@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CardList.tsx CardList matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-bZQynM bRkGRU"
+  >
+    <div
+      class="sc-bxivhb FDbHW"
+      data-testid="Card"
+    >
+      <div
+        class="card-cell card-date"
+      >
+        <h2
+          class="sc-gzVnrw fDlMua"
+          type="h2"
+        >
+          13
+        </h2>
+        <h6
+          class="sc-htoDjs eWaNkr"
+          type="h6"
+        >
+          Oct
+        </h6>
+      </div>
+      <div
+        class="card-cell card-location"
+      >
+        <h6
+          class="sc-dnqmqq fWMmgG"
+          type="h6"
+        >
+          <span
+            class="card-highlight"
+          >
+            Thursday
+          </span>
+        </h6>
+        <h2
+          class="sc-iwsKbI caDdqp"
+          type="h2"
+        >
+          Hoxton
+        </h2>
+      </div>
+      <span
+        class="card-chevron"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;
