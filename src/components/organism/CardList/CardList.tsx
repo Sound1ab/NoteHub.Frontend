@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { NoteContext } from '../../../Context'
+import { useStore} from '../../../hooks/useStore'
 import { INotepad } from '../../../interfaces'
 import {styled} from '../../../theme'
 import { Container } from '../../atoms'
@@ -19,8 +19,8 @@ const Style = styled.div`
 
 export function CardList() {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null)
-  const notepads = useContext<INotepad[] | null>(NoteContext)
-  const notes = notepads && notepads[0].notes
+  const [state] = useStore()
+  const notes = state.allNotepads.length > 0 ? state.allNotepads[0].notes : []
 
   return (
     <Style>

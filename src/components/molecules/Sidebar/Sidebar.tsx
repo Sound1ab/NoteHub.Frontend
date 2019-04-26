@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import {NoteContext} from '../../../Context'
+import { useStore} from '../../../hooks/useStore'
 import { INotepad } from '../../../interfaces'
 import { styled } from '../../../theme'
 import { Heading, Icon, Container } from '../../atoms'
@@ -39,7 +39,7 @@ const Style = styled.div`
 `
 
 export function Sidebar() {
-  const notepads = useContext<INotepad[] | null>(NoteContext)
+  const [state] = useStore()
 
   return (
     <Style>
@@ -53,7 +53,7 @@ export function Sidebar() {
             />
             <Heading type="h5" textTransform="uppercase">Notebooks</Heading>
           </div>
-          {notepads && notepads.map((notepad: INotepad) => (
+          {state.allNotepads.length > 0 && state.allNotepads.map((notepad: INotepad) => (
             <Heading type="h6" marginBottom>{notepad.title}</Heading>
           ))}
         </nav>
