@@ -1,9 +1,12 @@
-export interface IEvent {
-  date: {
-    dayOfMonth: number
-    dayOfWeek: string
-    month: string
-  }
-  genre: string
-  location: string
+export interface INotepad {
+  id: string,
+  title: string,
+  notes: INote[]
+}
+
+export interface INote {
+  id: string,
+  title: string,
+  content: string,
+  excerpt: string
 }

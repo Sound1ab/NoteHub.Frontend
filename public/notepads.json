@@ -1,0 +1,38 @@
+[
+  {
+    "id": "uuid1",
+    "title": "Swift",
+    "notes": [
+      {
+        "id": "uuid1-1",
+        "title": "Basics",
+        "content": "Some content",
+        "excerpt": "Some excerpt"
+      },
+      {
+        "id": "uuid1-2",
+        "title": "Extensions",
+        "content": "Some content about extensions",
+        "excerpt": "Some excerpt about extensions"
+      }
+    ]
+  },
+  {
+    "id": "uuid2",
+    "title": "TypeScript",
+    "notes": [
+      {
+        "id": "uuid2-1",
+        "title": "Basics",
+        "content": "Some content",
+        "excerpt": "Some excerpt"
+      },
+      {
+        "id": "uuid2-2",
+        "title": "Extensions",
+        "content": "Some content about extensions",
+        "excerpt": "Some excerpt about extensions"
+      }
+    ]
+  }
+]

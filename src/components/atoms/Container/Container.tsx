@@ -6,10 +6,8 @@ export const Style = styled.section<{
   marginTop?: boolean
 }>`
   position: relative;
-  margin: 0 auto;
-  max-width: 1000px;
   padding: 0 0;
-  width: 90%;
+  width: 100%;
   margin-bottom: ${({ theme, marginBottom }) =>
     marginBottom ? theme.spacing.s : 0};
   margin-top: ${({ theme, marginTop }) => (marginTop ? theme.spacing.s : 0)};

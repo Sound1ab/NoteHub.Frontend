@@ -2,7 +2,8 @@ import { typography } from './typography'
 
 export const theme = {
   colors: {
-    brand: '#10ad52',
+    accent: '#0ac890',
+    brand: '#18ffa7',
     text: {
       primary: '#171717',
       secondary: '#858585',
@@ -16,6 +17,8 @@ export const theme = {
     xl: typography.rhythm(7),
     xs: typography.rhythm(0.5),
     xxl: typography.rhythm(10),
+    xxxl: typography.rhythm(13),
     xxs: typography.rhythm(0.25),
+    xxxs: typography.rhythm(0.1),
   },
 }

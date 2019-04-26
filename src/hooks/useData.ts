@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export function useData<T>(url = 'shows.json'): [T | [], boolean] {
+export function useData<T>(url = 'notepads.json'): [T | [], boolean] {
   const [data, setData] = useState<T | []>([])
   const [loading, setLoading] = useState(true)
 
