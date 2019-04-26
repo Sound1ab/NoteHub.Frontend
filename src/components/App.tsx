@@ -18,7 +18,7 @@ import { notepadReducer, setAllNotepads, TNotepadActions } from '../store'
 import { styled } from '../theme'
 import { typography } from '../theme/typography'
 import { Container, TextArea } from './atoms'
-import { Sidebar } from './molecules'
+import { Header, Sidebar } from './molecules'
 import { CardList } from './organism'
 import { GlobalStyle, ThemeProvider } from './utility'
 

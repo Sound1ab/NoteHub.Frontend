@@ -3,7 +3,6 @@ import { typography } from './typography'
 export const theme = {
   colors: {
     accent: '#98c8c4',
-    brand: '#151e31',
     text: {
       primary: '#171717',
       secondary: '#acacac',
@@ -15,7 +14,8 @@ export const theme = {
     },
     background: {
       primary: '#fff',
-      secondary: '#f8f8f8'
+      secondary: '#f8f8f8',
+      tertiary: '#151e31',
     }
   },
   spacing: {

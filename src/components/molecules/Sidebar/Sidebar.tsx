@@ -1,4 +1,5 @@
 import React, { Dispatch, ReducerAction } from 'react'
+import { ICON_COLOR } from '../../../enums'
 import { INotepad } from '../../../interfaces'
 import { IState } from '../../../store'
 import {
@@ -7,13 +8,34 @@ import {
   TNotepadActions,
 } from '../../../store'
 import { styled } from '../../../theme'
-import { Container, Heading, Icon } from '../../atoms'
+import { Avatar, Container, Heading, Icon } from '../../atoms'
 
 const Style = styled.div`
   position: relative;
-  flex: 0 0 ${({ theme }) => theme.spacing.xl};
+  flex: 0 0 ${({ theme }) => theme.spacing.xxl};
   height: 100%;
-  background-color: ${({ theme }) => theme.colors.brand};
+  background-color: ${({ theme }) => theme.colors.background.tertiary};
+  
+  .sidebar-avatar {
+    margin-right: ${({theme}) => theme.spacing.xs};
+  }
+  
+  .sidebar-profile {
+    display: flex;
+    margin-bottom: ${({theme}) => theme.spacing.s};
+  }
+  
+  .sidebar-profile-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .sidebar-github {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
 
   .sidebar-category-heading {
     color: ${({ theme }) => theme.colors.text.tertiary};
@@ -69,6 +91,20 @@ export function Sidebar({ allNotepads, activeNotepad, dispatch }: ISidebar) {
   return (
     <Style>
       <Container className="sidebar-sticky">
+        <div className="sidebar-profile">
+          <Avatar className="sidebar-avatar" />
+          <div className="sidebar-profile-details">
+            <Heading type="h4">Phillip Parker</Heading>
+            <div className="sidebar-github">
+              <Icon
+                icon="github"
+                prefix="fab"
+                marginRight
+              />
+              <Heading type="h6">View Github</Heading>
+            </div>
+          </div>
+        </div>
         <nav className="sidebar-nav">
           <div className="sidebar-title">
             <Icon icon="github" prefix="fab" marginRight />

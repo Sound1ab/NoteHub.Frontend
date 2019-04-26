@@ -50,6 +50,10 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
   }
   
+  img {
+    margin-bottom: 0!important;
+  }
+  
   
   /* Grouping content
      ========================================================================== */
