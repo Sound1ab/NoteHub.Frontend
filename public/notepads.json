@@ -25,14 +25,14 @@
     "notes": [
       {
         "id": "uuid2-1",
-        "title": "Basics",
+        "title": "Basics Typescript",
         "content": "Some content",
         "excerpt": "Some excerpt",
         "createdAt": "12/03/2019"
       },
       {
         "id": "uuid2-2",
-        "title": "Extensions",
+        "title": "Extensions Typescript",
         "content": "Some content about extensions",
         "excerpt": "Some excerpt about extensions",
         "createdAt": "12/03/2019"

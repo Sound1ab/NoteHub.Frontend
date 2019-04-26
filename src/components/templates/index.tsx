@@ -12,6 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faSoundcloud } from '@fortawesome/free-brands-svg-icons'
 import { CardList } from '../organism'
+import { useStore } from '../../hooks/useStore'
 
 library.add(
   faGithub as any,
@@ -48,13 +49,15 @@ const Style = styled.div`
 `
 
 export function IIndex() {
+  const [state] = useStore()
+  
   return (
     <Style>
       <Container className="layout-page">
         <Sidebar />
         <CardList />
         <main className="layout-main">
-          <TextArea />
+          <TextArea content={state.activeNote ? state.activeNote.content : null} />
         </main>
       </Container>
     </Style>

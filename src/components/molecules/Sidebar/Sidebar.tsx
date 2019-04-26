@@ -1,8 +1,9 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import { useStore} from '../../../hooks/useStore'
 import { INotepad } from '../../../interfaces'
+import { setActiveNote, setActiveNotepad } from '../../../store/actions/notepadAction'
 import { styled } from '../../../theme'
-import { Heading, Icon, Container } from '../../atoms'
+import { Container, Heading, Icon } from '../../atoms'
 
 const Style = styled.div`
   position: relative;
@@ -16,6 +17,11 @@ const Style = styled.div`
   
   h6 {
     color: ${({theme}) => theme.colors.text.secondary};
+    cursor: pointer;
+    
+    &:hover {
+      color: ${({theme}) => theme.colors.text.tertiary};
+    }
   }
 
   .sidebar-sticky {
@@ -36,10 +42,21 @@ const Style = styled.div`
     align-items: center;
     margin-bottom: ${({theme}) => theme.spacing.xs};
   }
+  
+  .sidebar-active-heading {
+    color: ${({theme}) => theme.colors.text.tertiary}
+  }
 `
 
 export function Sidebar() {
-  const [state] = useStore()
+  const [state, dispatch] = useStore()
+
+  function handleHeadingClick(notepad: INotepad) {
+    if (dispatch) {
+      dispatch(setActiveNotepad(notepad))
+      dispatch(setActiveNote(null))
+    }
+  }
 
   return (
     <Style>
@@ -53,8 +70,10 @@ export function Sidebar() {
             />
             <Heading type="h5" textTransform="uppercase">Notebooks</Heading>
           </div>
-          {state.allNotepads.length > 0 && state.allNotepads.map((notepad: INotepad) => (
-            <Heading type="h6" marginBottom>{notepad.title}</Heading>
+          {state.allNotepads.map((notepad: INotepad) => (
+            <span  onClick={handleHeadingClick.bind(null, notepad)}>
+              <Heading className={state.activeNotepad && notepad.id === state.activeNotepad.id ? 'sidebar-active-heading' : ''} type="h6" marginBottom>{notepad.title}</Heading>
+            </span>
           ))}
         </nav>
       </Container>

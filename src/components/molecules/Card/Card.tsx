@@ -24,12 +24,11 @@ interface ICard {
   excerpt: string
   createdAt: string
   isSelected: boolean,
-  handleSetSelectedCardId: (id: string) => void
 }
 
-export function Card({ id, title, excerpt, createdAt, isSelected, handleSetSelectedCardId }: ICard) {
+export function Card({ id, title, excerpt, createdAt, isSelected }: ICard) {
   return (
-    <Style data-testid="Card" isSelected={isSelected} onClick={handleSetSelectedCardId.bind(null, id)}>
+    <Style data-testid="Card" isSelected={isSelected}>
       <div className="card-heading">
         <Heading type="h3" marginBottom>{title}</Heading>
         <Heading type="h6" marginBottom>{createdAt}</Heading>

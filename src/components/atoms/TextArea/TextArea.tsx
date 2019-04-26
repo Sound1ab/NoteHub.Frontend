@@ -18,12 +18,12 @@ const Style = styled.div`
 `
 
 interface ITextArea {
-  dummyProp? : string
+  content : string | null
 }
 
 const PLACEHOLDER = "Start noting"
 
-export function TextArea({ dummyProp = '' }: ITextArea) {
+export function TextArea({ content = '' }: ITextArea) {
   const [placeholder, setPlaceholder] = useState(PLACEHOLDER)
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export function TextArea({ dummyProp = '' }: ITextArea) {
 
   return (
     <Style>
-      <div className="text-editor" contentEditable onClick={handleOnClick} onBlur={handleOnBlur}>{placeholder}</div>
+      <div className="text-editor" contentEditable onClick={handleOnClick} onBlur={handleOnBlur}>{content || placeholder}</div>
     </Style>
   )
 }

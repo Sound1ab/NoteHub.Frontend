@@ -1,16 +1,16 @@
 import React, { Dispatch, ReducerAction } from 'react'
-import { INotepad } from '../interfaces'
+import { INote, INotepad } from '../interfaces'
 import { TNotepadActions } from './actions/notepadAction'
 
 export interface IState {
-  activeNote: string
-  activeNotepad: string
+  activeNote: INote | null
+  activeNotepad: INotepad | null
   allNotepads: INotepad[]
 }
 
 export const initialState: IState = {
-  activeNote: '',
-  activeNotepad: '',
+  activeNote: null,
+  activeNotepad: null,
   allNotepads: []
 }
 

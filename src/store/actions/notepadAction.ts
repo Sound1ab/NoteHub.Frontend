@@ -1,4 +1,4 @@
-import { INotepad } from '../../interfaces'
+import { INote, INotepad } from '../../interfaces'
 
 export type TReturnOfSetActiveNote = ReturnType<typeof setActiveNote>
 export type TReturnOfSetActiveNotepad = ReturnType<typeof setActiveNotepad>
@@ -15,19 +15,19 @@ export enum NOTEPAD_ACTIONS {
   SET_ALL_NOTEPADS = 'SET_ALL_NOTES',
 }
 
-export function setActiveNote(id: string) {
+export function setActiveNote(note: INote | null) {
   return {
     payload: {
-      id
+      note
     },
     type: NOTEPAD_ACTIONS.SET_ACTIVE_NOTE
   }
 }
 
-export function setActiveNotepad(id: string) {
+export function setActiveNotepad(notepad: INotepad | null) {
   return {
     payload: {
-      id
+      notepad
     },
     type: NOTEPAD_ACTIONS.SET_ACTIVE_NOTEPAD
   }

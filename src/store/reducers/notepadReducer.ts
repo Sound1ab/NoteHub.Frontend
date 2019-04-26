@@ -7,12 +7,12 @@ export function notepadReducer(state: IState, action: TNotepadActions) {
     case NOTEPAD_ACTIONS.SET_ACTIVE_NOTE:
       return {
         ...state,
-        activeNote: (action as TReturnOfSetActiveNote).payload.id
+        activeNote: (action as TReturnOfSetActiveNote).payload.note
       }
     case NOTEPAD_ACTIONS.SET_ACTIVE_NOTEPAD:
       return {
         ...state,
-        activeNotepad: (action as TReturnOfSetActiveNotepad).payload.id
+        activeNotepad: (action as TReturnOfSetActiveNotepad).payload.notepad
       }
     case NOTEPAD_ACTIONS.SET_ALL_NOTEPADS:
       return {
