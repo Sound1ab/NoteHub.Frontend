@@ -8,7 +8,7 @@ const Style = styled.div<{isSelected: boolean}>`
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  padding: ${({theme}) => theme.spacing.xs};
+  padding: ${({theme}) => theme.spacing.s};
   background-color: ${({theme, isSelected}) => isSelected ? theme.colors.link.active : theme.colors.background};
 
   .card-heading {

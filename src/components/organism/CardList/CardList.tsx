@@ -2,13 +2,13 @@ import React, { useContext, useState } from 'react'
 import { NoteContext } from '../../../Context'
 import { INote, INotepad } from '../../../interfaces'
 import {styled} from '../../../theme'
-import { Heading, Icon, StickyContainer } from '../../atoms'
+import { Heading, Icon, Container } from '../../atoms'
 import { Card } from '../../molecules'
 
 const Style = styled.div`
   position: relative;
   flex: 0 0 ${({theme}) => theme.spacing.xxxl};
-  height: 100vh;
+  height: 100%;
   
   .card-list-sticky {
     display: flex;
@@ -24,7 +24,7 @@ export function CardList() {
 
   return (
     <Style>
-      <StickyContainer className="card-list-sticky">
+      <Container className="card-list-sticky">
         {notes && notes
           .map(note => (
             <Card
@@ -37,7 +37,7 @@ export function CardList() {
               handleSetSelectedCardId={setSelectedCardId}
             />
           ))}
-      </StickyContainer>
+      </Container>
     </Style>
   )
 }

@@ -2,19 +2,27 @@ import React, {useContext} from 'react'
 import {NoteContext} from '../../../Context'
 import { INotepad } from '../../../interfaces'
 import { styled } from '../../../theme'
-import { Heading, Icon, StickyContainer } from '../../atoms'
+import { Heading, Icon, Container } from '../../atoms'
 
 const Style = styled.div`
   position: relative;
   flex: 0 0 ${({theme}) => theme.spacing.xl};
-  height: 100vh;
+  height: 100%;
   background-color: ${({theme}) => theme.colors.brand};
+  
+  h5 {
+    color: ${({theme}) => theme.colors.text.tertiary};
+  }
+  
+  h6 {
+    color: ${({theme}) => theme.colors.text.secondary};
+  }
 
   .sidebar-sticky {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: ${({ theme }) => theme.spacing.xs};
+    padding: ${({ theme }) => theme.spacing.s};
   }
 
   .sidebar-nav > a {
@@ -35,7 +43,7 @@ export function Sidebar() {
 
   return (
     <Style>
-      <StickyContainer className="sidebar-sticky">
+      <Container className="sidebar-sticky">
         <nav className="sidebar-nav">
           <div className="sidebar-title">
             <Icon
@@ -49,7 +57,7 @@ export function Sidebar() {
             <Heading type="h6" marginBottom>{notepad.title}</Heading>
           ))}
         </nav>
-      </StickyContainer>
+      </Container>
     </Style>
   )
 }

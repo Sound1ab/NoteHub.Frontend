@@ -6,9 +6,9 @@ export const typography = new Typography({
   bodyFontFamily: ['Open Sans'],
   googleFonts: [
     {
-      name: 'Open Sans',
+      name: 'Montserrat',
       styles: ['700'],
     },
   ],
-  headerFontFamily: ['Open Sans'],
+  headerFontFamily: ['Montserrat'],
 })

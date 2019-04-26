@@ -3,10 +3,10 @@ import { typography } from './typography'
 export const theme = {
   colors: {
     accent: '#98c8c4',
-    brand: '#f6fcff',
+    brand: '#302f31',
     text: {
       primary: '#171717',
-      secondary: '#858585',
+      secondary: '#acacac',
       tertiary: '#ffffff',
     },
     link: {
@@ -22,7 +22,7 @@ export const theme = {
     xl: typography.rhythm(7),
     xs: typography.rhythm(0.5),
     xxl: typography.rhythm(10),
-    xxxl: typography.rhythm(13),
+    xxxl: typography.rhythm(14),
     xxs: typography.rhythm(0.25),
     xxxs: typography.rhythm(0.1),
   },

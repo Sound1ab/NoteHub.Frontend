@@ -1,6 +1,6 @@
 import React from 'react'
 import { styled } from '../../theme'
-import {Container} from '../atoms'
+import { Container, TextArea } from '../atoms'
 import {Sidebar} from '../molecules'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -26,8 +26,8 @@ library.add(
 const Style = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-
+  height: 100vh;
+  
   .layout-page {
     flex: 1;
     display: flex;
@@ -36,33 +36,26 @@ const Style = styled.div`
     align-items: stretch;
   }
 
-  .layout-sidebar {
-    flex: 0 0 300px;
-  }
-
   .layout-main {
     display: flex;
     flex-direction: column;
-    flex: 2;
+    flex: 1;
     position: relative;
-    padding: ${({ theme }) => theme.spacing.s};
     min-width: 0;
+    height: 100%;
+    overflow-y: scroll;
   }
 `
 
-interface IIndex {
-  children?: any
-}
-
-export function IIndex({children}: IIndex) {
-  const date = new Date()
-  console.log(date.toISOString())
+export function IIndex() {
   return (
     <Style>
       <Container className="layout-page">
         <Sidebar />
         <CardList />
-        <main className="layout-main">{children}</main>
+        <main className="layout-main">
+          <TextArea />
+        </main>
       </Container>
     </Style>
   )

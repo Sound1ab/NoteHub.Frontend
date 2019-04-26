@@ -5,10 +5,10 @@ const Style = styled.div`
   position: relative;
   
   .text-editor {
+    padding: ${({theme}) => theme.spacing.s};
     resize: none;
     width: 100%;
     height: 100%;
-    background-color: ${({theme}) => theme.colors.brand};
   }
   
   p {
@@ -55,7 +55,6 @@ export function TextArea({ dummyProp = '' }: ITextArea) {
 
   return (
     <Style>
-      <button onClick={formatDocument.bind(null, EXEC_COMMAND.UNDERLINE, '')}>click</button>
       <div className="text-editor" contentEditable onClick={handleOnClick} onBlur={handleOnBlur}>{placeholder}</div>
     </Style>
   )
