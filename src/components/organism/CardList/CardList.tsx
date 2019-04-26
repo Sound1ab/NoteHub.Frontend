@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react'
 import { NoteContext } from '../../../Context'
-import { INote, INotepad } from '../../../interfaces'
+import { INotepad } from '../../../interfaces'
 import {styled} from '../../../theme'
-import { Heading, Icon, Container } from '../../atoms'
+import { Container } from '../../atoms'
 import { Card } from '../../molecules'
 
 const Style = styled.div`

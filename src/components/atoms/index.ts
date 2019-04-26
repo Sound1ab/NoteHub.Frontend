@@ -1,6 +1,5 @@
 export * from './Heading/Heading'
 export * from './Container/Container'
-export * from './Container/StickyContainer'
 export * from './Image/Image'
 export * from './TextArea/TextArea'
 export * from './Icon/Icon'

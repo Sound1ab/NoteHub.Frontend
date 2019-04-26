@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { styled } from '../../../theme'
+import {EXEC_COMMAND} from '../../../enums'
 
 const Style = styled.div`
   position: relative;
@@ -21,10 +22,6 @@ interface ITextArea {
 }
 
 const PLACEHOLDER = "Start noting"
-
-enum EXEC_COMMAND {
-  UNDERLINE = 'underline'
-}
 
 export function TextArea({ dummyProp = '' }: ITextArea) {
   const [placeholder, setPlaceholder] = useState(PLACEHOLDER)

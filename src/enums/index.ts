@@ -1,6 +1,3 @@
-export enum TOGGLES {
-  ROCK = 'rock',
-  FOLK = 'folk',
-  JAZZ = 'jazz',
-  ALL = 'all',
+export enum EXEC_COMMAND {
+  UNDERLINE = 'underline'
 }
