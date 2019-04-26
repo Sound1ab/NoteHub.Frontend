@@ -14,7 +14,7 @@ const Style = styled.a<{ marginRight: boolean }>`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: ${({theme}) => theme.colors.text.tertiary}
+    color: ${({ theme }) => theme.colors.text.tertiary};
   }
 `
 

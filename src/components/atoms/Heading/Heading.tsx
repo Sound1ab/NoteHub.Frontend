@@ -10,7 +10,7 @@ const StyledHeading = styled('h1')<IHeading>`
   text-align: ${({ textAlign }) => textAlign};
   text-rendering: optimizeLegibility;
   margin-bottom: ${({ theme, marginBottom }) =>
-  marginBottom ? theme.spacing.xxs : 0};
+    marginBottom ? theme.spacing.xxs : 0};
   margin-top: ${({ theme, marginTop }) => (marginTop ? theme.spacing.s : 0)};
 `
 

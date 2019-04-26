@@ -2,14 +2,15 @@ import React from 'react'
 import { styled } from '../../../theme'
 import { Heading } from '../../atoms'
 
-const Style = styled.div<{isSelected: boolean}>`
+const Style = styled.div<{ isSelected: boolean }>`
   position: relative;
   width: 100%;
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  padding: ${({theme}) => theme.spacing.s};
-  background-color: ${({theme, isSelected}) => isSelected ? theme.colors.link.active : theme.colors.background};
+  padding: ${({ theme }) => theme.spacing.s};
+  background-color: ${({ theme, isSelected }) =>
+    isSelected ? theme.colors.link.active : theme.colors.background};
 
   .card-heading {
     display: flex;
@@ -19,21 +20,27 @@ const Style = styled.div<{isSelected: boolean}>`
 `
 
 interface ICard {
-  id: string,
+  id: string
   title: string
   excerpt: string
   createdAt: string
-  isSelected: boolean,
+  isSelected: boolean
 }
 
 export function Card({ id, title, excerpt, createdAt, isSelected }: ICard) {
   return (
     <Style data-testid="Card" isSelected={isSelected}>
       <div className="card-heading">
-        <Heading type="h3" marginBottom>{title}</Heading>
-        <Heading type="h6" marginBottom>{createdAt}</Heading>
+        <Heading type="h3" marginBottom>
+          {title}
+        </Heading>
+        <Heading type="h6" marginBottom>
+          {createdAt}
+        </Heading>
       </div>
-      <Heading type="h5" marginBottom>{excerpt}</Heading>
+      <Heading type="h5" marginBottom>
+        {excerpt}
+      </Heading>
     </Style>
   )
 }

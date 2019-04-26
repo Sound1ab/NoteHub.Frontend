@@ -18,26 +18,26 @@ export enum NOTEPAD_ACTIONS {
 export function setActiveNote(note: INote | null) {
   return {
     payload: {
-      note
+      note,
     },
-    type: NOTEPAD_ACTIONS.SET_ACTIVE_NOTE
+    type: NOTEPAD_ACTIONS.SET_ACTIVE_NOTE,
   }
 }
 
 export function setActiveNotepad(notepad: INotepad | null) {
   return {
     payload: {
-      notepad
+      notepad,
     },
-    type: NOTEPAD_ACTIONS.SET_ACTIVE_NOTEPAD
+    type: NOTEPAD_ACTIONS.SET_ACTIVE_NOTEPAD,
   }
 }
 
 export function setAllNotepads(notepads: INotepad[]) {
   return {
     payload: {
-      notepads
+      notepads,
     },
-    type: NOTEPAD_ACTIONS.SET_ALL_NOTEPADS
+    type: NOTEPAD_ACTIONS.SET_ALL_NOTEPADS,
   }
 }

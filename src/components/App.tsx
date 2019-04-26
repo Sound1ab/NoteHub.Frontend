@@ -36,7 +36,7 @@ const Style = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  
+
   .app-page {
     flex: 1;
     display: flex;
@@ -78,10 +78,20 @@ export function App() {
         ) : (
           <Style>
             <Container className="app-page">
-              <Sidebar allNotepads={state.allNotepads} activeNotepad={state.activeNotepad} dispatch={dispatch} />
-              <CardList activeNotepad={state.activeNotepad} activeNote={state.activeNote} dispatch={dispatch} />
+              <Sidebar
+                allNotepads={state.allNotepads}
+                activeNotepad={state.activeNotepad}
+                dispatch={dispatch}
+              />
+              <CardList
+                activeNotepad={state.activeNotepad}
+                activeNote={state.activeNote}
+                dispatch={dispatch}
+              />
               <main className="app-main">
-                <TextArea content={state.activeNote ? state.activeNote.content : null} />
+                <TextArea
+                  content={state.activeNote ? state.activeNote.content : null}
+                />
               </main>
             </Container>
           </Style>
