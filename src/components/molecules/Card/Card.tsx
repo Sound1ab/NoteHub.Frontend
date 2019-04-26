@@ -2,73 +2,39 @@ import React from 'react'
 import { styled } from '../../../theme'
 import { Heading } from '../../atoms'
 
-const Style = styled.div`
+const Style = styled.div<{isSelected: boolean}>`
   position: relative;
   width: 100%;
-  border: 1px solid ${({ theme }) => theme.colors.text.secondary};
-  border-radius: 5px;
   display: flex;
   justify-content: flex-start;
+  flex-direction: column;
+  padding: ${({theme}) => theme.spacing.xs};
+  background-color: ${({theme, isSelected}) => isSelected ? theme.colors.link.active : theme.colors.background};
 
-  > * {
-    padding: ${({ theme }) => theme.spacing.xs};
+  .card-heading {
     display: flex;
-    justify-content: center;
-    flex-direction: column;
-  }
-
-  .card-date {
-    flex: 0;
-    align-items: center;
-    border-right: 1px solid ${({ theme }) => theme.colors.text.secondary};
-  }
-
-  .card-location {
-    flex: 1;
-    align-items: flex-start;
-  }
-
-  .card-highlight {
-    color: ${({ theme }) => theme.colors.text.secondary};
-  }
-
-  .card-chevron::before {
-    border-style: solid;
-    border-width: 0.25em 0.25em 0 0;
-    content: '';
-    display: inline-block;
-    height: 0.75em;
-    position: relative;
-    top: 0.15em;
-    vertical-align: top;
-    width: 0.75em;
-    left: 0;
-    transform: rotate(45deg);
-    color: ${({ theme }) => theme.colors.brand};
+    justify-content: space-between;
+    align-items: flex-end;
   }
 `
 
 interface ICard {
-  dayOfMonth: number
-  dayOfWeek: string
-  month: string
-  location: string
+  id: string,
+  title: string
+  excerpt: string
+  createdAt: string
+  isSelected: boolean,
+  handleSetSelectedCardId: (id: string) => void
 }
 
-export function Card({ dayOfMonth, dayOfWeek, location, month }: ICard) {
+export function Card({ id, title, excerpt, createdAt, isSelected, handleSetSelectedCardId }: ICard) {
   return (
-    <Style data-testid="Card">
-      <div className="card-cell card-date">
-        <Heading type="h2">{dayOfMonth}</Heading>
-        <Heading type="h6">{month}</Heading>
+    <Style data-testid="Card" isSelected={isSelected} onClick={handleSetSelectedCardId.bind(null, id)}>
+      <div className="card-heading">
+        <Heading type="h3" marginBottom>{title}</Heading>
+        <Heading type="h6" marginBottom>{createdAt}</Heading>
       </div>
-      <div className="card-cell card-location">
-        <Heading type="h6">
-          <span className="card-highlight">{dayOfWeek}</span>
-        </Heading>
-        <Heading type="h2">{location}</Heading>
-      </div>
-      <span className="card-chevron" />
+      <Heading type="h5" marginBottom>{excerpt}</Heading>
     </Style>
   )
 }

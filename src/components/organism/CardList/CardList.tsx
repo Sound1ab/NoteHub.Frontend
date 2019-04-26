@@ -1,35 +1,43 @@
-import React from 'react'
-import { TOGGLES } from '../../../enums'
-import { IEvent } from '../../../interfaces'
+import React, { useContext, useState } from 'react'
+import { NoteContext } from '../../../Context'
+import { INote, INotepad } from '../../../interfaces'
 import {styled} from '../../../theme'
+import { Heading, Icon, StickyContainer } from '../../atoms'
 import { Card } from '../../molecules'
 
 const Style = styled.div`
   position: relative;
-
-  > div {
-    margin-top: ${({ theme }) => theme.spacing.xs};
+  flex: 0 0 ${({theme}) => theme.spacing.xxxl};
+  height: 100vh;
+  
+  .card-list-sticky {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
   }
 `
 
-interface ICardList {
-  events: IEvent[]
-  activeToggle: TOGGLES
-}
+export function CardList() {
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null)
+  const notepads = useContext<INotepad[] | null>(NoteContext)
+  const notes = notepads && notepads[0].notes
 
-export function CardList({ events, activeToggle }: ICardList) {
   return (
     <Style>
-      {events
-        .map(event => (
-          <Card
-            key={`${event.date.dayOfMonth}-${event.location}-${activeToggle}`}
-            dayOfMonth={event.date.dayOfMonth}
-            dayOfWeek={event.date.dayOfWeek}
-            location={event.location}
-            month={event.date.month}
-          />
-        ))}
+      <StickyContainer className="card-list-sticky">
+        {notes && notes
+          .map(note => (
+            <Card
+              key={note.id}
+              id={note.id}
+              title={note.title}
+              excerpt={note.excerpt}
+              createdAt={note.createdAt}
+              isSelected={selectedCardId === note.id}
+              handleSetSelectedCardId={setSelectedCardId}
+            />
+          ))}
+      </StickyContainer>
     </Style>
   )
 }

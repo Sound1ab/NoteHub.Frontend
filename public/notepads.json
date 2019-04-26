@@ -7,13 +7,15 @@
         "id": "uuid1-1",
         "title": "Basics",
         "content": "Some content",
-        "excerpt": "Some excerpt"
+        "excerpt": "Some excerpt",
+        "createdAt": "12/03/2019"
       },
       {
         "id": "uuid1-2",
         "title": "Extensions",
         "content": "Some content about extensions",
-        "excerpt": "Some excerpt about extensions"
+        "excerpt": "Some excerpt about extensions",
+        "createdAt": "12/03/2019"
       }
     ]
   },
@@ -25,13 +27,15 @@
         "id": "uuid2-1",
         "title": "Basics",
         "content": "Some content",
-        "excerpt": "Some excerpt"
+        "excerpt": "Some excerpt",
+        "createdAt": "12/03/2019"
       },
       {
         "id": "uuid2-2",
         "title": "Extensions",
         "content": "Some content about extensions",
-        "excerpt": "Some excerpt about extensions"
+        "excerpt": "Some excerpt about extensions",
+        "createdAt": "12/03/2019"
       }
     ]
   }

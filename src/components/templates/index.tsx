@@ -11,6 +11,7 @@ import {
   faMoon,
 } from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faSoundcloud } from '@fortawesome/free-brands-svg-icons'
+import { CardList } from '../organism'
 
 library.add(
   faGithub as any,
@@ -54,10 +55,13 @@ interface IIndex {
 }
 
 export function IIndex({children}: IIndex) {
+  const date = new Date()
+  console.log(date.toISOString())
   return (
     <Style>
       <Container className="layout-page">
         <Sidebar />
+        <CardList />
         <main className="layout-main">{children}</main>
       </Container>
     </Style>

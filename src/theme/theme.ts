@@ -2,13 +2,18 @@ import { typography } from './typography'
 
 export const theme = {
   colors: {
-    accent: '#0ac890',
-    brand: '#18ffa7',
+    accent: '#98c8c4',
+    brand: '#f6fcff',
     text: {
       primary: '#171717',
       secondary: '#858585',
       tertiary: '#ffffff',
     },
+    link: {
+      hover: '#d6d6d6',
+      active: '#bbbbbb'
+    },
+    background: '#fff'
   },
   spacing: {
     l: typography.rhythm(3),

@@ -14,7 +14,7 @@ const Style = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: ${({ theme }) => theme.spacing.s};
+    padding: ${({ theme }) => theme.spacing.xs};
   }
 
   .sidebar-nav > a {
