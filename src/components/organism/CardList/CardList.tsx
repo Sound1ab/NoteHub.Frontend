@@ -1,19 +1,15 @@
 import React, { Dispatch, ReducerAction } from 'react'
-import { useStore } from '../../../hooks/useStore'
 import { INote, INotepad } from '../../../interfaces'
-import {
-  setActiveNote,
-  TNotepadActions,
-} from '../../../store/actions/notepadAction'
+import { IState, setActiveNote, TNotepadActions } from '../../../store'
 import { styled } from '../../../theme'
 import { Container } from '../../atoms'
 import { Card } from '../../molecules'
-import { IState } from '../../../store'
 
 const Style = styled.div`
   position: relative;
   flex: 0 0 ${({ theme }) => theme.spacing.xxxl};
   height: 100%;
+  background-color: ${({theme}) => theme.colors.background.secondary};
 
   .card-list-sticky {
     display: flex;

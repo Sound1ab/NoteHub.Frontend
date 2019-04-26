@@ -1,13 +1,13 @@
 import Typography from 'typography'
 
 export const typography = new Typography({
-  baseFontSize: '16px',
+  baseFontSize: '14px',
   baseLineHeight: 1.666,
-  bodyFontFamily: ['Open Sans'],
+  bodyFontFamily: ['Montserrat'],
   googleFonts: [
     {
       name: 'Montserrat',
-      styles: ['700'],
+      styles: ['400'],
     },
   ],
   headerFontFamily: ['Montserrat'],

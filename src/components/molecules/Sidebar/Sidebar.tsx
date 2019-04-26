@@ -15,11 +15,11 @@ const Style = styled.div`
   height: 100%;
   background-color: ${({ theme }) => theme.colors.brand};
 
-  h5 {
+  .sidebar-category-heading {
     color: ${({ theme }) => theme.colors.text.tertiary};
   }
 
-  h6 {
+  .sidebar-heading {
     color: ${({ theme }) => theme.colors.text.secondary};
     cursor: pointer;
 
@@ -72,7 +72,7 @@ export function Sidebar({ allNotepads, activeNotepad, dispatch }: ISidebar) {
         <nav className="sidebar-nav">
           <div className="sidebar-title">
             <Icon icon="github" prefix="fab" marginRight />
-            <Heading type="h5" textTransform="uppercase">
+            <Heading className="sidebar-category-heading" type="h5" textTransform="uppercase">
               Notebooks
             </Heading>
           </div>
@@ -81,10 +81,10 @@ export function Sidebar({ allNotepads, activeNotepad, dispatch }: ISidebar) {
               <Heading
                 className={
                   activeNotepad && notepad.id === activeNotepad.id
-                    ? 'sidebar-active-heading'
-                    : ''
+                    ? 'sidebar-heading sidebar-active-heading'
+                    : 'sidebar-heading'
                 }
-                type="h6"
+                type="h4"
                 marginBottom
               >
                 {notepad.title}

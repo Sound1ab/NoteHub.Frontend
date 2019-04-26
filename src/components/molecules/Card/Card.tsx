@@ -10,7 +10,7 @@ const Style = styled.div<{ isSelected: boolean }>`
   flex-direction: column;
   padding: ${({ theme }) => theme.spacing.s};
   background-color: ${({ theme, isSelected }) =>
-    isSelected ? theme.colors.link.active : theme.colors.background};
+    isSelected ? theme.colors.link.active : 'transparent'};
 
   .card-heading {
     display: flex;
@@ -31,16 +31,16 @@ export function Card({ id, title, excerpt, createdAt, isSelected }: ICard) {
   return (
     <Style data-testid="Card" isSelected={isSelected}>
       <div className="card-heading">
-        <Heading type="h3" marginBottom>
+        <Heading type="h4" marginBottom>
           {title}
         </Heading>
         <Heading type="h6" marginBottom>
           {createdAt}
         </Heading>
       </div>
-      <Heading type="h5" marginBottom>
+      <p>
         {excerpt}
-      </Heading>
+      </p>
     </Style>
   )
 }

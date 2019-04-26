@@ -11,9 +11,12 @@ export const theme = {
     },
     link: {
       hover: '#d6d6d6',
-      active: '#bbbbbb'
+      active: '#f3f3f3'
     },
-    background: '#fff'
+    background: {
+      primary: '#fff',
+      secondary: '#f8f8f8'
+    }
   },
   spacing: {
     l: typography.rhythm(3),
