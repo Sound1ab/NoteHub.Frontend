@@ -11,6 +11,7 @@ const Style = styled.div<{ isSelected: boolean }>`
   padding: ${({ theme }) => theme.spacing.s};
   background-color: ${({ theme, isSelected }) =>
     isSelected ? theme.colors.link.active : 'transparent'};
+  cursor: pointer;
 
   .card-heading {
     display: flex;

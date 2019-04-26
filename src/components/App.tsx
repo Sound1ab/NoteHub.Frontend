@@ -7,11 +7,11 @@ import {
   faPenSquare,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
-import React, { useReducer } from 'react'
+import React, { Dispatch, ReducerAction, useReducer } from 'react'
 import { GoogleFont, TypographyStyle } from 'react-typography'
 import { useData } from '../hooks'
 import { INotepad } from '../interfaces'
-import { NoteContext } from '../store'
+import { NoteContext, setActiveNote, setActiveNotepad } from '../store'
 import { IState } from '../store'
 import { initialState } from '../store'
 import { notepadReducer, setAllNotepads, TNotepadActions } from '../store'
@@ -56,6 +56,35 @@ const Style = styled.div`
   }
 `
 
+function setupSelections(
+  data: INotepad[],
+  state: IState,
+  dispatch: Dispatch<ReducerAction<React.Reducer<IState, TNotepadActions>>>
+) {
+  const dataAvailableNoNotepadsSet =
+    data.length > 0 && state.allNotepads.length === 0
+
+  const notepadsAvailableNoActiveNotepadSet =
+    state.allNotepads.length > 0 && !state.activeNotepad
+
+  const activeNotepadNoActiveNote =
+    state.activeNotepad &&
+    !state.activeNote &&
+    state.activeNotepad.notes.length > 0
+
+  if (dataAvailableNoNotepadsSet) {
+    dispatch(setAllNotepads(data))
+  }
+
+  if (notepadsAvailableNoActiveNotepadSet) {
+    dispatch(setActiveNotepad(state.allNotepads[0]))
+  }
+
+  if (activeNotepadNoActiveNote) {
+    dispatch(setActiveNote(state.activeNotepad && state.activeNotepad.notes[0]))
+  }
+}
+
 export function App() {
   const [data, loading] = useData<INotepad[]>()
   const [state, dispatch] = useReducer<React.Reducer<IState, TNotepadActions>>(
@@ -63,9 +92,7 @@ export function App() {
     initialState
   )
 
-  if (data.length > 0 && state.allNotepads.length === 0) {
-    dispatch(setAllNotepads(data))
-  }
+  setupSelections(data, state, dispatch)
 
   return (
     <ThemeProvider>
