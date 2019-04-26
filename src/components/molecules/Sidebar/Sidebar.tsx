@@ -1,26 +1,30 @@
-import React from 'react'
-import { useStore} from '../../../hooks/useStore'
+import React, { Dispatch, ReducerAction } from 'react'
 import { INotepad } from '../../../interfaces'
-import { setActiveNote, setActiveNotepad } from '../../../store/actions/notepadAction'
+import { IState } from '../../../store'
+import {
+  setActiveNote,
+  setActiveNotepad,
+  TNotepadActions,
+} from '../../../store'
 import { styled } from '../../../theme'
 import { Container, Heading, Icon } from '../../atoms'
 
 const Style = styled.div`
   position: relative;
-  flex: 0 0 ${({theme}) => theme.spacing.xl};
+  flex: 0 0 ${({ theme }) => theme.spacing.xl};
   height: 100%;
-  background-color: ${({theme}) => theme.colors.brand};
-  
+  background-color: ${({ theme }) => theme.colors.brand};
+
   h5 {
-    color: ${({theme}) => theme.colors.text.tertiary};
+    color: ${({ theme }) => theme.colors.text.tertiary};
   }
-  
+
   h6 {
-    color: ${({theme}) => theme.colors.text.secondary};
+    color: ${({ theme }) => theme.colors.text.secondary};
     cursor: pointer;
-    
+
     &:hover {
-      color: ${({theme}) => theme.colors.text.tertiary};
+      color: ${({ theme }) => theme.colors.text.tertiary};
     }
   }
 
@@ -35,22 +39,26 @@ const Style = styled.div`
     display: block;
     margin-bottom: ${({ theme }) => theme.spacing.xs};
   }
-  
+
   .sidebar-title {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-bottom: ${({theme}) => theme.spacing.xs};
+    margin-bottom: ${({ theme }) => theme.spacing.xs};
   }
-  
+
   .sidebar-active-heading {
-    color: ${({theme}) => theme.colors.text.tertiary}
+    color: ${({ theme }) => theme.colors.text.tertiary};
   }
 `
 
-export function Sidebar() {
-  const [state, dispatch] = useStore()
+interface ISidebar {
+  allNotepads: INotepad[]
+  activeNotepad: INotepad | null
+  dispatch: Dispatch<ReducerAction<React.Reducer<IState, TNotepadActions>>>
+}
 
+export function Sidebar({ allNotepads, activeNotepad, dispatch }: ISidebar) {
   function handleHeadingClick(notepad: INotepad) {
     if (dispatch) {
       dispatch(setActiveNotepad(notepad))
@@ -63,16 +71,24 @@ export function Sidebar() {
       <Container className="sidebar-sticky">
         <nav className="sidebar-nav">
           <div className="sidebar-title">
-            <Icon
-              icon="github"
-              prefix="fab"
-              marginRight
-            />
-            <Heading type="h5" textTransform="uppercase">Notebooks</Heading>
+            <Icon icon="github" prefix="fab" marginRight />
+            <Heading type="h5" textTransform="uppercase">
+              Notebooks
+            </Heading>
           </div>
-          {state.allNotepads.map((notepad: INotepad) => (
-            <span  onClick={handleHeadingClick.bind(null, notepad)}>
-              <Heading className={state.activeNotepad && notepad.id === state.activeNotepad.id ? 'sidebar-active-heading' : ''} type="h6" marginBottom>{notepad.title}</Heading>
+          {allNotepads.map((notepad: INotepad) => (
+            <span onClick={handleHeadingClick.bind(null, notepad)}>
+              <Heading
+                className={
+                  activeNotepad && notepad.id === activeNotepad.id
+                    ? 'sidebar-active-heading'
+                    : ''
+                }
+                type="h6"
+                marginBottom
+              >
+                {notepad.title}
+              </Heading>
             </span>
           ))}
         </nav>

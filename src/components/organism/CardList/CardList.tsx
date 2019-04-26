@@ -1,10 +1,11 @@
-import React  from 'react'
+import React, { Dispatch, ReducerAction } from 'react'
 import { useStore} from '../../../hooks/useStore'
-import { INote } from '../../../interfaces'
-import { setActiveNote } from '../../../store/actions/notepadAction'
+import { INote, INotepad } from '../../../interfaces'
+import { setActiveNote, TNotepadActions } from '../../../store/actions/notepadAction'
 import {styled} from '../../../theme'
 import { Container } from '../../atoms'
 import { Card } from '../../molecules'
+import { IState } from '../../../store'
 
 const Style = styled.div`
   position: relative;
@@ -18,9 +19,13 @@ const Style = styled.div`
   }
 `
 
-export function CardList() {
-  const [state, dispatch] = useStore()
+interface ICardlist {
+  activeNotepad: INotepad | null
+  activeNote: INote | null
+  dispatch: Dispatch<ReducerAction<React.Reducer<IState, TNotepadActions>>>
+}
 
+export function CardList({activeNote, activeNotepad, dispatch}: ICardlist) {
   function handleCardClick(note: INote | null) {
     if (dispatch) dispatch(setActiveNote(note))
   }
@@ -28,7 +33,7 @@ export function CardList() {
   return (
     <Style>
       <Container className="card-list-sticky">
-        {state.activeNotepad && state.activeNotepad.notes
+        {activeNotepad && activeNotepad.notes
           .map(note => (
             <span onClick={handleCardClick.bind(null, note)}>
               <Card
@@ -37,7 +42,7 @@ export function CardList() {
                 title={note.title}
                 excerpt={note.excerpt}
                 createdAt={note.createdAt}
-                isSelected={!!state.activeNote && state.activeNote.id === note.id}
+                isSelected={!!activeNote && activeNote.id === note.id}
               />
             </span>
           ))}
