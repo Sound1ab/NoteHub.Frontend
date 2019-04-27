@@ -6,7 +6,8 @@ import {
   faEnvelope,
   faMoon,
   faPenSquare,
-  faUser,
+  faPlusCircle,
+  faUser
 } from '@fortawesome/free-solid-svg-icons'
 import React, { Dispatch, ReducerAction, useReducer } from 'react'
 import { GoogleFont, TypographyStyle } from 'react-typography'
@@ -32,6 +33,7 @@ library.add(
   faComment,
   faPenSquare,
   faBook,
+  faPlusCircle,
 )
 
 const Style = styled.div`

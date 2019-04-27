@@ -2,7 +2,7 @@ import { typography } from './typography'
 
 export const theme = {
   colors: {
-    accent: '#98c8c4',
+    accent: '#f442ff',
     text: {
       primary: '#171717',
       secondary: '#acacac',

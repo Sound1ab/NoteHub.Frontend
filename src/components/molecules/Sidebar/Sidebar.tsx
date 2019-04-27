@@ -2,12 +2,7 @@ import React, { Dispatch, ReducerAction } from 'react'
 import { Profile } from '..'
 import { COLOR } from '../../../enums'
 import { INotepad } from '../../../interfaces'
-import { IState } from '../../../store'
-import {
-  setActiveNote,
-  setActiveNotepad,
-  TNotepadActions,
-} from '../../../store'
+import { IState, setActiveNote, setActiveNotepad, TNotepadActions } from '../../../store'
 import { styled } from '../../../theme'
 import { Container, Heading, Icon } from '../../atoms'
 
@@ -16,6 +11,20 @@ const Style = styled.div`
   flex: 0 0 ${({ theme }) => theme.spacing.xxl};
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.tertiary};
+  
+  .sidebar-new-notebook-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: ${({ theme }) => theme.spacing.s};
+  }
+  
+  .sidebar-title-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: ${({ theme }) => theme.spacing.xs};
+  }
 
   .sidebar-heading {
     color: ${({ theme }) => theme.colors.text.secondary};
@@ -41,13 +50,6 @@ const Style = styled.div`
     display: block;
     margin-bottom: ${({ theme }) => theme.spacing.xs};
   }
-
-  .sidebar-title {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: ${({ theme }) => theme.spacing.xs};
-  }
 `
 
 interface ISidebar {
@@ -68,7 +70,17 @@ export function Sidebar({ allNotepads, activeNotepad, dispatch }: ISidebar) {
     <Style>
       <Container className="sidebar-sticky">
         <Profile />
-        <div className="sidebar-title">
+        <div className="sidebar-new-notebook-wrapper">
+          <Icon size="lg" color={COLOR.ACCENT} icon="plus-circle" prefix="fa" marginRight />
+          <Heading
+            color={COLOR.LIGHT}
+            className="sidebar-category-heading"
+            type="h3"
+          >
+            New Notebook
+          </Heading>
+        </div>
+        <div className="sidebar-title-wrapper">
           <Icon icon="book" prefix="fa" marginRight />
           <Heading
             color={COLOR.LIGHT}

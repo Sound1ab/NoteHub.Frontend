@@ -5,4 +5,5 @@ export enum EXEC_COMMAND {
 export enum COLOR {
   DARK = 'dark',
   LIGHT = 'light',
+  ACCENT = 'accent',
 }
