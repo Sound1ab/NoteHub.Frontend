@@ -1,34 +1,37 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
-import { ICON_COLOR } from '../../../enums'
+import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 
-const Style = styled.a<{ marginRight: boolean; color: ICON_COLOR }>`
+const Style = styled.a<{ marginRight: boolean; color: COLOR }>`
   position: relative;
   display: inline-block !important;
-  padding: 10px;
+  padding: 6px;
   margin-right: ${({ theme, marginRight }) =>
-    marginRight ? theme.spacing.xxxs : 0};
+    marginRight ? theme.spacing.xxs : 0};
 
   .icon-svg {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: ${({ theme, color }) => color === ICON_COLOR.DARK ? theme.colors.text.primary : theme.colors.text.tertiary};
+    color: ${({ theme, color }) =>
+      color === COLOR.DARK
+        ? theme.colors.text.primary
+        : theme.colors.text.tertiary};
   }
 `
 
 interface IIcon {
-  color?: ICON_COLOR
+  color?: COLOR
   link?: string
-  prefix?: 'fab'
-  icon: 'github' | 'soundcloud' | 'pen-square' | 'moon'
+  prefix?: 'fab' | 'fa'
+  icon: 'github' | 'soundcloud' | 'pen-square' | 'moon' | 'book'
   marginRight?: boolean
 }
 
 export function Icon({
-  color = ICON_COLOR.LIGHT,
+  color = COLOR.LIGHT,
   link,
   icon,
   prefix,

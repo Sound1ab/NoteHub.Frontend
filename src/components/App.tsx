@@ -1,6 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faGithub, faSoundcloud } from '@fortawesome/free-brands-svg-icons'
 import {
+  faBook,
   faComment,
   faEnvelope,
   faMoon,
@@ -18,7 +19,7 @@ import { notepadReducer, setAllNotepads, TNotepadActions } from '../store'
 import { styled } from '../theme'
 import { typography } from '../theme/typography'
 import { Container, TextArea } from './atoms'
-import { Header, Sidebar } from './molecules'
+import { Sidebar } from './molecules'
 import { CardList } from './organism'
 import { GlobalStyle, ThemeProvider } from './utility'
 
@@ -29,7 +30,8 @@ library.add(
   faUser,
   faMoon,
   faComment,
-  faPenSquare
+  faPenSquare,
+  faBook,
 )
 
 const Style = styled.div`

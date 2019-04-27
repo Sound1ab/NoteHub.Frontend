@@ -2,7 +2,7 @@ export enum EXEC_COMMAND {
   UNDERLINE = 'underline'
 }
 
-export enum ICON_COLOR {
+export enum COLOR {
   DARK = 'dark',
   LIGHT = 'light',
 }

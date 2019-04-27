@@ -1,5 +1,6 @@
 import React, { Dispatch, ReducerAction } from 'react'
-import { ICON_COLOR } from '../../../enums'
+import { Profile } from '..'
+import { COLOR } from '../../../enums'
 import { INotepad } from '../../../interfaces'
 import { IState } from '../../../store'
 import {
@@ -8,38 +9,13 @@ import {
   TNotepadActions,
 } from '../../../store'
 import { styled } from '../../../theme'
-import { Avatar, Container, Heading, Icon } from '../../atoms'
+import { Container, Heading, Icon } from '../../atoms'
 
 const Style = styled.div`
   position: relative;
   flex: 0 0 ${({ theme }) => theme.spacing.xxl};
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.tertiary};
-  
-  .sidebar-avatar {
-    margin-right: ${({theme}) => theme.spacing.xs};
-  }
-  
-  .sidebar-profile {
-    display: flex;
-    margin-bottom: ${({theme}) => theme.spacing.s};
-  }
-  
-  .sidebar-profile-details {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .sidebar-github {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-  }
-
-  .sidebar-category-heading {
-    color: ${({ theme }) => theme.colors.text.tertiary};
-  }
 
   .sidebar-heading {
     color: ${({ theme }) => theme.colors.text.secondary};
@@ -48,6 +24,10 @@ const Style = styled.div`
     &:hover {
       color: ${({ theme }) => theme.colors.text.tertiary};
     }
+  }
+
+  .sidebar-active-heading {
+    color: ${({ theme }) => theme.colors.text.tertiary};
   }
 
   .sidebar-sticky {
@@ -68,10 +48,6 @@ const Style = styled.div`
     align-items: center;
     margin-bottom: ${({ theme }) => theme.spacing.xs};
   }
-
-  .sidebar-active-heading {
-    color: ${({ theme }) => theme.colors.text.tertiary};
-  }
 `
 
 interface ISidebar {
@@ -91,41 +67,32 @@ export function Sidebar({ allNotepads, activeNotepad, dispatch }: ISidebar) {
   return (
     <Style>
       <Container className="sidebar-sticky">
-        <div className="sidebar-profile">
-          <Avatar className="sidebar-avatar" />
-          <div className="sidebar-profile-details">
-            <Heading type="h4">Phillip Parker</Heading>
-            <div className="sidebar-github">
-              <Icon
-                icon="github"
-                prefix="fab"
-                marginRight
-              />
-              <Heading type="h6">View Github</Heading>
-            </div>
-          </div>
+        <Profile />
+        <div className="sidebar-title">
+          <Icon icon="book" prefix="fa" marginRight />
+          <Heading
+            color={COLOR.LIGHT}
+            className="sidebar-category-heading"
+            type="h5"
+            textTransform="uppercase"
+          >
+            Notebooks
+          </Heading>
         </div>
         <nav className="sidebar-nav">
-          <div className="sidebar-title">
-            <Icon icon="github" prefix="fab" marginRight />
-            <Heading className="sidebar-category-heading" type="h5" textTransform="uppercase">
-              Notebooks
-            </Heading>
-          </div>
           {allNotepads.map((notepad: INotepad) => (
-            <span onClick={handleHeadingClick.bind(null, notepad)}>
-              <Heading
-                className={
-                  activeNotepad && notepad.id === activeNotepad.id
-                    ? 'sidebar-heading sidebar-active-heading'
-                    : 'sidebar-heading'
-                }
-                type="h4"
-                marginBottom
-              >
-                {notepad.title}
-              </Heading>
-            </span>
+            <Heading
+              onClick={handleHeadingClick.bind(null, notepad)}
+              className={
+                activeNotepad && notepad.id === activeNotepad.id
+                  ? 'sidebar-heading sidebar-active-heading'
+                  : 'sidebar-heading'
+              }
+              type="h4"
+              marginBottom
+            >
+              {notepad.title}
+            </Heading>
           ))}
         </nav>
       </Container>
