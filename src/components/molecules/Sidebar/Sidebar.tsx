@@ -12,21 +12,21 @@ const Style = styled.div`
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.tertiary};
   
-  .sidebar-new-notebook-wrapper {
+  .new-notebook-wrapper {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     margin-bottom: ${({ theme }) => theme.spacing.s};
   }
   
-  .sidebar-title-wrapper {
+  .title-wrapper {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     margin-bottom: ${({ theme }) => theme.spacing.xs};
   }
 
-  .sidebar-heading {
+  .heading {
     color: ${({ theme }) => theme.colors.text.secondary};
     cursor: pointer;
 
@@ -35,18 +35,18 @@ const Style = styled.div`
     }
   }
 
-  .sidebar-active-heading {
+  .active-heading {
     color: ${({ theme }) => theme.colors.text.tertiary};
   }
 
-  .sidebar-sticky {
+  .sticky {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     padding: ${({ theme }) => theme.spacing.s};
   }
 
-  .sidebar-nav > a {
+  .nav > a {
     display: block;
     margin-bottom: ${({ theme }) => theme.spacing.xs};
   }
@@ -68,37 +68,37 @@ export function Sidebar({ allNotepads, activeNotepad, dispatch }: ISidebar) {
 
   return (
     <Style>
-      <Container className="sidebar-sticky">
+      <Container className="sticky">
         <Profile />
-        <div className="sidebar-new-notebook-wrapper">
+        <div className="new-notebook-wrapper">
           <Icon size="lg" color={COLOR.ACCENT} icon="plus-circle" prefix="fa" marginRight />
           <Heading
             color={COLOR.LIGHT}
-            className="sidebar-category-heading"
+            className="category-heading"
             type="h3"
           >
             New Notebook
           </Heading>
         </div>
-        <div className="sidebar-title-wrapper">
+        <div className="title-wrapper">
           <Icon icon="book" prefix="fa" marginRight />
           <Heading
             color={COLOR.LIGHT}
-            className="sidebar-category-heading"
+            className="category-heading"
             type="h5"
             textTransform="uppercase"
           >
             Notebooks
           </Heading>
         </div>
-        <nav className="sidebar-nav">
+        <nav className="nav">
           {allNotepads.map((notepad: INotepad) => (
             <Heading
               onClick={handleHeadingClick.bind(null, notepad)}
               className={
                 activeNotepad && notepad.id === activeNotepad.id
-                  ? 'sidebar-heading sidebar-active-heading'
-                  : 'sidebar-heading'
+                  ? 'heading active-heading'
+                  : 'heading'
               }
               type="h4"
               marginBottom

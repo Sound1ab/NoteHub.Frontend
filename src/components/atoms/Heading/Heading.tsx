@@ -10,13 +10,41 @@ const StyledHeading = styled('h1')<IHeading>`
   text-transform: ${({ textTransform }) => textTransform};
   text-align: ${({ textAlign }) => textAlign};
   text-rendering: optimizeLegibility;
-  margin-bottom: ${({ theme, marginBottom }) =>
-    marginBottom ? theme.spacing.xxs : 0};
   margin-top: ${({ theme, marginTop }) => (marginTop ? theme.spacing.s : 0)};
-  color: ${({ theme, color = COLOR.DARK }) =>
-    color === COLOR.DARK
-      ? theme.colors.text.primary
-      : theme.colors.text.tertiary};
+  margin-bottom: ${({ theme, type, marginBottom }) => {
+    if (marginBottom) {
+      switch (type) {
+        case 'h1':
+          return theme.spacing.s
+        case 'h2':
+          return theme.spacing.s
+        case 'h3':
+          return theme.spacing.s
+        case 'h4':
+          return theme.spacing.xxs
+        case 'h5':
+          return theme.spacing.xs
+        case 'h6':
+          return theme.spacing.xs
+      }
+    } else {
+      return 0
+    }
+  }}
+  color: ${({ theme, color }) => {
+    switch (color) {
+      case COLOR.DARK:
+        return theme.colors.text.primary
+      case COLOR.LIGHT:
+        return theme.colors.text.tertiary
+      case COLOR.ACCENT:
+        return theme.colors.accent
+      case COLOR.MEDIUM:
+        return theme.colors.text.secondary
+      default:
+        return theme.colors.text.primary
+    }
+  }};
 `
 
 interface IHeading {

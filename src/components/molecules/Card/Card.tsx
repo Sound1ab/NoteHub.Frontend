@@ -1,6 +1,7 @@
 import React from 'react'
 import { styled } from '../../../theme'
 import { Heading } from '../../atoms'
+import { COLOR } from '../../../enums'
 
 const Style = styled.div<{ isSelected: boolean }>`
   position: relative;
@@ -13,7 +14,7 @@ const Style = styled.div<{ isSelected: boolean }>`
     isSelected ? theme.colors.link.active : 'transparent'};
   cursor: pointer;
 
-  .card-heading {
+  .heading {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -31,17 +32,15 @@ interface ICard {
 export function Card({ id, title, excerpt, createdAt, isSelected }: ICard) {
   return (
     <Style data-testid="Card" isSelected={isSelected}>
-      <div className="card-heading">
+      <div className="heading">
         <Heading type="h4" marginBottom>
           {title}
         </Heading>
-        <Heading type="h6" marginBottom>
+        <Heading color={COLOR.MEDIUM} type="h6" marginBottom>
           {createdAt}
         </Heading>
       </div>
-      <p>
-        {excerpt}
-      </p>
+      <p>{excerpt}</p>
     </Style>
   )
 }

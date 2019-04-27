@@ -5,7 +5,7 @@ import { styled } from '../../../theme'
 const Style = styled.div`
   position: relative;
 
-  .text-editor {
+  .editor {
     padding: ${({ theme }) => theme.spacing.s};
     resize: none;
     width: 100%;
@@ -55,7 +55,7 @@ export function TextArea({ content = '' }: ITextArea) {
   return (
     <Style>
       <div
-        className="text-editor"
+        className="editor"
         contentEditable
         onClick={handleOnClick}
         onBlur={handleOnBlur}

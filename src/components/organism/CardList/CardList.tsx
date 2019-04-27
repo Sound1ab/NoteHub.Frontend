@@ -1,20 +1,36 @@
 import React, { Dispatch, ReducerAction } from 'react'
+import { COLOR } from '../../../enums'
 import { INote, INotepad } from '../../../interfaces'
 import { IState, setActiveNote, TNotepadActions } from '../../../store'
 import { styled } from '../../../theme'
-import { Container } from '../../atoms'
+import { Container, Heading, Icon } from '../../atoms'
 import { Card } from '../../molecules'
 
 const Style = styled.div`
   position: relative;
   flex: 0 0 ${({ theme }) => theme.spacing.xxxl};
   height: 100%;
-  background-color: ${({theme}) => theme.colors.background.secondary};
+  background-color: ${({ theme }) => theme.colors.background.secondary};
 
-  .card-list-sticky {
+  .sticky {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+  }
+
+  .header {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: ${({ theme }) => theme.spacing.s};
+    background-color: transparent;
+  }
+
+  .header-options {
+    cursor: pointer;
   }
 `
 
@@ -31,7 +47,28 @@ export function CardList({ activeNote, activeNotepad, dispatch }: ICardlist) {
 
   return (
     <Style>
-      <Container className="card-list-sticky">
+      <Container className="sticky">
+        <div className="header">
+          <Heading type="h2" marginBottom>
+            {(activeNotepad && activeNotepad.title) || ''}
+          </Heading>
+          <div className="header-options">
+            <Icon
+              color={COLOR.MEDIUM}
+              icon="sync"
+              prefix="fa"
+              marginRight
+              size="sm"
+            />
+            <Icon
+              color={COLOR.MEDIUM}
+              icon="trash"
+              prefix="fa"
+              marginRight
+              size="sm"
+            />
+          </div>
+        </div>
         {activeNotepad &&
           activeNotepad.notes.map(note => (
             <span onClick={handleCardClick.bind(null, note)}>

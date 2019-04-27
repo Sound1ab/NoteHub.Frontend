@@ -21,7 +21,7 @@ const Style = styled.a<{ marginRight: boolean; color: COLOR; size: string }>`
     }
   }};
 
-  .icon-svg {
+  .svg {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -34,6 +34,8 @@ const Style = styled.a<{ marginRight: boolean; color: COLOR; size: string }>`
           return theme.colors.text.tertiary
         case COLOR.ACCENT:
           return theme.colors.accent
+        case COLOR.MEDIUM:
+          return theme.colors.text.secondary
         default:
           return theme.colors.text.tertiary
       }
@@ -44,7 +46,7 @@ interface IIcon {
   color?: COLOR
   link?: string
   prefix?: 'fab' | 'fa'
-  icon: 'github' | 'soundcloud' | 'pen-square' | 'moon' | 'book' | 'plus-circle'
+  icon: 'github' | 'soundcloud' | 'pen-square' | 'moon' | 'book' | 'plus-circle' | 'trash' | 'sync'
   marginRight?: boolean
   size?: 'xs' | 'sm' | 'lg'
 }
@@ -61,7 +63,7 @@ export function Icon({
     <FontAwesomeIcon
       icon={[prefix as any, icon]}
       size={size}
-      className="icon-svg"
+      className="svg"
     />
   )
   return link ? (
