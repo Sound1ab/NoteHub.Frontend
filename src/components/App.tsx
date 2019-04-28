@@ -21,7 +21,7 @@ import { initialState } from '../store'
 import { notepadReducer, setAllNotepads, TNotepadActions } from '../store'
 import { styled } from '../theme'
 import { typography } from '../theme/typography'
-import { Container, TextArea } from './atoms'
+import { Container, TextArea, Ace } from './atoms'
 import { Sidebar } from './molecules'
 import { CardList } from './organism'
 import { GlobalStyle, ThemeProvider } from './utility'
@@ -37,7 +37,7 @@ library.add(
   faBook,
   faPlusCircle,
   faSync,
-  faTrash,
+  faTrash
 )
 
 const Style = styled.div`
@@ -45,7 +45,7 @@ const Style = styled.div`
   flex-direction: column;
   height: 100vh;
 
-  .app-page {
+  .page {
     flex: 1;
     display: flex;
     flex-direction: row;
@@ -53,14 +53,13 @@ const Style = styled.div`
     align-items: stretch;
   }
 
-  .app-main {
+  .main {
     display: flex;
     flex-direction: column;
     flex: 1;
     position: relative;
     min-width: 0;
     height: 100%;
-    overflow-y: scroll;
   }
 `
 
@@ -112,7 +111,7 @@ export function App() {
           'loading'
         ) : (
           <Style>
-            <Container className="app-page">
+            <Container className="page">
               <Sidebar
                 allNotepads={state.allNotepads}
                 activeNotepad={state.activeNotepad}
@@ -123,9 +122,14 @@ export function App() {
                 activeNote={state.activeNote}
                 dispatch={dispatch}
               />
-              <main className="app-main">
-                <TextArea
-                  content={state.activeNote ? state.activeNote.content : null}
+              <main className="main">
+                {/*<TextArea*/}
+                {/*content={state.activeNote ? state.activeNote.content : null}*/}
+                {/*/>*/}
+                <Ace
+                  activeNotepad={state.activeNotepad}
+                  activeNote={state.activeNote}
+                  dispatch={dispatch}
                 />
               </main>
             </Container>
