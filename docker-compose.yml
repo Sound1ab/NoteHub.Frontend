@@ -1,0 +1,45 @@
+version: "3"
+services:
+  api:
+    working_dir: /usr/src/api
+    build: ./api
+    restart: always
+    image: deadly-banjo-api:latest
+    volumes:
+      - ./api:/usr/src/api
+    environment:
+      - NODE_ENV=development
+      - PORT=8088
+    ports:
+      - 8088:8088
+    command: npm start
+    depends_on:
+      - db
+    env_file:
+      - .env
+  db:
+    image: postgres:10
+    restart: always
+    volumes:
+      - $HOME/docker/volumes/postgres:/var/lib/postgresql/data
+    env_file:
+      - .env
+    ports:
+      - 5431:5432
+  app:
+    working_dir: /usr/src/app
+    build: ./app
+    restart: always
+    image: deadly-banjo-app:latest
+    volumes:
+      - ./app:/usr/src/app
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+    ports:
+      - 8080:8080
+    command: npm start
+    depends_on:
+      - api
+    env_file:
+      - .env

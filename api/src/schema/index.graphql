@@ -1,0 +1,112 @@
+type Query {
+  readTodo(id: ID!): Todo
+  listTodos(filter: ModelTodoFilterInput, limit: Int, nextToken: String): ModelTodoConnection
+}
+
+type Mutation {
+  createTodo(input: CreateTodoInput!): Todo
+  updateTodo(input: UpdateTodoInput!): Todo
+  deleteTodo(input: DeleteTodoInput!): Todo
+}
+
+type Date {
+  dayOfWeek: String!
+  dayOfMonth: Int!
+  month: String!
+  dateLongForm: String!
+}
+
+type Todo {
+  id: ID!
+  description: String!
+  isDone: Boolean!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelTodoConnection {
+  items: [Todo]
+  nextToken: String
+}
+
+input ModelStringFilterInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+}
+
+input ModelIDFilterInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+}
+
+input ModelIntFilterInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  contains: Int
+  notContains: Int
+  between: [Int]
+}
+
+input ModelFloatFilterInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  contains: Float
+  notContains: Float
+  between: [Float]
+}
+
+input ModelBooleanFilterInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelTodoFilterInput {
+  id: ModelIDFilterInput
+  description: ModelStringFilterInput
+  and: [ModelTodoFilterInput]
+  or: [ModelTodoFilterInput]
+  not: ModelTodoFilterInput
+}
+
+input CreateTodoInput {
+  description: String
+}
+
+input UpdateTodoInput {
+  id: ID!
+  description: String
+  isDone: Boolean
+}
+
+input DeleteTodoInput {
+  id: ID
+}
