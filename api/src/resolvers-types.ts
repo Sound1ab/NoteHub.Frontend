@@ -204,7 +204,7 @@ export type Note = {
 export type Notebook = {
   id: Scalars['ID']
   title: Scalars['String']
-  notes: Array<Note>
+  notes?: Maybe<Array<Maybe<Note>>>
   createdAt: Date
   updatedAt: Date
 }
@@ -249,10 +249,12 @@ export type QueryListUsersArgs = {
 }
 
 export type UpdateNotebookInput = {
+  id: Scalars['ID']
   title?: Maybe<Scalars['String']>
 }
 
 export type UpdateNoteInput = {
+  id: Scalars['ID']
   title?: Maybe<Scalars['String']>
   markdown?: Maybe<Scalars['String']>
   excerpt?: Maybe<Scalars['String']>
@@ -270,7 +272,7 @@ export type User = {
   firstName: Scalars['String']
   lastName: Scalars['String']
   email: Scalars['String']
-  notebooks: Array<Notebook>
+  notebooks?: Maybe<Array<Maybe<Notebook>>>
   createdAt: Date
   updatedAt: Date
 }
@@ -506,7 +508,11 @@ export type NotebookResolvers<
 > = {
   id?: Resolver<ResolversTypes['ID'], ParentType, Context>
   title?: Resolver<ResolversTypes['String'], ParentType, Context>
-  notes?: Resolver<Array<ResolversTypes['Note']>, ParentType, Context>
+  notes?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['Note']>>>,
+    ParentType,
+    Context
+  >
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
 }
@@ -561,7 +567,11 @@ export type UserResolvers<
   firstName?: Resolver<ResolversTypes['String'], ParentType, Context>
   lastName?: Resolver<ResolversTypes['String'], ParentType, Context>
   email?: Resolver<ResolversTypes['String'], ParentType, Context>
-  notebooks?: Resolver<Array<ResolversTypes['Notebook']>, ParentType, Context>
+  notebooks?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['Notebook']>>>,
+    ParentType,
+    Context
+  >
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
 }

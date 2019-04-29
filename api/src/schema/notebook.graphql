@@ -39,6 +39,7 @@ input CreateNotebookInput {
 }
 
 input UpdateNotebookInput {
+    id: ID!
     title: String
 }
 

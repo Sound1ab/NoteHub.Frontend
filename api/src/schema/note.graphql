@@ -42,6 +42,7 @@ input CreateNoteInput {
 }
 
 input UpdateNoteInput {
+    id: ID!
     title: String
     markdown: String
     excerpt: String

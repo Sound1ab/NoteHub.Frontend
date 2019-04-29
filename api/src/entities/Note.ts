@@ -9,6 +9,14 @@ export class Note extends Base {
   @IsAlphanumeric()
   public title: string
 
+  @Column('text')
+  @IsAlphanumeric()
+  public markdown: string
+
+  @Column('text')
+  @IsAlphanumeric()
+  public excerpt: string
+
   @ManyToOne(type => Notebook, notebook => notebook.notes)
   public notebook: Notebook
 }
