@@ -7,23 +7,23 @@ import {
   faMoon,
   faPenSquare,
   faPlusCircle,
-  faUser,
   faSync,
   faTrash,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { Dispatch, ReducerAction, useReducer } from 'react'
+import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import { GoogleFont, TypographyStyle } from 'react-typography'
 import { useData } from '../hooks'
 import { INotepad } from '../interfaces'
+import { client } from '../services/Apollo/clientConfig'
+import { notepadReducer, setAllNotepads, TNotepadActions } from '../store'
+import { initialState } from '../store'
 import { NoteContext, setActiveNote, setActiveNotepad } from '../store'
 import { IState } from '../store'
-import { initialState } from '../store'
-import { notepadReducer, setAllNotepads, TNotepadActions } from '../store'
-import { styled } from '../theme'
 import { typography } from '../theme/typography'
-import { Container, TextArea, Ace } from './atoms'
-import { Sidebar } from './molecules'
-import { CardList } from './organism'
+import { Editor } from './templates'
 import { GlobalStyle, ThemeProvider } from './utility'
 
 library.add(
@@ -39,29 +39,6 @@ library.add(
   faSync,
   faTrash
 )
-
-const Style = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-
-  .page {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: stretch;
-  }
-
-  .main {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    position: relative;
-    min-width: 0;
-    height: 100%;
-  }
-`
 
 function setupSelections(
   data: INotepad[],
@@ -102,40 +79,17 @@ export function App() {
   setupSelections(data, state, dispatch)
 
   return (
-    <ThemeProvider>
-      <NoteContext.Provider value={[state, dispatch]}>
-        <GlobalStyle />
-        <TypographyStyle typography={typography} />
-        <GoogleFont typography={typography} />
-        {loading ? (
-          'loading'
-        ) : (
-          <Style>
-            <Container className="page">
-              <Sidebar
-                allNotepads={state.allNotepads}
-                activeNotepad={state.activeNotepad}
-                dispatch={dispatch}
-              />
-              <CardList
-                activeNotepad={state.activeNotepad}
-                activeNote={state.activeNote}
-                dispatch={dispatch}
-              />
-              <main className="main">
-                {/*<TextArea*/}
-                {/*content={state.activeNote ? state.activeNote.content : null}*/}
-                {/*/>*/}
-                <Ace
-                  activeNotepad={state.activeNotepad}
-                  activeNote={state.activeNote}
-                  dispatch={dispatch}
-                />
-              </main>
-            </Container>
-          </Style>
-        )}
-      </NoteContext.Provider>
-    </ThemeProvider>
+    <ApolloProvider client={client}>
+      <ApolloHooksProvider client={client}>
+        <ThemeProvider>
+          <NoteContext.Provider value={[state, dispatch]}>
+            <GlobalStyle />
+            <TypographyStyle typography={typography} />
+            <GoogleFont typography={typography} />
+            {loading ? 'loading' : <Editor />}
+          </NoteContext.Provider>
+        </ThemeProvider>
+      </ApolloHooksProvider>
+    </ApolloProvider>
   )
 }

@@ -4,9 +4,6 @@ import { TNotepadActions } from '../store'
 
 export function useStore() {
   return useContext<
-    [
-      IState,
-      Dispatch<ReducerAction<React.Reducer<IState, TNotepadActions>>> | null
-    ]
+    [IState, Dispatch<ReducerAction<React.Reducer<IState, TNotepadActions>>>]
   >(NoteContext)
 }

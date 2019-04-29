@@ -15,8 +15,5 @@ export const initialState: IState = {
 }
 
 export const NoteContext = React.createContext<
-  [
-    IState,
-    Dispatch<ReducerAction<React.Reducer<IState, TNotepadActions>>> | null
-  ]
->([initialState, null])
+  [IState, Dispatch<ReducerAction<React.Reducer<IState, TNotepadActions>>>]
+>([initialState, () => null])
