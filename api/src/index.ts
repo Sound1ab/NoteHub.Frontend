@@ -14,12 +14,12 @@ async function configureServer() {
   app.set('env', process.env.APP_ENV)
 
   const resolvers: IResolvers = {
-    Mutation: {
-      ...(await TodoMutations()),
-    },
-    Query: {
-      ...(await TodoQueries()),
-    },
+    // Mutation: {
+    //   ...(await TodoMutations()),
+    // },
+    // Query: {
+    //   ...(await TodoQueries()),
+    // },
   }
 
   const server = new ApolloServer({

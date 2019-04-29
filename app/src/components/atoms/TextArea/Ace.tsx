@@ -1,4 +1,3 @@
-import AceAjax from 'ace'
 import React, { Dispatch, ReducerAction } from 'react'
 import AceEditor from 'react-ace'
 
@@ -14,10 +13,7 @@ interface IAce {
 }
 
 export function Ace({  }: IAce) {
-  function handleBlur(
-    e: React.MouseEvent<HTMLDivElement>,
-    editor: AceAjax.Document
-  ) {
+  function handleBlur(e: React.MouseEvent<HTMLDivElement>, editor: any) {
     console.log(e)
     console.log(editor.getValue())
   }
