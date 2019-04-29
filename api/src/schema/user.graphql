@@ -1,0 +1,55 @@
+## Base
+type Query {
+    readUser(id: ID!): User
+    listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
+}
+
+type Mutation {
+    createUser(input: CreateUserInput!): User
+    updateUser(input: UpdateUserInput!): User
+    deleteUser(input: DeleteUserInput!): User
+}
+
+## Types
+type User {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    notebooks: [Notebook!]!
+    createdAt: Date!
+    updatedAt: Date!
+
+}
+
+type ModelUserConnection {
+    items: [User]
+    nextToken: String
+}
+
+## Query inputs
+input ModelUserFilterInput {
+    id: ModelIDFilterInput
+    description: ModelStringFilterInput
+    and: [ModelUserFilterInput]
+    or: [ModelUserFilterInput]
+    not: ModelUserFilterInput
+}
+
+## Mutation inputs
+input CreateUserInput {
+    firstName: String!
+    lastName: String!
+    email: String!
+}
+
+input UpdateUserInput {
+    id: ID!
+    firstName: String
+    lastName: String
+    email: String
+}
+
+input DeleteUserInput {
+    id: ID
+}

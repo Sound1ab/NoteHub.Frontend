@@ -1,0 +1,47 @@
+## Base
+type Query {
+    readNotebook(id: ID!): Notebook
+    listNotebooks(filter: ModelNotebookFilterInput, limit: Int, nextToken: String): ModelNotebookConnection
+}
+
+type Mutation {
+    createNotebook(input: CreateNotebookInput!): Notebook
+    updateNotebook(input: UpdateNotebookInput!): Notebook
+    deleteNotebook(input: DeleteNotebookInput!): Notebook
+}
+
+## Types
+type Notebook {
+    id: ID!
+    title: String!
+    notes: [Note!]!
+    createdAt: Date!
+    updatedAt: Date!
+}
+
+type ModelNotebookConnection {
+    items: [Notebook]
+    nextToken: String
+}
+
+## Query inputs
+input ModelNotebookFilterInput {
+    id: ModelIDFilterInput
+    description: ModelStringFilterInput
+    and: [ModelNotebookFilterInput]
+    or: [ModelNotebookFilterInput]
+    not: ModelNotebookFilterInput
+}
+
+## Mutation inputs
+input CreateNotebookInput {
+    title: String!
+}
+
+input UpdateNotebookInput {
+    title: String
+}
+
+input DeleteNotebookInput {
+    id: ID
+}

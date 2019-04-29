@@ -3,8 +3,8 @@ import express from 'express'
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import { config } from './config'
-import { convertGraphQLToTypedefs } from './helpers'
 import { TodoMutations, TodoQueries } from './resolvers/todo'
+import { typeDefs } from './schema'
 
 const port = process.env.PORT || 8088
 
@@ -24,7 +24,7 @@ async function configureServer() {
 
   const server = new ApolloServer({
     resolvers,
-    typeDefs: convertGraphQLToTypedefs(),
+    typeDefs,
   })
 
   server.applyMiddleware({ app })

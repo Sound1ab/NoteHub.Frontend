@@ -1,0 +1,52 @@
+## Base
+type Query {
+    readNote(id: ID!): Note
+    listNotes(filter: ModelNoteFilterInput, limit: Int, nextToken: String): ModelNoteConnection
+}
+
+type Mutation {
+    createNote(input: CreateNoteInput!): Note
+    updateNote(input: UpdateNoteInput!): Note
+    deleteNote(input: DeleteNoteInput!): Note
+}
+
+## Types
+type Note {
+    id: ID!
+    title: String!
+    markdown: String!
+    excerpt: String!
+    createdAt: Date!
+    updatedAt: Date!
+}
+
+type ModelNoteConnection {
+    items: [Note]
+    nextToken: String
+}
+
+## Query inputs
+input ModelNoteFilterInput {
+    id: ModelIDFilterInput
+    description: ModelStringFilterInput
+    and: [ModelNoteFilterInput]
+    or: [ModelNoteFilterInput]
+    not: ModelNoteFilterInput
+}
+
+## Mutation inputs
+input CreateNoteInput {
+    title: String!
+    markdown: String!
+    excerpt: String!
+}
+
+input UpdateNoteInput {
+    title: String
+    markdown: String
+    excerpt: String
+}
+
+input DeleteNoteInput {
+    id: ID
+}
