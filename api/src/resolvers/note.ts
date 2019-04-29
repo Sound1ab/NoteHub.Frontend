@@ -1,4 +1,6 @@
+import { getConnection } from 'typeorm'
 import { Note } from '../entities/Note'
+import { Notebook } from '../entities/Notebook'
 import { configureRepository, formatResult } from '../helpers'
 import {
   MutationCreateNoteArgs,
@@ -13,7 +15,9 @@ export async function NoteQueries() {
     listNotes: await configureRepository<Note, QueryListNotesArgs>(
       Note,
       async repository => {
-        const results = await repository.find()
+        const results = await repository.find({
+          relations: ['notebook', 'notebook.user'],
+        })
         return {
           items: results.map(formatResult),
           nextToken: '1234',
@@ -23,7 +27,12 @@ export async function NoteQueries() {
     readNote: await configureRepository<Note, QueryReadNoteArgs>(
       Note,
       async (repository, { id }) => {
-        return formatResult(await repository.findOne(id))
+        return formatResult(
+          await repository.findOne({
+            relations: ['notebook', 'notebook.user'],
+            where: { id },
+          })
+        )
       }
     ),
   }
@@ -33,11 +42,19 @@ export async function NoteMutations() {
   return {
     createNote: await configureRepository<Note, MutationCreateNoteArgs>(
       Note,
-      async (repository, { input: { title, excerpt, markdown } }) => {
+      async (
+        repository,
+        { input: { title, excerpt, markdown, notebookId } }
+      ) => {
+        const notebookRepository = await getConnection().getRepository(Notebook)
+        const notebook = await notebookRepository.findOne(notebookId)
+        if (!notebook) return null
+
         const note = new Note()
         note.title = title
         note.excerpt = excerpt
         note.markdown = markdown
+        note.notebook = notebook
 
         return formatResult(await repository.save(note))
       }

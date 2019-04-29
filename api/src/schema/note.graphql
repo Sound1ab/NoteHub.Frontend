@@ -13,6 +13,7 @@ type Mutation {
 ## Types
 type Note {
     id: ID!
+    notebook: Notebook!
     title: String!
     markdown: String!
     excerpt: String!
@@ -36,6 +37,7 @@ input ModelNoteFilterInput {
 
 ## Mutation inputs
 input CreateNoteInput {
+    notebookId: ID!
     title: String!
     markdown: String!
     excerpt: String!

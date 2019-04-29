@@ -3,6 +3,8 @@ import express from 'express'
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import { config } from './config'
+import { NoteMutations, NoteQueries } from './resolvers/note'
+import { NotebookMutations, NotebookQueries } from './resolvers/notebook'
 import { UserMutations, UserQueries } from './resolvers/user'
 import { typeDefs } from './schema'
 
@@ -16,9 +18,13 @@ async function configureServer() {
   const resolvers: IResolvers = {
     Mutation: {
       ...(await UserMutations()),
+      ...(await NoteMutations()),
+      ...(await NotebookMutations()),
     },
     Query: {
       ...(await UserQueries()),
+      ...(await NoteQueries()),
+      ...(await NotebookQueries()),
     },
   }
 

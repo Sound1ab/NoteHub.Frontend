@@ -11,10 +11,12 @@ export type Scalars = {
 }
 
 export type CreateNotebookInput = {
+  userId: Scalars['ID']
   title: Scalars['String']
 }
 
 export type CreateNoteInput = {
+  notebookId: Scalars['ID']
   title: Scalars['String']
   markdown: Scalars['String']
   excerpt: Scalars['String']
@@ -194,6 +196,7 @@ export type MutationDeleteUserArgs = {
 
 export type Note = {
   id: Scalars['ID']
+  notebook: Notebook
   title: Scalars['String']
   markdown: Scalars['String']
   excerpt: Scalars['String']
@@ -203,6 +206,7 @@ export type Note = {
 
 export type Notebook = {
   id: Scalars['ID']
+  user: User
   title: Scalars['String']
   notes?: Maybe<Array<Maybe<Note>>>
   createdAt: Date
@@ -353,6 +357,8 @@ export type ResolversTypes = {
   Query: Query
   ID: Scalars['ID']
   Note: Note
+  Notebook: Notebook
+  User: User
   String: Scalars['String']
   Date: Date
   Int: Scalars['Int']
@@ -360,10 +366,8 @@ export type ResolversTypes = {
   ModelIDFilterInput: ModelIdFilterInput
   ModelStringFilterInput: ModelStringFilterInput
   ModelNoteConnection: ModelNoteConnection
-  Notebook: Notebook
   ModelNotebookFilterInput: ModelNotebookFilterInput
   ModelNotebookConnection: ModelNotebookConnection
-  User: User
   ModelUserFilterInput: ModelUserFilterInput
   ModelUserConnection: ModelUserConnection
   Mutation: Mutation
@@ -495,6 +499,7 @@ export type NoteResolvers<
   ParentType = ResolversTypes['Note']
 > = {
   id?: Resolver<ResolversTypes['ID'], ParentType, Context>
+  notebook?: Resolver<ResolversTypes['Notebook'], ParentType, Context>
   title?: Resolver<ResolversTypes['String'], ParentType, Context>
   markdown?: Resolver<ResolversTypes['String'], ParentType, Context>
   excerpt?: Resolver<ResolversTypes['String'], ParentType, Context>
@@ -507,6 +512,7 @@ export type NotebookResolvers<
   ParentType = ResolversTypes['Notebook']
 > = {
   id?: Resolver<ResolversTypes['ID'], ParentType, Context>
+  user?: Resolver<ResolversTypes['User'], ParentType, Context>
   title?: Resolver<ResolversTypes['String'], ParentType, Context>
   notes?: Resolver<
     Maybe<Array<Maybe<ResolversTypes['Note']>>>,

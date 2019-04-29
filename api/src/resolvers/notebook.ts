@@ -1,4 +1,6 @@
+import { getConnection } from 'typeorm'
 import { Notebook } from '../entities/Notebook'
+import { User } from '../entities/User'
 import { configureRepository, formatResult } from '../helpers'
 import {
   MutationCreateNotebookArgs,
@@ -13,7 +15,9 @@ export async function NotebookQueries() {
     listNotebooks: await configureRepository<Notebook, QueryListNotebooksArgs>(
       Notebook,
       async repository => {
-        const results = await repository.find()
+        const results = await repository.find({
+          relations: ['notes', 'user'],
+        })
         return {
           items: results.map(formatResult),
           nextToken: '1234',
@@ -23,7 +27,12 @@ export async function NotebookQueries() {
     readNotebook: await configureRepository<Notebook, QueryReadNotebookArgs>(
       Notebook,
       async (repository, { id }) => {
-        return formatResult(await repository.findOne(id))
+        return formatResult(
+          await repository.findOne({
+            relations: ['notes', 'user'],
+            where: { id },
+          })
+        )
       }
     ),
   }
@@ -34,9 +43,14 @@ export async function NotebookMutations() {
     createNotebook: await configureRepository<
       Notebook,
       MutationCreateNotebookArgs
-    >(Notebook, async (repository, { input: { title } }) => {
+    >(Notebook, async (repository, { input: { title, userId } }) => {
+      const userRepository = await getConnection().getRepository(User)
+      const user = await userRepository.findOne(userId)
+      if (!user) return null
+
       const notebook = new Notebook()
       notebook.title = title
+      notebook.user = user
 
       return formatResult(await repository.save(notebook))
     }),

@@ -13,7 +13,9 @@ export async function UserQueries() {
     listUsers: await configureRepository<User, QueryListUsersArgs>(
       User,
       async repository => {
-        const results = await repository.find()
+        const results = await repository.find({
+          relations: ['notebooks', 'notebooks.notes'],
+        })
         return {
           items: results.map(formatResult),
           nextToken: '1234',
@@ -23,7 +25,12 @@ export async function UserQueries() {
     readUser: await configureRepository<User, QueryReadUserArgs>(
       User,
       async (repository, { id }) => {
-        return formatResult(await repository.findOne(id))
+        return formatResult(
+          await repository.findOne({
+            relations: ['notebooks', 'notebooks.notes'],
+            where: { id },
+          })
+        )
       }
     ),
   }
