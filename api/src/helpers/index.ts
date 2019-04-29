@@ -1,4 +1,5 @@
 import { EntitySchema, getConnection, ObjectType, Repository } from 'typeorm'
+import { Base } from '../entities/Base'
 
 export async function configureRepository<S, T>(
   entity: ObjectType<S> | EntitySchema<S> | string,
@@ -11,5 +12,26 @@ export async function configureRepository<S, T>(
     }
   } catch (e) {
     console.log(e.message)
+  }
+}
+
+export function parseDate(date: string) {
+  const jsDate = new Date(date)
+  const splitDate = jsDate.toDateString().split(' ')
+
+  return {
+    dateLongForm: jsDate.toISOString(),
+    dayOfMonth: splitDate[2],
+    dayOfWeek: splitDate[0],
+    month: splitDate[1],
+  }
+}
+
+export function formatResult<T extends Base>(entity: T | undefined) {
+  if (!entity) return null
+  return {
+    ...entity,
+    createdAt: parseDate(entity.createdAt),
+    updatedAt: parseDate(entity.updatedAt),
   }
 }

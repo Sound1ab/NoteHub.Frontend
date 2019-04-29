@@ -14,7 +14,7 @@ type Mutation {
 type Notebook {
     id: ID!
     title: String!
-    notes: [Note!]!
+    notes: [Note]
     createdAt: Date!
     updatedAt: Date!
 }

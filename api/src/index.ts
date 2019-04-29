@@ -3,7 +3,7 @@ import express from 'express'
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import { config } from './config'
-import { TodoMutations, TodoQueries } from './resolvers/todo'
+import { UserMutations, UserQueries } from './resolvers/user'
 import { typeDefs } from './schema'
 
 const port = process.env.PORT || 8088
@@ -14,12 +14,12 @@ async function configureServer() {
   app.set('env', process.env.APP_ENV)
 
   const resolvers: IResolvers = {
-    // Mutation: {
-    //   ...(await TodoMutations()),
-    // },
-    // Query: {
-    //   ...(await TodoQueries()),
-    // },
+    Mutation: {
+      ...(await UserMutations()),
+    },
+    Query: {
+      ...(await UserQueries()),
+    },
   }
 
   const server = new ApolloServer({
@@ -28,7 +28,6 @@ async function configureServer() {
   })
 
   server.applyMiddleware({ app })
-
   return { server, app }
 }
 
