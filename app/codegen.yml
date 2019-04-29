@@ -1,0 +1,11 @@
+overwrite: true
+schema: "../api/src/schema/*.graphql"
+documents: "src/**/*.{ts,tsx}"
+generates:
+  src/components/apollo/generated_components_typings.tsx:
+    plugins:
+      - add: '/* tslint:disable */'
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+      - "fragment-matcher"

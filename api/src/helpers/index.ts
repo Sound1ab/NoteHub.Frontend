@@ -1,4 +1,3 @@
-import fs from 'fs'
 import { EntitySchema, getConnection, ObjectType, Repository } from 'typeorm'
 
 export async function configureRepository<S, T>(
