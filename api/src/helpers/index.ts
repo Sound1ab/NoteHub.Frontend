@@ -14,9 +14,3 @@ export async function configureRepository<S, T>(
     console.log(e.message)
   }
 }
-
-export function convertGraphQLToTypedefs() {
-  return fs
-    .readFileSync(`${__dirname}/../schema/index.graphql`, 'utf8')
-    .toString()
-}

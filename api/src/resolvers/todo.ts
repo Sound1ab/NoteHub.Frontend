@@ -1,4 +1,4 @@
-import { Todo } from '../entities/Todo'
+import { User } from '../entities/Todo'
 import { configureRepository } from '../helpers'
 
 interface IReadTodo {
@@ -37,7 +37,7 @@ function parseDate(date: string) {
   }
 }
 
-function formatResult(todo: Todo | undefined) {
+function formatResult(todo: User | undefined) {
   if (!todo) return null
   return {
     ...todo,
@@ -48,15 +48,15 @@ function formatResult(todo: Todo | undefined) {
 
 export async function TodoQueries() {
   return {
-    listTodos: await configureRepository<Todo, {}>(Todo, async repository => {
+    listTodos: await configureRepository<User, {}>(User, async repository => {
       const results = await repository.find()
       return {
         items: results.map(formatResult),
         nextToken: '1234',
       }
     }),
-    readTodo: await configureRepository<Todo, IReadTodo>(
-      Todo,
+    readTodo: await configureRepository<User, IReadTodo>(
+      User,
       async (repository, { id }) => {
         return formatResult(await repository.findOne(id))
       }
@@ -66,18 +66,18 @@ export async function TodoQueries() {
 
 export async function TodoMutations() {
   return {
-    createTodo: await configureRepository<Todo, ICreateTodo>(
-      Todo,
+    createTodo: await configureRepository<User, ICreateTodo>(
+      User,
       async (repository, { input: { description = '' } }) => {
-        const todo = new Todo()
+        const todo = new User()
         todo.description = description
         todo.isDone = false
 
         return formatResult(await repository.save(todo))
       }
     ),
-    deleteTodo: await configureRepository<Todo, IDeleteTodo>(
-      Todo,
+    deleteTodo: await configureRepository<User, IDeleteTodo>(
+      User,
       async (repository, { input: { id } }) => {
         const todo = await repository.findOne(id)
         await repository.delete(id)
@@ -85,8 +85,8 @@ export async function TodoMutations() {
         return formatResult(todo)
       }
     ),
-    updateTodo: await configureRepository<Todo, IUpdateTodo>(
-      Todo,
+    updateTodo: await configureRepository<User, IUpdateTodo>(
+      User,
       async (repository, { input: { id, description, isDone } }) => {
         const todo = await repository.findOne(id)
         if (!todo) return null

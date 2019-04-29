@@ -1,5 +1,4 @@
 import {
-  Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
@@ -7,15 +6,9 @@ import {
 } from 'typeorm'
 
 @Entity()
-export class Todo {
+export abstract class Base {
   @PrimaryGeneratedColumn('uuid')
   public id: number
-
-  @Column('text')
-  public description: string
-
-  @Column('boolean')
-  public isDone: boolean
 
   @CreateDateColumn()
   public createdAt: string
