@@ -1,8 +1,9 @@
 import { getConnection } from 'typeorm'
 import { Notebook } from '../entities/Notebook'
 import { User } from '../entities/User'
-import { configureRepository, formatResult } from '../helpers'
+import { configureRepository } from '../helpers'
 import {
+  ModelNotebookConnection,
   MutationCreateNotebookArgs,
   MutationDeleteNotebookArgs,
   MutationUpdateNotebookArgs,
@@ -14,7 +15,10 @@ export async function NotebookQueries() {
   return {
     listNotebooks: await configureRepository<Notebook, QueryListNotebooksArgs>(
       Notebook,
-      async (repository, { filter, limit, offset }) => {
+      async (
+        repository,
+        { filter, limit, offset }
+      ): Promise<ModelNotebookConnection> => {
         const query = repository
           .createQueryBuilder('notebook')
           .innerJoinAndSelect('notebook.user', 'user')
@@ -35,7 +39,7 @@ export async function NotebookQueries() {
         const results = await query.getMany()
 
         return {
-          items: results.map(formatResult),
+          items: results,
           nextOffset:
             typeof offset === 'number' && typeof limit === 'number'
               ? offset + limit
@@ -46,12 +50,10 @@ export async function NotebookQueries() {
     readNotebook: await configureRepository<Notebook, QueryReadNotebookArgs>(
       Notebook,
       async (repository, { id }) => {
-        return formatResult(
-          await repository.findOne({
-            relations: ['notes', 'user'],
-            where: { id },
-          })
-        )
+        return repository.findOne({
+          relations: ['notes', 'user'],
+          where: { id },
+        })
       }
     ),
   }
@@ -71,7 +73,7 @@ export async function NotebookMutations() {
       notebook.title = title
       notebook.user = user
 
-      return formatResult(await repository.save(notebook))
+      return repository.save(notebook)
     }),
     deleteNotebook: await configureRepository<
       Notebook,
@@ -80,9 +82,8 @@ export async function NotebookMutations() {
       if (!id) return null
       const notebook = await repository.findOne(id)
       if (!notebook) return null
-      await repository.remove(notebook)
 
-      return formatResult(notebook)
+      return repository.remove(notebook)
     }),
     updateNotebook: await configureRepository<
       Notebook,
@@ -92,7 +93,7 @@ export async function NotebookMutations() {
       if (!notebook) return null
       notebook.title = title || notebook.title
 
-      return formatResult(await repository.save(notebook))
+      return repository.save(notebook)
     }),
   }
 }

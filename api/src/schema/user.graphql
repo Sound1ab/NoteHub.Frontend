@@ -17,8 +17,8 @@ type User {
     lastName: String!
     email: String!
     notebooks: [Notebook]
-    createdAt: Date!
-    updatedAt: Date!
+    createdAt: String!
+    updatedAt: String!
 
 }
 

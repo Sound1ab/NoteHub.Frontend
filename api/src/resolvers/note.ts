@@ -27,12 +27,10 @@ export async function NoteQueries() {
     readNote: await configureRepository<Note, QueryReadNoteArgs>(
       Note,
       async (repository, { id }) => {
-        return formatResult(
-          await repository.findOne({
-            relations: ['notebook', 'notebook.user'],
-            where: { id },
-          })
-        )
+        return await repository.findOne({
+          relations: ['notebook', 'notebook.user'],
+          where: { id },
+        })
       }
     ),
   }
@@ -56,7 +54,7 @@ export async function NoteMutations() {
         note.markdown = markdown
         note.notebook = notebook
 
-        return formatResult(await repository.save(note))
+        return await repository.save(note)
       }
     ),
     deleteNote: await configureRepository<Note, MutationDeleteNoteArgs>(
@@ -65,9 +63,8 @@ export async function NoteMutations() {
         if (!id) return null
         const note = await repository.findOne(id)
         if (!note) return null
-        await repository.remove(note)
 
-        return formatResult(note)
+        return repository.remove(note)
       }
     ),
     updateNote: await configureRepository<Note, MutationUpdateNoteArgs>(
@@ -79,7 +76,7 @@ export async function NoteMutations() {
         note.excerpt = excerpt || note.excerpt
         note.markdown = markdown || note.markdown
 
-        return formatResult(await repository.save(note))
+        return repository.save(note)
       }
     ),
   }

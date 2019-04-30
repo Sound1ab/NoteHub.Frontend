@@ -17,7 +17,7 @@ export async function UserQueries() {
           relations: ['notebooks', 'notebooks.notes'],
         })
         return {
-          items: results.map(formatResult),
+          items: results,
           nextToken: '1234',
         }
       }
@@ -25,12 +25,10 @@ export async function UserQueries() {
     readUser: await configureRepository<User, QueryReadUserArgs>(
       User,
       async (repository, { id }) => {
-        return formatResult(
-          await repository.findOne({
-            relations: ['notebooks', 'notebooks.notes'],
-            where: { id },
-          })
-        )
+        return repository.findOne({
+          relations: ['notebooks', 'notebooks.notes'],
+          where: { id },
+        })
       }
     ),
   }
@@ -46,7 +44,7 @@ export async function UserMutations() {
         user.lastName = lastName
         user.email = email
 
-        return formatResult(await repository.save(user))
+        return repository.save(user)
       }
     ),
     deleteUser: await configureRepository<User, MutationDeleteUserArgs>(
@@ -56,9 +54,8 @@ export async function UserMutations() {
         console.log('deleting: ', id)
         const user = await repository.findOne(id)
         if (!user) return null
-        await repository.remove(user)
 
-        return formatResult(user)
+        return repository.remove(user)
       }
     ),
     updateUser: await configureRepository<User, MutationUpdateUserArgs>(
@@ -70,7 +67,7 @@ export async function UserMutations() {
         user.firstName = firstName || user.firstName
         user.lastName = lastName || user.lastName
 
-        return formatResult(await repository.save(user))
+        return repository.save(user)
       }
     ),
   }

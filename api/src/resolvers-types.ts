@@ -197,8 +197,8 @@ export type Note = {
   title: Scalars['String']
   markdown: Scalars['String']
   excerpt: Scalars['String']
-  createdAt: Date
-  updatedAt: Date
+  createdAt: Scalars['String']
+  updatedAt: Scalars['String']
 }
 
 export type Notebook = {
@@ -206,8 +206,8 @@ export type Notebook = {
   user: User
   title: Scalars['String']
   notes?: Maybe<Array<Maybe<Note>>>
-  createdAt: Date
-  updatedAt: Date
+  createdAt: Scalars['String']
+  updatedAt: Scalars['String']
 }
 
 export type Query = {
@@ -274,8 +274,8 @@ export type User = {
   lastName: Scalars['String']
   email: Scalars['String']
   notebooks?: Maybe<Array<Maybe<Notebook>>>
-  createdAt: Date
-  updatedAt: Date
+  createdAt: Scalars['String']
+  updatedAt: Scalars['String']
 }
 
 import { GraphQLResolveInfo } from 'graphql'
@@ -357,11 +357,10 @@ export type ResolversTypes = {
   Notebook: Notebook
   User: User
   String: Scalars['String']
-  Date: Date
-  Int: Scalars['Int']
   ModelNoteFilterInput: ModelNoteFilterInput
   ModelIDFilterInput: ModelIdFilterInput
   ModelStringFilterInput: ModelStringFilterInput
+  Int: Scalars['Int']
   ModelNoteConnection: ModelNoteConnection
   ModelNotebookFilterInput: ModelNotebookFilterInput
   ModelNotebookConnection: ModelNotebookConnection
@@ -378,6 +377,7 @@ export type ResolversTypes = {
   UpdateUserInput: UpdateUserInput
   DeleteUserInput: DeleteUserInput
   Boolean: Scalars['Boolean']
+  Date: Date
   ModelSortDirection: ModelSortDirection
   ModelIntFilterInput: ModelIntFilterInput
   ModelFloatFilterInput: ModelFloatFilterInput
@@ -500,8 +500,8 @@ export type NoteResolvers<
   title?: Resolver<ResolversTypes['String'], ParentType, Context>
   markdown?: Resolver<ResolversTypes['String'], ParentType, Context>
   excerpt?: Resolver<ResolversTypes['String'], ParentType, Context>
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
-  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, Context>
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, Context>
 }
 
 export type NotebookResolvers<
@@ -516,8 +516,8 @@ export type NotebookResolvers<
     ParentType,
     Context
   >
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
-  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, Context>
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, Context>
 }
 
 export type QueryResolvers<
@@ -575,8 +575,8 @@ export type UserResolvers<
     ParentType,
     Context
   >
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
-  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, Context>
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, Context>
 }
 
 export type Resolvers<Context = any> = {
