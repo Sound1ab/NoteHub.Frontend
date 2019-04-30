@@ -14,13 +14,32 @@ export async function NotebookQueries() {
   return {
     listNotebooks: await configureRepository<Notebook, QueryListNotebooksArgs>(
       Notebook,
-      async repository => {
-        const results = await repository.find({
-          relations: ['notes', 'user'],
-        })
+      async (repository, { filter, limit, offset }) => {
+        const query = repository
+          .createQueryBuilder('notebook')
+          .innerJoinAndSelect('notebook.user', 'user')
+
+        if (filter && filter.userId) {
+          console.log('filter.userId.eq', filter.userId.eq)
+          query.where('user.id = :id', { id: filter.userId.eq })
+        }
+
+        if (limit) {
+          query.take(limit)
+        }
+
+        if (offset) {
+          query.skip(offset)
+        }
+
+        const results = await query.getMany()
+
         return {
           items: results.map(formatResult),
-          nextToken: '1234',
+          nextOffset:
+            typeof offset === 'number' && typeof limit === 'number'
+              ? offset + limit
+              : null,
         }
       }
     ),

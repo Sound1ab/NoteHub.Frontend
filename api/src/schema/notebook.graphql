@@ -1,7 +1,7 @@
 ## Base
 type Query {
     readNotebook(id: ID!): Notebook
-    listNotebooks(filter: ModelNotebookFilterInput, limit: Int, nextToken: String): ModelNotebookConnection
+    listNotebooks(filter: ModelNotebookFilterInput, limit: Int, offset: Int): ModelNotebookConnection
 }
 
 type Mutation {
@@ -22,16 +22,13 @@ type Notebook {
 
 type ModelNotebookConnection {
     items: [Notebook]
-    nextToken: String
+    nextOffset: Int
 }
 
 ## Query inputs
 input ModelNotebookFilterInput {
     id: ModelIDFilterInput
-    description: ModelStringFilterInput
-    and: [ModelNotebookFilterInput]
-    or: [ModelNotebookFilterInput]
-    not: ModelNotebookFilterInput
+    userId: ModelStringFilterInput
 }
 
 ## Mutation inputs

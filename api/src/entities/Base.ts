@@ -8,7 +8,7 @@ import {
 @Entity()
 export abstract class Base {
   @PrimaryGeneratedColumn('uuid')
-  public id: number
+  public id: string
 
   @CreateDateColumn()
   public createdAt: string

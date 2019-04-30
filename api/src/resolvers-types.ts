@@ -91,15 +91,12 @@ export type ModelIntFilterInput = {
 
 export type ModelNotebookConnection = {
   items?: Maybe<Array<Maybe<Notebook>>>
-  nextToken?: Maybe<Scalars['String']>
+  nextOffset?: Maybe<Scalars['Int']>
 }
 
 export type ModelNotebookFilterInput = {
   id?: Maybe<ModelIdFilterInput>
-  description?: Maybe<ModelStringFilterInput>
-  and?: Maybe<Array<Maybe<ModelNotebookFilterInput>>>
-  or?: Maybe<Array<Maybe<ModelNotebookFilterInput>>>
-  not?: Maybe<ModelNotebookFilterInput>
+  userId?: Maybe<ModelStringFilterInput>
 }
 
 export type ModelNoteConnection = {
@@ -239,7 +236,7 @@ export type QueryReadNotebookArgs = {
 export type QueryListNotebooksArgs = {
   filter?: Maybe<ModelNotebookFilterInput>
   limit?: Maybe<Scalars['Int']>
-  nextToken?: Maybe<Scalars['String']>
+  offset?: Maybe<Scalars['Int']>
 }
 
 export type QueryReadUserArgs = {
@@ -407,7 +404,7 @@ export type ModelNotebookConnectionResolvers<
     ParentType,
     Context
   >
-  nextToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, Context>
+  nextOffset?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, Context>
 }
 
 export type ModelNoteConnectionResolvers<
