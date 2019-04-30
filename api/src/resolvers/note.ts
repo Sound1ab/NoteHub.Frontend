@@ -1,7 +1,7 @@
 import { getConnection } from 'typeorm'
 import { Note } from '../entities/Note'
 import { Notebook } from '../entities/Notebook'
-import { configureRepository, formatResult } from '../helpers'
+import { configureRepository } from '../helpers'
 import {
   MutationCreateNoteArgs,
   MutationDeleteNoteArgs,
@@ -19,7 +19,7 @@ export async function NoteQueries() {
           relations: ['notebook', 'notebook.user'],
         })
         return {
-          items: results.map(formatResult),
+          items: results,
           nextToken: '1234',
         }
       }

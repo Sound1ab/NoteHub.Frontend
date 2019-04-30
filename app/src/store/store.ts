@@ -1,19 +1,16 @@
 import React, { Dispatch, ReducerAction } from 'react'
-import { INote, INotepad } from '../interfaces'
-import { TNotepadActions } from './actions/notepadAction'
+import { TNotebookActions } from './actions/notebookAction'
 
 export interface IState {
-  activeNote: INote | null
-  activeNotepad: INotepad | null
-  allNotepads: INotepad[]
+  activeNote: string | null
+  activeNotebook: string | null
 }
 
 export const initialState: IState = {
   activeNote: null,
-  activeNotepad: null,
-  allNotepads: [],
+  activeNotebook: null,
 }
 
 export const NoteContext = React.createContext<
-  [IState, Dispatch<ReducerAction<React.Reducer<IState, TNotepadActions>>>]
+  [IState, Dispatch<ReducerAction<React.Reducer<IState, TNotebookActions>>>]
 >([initialState, () => null])

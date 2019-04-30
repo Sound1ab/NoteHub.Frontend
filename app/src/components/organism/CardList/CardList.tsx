@@ -1,8 +1,15 @@
-import React, { Dispatch, ReducerAction } from 'react'
+import gql from 'graphql-tag'
+import React from 'react'
+import { useQuery } from 'react-apollo-hooks'
 import { COLOR } from '../../../enums'
-import { INote, INotepad } from '../../../interfaces'
-import { IState, setActiveNote, TNotepadActions } from '../../../store'
+import { NotebookFragment, NoteFragment } from '../../../fragments'
+import { useStore } from '../../../hooks/useStore'
+import { setActiveNote } from '../../../store'
 import { styled } from '../../../theme'
+import {
+  ReadNotebookQuery,
+  ReadNotebookQueryVariables,
+} from '../../apollo/generated_components_typings'
 import { Container, Heading, Icon } from '../../atoms'
 import { Card } from '../../molecules'
 
@@ -34,14 +41,34 @@ const Style = styled.div`
   }
 `
 
-interface ICardlist {
-  activeNotepad: INotepad | null
-  activeNote: INote | null
-  dispatch: Dispatch<ReducerAction<React.Reducer<IState, TNotepadActions>>>
-}
+export const ReadNotebookDocument = gql`
+  ${NotebookFragment}
+  ${NoteFragment}
+  query ReadNotebook($id: ID!) {
+    readNotebook(id: $id) {
+      ...notebook
+      notes {
+        ...note
+      }
+    }
+  }
+`
 
-export function CardList({ activeNote, activeNotepad, dispatch }: ICardlist) {
-  function handleCardClick(note: INote | null) {
+export function CardList() {
+  const [state, dispatch] = useStore()
+
+  const { data } = useQuery<ReadNotebookQuery, ReadNotebookQueryVariables>(
+    ReadNotebookDocument,
+    {
+      variables: {
+        id: state.activeNotebook || '',
+      },
+    }
+  )
+
+  const notebook = data && data.readNotebook
+
+  function handleCardClick(note: string | null) {
     if (dispatch) dispatch(setActiveNote(note))
   }
 
@@ -50,7 +77,7 @@ export function CardList({ activeNote, activeNotepad, dispatch }: ICardlist) {
       <Container className="sticky">
         <div className="header">
           <Heading type="h2" marginBottom>
-            {(activeNotepad && activeNotepad.title) || ''}
+            {(notebook && notebook.title) || ''}
           </Heading>
           <div className="header-options">
             <Icon
@@ -69,19 +96,25 @@ export function CardList({ activeNote, activeNotepad, dispatch }: ICardlist) {
             />
           </div>
         </div>
-        {activeNotepad &&
-          activeNotepad.notes.map(note => (
-            <span onClick={handleCardClick.bind(null, note)}>
-              <Card
-                key={note.id}
-                id={note.id}
-                title={note.title}
-                excerpt={note.excerpt}
-                createdAt={note.createdAt}
-                isSelected={!!activeNote && activeNote.id === note.id}
-              />
-            </span>
-          ))}
+        {notebook &&
+          notebook.notes &&
+          notebook.notes.map(note => {
+            if (!note) return
+            return (
+              <span onClick={handleCardClick.bind(null, note.id)}>
+                <Card
+                  key={note.id}
+                  id={note.id}
+                  title={note.title}
+                  excerpt={note.excerpt}
+                  createdAt={note.createdAt}
+                  isSelected={
+                    !!state.activeNote && state.activeNote === note.id
+                  }
+                />
+              </span>
+            )
+          })}
       </Container>
     </Style>
   )

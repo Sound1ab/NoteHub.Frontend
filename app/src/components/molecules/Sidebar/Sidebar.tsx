@@ -1,9 +1,16 @@
-import React, { Dispatch, ReducerAction } from 'react'
+import gql from 'graphql-tag'
+import React from 'react'
+import { useQuery } from 'react-apollo-hooks'
 import { Profile } from '..'
 import { COLOR } from '../../../enums'
-import { INotepad } from '../../../interfaces'
-import { IState, setActiveNote, setActiveNotepad, TNotepadActions } from '../../../store'
+import { NotebookFragment } from '../../../fragments'
+import { useStore } from '../../../hooks/useStore'
+import { setActiveNotebook } from '../../../store'
 import { styled } from '../../../theme'
+import {
+  ListNotebooksQuery,
+  ListNotebooksQueryVariables,
+} from '../../apollo/generated_components_typings'
 import { Container, Heading, Icon } from '../../atoms'
 
 const Style = styled.div`
@@ -11,14 +18,14 @@ const Style = styled.div`
   flex: 0 0 ${({ theme }) => theme.spacing.xxl};
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.tertiary};
-  
+
   .new-notebook-wrapper {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     margin-bottom: ${({ theme }) => theme.spacing.s};
   }
-  
+
   .title-wrapper {
     display: flex;
     justify-content: flex-start;
@@ -52,17 +59,39 @@ const Style = styled.div`
   }
 `
 
-interface ISidebar {
-  allNotepads: INotepad[]
-  activeNotepad: INotepad | null
-  dispatch: Dispatch<ReducerAction<React.Reducer<IState, TNotepadActions>>>
-}
+export const ListNotebooksDocument = gql`
+  ${NotebookFragment}
+  query ListNotebooks(
+    $filter: ModelNotebookFilterInput
+    $limit: Int
+    $offset: Int
+  ) {
+    listNotebooks(filter: $filter, limit: $limit, offset: $offset) {
+      items {
+        ...notebook
+      }
+    }
+  }
+`
 
-export function Sidebar({ allNotepads, activeNotepad, dispatch }: ISidebar) {
-  function handleHeadingClick(notepad: INotepad) {
+export function Sidebar() {
+  const [state, dispatch] = useStore()
+
+  const { data } = useQuery<ListNotebooksQuery, ListNotebooksQueryVariables>(
+    ListNotebooksDocument,
+    {
+      variables: {
+        filter: { userId: { eq: '985d9b4d-920d-4b4f-9358-ab91146944d8' } },
+      },
+    }
+  )
+
+  const notebooks =
+    (data && data.listNotebooks && data.listNotebooks.items) || []
+
+  function handleHeadingClick(notebook: string | null) {
     if (dispatch) {
-      dispatch(setActiveNotepad(notepad))
-      dispatch(setActiveNote(null))
+      dispatch(setActiveNotebook(notebook))
     }
   }
 
@@ -71,12 +100,14 @@ export function Sidebar({ allNotepads, activeNotepad, dispatch }: ISidebar) {
       <Container className="sticky">
         <Profile />
         <div className="new-notebook-wrapper">
-          <Icon size="lg" color={COLOR.ACCENT} icon="plus-circle" prefix="fa" marginRight />
-          <Heading
-            color={COLOR.LIGHT}
-            className="category-heading"
-            type="h3"
-          >
+          <Icon
+            size="lg"
+            color={COLOR.ACCENT}
+            icon="plus-circle"
+            prefix="fa"
+            marginRight
+          />
+          <Heading color={COLOR.LIGHT} className="category-heading" type="h3">
             New Notebook
           </Heading>
         </div>
@@ -92,20 +123,24 @@ export function Sidebar({ allNotepads, activeNotepad, dispatch }: ISidebar) {
           </Heading>
         </div>
         <nav className="nav">
-          {allNotepads.map((notepad: INotepad) => (
-            <Heading
-              onClick={handleHeadingClick.bind(null, notepad)}
-              className={
-                activeNotepad && notepad.id === activeNotepad.id
-                  ? 'heading active-heading'
-                  : 'heading'
-              }
-              type="h4"
-              marginBottom
-            >
-              {notepad.title}
-            </Heading>
-          ))}
+          {notebooks &&
+            notebooks.map(notebook => (
+              <Heading
+                color={COLOR.LIGHT}
+                onClick={handleHeadingClick.bind(null, notebook && notebook.id)}
+                className={
+                  state.activeNotebook &&
+                  notebook &&
+                  notebook.id === state.activeNotebook
+                    ? 'heading active-heading'
+                    : 'heading'
+                }
+                type="h4"
+                marginBottom
+              >
+                {notebook && notebook.title}
+              </Heading>
+            ))}
         </nav>
       </Container>
     </Style>

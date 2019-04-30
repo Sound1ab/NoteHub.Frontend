@@ -1,5 +1,4 @@
 import React from 'react'
-import { useStore } from '../../../hooks/useStore'
 import { styled } from '../../../theme'
 import { Ace, Container } from '../../atoms'
 import { Sidebar } from '../../molecules'
@@ -28,28 +27,38 @@ const Style = styled.div`
   }
 `
 
-export function Editor() {
-  const [state, dispatch] = useStore()
+// export const ReadUserDocument = gql`
+//   ${UserFragment}
+//   ${NotebookFragment}
+//   ${NoteFragment}
+//   ${DateFragment}
+//   query ReadUser {
+//     readUser(id: "985d9b4d-920d-4b4f-9358-ab91146944d8") {
+//       ...user
+//       notebooks {
+//         ...notebook
+//         notes {
+//           ...note
+//         }
+//       }
+//       createdAt {
+//         ...date
+//       }
+//       updatedAt {
+//         ...date
+//       }
+//     }
+//   }
+// `
 
+export function Editor() {
   return (
     <Style>
       <Container className="page">
-        <Sidebar
-          allNotepads={state.allNotepads}
-          activeNotepad={state.activeNotepad}
-          dispatch={dispatch}
-        />
-        <CardList
-          activeNotepad={state.activeNotepad}
-          activeNote={state.activeNote}
-          dispatch={dispatch}
-        />
+        <Sidebar />
+        <CardList />
         <main className="main">
-          <Ace
-            activeNotepad={state.activeNotepad}
-            activeNote={state.activeNote}
-            dispatch={dispatch}
-          />
+          <Ace />
         </main>
       </Container>
     </Style>

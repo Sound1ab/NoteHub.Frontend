@@ -11,16 +11,14 @@ import {
   faTrash,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
-import React, { Dispatch, ReducerAction, useReducer } from 'react'
+import React, { useReducer } from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import { GoogleFont, TypographyStyle } from 'react-typography'
-import { useData } from '../hooks'
-import { INotepad } from '../interfaces'
 import { client } from '../services/Apollo/clientConfig'
-import { notepadReducer, setAllNotepads, TNotepadActions } from '../store'
+import { notebookReducer, TNotebookActions } from '../store'
 import { initialState } from '../store'
-import { NoteContext, setActiveNote, setActiveNotepad } from '../store'
+import { NoteContext } from '../store'
 import { IState } from '../store'
 import { typography } from '../theme/typography'
 import { Editor } from './templates'
@@ -40,43 +38,11 @@ library.add(
   faTrash
 )
 
-function setupSelections(
-  data: INotepad[],
-  state: IState,
-  dispatch: Dispatch<ReducerAction<React.Reducer<IState, TNotepadActions>>>
-) {
-  const dataAvailableNoNotepadsSet =
-    data.length > 0 && state.allNotepads.length === 0
-
-  const notepadsAvailableNoActiveNotepadSet =
-    state.allNotepads.length > 0 && !state.activeNotepad
-
-  const activeNotepadNoActiveNote =
-    state.activeNotepad &&
-    !state.activeNote &&
-    state.activeNotepad.notes.length > 0
-
-  if (dataAvailableNoNotepadsSet) {
-    dispatch(setAllNotepads(data))
-  }
-
-  if (notepadsAvailableNoActiveNotepadSet) {
-    dispatch(setActiveNotepad(state.allNotepads[0]))
-  }
-
-  if (activeNotepadNoActiveNote) {
-    dispatch(setActiveNote(state.activeNotepad && state.activeNotepad.notes[0]))
-  }
-}
-
 export function App() {
-  const [data, loading] = useData<INotepad[]>()
-  const [state, dispatch] = useReducer<React.Reducer<IState, TNotepadActions>>(
-    notepadReducer,
+  const [state, dispatch] = useReducer<React.Reducer<IState, TNotebookActions>>(
+    notebookReducer,
     initialState
   )
-
-  setupSelections(data, state, dispatch)
 
   return (
     <ApolloProvider client={client}>
@@ -86,7 +52,7 @@ export function App() {
             <GlobalStyle />
             <TypographyStyle typography={typography} />
             <GoogleFont typography={typography} />
-            {loading ? 'loading' : <Editor />}
+            <Editor />
           </NoteContext.Provider>
         </ThemeProvider>
       </ApolloHooksProvider>

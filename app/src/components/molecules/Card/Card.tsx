@@ -1,9 +1,9 @@
 import React from 'react'
+import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 import { Heading } from '../../atoms'
-import { COLOR } from '../../../enums'
 
-const Style = styled.div<{ isSelected: boolean }>`
+const Style = styled.div<{ isSelected?: boolean }>`
   position: relative;
   width: 100%;
   display: flex;
@@ -26,10 +26,10 @@ interface ICard {
   title: string
   excerpt: string
   createdAt: string
-  isSelected: boolean
+  isSelected?: boolean
 }
 
-export function Card({ id, title, excerpt, createdAt, isSelected }: ICard) {
+export function Card({ title, excerpt, createdAt, isSelected }: ICard) {
   return (
     <Style data-testid="Card" isSelected={isSelected}>
       <div className="heading">

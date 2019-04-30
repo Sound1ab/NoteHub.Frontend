@@ -1,3 +1,3 @@
-export * from './actions/notepadAction'
-export * from './reducers/notepadReducer'
+export * from './actions/notebookAction'
+export * from './reducers/notebookReducer'
 export * from './store'

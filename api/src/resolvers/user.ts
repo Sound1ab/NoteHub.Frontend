@@ -1,5 +1,5 @@
 import { User } from '../entities/User'
-import { configureRepository, formatResult } from '../helpers'
+import { configureRepository } from '../helpers'
 import {
   MutationCreateUserArgs,
   MutationDeleteUserArgs,
