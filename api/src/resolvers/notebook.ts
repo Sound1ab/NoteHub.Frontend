@@ -24,7 +24,6 @@ export async function NotebookQueries() {
           .innerJoinAndSelect('notebook.user', 'user')
 
         if (filter && filter.userId) {
-          console.log('filter.userId.eq', filter.userId.eq)
           query.where('user.id = :id', { id: filter.userId.eq })
         }
 

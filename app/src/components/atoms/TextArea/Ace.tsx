@@ -33,8 +33,6 @@ export function Ace() {
 
   const note = data && data.readNote
 
-  console.log(state.activeNote)
-
   useEffect(() => {
     setValue((note && note.markdown) || '')
   }, [note])

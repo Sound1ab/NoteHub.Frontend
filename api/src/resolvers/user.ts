@@ -51,7 +51,6 @@ export async function UserMutations() {
       User,
       async (repository, { input: { id } }) => {
         if (!id) return null
-        console.log('deleting: ', id)
         const user = await repository.findOne(id)
         if (!user) return null
 
