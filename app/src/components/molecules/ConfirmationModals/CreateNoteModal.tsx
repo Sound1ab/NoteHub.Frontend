@@ -31,6 +31,11 @@ export function CreateNoteModal({
         },
       },
     })
+    handleRequestClose()
+  }
+
+  function handleRequestClose() {
+    setInputValue('')
     onRequestClose()
   }
 
@@ -43,7 +48,7 @@ export function CreateNoteModal({
       onContinue={handleCreateNewNote}
       title="Create new Note"
       isOpen={isOpen}
-      onRequestClose={onRequestClose}
+      onRequestClose={handleRequestClose}
     >
       <Heading type="h5" marginBottom>
         Title

@@ -34,6 +34,11 @@ export function DeleteNotebookModal({
         },
       },
     })
+    handleRequestClose()
+  }
+
+  function handleRequestClose() {
+    setInputValue('')
     onRequestClose()
   }
 
@@ -46,7 +51,7 @@ export function DeleteNotebookModal({
       onContinue={handleDeleteNotebook}
       title="Delete Notebook"
       isOpen={isOpen}
-      onRequestClose={onRequestClose}
+      onRequestClose={handleRequestClose}
     >
       <p>Please confirm the Notebook name you wish to delete.</p>
       <Heading type="h5" marginBottom>

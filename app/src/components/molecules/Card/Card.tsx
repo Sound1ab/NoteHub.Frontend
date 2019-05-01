@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { DeleteNoteModal } from '..'
 import { COLOR } from '../../../enums'
+import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
 
@@ -47,6 +49,9 @@ interface ICard {
 }
 
 export function Card({ title, excerpt, createdAt, isSelected }: ICard) {
+  const [state] = useStore()
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
   return (
     <Style data-testid="Card" isSelected={isSelected}>
       <div className="Card-heading">
@@ -57,8 +62,20 @@ export function Card({ title, excerpt, createdAt, isSelected }: ICard) {
       </div>
       <p className="Card-excerpt">{excerpt}</p>
       <div className="Card-options">
-        <Icon color={COLOR.MEDIUM} icon="trash" prefix="fa" size="sm" />
+        <Icon
+          color={COLOR.MEDIUM}
+          icon="trash"
+          prefix="fa"
+          size="sm"
+          onClick={setIsDeleteModalOpen.bind(null, true)}
+        />
       </div>
+      <DeleteNoteModal
+        isOpen={isDeleteModalOpen}
+        onRequestClose={setIsDeleteModalOpen.bind(null, false)}
+        activeNote={state.activeNote}
+        activeNotebook={state.activeNotebook}
+      />
     </Style>
   )
 }

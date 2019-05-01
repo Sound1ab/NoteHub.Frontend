@@ -232,82 +232,6 @@ export type User = {
   createdAt: Date
   updatedAt: Date
 }
-export type ReadNoteQueryVariables = {
-  id: Scalars['ID']
-}
-
-export type ReadNoteQuery = { __typename?: 'Query' } & {
-  readNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
-}
-
-export type UpdateNoteMutationVariables = {
-  input: UpdateNoteInput
-}
-
-export type UpdateNoteMutation = { __typename?: 'Mutation' } & {
-  updateNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
-}
-
-export type CreateNoteMutationVariables = {
-  input: CreateNoteInput
-}
-
-export type CreateNoteMutation = { __typename?: 'Mutation' } & {
-  createNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
-}
-
-export type DeleteNotebookMutationVariables = {
-  input: DeleteNotebookInput
-}
-
-export type DeleteNotebookMutation = { __typename?: 'Mutation' } & {
-  deleteNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
-}
-
-export type ListNotebooksQueryVariables = {
-  filter?: Maybe<ModelNotebookFilterInput>
-  limit?: Maybe<Scalars['Int']>
-  offset?: Maybe<Scalars['Int']>
-}
-
-export type ListNotebooksQuery = { __typename?: 'Query' } & {
-  listNotebooks: Maybe<
-    { __typename?: 'ModelNotebookConnection' } & {
-      items: Maybe<Array<Maybe<{ __typename?: 'Notebook' } & NotebookFragment>>>
-    }
-  >
-}
-
-export type CreateNotebookMutationVariables = {
-  input: CreateNotebookInput
-}
-
-export type CreateNotebookMutation = { __typename?: 'Mutation' } & {
-  createNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
-}
-
-export type ListNotesQueryVariables = {
-  filter?: Maybe<ModelNoteFilterInput>
-  limit?: Maybe<Scalars['Int']>
-  offset?: Maybe<Scalars['Int']>
-}
-
-export type ListNotesQuery = { __typename?: 'Query' } & {
-  listNotes: Maybe<
-    { __typename?: 'ModelNoteConnection' } & {
-      items: Maybe<Array<Maybe<{ __typename?: 'Note' } & NoteFragment>>>
-    }
-  >
-}
-
-export type ReadNotebookQueryVariables = {
-  id: Scalars['ID']
-}
-
-export type ReadNotebookQuery = { __typename?: 'Query' } & {
-  readNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
-}
-
 export type DateFragment = { __typename?: 'Date' } & Pick<
   Date,
   'dateLongForm' | 'dayOfMonth' | 'dayOfWeek' | 'month'
@@ -336,6 +260,90 @@ export type UserFragment = { __typename?: 'User' } & Pick<
     createdAt: { __typename?: 'Date' } & DateFragment
     updatedAt: { __typename?: 'Date' } & DateFragment
   }
+
+export type CreateNoteMutationVariables = {
+  input: CreateNoteInput
+}
+
+export type CreateNoteMutation = { __typename?: 'Mutation' } & {
+  createNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
+}
+
+export type CreateNotebookMutationVariables = {
+  input: CreateNotebookInput
+}
+
+export type CreateNotebookMutation = { __typename?: 'Mutation' } & {
+  createNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
+}
+
+export type DeleteNoteMutationVariables = {
+  input: DeleteNoteInput
+}
+
+export type DeleteNoteMutation = { __typename?: 'Mutation' } & {
+  deleteNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
+}
+
+export type DeleteNotebookMutationVariables = {
+  input: DeleteNotebookInput
+}
+
+export type DeleteNotebookMutation = { __typename?: 'Mutation' } & {
+  deleteNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
+}
+
+export type ListNotebooksQueryVariables = {
+  filter?: Maybe<ModelNotebookFilterInput>
+  limit?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
+}
+
+export type ListNotebooksQuery = { __typename?: 'Query' } & {
+  listNotebooks: Maybe<
+    { __typename?: 'ModelNotebookConnection' } & {
+      items: Maybe<Array<Maybe<{ __typename?: 'Notebook' } & NotebookFragment>>>
+    }
+  >
+}
+
+export type ListNotesQueryVariables = {
+  filter?: Maybe<ModelNoteFilterInput>
+  limit?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
+}
+
+export type ListNotesQuery = { __typename?: 'Query' } & {
+  listNotes: Maybe<
+    { __typename?: 'ModelNoteConnection' } & {
+      items: Maybe<Array<Maybe<{ __typename?: 'Note' } & NoteFragment>>>
+    }
+  >
+}
+
+export type ReadNoteQueryVariables = {
+  id: Scalars['ID']
+}
+
+export type ReadNoteQuery = { __typename?: 'Query' } & {
+  readNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
+}
+
+export type ReadNotebookQueryVariables = {
+  id: Scalars['ID']
+}
+
+export type ReadNotebookQuery = { __typename?: 'Query' } & {
+  readNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
+}
+
+export type UpdateNoteMutationVariables = {
+  input: UpdateNoteInput
+}
+
+export type UpdateNoteMutation = { __typename?: 'Mutation' } & {
+  updateNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
+}
 
 import gql from 'graphql-tag'
 import * as React from 'react'
@@ -391,96 +399,6 @@ export const userFragmentDoc = gql`
   }
   ${dateFragmentDoc}
 `
-export const ReadNoteDocument = gql`
-  query ReadNote($id: ID!) {
-    readNote(id: $id) {
-      ...note
-    }
-  }
-  ${noteFragmentDoc}
-`
-
-export class ReadNoteComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<ReadNoteQuery, ReadNoteQueryVariables>>
-> {
-  render() {
-    return (
-      <ReactApollo.Query<ReadNoteQuery, ReadNoteQueryVariables>
-        query={ReadNoteDocument}
-        {...(this as any)['props'] as any}
-      />
-    )
-  }
-}
-export type ReadNoteProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<ReadNoteQuery, ReadNoteQueryVariables>
-> &
-  TChildProps
-export function withReadNote<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ReadNoteQuery,
-        ReadNoteQueryVariables,
-        ReadNoteProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
-    ReadNoteQuery,
-    ReadNoteQueryVariables,
-    ReadNoteProps<TChildProps>
-  >(ReadNoteDocument, operationOptions)
-}
-export const UpdateNoteDocument = gql`
-  mutation UpdateNote($input: UpdateNoteInput!) {
-    updateNote(input: $input) {
-      ...note
-    }
-  }
-  ${noteFragmentDoc}
-`
-
-export class UpdateNoteComponent extends React.Component<
-  Partial<
-    ReactApollo.MutationProps<UpdateNoteMutation, UpdateNoteMutationVariables>
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Mutation<UpdateNoteMutation, UpdateNoteMutationVariables>
-        mutation={UpdateNoteDocument}
-        {...(this as any)['props'] as any}
-      />
-    )
-  }
-}
-export type UpdateNoteProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<UpdateNoteMutation, UpdateNoteMutationVariables>
-> &
-  TChildProps
-export type UpdateNoteMutationFn = ReactApollo.MutationFn<
-  UpdateNoteMutation,
-  UpdateNoteMutationVariables
->
-export function withUpdateNote<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        UpdateNoteMutation,
-        UpdateNoteMutationVariables,
-        UpdateNoteProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withMutation<
-    TProps,
-    UpdateNoteMutation,
-    UpdateNoteMutationVariables,
-    UpdateNoteProps<TChildProps>
-  >(UpdateNoteDocument, operationOptions)
-}
 export const CreateNoteDocument = gql`
   mutation CreateNote($input: CreateNoteInput!) {
     createNote(input: $input) {
@@ -528,6 +446,111 @@ export function withCreateNote<TProps, TChildProps = {}>(
     CreateNoteMutationVariables,
     CreateNoteProps<TChildProps>
   >(CreateNoteDocument, operationOptions)
+}
+export const CreateNotebookDocument = gql`
+  mutation CreateNotebook($input: CreateNotebookInput!) {
+    createNotebook(input: $input) {
+      ...notebook
+    }
+  }
+  ${notebookFragmentDoc}
+`
+
+export class CreateNotebookComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<
+      CreateNotebookMutation,
+      CreateNotebookMutationVariables
+    >
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<
+        CreateNotebookMutation,
+        CreateNotebookMutationVariables
+      >
+        mutation={CreateNotebookDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type CreateNotebookProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    CreateNotebookMutation,
+    CreateNotebookMutationVariables
+  >
+> &
+  TChildProps
+export type CreateNotebookMutationFn = ReactApollo.MutationFn<
+  CreateNotebookMutation,
+  CreateNotebookMutationVariables
+>
+export function withCreateNotebook<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        CreateNotebookMutation,
+        CreateNotebookMutationVariables,
+        CreateNotebookProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    CreateNotebookMutation,
+    CreateNotebookMutationVariables,
+    CreateNotebookProps<TChildProps>
+  >(CreateNotebookDocument, operationOptions)
+}
+export const DeleteNoteDocument = gql`
+  mutation DeleteNote($input: DeleteNoteInput!) {
+    deleteNote(input: $input) {
+      ...note
+    }
+  }
+  ${noteFragmentDoc}
+`
+
+export class DeleteNoteComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<DeleteNoteMutation, DeleteNoteMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<DeleteNoteMutation, DeleteNoteMutationVariables>
+        mutation={DeleteNoteDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type DeleteNoteProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<DeleteNoteMutation, DeleteNoteMutationVariables>
+> &
+  TChildProps
+export type DeleteNoteMutationFn = ReactApollo.MutationFn<
+  DeleteNoteMutation,
+  DeleteNoteMutationVariables
+>
+export function withDeleteNote<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        DeleteNoteMutation,
+        DeleteNoteMutationVariables,
+        DeleteNoteProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    DeleteNoteMutation,
+    DeleteNoteMutationVariables,
+    DeleteNoteProps<TChildProps>
+  >(DeleteNoteDocument, operationOptions)
 }
 export const DeleteNotebookDocument = gql`
   mutation DeleteNotebook($input: DeleteNotebookInput!) {
@@ -636,63 +659,6 @@ export function withListNotebooks<TProps, TChildProps = {}>(
     ListNotebooksProps<TChildProps>
   >(ListNotebooksDocument, operationOptions)
 }
-export const CreateNotebookDocument = gql`
-  mutation CreateNotebook($input: CreateNotebookInput!) {
-    createNotebook(input: $input) {
-      ...notebook
-    }
-  }
-  ${notebookFragmentDoc}
-`
-
-export class CreateNotebookComponent extends React.Component<
-  Partial<
-    ReactApollo.MutationProps<
-      CreateNotebookMutation,
-      CreateNotebookMutationVariables
-    >
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Mutation<
-        CreateNotebookMutation,
-        CreateNotebookMutationVariables
-      >
-        mutation={CreateNotebookDocument}
-        {...(this as any)['props'] as any}
-      />
-    )
-  }
-}
-export type CreateNotebookProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<
-    CreateNotebookMutation,
-    CreateNotebookMutationVariables
-  >
-> &
-  TChildProps
-export type CreateNotebookMutationFn = ReactApollo.MutationFn<
-  CreateNotebookMutation,
-  CreateNotebookMutationVariables
->
-export function withCreateNotebook<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        CreateNotebookMutation,
-        CreateNotebookMutationVariables,
-        CreateNotebookProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withMutation<
-    TProps,
-    CreateNotebookMutation,
-    CreateNotebookMutationVariables,
-    CreateNotebookProps<TChildProps>
-  >(CreateNotebookDocument, operationOptions)
-}
 export const ListNotesDocument = gql`
   query ListNotes($filter: ModelNoteFilterInput, $limit: Int, $offset: Int) {
     listNotes(filter: $filter, limit: $limit, offset: $offset) {
@@ -737,6 +703,48 @@ export function withListNotes<TProps, TChildProps = {}>(
     ListNotesProps<TChildProps>
   >(ListNotesDocument, operationOptions)
 }
+export const ReadNoteDocument = gql`
+  query ReadNote($id: ID!) {
+    readNote(id: $id) {
+      ...note
+    }
+  }
+  ${noteFragmentDoc}
+`
+
+export class ReadNoteComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ReadNoteQuery, ReadNoteQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ReadNoteQuery, ReadNoteQueryVariables>
+        query={ReadNoteDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type ReadNoteProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ReadNoteQuery, ReadNoteQueryVariables>
+> &
+  TChildProps
+export function withReadNote<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ReadNoteQuery,
+        ReadNoteQueryVariables,
+        ReadNoteProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ReadNoteQuery,
+    ReadNoteQueryVariables,
+    ReadNoteProps<TChildProps>
+  >(ReadNoteDocument, operationOptions)
+}
 export const ReadNotebookDocument = gql`
   query ReadNotebook($id: ID!) {
     readNotebook(id: $id) {
@@ -778,6 +786,54 @@ export function withReadNotebook<TProps, TChildProps = {}>(
     ReadNotebookQueryVariables,
     ReadNotebookProps<TChildProps>
   >(ReadNotebookDocument, operationOptions)
+}
+export const UpdateNoteDocument = gql`
+  mutation UpdateNote($input: UpdateNoteInput!) {
+    updateNote(input: $input) {
+      ...note
+    }
+  }
+  ${noteFragmentDoc}
+`
+
+export class UpdateNoteComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<UpdateNoteMutation, UpdateNoteMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<UpdateNoteMutation, UpdateNoteMutationVariables>
+        mutation={UpdateNoteDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type UpdateNoteProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<UpdateNoteMutation, UpdateNoteMutationVariables>
+> &
+  TChildProps
+export type UpdateNoteMutationFn = ReactApollo.MutationFn<
+  UpdateNoteMutation,
+  UpdateNoteMutationVariables
+>
+export function withUpdateNote<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        UpdateNoteMutation,
+        UpdateNoteMutationVariables,
+        UpdateNoteProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    UpdateNoteMutation,
+    UpdateNoteMutationVariables,
+    UpdateNoteProps<TChildProps>
+  >(UpdateNoteDocument, operationOptions)
 }
 export interface IntrospectionResultData {
   __schema: {
