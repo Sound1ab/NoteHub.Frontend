@@ -48,45 +48,19 @@ export type DeleteUserInput = {
 }
 
 export type ModelBooleanFilterInput = {
-  ne?: Maybe<Scalars['Boolean']>
   eq?: Maybe<Scalars['Boolean']>
 }
 
 export type ModelFloatFilterInput = {
-  ne?: Maybe<Scalars['Float']>
   eq?: Maybe<Scalars['Float']>
-  le?: Maybe<Scalars['Float']>
-  lt?: Maybe<Scalars['Float']>
-  ge?: Maybe<Scalars['Float']>
-  gt?: Maybe<Scalars['Float']>
-  contains?: Maybe<Scalars['Float']>
-  notContains?: Maybe<Scalars['Float']>
-  between?: Maybe<Array<Maybe<Scalars['Float']>>>
 }
 
 export type ModelIdFilterInput = {
-  ne?: Maybe<Scalars['ID']>
   eq?: Maybe<Scalars['ID']>
-  le?: Maybe<Scalars['ID']>
-  lt?: Maybe<Scalars['ID']>
-  ge?: Maybe<Scalars['ID']>
-  gt?: Maybe<Scalars['ID']>
-  contains?: Maybe<Scalars['ID']>
-  notContains?: Maybe<Scalars['ID']>
-  between?: Maybe<Array<Maybe<Scalars['ID']>>>
-  beginsWith?: Maybe<Scalars['ID']>
 }
 
 export type ModelIntFilterInput = {
-  ne?: Maybe<Scalars['Int']>
   eq?: Maybe<Scalars['Int']>
-  le?: Maybe<Scalars['Int']>
-  lt?: Maybe<Scalars['Int']>
-  ge?: Maybe<Scalars['Int']>
-  gt?: Maybe<Scalars['Int']>
-  contains?: Maybe<Scalars['Int']>
-  notContains?: Maybe<Scalars['Int']>
-  between?: Maybe<Array<Maybe<Scalars['Int']>>>
 }
 
 export type ModelNotebookConnection = {
@@ -96,20 +70,17 @@ export type ModelNotebookConnection = {
 
 export type ModelNotebookFilterInput = {
   id?: Maybe<ModelIdFilterInput>
-  userId?: Maybe<ModelStringFilterInput>
+  userId?: Maybe<ModelIdFilterInput>
 }
 
 export type ModelNoteConnection = {
   items?: Maybe<Array<Maybe<Note>>>
-  nextToken?: Maybe<Scalars['String']>
+  nextOffset?: Maybe<Scalars['Int']>
 }
 
 export type ModelNoteFilterInput = {
   id?: Maybe<ModelIdFilterInput>
-  description?: Maybe<ModelStringFilterInput>
-  and?: Maybe<Array<Maybe<ModelNoteFilterInput>>>
-  or?: Maybe<Array<Maybe<ModelNoteFilterInput>>>
-  not?: Maybe<ModelNoteFilterInput>
+  notebookId?: Maybe<ModelIdFilterInput>
 }
 
 export enum ModelSortDirection {
@@ -118,29 +89,16 @@ export enum ModelSortDirection {
 }
 
 export type ModelStringFilterInput = {
-  ne?: Maybe<Scalars['String']>
   eq?: Maybe<Scalars['String']>
-  le?: Maybe<Scalars['String']>
-  lt?: Maybe<Scalars['String']>
-  ge?: Maybe<Scalars['String']>
-  gt?: Maybe<Scalars['String']>
-  contains?: Maybe<Scalars['String']>
-  notContains?: Maybe<Scalars['String']>
-  between?: Maybe<Array<Maybe<Scalars['String']>>>
-  beginsWith?: Maybe<Scalars['String']>
 }
 
 export type ModelUserConnection = {
   items?: Maybe<Array<Maybe<User>>>
-  nextToken?: Maybe<Scalars['String']>
+  nextOffset?: Maybe<Scalars['Int']>
 }
 
 export type ModelUserFilterInput = {
   id?: Maybe<ModelIdFilterInput>
-  description?: Maybe<ModelStringFilterInput>
-  and?: Maybe<Array<Maybe<ModelUserFilterInput>>>
-  or?: Maybe<Array<Maybe<ModelUserFilterInput>>>
-  not?: Maybe<ModelUserFilterInput>
 }
 
 export type Mutation = {
@@ -193,21 +151,18 @@ export type MutationDeleteUserArgs = {
 
 export type Note = {
   id: Scalars['ID']
-  notebook: Notebook
   title: Scalars['String']
   markdown: Scalars['String']
   excerpt: Scalars['String']
-  createdAt: Scalars['String']
-  updatedAt: Scalars['String']
+  createdAt: Date
+  updatedAt: Date
 }
 
 export type Notebook = {
   id: Scalars['ID']
-  user: User
   title: Scalars['String']
-  notes?: Maybe<Array<Maybe<Note>>>
-  createdAt: Scalars['String']
-  updatedAt: Scalars['String']
+  createdAt: Date
+  updatedAt: Date
 }
 
 export type Query = {
@@ -226,7 +181,7 @@ export type QueryReadNoteArgs = {
 export type QueryListNotesArgs = {
   filter?: Maybe<ModelNoteFilterInput>
   limit?: Maybe<Scalars['Int']>
-  nextToken?: Maybe<Scalars['String']>
+  offset?: Maybe<Scalars['Int']>
 }
 
 export type QueryReadNotebookArgs = {
@@ -246,7 +201,7 @@ export type QueryReadUserArgs = {
 export type QueryListUsersArgs = {
   filter?: Maybe<ModelUserFilterInput>
   limit?: Maybe<Scalars['Int']>
-  nextToken?: Maybe<Scalars['String']>
+  offset?: Maybe<Scalars['Int']>
 }
 
 export type UpdateNotebookInput = {
@@ -273,9 +228,8 @@ export type User = {
   firstName: Scalars['String']
   lastName: Scalars['String']
   email: Scalars['String']
-  notebooks?: Maybe<Array<Maybe<Notebook>>>
-  createdAt: Scalars['String']
-  updatedAt: Scalars['String']
+  createdAt: Date
+  updatedAt: Date
 }
 
 import { GraphQLResolveInfo } from 'graphql'
@@ -354,16 +308,16 @@ export type ResolversTypes = {
   Query: Query
   ID: Scalars['ID']
   Note: Note
-  Notebook: Notebook
-  User: User
   String: Scalars['String']
+  Date: Date
+  Int: Scalars['Int']
   ModelNoteFilterInput: ModelNoteFilterInput
   ModelIDFilterInput: ModelIdFilterInput
-  ModelStringFilterInput: ModelStringFilterInput
-  Int: Scalars['Int']
   ModelNoteConnection: ModelNoteConnection
+  Notebook: Notebook
   ModelNotebookFilterInput: ModelNotebookFilterInput
   ModelNotebookConnection: ModelNotebookConnection
+  User: User
   ModelUserFilterInput: ModelUserFilterInput
   ModelUserConnection: ModelUserConnection
   Mutation: Mutation
@@ -377,8 +331,8 @@ export type ResolversTypes = {
   UpdateUserInput: UpdateUserInput
   DeleteUserInput: DeleteUserInput
   Boolean: Scalars['Boolean']
-  Date: Date
   ModelSortDirection: ModelSortDirection
+  ModelStringFilterInput: ModelStringFilterInput
   ModelIntFilterInput: ModelIntFilterInput
   ModelFloatFilterInput: ModelFloatFilterInput
   Float: Scalars['Float']
@@ -416,7 +370,7 @@ export type ModelNoteConnectionResolvers<
     ParentType,
     Context
   >
-  nextToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, Context>
+  nextOffset?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, Context>
 }
 
 export type ModelUserConnectionResolvers<
@@ -428,7 +382,7 @@ export type ModelUserConnectionResolvers<
     ParentType,
     Context
   >
-  nextToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, Context>
+  nextOffset?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, Context>
 }
 
 export type MutationResolvers<
@@ -496,12 +450,11 @@ export type NoteResolvers<
   ParentType = ResolversTypes['Note']
 > = {
   id?: Resolver<ResolversTypes['ID'], ParentType, Context>
-  notebook?: Resolver<ResolversTypes['Notebook'], ParentType, Context>
   title?: Resolver<ResolversTypes['String'], ParentType, Context>
   markdown?: Resolver<ResolversTypes['String'], ParentType, Context>
   excerpt?: Resolver<ResolversTypes['String'], ParentType, Context>
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, Context>
-  updatedAt?: Resolver<ResolversTypes['String'], ParentType, Context>
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
 }
 
 export type NotebookResolvers<
@@ -509,15 +462,9 @@ export type NotebookResolvers<
   ParentType = ResolversTypes['Notebook']
 > = {
   id?: Resolver<ResolversTypes['ID'], ParentType, Context>
-  user?: Resolver<ResolversTypes['User'], ParentType, Context>
   title?: Resolver<ResolversTypes['String'], ParentType, Context>
-  notes?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['Note']>>>,
-    ParentType,
-    Context
-  >
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, Context>
-  updatedAt?: Resolver<ResolversTypes['String'], ParentType, Context>
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
 }
 
 export type QueryResolvers<
@@ -570,13 +517,8 @@ export type UserResolvers<
   firstName?: Resolver<ResolversTypes['String'], ParentType, Context>
   lastName?: Resolver<ResolversTypes['String'], ParentType, Context>
   email?: Resolver<ResolversTypes['String'], ParentType, Context>
-  notebooks?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['Notebook']>>>,
-    ParentType,
-    Context
-  >
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, Context>
-  updatedAt?: Resolver<ResolversTypes['String'], ParentType, Context>
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
 }
 
 export type Resolvers<Context = any> = {

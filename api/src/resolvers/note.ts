@@ -1,7 +1,7 @@
 import { getConnection } from 'typeorm'
 import { Note } from '../entities/Note'
 import { Notebook } from '../entities/Notebook'
-import { configureRepository } from '../helpers'
+import { calculateNextOffset, configureRepository } from '../helpers'
 import {
   MutationCreateNoteArgs,
   MutationDeleteNoteArgs,
@@ -14,13 +14,28 @@ export async function NoteQueries() {
   return {
     listNotes: await configureRepository<Note, QueryListNotesArgs>(
       Note,
-      async repository => {
-        const results = await repository.find({
-          relations: ['notebook', 'notebook.user'],
-        })
+      async (repository, { filter, limit, offset }) => {
+        const query = repository
+          .createQueryBuilder('note')
+          .innerJoinAndSelect('note.notebook', 'notebook')
+
+        if (filter && filter.notebookId) {
+          query.where('notebook.id = :id', { id: filter.notebookId.eq })
+        }
+
+        if (limit) {
+          query.take(limit)
+        }
+
+        if (offset) {
+          query.skip(offset)
+        }
+
+        const results = await query.getMany()
+
         return {
           items: results,
-          nextToken: '1234',
+          nextOffset: calculateNextOffset(limit, offset),
         }
       }
     ),

@@ -6,6 +6,15 @@ import {
   SelectQueryBuilder,
 } from 'typeorm'
 
+export function calculateNextOffset(
+  offset?: number | null,
+  limit?: number | null
+) {
+  return typeof offset === 'number' && typeof limit === 'number'
+    ? offset + limit
+    : null
+}
+
 export async function configureRepository<S, T>(
   entity: ObjectType<S> | EntitySchema<S> | string,
   fn: (repository: Repository<S>, args: T) => any

@@ -1,7 +1,7 @@
 ## Base
 type Query {
     readUser(id: ID!): User
-    listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
+    listUsers(filter: ModelUserFilterInput, limit: Int, offset: Int): ModelUserConnection
 }
 
 type Mutation {
@@ -16,7 +16,6 @@ type User {
     firstName: String!
     lastName: String!
     email: String!
-    notebooks: [Notebook]
     createdAt: Date!
     updatedAt: Date!
 
@@ -24,16 +23,12 @@ type User {
 
 type ModelUserConnection {
     items: [User]
-    nextToken: String
+    nextOffset: Int
 }
 
 ## Query inputs
 input ModelUserFilterInput {
     id: ModelIDFilterInput
-    description: ModelStringFilterInput
-    and: [ModelUserFilterInput]
-    or: [ModelUserFilterInput]
-    not: ModelUserFilterInput
 }
 
 ## Mutation inputs

@@ -1,9 +1,8 @@
 import { getConnection } from 'typeorm'
 import { Notebook } from '../entities/Notebook'
 import { User } from '../entities/User'
-import { configureRepository } from '../helpers'
+import { calculateNextOffset, configureRepository } from '../helpers'
 import {
-  ModelNotebookConnection,
   MutationCreateNotebookArgs,
   MutationDeleteNotebookArgs,
   MutationUpdateNotebookArgs,
@@ -15,10 +14,7 @@ export async function NotebookQueries() {
   return {
     listNotebooks: await configureRepository<Notebook, QueryListNotebooksArgs>(
       Notebook,
-      async (
-        repository,
-        { filter, limit, offset }
-      ): Promise<ModelNotebookConnection> => {
+      async (repository, { filter, limit, offset }) => {
         const query = repository
           .createQueryBuilder('notebook')
           .innerJoinAndSelect('notebook.user', 'user')
@@ -39,10 +35,7 @@ export async function NotebookQueries() {
 
         return {
           items: results,
-          nextOffset:
-            typeof offset === 'number' && typeof limit === 'number'
-              ? offset + limit
-              : null,
+          nextOffset: calculateNextOffset(limit, offset),
         }
       }
     ),

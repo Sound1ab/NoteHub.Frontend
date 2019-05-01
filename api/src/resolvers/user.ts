@@ -1,5 +1,5 @@
 import { User } from '../entities/User'
-import { configureRepository } from '../helpers'
+import { calculateNextOffset, configureRepository } from '../helpers'
 import {
   MutationCreateUserArgs,
   MutationDeleteUserArgs,
@@ -12,13 +12,26 @@ export async function UserQueries() {
   return {
     listUsers: await configureRepository<User, QueryListUsersArgs>(
       User,
-      async repository => {
-        const results = await repository.find({
-          relations: ['notebooks', 'notebooks.notes'],
-        })
+      async (repository, { filter, limit, offset }) => {
+        const query = repository.createQueryBuilder('user')
+
+        if (filter && filter.id) {
+          query.where('id = :id', { id: filter.id.eq })
+        }
+
+        if (limit) {
+          query.take(limit)
+        }
+
+        if (offset) {
+          query.skip(offset)
+        }
+
+        const results = await query.getMany()
+
         return {
           items: results,
-          nextToken: '1234',
+          nextOffset: calculateNextOffset(limit, offset),
         }
       }
     ),
@@ -26,7 +39,6 @@ export async function UserQueries() {
       User,
       async (repository, { id }) => {
         return repository.findOne({
-          relations: ['notebooks', 'notebooks.notes'],
           where: { id },
         })
       }
