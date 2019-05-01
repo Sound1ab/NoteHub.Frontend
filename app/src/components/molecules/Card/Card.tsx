@@ -1,7 +1,7 @@
 import React from 'react'
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
-import { Heading } from '../../atoms'
+import { Heading, Icon } from '../../atoms'
 
 const Style = styled.div<{ isSelected?: boolean }>`
   position: relative;
@@ -26,11 +26,15 @@ const Style = styled.div<{ isSelected?: boolean }>`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-bottom: 0;
   }
 
   .Card-created-at {
     white-space: nowrap;
+  }
+
+  .Card-options {
+    display: flex;
+    justify-content: flex-end;
   }
 `
 
@@ -51,7 +55,10 @@ export function Card({ title, excerpt, createdAt, isSelected }: ICard) {
           {createdAt}
         </Heading>
       </div>
-      <span className="Card-excerpt">{excerpt}</span>
+      <p className="Card-excerpt">{excerpt}</p>
+      <div className="Card-options">
+        <Icon color={COLOR.MEDIUM} icon="trash" prefix="fa" size="sm" />
+      </div>
     </Style>
   )
 }

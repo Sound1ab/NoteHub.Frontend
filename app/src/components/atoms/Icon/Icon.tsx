@@ -14,7 +14,7 @@ const Style = styled.a<{ marginRight: boolean; color: COLOR; size: string }>`
       case 'xs':
         return '6px'
       case 'sm':
-        return '10px'
+        return '5px'
       case 'lg':
         return '10px'
       default:

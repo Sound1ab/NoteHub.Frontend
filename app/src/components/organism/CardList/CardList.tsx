@@ -1,16 +1,7 @@
-import gql from 'graphql-tag'
 import React from 'react'
-import { useQuery } from 'react-apollo-hooks'
-import { NotebookFragment, NoteFragment } from '../../../fragments'
-import { useStore } from '../../../hooks/useStore'
+import { useListNotes, useReadNotebook, useStore } from '../../../hooks'
 import { setActiveNote } from '../../../store'
 import { styled } from '../../../theme'
-import {
-  ListNotesQuery,
-  ListNotesQueryVariables,
-  ReadNotebookQuery,
-  ReadNotebookQueryVariables,
-} from '../../apollo/generated_components_typings'
 import { Container } from '../../atoms'
 import { Card, CardHeader } from '../../molecules'
 
@@ -20,6 +11,8 @@ const Style = styled.div`
   width: ${({ theme }) => theme.spacing.xxxl}
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.secondary};
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 
   .CardList-wrapper {
     display: flex;
@@ -32,52 +25,10 @@ const Style = styled.div`
   }
 `
 
-export const ListNotesDocument = gql`
-  ${NoteFragment}
-  query ListNotes($filter: ModelNoteFilterInput, $limit: Int, $offset: Int) {
-    listNotes(filter: $filter, limit: $limit, offset: $offset) {
-      items {
-        ...note
-      }
-    }
-  }
-`
-
-export const ReadNotebookDocument = gql`
-  ${NotebookFragment}
-  query ReadNotebook($id: ID!) {
-    readNotebook(id: $id) {
-      ...notebook
-    }
-  }
-`
-
 export function CardList() {
   const [state, dispatch] = useStore()
-
-  const { data: notesData } = useQuery<ListNotesQuery, ListNotesQueryVariables>(
-    ListNotesDocument,
-    {
-      variables: {
-        filter: { notebookId: { eq: state.activeNotebook || '' } },
-      },
-    }
-  )
-
-  const { data: notebookData } = useQuery<
-    ReadNotebookQuery,
-    ReadNotebookQueryVariables
-  >(ReadNotebookDocument, {
-    variables: {
-      id: state.activeNotebook || '',
-    },
-  })
-
-  const notebook = notebookData && notebookData.readNotebook
-  const notes =
-    (notesData && notesData.listNotes && notesData.listNotes.items) || []
-
-  console.log(notebook)
+  const notebook = useReadNotebook(state.activeNotebook)
+  const notes = useListNotes(state.activeNotebook)
 
   function handleCardClick(note: string | null) {
     if (dispatch) dispatch(setActiveNote(note))

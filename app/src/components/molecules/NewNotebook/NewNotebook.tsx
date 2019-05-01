@@ -1,15 +1,7 @@
-import gql from 'graphql-tag'
 import React, { useState } from 'react'
-import { useMutation } from 'react-apollo-hooks'
 import { COLOR } from '../../../enums'
-import { NotebookFragment } from '../../../fragments'
+import { useCreateNotebook } from '../../../hooks'
 import { styled } from '../../../theme'
-import {
-  CreateNotebookMutation,
-  CreateNotebookMutationVariables,
-  ListNotebooksDocument,
-  ListNotebooksQuery,
-} from '../../apollo/generated_components_typings'
 import { Heading, Icon, Modal } from '../../atoms'
 
 const Style = styled.div`
@@ -22,50 +14,10 @@ const Style = styled.div`
   }
 `
 
-export const CreateNotebookDocument = gql`
-  ${NotebookFragment}
-  mutation CreateNotebook($input: CreateNotebookInput!) {
-    createNotebook(input: $input) {
-      ...notebook
-    }
-  }
-`
-
 export function NewNotebook() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
-
-  const createNewNotebook = useMutation<
-    CreateNotebookMutation,
-    CreateNotebookMutationVariables
-  >(CreateNotebookDocument, {
-    update: (cache, { data }) => {
-      const newNotebook = data && data.createNotebook
-      if (!newNotebook) return
-
-      const result = cache.readQuery<ListNotebooksQuery>({
-        query: ListNotebooksDocument,
-        variables: {
-          filter: { userId: { eq: '985d9b4d-920d-4b4f-9358-ab91146944d8' } },
-        },
-      })
-
-      const notebooks =
-        (result && result.listNotebooks && result.listNotebooks.items) || []
-
-      cache.writeQuery<ListNotebooksQuery>({
-        data: {
-          listNotebooks: {
-            items: notebooks.concat([{ ...newNotebook }]),
-          },
-        },
-        query: ListNotebooksDocument,
-        variables: {
-          filter: { userId: { eq: '985d9b4d-920d-4b4f-9358-ab91146944d8' } },
-        },
-      })
-    },
-  })
+  const createNewNotebook = useCreateNotebook()
 
   async function handleCreateNewNotebook() {
     await createNewNotebook({
