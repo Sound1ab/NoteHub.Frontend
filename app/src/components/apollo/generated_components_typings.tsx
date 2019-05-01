@@ -1,4 +1,5 @@
 /* tslint:disable */
+/* eslint-disable import/first */
 
 type Maybe<T> = T | null
 /** All built-in and custom scalars, mapped to their actual values */
@@ -299,6 +300,14 @@ export type ListNotebooksQuery = { __typename?: 'Query' } & {
   >
 }
 
+export type CreateNotebookMutationVariables = {
+  input: CreateNotebookInput
+}
+
+export type CreateNotebookMutation = { __typename?: 'Mutation' } & {
+  createNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
+}
+
 export type ReadNotebookQueryVariables = {
   id: Scalars['ID']
 }
@@ -485,6 +494,63 @@ export function withListNotebooks<TProps, TChildProps = {}>(
     ListNotebooksQueryVariables,
     ListNotebooksProps<TChildProps>
   >(ListNotebooksDocument, operationOptions)
+}
+export const CreateNotebookDocument = gql`
+  mutation CreateNotebook($input: CreateNotebookInput!) {
+    createNotebook(input: $input) {
+      ...notebook
+    }
+  }
+  ${notebookFragmentDoc}
+`
+
+export class CreateNotebookComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<
+      CreateNotebookMutation,
+      CreateNotebookMutationVariables
+    >
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<
+        CreateNotebookMutation,
+        CreateNotebookMutationVariables
+      >
+        mutation={CreateNotebookDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type CreateNotebookProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    CreateNotebookMutation,
+    CreateNotebookMutationVariables
+  >
+> &
+  TChildProps
+export type CreateNotebookMutationFn = ReactApollo.MutationFn<
+  CreateNotebookMutation,
+  CreateNotebookMutationVariables
+>
+export function withCreateNotebook<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        CreateNotebookMutation,
+        CreateNotebookMutationVariables,
+        CreateNotebookProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    CreateNotebookMutation,
+    CreateNotebookMutationVariables,
+    CreateNotebookProps<TChildProps>
+  >(CreateNotebookDocument, operationOptions)
 }
 export const ReadNotebookDocument = gql`
   query ReadNotebook($id: ID!) {

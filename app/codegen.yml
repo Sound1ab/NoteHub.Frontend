@@ -5,6 +5,7 @@ generates:
   src/components/apollo/generated_components_typings.tsx:
     plugins:
       - add: '/* tslint:disable */'
+      - add: '/* eslint-disable import/first */'
       - "typescript"
       - "typescript-operations"
       - "typescript-react-apollo"
