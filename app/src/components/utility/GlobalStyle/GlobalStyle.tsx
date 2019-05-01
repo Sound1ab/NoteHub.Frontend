@@ -184,6 +184,12 @@ export const GlobalStyle = createGlobalStyle`
     border: none;
   }
   
+  input {
+    padding: ${({ theme }) => theme.spacing.xs};
+    border: 1px solid ${({ theme }) => theme.colors.text.secondary};
+    width: 100%;
+   }
+  
   /**
    * Remove the inheritance of text transform in Edge and Firefox.
    * 1. Remove the inheritance of text transform in Firefox.

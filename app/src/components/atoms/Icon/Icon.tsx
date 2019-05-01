@@ -54,6 +54,7 @@ interface IIcon {
     | 'plus-circle'
     | 'trash'
     | 'sync'
+    | 'times'
   color?: COLOR
   link?: string
   prefix?: 'fab' | 'fa'

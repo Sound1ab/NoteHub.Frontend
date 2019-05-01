@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import React from 'react'
+import React, { useState } from 'react'
 import { useMutation } from 'react-apollo-hooks'
 import { COLOR } from '../../../enums'
 import { NotebookFragment } from '../../../fragments'
@@ -10,14 +10,16 @@ import {
   ListNotebooksDocument,
   ListNotebooksQuery,
 } from '../../apollo/generated_components_typings'
-import { Heading, Icon } from '../../atoms'
+import { Heading, Icon, Modal } from '../../atoms'
 
 const Style = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: ${({ theme }) => theme.spacing.s};
-  cursor: pointer;
+  .NewNotebook-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: ${({ theme }) => theme.spacing.s};
+    cursor: pointer;
+  }
 `
 
 export const CreateNotebookDocument = gql`
@@ -30,6 +32,8 @@ export const CreateNotebookDocument = gql`
 `
 
 export function NewNotebook() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   const createNewNotebook = useMutation<
     CreateNotebookMutation,
     CreateNotebookMutationVariables
@@ -74,17 +78,32 @@ export function NewNotebook() {
   }
 
   return (
-    <Style onClick={handleCreateNewNotebook}>
-      <Icon
-        size="lg"
-        color={COLOR.ACCENT}
-        icon="plus-circle"
-        prefix="fa"
-        marginRight
-      />
-      <Heading color={COLOR.LIGHT} type="h3">
-        New Notebook
-      </Heading>
+    <Style>
+      <span
+        className="NewNotebook-wrapper"
+        onClick={setIsModalOpen.bind(null, true)}
+      >
+        <Icon
+          size="lg"
+          color={COLOR.ACCENT}
+          icon="plus-circle"
+          prefix="fa"
+          marginRight
+        />
+        <Heading color={COLOR.LIGHT} type="h3">
+          New Notebook
+        </Heading>
+      </span>
+      <Modal
+        title="Create new Notebook"
+        isOpen={isModalOpen}
+        onRequestClose={setIsModalOpen.bind(null, false)}
+      >
+        <Heading type="h5" marginBottom>
+          Title
+        </Heading>
+        <input type="text" placeholder="Notebook name" />
+      </Modal>
     </Style>
   )
 }

@@ -8,6 +8,7 @@ import {
   faPenSquare,
   faPlusCircle,
   faSync,
+  faTimes,
   faTrash,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
@@ -35,7 +36,8 @@ library.add(
   faBook,
   faPlusCircle,
   faSync,
-  faTrash
+  faTrash,
+  faTimes
 )
 
 export function App() {
