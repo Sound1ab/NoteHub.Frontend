@@ -197,8 +197,8 @@ export type Note = {
   title: Scalars['String']
   markdown: Scalars['String']
   excerpt: Scalars['String']
-  createdAt: Scalars['String']
-  updatedAt: Scalars['String']
+  createdAt: Date
+  updatedAt: Date
 }
 
 export type Notebook = {
@@ -206,8 +206,8 @@ export type Notebook = {
   user: User
   title: Scalars['String']
   notes?: Maybe<Array<Maybe<Note>>>
-  createdAt: Scalars['String']
-  updatedAt: Scalars['String']
+  createdAt: Date
+  updatedAt: Date
 }
 
 export type Query = {
@@ -274,8 +274,8 @@ export type User = {
   lastName: Scalars['String']
   email: Scalars['String']
   notebooks?: Maybe<Array<Maybe<Notebook>>>
-  createdAt: Scalars['String']
-  updatedAt: Scalars['String']
+  createdAt: Date
+  updatedAt: Date
 }
 export type ReadNoteQueryVariables = {
   id: Scalars['ID']
@@ -283,18 +283,6 @@ export type ReadNoteQueryVariables = {
 
 export type ReadNoteQuery = { __typename?: 'Query' } & {
   readNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
-}
-
-export type ReadNotebookQueryVariables = {
-  id: Scalars['ID']
-}
-
-export type ReadNotebookQuery = { __typename?: 'Query' } & {
-  readNotebook: Maybe<
-    { __typename?: 'Notebook' } & {
-      notes: Maybe<Array<Maybe<{ __typename?: 'Note' } & NoteFragment>>>
-    } & NotebookFragment
-  >
 }
 
 export type ListNotebooksQueryVariables = {
@@ -311,41 +299,85 @@ export type ListNotebooksQuery = { __typename?: 'Query' } & {
   >
 }
 
+export type ReadNotebookQueryVariables = {
+  id: Scalars['ID']
+}
+
+export type ReadNotebookQuery = { __typename?: 'Query' } & {
+  readNotebook: Maybe<
+    { __typename?: 'Notebook' } & {
+      notes: Maybe<Array<Maybe<{ __typename?: 'Note' } & NoteFragment>>>
+    } & NotebookFragment
+  >
+}
+
+export type DateFragment = { __typename?: 'Date' } & Pick<
+  Date,
+  'dateLongForm' | 'dayOfMonth' | 'dayOfWeek' | 'month'
+>
+
 export type NoteFragment = { __typename?: 'Note' } & Pick<
   Note,
-  'id' | 'title' | 'markdown' | 'excerpt' | 'createdAt' | 'updatedAt'
->
+  'id' | 'title' | 'markdown' | 'excerpt'
+> & {
+    createdAt: { __typename?: 'Date' } & DateFragment
+    updatedAt: { __typename?: 'Date' } & DateFragment
+  }
 
 export type NotebookFragment = { __typename?: 'Notebook' } & Pick<
   Notebook,
-  'id' | 'title' | 'createdAt' | 'updatedAt'
->
+  'id' | 'title'
+> & {
+    createdAt: { __typename?: 'Date' } & DateFragment
+    updatedAt: { __typename?: 'Date' } & DateFragment
+  }
 
 export type UserFragment = { __typename?: 'User' } & Pick<
   User,
-  'id' | 'firstName' | 'lastName' | 'email' | 'createdAt' | 'updatedAt'
->
+  'id' | 'firstName' | 'lastName' | 'email'
+> & {
+    createdAt: { __typename?: 'Date' } & DateFragment
+    updatedAt: { __typename?: 'Date' } & DateFragment
+  }
 
 import gql from 'graphql-tag'
 import * as React from 'react'
 import * as ReactApollo from 'react-apollo'
+export const dateFragmentDoc = gql`
+  fragment date on Date {
+    dateLongForm
+    dayOfMonth
+    dayOfWeek
+    month
+  }
+`
 export const noteFragmentDoc = gql`
   fragment note on Note {
     id
     title
     markdown
     excerpt
-    createdAt
-    updatedAt
+    createdAt {
+      ...date
+    }
+    updatedAt {
+      ...date
+    }
   }
+  ${dateFragmentDoc}
 `
 export const notebookFragmentDoc = gql`
   fragment notebook on Notebook {
     id
     title
-    createdAt
-    updatedAt
+    createdAt {
+      ...date
+    }
+    updatedAt {
+      ...date
+    }
   }
+  ${dateFragmentDoc}
 `
 export const userFragmentDoc = gql`
   fragment user on User {
@@ -353,9 +385,14 @@ export const userFragmentDoc = gql`
     firstName
     lastName
     email
-    createdAt
-    updatedAt
+    createdAt {
+      ...date
+    }
+    updatedAt {
+      ...date
+    }
   }
+  ${dateFragmentDoc}
 `
 export const ReadNoteDocument = gql`
   query ReadNote($id: ID!) {
@@ -398,52 +435,6 @@ export function withReadNote<TProps, TChildProps = {}>(
     ReadNoteQueryVariables,
     ReadNoteProps<TChildProps>
   >(ReadNoteDocument, operationOptions)
-}
-export const ReadNotebookDocument = gql`
-  query ReadNotebook($id: ID!) {
-    readNotebook(id: $id) {
-      ...notebook
-      notes {
-        ...note
-      }
-    }
-  }
-  ${notebookFragmentDoc}
-  ${noteFragmentDoc}
-`
-
-export class ReadNotebookComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<ReadNotebookQuery, ReadNotebookQueryVariables>>
-> {
-  render() {
-    return (
-      <ReactApollo.Query<ReadNotebookQuery, ReadNotebookQueryVariables>
-        query={ReadNotebookDocument}
-        {...(this as any)['props'] as any}
-      />
-    )
-  }
-}
-export type ReadNotebookProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<ReadNotebookQuery, ReadNotebookQueryVariables>
-> &
-  TChildProps
-export function withReadNotebook<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ReadNotebookQuery,
-        ReadNotebookQueryVariables,
-        ReadNotebookProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
-    ReadNotebookQuery,
-    ReadNotebookQueryVariables,
-    ReadNotebookProps<TChildProps>
-  >(ReadNotebookDocument, operationOptions)
 }
 export const ListNotebooksDocument = gql`
   query ListNotebooks(
@@ -494,6 +485,52 @@ export function withListNotebooks<TProps, TChildProps = {}>(
     ListNotebooksQueryVariables,
     ListNotebooksProps<TChildProps>
   >(ListNotebooksDocument, operationOptions)
+}
+export const ReadNotebookDocument = gql`
+  query ReadNotebook($id: ID!) {
+    readNotebook(id: $id) {
+      ...notebook
+      notes {
+        ...note
+      }
+    }
+  }
+  ${notebookFragmentDoc}
+  ${noteFragmentDoc}
+`
+
+export class ReadNotebookComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ReadNotebookQuery, ReadNotebookQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ReadNotebookQuery, ReadNotebookQueryVariables>
+        query={ReadNotebookDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type ReadNotebookProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ReadNotebookQuery, ReadNotebookQueryVariables>
+> &
+  TChildProps
+export function withReadNotebook<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ReadNotebookQuery,
+        ReadNotebookQueryVariables,
+        ReadNotebookProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ReadNotebookQuery,
+    ReadNotebookQueryVariables,
+    ReadNotebookProps<TChildProps>
+  >(ReadNotebookDocument, operationOptions)
 }
 export interface IntrospectionResultData {
   __schema: {

@@ -1,13 +1,27 @@
 import gql from 'graphql-tag'
 
+export const DateFragment = gql`
+  fragment date on Date {
+    dateLongForm
+    dayOfMonth
+    dayOfWeek
+    month
+  }
+`
+
 export const NoteFragment = gql`
+  ${DateFragment}
   fragment note on Note {
     id
     title
     markdown
     excerpt
-    createdAt
-    updatedAt
+    createdAt {
+      ...date
+    }
+    updatedAt {
+      ...date
+    }
   }
 `
 
@@ -15,8 +29,12 @@ export const NotebookFragment = gql`
   fragment notebook on Notebook {
     id
     title
-    createdAt
-    updatedAt
+    createdAt {
+      ...date
+    }
+    updatedAt {
+      ...date
+    }
   }
 `
 
@@ -26,7 +44,11 @@ export const UserFragment = gql`
     firstName
     lastName
     email
-    createdAt
-    updatedAt
+    createdAt {
+      ...date
+    }
+    updatedAt {
+      ...date
+    }
   }
 `
