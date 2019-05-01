@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
+import { DeleteNotebookModal } from '..'
 import { COLOR } from '../../../enums'
-import { useCreateNote, useDeleteNotebook } from '../../../hooks'
 import { useStore } from '../../../hooks/useStore'
 import { styled } from '../../../theme'
-import { Heading, Icon, Modal } from '../../atoms'
+import { Heading, Icon } from '../../atoms'
+import { CreateNoteModal } from '../ConfirmationModals/CreateNoteModal'
 
 const Style = styled.div`
   position: relative;
@@ -41,62 +42,10 @@ interface ICardHeader {
 
 export function CardHeader({ title = '' }: ICardHeader) {
   const [state] = useStore()
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isCreateNoteModalOpen, setIsCreateNoteModalOpen] = useState(false)
   const [isDeleteNotebookModalOpen, setIsDeleteNotebookModalOpen] = useState(
     false
   )
-  const [inputValue, setInputValue] = useState('')
-  const [deleteNotebookInputValue, setDeleteNotebookInputValue] = useState('')
-
-  const createNewNote = useCreateNote(state.activeNotebook)
-  const deleteNotebook = useDeleteNotebook()
-
-  async function handleDeleteNotebook() {
-    if (!state.activeNotebook) {
-      alert('No active notebook')
-      return
-    }
-    if (deleteNotebookInputValue !== title) {
-      alert('Please confirm the notebook you wish to delete')
-      return
-    }
-    await deleteNotebook({
-      variables: {
-        input: {
-          id: state.activeNotebook,
-        },
-      },
-    })
-    setIsDeleteNotebookModalOpen(false)
-  }
-
-  async function handleCreateNewNote() {
-    if (!state.activeNotebook) {
-      alert('No active notebook')
-      return
-    }
-    await createNewNote({
-      variables: {
-        input: {
-          excerpt: '',
-          markdown: '',
-          notebookId: state.activeNotebook,
-          title: inputValue,
-        },
-      },
-    })
-    setIsModalOpen(false)
-  }
-
-  function handleOnInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setInputValue(e.target.value)
-  }
-
-  function handleOnDeleteNotebookInputChange(
-    e: React.ChangeEvent<HTMLInputElement>
-  ) {
-    setDeleteNotebookInputValue(e.target.value)
-  }
 
   return (
     <Style>
@@ -106,7 +55,7 @@ export function CardHeader({ title = '' }: ICardHeader) {
       <div className="CardHeader-wrapper">
         <div
           className="CardHeader-new-note"
-          onClick={setIsModalOpen.bind(null, true)}
+          onClick={setIsCreateNoteModalOpen.bind(null, true)}
         >
           <Icon
             size="lg"
@@ -136,41 +85,17 @@ export function CardHeader({ title = '' }: ICardHeader) {
           />
         </div>
       </div>
-      <Modal
-        onContinue={handleCreateNewNote}
-        title="Create new Note"
-        isOpen={isModalOpen}
-        onRequestClose={setIsModalOpen.bind(null, false)}
-      >
-        <Heading type="h5" marginBottom>
-          Title
-        </Heading>
-        <input
-          value={inputValue}
-          onChange={handleOnInputChange}
-          className="NewNote-input"
-          type="text"
-          placeholder="Note name"
-        />
-      </Modal>
-      <Modal
-        onContinue={handleDeleteNotebook}
-        title="Delete Notebook"
+      <CreateNoteModal
+        isOpen={isCreateNoteModalOpen}
+        onRequestClose={setIsCreateNoteModalOpen.bind(null, false)}
+        activeNotebook={state.activeNotebook}
+      />
+      <DeleteNotebookModal
         isOpen={isDeleteNotebookModalOpen}
         onRequestClose={setIsDeleteNotebookModalOpen.bind(null, false)}
-      >
-        <p>Please confirm the Notebook name you wish to delete.</p>
-        <Heading type="h5" marginBottom>
-          Notebook
-        </Heading>
-        <input
-          value={deleteNotebookInputValue}
-          onChange={handleOnDeleteNotebookInputChange}
-          className="NewNote-input"
-          type="text"
-          placeholder="Notebook name"
-        />
-      </Modal>
+        activeNotebook={state.activeNotebook}
+        title={title}
+      />
     </Style>
   )
 }
