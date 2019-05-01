@@ -1,8 +1,9 @@
-import { ApolloServer, IResolvers } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import { config } from './config'
+import { DateType } from './resolvers/date'
 import { NoteMutations, NoteQueries } from './resolvers/note'
 import { NotebookMutations, NotebookQueries } from './resolvers/notebook'
 import { UserMutations, UserQueries } from './resolvers/user'
@@ -15,7 +16,8 @@ async function configureServer() {
 
   app.set('env', process.env.APP_ENV)
 
-  const resolvers: IResolvers = {
+  const resolvers = {
+    Date: DateType,
     Mutation: {
       ...(await UserMutations()),
       ...(await NoteMutations()),

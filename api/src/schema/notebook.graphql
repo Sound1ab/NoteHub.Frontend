@@ -1,10 +1,10 @@
 ## Base
-type Query {
+extend type Query {
     readNotebook(id: ID!): Notebook
     listNotebooks(filter: ModelNotebookFilterInput, limit: Int, offset: Int): ModelNotebookConnection
 }
 
-type Mutation {
+extend type Mutation {
     createNotebook(input: CreateNotebookInput!): Notebook
     updateNotebook(input: UpdateNotebookInput!): Notebook
     deleteNotebook(input: DeleteNotebookInput!): Notebook
@@ -16,8 +16,8 @@ type Notebook {
     user: User!
     title: String!
     notes: [Note]
-    createdAt: String!
-    updatedAt: String!
+    createdAt: Date!
+    updatedAt: Date!
 }
 
 type ModelNotebookConnection {

@@ -5,8 +5,6 @@ import {
   Repository,
   SelectQueryBuilder,
 } from 'typeorm'
-import { Base } from '../entities/Base'
-import { Date as GQLDate } from '../resolvers-types'
 
 export async function configureRepository<S, T>(
   entity: ObjectType<S> | EntitySchema<S> | string,
@@ -19,27 +17,6 @@ export async function configureRepository<S, T>(
     }
   } catch (e) {
     console.log(e.message)
-  }
-}
-
-export function parseDate(date: string): GQLDate {
-  const jsDate = new Date(date)
-  const splitDate = jsDate.toDateString().split(' ')
-
-  return {
-    dateLongForm: jsDate.toISOString(),
-    dayOfMonth: Number(splitDate[2]),
-    dayOfWeek: splitDate[0],
-    month: splitDate[1],
-  }
-}
-
-export function formatResult<T extends Base>(entity: T | undefined) {
-  if (!entity) return null
-  return {
-    ...entity,
-    createdAt: parseDate(entity.createdAt),
-    updatedAt: parseDate(entity.updatedAt),
   }
 }
 
