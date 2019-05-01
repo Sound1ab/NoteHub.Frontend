@@ -87,26 +87,34 @@ export function CardList() {
       <CardHeader title={notebook && notebook.title} />
       <Container className="CardList-wrapper">
         {notes &&
-          notes.map(note => {
-            if (!note) return
-            return (
-              <span
-                className="CardList-card-wrapper"
-                onClick={handleCardClick.bind(null, note.id)}
-              >
-                <Card
-                  key={note.id}
-                  id={note.id}
-                  title={note.title}
-                  excerpt={note.excerpt}
-                  createdAt={note.createdAt && note.createdAt.dateLongForm}
-                  isSelected={
-                    !!state.activeNote && state.activeNote === note.id
-                  }
-                />
-              </span>
-            )
-          })}
+          notes
+            .sort((noteA, noteB) => {
+              if (!noteA || !noteB) return 1
+              return (
+                new Date(noteB.createdAt.dateLongForm).getTime() -
+                new Date(noteA.createdAt.dateLongForm).getTime()
+              )
+            })
+            .map(note => {
+              if (!note) return
+              return (
+                <span
+                  className="CardList-card-wrapper"
+                  onClick={handleCardClick.bind(null, note.id)}
+                >
+                  <Card
+                    key={note.id}
+                    id={note.id}
+                    title={note.title}
+                    excerpt={note.excerpt}
+                    createdAt={note.createdAt && note.createdAt.dateLongForm}
+                    isSelected={
+                      !!state.activeNote && state.activeNote === note.id
+                    }
+                  />
+                </span>
+              )
+            })}
       </Container>
     </Style>
   )

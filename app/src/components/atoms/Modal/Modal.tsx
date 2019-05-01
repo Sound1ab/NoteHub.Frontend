@@ -91,7 +91,9 @@ export const Modal = styled(ReactModalAdapter)`
     bottom: auto;
     overflow: auto;
     transform: translate(-50%, -50%);
-    max-width: ${({ theme }) => theme.spacing.xxxl};
+    max-width: calc(
+      ${({ theme }) => theme.spacing.xxl} + ${({ theme }) => theme.spacing.xxl}
+    );
     width: 80%;
     padding: ${({ theme }) => theme.spacing.s};
     z-index: 12;

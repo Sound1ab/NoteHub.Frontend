@@ -120,6 +120,7 @@ export function Ace() {
       width="100%"
       onChange={handleChange}
       onBlur={handleBlur as any}
+      wrapEnabled={true}
       editorProps={{ $blockScrolling: true }}
     />
   )
