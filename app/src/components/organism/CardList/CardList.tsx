@@ -6,6 +6,8 @@ import { useStore } from '../../../hooks/useStore'
 import { setActiveNote } from '../../../store'
 import { styled } from '../../../theme'
 import {
+  ListNotesQuery,
+  ListNotesQueryVariables,
   ReadNotebookQuery,
   ReadNotebookQueryVariables,
 } from '../../apollo/generated_components_typings'
@@ -25,15 +27,22 @@ const Style = styled.div`
   }
 `
 
+export const ListNotesDocument = gql`
+  ${NoteFragment}
+  query ListNotes($filter: ModelNoteFilterInput, $limit: Int, $offset: Int) {
+    listNotes(filter: $filter, limit: $limit, offset: $offset) {
+      items {
+        ...note
+      }
+    }
+  }
+`
+
 export const ReadNotebookDocument = gql`
   ${NotebookFragment}
-  ${NoteFragment}
   query ReadNotebook($id: ID!) {
     readNotebook(id: $id) {
       ...notebook
-      notes {
-        ...note
-      }
     }
   }
 `
@@ -41,16 +50,29 @@ export const ReadNotebookDocument = gql`
 export function CardList() {
   const [state, dispatch] = useStore()
 
-  const { data } = useQuery<ReadNotebookQuery, ReadNotebookQueryVariables>(
-    ReadNotebookDocument,
+  const { data: notesData } = useQuery<ListNotesQuery, ListNotesQueryVariables>(
+    ListNotesDocument,
     {
       variables: {
-        id: state.activeNotebook || '',
+        filter: { notebookId: { eq: state.activeNotebook || '' } },
       },
     }
   )
 
-  const notebook = data && data.readNotebook
+  const { data: notebookData } = useQuery<
+    ReadNotebookQuery,
+    ReadNotebookQueryVariables
+  >(ReadNotebookDocument, {
+    variables: {
+      id: state.activeNotebook || '',
+    },
+  })
+
+  const notebook = notebookData && notebookData.readNotebook
+  const notes =
+    (notesData && notesData.listNotes && notesData.listNotes.items) || []
+
+  console.log(notebook)
 
   function handleCardClick(note: string | null) {
     if (dispatch) dispatch(setActiveNote(note))
@@ -60,9 +82,8 @@ export function CardList() {
     <Style>
       <CardHeader title={notebook && notebook.title} />
       <Container className="wrapper">
-        {notebook &&
-          notebook.notes &&
-          notebook.notes.map(note => {
+        {notes &&
+          notes.map(note => {
             if (!note) return
             return (
               <span onClick={handleCardClick.bind(null, note.id)}>

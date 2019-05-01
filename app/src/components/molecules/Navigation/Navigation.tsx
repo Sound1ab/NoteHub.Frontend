@@ -72,7 +72,7 @@ export function Navigation() {
                 ? 'active-heading'
                 : ''
             }
-            type="h4"
+            type="h5"
             marginBottom
           >
             {notebook && notebook.title}

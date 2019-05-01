@@ -40,6 +40,9 @@ export function NewNotebook() {
 
       const result = cache.readQuery<ListNotebooksQuery>({
         query: ListNotebooksDocument,
+        variables: {
+          filter: { userId: { eq: '985d9b4d-920d-4b4f-9358-ab91146944d8' } },
+        },
       })
 
       const notebooks =
@@ -48,10 +51,13 @@ export function NewNotebook() {
       cache.writeQuery<ListNotebooksQuery>({
         data: {
           listNotebooks: {
-            items: notebooks.concat([newNotebook]),
+            items: notebooks.concat([{ ...newNotebook }]),
           },
         },
         query: ListNotebooksDocument,
+        variables: {
+          filter: { userId: { eq: '985d9b4d-920d-4b4f-9358-ab91146944d8' } },
+        },
       })
     },
   })

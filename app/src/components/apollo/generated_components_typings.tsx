@@ -49,45 +49,19 @@ export type DeleteUserInput = {
 }
 
 export type ModelBooleanFilterInput = {
-  ne?: Maybe<Scalars['Boolean']>
   eq?: Maybe<Scalars['Boolean']>
 }
 
 export type ModelFloatFilterInput = {
-  ne?: Maybe<Scalars['Float']>
   eq?: Maybe<Scalars['Float']>
-  le?: Maybe<Scalars['Float']>
-  lt?: Maybe<Scalars['Float']>
-  ge?: Maybe<Scalars['Float']>
-  gt?: Maybe<Scalars['Float']>
-  contains?: Maybe<Scalars['Float']>
-  notContains?: Maybe<Scalars['Float']>
-  between?: Maybe<Array<Maybe<Scalars['Float']>>>
 }
 
 export type ModelIdFilterInput = {
-  ne?: Maybe<Scalars['ID']>
   eq?: Maybe<Scalars['ID']>
-  le?: Maybe<Scalars['ID']>
-  lt?: Maybe<Scalars['ID']>
-  ge?: Maybe<Scalars['ID']>
-  gt?: Maybe<Scalars['ID']>
-  contains?: Maybe<Scalars['ID']>
-  notContains?: Maybe<Scalars['ID']>
-  between?: Maybe<Array<Maybe<Scalars['ID']>>>
-  beginsWith?: Maybe<Scalars['ID']>
 }
 
 export type ModelIntFilterInput = {
-  ne?: Maybe<Scalars['Int']>
   eq?: Maybe<Scalars['Int']>
-  le?: Maybe<Scalars['Int']>
-  lt?: Maybe<Scalars['Int']>
-  ge?: Maybe<Scalars['Int']>
-  gt?: Maybe<Scalars['Int']>
-  contains?: Maybe<Scalars['Int']>
-  notContains?: Maybe<Scalars['Int']>
-  between?: Maybe<Array<Maybe<Scalars['Int']>>>
 }
 
 export type ModelNotebookConnection = {
@@ -97,20 +71,17 @@ export type ModelNotebookConnection = {
 
 export type ModelNotebookFilterInput = {
   id?: Maybe<ModelIdFilterInput>
-  userId?: Maybe<ModelStringFilterInput>
+  userId?: Maybe<ModelIdFilterInput>
 }
 
 export type ModelNoteConnection = {
   items?: Maybe<Array<Maybe<Note>>>
-  nextToken?: Maybe<Scalars['String']>
+  nextOffset?: Maybe<Scalars['Int']>
 }
 
 export type ModelNoteFilterInput = {
   id?: Maybe<ModelIdFilterInput>
-  description?: Maybe<ModelStringFilterInput>
-  and?: Maybe<Array<Maybe<ModelNoteFilterInput>>>
-  or?: Maybe<Array<Maybe<ModelNoteFilterInput>>>
-  not?: Maybe<ModelNoteFilterInput>
+  notebookId?: Maybe<ModelIdFilterInput>
 }
 
 export enum ModelSortDirection {
@@ -119,29 +90,16 @@ export enum ModelSortDirection {
 }
 
 export type ModelStringFilterInput = {
-  ne?: Maybe<Scalars['String']>
   eq?: Maybe<Scalars['String']>
-  le?: Maybe<Scalars['String']>
-  lt?: Maybe<Scalars['String']>
-  ge?: Maybe<Scalars['String']>
-  gt?: Maybe<Scalars['String']>
-  contains?: Maybe<Scalars['String']>
-  notContains?: Maybe<Scalars['String']>
-  between?: Maybe<Array<Maybe<Scalars['String']>>>
-  beginsWith?: Maybe<Scalars['String']>
 }
 
 export type ModelUserConnection = {
   items?: Maybe<Array<Maybe<User>>>
-  nextToken?: Maybe<Scalars['String']>
+  nextOffset?: Maybe<Scalars['Int']>
 }
 
 export type ModelUserFilterInput = {
   id?: Maybe<ModelIdFilterInput>
-  description?: Maybe<ModelStringFilterInput>
-  and?: Maybe<Array<Maybe<ModelUserFilterInput>>>
-  or?: Maybe<Array<Maybe<ModelUserFilterInput>>>
-  not?: Maybe<ModelUserFilterInput>
 }
 
 export type Mutation = {
@@ -194,7 +152,6 @@ export type MutationDeleteUserArgs = {
 
 export type Note = {
   id: Scalars['ID']
-  notebook: Notebook
   title: Scalars['String']
   markdown: Scalars['String']
   excerpt: Scalars['String']
@@ -204,9 +161,7 @@ export type Note = {
 
 export type Notebook = {
   id: Scalars['ID']
-  user: User
   title: Scalars['String']
-  notes?: Maybe<Array<Maybe<Note>>>
   createdAt: Date
   updatedAt: Date
 }
@@ -227,7 +182,7 @@ export type QueryReadNoteArgs = {
 export type QueryListNotesArgs = {
   filter?: Maybe<ModelNoteFilterInput>
   limit?: Maybe<Scalars['Int']>
-  nextToken?: Maybe<Scalars['String']>
+  offset?: Maybe<Scalars['Int']>
 }
 
 export type QueryReadNotebookArgs = {
@@ -247,7 +202,7 @@ export type QueryReadUserArgs = {
 export type QueryListUsersArgs = {
   filter?: Maybe<ModelUserFilterInput>
   limit?: Maybe<Scalars['Int']>
-  nextToken?: Maybe<Scalars['String']>
+  offset?: Maybe<Scalars['Int']>
 }
 
 export type UpdateNotebookInput = {
@@ -274,7 +229,6 @@ export type User = {
   firstName: Scalars['String']
   lastName: Scalars['String']
   email: Scalars['String']
-  notebooks?: Maybe<Array<Maybe<Notebook>>>
   createdAt: Date
   updatedAt: Date
 }
@@ -308,16 +262,26 @@ export type CreateNotebookMutation = { __typename?: 'Mutation' } & {
   createNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
 }
 
+export type ListNotesQueryVariables = {
+  filter?: Maybe<ModelNoteFilterInput>
+  limit?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
+}
+
+export type ListNotesQuery = { __typename?: 'Query' } & {
+  listNotes: Maybe<
+    { __typename?: 'ModelNoteConnection' } & {
+      items: Maybe<Array<Maybe<{ __typename?: 'Note' } & NoteFragment>>>
+    }
+  >
+}
+
 export type ReadNotebookQueryVariables = {
   id: Scalars['ID']
 }
 
 export type ReadNotebookQuery = { __typename?: 'Query' } & {
-  readNotebook: Maybe<
-    { __typename?: 'Notebook' } & {
-      notes: Maybe<Array<Maybe<{ __typename?: 'Note' } & NoteFragment>>>
-    } & NotebookFragment
-  >
+  readNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
 }
 
 export type DateFragment = { __typename?: 'Date' } & Pick<
@@ -552,17 +516,57 @@ export function withCreateNotebook<TProps, TChildProps = {}>(
     CreateNotebookProps<TChildProps>
   >(CreateNotebookDocument, operationOptions)
 }
-export const ReadNotebookDocument = gql`
-  query ReadNotebook($id: ID!) {
-    readNotebook(id: $id) {
-      ...notebook
-      notes {
+export const ListNotesDocument = gql`
+  query ListNotes($filter: ModelNoteFilterInput, $limit: Int, $offset: Int) {
+    listNotes(filter: $filter, limit: $limit, offset: $offset) {
+      items {
         ...note
       }
     }
   }
-  ${notebookFragmentDoc}
   ${noteFragmentDoc}
+`
+
+export class ListNotesComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ListNotesQuery, ListNotesQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ListNotesQuery, ListNotesQueryVariables>
+        query={ListNotesDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type ListNotesProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ListNotesQuery, ListNotesQueryVariables>
+> &
+  TChildProps
+export function withListNotes<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ListNotesQuery,
+        ListNotesQueryVariables,
+        ListNotesProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ListNotesQuery,
+    ListNotesQueryVariables,
+    ListNotesProps<TChildProps>
+  >(ListNotesDocument, operationOptions)
+}
+export const ReadNotebookDocument = gql`
+  query ReadNotebook($id: ID!) {
+    readNotebook(id: $id) {
+      ...notebook
+    }
+  }
+  ${notebookFragmentDoc}
 `
 
 export class ReadNotebookComponent extends React.Component<

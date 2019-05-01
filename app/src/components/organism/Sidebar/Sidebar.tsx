@@ -36,7 +36,7 @@ export function Sidebar() {
           <Heading
             color={COLOR.LIGHT}
             className="category-heading"
-            type="h5"
+            type="h4"
             textTransform="uppercase"
           >
             Notebooks
