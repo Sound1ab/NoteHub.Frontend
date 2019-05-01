@@ -13,7 +13,7 @@ const Style = styled.div`
   padding: ${({ theme }) => theme.spacing.s};
   background-color: transparent;
 
-  .header-options {
+  .CardHeader-options {
     cursor: pointer;
   }
 `
@@ -29,7 +29,7 @@ export function CardHeader({ title = '' }: ICardHeader) {
         <Heading type="h2" marginBottom>
           {title}
         </Heading>
-        <div className="header-options">
+        <div className="CardHeader-options">
           <Icon
             color={COLOR.MEDIUM}
             icon="sync"

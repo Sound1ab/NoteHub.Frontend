@@ -14,7 +14,7 @@ const Style = styled.div<{ isSelected?: boolean }>`
     isSelected ? theme.colors.link.active : 'transparent'};
   cursor: pointer;
 
-  .heading {
+  .Card-heading {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -32,7 +32,7 @@ interface ICard {
 export function Card({ title, excerpt, createdAt, isSelected }: ICard) {
   return (
     <Style data-testid="Card" isSelected={isSelected}>
-      <div className="heading">
+      <div className="Card-heading">
         <Heading type="h4" marginBottom>
           {title}
         </Heading>

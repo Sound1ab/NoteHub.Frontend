@@ -7,21 +7,21 @@ const Style = styled.div`
   display: flex;
   margin-bottom: ${({ theme }) => theme.spacing.m};
 
-  .name {
+  .Profile-name {
     margin-bottom: ${({ theme }) => theme.spacing.xxs};
   }
 
-  .avatar {
+  .Profile-avatar {
     margin-right: ${({ theme }) => theme.spacing.xs};
   }
 
-  .details {
+  .Profile-details {
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
 
-  .github {
+  .Profile-github {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -31,12 +31,12 @@ const Style = styled.div`
 export function Profile() {
   return (
     <Style>
-      <Avatar image="avatar.png" className="avatar" />
-      <div className="details">
-        <Heading color={COLOR.LIGHT} className="name" type="h4">
+      <Avatar image="avatar.png" className="Profile-avatar" />
+      <div className="Profile-details">
+        <Heading color={COLOR.LIGHT} className="Profile-name" type="h4">
           Phillip Parker
         </Heading>
-        <div className="github">
+        <div className="Profile-github">
           <Icon icon="github" prefix="fab" marginRight />
           <Heading color={COLOR.LIGHT} type="h6">
             View Github

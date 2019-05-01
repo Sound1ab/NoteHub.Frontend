@@ -14,7 +14,7 @@ import { Heading } from '../../atoms'
 const Style = styled.nav`
   position: relative;
 
-  .active-heading {
+  .Navigation-active-heading {
     color: ${({ theme }) => theme.colors.accent};
   }
 
@@ -69,7 +69,7 @@ export function Navigation() {
               state.activeNotebook &&
               notebook &&
               notebook.id === state.activeNotebook
-                ? 'active-heading'
+                ? 'Navigation-active-heading'
                 : ''
             }
             type="h5"

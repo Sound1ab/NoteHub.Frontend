@@ -10,14 +10,14 @@ const Style = styled.div`
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.tertiary};
 
-  .wrapper {
+  .Sidebar-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     padding: ${({ theme }) => theme.spacing.s};
   }
 
-  .title-wrapper {
+  .Sidebar-title-wrapper {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -28,10 +28,10 @@ const Style = styled.div`
 export function Sidebar() {
   return (
     <Style>
-      <Container className="wrapper">
+      <Container className="Sidebar-wrapper">
         <Profile />
         <NewNotebook />
-        <div className="title-wrapper">
+        <div className="Sidebar-title-wrapper">
           <Icon icon="book" prefix="fa" marginRight />
           <Heading
             color={COLOR.LIGHT}

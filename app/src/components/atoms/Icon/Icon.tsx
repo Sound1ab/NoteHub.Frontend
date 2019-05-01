@@ -22,7 +22,7 @@ const Style = styled.a<{ marginRight: boolean; color: COLOR; size: string }>`
     }
   }};
 
-  .svg {
+  .Icon-svg {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -71,7 +71,11 @@ export function Icon({
   size = 'xs',
 }: IIcon) {
   const FontAwesomeIconComponent = React.cloneElement(
-    <FontAwesomeIcon icon={[prefix as any, icon]} size={size} className="svg" />
+    <FontAwesomeIcon
+      icon={[prefix as any, icon]}
+      size={size}
+      className="Icon-svg"
+    />
   )
   return link ? (
     <Style

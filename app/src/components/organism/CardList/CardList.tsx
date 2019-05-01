@@ -20,7 +20,7 @@ const Style = styled.div`
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.secondary};
 
-  .wrapper {
+  .CardList-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -81,7 +81,7 @@ export function CardList() {
   return (
     <Style>
       <CardHeader title={notebook && notebook.title} />
-      <Container className="wrapper">
+      <Container className="CardList-wrapper">
         {notes &&
           notes.map(note => {
             if (!note) return

@@ -8,7 +8,7 @@ const Style = styled.div`
   flex-direction: column;
   height: 100vh;
 
-  .page {
+  .Editor-page {
     flex: 1;
     display: flex;
     flex-direction: row;
@@ -16,7 +16,7 @@ const Style = styled.div`
     align-items: stretch;
   }
 
-  .main {
+  .Editor-main {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -53,10 +53,10 @@ const Style = styled.div`
 export function Editor() {
   return (
     <Style>
-      <Container className="page">
+      <Container className="Editor-page">
         <Sidebar />
         <CardList />
-        <main className="main">
+        <main className="Editor-main">
           <Ace />
         </main>
       </Container>
