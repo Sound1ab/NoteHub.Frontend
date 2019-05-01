@@ -17,7 +17,8 @@ const Style = styled.div<{ isSelected?: boolean }>`
   .Card-heading {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
+    margin-bottom: ${({ theme }) => theme.spacing.xs};
   }
 `
 
@@ -33,10 +34,8 @@ export function Card({ title, excerpt, createdAt, isSelected }: ICard) {
   return (
     <Style data-testid="Card" isSelected={isSelected}>
       <div className="Card-heading">
-        <Heading type="h4" marginBottom>
-          {title}
-        </Heading>
-        <Heading color={COLOR.MEDIUM} type="h6" marginBottom>
+        <Heading type="h4">{title}</Heading>
+        <Heading color={COLOR.MEDIUM} type="h6">
           {createdAt}
         </Heading>
       </div>

@@ -107,7 +107,10 @@ export function CardList() {
                     id={note.id}
                     title={note.title}
                     excerpt={note.excerpt}
-                    createdAt={note.createdAt && note.createdAt.dateLongForm}
+                    createdAt={
+                      note.createdAt &&
+                      `${note.createdAt.dayOfMonth} ${note.createdAt.month}`
+                    }
                     isSelected={
                       !!state.activeNote && state.activeNote === note.id
                     }
