@@ -1,16 +1,8 @@
-import gql from 'graphql-tag'
 import React, { useState } from 'react'
-import { useMutation } from 'react-apollo-hooks'
 import { COLOR } from '../../../enums'
-import { NoteFragment } from '../../../fragments'
+import { useCreateNote, useDeleteNotebook } from '../../../hooks'
 import { useStore } from '../../../hooks/useStore'
 import { styled } from '../../../theme'
-import {
-  CreateNoteMutation,
-  CreateNoteMutationVariables,
-  ListNotesDocument,
-  ListNotesQuery,
-} from '../../apollo/generated_components_typings'
 import { Heading, Icon, Modal } from '../../atoms'
 
 const Style = styled.div`
@@ -43,15 +35,6 @@ const Style = styled.div`
   }
 `
 
-export const CreateNoteDocument = gql`
-  ${NoteFragment}
-  mutation CreateNote($input: CreateNoteInput!) {
-    createNote(input: $input) {
-      ...note
-    }
-  }
-`
-
 interface ICardHeader {
   title?: string | null
 }
@@ -59,38 +42,33 @@ interface ICardHeader {
 export function CardHeader({ title = '' }: ICardHeader) {
   const [state] = useStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDeleteNotebookModalOpen, setIsDeleteNotebookModalOpen] = useState(
+    false
+  )
   const [inputValue, setInputValue] = useState('')
+  const [deleteNotebookInputValue, setDeleteNotebookInputValue] = useState('')
 
-  const createNewNote = useMutation<
-    CreateNoteMutation,
-    CreateNoteMutationVariables
-  >(CreateNoteDocument, {
-    update: (cache, { data }) => {
-      const newNote = data && data.createNote
-      if (!newNote) return
+  const createNewNote = useCreateNote(state.activeNotebook)
+  const deleteNotebook = useDeleteNotebook()
 
-      const result = cache.readQuery<ListNotesQuery>({
-        query: ListNotesDocument,
-        variables: {
-          filter: { notebookId: { eq: state.activeNotebook } },
+  async function handleDeleteNotebook() {
+    if (!state.activeNotebook) {
+      alert('No active notebook')
+      return
+    }
+    if (deleteNotebookInputValue !== title) {
+      alert('Please confirm the notebook you wish to delete')
+      return
+    }
+    await deleteNotebook({
+      variables: {
+        input: {
+          id: state.activeNotebook,
         },
-      })
-
-      const notes = (result && result.listNotes && result.listNotes.items) || []
-
-      cache.writeQuery<ListNotesQuery>({
-        data: {
-          listNotes: {
-            items: notes.concat([{ ...newNote }]),
-          },
-        },
-        query: ListNotesDocument,
-        variables: {
-          filter: { notebookId: { eq: state.activeNotebook } },
-        },
-      })
-    },
-  })
+      },
+    })
+    setIsDeleteNotebookModalOpen(false)
+  }
 
   async function handleCreateNewNote() {
     if (!state.activeNotebook) {
@@ -112,6 +90,12 @@ export function CardHeader({ title = '' }: ICardHeader) {
 
   function handleOnInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value)
+  }
+
+  function handleOnDeleteNotebookInputChange(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
+    setDeleteNotebookInputValue(e.target.value)
   }
 
   return (
@@ -143,7 +127,13 @@ export function CardHeader({ title = '' }: ICardHeader) {
             marginRight
             size="sm"
           />
-          <Icon color={COLOR.MEDIUM} icon="trash" prefix="fa" size="sm" />
+          <Icon
+            color={COLOR.MEDIUM}
+            icon="trash"
+            prefix="fa"
+            size="sm"
+            onClick={setIsDeleteNotebookModalOpen.bind(null, true)}
+          />
         </div>
       </div>
       <Modal
@@ -161,6 +151,24 @@ export function CardHeader({ title = '' }: ICardHeader) {
           className="NewNote-input"
           type="text"
           placeholder="Note name"
+        />
+      </Modal>
+      <Modal
+        onContinue={handleDeleteNotebook}
+        title="Delete Notebook"
+        isOpen={isDeleteNotebookModalOpen}
+        onRequestClose={setIsDeleteNotebookModalOpen.bind(null, false)}
+      >
+        <p>Please confirm the Notebook name you wish to delete.</p>
+        <Heading type="h5" marginBottom>
+          Notebook
+        </Heading>
+        <input
+          value={deleteNotebookInputValue}
+          onChange={handleOnDeleteNotebookInputChange}
+          className="NewNote-input"
+          type="text"
+          placeholder="Notebook name"
         />
       </Modal>
     </Style>

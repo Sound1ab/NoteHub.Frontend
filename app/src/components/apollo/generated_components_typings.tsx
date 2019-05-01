@@ -256,6 +256,14 @@ export type CreateNoteMutation = { __typename?: 'Mutation' } & {
   createNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
 }
 
+export type DeleteNotebookMutationVariables = {
+  input: DeleteNotebookInput
+}
+
+export type DeleteNotebookMutation = { __typename?: 'Mutation' } & {
+  deleteNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
+}
+
 export type ListNotebooksQueryVariables = {
   filter?: Maybe<ModelNotebookFilterInput>
   limit?: Maybe<Scalars['Int']>
@@ -520,6 +528,63 @@ export function withCreateNote<TProps, TChildProps = {}>(
     CreateNoteMutationVariables,
     CreateNoteProps<TChildProps>
   >(CreateNoteDocument, operationOptions)
+}
+export const DeleteNotebookDocument = gql`
+  mutation DeleteNotebook($input: DeleteNotebookInput!) {
+    deleteNotebook(input: $input) {
+      ...notebook
+    }
+  }
+  ${notebookFragmentDoc}
+`
+
+export class DeleteNotebookComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<
+      DeleteNotebookMutation,
+      DeleteNotebookMutationVariables
+    >
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<
+        DeleteNotebookMutation,
+        DeleteNotebookMutationVariables
+      >
+        mutation={DeleteNotebookDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type DeleteNotebookProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    DeleteNotebookMutation,
+    DeleteNotebookMutationVariables
+  >
+> &
+  TChildProps
+export type DeleteNotebookMutationFn = ReactApollo.MutationFn<
+  DeleteNotebookMutation,
+  DeleteNotebookMutationVariables
+>
+export function withDeleteNotebook<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        DeleteNotebookMutation,
+        DeleteNotebookMutationVariables,
+        DeleteNotebookProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    DeleteNotebookMutation,
+    DeleteNotebookMutationVariables,
+    DeleteNotebookProps<TChildProps>
+  >(DeleteNotebookDocument, operationOptions)
 }
 export const ListNotebooksDocument = gql`
   query ListNotebooks(

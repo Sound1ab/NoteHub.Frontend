@@ -60,12 +60,14 @@ interface IIcon {
   prefix?: 'fab' | 'fa'
   marginRight?: boolean
   size?: 'xs' | 'sm' | 'lg'
+  onClick?: () => void
 }
 
 export function Icon({
   link,
   icon,
   prefix,
+  onClick,
   marginRight = false,
   color = COLOR.LIGHT,
   size = 'xs',
@@ -85,13 +87,14 @@ export function Icon({
       target="_blank"
       marginRight={marginRight}
       size={size}
+      onClick={onClick}
     >
       {FontAwesomeIconComponent}
     </Style>
   ) : (
     React.createElement(
       Style.withComponent('div'),
-      { marginRight, color, size },
+      { marginRight, color, size, onClick },
       FontAwesomeIconComponent
     )
   )
