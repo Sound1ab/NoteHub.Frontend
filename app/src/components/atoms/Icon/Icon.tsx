@@ -8,6 +8,7 @@ const Style = styled.a<{ marginRight: boolean; color: COLOR; size: string }>`
   display: inline-block !important;
   margin-right: ${({ theme, marginRight }) =>
     marginRight ? theme.spacing.xxs : 0};
+  
   padding: ${({ size }) => {
     switch (size) {
       case 'xs':
@@ -26,6 +27,7 @@ const Style = styled.a<{ marginRight: boolean; color: COLOR; size: string }>`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    
     color: ${({ theme, color }) => {
       switch (color) {
         case COLOR.DARK:
@@ -43,28 +45,32 @@ const Style = styled.a<{ marginRight: boolean; color: COLOR; size: string }>`
 `
 
 interface IIcon {
+  icon:
+    | 'github'
+    | 'soundcloud'
+    | 'pen-square'
+    | 'moon'
+    | 'book'
+    | 'plus-circle'
+    | 'trash'
+    | 'sync'
   color?: COLOR
   link?: string
   prefix?: 'fab' | 'fa'
-  icon: 'github' | 'soundcloud' | 'pen-square' | 'moon' | 'book' | 'plus-circle' | 'trash' | 'sync'
   marginRight?: boolean
   size?: 'xs' | 'sm' | 'lg'
 }
 
 export function Icon({
-  color = COLOR.LIGHT,
   link,
   icon,
   prefix,
   marginRight = false,
+  color = COLOR.LIGHT,
   size = 'xs',
 }: IIcon) {
   const FontAwesomeIconComponent = React.cloneElement(
-    <FontAwesomeIcon
-      icon={[prefix as any, icon]}
-      size={size}
-      className="svg"
-    />
+    <FontAwesomeIcon icon={[prefix as any, icon]} size={size} className="svg" />
   )
   return link ? (
     <Style

@@ -1,7 +1,6 @@
 export * from './Heading/Heading'
 export * from './Container/Container'
 export * from './Image/Image'
-export * from './TextArea/TextArea'
 export * from './TextArea/Ace'
 export * from './Icon/Icon'
 export * from './Avatar/Avatar'

@@ -54,6 +54,43 @@ export const GlobalStyle = createGlobalStyle`
     margin-bottom: 0!important;
   }
   
+  /* Text-level semantics
+     ========================================================================== */
+  
+  
+  h1,h2,h3,h4,h5,h6 {
+    color: ${({ theme }: { theme: any }) => theme.colors.brand};
+  }
+  
+  /* unvisited link */
+  nav a {
+    text-decoration: none;
+  }
+  
+  nav a:link {
+    color: ${({ theme }) => theme.colors.text.tertiary};
+  }
+  
+  /* visited link */
+  nav a:visited {
+    color: ${({ theme }) => theme.colors.text.tertiary};
+  }
+  
+  /* mouse over link */
+  nav a:hover {
+    color: ${({ theme }) => theme.colors.accent};
+  }
+  
+  /* selected link */
+  nav a:active {
+    color: ${({ theme }) => theme.colors.brand};
+  }
+  
+  p {
+    color: ${({ theme }: { theme: any }) => theme.colors.text.primary};
+  }
+  
+  
   
   /* Grouping content
      ========================================================================== */

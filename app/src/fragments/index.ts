@@ -26,6 +26,7 @@ export const NoteFragment = gql`
 `
 
 export const NotebookFragment = gql`
+  ${DateFragment}
   fragment notebook on Notebook {
     id
     title
@@ -39,6 +40,7 @@ export const NotebookFragment = gql`
 `
 
 export const UserFragment = gql`
+  ${DateFragment}
   fragment user on User {
     id
     firstName

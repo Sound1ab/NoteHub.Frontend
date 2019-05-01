@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { ReactNode } from 'react'
 import { styled } from '../../../theme'
 
 export const Style = styled.section<{
@@ -14,7 +14,7 @@ export const Style = styled.section<{
 `
 
 interface IContainer {
-  children?: any
+  children?: ReactNode
   className?: string
   marginBottom?: boolean
   marginTop?: boolean

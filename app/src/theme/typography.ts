@@ -11,4 +11,24 @@ export const typography = new Typography({
     },
   ],
   headerFontFamily: ['Montserrat'],
+  overrideThemeStyles: ({ rhythm }) => ({
+    h1: {
+      marginBottom: rhythm(1.5),
+    },
+    h2: {
+      marginBottom: rhythm(1),
+    },
+    h3: {
+      marginBottom: rhythm(1),
+    },
+    h4: {
+      marginBottom: rhythm(0.5),
+    },
+    h5: {
+      marginBottom: rhythm(0.25),
+    },
+    h6: {
+      marginBottom: rhythm(0.25),
+    },
+  }),
 })

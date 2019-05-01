@@ -13,11 +13,11 @@ const Style = styled.div`
 `
 
 interface IAvatar {
+  image: string
   className?: string
-  image?: string
 }
 
-export function Avatar({ className, image = 'avatar.png' }: IAvatar) {
+export function Avatar({ className, image }: IAvatar) {
   return (
     <Style className={className}>
       <img src={image} alt="avatar" />

@@ -1,7 +1,6 @@
 import gql from 'graphql-tag'
 import React from 'react'
 import { useQuery } from 'react-apollo-hooks'
-import { COLOR } from '../../../enums'
 import { NotebookFragment, NoteFragment } from '../../../fragments'
 import { useStore } from '../../../hooks/useStore'
 import { setActiveNote } from '../../../store'
@@ -10,8 +9,8 @@ import {
   ReadNotebookQuery,
   ReadNotebookQueryVariables,
 } from '../../apollo/generated_components_typings'
-import { Container, Heading, Icon } from '../../atoms'
-import { Card } from '../../molecules'
+import { Container } from '../../atoms'
+import { Card, CardHeader } from '../../molecules'
 
 const Style = styled.div`
   position: relative;
@@ -19,25 +18,10 @@ const Style = styled.div`
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.secondary};
 
-  .sticky {
+  .wrapper {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-  }
-
-  .header {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
-    padding: ${({ theme }) => theme.spacing.s};
-    background-color: transparent;
-  }
-
-  .header-options {
-    cursor: pointer;
   }
 `
 
@@ -74,28 +58,8 @@ export function CardList() {
 
   return (
     <Style>
-      <Container className="sticky">
-        <div className="header">
-          <Heading type="h2" marginBottom>
-            {(notebook && notebook.title) || ''}
-          </Heading>
-          <div className="header-options">
-            <Icon
-              color={COLOR.MEDIUM}
-              icon="sync"
-              prefix="fa"
-              marginRight
-              size="sm"
-            />
-            <Icon
-              color={COLOR.MEDIUM}
-              icon="trash"
-              prefix="fa"
-              marginRight
-              size="sm"
-            />
-          </div>
-        </div>
+      <CardHeader title={notebook && notebook.title} />
+      <Container className="wrapper">
         {notebook &&
           notebook.notes &&
           notebook.notes.map(note => {
@@ -107,7 +71,7 @@ export function CardList() {
                   id={note.id}
                   title={note.title}
                   excerpt={note.excerpt}
-                  createdAt={note.createdAt}
+                  createdAt={note.createdAt && note.createdAt.dateLongForm}
                   isSelected={
                     !!state.activeNote && state.activeNote === note.id
                   }

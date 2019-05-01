@@ -1,8 +1,7 @@
 import React from 'react'
 import { styled } from '../../../theme'
 import { Ace, Container } from '../../atoms'
-import { Sidebar } from '../../molecules'
-import { CardList } from '../../organism'
+import { CardList, Sidebar } from '../../organism'
 
 const Style = styled.div`
   display: flex;

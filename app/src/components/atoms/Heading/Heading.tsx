@@ -1,36 +1,18 @@
-import * as React from 'react'
+import CSS from 'csstype'
+import React, { ReactNode } from 'react'
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
-
-type headingType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-type textTransformType = 'lowercase' | 'uppercase' | 'none'
-type textAlignType = 'left' | 'center' | 'right'
 
 const StyledHeading = styled('h1')<IHeading>`
   text-transform: ${({ textTransform }) => textTransform};
   text-align: ${({ textAlign }) => textAlign};
   text-rendering: optimizeLegibility;
   margin-top: ${({ theme, marginTop }) => (marginTop ? theme.spacing.s : 0)};
-  margin-bottom: ${({ theme, type, marginBottom }) => {
-    if (marginBottom) {
-      switch (type) {
-        case 'h1':
-          return theme.spacing.s
-        case 'h2':
-          return theme.spacing.s
-        case 'h3':
-          return theme.spacing.s
-        case 'h4':
-          return theme.spacing.xxs
-        case 'h5':
-          return theme.spacing.xs
-        case 'h6':
-          return theme.spacing.xs
-      }
-    } else {
-      return 0
-    }
+  
+  margin-bottom: ${({ marginBottom }) => {
+    return !marginBottom && 0
   }}
+
   color: ${({ theme, color }) => {
     switch (color) {
       case COLOR.DARK:
@@ -48,10 +30,10 @@ const StyledHeading = styled('h1')<IHeading>`
 `
 
 interface IHeading {
-  children: any
-  textTransform?: textTransformType
-  textAlign?: textAlignType
-  type: headingType
+  children: ReactNode
+  type: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  textTransform?: CSS.TextTransformProperty
+  textAlign?: 'left' | 'center' | 'right'
   marginBottom?: boolean
   marginTop?: boolean
   className?: string

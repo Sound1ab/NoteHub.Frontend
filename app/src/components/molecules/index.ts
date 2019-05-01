@@ -1,3 +1,5 @@
 export * from './Card/Card'
-export * from './Sidebar/Sidebar'
 export * from './Profile/Profile'
+export * from './NewNotebook/NewNotebook'
+export * from './Navigation/Navigation'
+export * from './CardHeader/CardHeader'

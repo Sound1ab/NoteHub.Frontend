@@ -7,6 +7,10 @@ const Style = styled.div`
   display: flex;
   margin-bottom: ${({ theme }) => theme.spacing.m};
 
+  .name {
+    margin-bottom: ${({ theme }) => theme.spacing.xxs};
+  }
+
   .avatar {
     margin-right: ${({ theme }) => theme.spacing.xs};
   }
@@ -27,9 +31,9 @@ const Style = styled.div`
 export function Profile() {
   return (
     <Style>
-      <Avatar className="avatar" />
+      <Avatar image="avatar.png" className="avatar" />
       <div className="details">
-        <Heading color={COLOR.LIGHT} marginBottom type="h4">
+        <Heading color={COLOR.LIGHT} className="name" type="h4">
           Phillip Parker
         </Heading>
         <div className="github">
