@@ -64,9 +64,13 @@ export async function UserMutations() {
       async (repository, { input: { id } }) => {
         if (!id) return null
         const user = await repository.findOne(id)
+        const userCopy = {
+          ...user,
+        }
         if (!user) return null
+        await repository.remove(user)
 
-        return repository.remove(user)
+        return userCopy
       }
     ),
     updateUser: await configureRepository<User, MutationUpdateUserArgs>(

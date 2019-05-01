@@ -77,9 +77,13 @@ export async function NoteMutations() {
       async (repository, { input: { id } }) => {
         if (!id) return null
         const note = await repository.findOne(id)
+        const noteCopy = {
+          ...note,
+        }
         if (!note) return null
+        await repository.remove(note)
 
-        return repository.remove(note)
+        return noteCopy
       }
     ),
     updateNote: await configureRepository<Note, MutationUpdateNoteArgs>(

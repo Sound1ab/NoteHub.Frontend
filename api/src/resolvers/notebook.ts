@@ -73,9 +73,14 @@ export async function NotebookMutations() {
     >(Notebook, async (repository, { input: { id } }) => {
       if (!id) return null
       const notebook = await repository.findOne(id)
+      const notebookCopy = {
+        ...(await repository.findOne(id)),
+      }
       if (!notebook) return null
+      await repository.remove(notebook)
+      console.log(notebookCopy)
 
-      return repository.remove(notebook)
+      return notebookCopy
     }),
     updateNotebook: await configureRepository<
       Notebook,
