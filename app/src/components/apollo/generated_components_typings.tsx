@@ -240,6 +240,14 @@ export type ReadNoteQuery = { __typename?: 'Query' } & {
   readNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
 }
 
+export type UpdateNoteMutationVariables = {
+  input: UpdateNoteInput
+}
+
+export type UpdateNoteMutation = { __typename?: 'Mutation' } & {
+  updateNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
+}
+
 export type CreateNoteMutationVariables = {
   input: CreateNoteInput
 }
@@ -416,6 +424,54 @@ export function withReadNote<TProps, TChildProps = {}>(
     ReadNoteQueryVariables,
     ReadNoteProps<TChildProps>
   >(ReadNoteDocument, operationOptions)
+}
+export const UpdateNoteDocument = gql`
+  mutation UpdateNote($input: UpdateNoteInput!) {
+    updateNote(input: $input) {
+      ...note
+    }
+  }
+  ${noteFragmentDoc}
+`
+
+export class UpdateNoteComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<UpdateNoteMutation, UpdateNoteMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<UpdateNoteMutation, UpdateNoteMutationVariables>
+        mutation={UpdateNoteDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type UpdateNoteProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<UpdateNoteMutation, UpdateNoteMutationVariables>
+> &
+  TChildProps
+export type UpdateNoteMutationFn = ReactApollo.MutationFn<
+  UpdateNoteMutation,
+  UpdateNoteMutationVariables
+>
+export function withUpdateNote<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        UpdateNoteMutation,
+        UpdateNoteMutationVariables,
+        UpdateNoteProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    UpdateNoteMutation,
+    UpdateNoteMutationVariables,
+    UpdateNoteProps<TChildProps>
+  >(UpdateNoteDocument, operationOptions)
 }
 export const CreateNoteDocument = gql`
   mutation CreateNote($input: CreateNoteInput!) {
