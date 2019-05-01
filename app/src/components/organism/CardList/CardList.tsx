@@ -25,6 +25,10 @@ const Style = styled.div`
     flex-direction: column;
     justify-content: flex-start;
   }
+
+  .CardList-card-wrapper {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.text.secondary};
+  }
 `
 
 export const ListNotesDocument = gql`
@@ -86,7 +90,10 @@ export function CardList() {
           notes.map(note => {
             if (!note) return
             return (
-              <span onClick={handleCardClick.bind(null, note.id)}>
+              <span
+                className="CardList-card-wrapper"
+                onClick={handleCardClick.bind(null, note.id)}
+              >
                 <Card
                   key={note.id}
                   id={note.id}
