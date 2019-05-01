@@ -22,6 +22,29 @@ const Style = styled.nav`
     display: block;
     margin-bottom: ${({ theme }) => theme.spacing.xs};
   }
+
+  > a {
+    text-decoration: none;
+  }
+
+  > a:link {
+    color: ${({ theme }) => theme.colors.text.tertiary};
+  }
+
+  /* visited link */
+  > a:visited {
+    color: ${({ theme }) => theme.colors.text.tertiary};
+  }
+
+  /* mouse over link */
+  > a:hover {
+    color: ${({ theme }) => theme.colors.text.secondary};
+  }
+
+  /* selected link */
+  > a:active {
+    color: ${({ theme }) => theme.colors.accent};
+  }
 `
 
 export const ListNotebooksDocument = gql`

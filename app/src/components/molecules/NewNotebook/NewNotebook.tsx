@@ -33,6 +33,7 @@ export const CreateNotebookDocument = gql`
 
 export function NewNotebook() {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [inputValue, setInputValue] = useState('')
 
   const createNewNotebook = useMutation<
     CreateNotebookMutation,
@@ -70,11 +71,16 @@ export function NewNotebook() {
     await createNewNotebook({
       variables: {
         input: {
-          title: 'Test Notebook',
+          title: inputValue,
           userId: '985d9b4d-920d-4b4f-9358-ab91146944d8',
         },
       },
     })
+    setIsModalOpen(false)
+  }
+
+  function handleOnInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInputValue(e.target.value)
   }
 
   return (
@@ -95,6 +101,7 @@ export function NewNotebook() {
         </Heading>
       </span>
       <Modal
+        onContinue={handleCreateNewNotebook}
         title="Create new Notebook"
         isOpen={isModalOpen}
         onRequestClose={setIsModalOpen.bind(null, false)}
@@ -102,7 +109,13 @@ export function NewNotebook() {
         <Heading type="h5" marginBottom>
           Title
         </Heading>
-        <input type="text" placeholder="Notebook name" />
+        <input
+          value={inputValue}
+          onChange={handleOnInputChange}
+          className="NewNotebook-input"
+          type="text"
+          placeholder="Notebook name"
+        />
       </Modal>
     </Style>
   )

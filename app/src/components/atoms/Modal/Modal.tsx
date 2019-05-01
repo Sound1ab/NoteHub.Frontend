@@ -10,6 +10,7 @@ interface IModal {
   isOpen: boolean
   onRequestClose: () => void
   title: string
+  onContinue: () => void
   className?: string
   children?: ReactNode
   contentLabel?: string
@@ -19,6 +20,7 @@ interface IModal {
 export function ReactModalAdapter({
   isOpen,
   onRequestClose,
+  onContinue,
   title,
   className = 'ReactModal',
   contentLabel,
@@ -47,6 +49,10 @@ export function ReactModalAdapter({
         </span>
       </div>
       {children}
+      <div className="button-wrapper">
+        <button onClick={onRequestClose}>Cancel</button>
+        <button onClick={onContinue}>Continue</button>
+      </div>
     </ReactModal>
   )
 }
@@ -108,5 +114,18 @@ export const Modal = styled(ReactModalAdapter)`
 
   .close {
     cursor: pointer;
+  }
+
+  .button-wrapper {
+    display: flex;
+    justify-content: flex-start;
+
+    * + * {
+      margin-left: ${({ theme }) => theme.spacing.s};
+    }
+  }
+
+  button {
+    margin-top: ${({ theme }) => theme.spacing.s};
   }
 `

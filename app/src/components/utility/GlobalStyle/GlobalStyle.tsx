@@ -63,28 +63,6 @@ export const GlobalStyle = createGlobalStyle`
   }
   
   /* unvisited link */
-  nav a {
-    text-decoration: none;
-  }
-  
-  nav a:link {
-    color: ${({ theme }) => theme.colors.text.tertiary};
-  }
-  
-  /* visited link */
-  nav a:visited {
-    color: ${({ theme }) => theme.colors.text.tertiary};
-  }
-  
-  /* mouse over link */
-  nav a:hover {
-    color: ${({ theme }) => theme.colors.accent};
-  }
-  
-  /* selected link */
-  nav a:active {
-    color: ${({ theme }) => theme.colors.brand};
-  }
   
   p {
     color: ${({ theme }: { theme: any }) => theme.colors.text.primary};
@@ -194,7 +172,7 @@ export const GlobalStyle = createGlobalStyle`
    * Remove the inheritance of text transform in Edge and Firefox.
    * 1. Remove the inheritance of text transform in Firefox.
    */
-  
+   
   button,
   select { /* 1 */
     text-transform: none;
@@ -237,6 +215,17 @@ export const GlobalStyle = createGlobalStyle`
   button:focus {
   outline: none
   }
+  
+  button {
+    padding: 0;
+    cursor: pointer;
+    color: ${({ theme }) => theme.colors.text.secondary};
+  }
+  
+  button:hover {
+    color: ${({ theme }) => theme.colors.accent};
+  }
+  
   
   /**
    * Correct the padding in Firefox.
