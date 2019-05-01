@@ -92,10 +92,7 @@ export function Ace() {
     setValue(newValue)
   }
 
-  async function handleBlur(
-    e: React.MouseEvent<HTMLDivElement>,
-    editor: AceAjax.Document
-  ) {
+  async function handleBlur(e: React.MouseEvent<HTMLDivElement>, editor: any) {
     if (!state.activeNote) {
       alert('No active note')
       return
@@ -103,6 +100,7 @@ export function Ace() {
     await updateNote({
       variables: {
         input: {
+          excerpt: editor.session.getLine(0),
           id: state.activeNote,
           markdown: editor.getValue(),
         },

@@ -16,7 +16,8 @@ import { Card, CardHeader } from '../../molecules'
 
 const Style = styled.div`
   position: relative;
-  flex: 0 0 ${({ theme }) => theme.spacing.xxxl};
+  flex: 0 0 auto;
+  width: ${({ theme }) => theme.spacing.xxxl}
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.secondary};
 

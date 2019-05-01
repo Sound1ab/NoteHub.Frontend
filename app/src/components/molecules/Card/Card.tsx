@@ -13,12 +13,24 @@ const Style = styled.div<{ isSelected?: boolean }>`
   background-color: ${({ theme, isSelected }) =>
     isSelected ? theme.colors.link.active : 'transparent'};
   cursor: pointer;
+  overflow: hidden;
 
   .Card-heading {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: ${({ theme }) => theme.spacing.xs};
+  }
+
+  .Card-excerpt {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+  }
+
+  .Card-created-at {
+    white-space: nowrap;
   }
 `
 
@@ -35,11 +47,11 @@ export function Card({ title, excerpt, createdAt, isSelected }: ICard) {
     <Style data-testid="Card" isSelected={isSelected}>
       <div className="Card-heading">
         <Heading type="h4">{title}</Heading>
-        <Heading color={COLOR.MEDIUM} type="h6">
+        <Heading className="Card-created-at" color={COLOR.MEDIUM} type="h6">
           {createdAt}
         </Heading>
       </div>
-      <p>{excerpt}</p>
+      <span className="Card-excerpt">{excerpt}</span>
     </Style>
   )
 }
