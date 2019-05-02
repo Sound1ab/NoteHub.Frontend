@@ -3,8 +3,8 @@ import { useQuery } from 'react-apollo-hooks'
 import {
   ReadNotebookQuery,
   ReadNotebookQueryVariables,
-} from '../components/apollo/generated_components_typings'
-import { NotebookFragment } from '../fragments'
+} from '../../components/apollo/generated_components_typings'
+import { NotebookFragment } from '../../fragments'
 
 export const ReadNotebookDocument = gql`
   ${NotebookFragment}

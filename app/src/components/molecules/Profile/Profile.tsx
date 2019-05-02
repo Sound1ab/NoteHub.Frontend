@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 import { Avatar, Heading, Icon } from '../../atoms'
+import { useStore } from '../../../hooks'
+import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
+import { username } from '../../../store'
 
 const Style = styled.div`
   display: flex;
@@ -29,12 +32,19 @@ const Style = styled.div`
 `
 
 export function Profile() {
+  const [state, dispatch] = useStore()
+  const user = useReadGithubUser(state.user.username)
+
+  useEffect(() => {
+    dispatch(username((user && user.login) || ''))
+  }, [user])
+
   return (
     <Style>
       <Avatar image="avatar.png" className="Profile-avatar" />
       <div className="Profile-details">
         <Heading color={COLOR.LIGHT} className="Profile-name" type="h4">
-          Phillip Parker
+          {state.user.isAuthorized ? state.user.username : 'Authorize'}
         </Heading>
         <div className="Profile-github">
           <Icon icon="github" prefix="fab" marginRight />

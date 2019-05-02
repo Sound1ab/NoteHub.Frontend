@@ -6,8 +6,8 @@ import {
   ListNotebooksDocument,
   ListNotebooksQuery,
   ListNotebooksQueryVariables,
-} from '../components/apollo/generated_components_typings'
-import { NotebookFragment } from '../fragments'
+} from '../../components/apollo/generated_components_typings'
+import { NotebookFragment } from '../../fragments'
 
 export const DeleteNotebookDocument = gql`
   ${NotebookFragment}

@@ -10,8 +10,8 @@ import {
   ListNotesDocument,
   ListNotesQuery,
   ListNotesQueryVariables,
-} from '../components/apollo/generated_components_typings'
-import { NotebookFragment, NoteFragment } from '../fragments'
+} from '../../components/apollo/generated_components_typings'
+import { NotebookFragment, NoteFragment } from '../../fragments'
 
 export const CreateNotebookDocument = gql`
   ${NotebookFragment}

@@ -17,7 +17,7 @@ export function isAuthorized(value: boolean) {
   }
 }
 
-export function username(value: boolean) {
+export function username(value: string) {
   return {
     payload: {
       value,

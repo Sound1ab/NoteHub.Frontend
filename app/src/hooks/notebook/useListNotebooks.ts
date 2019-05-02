@@ -3,10 +3,8 @@ import { useQuery } from 'react-apollo-hooks'
 import {
   ListNotebooksQuery,
   ListNotebooksQueryVariables,
-  ListNotesQuery,
-  ListNotesQueryVariables,
-} from '../components/apollo/generated_components_typings'
-import { NotebookFragment, NoteFragment } from '../fragments'
+} from '../../components/apollo/generated_components_typings'
+import { NotebookFragment } from '../../fragments'
 
 export const ListNotebooksDocument = gql`
   ${NotebookFragment}

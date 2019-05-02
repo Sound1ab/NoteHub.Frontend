@@ -11,6 +11,13 @@ export type Scalars = {
   Float: number
 }
 
+export type CreateFileInput = {
+  username: Scalars['String']
+  repo: Scalars['String']
+  name: Scalars['String']
+  markdown?: Maybe<Scalars['String']>
+}
+
 export type CreateNotebookInput = {
   userId: Scalars['ID']
   title: Scalars['String']
@@ -21,6 +28,11 @@ export type CreateNoteInput = {
   title: Scalars['String']
   markdown: Scalars['String']
   excerpt: Scalars['String']
+}
+
+export type CreateRepoInput = {
+  name: Scalars['String']
+  description?: Maybe<Scalars['String']>
 }
 
 export type CreateUserInput = {
@@ -36,6 +48,12 @@ export type Date = {
   dateLongForm: Scalars['String']
 }
 
+export type DeleteFileInput = {
+  username: Scalars['String']
+  repo: Scalars['String']
+  name: Scalars['String']
+}
+
 export type DeleteNotebookInput = {
   id?: Maybe<Scalars['ID']>
 }
@@ -44,12 +62,39 @@ export type DeleteNoteInput = {
   id?: Maybe<Scalars['ID']>
 }
 
+export type DeleteRepoInput = {
+  username: Scalars['String']
+  repo: Scalars['String']
+}
+
 export type DeleteUserInput = {
   id?: Maybe<Scalars['ID']>
 }
 
+export type File = {
+  type: Scalars['String']
+  name: Scalars['String']
+  path: Scalars['String']
+  content?: Maybe<Scalars['String']>
+  sha: Scalars['String']
+  _links: Links
+}
+
+export type GithubUser = {
+  id: Scalars['Int']
+  login: Scalars['String']
+}
+
+export type Links = {
+  html: Scalars['String']
+}
+
 export type ModelBooleanFilterInput = {
   eq?: Maybe<Scalars['Boolean']>
+}
+
+export type ModelFileConnection = {
+  items?: Maybe<Array<Maybe<File>>>
 }
 
 export type ModelFloatFilterInput = {
@@ -84,6 +129,10 @@ export type ModelNoteFilterInput = {
   notebookId?: Maybe<ModelIdFilterInput>
 }
 
+export type ModelRepoConnection = {
+  items?: Maybe<Array<Maybe<Repo>>>
+}
+
 export enum ModelSortDirection {
   Asc = 'ASC',
   Desc = 'DESC',
@@ -103,15 +152,33 @@ export type ModelUserFilterInput = {
 }
 
 export type Mutation = {
+  createFile?: Maybe<File>
+  updateFile?: Maybe<File>
+  deleteFile?: Maybe<File>
   createNote?: Maybe<Note>
   updateNote?: Maybe<Note>
   deleteNote?: Maybe<Note>
   createNotebook?: Maybe<Notebook>
   updateNotebook?: Maybe<Notebook>
   deleteNotebook?: Maybe<Notebook>
+  createRepo?: Maybe<Repo>
+  updateRepo?: Maybe<Repo>
+  deleteRepo?: Maybe<Repo>
   createUser?: Maybe<User>
   updateUser?: Maybe<User>
   deleteUser?: Maybe<User>
+}
+
+export type MutationCreateFileArgs = {
+  input: CreateFileInput
+}
+
+export type MutationUpdateFileArgs = {
+  input: UpdateFileInput
+}
+
+export type MutationDeleteFileArgs = {
+  input: DeleteFileInput
 }
 
 export type MutationCreateNoteArgs = {
@@ -136,6 +203,18 @@ export type MutationUpdateNotebookArgs = {
 
 export type MutationDeleteNotebookArgs = {
   input: DeleteNotebookInput
+}
+
+export type MutationCreateRepoArgs = {
+  input: CreateRepoInput
+}
+
+export type MutationUpdateRepoArgs = {
+  input: UpdateRepoInput
+}
+
+export type MutationDeleteRepoArgs = {
+  input: DeleteRepoInput
 }
 
 export type MutationCreateUserArgs = {
@@ -167,12 +246,29 @@ export type Notebook = {
 }
 
 export type Query = {
+  readFile?: Maybe<File>
+  listFiles?: Maybe<ModelFileConnection>
   readNote?: Maybe<Note>
   listNotes?: Maybe<ModelNoteConnection>
   readNotebook?: Maybe<Notebook>
   listNotebooks?: Maybe<ModelNotebookConnection>
+  readRepo?: Maybe<Repo>
+  listRepos?: Maybe<ModelRepoConnection>
+  readGithubUserAccessToken: Scalars['String']
+  readGithubUser?: Maybe<GithubUser>
   readUser?: Maybe<User>
   listUsers?: Maybe<ModelUserConnection>
+}
+
+export type QueryReadFileArgs = {
+  username: Scalars['String']
+  repo: Scalars['String']
+  file: Scalars['String']
+}
+
+export type QueryListFilesArgs = {
+  username: Scalars['ID']
+  repo: Scalars['String']
 }
 
 export type QueryReadNoteArgs = {
@@ -195,6 +291,23 @@ export type QueryListNotebooksArgs = {
   offset?: Maybe<Scalars['Int']>
 }
 
+export type QueryReadRepoArgs = {
+  username: Scalars['String']
+  repo: Scalars['String']
+}
+
+export type QueryListReposArgs = {
+  username: Scalars['ID']
+}
+
+export type QueryReadGithubUserAccessTokenArgs = {
+  code: Scalars['String']
+}
+
+export type QueryReadGithubUserArgs = {
+  username: Scalars['String']
+}
+
 export type QueryReadUserArgs = {
   id: Scalars['ID']
 }
@@ -203,6 +316,21 @@ export type QueryListUsersArgs = {
   filter?: Maybe<ModelUserFilterInput>
   limit?: Maybe<Scalars['Int']>
   offset?: Maybe<Scalars['Int']>
+}
+
+export type Repo = {
+  id: Scalars['Int']
+  node_id: Scalars['String']
+  name: Scalars['String']
+  full_name: Scalars['String']
+  description: Scalars['String']
+}
+
+export type UpdateFileInput = {
+  username: Scalars['String']
+  repo: Scalars['String']
+  name: Scalars['String']
+  markdown?: Maybe<Scalars['String']>
 }
 
 export type UpdateNotebookInput = {
@@ -215,6 +343,13 @@ export type UpdateNoteInput = {
   title?: Maybe<Scalars['String']>
   markdown?: Maybe<Scalars['String']>
   excerpt?: Maybe<Scalars['String']>
+}
+
+export type UpdateRepoInput = {
+  username: Scalars['String']
+  repo: Scalars['String']
+  name?: Maybe<Scalars['String']>
+  description?: Maybe<Scalars['String']>
 }
 
 export type UpdateUserInput = {
@@ -232,6 +367,11 @@ export type User = {
   createdAt: Date
   updatedAt: Date
 }
+export type GithubUserFragment = { __typename?: 'GithubUser' } & Pick<
+  GithubUser,
+  'id' | 'login'
+>
+
 export type DateFragment = { __typename?: 'Date' } & Pick<
   Date,
   'dateLongForm' | 'dayOfMonth' | 'dayOfWeek' | 'month'
@@ -269,42 +409,12 @@ export type CreateNoteMutation = { __typename?: 'Mutation' } & {
   createNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
 }
 
-export type CreateNotebookMutationVariables = {
-  input: CreateNotebookInput
-}
-
-export type CreateNotebookMutation = { __typename?: 'Mutation' } & {
-  createNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
-}
-
 export type DeleteNoteMutationVariables = {
   input: DeleteNoteInput
 }
 
 export type DeleteNoteMutation = { __typename?: 'Mutation' } & {
   deleteNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
-}
-
-export type DeleteNotebookMutationVariables = {
-  input: DeleteNotebookInput
-}
-
-export type DeleteNotebookMutation = { __typename?: 'Mutation' } & {
-  deleteNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
-}
-
-export type ListNotebooksQueryVariables = {
-  filter?: Maybe<ModelNotebookFilterInput>
-  limit?: Maybe<Scalars['Int']>
-  offset?: Maybe<Scalars['Int']>
-}
-
-export type ListNotebooksQuery = { __typename?: 'Query' } & {
-  listNotebooks: Maybe<
-    { __typename?: 'ModelNotebookConnection' } & {
-      items: Maybe<Array<Maybe<{ __typename?: 'Notebook' } & NotebookFragment>>>
-    }
-  >
 }
 
 export type ListNotesQueryVariables = {
@@ -329,14 +439,6 @@ export type ReadNoteQuery = { __typename?: 'Query' } & {
   readNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
 }
 
-export type ReadNotebookQueryVariables = {
-  id: Scalars['ID']
-}
-
-export type ReadNotebookQuery = { __typename?: 'Query' } & {
-  readNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
-}
-
 export type UpdateNoteMutationVariables = {
   input: UpdateNoteInput
 }
@@ -345,9 +447,61 @@ export type UpdateNoteMutation = { __typename?: 'Mutation' } & {
   updateNote: Maybe<{ __typename?: 'Note' } & NoteFragment>
 }
 
+export type CreateNotebookMutationVariables = {
+  input: CreateNotebookInput
+}
+
+export type CreateNotebookMutation = { __typename?: 'Mutation' } & {
+  createNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
+}
+
+export type DeleteNotebookMutationVariables = {
+  input: DeleteNotebookInput
+}
+
+export type DeleteNotebookMutation = { __typename?: 'Mutation' } & {
+  deleteNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
+}
+
+export type ListNotebooksQueryVariables = {
+  filter?: Maybe<ModelNotebookFilterInput>
+  limit?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
+}
+
+export type ListNotebooksQuery = { __typename?: 'Query' } & {
+  listNotebooks: Maybe<
+    { __typename?: 'ModelNotebookConnection' } & {
+      items: Maybe<Array<Maybe<{ __typename?: 'Notebook' } & NotebookFragment>>>
+    }
+  >
+}
+
+export type ReadNotebookQueryVariables = {
+  id: Scalars['ID']
+}
+
+export type ReadNotebookQuery = { __typename?: 'Query' } & {
+  readNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
+}
+
+export type ReadGithubUserQueryVariables = {
+  username: Scalars['String']
+}
+
+export type ReadGithubUserQuery = { __typename?: 'Query' } & {
+  readGithubUser: Maybe<{ __typename?: 'GithubUser' } & GithubUserFragment>
+}
+
 import gql from 'graphql-tag'
 import * as React from 'react'
 import * as ReactApollo from 'react-apollo'
+export const githubUserFragmentDoc = gql`
+  fragment githubUser on GithubUser {
+    id
+    login
+  }
+`
 export const dateFragmentDoc = gql`
   fragment date on Date {
     dateLongForm
@@ -447,6 +601,188 @@ export function withCreateNote<TProps, TChildProps = {}>(
     CreateNoteProps<TChildProps>
   >(CreateNoteDocument, operationOptions)
 }
+export const DeleteNoteDocument = gql`
+  mutation DeleteNote($input: DeleteNoteInput!) {
+    deleteNote(input: $input) {
+      ...note
+    }
+  }
+  ${noteFragmentDoc}
+`
+
+export class DeleteNoteComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<DeleteNoteMutation, DeleteNoteMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<DeleteNoteMutation, DeleteNoteMutationVariables>
+        mutation={DeleteNoteDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type DeleteNoteProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<DeleteNoteMutation, DeleteNoteMutationVariables>
+> &
+  TChildProps
+export type DeleteNoteMutationFn = ReactApollo.MutationFn<
+  DeleteNoteMutation,
+  DeleteNoteMutationVariables
+>
+export function withDeleteNote<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        DeleteNoteMutation,
+        DeleteNoteMutationVariables,
+        DeleteNoteProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    DeleteNoteMutation,
+    DeleteNoteMutationVariables,
+    DeleteNoteProps<TChildProps>
+  >(DeleteNoteDocument, operationOptions)
+}
+export const ListNotesDocument = gql`
+  query ListNotes($filter: ModelNoteFilterInput, $limit: Int, $offset: Int) {
+    listNotes(filter: $filter, limit: $limit, offset: $offset) {
+      items {
+        ...note
+      }
+    }
+  }
+  ${noteFragmentDoc}
+`
+
+export class ListNotesComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ListNotesQuery, ListNotesQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ListNotesQuery, ListNotesQueryVariables>
+        query={ListNotesDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type ListNotesProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ListNotesQuery, ListNotesQueryVariables>
+> &
+  TChildProps
+export function withListNotes<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ListNotesQuery,
+        ListNotesQueryVariables,
+        ListNotesProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ListNotesQuery,
+    ListNotesQueryVariables,
+    ListNotesProps<TChildProps>
+  >(ListNotesDocument, operationOptions)
+}
+export const ReadNoteDocument = gql`
+  query ReadNote($id: ID!) {
+    readNote(id: $id) {
+      ...note
+    }
+  }
+  ${noteFragmentDoc}
+`
+
+export class ReadNoteComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ReadNoteQuery, ReadNoteQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ReadNoteQuery, ReadNoteQueryVariables>
+        query={ReadNoteDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type ReadNoteProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ReadNoteQuery, ReadNoteQueryVariables>
+> &
+  TChildProps
+export function withReadNote<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ReadNoteQuery,
+        ReadNoteQueryVariables,
+        ReadNoteProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ReadNoteQuery,
+    ReadNoteQueryVariables,
+    ReadNoteProps<TChildProps>
+  >(ReadNoteDocument, operationOptions)
+}
+export const UpdateNoteDocument = gql`
+  mutation UpdateNote($input: UpdateNoteInput!) {
+    updateNote(input: $input) {
+      ...note
+    }
+  }
+  ${noteFragmentDoc}
+`
+
+export class UpdateNoteComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<UpdateNoteMutation, UpdateNoteMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<UpdateNoteMutation, UpdateNoteMutationVariables>
+        mutation={UpdateNoteDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type UpdateNoteProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<UpdateNoteMutation, UpdateNoteMutationVariables>
+> &
+  TChildProps
+export type UpdateNoteMutationFn = ReactApollo.MutationFn<
+  UpdateNoteMutation,
+  UpdateNoteMutationVariables
+>
+export function withUpdateNote<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        UpdateNoteMutation,
+        UpdateNoteMutationVariables,
+        UpdateNoteProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    UpdateNoteMutation,
+    UpdateNoteMutationVariables,
+    UpdateNoteProps<TChildProps>
+  >(UpdateNoteDocument, operationOptions)
+}
 export const CreateNotebookDocument = gql`
   mutation CreateNotebook($input: CreateNotebookInput!) {
     createNotebook(input: $input) {
@@ -503,54 +839,6 @@ export function withCreateNotebook<TProps, TChildProps = {}>(
     CreateNotebookMutationVariables,
     CreateNotebookProps<TChildProps>
   >(CreateNotebookDocument, operationOptions)
-}
-export const DeleteNoteDocument = gql`
-  mutation DeleteNote($input: DeleteNoteInput!) {
-    deleteNote(input: $input) {
-      ...note
-    }
-  }
-  ${noteFragmentDoc}
-`
-
-export class DeleteNoteComponent extends React.Component<
-  Partial<
-    ReactApollo.MutationProps<DeleteNoteMutation, DeleteNoteMutationVariables>
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Mutation<DeleteNoteMutation, DeleteNoteMutationVariables>
-        mutation={DeleteNoteDocument}
-        {...(this as any)['props'] as any}
-      />
-    )
-  }
-}
-export type DeleteNoteProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<DeleteNoteMutation, DeleteNoteMutationVariables>
-> &
-  TChildProps
-export type DeleteNoteMutationFn = ReactApollo.MutationFn<
-  DeleteNoteMutation,
-  DeleteNoteMutationVariables
->
-export function withDeleteNote<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        DeleteNoteMutation,
-        DeleteNoteMutationVariables,
-        DeleteNoteProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withMutation<
-    TProps,
-    DeleteNoteMutation,
-    DeleteNoteMutationVariables,
-    DeleteNoteProps<TChildProps>
-  >(DeleteNoteDocument, operationOptions)
 }
 export const DeleteNotebookDocument = gql`
   mutation DeleteNotebook($input: DeleteNotebookInput!) {
@@ -659,92 +947,6 @@ export function withListNotebooks<TProps, TChildProps = {}>(
     ListNotebooksProps<TChildProps>
   >(ListNotebooksDocument, operationOptions)
 }
-export const ListNotesDocument = gql`
-  query ListNotes($filter: ModelNoteFilterInput, $limit: Int, $offset: Int) {
-    listNotes(filter: $filter, limit: $limit, offset: $offset) {
-      items {
-        ...note
-      }
-    }
-  }
-  ${noteFragmentDoc}
-`
-
-export class ListNotesComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<ListNotesQuery, ListNotesQueryVariables>>
-> {
-  render() {
-    return (
-      <ReactApollo.Query<ListNotesQuery, ListNotesQueryVariables>
-        query={ListNotesDocument}
-        {...(this as any)['props'] as any}
-      />
-    )
-  }
-}
-export type ListNotesProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<ListNotesQuery, ListNotesQueryVariables>
-> &
-  TChildProps
-export function withListNotes<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ListNotesQuery,
-        ListNotesQueryVariables,
-        ListNotesProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
-    ListNotesQuery,
-    ListNotesQueryVariables,
-    ListNotesProps<TChildProps>
-  >(ListNotesDocument, operationOptions)
-}
-export const ReadNoteDocument = gql`
-  query ReadNote($id: ID!) {
-    readNote(id: $id) {
-      ...note
-    }
-  }
-  ${noteFragmentDoc}
-`
-
-export class ReadNoteComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<ReadNoteQuery, ReadNoteQueryVariables>>
-> {
-  render() {
-    return (
-      <ReactApollo.Query<ReadNoteQuery, ReadNoteQueryVariables>
-        query={ReadNoteDocument}
-        {...(this as any)['props'] as any}
-      />
-    )
-  }
-}
-export type ReadNoteProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<ReadNoteQuery, ReadNoteQueryVariables>
-> &
-  TChildProps
-export function withReadNote<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ReadNoteQuery,
-        ReadNoteQueryVariables,
-        ReadNoteProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
-    ReadNoteQuery,
-    ReadNoteQueryVariables,
-    ReadNoteProps<TChildProps>
-  >(ReadNoteDocument, operationOptions)
-}
 export const ReadNotebookDocument = gql`
   query ReadNotebook($id: ID!) {
     readNotebook(id: $id) {
@@ -787,53 +989,49 @@ export function withReadNotebook<TProps, TChildProps = {}>(
     ReadNotebookProps<TChildProps>
   >(ReadNotebookDocument, operationOptions)
 }
-export const UpdateNoteDocument = gql`
-  mutation UpdateNote($input: UpdateNoteInput!) {
-    updateNote(input: $input) {
-      ...note
+export const ReadGithubUserDocument = gql`
+  query ReadGithubUser($username: String!) {
+    readGithubUser(username: $username) {
+      ...githubUser
     }
   }
-  ${noteFragmentDoc}
+  ${githubUserFragmentDoc}
 `
 
-export class UpdateNoteComponent extends React.Component<
+export class ReadGithubUserComponent extends React.Component<
   Partial<
-    ReactApollo.MutationProps<UpdateNoteMutation, UpdateNoteMutationVariables>
+    ReactApollo.QueryProps<ReadGithubUserQuery, ReadGithubUserQueryVariables>
   >
 > {
   render() {
     return (
-      <ReactApollo.Mutation<UpdateNoteMutation, UpdateNoteMutationVariables>
-        mutation={UpdateNoteDocument}
+      <ReactApollo.Query<ReadGithubUserQuery, ReadGithubUserQueryVariables>
+        query={ReadGithubUserDocument}
         {...(this as any)['props'] as any}
       />
     )
   }
 }
-export type UpdateNoteProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<UpdateNoteMutation, UpdateNoteMutationVariables>
+export type ReadGithubUserProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ReadGithubUserQuery, ReadGithubUserQueryVariables>
 > &
   TChildProps
-export type UpdateNoteMutationFn = ReactApollo.MutationFn<
-  UpdateNoteMutation,
-  UpdateNoteMutationVariables
->
-export function withUpdateNote<TProps, TChildProps = {}>(
+export function withReadGithubUser<TProps, TChildProps = {}>(
   operationOptions:
     | ReactApollo.OperationOption<
         TProps,
-        UpdateNoteMutation,
-        UpdateNoteMutationVariables,
-        UpdateNoteProps<TChildProps>
+        ReadGithubUserQuery,
+        ReadGithubUserQueryVariables,
+        ReadGithubUserProps<TChildProps>
       >
     | undefined
 ) {
-  return ReactApollo.withMutation<
+  return ReactApollo.withQuery<
     TProps,
-    UpdateNoteMutation,
-    UpdateNoteMutationVariables,
-    UpdateNoteProps<TChildProps>
-  >(UpdateNoteDocument, operationOptions)
+    ReadGithubUserQuery,
+    ReadGithubUserQueryVariables,
+    ReadGithubUserProps<TChildProps>
+  >(ReadGithubUserDocument, operationOptions)
 }
 export interface IntrospectionResultData {
   __schema: {

@@ -6,8 +6,8 @@ import {
   ListNotesDocument,
   ListNotesQuery,
   ListNotesQueryVariables,
-} from '../components/apollo/generated_components_typings'
-import { NoteFragment } from '../fragments'
+} from '../../components/apollo/generated_components_typings'
+import { NoteFragment } from '../../fragments'
 
 export const CreateNoteDocument = gql`
   ${NoteFragment}

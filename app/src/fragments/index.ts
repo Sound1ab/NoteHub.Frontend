@@ -1,5 +1,12 @@
 import gql from 'graphql-tag'
 
+export const GithubUserFragment = gql`
+  fragment githubUser on GithubUser {
+    id
+    login
+  }
+`
+
 export const DateFragment = gql`
   fragment date on Date {
     dateLongForm

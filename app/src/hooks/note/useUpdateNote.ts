@@ -5,8 +5,8 @@ import {
   ListNotesQuery,
   UpdateNoteMutation,
   UpdateNoteMutationVariables,
-} from '../components/apollo/generated_components_typings'
-import { NoteFragment } from '../fragments'
+} from '../../components/apollo/generated_components_typings'
+import { NoteFragment } from '../../fragments'
 
 export const UpdateNoteDocument = gql`
   ${NoteFragment}

@@ -5,7 +5,7 @@ import { initialNotebookState } from './reducers/notebookReducer'
 import { initialUserState } from './reducers/userReducer'
 
 export type IState = typeof initialState
-export type TActions = TNotebookActions & TUserActions
+export type TActions = TNotebookActions | TUserActions
 
 export const initialState = {
   notebook: initialNotebookState,
