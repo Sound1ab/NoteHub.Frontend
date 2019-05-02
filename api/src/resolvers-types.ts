@@ -245,7 +245,7 @@ export type Notebook = {
 }
 
 export type Query = {
-  readFile?: Maybe<Repo>
+  readFile?: Maybe<File>
   listFiles?: Maybe<ModelFileConnection>
   readNote?: Maybe<Note>
   listNotes?: Maybe<ModelNoteConnection>
@@ -253,6 +253,7 @@ export type Query = {
   listNotebooks?: Maybe<ModelNotebookConnection>
   readRepo?: Maybe<Repo>
   listRepos?: Maybe<ModelRepoConnection>
+  readGithubUserAccessToken: Scalars['String']
   readGithubUser?: Maybe<GithubUser>
   readUser?: Maybe<User>
   listUsers?: Maybe<ModelUserConnection>
@@ -296,6 +297,10 @@ export type QueryReadRepoArgs = {
 
 export type QueryListReposArgs = {
   username: Scalars['ID']
+}
+
+export type QueryReadGithubUserAccessTokenArgs = {
+  code: Scalars['String']
 }
 
 export type QueryReadGithubUserArgs = {
@@ -437,20 +442,20 @@ export type DirectiveResolverFn<
 export type ResolversTypes = {
   Query: Query
   String: Scalars['String']
-  Repo: Repo
-  Int: Scalars['Int']
-  ID: Scalars['ID']
-  ModelFileConnection: ModelFileConnection
   File: File
   Links: Links
+  ID: Scalars['ID']
+  ModelFileConnection: ModelFileConnection
   Note: Note
   Date: Date
+  Int: Scalars['Int']
   ModelNoteFilterInput: ModelNoteFilterInput
   ModelIDFilterInput: ModelIdFilterInput
   ModelNoteConnection: ModelNoteConnection
   Notebook: Notebook
   ModelNotebookFilterInput: ModelNotebookFilterInput
   ModelNotebookConnection: ModelNotebookConnection
+  Repo: Repo
   ModelRepoConnection: ModelRepoConnection
   GithubUser: GithubUser
   User: User
@@ -699,7 +704,7 @@ export type QueryResolvers<
   ParentType = ResolversTypes['Query']
 > = {
   readFile?: Resolver<
-    Maybe<ResolversTypes['Repo']>,
+    Maybe<ResolversTypes['File']>,
     ParentType,
     Context,
     QueryReadFileArgs
@@ -745,6 +750,12 @@ export type QueryResolvers<
     ParentType,
     Context,
     QueryListReposArgs
+  >
+  readGithubUserAccessToken?: Resolver<
+    ResolversTypes['String'],
+    ParentType,
+    Context,
+    QueryReadGithubUserAccessTokenArgs
   >
   readGithubUser?: Resolver<
     Maybe<ResolversTypes['GithubUser']>,

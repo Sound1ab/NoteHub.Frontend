@@ -6,10 +6,11 @@ import {
   MutationDeleteUserArgs,
   MutationUpdateUserArgs,
   QueryListUsersArgs,
+  QueryReadGithubUserAccessTokenArgs,
   QueryReadGithubUserArgs,
   QueryReadUserArgs,
 } from '../resolvers-types'
-import { Github } from '../services/octokit'
+import { UserManager } from '../services/octokit'
 
 export async function UserQueries() {
   return {
@@ -38,11 +39,19 @@ export async function UserQueries() {
         }
       }
     ),
+    async readGithubUserAccessToken(
+      _,
+      { code }: QueryReadGithubUserAccessTokenArgs,
+      { userManager }: { userManager: UserManager }
+    ): Promise<string> {
+      return userManager.readGithubUserAccessToken(code)
+    },
     async readGithubUser(
       _,
-      args: QueryReadGithubUserArgs
+      { username }: QueryReadGithubUserArgs,
+      { userManager }: { userManager: UserManager }
     ): Promise<GithubUser> {
-      return new Github().readUser(args.username)
+      return userManager.readUser(username)
     },
     readUser: await configureRepository<User, QueryReadUserArgs>(
       User,

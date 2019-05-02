@@ -10,7 +10,7 @@ import { NotebookMutations, NotebookQueries } from './resolvers/notebook'
 import { RepoMutations, RepoQueries } from './resolvers/repo'
 import { UserMutations, UserQueries } from './resolvers/user'
 import { typeDefs } from './schema'
-import { FileManager, RepoManager } from './services/octokit'
+import { FileManager, RepoManager, UserManager } from './services/octokit'
 
 const port = process.env.PORT || 8088
 
@@ -42,7 +42,8 @@ async function configureServer() {
       const token = req.headers.authorization || ''
       const fileManager = new FileManager(token)
       const repoManager = new RepoManager(token)
-      return { fileManager, repoManager }
+      const userManager = new UserManager(token)
+      return { fileManager, repoManager, userManager }
     },
     resolvers,
     typeDefs,
