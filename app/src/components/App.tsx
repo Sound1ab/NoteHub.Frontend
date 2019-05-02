@@ -17,10 +17,11 @@ import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import { GoogleFont, TypographyStyle } from 'react-typography'
 import { client } from '../services/Apollo/clientConfig'
-import { notebookReducer, TNotebookActions } from '../store'
+import { TActions } from '../store'
 import { initialState } from '../store'
 import { NoteContext } from '../store'
 import { IState } from '../store'
+import { combinedReducers } from '../store/reducers'
 import { typography } from '../theme/typography'
 import { Editor } from './templates'
 import { GlobalStyle, ThemeProvider } from './utility'
@@ -41,8 +42,8 @@ library.add(
 )
 
 export function App() {
-  const [state, dispatch] = useReducer<React.Reducer<IState, TNotebookActions>>(
-    notebookReducer,
+  const [state, dispatch] = useReducer<React.Reducer<IState, TActions>>(
+    combinedReducers as any,
     initialState
   )
 

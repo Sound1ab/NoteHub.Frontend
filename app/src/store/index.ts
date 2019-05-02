@@ -1,3 +1,5 @@
 export * from './actions/notebookAction'
+export * from './actions/userAction'
 export * from './reducers/notebookReducer'
+export * from './reducers/userReducer'
 export * from './store'

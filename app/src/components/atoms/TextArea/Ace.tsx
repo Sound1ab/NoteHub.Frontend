@@ -9,8 +9,12 @@ import { useReadNote, useUpdateNote } from '../../../hooks'
 export function Ace() {
   const [value, setValue] = useState('')
   const [state] = useStore()
-  const note = useReadNote(state.activeNote)
-  const updateNote = useUpdateNote(state.activeNotebook, state.activeNote)
+  console.log(state)
+  const note = useReadNote(state.notebook.activeNote)
+  const updateNote = useUpdateNote(
+    state.notebook.activeNotebook,
+    state.notebook.activeNote
+  )
 
   useEffect(() => {
     setValue((note && note.markdown) || '')
@@ -21,7 +25,7 @@ export function Ace() {
   }
 
   async function handleBlur(e: React.MouseEvent<HTMLDivElement>, editor: any) {
-    if (!state.activeNote) {
+    if (!state.notebook.activeNote) {
       alert('No active note')
       return
     }
@@ -29,7 +33,7 @@ export function Ace() {
       variables: {
         input: {
           excerpt: editor.session.getLine(0),
-          id: state.activeNote,
+          id: state.notebook.activeNote,
           markdown: editor.getValue(),
         },
       },

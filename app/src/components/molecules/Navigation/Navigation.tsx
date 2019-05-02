@@ -1,7 +1,7 @@
 import React from 'react'
 import { useListNotebooks } from '../../../hooks'
 import { useStore } from '../../../hooks/useStore'
-import { setActiveNotebook } from '../../../store'
+import { activeNotebook } from '../../../store'
 import { styled } from '../../../theme'
 import { Heading } from '../../atoms'
 
@@ -47,7 +47,7 @@ export function Navigation() {
 
   function handleHeadingClick(notebook: string | null) {
     if (dispatch) {
-      dispatch(setActiveNotebook(notebook))
+      dispatch(activeNotebook(notebook))
     }
   }
 
@@ -58,9 +58,9 @@ export function Navigation() {
           <Heading
             onClick={handleHeadingClick.bind(null, notebook && notebook.id)}
             className={
-              state.activeNotebook &&
+              state.notebook.activeNotebook &&
               notebook &&
-              notebook.id === state.activeNotebook
+              notebook.id === state.notebook.activeNotebook
                 ? 'Navigation-active-heading'
                 : ''
             }

@@ -1,29 +1,27 @@
-export type TReturnOfSetActiveNote = ReturnType<typeof setActiveNote>
-export type TReturnOfSetActiveNotebook = ReturnType<typeof setActiveNotebook>
+export type TReturnOfActiveNote = ReturnType<typeof activeNote>
+export type TReturnOfActiveNotebook = ReturnType<typeof activeNotebook>
 
-export type TNotebookActions =
-  | TReturnOfSetActiveNote
-  | TReturnOfSetActiveNotebook
+export type TNotebookActions = TReturnOfActiveNote | TReturnOfActiveNotebook
 
 export enum NOTEBOOK_ACTIONS {
-  SET_ACTIVE_NOTE = 'SET_ACTIVE_NOTE',
-  SET_ACTIVE_NOTEBOOK = 'SET_ACTIVE_NOTEBOOK',
+  ACTIVE_NOTE = 'ACTIVE_NOTE',
+  ACTIVE_NOTEBOOK = 'ACTIVE_NOTEBOOK',
 }
 
-export function setActiveNote(note: string | null) {
+export function activeNote(note: string | null) {
   return {
     payload: {
       note,
     },
-    type: NOTEBOOK_ACTIONS.SET_ACTIVE_NOTE,
+    type: NOTEBOOK_ACTIONS.ACTIVE_NOTE,
   }
 }
 
-export function setActiveNotebook(notebook: string | null) {
+export function activeNotebook(notebook: string | null) {
   return {
     payload: {
       notebook,
     },
-    type: NOTEBOOK_ACTIONS.SET_ACTIVE_NOTEBOOK,
+    type: NOTEBOOK_ACTIONS.ACTIVE_NOTEBOOK,
   }
 }

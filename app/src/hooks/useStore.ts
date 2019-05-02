@@ -1,9 +1,8 @@
 import React, { Dispatch, ReducerAction, useContext } from 'react'
-import { IState, NoteContext } from '../store'
-import { TNotebookActions } from '../store/actions/notebookAction'
+import { IState, NoteContext, TActions } from '../store'
 
 export function useStore() {
   return useContext<
-    [IState, Dispatch<ReducerAction<React.Reducer<IState, TNotebookActions>>>]
+    [IState, Dispatch<ReducerAction<React.Reducer<IState, TActions>>>]
   >(NoteContext)
 }

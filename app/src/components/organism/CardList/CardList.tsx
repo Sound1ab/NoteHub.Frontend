@@ -1,6 +1,6 @@
 import React from 'react'
 import { useListNotes, useReadNotebook, useStore } from '../../../hooks'
-import { setActiveNote } from '../../../store'
+import { activeNote } from '../../../store'
 import { styled } from '../../../theme'
 import { Container } from '../../atoms'
 import { Card, CardHeader } from '../../molecules'
@@ -27,11 +27,11 @@ const Style = styled.div`
 
 export function CardList() {
   const [state, dispatch] = useStore()
-  const notebook = useReadNotebook(state.activeNotebook)
-  const notes = useListNotes(state.activeNotebook)
+  const notebook = useReadNotebook(state.notebook.activeNotebook)
+  const notes = useListNotes(state.notebook.activeNotebook)
 
   function handleCardClick(note: string | null) {
-    if (dispatch) dispatch(setActiveNote(note))
+    if (dispatch) dispatch(activeNote(note))
   }
 
   return (
@@ -64,7 +64,8 @@ export function CardList() {
                       `${note.createdAt.dayOfMonth} ${note.createdAt.month}`
                     }
                     isSelected={
-                      !!state.activeNote && state.activeNote === note.id
+                      !!state.notebook.activeNote &&
+                      state.notebook.activeNote === note.id
                     }
                   />
                 </span>

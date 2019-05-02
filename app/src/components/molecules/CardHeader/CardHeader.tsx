@@ -85,12 +85,12 @@ export function CardHeader({ title = '' }: ICardHeader) {
       <CreateNoteModal
         isOpen={isCreateNoteModalOpen}
         onRequestClose={setIsCreateNoteModalOpen.bind(null, false)}
-        activeNotebook={state.activeNotebook}
+        activeNotebook={state.notebook.activeNotebook}
       />
       <DeleteNotebookModal
         isOpen={isDeleteNotebookModalOpen}
         onRequestClose={setIsDeleteNotebookModalOpen.bind(null, false)}
-        activeNotebook={state.activeNotebook}
+        activeNotebook={state.notebook.activeNotebook}
         title={title}
       />
     </Style>

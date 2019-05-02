@@ -1,24 +1,31 @@
 import {
   TNotebookActions,
-  TReturnOfSetActiveNote,
-  TReturnOfSetActiveNotebook,
+  TReturnOfActiveNote,
+  TReturnOfActiveNotebook,
 } from '..'
 import { NOTEBOOK_ACTIONS } from '..'
-import { IState } from '../index'
 
-export function notebookReducer(state: IState, action: TNotebookActions) {
+export const initialNotebookState = {
+  activeNote: '',
+  activeNotebook: '',
+}
+
+export function notebookReducer(
+  state: typeof initialNotebookState,
+  action: TNotebookActions
+) {
   switch (action.type) {
-    case NOTEBOOK_ACTIONS.SET_ACTIVE_NOTE:
+    case NOTEBOOK_ACTIONS.ACTIVE_NOTE:
       return {
         ...state,
-        activeNote: (action as TReturnOfSetActiveNote).payload.note,
+        activeNote: (action as TReturnOfActiveNote).payload.note,
       }
-    case NOTEBOOK_ACTIONS.SET_ACTIVE_NOTEBOOK:
+    case NOTEBOOK_ACTIONS.ACTIVE_NOTEBOOK:
       return {
         ...state,
-        activeNotebook: (action as TReturnOfSetActiveNotebook).payload.notebook,
+        activeNotebook: (action as TReturnOfActiveNotebook).payload.notebook,
       }
     default:
-      throw new Error()
+      return state
   }
 }
