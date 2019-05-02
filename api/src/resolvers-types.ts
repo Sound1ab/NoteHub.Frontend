@@ -22,6 +22,11 @@ export type CreateNoteInput = {
   excerpt: Scalars['String']
 }
 
+export type CreateRepoInput = {
+  name: Scalars['String']
+  description?: Maybe<Scalars['String']>
+}
+
 export type CreateUserInput = {
   firstName: Scalars['String']
   lastName: Scalars['String']
@@ -43,12 +48,37 @@ export type DeleteNoteInput = {
   id?: Maybe<Scalars['ID']>
 }
 
+export type DeleteRepoInput = {
+  username: Scalars['String']
+  repo: Scalars['String']
+}
+
 export type DeleteUserInput = {
   id?: Maybe<Scalars['ID']>
 }
 
+export type File = {
+  type: Type
+  name: Scalars['String']
+  path: Scalars['String']
+  _links?: Maybe<Links>
+}
+
+export type GithubUser = {
+  id: Scalars['Int']
+  login: Scalars['String']
+}
+
+export type Links = {
+  html: Scalars['String']
+}
+
 export type ModelBooleanFilterInput = {
   eq?: Maybe<Scalars['Boolean']>
+}
+
+export type ModelFileConnection = {
+  items?: Maybe<Array<Maybe<File>>>
 }
 
 export type ModelFloatFilterInput = {
@@ -83,6 +113,10 @@ export type ModelNoteFilterInput = {
   notebookId?: Maybe<ModelIdFilterInput>
 }
 
+export type ModelRepoConnection = {
+  items?: Maybe<Array<Maybe<Repo>>>
+}
+
 export enum ModelSortDirection {
   Asc = 'ASC',
   Desc = 'DESC',
@@ -108,6 +142,9 @@ export type Mutation = {
   createNotebook?: Maybe<Notebook>
   updateNotebook?: Maybe<Notebook>
   deleteNotebook?: Maybe<Notebook>
+  createRepo?: Maybe<Repo>
+  updateRepo?: Maybe<Repo>
+  deleteRepo?: Maybe<Repo>
   createUser?: Maybe<User>
   updateUser?: Maybe<User>
   deleteUser?: Maybe<User>
@@ -135,6 +172,18 @@ export type MutationUpdateNotebookArgs = {
 
 export type MutationDeleteNotebookArgs = {
   input: DeleteNotebookInput
+}
+
+export type MutationCreateRepoArgs = {
+  input: CreateRepoInput
+}
+
+export type MutationUpdateRepoArgs = {
+  input: UpdateRepoInput
+}
+
+export type MutationDeleteRepoArgs = {
+  input: DeleteRepoInput
 }
 
 export type MutationCreateUserArgs = {
@@ -166,12 +215,21 @@ export type Notebook = {
 }
 
 export type Query = {
+  listFiles?: Maybe<ModelFileConnection>
   readNote?: Maybe<Note>
   listNotes?: Maybe<ModelNoteConnection>
   readNotebook?: Maybe<Notebook>
   listNotebooks?: Maybe<ModelNotebookConnection>
+  readRepo?: Maybe<Repo>
+  listRepos?: Maybe<ModelRepoConnection>
+  readGithubUser?: Maybe<GithubUser>
   readUser?: Maybe<User>
   listUsers?: Maybe<ModelUserConnection>
+}
+
+export type QueryListFilesArgs = {
+  username: Scalars['ID']
+  repoName: Scalars['String']
 }
 
 export type QueryReadNoteArgs = {
@@ -194,6 +252,19 @@ export type QueryListNotebooksArgs = {
   offset?: Maybe<Scalars['Int']>
 }
 
+export type QueryReadRepoArgs = {
+  username: Scalars['String']
+  repo: Scalars['String']
+}
+
+export type QueryListReposArgs = {
+  username: Scalars['ID']
+}
+
+export type QueryReadGithubUserArgs = {
+  username: Scalars['String']
+}
+
 export type QueryReadUserArgs = {
   id: Scalars['ID']
 }
@@ -202,6 +273,19 @@ export type QueryListUsersArgs = {
   filter?: Maybe<ModelUserFilterInput>
   limit?: Maybe<Scalars['Int']>
   offset?: Maybe<Scalars['Int']>
+}
+
+export type Repo = {
+  id: Scalars['Int']
+  node_id: Scalars['String']
+  name: Scalars['String']
+  full_name: Scalars['String']
+  description: Scalars['String']
+}
+
+export enum Type {
+  File = 'file',
+  Dir = 'dir',
 }
 
 export type UpdateNotebookInput = {
@@ -214,6 +298,13 @@ export type UpdateNoteInput = {
   title?: Maybe<Scalars['String']>
   markdown?: Maybe<Scalars['String']>
   excerpt?: Maybe<Scalars['String']>
+}
+
+export type UpdateRepoInput = {
+  username: Scalars['String']
+  repo: Scalars['String']
+  name?: Maybe<Scalars['String']>
+  description?: Maybe<Scalars['String']>
 }
 
 export type UpdateUserInput = {
@@ -307,8 +398,12 @@ export type DirectiveResolverFn<
 export type ResolversTypes = {
   Query: Query
   ID: Scalars['ID']
-  Note: Note
   String: Scalars['String']
+  ModelFileConnection: ModelFileConnection
+  File: File
+  TYPE: Type
+  Links: Links
+  Note: Note
   Date: Date
   Int: Scalars['Int']
   ModelNoteFilterInput: ModelNoteFilterInput
@@ -317,6 +412,9 @@ export type ResolversTypes = {
   Notebook: Notebook
   ModelNotebookFilterInput: ModelNotebookFilterInput
   ModelNotebookConnection: ModelNotebookConnection
+  Repo: Repo
+  ModelRepoConnection: ModelRepoConnection
+  GithubUser: GithubUser
   User: User
   ModelUserFilterInput: ModelUserFilterInput
   ModelUserConnection: ModelUserConnection
@@ -327,6 +425,9 @@ export type ResolversTypes = {
   CreateNotebookInput: CreateNotebookInput
   UpdateNotebookInput: UpdateNotebookInput
   DeleteNotebookInput: DeleteNotebookInput
+  CreateRepoInput: CreateRepoInput
+  UpdateRepoInput: UpdateRepoInput
+  DeleteRepoInput: DeleteRepoInput
   CreateUserInput: CreateUserInput
   UpdateUserInput: UpdateUserInput
   DeleteUserInput: DeleteUserInput
@@ -347,6 +448,42 @@ export type DateResolvers<
   dayOfMonth?: Resolver<ResolversTypes['Int'], ParentType, Context>
   month?: Resolver<ResolversTypes['String'], ParentType, Context>
   dateLongForm?: Resolver<ResolversTypes['String'], ParentType, Context>
+}
+
+export type FileResolvers<
+  Context = any,
+  ParentType = ResolversTypes['File']
+> = {
+  type?: Resolver<ResolversTypes['TYPE'], ParentType, Context>
+  name?: Resolver<ResolversTypes['String'], ParentType, Context>
+  path?: Resolver<ResolversTypes['String'], ParentType, Context>
+  _links?: Resolver<Maybe<ResolversTypes['Links']>, ParentType, Context>
+}
+
+export type GithubUserResolvers<
+  Context = any,
+  ParentType = ResolversTypes['GithubUser']
+> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, Context>
+  login?: Resolver<ResolversTypes['String'], ParentType, Context>
+}
+
+export type LinksResolvers<
+  Context = any,
+  ParentType = ResolversTypes['Links']
+> = {
+  html?: Resolver<ResolversTypes['String'], ParentType, Context>
+}
+
+export type ModelFileConnectionResolvers<
+  Context = any,
+  ParentType = ResolversTypes['ModelFileConnection']
+> = {
+  items?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['File']>>>,
+    ParentType,
+    Context
+  >
 }
 
 export type ModelNotebookConnectionResolvers<
@@ -371,6 +508,17 @@ export type ModelNoteConnectionResolvers<
     Context
   >
   nextOffset?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, Context>
+}
+
+export type ModelRepoConnectionResolvers<
+  Context = any,
+  ParentType = ResolversTypes['ModelRepoConnection']
+> = {
+  items?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['Repo']>>>,
+    ParentType,
+    Context
+  >
 }
 
 export type ModelUserConnectionResolvers<
@@ -425,6 +573,24 @@ export type MutationResolvers<
     Context,
     MutationDeleteNotebookArgs
   >
+  createRepo?: Resolver<
+    Maybe<ResolversTypes['Repo']>,
+    ParentType,
+    Context,
+    MutationCreateRepoArgs
+  >
+  updateRepo?: Resolver<
+    Maybe<ResolversTypes['Repo']>,
+    ParentType,
+    Context,
+    MutationUpdateRepoArgs
+  >
+  deleteRepo?: Resolver<
+    Maybe<ResolversTypes['Repo']>,
+    ParentType,
+    Context,
+    MutationDeleteRepoArgs
+  >
   createUser?: Resolver<
     Maybe<ResolversTypes['User']>,
     ParentType,
@@ -471,6 +637,12 @@ export type QueryResolvers<
   Context = any,
   ParentType = ResolversTypes['Query']
 > = {
+  listFiles?: Resolver<
+    Maybe<ResolversTypes['ModelFileConnection']>,
+    ParentType,
+    Context,
+    QueryListFilesArgs
+  >
   readNote?: Resolver<
     Maybe<ResolversTypes['Note']>,
     ParentType,
@@ -495,6 +667,24 @@ export type QueryResolvers<
     Context,
     QueryListNotebooksArgs
   >
+  readRepo?: Resolver<
+    Maybe<ResolversTypes['Repo']>,
+    ParentType,
+    Context,
+    QueryReadRepoArgs
+  >
+  listRepos?: Resolver<
+    Maybe<ResolversTypes['ModelRepoConnection']>,
+    ParentType,
+    Context,
+    QueryListReposArgs
+  >
+  readGithubUser?: Resolver<
+    Maybe<ResolversTypes['GithubUser']>,
+    ParentType,
+    Context,
+    QueryReadGithubUserArgs
+  >
   readUser?: Resolver<
     Maybe<ResolversTypes['User']>,
     ParentType,
@@ -507,6 +697,17 @@ export type QueryResolvers<
     Context,
     QueryListUsersArgs
   >
+}
+
+export type RepoResolvers<
+  Context = any,
+  ParentType = ResolversTypes['Repo']
+> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, Context>
+  node_id?: Resolver<ResolversTypes['String'], ParentType, Context>
+  name?: Resolver<ResolversTypes['String'], ParentType, Context>
+  full_name?: Resolver<ResolversTypes['String'], ParentType, Context>
+  description?: Resolver<ResolversTypes['String'], ParentType, Context>
 }
 
 export type UserResolvers<
@@ -523,13 +724,19 @@ export type UserResolvers<
 
 export type Resolvers<Context = any> = {
   Date?: DateResolvers<Context>
+  File?: FileResolvers<Context>
+  GithubUser?: GithubUserResolvers<Context>
+  Links?: LinksResolvers<Context>
+  ModelFileConnection?: ModelFileConnectionResolvers<Context>
   ModelNotebookConnection?: ModelNotebookConnectionResolvers<Context>
   ModelNoteConnection?: ModelNoteConnectionResolvers<Context>
+  ModelRepoConnection?: ModelRepoConnectionResolvers<Context>
   ModelUserConnection?: ModelUserConnectionResolvers<Context>
   Mutation?: MutationResolvers<Context>
   Note?: NoteResolvers<Context>
   Notebook?: NotebookResolvers<Context>
   Query?: QueryResolvers<Context>
+  Repo?: RepoResolvers<Context>
   User?: UserResolvers<Context>
 }
 

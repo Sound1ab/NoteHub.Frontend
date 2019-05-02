@@ -1,12 +1,15 @@
 import { User } from '../entities/User'
 import { calculateNextOffset, configureRepository } from '../helpers'
 import {
+  GithubUser,
   MutationCreateUserArgs,
   MutationDeleteUserArgs,
   MutationUpdateUserArgs,
   QueryListUsersArgs,
+  QueryReadGithubUserArgs,
   QueryReadUserArgs,
 } from '../resolvers-types'
+import { Github } from '../services/octokit'
 
 export async function UserQueries() {
   return {
@@ -35,6 +38,12 @@ export async function UserQueries() {
         }
       }
     ),
+    async readGithubUser(
+      _,
+      args: QueryReadGithubUserArgs
+    ): Promise<GithubUser> {
+      return new Github().readUser(args.username)
+    },
     readUser: await configureRepository<User, QueryReadUserArgs>(
       User,
       async (repository, { id }) => {

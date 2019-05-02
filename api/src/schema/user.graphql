@@ -1,5 +1,6 @@
 ## Base
 type Query {
+    readGithubUser(username: String!): GithubUser
     readUser(id: ID!): User
     listUsers(filter: ModelUserFilterInput, limit: Int, offset: Int): ModelUserConnection
 }
@@ -11,6 +12,11 @@ type Mutation {
 }
 
 ## Types
+type GithubUser {
+    id: Int!
+    login: String!
+}
+
 type User {
     id: ID!
     firstName: String!

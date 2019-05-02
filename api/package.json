@@ -30,6 +30,8 @@
     "webpack-cli": "^3.3.0"
   },
   "dependencies": {
+    "@octokit/plugin-throttling": "^2.4.0",
+    "@octokit/rest": "^16.25.1",
     "apollo-server-express": "^2.4.8",
     "class-validator": "^0.9.1",
     "dotenv": "^7.0.0",

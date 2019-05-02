@@ -1,0 +1,26 @@
+## Base
+extend type Query {
+    listFiles(username: ID!, repoName: String!): ModelFileConnection
+}
+
+## Types
+enum TYPE {
+    file
+    dir
+}
+
+type Links {
+    html: String!
+}
+
+type File {
+    type: TYPE!
+    name: String!
+    path: String!
+    _links: Links
+}
+
+## Query outputs
+type ModelFileConnection {
+    items: [File]
+}

@@ -6,8 +6,10 @@ import { config } from './config'
 import { DateType } from './resolvers/date'
 import { NoteMutations, NoteQueries } from './resolvers/note'
 import { NotebookMutations, NotebookQueries } from './resolvers/notebook'
+import { RepoMutations, RepoQueries } from './resolvers/repo'
 import { UserMutations, UserQueries } from './resolvers/user'
 import { typeDefs } from './schema'
+import { Github } from './services/octokit'
 
 const port = process.env.PORT || 8088
 
@@ -22,15 +24,22 @@ async function configureServer() {
       ...(await UserMutations()),
       ...(await NoteMutations()),
       ...(await NotebookMutations()),
+      ...RepoMutations(),
     },
     Query: {
       ...(await UserQueries()),
       ...(await NoteQueries()),
       ...(await NotebookQueries()),
+      ...RepoQueries(),
     },
   }
 
   const server = new ApolloServer({
+    context: ({ req }) => {
+      const token = req.headers.authorization || ''
+      const github = new Github(token)
+      return { github }
+    },
     resolvers,
     typeDefs,
   })
