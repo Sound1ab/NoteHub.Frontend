@@ -1,63 +1,58 @@
 import {
   File,
-  FileResolvers,
-  GithubUser,
-  GithubUserResolvers,
-  ModelListRepoConnection,
-  ModelReadRepoConnection,
-  ModelRepoConnection,
-  ModelRepoConnectionResolvers,
-  MutationCreateRepoArgs,
-  MutationDeleteRepoArgs,
-  MutationUpdateRepoArgs,
-  QueryListReposArgs,
-  QueryReadRepoArgs,
-  Repo,
-  RepoResolvers,
+  ModelFileConnection,
+  MutationCreateFileArgs,
+  MutationDeleteFileArgs,
+  MutationUpdateFileArgs,
+  QueryListFilesArgs,
+  QueryReadFileArgs,
 } from '../resolvers-types'
-import { github } from '../services/octokit'
+import { FileManager } from '../services/octokit'
 
-export function GithubQueries() {
+export function FileQueries() {
   return {
-    async readGithubUser(): Promise<GithubUser> {
-      return github.getUser()
-    },
-    async readRepo(
+    async readFile(
       _,
-      args: QueryReadRepoArgs
-    ): Promise<ModelReadRepoConnection> {
-      const files = await github.getRepo(args.username, args.name)
+      { file, repo, username }: QueryReadFileArgs,
+      { fileManager }: { fileManager: FileManager }
+    ): Promise<File> {
+      return fileManager.readFile(username, repo, file)
+    },
+    async listFiles(
+      _,
+      { repo, username }: QueryListFilesArgs,
+      { fileManager }: { fileManager: FileManager }
+    ): Promise<ModelFileConnection> {
+      const files = await fileManager.listFiles(username, repo)
       return {
         items: files,
-      }
-    },
-    async readRepo(
-      _,
-      args: QueryReadRepoArgs
-    ): Promise<ModelReadRepoConnection> {
-      const files = await github.getRepo(args.username, args.name)
-      return {
-        items: files,
-      }
-    },
-    async listRepos(
-      _,
-      args: QueryListReposArgs
-    ): Promise<ModelListRepoConnection> {
-      const repos = await github.listRepos(args.username)
-      return {
-        items: repos,
       }
     },
   }
 }
 
-export function GithubMutations() {
+export function FileMutations() {
   return {
-    async createRepo(_, { input }: MutationCreateRepoArgs): Promise<Repo> {
-      return github.createRepo(input.name, input.description)
+    async createFile(
+      _,
+      { input: { username, repo, name, markdown } }: MutationCreateFileArgs,
+      { fileManager }: { fileManager: FileManager }
+    ): Promise<File> {
+      return fileManager.createFile(username, repo, name, markdown)
     },
-    async updateRepo(_, { input }: MutationUpdateRepoArgs): Promise<Repo> {},
-    async deleteRepo(_, { input }: MutationDeleteRepoArgs): Promise<Repo> {},
+    async updateFile(
+      _,
+      { input: { markdown, name, repo, username } }: MutationUpdateFileArgs,
+      { fileManager }: { fileManager: FileManager }
+    ): Promise<File> {
+      return fileManager.updateFile(username, repo, name, markdown)
+    },
+    async deleteFile(
+      _,
+      { input: { name, repo, username } }: MutationDeleteFileArgs,
+      { fileManager }: { fileManager: FileManager }
+    ): Promise<File> {
+      return fileManager.deleteFile(username, repo, name)
+    },
   }
 }

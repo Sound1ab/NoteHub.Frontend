@@ -1,26 +1,51 @@
 ## Base
 extend type Query {
-    listFiles(username: ID!, repoName: String!): ModelFileConnection
+    readFile(username: String!, repo: String!, file: String!): File
+    listFiles(username: ID!, repo: String!): ModelFileConnection
+}
+
+extend type Mutation {
+    createFile(input: CreateFileInput!): File
+    updateFile(input: UpdateFileInput!): File
+    deleteFile(input: DeleteFileInput!): File
 }
 
 ## Types
-enum TYPE {
-    file
-    dir
-}
-
 type Links {
     html: String!
 }
 
 type File {
-    type: TYPE!
+    type: String!
     name: String!
     path: String!
-    _links: Links
+    content: String
+    sha: String!
+    _links: Links!
 }
 
 ## Query outputs
 type ModelFileConnection {
     items: [File]
+}
+
+## Mutation inputs
+input CreateFileInput {
+    username: String!
+    repo: String!
+    name: String!
+    markdown: String
+}
+
+input UpdateFileInput {
+    username: String!
+    repo: String!
+    name: String!
+    markdown: String
+}
+
+input DeleteFileInput {
+    username: String!
+    repo: String!
+    name: String!
 }

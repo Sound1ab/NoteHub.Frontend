@@ -4,12 +4,13 @@ import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import { config } from './config'
 import { DateType } from './resolvers/date'
+import { FileMutations, FileQueries } from './resolvers/file'
 import { NoteMutations, NoteQueries } from './resolvers/note'
 import { NotebookMutations, NotebookQueries } from './resolvers/notebook'
 import { RepoMutations, RepoQueries } from './resolvers/repo'
 import { UserMutations, UserQueries } from './resolvers/user'
 import { typeDefs } from './schema'
-import { Github } from './services/octokit'
+import { FileManager, RepoManager } from './services/octokit'
 
 const port = process.env.PORT || 8088
 
@@ -25,20 +26,23 @@ async function configureServer() {
       ...(await NoteMutations()),
       ...(await NotebookMutations()),
       ...RepoMutations(),
+      ...FileMutations(),
     },
     Query: {
       ...(await UserQueries()),
       ...(await NoteQueries()),
       ...(await NotebookQueries()),
       ...RepoQueries(),
+      ...FileQueries(),
     },
   }
 
   const server = new ApolloServer({
     context: ({ req }) => {
       const token = req.headers.authorization || ''
-      const github = new Github(token)
-      return { github }
+      const fileManager = new FileManager(token)
+      const repoManager = new RepoManager(token)
+      return { fileManager, repoManager }
     },
     resolvers,
     typeDefs,

@@ -7,23 +7,23 @@ import {
   QueryReadRepoArgs,
   Repo,
 } from '../resolvers-types'
-import { Github } from '../services/octokit'
+import { RepoManager } from '../services/octokit'
 
 export function RepoQueries() {
   return {
     async readRepo(
       _,
-      args: QueryReadRepoArgs,
-      ctx: { github: Github }
+      { username, repo }: QueryReadRepoArgs,
+      { repoManager }: { repoManager: RepoManager }
     ): Promise<Repo> {
-      return ctx.github.readRepo(args.username, args.repo)
+      return repoManager.readRepo(username, repo)
     },
     async listRepos(
       _,
-      args: QueryListReposArgs,
-      ctx: { github: Github }
+      { username }: QueryListReposArgs,
+      { repoManager }: { repoManager: RepoManager }
     ): Promise<ModelRepoConnection> {
-      const repos = await ctx.github.listRepos(args.username)
+      const repos = await repoManager.listRepos(username)
       return {
         items: repos,
       }
@@ -36,13 +36,16 @@ export function RepoMutations() {
     async createRepo(
       _,
       { input }: MutationCreateRepoArgs,
-      ctx: { github: Github }
+      { repoManager }: { repoManager: RepoManager }
     ): Promise<Repo> {
-      return ctx.github.createRepo(input.name, input.description)
+      return repoManager.createRepo(input.name, input.description)
     },
-    async updateRepo(_, { input }: MutationUpdateRepoArgs): Promise<Repo> {
-      const github = new Github(input.token)
-      return github.updateRepo(
+    async updateRepo(
+      _,
+      { input }: MutationUpdateRepoArgs,
+      { repoManager }: { repoManager: RepoManager }
+    ): Promise<Repo> {
+      return repoManager.updateRepo(
         input.username,
         input.repo,
         input.name,
@@ -52,9 +55,9 @@ export function RepoMutations() {
     async deleteRepo(
       _,
       { input }: MutationDeleteRepoArgs,
-      ctx: { github: Github }
+      { repoManager }: { repoManager: RepoManager }
     ): Promise<Repo> {
-      return ctx.github.deleteRepo(input.username, input.repo)
+      return repoManager.deleteRepo(input.username, input.repo)
     },
   }
 }
