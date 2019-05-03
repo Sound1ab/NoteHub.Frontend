@@ -8,21 +8,16 @@ import { GithubUserFragment } from '../../fragments'
 
 export const ReadGithubUserDocument = gql`
   ${GithubUserFragment}
-  query ReadGithubUser($username: String!) {
-    readGithubUser(username: $username) {
+  query ReadGithubUser {
+    readGithubUser {
       ...githubUser
     }
   }
 `
 
-export function useReadGithubUser(username: string) {
+export function useReadGithubUser() {
   const { data } = useQuery<ReadGithubUserQuery, ReadGithubUserQueryVariables>(
-    ReadGithubUserDocument,
-    {
-      variables: {
-        username: username || '',
-      },
-    }
+    ReadGithubUserDocument
   )
 
   return data && data.readGithubUser

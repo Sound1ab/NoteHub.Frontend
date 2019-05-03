@@ -83,6 +83,9 @@ export type File = {
 export type GithubUser = {
   id: Scalars['Int']
   login: Scalars['String']
+  avatar_url: Scalars['String']
+  html_url: Scalars['String']
+  name: Scalars['String']
 }
 
 export type Links = {
@@ -304,10 +307,6 @@ export type QueryReadGithubUserAccessTokenArgs = {
   code: Scalars['String']
 }
 
-export type QueryReadGithubUserArgs = {
-  username: Scalars['String']
-}
-
 export type QueryReadUserArgs = {
   id: Scalars['ID']
 }
@@ -369,7 +368,7 @@ export type User = {
 }
 export type GithubUserFragment = { __typename?: 'GithubUser' } & Pick<
   GithubUser,
-  'id' | 'login'
+  'id' | 'login' | 'avatar_url' | 'html_url' | 'name'
 >
 
 export type DateFragment = { __typename?: 'Date' } & Pick<
@@ -485,9 +484,7 @@ export type ReadNotebookQuery = { __typename?: 'Query' } & {
   readNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
 }
 
-export type ReadGithubUserQueryVariables = {
-  username: Scalars['String']
-}
+export type ReadGithubUserQueryVariables = {}
 
 export type ReadGithubUserQuery = { __typename?: 'Query' } & {
   readGithubUser: Maybe<{ __typename?: 'GithubUser' } & GithubUserFragment>
@@ -500,6 +497,9 @@ export const githubUserFragmentDoc = gql`
   fragment githubUser on GithubUser {
     id
     login
+    avatar_url
+    html_url
+    name
   }
 `
 export const dateFragmentDoc = gql`
@@ -990,8 +990,8 @@ export function withReadNotebook<TProps, TChildProps = {}>(
   >(ReadNotebookDocument, operationOptions)
 }
 export const ReadGithubUserDocument = gql`
-  query ReadGithubUser($username: String!) {
-    readGithubUser(username: $username) {
+  query ReadGithubUser {
+    readGithubUser {
       ...githubUser
     }
   }

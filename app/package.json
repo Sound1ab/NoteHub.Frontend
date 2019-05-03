@@ -60,7 +60,8 @@
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "tslint 'src/**/*.{ts,tsx}' --project tsconfig.json --format stylish",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config codegen.yml",
+    "ssh": "docker exec -it $CONTAINER sh"
   },
   "eslintConfig": {
     "extends": "react-app"

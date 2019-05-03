@@ -1,8 +1,10 @@
 import React from 'react'
 import { COLOR } from '../../../enums'
+import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Container, Heading, Icon } from '../../atoms'
 import { Navigation, NewNotebook, Profile } from '../../molecules'
+import { Authorize } from '../../molecules/Authorize/Authorize'
 
 const Style = styled.div`
   position: relative;
@@ -26,10 +28,12 @@ const Style = styled.div`
 `
 
 export function Sidebar() {
+  const [state] = useStore()
+
   return (
     <Style>
       <Container className="Sidebar-wrapper">
-        <Profile />
+        {state.user.isAuthorized ? <Profile /> : <Authorize />}
         <NewNotebook />
         <div className="Sidebar-title-wrapper">
           <Icon icon="book" prefix="fa" marginRight />

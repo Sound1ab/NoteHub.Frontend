@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { COLOR } from '../../../enums'
-import { styled } from '../../../theme'
-import { Avatar, Heading, Icon } from '../../atoms'
 import { useStore } from '../../../hooks'
 import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
 import { username } from '../../../store'
+import { styled } from '../../../theme'
+import { Avatar, Heading, Icon } from '../../atoms'
 
 const Style = styled.div`
   display: flex;
@@ -32,8 +32,8 @@ const Style = styled.div`
 `
 
 export function Profile() {
-  const [state, dispatch] = useStore()
-  const user = useReadGithubUser(state.user.username)
+  const [, dispatch] = useStore()
+  const user = useReadGithubUser()
 
   useEffect(() => {
     dispatch(username((user && user.login) || ''))
@@ -41,16 +41,25 @@ export function Profile() {
 
   return (
     <Style>
-      <Avatar image="avatar.png" className="Profile-avatar" />
+      <Avatar
+        image={(user && user.avatar_url) || 'avatar-placeholder.png'}
+        className="Profile-avatar"
+      />
       <div className="Profile-details">
         <Heading color={COLOR.LIGHT} className="Profile-name" type="h4">
-          {state.user.isAuthorized ? state.user.username : 'Authorize'}
+          {user && user.login}
         </Heading>
         <div className="Profile-github">
           <Icon icon="github" prefix="fab" marginRight />
-          <Heading color={COLOR.LIGHT} type="h6">
-            View Github
-          </Heading>
+          <a
+            href={(user && user.html_url) || '#'}
+            target="_blank"
+            rel="noopener"
+          >
+            <Heading color={COLOR.LIGHT} type="h6">
+              View Github
+            </Heading>
+          </a>
         </div>
       </div>
     </Style>
