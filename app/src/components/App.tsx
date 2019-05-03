@@ -12,11 +12,15 @@ import {
   faTrash,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
-import React, { useReducer } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
+import { Route } from 'react-router'
 import { GoogleFont, TypographyStyle } from 'react-typography'
+import { LOCAL_STORAGE } from '../enums'
 import { client } from '../services/Apollo/clientConfig'
+import { LocalStorage } from '../services/LocalStorage'
+import { isAuthorized } from '../store'
 import { TActions } from '../store'
 import { initialState } from '../store'
 import { NoteContext } from '../store'
@@ -24,7 +28,7 @@ import { IState } from '../store'
 import { combinedReducers } from '../store/reducers'
 import { typography } from '../theme/typography'
 import { Editor } from './templates'
-import { GlobalStyle, ThemeProvider } from './utility'
+import { Callback, GlobalStyle, Router, ThemeProvider } from './utility'
 
 library.add(
   faGithub as any,
@@ -47,6 +51,14 @@ export function App() {
     initialState
   )
 
+  const token = LocalStorage.getItem(LOCAL_STORAGE.KEY)
+
+  useEffect(() => {
+    if (token) {
+      dispatch(isAuthorized(true))
+    }
+  }, [token])
+
   return (
     <ApolloProvider client={client}>
       <ApolloHooksProvider client={client}>
@@ -55,7 +67,10 @@ export function App() {
             <GlobalStyle />
             <TypographyStyle typography={typography} />
             <GoogleFont typography={typography} />
-            <Editor />
+            <Router>
+              <Route path="/" exact component={Editor} />
+              <Route path="/callback" exact component={Callback} />
+            </Router>
           </NoteContext.Provider>
         </ThemeProvider>
       </ApolloHooksProvider>

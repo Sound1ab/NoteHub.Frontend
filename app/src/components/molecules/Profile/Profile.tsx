@@ -40,28 +40,24 @@ export function Profile() {
   }, [user])
 
   return (
-    <Style>
-      <Avatar
-        image={(user && user.avatar_url) || 'avatar-placeholder.png'}
-        className="Profile-avatar"
-      />
-      <div className="Profile-details">
-        <Heading color={COLOR.LIGHT} className="Profile-name" type="h4">
-          {user && user.login}
-        </Heading>
-        <div className="Profile-github">
-          <Icon icon="github" prefix="fab" marginRight />
-          <a
-            href={(user && user.html_url) || '#'}
-            target="_blank"
-            rel="noopener"
-          >
+    <a href={(user && user.html_url) || '#'} target="_blank" rel="noopener">
+      <Style>
+        <Avatar
+          image={(user && user.avatar_url) || 'avatar-placeholder.png'}
+          className="Profile-avatar"
+        />
+        <div className="Profile-details">
+          <Heading color={COLOR.LIGHT} className="Profile-name" type="h4">
+            {user && user.login}
+          </Heading>
+          <div className="Profile-github">
+            <Icon icon="github" prefix="fab" marginRight />
             <Heading color={COLOR.LIGHT} type="h6">
               View Github
             </Heading>
-          </a>
+          </div>
         </div>
-      </div>
-    </Style>
+      </Style>
+    </a>
   )
 }

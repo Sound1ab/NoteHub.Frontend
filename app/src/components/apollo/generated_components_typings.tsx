@@ -305,6 +305,7 @@ export type QueryListReposArgs = {
 
 export type QueryReadGithubUserAccessTokenArgs = {
   code: Scalars['String']
+  state: Scalars['String']
 }
 
 export type QueryReadUserArgs = {
@@ -489,6 +490,16 @@ export type ReadGithubUserQueryVariables = {}
 export type ReadGithubUserQuery = { __typename?: 'Query' } & {
   readGithubUser: Maybe<{ __typename?: 'GithubUser' } & GithubUserFragment>
 }
+
+export type ReadGithubUserAccessTokenQueryVariables = {
+  code: Scalars['String']
+  state: Scalars['String']
+}
+
+export type ReadGithubUserAccessTokenQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'readGithubUserAccessToken'
+>
 
 import gql from 'graphql-tag'
 import * as React from 'react'
@@ -1032,6 +1043,56 @@ export function withReadGithubUser<TProps, TChildProps = {}>(
     ReadGithubUserQueryVariables,
     ReadGithubUserProps<TChildProps>
   >(ReadGithubUserDocument, operationOptions)
+}
+export const ReadGithubUserAccessTokenDocument = gql`
+  query ReadGithubUserAccessToken($code: String!, $state: String!) {
+    readGithubUserAccessToken(code: $code, state: $state)
+  }
+`
+
+export class ReadGithubUserAccessTokenComponent extends React.Component<
+  Partial<
+    ReactApollo.QueryProps<
+      ReadGithubUserAccessTokenQuery,
+      ReadGithubUserAccessTokenQueryVariables
+    >
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Query<
+        ReadGithubUserAccessTokenQuery,
+        ReadGithubUserAccessTokenQueryVariables
+      >
+        query={ReadGithubUserAccessTokenDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type ReadGithubUserAccessTokenProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<
+    ReadGithubUserAccessTokenQuery,
+    ReadGithubUserAccessTokenQueryVariables
+  >
+> &
+  TChildProps
+export function withReadGithubUserAccessToken<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ReadGithubUserAccessTokenQuery,
+        ReadGithubUserAccessTokenQueryVariables,
+        ReadGithubUserAccessTokenProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ReadGithubUserAccessTokenQuery,
+    ReadGithubUserAccessTokenQueryVariables,
+    ReadGithubUserAccessTokenProps<TChildProps>
+  >(ReadGithubUserAccessTokenDocument, operationOptions)
 }
 export interface IntrospectionResultData {
   __schema: {
