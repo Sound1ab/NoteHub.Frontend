@@ -71,6 +71,7 @@ export type DeleteUserInput = {
 }
 
 export type File = {
+  id: Scalars['String']
   type: Scalars['String']
   name: Scalars['String']
   path: Scalars['String']
@@ -318,7 +319,7 @@ export type QueryListUsersArgs = {
 }
 
 export type Repo = {
-  id: Scalars['Int']
+  id: Scalars['String']
   node_id: Scalars['String']
   name: Scalars['String']
   full_name: Scalars['String']
@@ -500,6 +501,7 @@ export type FileResolvers<
   Context = any,
   ParentType = ResolversTypes['File']
 > = {
+  id?: Resolver<ResolversTypes['String'], ParentType, Context>
   type?: Resolver<ResolversTypes['String'], ParentType, Context>
   name?: Resolver<ResolversTypes['String'], ParentType, Context>
   path?: Resolver<ResolversTypes['String'], ParentType, Context>
@@ -783,7 +785,7 @@ export type RepoResolvers<
   Context = any,
   ParentType = ResolversTypes['Repo']
 > = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, Context>
+  id?: Resolver<ResolversTypes['String'], ParentType, Context>
   node_id?: Resolver<ResolversTypes['String'], ParentType, Context>
   name?: Resolver<ResolversTypes['String'], ParentType, Context>
   full_name?: Resolver<ResolversTypes['String'], ParentType, Context>

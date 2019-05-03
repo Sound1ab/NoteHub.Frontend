@@ -12,7 +12,7 @@ extend type Mutation {
 
 ## Types
 type Repo {
-    id: Int!
+    id: String!
     node_id: String!
     name: String!
     full_name: String!

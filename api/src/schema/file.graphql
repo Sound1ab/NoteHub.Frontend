@@ -16,6 +16,7 @@ type Links {
 }
 
 type File {
+    id: String!
     type: String!
     name: String!
     path: String!

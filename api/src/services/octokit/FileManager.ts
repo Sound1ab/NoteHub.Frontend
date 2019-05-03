@@ -1,30 +1,30 @@
+import Octokit from '@octokit/rest'
+import { File } from '../../resolvers-types'
 import { Github } from './Base'
 
 export class FileManager extends Github {
-  public async readUser(username: string) {
-    const { data } = await this.octokit.users.getByUsername({
-      username,
-    })
-    return data
-  }
-
-  // File
-  public async readFile(owner: string, repo: string, name: string) {
+  public async readFile(
+    owner: string,
+    repo: string,
+    name: string
+  ): Promise<File> {
     const { data } = await this.octokit.repos.getContents({
       owner,
       path: `${name}`,
       repo: `${this.repoNamespace}${repo}`,
     })
-    return data
+    return this.formatFileResult(data)
   }
 
-  public async listFiles(owner: string, repo: string) {
+  public async listFiles(owner: string, repo: string): Promise<File> {
     const { data } = await this.octokit.repos.getContents({
       owner,
       path: '/',
       repo: `${this.repoNamespace}${repo}`,
     })
-    return data
+    return data.map((file: Octokit.ReposCreateFileResponse['content']) =>
+      this.formatFileResult(file)
+    )
   }
 
   public async createFile(
@@ -32,7 +32,7 @@ export class FileManager extends Github {
     repo: string,
     name: string,
     content?: string | null
-  ) {
+  ): Promise<File> {
     const { data } = await this.octokit.repos.createFile({
       content: content ? Github.encodeToBase64(content) : '',
       message: Github.formCommitMessage(name, 'create'),
@@ -40,7 +40,7 @@ export class FileManager extends Github {
       path: `${name}`,
       repo: `${this.repoNamespace}${repo}`,
     })
-    return data.content
+    return this.formatFileResult(data.content)
   }
 
   public async updateFile(
@@ -48,24 +48,29 @@ export class FileManager extends Github {
     repo: string,
     name: string,
     content?: string | null
-  ) {
+  ): Promise<File> {
     const { sha, content: originalContent } = await this.readFile(
       owner,
       repo,
       name
     )
     const { data } = await this.octokit.repos.updateFile({
-      content: content ? Github.encodeToBase64(content) : originalContent,
+      content:
+        (content && Github.encodeToBase64(content)) || (originalContent || ''),
       message: Github.formCommitMessage(name, 'update'),
       owner,
       path: `${name}`,
       repo: `${this.repoNamespace}${repo}`,
       sha,
     })
-    return data.content
+    return this.formatFileResult(data.content)
   }
 
-  public async deleteFile(owner: string, repo: string, name: string) {
+  public async deleteFile(
+    owner: string,
+    repo: string,
+    name: string
+  ): Promise<File> {
     const file = await this.readFile(owner, repo, name)
     await this.octokit.repos.deleteFile({
       message: Github.formCommitMessage(name, 'delete'),
@@ -75,5 +80,14 @@ export class FileManager extends Github {
       sha: file.sha,
     })
     return file
+  }
+
+  private formatFileResult(
+    file: Octokit.ReposCreateFileResponse['content']
+  ): File {
+    return {
+      ...file,
+      id: file.sha,
+    }
   }
 }
