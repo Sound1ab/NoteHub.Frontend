@@ -13,10 +13,10 @@ export function FileQueries() {
   return {
     async readFile(
       _,
-      { file, repo, username }: QueryReadFileArgs,
+      { filename, repo, username }: QueryReadFileArgs,
       { fileManager }: { fileManager: FileManager }
     ): Promise<File> {
-      return fileManager.readFile(username, repo, file)
+      return fileManager.readFile(username, repo, filename)
     },
     async listFiles(
       _,
@@ -35,24 +35,24 @@ export function FileMutations() {
   return {
     async createFile(
       _,
-      { input: { username, repo, name, content } }: MutationCreateFileArgs,
+      { input: { username, repo, filename, content } }: MutationCreateFileArgs,
       { fileManager }: { fileManager: FileManager }
     ): Promise<File> {
-      return fileManager.createFile(username, repo, name, content)
+      return fileManager.createFile(username, repo, filename, content)
     },
     async updateFile(
       _,
-      { input: { content, name, repo, username } }: MutationUpdateFileArgs,
+      { input: { content, filename, repo, username } }: MutationUpdateFileArgs,
       { fileManager }: { fileManager: FileManager }
     ): Promise<File> {
-      return fileManager.updateFile(username, repo, name, content)
+      return fileManager.updateFile(username, repo, filename, content)
     },
     async deleteFile(
       _,
-      { input: { name, repo, username } }: MutationDeleteFileArgs,
+      { input: { filename, repo, username } }: MutationDeleteFileArgs,
       { fileManager }: { fileManager: FileManager }
     ): Promise<File> {
-      return fileManager.deleteFile(username, repo, name)
+      return fileManager.deleteFile(username, repo, filename)
     },
   }
 }

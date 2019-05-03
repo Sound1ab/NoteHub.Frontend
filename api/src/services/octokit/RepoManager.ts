@@ -11,13 +11,15 @@ export class RepoManager extends Github {
     return this.formatRepoResult(data)
   }
 
-  public async listRepos(username: string): Promise<Repo> {
+  public async listRepos(username: string): Promise<Repo[]> {
     const { data } = await this.octokit.repos.listForUser({
       username,
     })
     return data
-      .filter((repo: Repo) => repo.name.includes(this.repoNamespace))
-      .map((repo: Repo) => this.formatRepoResult(repo as any))
+      .filter((repo: Octokit.AnyResponse['data']) =>
+        repo.name.includes(this.repoNamespace)
+      )
+      .map((repo: Octokit.AnyResponse['data']) => this.formatRepoResult(repo))
   }
 
   public async createRepo(
@@ -63,7 +65,6 @@ export class RepoManager extends Github {
   ): Repo {
     return {
       ...repo,
-      id: String(repo.id),
       name: this.removeNamespace(repo.name),
     }
   }

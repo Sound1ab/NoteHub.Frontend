@@ -8,7 +8,7 @@ import { RepoFragment } from '../../fragments'
 
 export const ListReposDocument = gql`
   ${RepoFragment}
-  query ListRepos($username: ID!) {
+  query ListRepos($username: String!) {
     listRepos(username: $username) {
       items {
         ...repo

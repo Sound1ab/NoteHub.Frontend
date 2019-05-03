@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { DeleteNotebookModal } from '..'
+import { CreateNoteModal } from '../'
 import { COLOR } from '../../../enums'
-import { useStore } from '../../../hooks/useStore'
+import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
-import { CreateNoteModal } from '../ConfirmationModals/CreateNoteModal'
 
 const Style = styled.div`
   position: relative;

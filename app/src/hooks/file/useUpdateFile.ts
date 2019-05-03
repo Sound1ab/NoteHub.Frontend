@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
 import {
-  ListFilesDocument,
-  ListFilesQuery,
-  ListFilesQueryVariables,
+  ReadFileDocument,
+  ReadFileQuery,
+  ReadFileQueryVariables,
   UpdateFileMutation,
   UpdateFileMutationVariables,
 } from '../../components/apollo/generated_components_typings'
@@ -18,7 +18,11 @@ export const UpdateFileDocument = gql`
   }
 `
 
-export function useUpdateFile(username: string, repo: string, file: string) {
+export function useUpdateFile(
+  username: string,
+  repo: string,
+  filename: string
+) {
   return useMutation<UpdateFileMutation, UpdateFileMutationVariables>(
     UpdateFileDocument,
     {
@@ -26,30 +30,13 @@ export function useUpdateFile(username: string, repo: string, file: string) {
         const updatedFile = data && data.updateFile
         if (!updatedFile) return
 
-        const result = cache.readQuery<ListFilesQuery, ListFilesQueryVariables>(
-          {
-            query: ListFilesDocument,
-            variables: {
-              repo,
-              username,
-            },
-          }
-        )
-
-        const files =
-          (result && result.listFiles && result.listFiles.items) || []
-
-        cache.writeQuery<ListFilesQuery, ListFilesQueryVariables>({
+        cache.writeQuery<ReadFileQuery, ReadFileQueryVariables>({
           data: {
-            listFiles: {
-              __typename: 'ModelFileConnection',
-              items: files
-                .filter(savedFiles => savedFiles && savedFiles.name !== file)
-                .concat([{ ...updatedFile, __typename: 'File' }]),
-            },
+            readFile: updatedFile,
           },
-          query: ListFilesDocument,
+          query: ReadFileDocument,
           variables: {
+            filename,
             repo,
             username,
           },

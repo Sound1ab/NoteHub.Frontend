@@ -42,7 +42,9 @@ export function useDeleteFile(username: string, repo: string) {
         cache.writeQuery<ListFilesQuery, ListFilesQueryVariables>({
           data: {
             listFiles: {
-              items: files.filter(file => file && file.id !== deletedFile.id),
+              items: files.filter(
+                file => file && file.filename !== deletedFile.filename
+              ),
             },
           },
           query: ListFilesDocument,

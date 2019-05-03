@@ -13,18 +13,23 @@ export class FileManager extends Github {
       path: `${name}`,
       repo: `${this.repoNamespace}${repo}`,
     })
-    return this.formatFileResult(data)
+    return {
+      ...data,
+      content: Github.decodeFromBase64(data.content),
+      filename: data.name,
+    }
   }
 
-  public async listFiles(owner: string, repo: string): Promise<File> {
+  public async listFiles(owner: string, repo: string): Promise<File[]> {
     const { data } = await this.octokit.repos.getContents({
       owner,
       path: '/',
       repo: `${this.repoNamespace}${repo}`,
     })
-    return data.map((file: Octokit.ReposCreateFileResponse['content']) =>
-      this.formatFileResult(file)
-    )
+    return data.map((file: Octokit.AnyResponse['data']) => ({
+      ...file,
+      filename: file.name,
+    }))
   }
 
   public async createFile(
@@ -80,17 +85,5 @@ export class FileManager extends Github {
       sha: file.sha,
     })
     return file
-  }
-
-  private formatFileResult(
-    file: Octokit.ReposCreateFileResponse['content'] & { content: string }
-  ): File {
-    return {
-      ...file,
-      content: file.content
-        ? Github.decodeFromBase64(file.content)
-        : file.content,
-      id: file.sha,
-    }
   }
 }

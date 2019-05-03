@@ -8,18 +8,18 @@ import { FileFragment } from '../../fragments'
 
 export const ReadFile = gql`
   ${FileFragment}
-  query ReadFile($username: String!, $repo: String!, $file: String!) {
-    readFile(username: $username, repo: $repo, file: $file) {
+  query ReadFile($username: String!, $repo: String!, $filename: String!) {
+    readFile(username: $username, repo: $repo, filename: $filename) {
       ...file
     }
   }
 `
 
-export function useReadFile(username: string, repo: string, file: string) {
+export function useReadFile(username: string, repo: string, filename: string) {
   const { data } = useQuery<ReadFileQuery, ReadFileQueryVariables>(ReadFile, {
-    fetchPolicy: 'no-cache',
+    // fetchPolicy: 'no-cache',
     variables: {
-      file,
+      filename,
       repo,
       username,
     },

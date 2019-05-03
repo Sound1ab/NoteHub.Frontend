@@ -2,9 +2,7 @@ import gql from 'graphql-tag'
 
 export const FileFragment = gql`
   fragment file on File {
-    id
-    type
-    name
+    filename
     path
     content
     sha

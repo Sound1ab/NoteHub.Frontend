@@ -1,7 +1,7 @@
 ## Base
 extend type Query {
-    readFile(username: String!, repo: String!, file: String!): File
-    listFiles(username: ID!, repo: String!): ModelFileConnection
+    readFile(username: String!, repo: String!, filename: String!): File
+    listFiles(username: String!, repo: String!): ModelFileConnection
 }
 
 extend type Mutation {
@@ -16,9 +16,7 @@ type Links {
 }
 
 type File {
-    id: String!
-    type: String!
-    name: String!
+    filename: String!
     path: String!
     content: String
     sha: String!
@@ -34,19 +32,19 @@ type ModelFileConnection {
 input CreateFileInput {
     username: String!
     repo: String!
-    name: String!
+    filename: String!
     content: String
 }
 
 input UpdateFileInput {
     username: String!
     repo: String!
-    name: String!
+    filename: String!
     content: String
 }
 
 input DeleteFileInput {
     username: String!
     repo: String!
-    name: String!
+    filename: String!
 }

@@ -13,7 +13,7 @@ export type Scalars = {
 export type CreateFileInput = {
   username: Scalars['String']
   repo: Scalars['String']
-  name: Scalars['String']
+  filename: Scalars['String']
   content?: Maybe<Scalars['String']>
 }
 
@@ -50,7 +50,7 @@ export type Date = {
 export type DeleteFileInput = {
   username: Scalars['String']
   repo: Scalars['String']
-  name: Scalars['String']
+  filename: Scalars['String']
 }
 
 export type DeleteNotebookInput = {
@@ -71,9 +71,7 @@ export type DeleteUserInput = {
 }
 
 export type File = {
-  id: Scalars['String']
-  type: Scalars['String']
-  name: Scalars['String']
+  filename: Scalars['String']
   path: Scalars['String']
   content?: Maybe<Scalars['String']>
   sha: Scalars['String']
@@ -266,11 +264,11 @@ export type Query = {
 export type QueryReadFileArgs = {
   username: Scalars['String']
   repo: Scalars['String']
-  file: Scalars['String']
+  filename: Scalars['String']
 }
 
 export type QueryListFilesArgs = {
-  username: Scalars['ID']
+  username: Scalars['String']
   repo: Scalars['String']
 }
 
@@ -300,7 +298,7 @@ export type QueryReadRepoArgs = {
 }
 
 export type QueryListReposArgs = {
-  username: Scalars['ID']
+  username: Scalars['String']
 }
 
 export type QueryReadGithubUserAccessTokenArgs = {
@@ -319,7 +317,7 @@ export type QueryListUsersArgs = {
 }
 
 export type Repo = {
-  id: Scalars['String']
+  id: Scalars['Int']
   node_id: Scalars['String']
   name: Scalars['String']
   full_name: Scalars['String']
@@ -329,7 +327,7 @@ export type Repo = {
 export type UpdateFileInput = {
   username: Scalars['String']
   repo: Scalars['String']
-  name: Scalars['String']
+  filename: Scalars['String']
   content?: Maybe<Scalars['String']>
 }
 
@@ -445,8 +443,8 @@ export type ResolversTypes = {
   String: Scalars['String']
   File: File
   Links: Links
-  ID: Scalars['ID']
   ModelFileConnection: ModelFileConnection
+  ID: Scalars['ID']
   Note: Note
   Date: Date
   Int: Scalars['Int']
@@ -501,9 +499,7 @@ export type FileResolvers<
   Context = any,
   ParentType = ResolversTypes['File']
 > = {
-  id?: Resolver<ResolversTypes['String'], ParentType, Context>
-  type?: Resolver<ResolversTypes['String'], ParentType, Context>
-  name?: Resolver<ResolversTypes['String'], ParentType, Context>
+  filename?: Resolver<ResolversTypes['String'], ParentType, Context>
   path?: Resolver<ResolversTypes['String'], ParentType, Context>
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, Context>
   sha?: Resolver<ResolversTypes['String'], ParentType, Context>
@@ -785,7 +781,7 @@ export type RepoResolvers<
   Context = any,
   ParentType = ResolversTypes['Repo']
 > = {
-  id?: Resolver<ResolversTypes['String'], ParentType, Context>
+  id?: Resolver<ResolversTypes['Int'], ParentType, Context>
   node_id?: Resolver<ResolversTypes['String'], ParentType, Context>
   name?: Resolver<ResolversTypes['String'], ParentType, Context>
   full_name?: Resolver<ResolversTypes['String'], ParentType, Context>

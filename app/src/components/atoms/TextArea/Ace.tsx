@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AceEditor from 'react-ace'
-import { useReadNote, useStore, useUpdateNote } from '../../../hooks'
+import { useStore } from '../../../hooks'
 
 import 'brace/mode/markdown'
 import 'brace/theme/github'
@@ -44,7 +44,7 @@ export function Ace() {
         input: {
           // excerpt: editor.session.getLine(0),
           content: editor.getValue(),
-          name: state.notebook.activeNote,
+          filename: state.notebook.activeNote,
           repo: state.notebook.activeNotebook,
           username: state.user.username,
         },

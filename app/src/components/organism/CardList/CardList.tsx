@@ -47,24 +47,24 @@ export function CardList() {
           notes
             .sort((noteA, noteB) => {
               if (!noteA || !noteB) return 0
-              return noteA.name < noteB.name ? -1 : 1
+              return noteA.filename < noteB.filename ? -1 : 1
             })
             .map(note => {
               if (!note) return
               return (
                 <span
                   className="CardList-card-wrapper"
-                  onClick={handleCardClick.bind(null, note.name)}
+                  onClick={handleCardClick.bind(null, note.filename)}
                 >
                   <Card
-                    key={note.id}
-                    id={note.id}
-                    title={note.name}
+                    key={note.sha}
+                    id={note.sha}
+                    title={note.filename}
                     excerpt={''}
                     createdAt={''}
                     isSelected={
                       !!state.notebook.activeNote &&
-                      state.notebook.activeNote === note.name
+                      state.notebook.activeNote === note.filename
                     }
                   />
                 </span>

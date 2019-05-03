@@ -14,7 +14,7 @@ export type Scalars = {
 export type CreateFileInput = {
   username: Scalars['String']
   repo: Scalars['String']
-  name: Scalars['String']
+  filename: Scalars['String']
   content?: Maybe<Scalars['String']>
 }
 
@@ -51,7 +51,7 @@ export type Date = {
 export type DeleteFileInput = {
   username: Scalars['String']
   repo: Scalars['String']
-  name: Scalars['String']
+  filename: Scalars['String']
 }
 
 export type DeleteNotebookInput = {
@@ -72,9 +72,7 @@ export type DeleteUserInput = {
 }
 
 export type File = {
-  id: Scalars['String']
-  type: Scalars['String']
-  name: Scalars['String']
+  filename: Scalars['String']
   path: Scalars['String']
   content?: Maybe<Scalars['String']>
   sha: Scalars['String']
@@ -267,11 +265,11 @@ export type Query = {
 export type QueryReadFileArgs = {
   username: Scalars['String']
   repo: Scalars['String']
-  file: Scalars['String']
+  filename: Scalars['String']
 }
 
 export type QueryListFilesArgs = {
-  username: Scalars['ID']
+  username: Scalars['String']
   repo: Scalars['String']
 }
 
@@ -301,7 +299,7 @@ export type QueryReadRepoArgs = {
 }
 
 export type QueryListReposArgs = {
-  username: Scalars['ID']
+  username: Scalars['String']
 }
 
 export type QueryReadGithubUserAccessTokenArgs = {
@@ -320,7 +318,7 @@ export type QueryListUsersArgs = {
 }
 
 export type Repo = {
-  id: Scalars['String']
+  id: Scalars['Int']
   node_id: Scalars['String']
   name: Scalars['String']
   full_name: Scalars['String']
@@ -330,7 +328,7 @@ export type Repo = {
 export type UpdateFileInput = {
   username: Scalars['String']
   repo: Scalars['String']
-  name: Scalars['String']
+  filename: Scalars['String']
   content?: Maybe<Scalars['String']>
 }
 
@@ -370,7 +368,7 @@ export type User = {
 }
 export type FileFragment = { __typename?: 'File' } & Pick<
   File,
-  'id' | 'type' | 'name' | 'path' | 'content' | 'sha'
+  'filename' | 'path' | 'content' | 'sha'
 > & { _links: { __typename?: 'Links' } & Pick<Links, 'html'> }
 
 export type RepoFragment = { __typename?: 'Repo' } & Pick<
@@ -429,7 +427,7 @@ export type DeleteFileMutation = { __typename?: 'Mutation' } & {
 }
 
 export type ListFilesQueryVariables = {
-  username: Scalars['ID']
+  username: Scalars['String']
   repo: Scalars['String']
 }
 
@@ -444,7 +442,7 @@ export type ListFilesQuery = { __typename?: 'Query' } & {
 export type ReadFileQueryVariables = {
   username: Scalars['String']
   repo: Scalars['String']
-  file: Scalars['String']
+  filename: Scalars['String']
 }
 
 export type ReadFileQuery = { __typename?: 'Query' } & {
@@ -560,7 +558,7 @@ export type DeleteRepoMutation = { __typename?: 'Mutation' } & {
 }
 
 export type ListReposQueryVariables = {
-  username: Scalars['ID']
+  username: Scalars['String']
 }
 
 export type ListReposQuery = { __typename?: 'Query' } & {
@@ -601,9 +599,7 @@ import * as React from 'react'
 import * as ReactApollo from 'react-apollo'
 export const fileFragmentDoc = gql`
   fragment file on File {
-    id
-    type
-    name
+    filename
     path
     content
     sha
@@ -777,7 +773,7 @@ export function withDeleteFile<TProps, TChildProps = {}>(
   >(DeleteFileDocument, operationOptions)
 }
 export const ListFilesDocument = gql`
-  query ListFiles($username: ID!, $repo: String!) {
+  query ListFiles($username: String!, $repo: String!) {
     listFiles(username: $username, repo: $repo) {
       items {
         ...file
@@ -821,8 +817,8 @@ export function withListFiles<TProps, TChildProps = {}>(
   >(ListFilesDocument, operationOptions)
 }
 export const ReadFileDocument = gql`
-  query ReadFile($username: String!, $repo: String!, $file: String!) {
-    readFile(username: $username, repo: $repo, file: $file) {
+  query ReadFile($username: String!, $repo: String!, $filename: String!) {
+    readFile(username: $username, repo: $repo, filename: $filename) {
       ...file
     }
   }
@@ -1443,7 +1439,7 @@ export function withDeleteRepo<TProps, TChildProps = {}>(
   >(DeleteRepoDocument, operationOptions)
 }
 export const ListReposDocument = gql`
-  query ListRepos($username: ID!) {
+  query ListRepos($username: String!) {
     listRepos(username: $username) {
       items {
         ...repo

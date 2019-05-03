@@ -50,7 +50,7 @@ export function useCreateFile(username: string, repo: string) {
           },
           query: ListFilesDocument,
           variables: {
-            repo: repo,
+            repo,
             username,
           },
         })

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { useCreateNote, useStore } from '../../../hooks'
-import { Heading, Modal } from '../../atoms'
+import { useStore } from '../../../hooks'
 import { useCreateFile } from '../../../hooks/file/useCreateFile'
+import { Heading, Modal } from '../../atoms'
 
 interface ICreateNoteModal {
   isOpen: boolean
@@ -27,7 +27,7 @@ export function CreateNoteModal({
       variables: {
         input: {
           content: '',
-          name: `${inputValue}.md`,
+          filename: `${inputValue}.md`,
           repo: activeNotebook,
           username: state.user.username,
         },

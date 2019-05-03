@@ -8,7 +8,7 @@ import { FileFragment } from '../../fragments'
 
 export const ListFilesDocument = gql`
   ${FileFragment}
-  query ListFiles($username: ID!, $repo: String!) {
+  query ListFiles($username: String!, $repo: String!) {
     listFiles(username: $username, repo: $repo) {
       items {
         ...file
