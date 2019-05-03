@@ -15,7 +15,7 @@ export type CreateFileInput = {
   username: Scalars['String']
   repo: Scalars['String']
   name: Scalars['String']
-  markdown?: Maybe<Scalars['String']>
+  content?: Maybe<Scalars['String']>
 }
 
 export type CreateNotebookInput = {
@@ -26,7 +26,7 @@ export type CreateNotebookInput = {
 export type CreateNoteInput = {
   notebookId: Scalars['ID']
   title: Scalars['String']
-  markdown: Scalars['String']
+  content: Scalars['String']
   excerpt: Scalars['String']
 }
 
@@ -72,6 +72,7 @@ export type DeleteUserInput = {
 }
 
 export type File = {
+  id: Scalars['String']
   type: Scalars['String']
   name: Scalars['String']
   path: Scalars['String']
@@ -235,7 +236,7 @@ export type MutationDeleteUserArgs = {
 export type Note = {
   id: Scalars['ID']
   title: Scalars['String']
-  markdown: Scalars['String']
+  content: Scalars['String']
   excerpt: Scalars['String']
   createdAt: Date
   updatedAt: Date
@@ -319,7 +320,7 @@ export type QueryListUsersArgs = {
 }
 
 export type Repo = {
-  id: Scalars['Int']
+  id: Scalars['String']
   node_id: Scalars['String']
   name: Scalars['String']
   full_name: Scalars['String']
@@ -330,7 +331,7 @@ export type UpdateFileInput = {
   username: Scalars['String']
   repo: Scalars['String']
   name: Scalars['String']
-  markdown?: Maybe<Scalars['String']>
+  content?: Maybe<Scalars['String']>
 }
 
 export type UpdateNotebookInput = {
@@ -341,7 +342,7 @@ export type UpdateNotebookInput = {
 export type UpdateNoteInput = {
   id: Scalars['ID']
   title?: Maybe<Scalars['String']>
-  markdown?: Maybe<Scalars['String']>
+  content?: Maybe<Scalars['String']>
   excerpt?: Maybe<Scalars['String']>
 }
 
@@ -367,6 +368,16 @@ export type User = {
   createdAt: Date
   updatedAt: Date
 }
+export type FileFragment = { __typename?: 'File' } & Pick<
+  File,
+  'id' | 'type' | 'name' | 'path' | 'content' | 'sha'
+> & { _links: { __typename?: 'Links' } & Pick<Links, 'html'> }
+
+export type RepoFragment = { __typename?: 'Repo' } & Pick<
+  Repo,
+  'id' | 'node_id' | 'name' | 'full_name'
+>
+
 export type GithubUserFragment = { __typename?: 'GithubUser' } & Pick<
   GithubUser,
   'id' | 'login' | 'avatar_url' | 'html_url' | 'name'
@@ -379,7 +390,7 @@ export type DateFragment = { __typename?: 'Date' } & Pick<
 
 export type NoteFragment = { __typename?: 'Note' } & Pick<
   Note,
-  'id' | 'title' | 'markdown' | 'excerpt'
+  'id' | 'title' | 'content' | 'excerpt'
 > & {
     createdAt: { __typename?: 'Date' } & DateFragment
     updatedAt: { __typename?: 'Date' } & DateFragment
@@ -400,6 +411,53 @@ export type UserFragment = { __typename?: 'User' } & Pick<
     createdAt: { __typename?: 'Date' } & DateFragment
     updatedAt: { __typename?: 'Date' } & DateFragment
   }
+
+export type CreateFileMutationVariables = {
+  input: CreateFileInput
+}
+
+export type CreateFileMutation = { __typename?: 'Mutation' } & {
+  createFile: Maybe<{ __typename?: 'File' } & FileFragment>
+}
+
+export type DeleteFileMutationVariables = {
+  input: DeleteFileInput
+}
+
+export type DeleteFileMutation = { __typename?: 'Mutation' } & {
+  deleteFile: Maybe<{ __typename?: 'File' } & FileFragment>
+}
+
+export type ListFilesQueryVariables = {
+  username: Scalars['ID']
+  repo: Scalars['String']
+}
+
+export type ListFilesQuery = { __typename?: 'Query' } & {
+  listFiles: Maybe<
+    { __typename?: 'ModelFileConnection' } & {
+      items: Maybe<Array<Maybe<{ __typename?: 'File' } & FileFragment>>>
+    }
+  >
+}
+
+export type ReadFileQueryVariables = {
+  username: Scalars['String']
+  repo: Scalars['String']
+  file: Scalars['String']
+}
+
+export type ReadFileQuery = { __typename?: 'Query' } & {
+  readFile: Maybe<{ __typename?: 'File' } & FileFragment>
+}
+
+export type UpdateFileMutationVariables = {
+  input: UpdateFileInput
+}
+
+export type UpdateFileMutation = { __typename?: 'Mutation' } & {
+  updateFile: Maybe<{ __typename?: 'File' } & FileFragment>
+}
 
 export type CreateNoteMutationVariables = {
   input: CreateNoteInput
@@ -485,6 +543,43 @@ export type ReadNotebookQuery = { __typename?: 'Query' } & {
   readNotebook: Maybe<{ __typename?: 'Notebook' } & NotebookFragment>
 }
 
+export type CreateRepoMutationVariables = {
+  input: CreateRepoInput
+}
+
+export type CreateRepoMutation = { __typename?: 'Mutation' } & {
+  createRepo: Maybe<{ __typename?: 'Repo' } & RepoFragment>
+}
+
+export type DeleteRepoMutationVariables = {
+  input: DeleteRepoInput
+}
+
+export type DeleteRepoMutation = { __typename?: 'Mutation' } & {
+  deleteRepo: Maybe<{ __typename?: 'Repo' } & RepoFragment>
+}
+
+export type ListReposQueryVariables = {
+  username: Scalars['ID']
+}
+
+export type ListReposQuery = { __typename?: 'Query' } & {
+  listRepos: Maybe<
+    { __typename?: 'ModelRepoConnection' } & {
+      items: Maybe<Array<Maybe<{ __typename?: 'Repo' } & RepoFragment>>>
+    }
+  >
+}
+
+export type ReadRepoQueryVariables = {
+  username: Scalars['String']
+  repo: Scalars['String']
+}
+
+export type ReadRepoQuery = { __typename?: 'Query' } & {
+  readRepo: Maybe<{ __typename?: 'Repo' } & RepoFragment>
+}
+
 export type ReadGithubUserQueryVariables = {}
 
 export type ReadGithubUserQuery = { __typename?: 'Query' } & {
@@ -504,6 +599,27 @@ export type ReadGithubUserAccessTokenQuery = { __typename?: 'Query' } & Pick<
 import gql from 'graphql-tag'
 import * as React from 'react'
 import * as ReactApollo from 'react-apollo'
+export const fileFragmentDoc = gql`
+  fragment file on File {
+    id
+    type
+    name
+    path
+    content
+    sha
+    _links {
+      html
+    }
+  }
+`
+export const repoFragmentDoc = gql`
+  fragment repo on Repo {
+    id
+    node_id
+    name
+    full_name
+  }
+`
 export const githubUserFragmentDoc = gql`
   fragment githubUser on GithubUser {
     id
@@ -525,7 +641,7 @@ export const noteFragmentDoc = gql`
   fragment note on Note {
     id
     title
-    markdown
+    content
     excerpt
     createdAt {
       ...date
@@ -564,6 +680,236 @@ export const userFragmentDoc = gql`
   }
   ${dateFragmentDoc}
 `
+export const CreateFileDocument = gql`
+  mutation CreateFile($input: CreateFileInput!) {
+    createFile(input: $input) {
+      ...file
+    }
+  }
+  ${fileFragmentDoc}
+`
+
+export class CreateFileComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<CreateFileMutation, CreateFileMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<CreateFileMutation, CreateFileMutationVariables>
+        mutation={CreateFileDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type CreateFileProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<CreateFileMutation, CreateFileMutationVariables>
+> &
+  TChildProps
+export type CreateFileMutationFn = ReactApollo.MutationFn<
+  CreateFileMutation,
+  CreateFileMutationVariables
+>
+export function withCreateFile<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        CreateFileMutation,
+        CreateFileMutationVariables,
+        CreateFileProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    CreateFileMutation,
+    CreateFileMutationVariables,
+    CreateFileProps<TChildProps>
+  >(CreateFileDocument, operationOptions)
+}
+export const DeleteFileDocument = gql`
+  mutation DeleteFile($input: DeleteFileInput!) {
+    deleteFile(input: $input) {
+      ...file
+    }
+  }
+  ${fileFragmentDoc}
+`
+
+export class DeleteFileComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<DeleteFileMutation, DeleteFileMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<DeleteFileMutation, DeleteFileMutationVariables>
+        mutation={DeleteFileDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type DeleteFileProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<DeleteFileMutation, DeleteFileMutationVariables>
+> &
+  TChildProps
+export type DeleteFileMutationFn = ReactApollo.MutationFn<
+  DeleteFileMutation,
+  DeleteFileMutationVariables
+>
+export function withDeleteFile<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        DeleteFileMutation,
+        DeleteFileMutationVariables,
+        DeleteFileProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    DeleteFileMutation,
+    DeleteFileMutationVariables,
+    DeleteFileProps<TChildProps>
+  >(DeleteFileDocument, operationOptions)
+}
+export const ListFilesDocument = gql`
+  query ListFiles($username: ID!, $repo: String!) {
+    listFiles(username: $username, repo: $repo) {
+      items {
+        ...file
+      }
+    }
+  }
+  ${fileFragmentDoc}
+`
+
+export class ListFilesComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ListFilesQuery, ListFilesQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ListFilesQuery, ListFilesQueryVariables>
+        query={ListFilesDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type ListFilesProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ListFilesQuery, ListFilesQueryVariables>
+> &
+  TChildProps
+export function withListFiles<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ListFilesQuery,
+        ListFilesQueryVariables,
+        ListFilesProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ListFilesQuery,
+    ListFilesQueryVariables,
+    ListFilesProps<TChildProps>
+  >(ListFilesDocument, operationOptions)
+}
+export const ReadFileDocument = gql`
+  query ReadFile($username: String!, $repo: String!, $file: String!) {
+    readFile(username: $username, repo: $repo, file: $file) {
+      ...file
+    }
+  }
+  ${fileFragmentDoc}
+`
+
+export class ReadFileComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ReadFileQuery, ReadFileQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ReadFileQuery, ReadFileQueryVariables>
+        query={ReadFileDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type ReadFileProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ReadFileQuery, ReadFileQueryVariables>
+> &
+  TChildProps
+export function withReadFile<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ReadFileQuery,
+        ReadFileQueryVariables,
+        ReadFileProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ReadFileQuery,
+    ReadFileQueryVariables,
+    ReadFileProps<TChildProps>
+  >(ReadFileDocument, operationOptions)
+}
+export const UpdateFileDocument = gql`
+  mutation UpdateFile($input: UpdateFileInput!) {
+    updateFile(input: $input) {
+      ...file
+    }
+  }
+  ${fileFragmentDoc}
+`
+
+export class UpdateFileComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<UpdateFileMutation, UpdateFileMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<UpdateFileMutation, UpdateFileMutationVariables>
+        mutation={UpdateFileDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type UpdateFileProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<UpdateFileMutation, UpdateFileMutationVariables>
+> &
+  TChildProps
+export type UpdateFileMutationFn = ReactApollo.MutationFn<
+  UpdateFileMutation,
+  UpdateFileMutationVariables
+>
+export function withUpdateFile<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        UpdateFileMutation,
+        UpdateFileMutationVariables,
+        UpdateFileProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    UpdateFileMutation,
+    UpdateFileMutationVariables,
+    UpdateFileProps<TChildProps>
+  >(UpdateFileDocument, operationOptions)
+}
 export const CreateNoteDocument = gql`
   mutation CreateNote($input: CreateNoteInput!) {
     createNote(input: $input) {
@@ -999,6 +1345,188 @@ export function withReadNotebook<TProps, TChildProps = {}>(
     ReadNotebookQueryVariables,
     ReadNotebookProps<TChildProps>
   >(ReadNotebookDocument, operationOptions)
+}
+export const CreateRepoDocument = gql`
+  mutation CreateRepo($input: CreateRepoInput!) {
+    createRepo(input: $input) {
+      ...repo
+    }
+  }
+  ${repoFragmentDoc}
+`
+
+export class CreateRepoComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<CreateRepoMutation, CreateRepoMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<CreateRepoMutation, CreateRepoMutationVariables>
+        mutation={CreateRepoDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type CreateRepoProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<CreateRepoMutation, CreateRepoMutationVariables>
+> &
+  TChildProps
+export type CreateRepoMutationFn = ReactApollo.MutationFn<
+  CreateRepoMutation,
+  CreateRepoMutationVariables
+>
+export function withCreateRepo<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        CreateRepoMutation,
+        CreateRepoMutationVariables,
+        CreateRepoProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    CreateRepoMutation,
+    CreateRepoMutationVariables,
+    CreateRepoProps<TChildProps>
+  >(CreateRepoDocument, operationOptions)
+}
+export const DeleteRepoDocument = gql`
+  mutation DeleteRepo($input: DeleteRepoInput!) {
+    deleteRepo(input: $input) {
+      ...repo
+    }
+  }
+  ${repoFragmentDoc}
+`
+
+export class DeleteRepoComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<DeleteRepoMutation, DeleteRepoMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<DeleteRepoMutation, DeleteRepoMutationVariables>
+        mutation={DeleteRepoDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type DeleteRepoProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<DeleteRepoMutation, DeleteRepoMutationVariables>
+> &
+  TChildProps
+export type DeleteRepoMutationFn = ReactApollo.MutationFn<
+  DeleteRepoMutation,
+  DeleteRepoMutationVariables
+>
+export function withDeleteRepo<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        DeleteRepoMutation,
+        DeleteRepoMutationVariables,
+        DeleteRepoProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    DeleteRepoMutation,
+    DeleteRepoMutationVariables,
+    DeleteRepoProps<TChildProps>
+  >(DeleteRepoDocument, operationOptions)
+}
+export const ListReposDocument = gql`
+  query ListRepos($username: ID!) {
+    listRepos(username: $username) {
+      items {
+        ...repo
+      }
+    }
+  }
+  ${repoFragmentDoc}
+`
+
+export class ListReposComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ListReposQuery, ListReposQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ListReposQuery, ListReposQueryVariables>
+        query={ListReposDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type ListReposProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ListReposQuery, ListReposQueryVariables>
+> &
+  TChildProps
+export function withListRepos<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ListReposQuery,
+        ListReposQueryVariables,
+        ListReposProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ListReposQuery,
+    ListReposQueryVariables,
+    ListReposProps<TChildProps>
+  >(ListReposDocument, operationOptions)
+}
+export const ReadRepoDocument = gql`
+  query ReadRepo($username: String!, $repo: String!) {
+    readRepo(username: $username, repo: $repo) {
+      ...repo
+    }
+  }
+  ${repoFragmentDoc}
+`
+
+export class ReadRepoComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ReadRepoQuery, ReadRepoQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ReadRepoQuery, ReadRepoQueryVariables>
+        query={ReadRepoDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type ReadRepoProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ReadRepoQuery, ReadRepoQueryVariables>
+> &
+  TChildProps
+export function withReadRepo<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ReadRepoQuery,
+        ReadRepoQueryVariables,
+        ReadRepoProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ReadRepoQuery,
+    ReadRepoQueryVariables,
+    ReadRepoProps<TChildProps>
+  >(ReadRepoDocument, operationOptions)
 }
 export const ReadGithubUserDocument = gql`
   query ReadGithubUser {

@@ -35,14 +35,14 @@ input CreateFileInput {
     username: String!
     repo: String!
     name: String!
-    markdown: String
+    content: String
 }
 
 input UpdateFileInput {
     username: String!
     repo: String!
     name: String!
-    markdown: String
+    content: String
 }
 
 input DeleteFileInput {

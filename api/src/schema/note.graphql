@@ -14,7 +14,7 @@ extend type Mutation {
 type Note {
     id: ID!
     title: String!
-    markdown: String!
+    content: String!
     excerpt: String!
     createdAt: Date!
     updatedAt: Date!
@@ -35,14 +35,14 @@ input ModelNoteFilterInput {
 input CreateNoteInput {
     notebookId: ID!
     title: String!
-    markdown: String!
+    content: String!
     excerpt: String!
 }
 
 input UpdateNoteInput {
     id: ID!
     title: String
-    markdown: String
+    content: String
     excerpt: String
 }
 

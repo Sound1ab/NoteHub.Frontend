@@ -8,6 +8,10 @@ export class Github {
     return Buffer.from(str, 'binary').toString('base64')
   }
 
+  public static decodeFromBase64(str: string) {
+    return Buffer.from(str, 'base64').toString('ascii')
+  }
+
   public static formCommitMessage(
     name: string,
     operation: 'create' | 'update' | 'delete'

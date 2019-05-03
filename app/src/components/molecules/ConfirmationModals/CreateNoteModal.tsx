@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { useCreateNote } from '../../../hooks'
+import { useCreateNote, useStore } from '../../../hooks'
 import { Heading, Modal } from '../../atoms'
+import { useCreateFile } from '../../../hooks/file/useCreateFile'
 
 interface ICreateNoteModal {
   isOpen: boolean
@@ -13,8 +14,9 @@ export function CreateNoteModal({
   onRequestClose,
   activeNotebook,
 }: ICreateNoteModal) {
+  const [state] = useStore()
   const [inputValue, setInputValue] = useState('')
-  const createNewNote = useCreateNote(activeNotebook)
+  const createNewNote = useCreateFile(state.user.username, activeNotebook || '')
 
   async function handleCreateNewNote() {
     if (!activeNotebook) {
@@ -24,10 +26,10 @@ export function CreateNoteModal({
     await createNewNote({
       variables: {
         input: {
-          excerpt: '',
-          markdown: '',
-          notebookId: activeNotebook,
-          title: inputValue,
+          content: '',
+          name: `${inputValue}.md`,
+          repo: activeNotebook,
+          username: state.user.username,
         },
       },
     })

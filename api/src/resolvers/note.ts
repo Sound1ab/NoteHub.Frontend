@@ -57,7 +57,7 @@ export async function NoteMutations() {
       Note,
       async (
         repository,
-        { input: { title, excerpt, markdown, notebookId } }
+        { input: { title, excerpt, content, notebookId } }
       ) => {
         const notebookRepository = await getConnection().getRepository(Notebook)
         const notebook = await notebookRepository.findOne(notebookId)
@@ -66,7 +66,7 @@ export async function NoteMutations() {
         const note = new Note()
         note.title = title
         note.excerpt = excerpt
-        note.markdown = markdown
+        note.content = content
         note.notebook = notebook
 
         return await repository.save(note)
@@ -88,12 +88,12 @@ export async function NoteMutations() {
     ),
     updateNote: await configureRepository<Note, MutationUpdateNoteArgs>(
       Note,
-      async (repository, { input: { id, title, excerpt, markdown } }) => {
+      async (repository, { input: { id, title, excerpt, content } }) => {
         const note = await repository.findOne(id)
         if (!note) return null
         note.title = title || note.title
         note.excerpt = excerpt || note.excerpt
-        note.markdown = markdown || note.markdown
+        note.content = content || note.content
 
         return repository.save(note)
       }

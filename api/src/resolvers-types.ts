@@ -14,7 +14,7 @@ export type CreateFileInput = {
   username: Scalars['String']
   repo: Scalars['String']
   name: Scalars['String']
-  markdown?: Maybe<Scalars['String']>
+  content?: Maybe<Scalars['String']>
 }
 
 export type CreateNotebookInput = {
@@ -25,7 +25,7 @@ export type CreateNotebookInput = {
 export type CreateNoteInput = {
   notebookId: Scalars['ID']
   title: Scalars['String']
-  markdown: Scalars['String']
+  content: Scalars['String']
   excerpt: Scalars['String']
 }
 
@@ -235,7 +235,7 @@ export type MutationDeleteUserArgs = {
 export type Note = {
   id: Scalars['ID']
   title: Scalars['String']
-  markdown: Scalars['String']
+  content: Scalars['String']
   excerpt: Scalars['String']
   createdAt: Date
   updatedAt: Date
@@ -330,7 +330,7 @@ export type UpdateFileInput = {
   username: Scalars['String']
   repo: Scalars['String']
   name: Scalars['String']
-  markdown?: Maybe<Scalars['String']>
+  content?: Maybe<Scalars['String']>
 }
 
 export type UpdateNotebookInput = {
@@ -341,7 +341,7 @@ export type UpdateNotebookInput = {
 export type UpdateNoteInput = {
   id: Scalars['ID']
   title?: Maybe<Scalars['String']>
-  markdown?: Maybe<Scalars['String']>
+  content?: Maybe<Scalars['String']>
   excerpt?: Maybe<Scalars['String']>
 }
 
@@ -688,7 +688,7 @@ export type NoteResolvers<
 > = {
   id?: Resolver<ResolversTypes['ID'], ParentType, Context>
   title?: Resolver<ResolversTypes['String'], ParentType, Context>
-  markdown?: Resolver<ResolversTypes['String'], ParentType, Context>
+  content?: Resolver<ResolversTypes['String'], ParentType, Context>
   excerpt?: Resolver<ResolversTypes['String'], ParentType, Context>
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, Context>

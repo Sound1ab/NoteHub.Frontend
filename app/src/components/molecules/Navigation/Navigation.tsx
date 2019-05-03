@@ -1,6 +1,6 @@
 import React from 'react'
-import { useListNotebooks } from '../../../hooks'
-import { useStore } from '../../../hooks/useStore'
+import { useStore } from '../../../hooks'
+import { useListRepos } from '../../../hooks/Repo/useListRepos'
 import { activeNotebook } from '../../../store'
 import { styled } from '../../../theme'
 import { Heading } from '../../atoms'
@@ -25,17 +25,14 @@ const Style = styled.nav`
     color: ${({ theme }) => theme.colors.text.tertiary};
   }
 
-  /* visited link */
   > a:visited {
     color: ${({ theme }) => theme.colors.text.tertiary};
   }
 
-  /* mouse over link */
   > a:hover {
     color: ${({ theme }) => theme.colors.text.secondary};
   }
 
-  /* selected link */
   > a:active {
     color: ${({ theme }) => theme.colors.accent};
   }
@@ -43,7 +40,7 @@ const Style = styled.nav`
 
 export function Navigation() {
   const [state, dispatch] = useStore()
-  const notebooks = useListNotebooks()
+  const repos = useListRepos(state.user.username)
 
   function handleHeadingClick(notebook: string | null) {
     if (dispatch) {
@@ -53,21 +50,21 @@ export function Navigation() {
 
   return (
     <Style>
-      {notebooks.map(notebook => (
-        <a href="javascript:">
+      {repos.map(repo => (
+        <a key={(repo && repo.id) || 'repo'} href="javascript:">
           <Heading
-            onClick={handleHeadingClick.bind(null, notebook && notebook.id)}
+            onClick={handleHeadingClick.bind(null, repo && repo.name)}
             className={
               state.notebook.activeNotebook &&
-              notebook &&
-              notebook.id === state.notebook.activeNotebook
+              repo &&
+              repo.name === state.notebook.activeNotebook
                 ? 'Navigation-active-heading'
                 : ''
             }
             type="h5"
             marginBottom
           >
-            {notebook && notebook.title}
+            {repo && repo.name}
           </Heading>
         </a>
       ))}

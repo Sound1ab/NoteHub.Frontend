@@ -35,17 +35,17 @@ export function FileMutations() {
   return {
     async createFile(
       _,
-      { input: { username, repo, name, markdown } }: MutationCreateFileArgs,
+      { input: { username, repo, name, content } }: MutationCreateFileArgs,
       { fileManager }: { fileManager: FileManager }
     ): Promise<File> {
-      return fileManager.createFile(username, repo, name, markdown)
+      return fileManager.createFile(username, repo, name, content)
     },
     async updateFile(
       _,
-      { input: { markdown, name, repo, username } }: MutationUpdateFileArgs,
+      { input: { content, name, repo, username } }: MutationUpdateFileArgs,
       { fileManager }: { fileManager: FileManager }
     ): Promise<File> {
-      return fileManager.updateFile(username, repo, name, markdown)
+      return fileManager.updateFile(username, repo, name, content)
     },
     async deleteFile(
       _,

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { COLOR } from '../../../enums'
-import { useCreateNotebook } from '../../../hooks'
+import { useStore } from '../../../hooks'
+import { useCreateRepo } from '../../../hooks/Repo/useCreateRepo'
 import { styled } from '../../../theme'
 import { Heading, Icon, Modal } from '../../atoms'
 
@@ -15,16 +16,16 @@ const Style = styled.div`
 `
 
 export function NewNotebook() {
+  const [state] = useStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
-  const createNewNotebook = useCreateNotebook()
+  const createNewRepo = useCreateRepo(state.user.username)
 
-  async function handleCreateNewNotebook() {
-    await createNewNotebook({
+  async function handleCreateNewRepo() {
+    await createNewRepo({
       variables: {
         input: {
-          title: inputValue,
-          userId: '985d9b4d-920d-4b4f-9358-ab91146944d8',
+          name: inputValue,
         },
       },
     })
@@ -53,7 +54,7 @@ export function NewNotebook() {
         </Heading>
       </span>
       <Modal
-        onContinue={handleCreateNewNotebook}
+        onContinue={handleCreateNewRepo}
         title="Create new Notebook"
         isOpen={isModalOpen}
         onRequestClose={setIsModalOpen.bind(null, false)}

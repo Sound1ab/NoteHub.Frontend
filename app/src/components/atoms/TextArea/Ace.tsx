@@ -1,23 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import AceEditor from 'react-ace'
-import { useStore } from '../../../hooks/useStore'
+import { useReadNote, useStore, useUpdateNote } from '../../../hooks'
 
 import 'brace/mode/markdown'
 import 'brace/theme/github'
-import { useReadNote, useUpdateNote } from '../../../hooks'
+import { useReadFile } from '../../../hooks/file/useReadFile'
+import { useUpdateFile } from '../../../hooks/file/useUpdateFile'
 
 export function Ace() {
   const [value, setValue] = useState('')
   const [state] = useStore()
-  console.log(state)
-  const note = useReadNote(state.notebook.activeNote)
-  const updateNote = useUpdateNote(
+  const note = useReadFile(
+    state.user.username,
+    state.notebook.activeNotebook,
+    state.notebook.activeNote
+  )
+  const updateFile = useUpdateFile(
+    state.user.username,
     state.notebook.activeNotebook,
     state.notebook.activeNote
   )
 
+  console.log('state', state)
+
   useEffect(() => {
-    setValue((note && note.markdown) || '')
+    if (!note) {
+      return
+    }
+    setValue((note && note.content) || '')
   }, [note])
 
   function handleChange(newValue: string) {
@@ -29,12 +39,14 @@ export function Ace() {
       alert('No active note')
       return
     }
-    await updateNote({
+    await updateFile({
       variables: {
         input: {
-          excerpt: editor.session.getLine(0),
-          id: state.notebook.activeNote,
-          markdown: editor.getValue(),
+          // excerpt: editor.session.getLine(0),
+          content: editor.getValue(),
+          name: state.notebook.activeNote,
+          repo: state.notebook.activeNotebook,
+          username: state.user.username,
         },
       },
     })

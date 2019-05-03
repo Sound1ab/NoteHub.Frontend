@@ -11,7 +11,7 @@ export class Note extends Base {
 
   @Column('text')
   @IsAlphanumeric()
-  public markdown: string
+  public content: string
 
   @Column('text')
   @IsAlphanumeric()

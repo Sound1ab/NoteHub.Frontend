@@ -33,14 +33,14 @@ export class FileManager extends Github {
     name: string,
     content?: string | null
   ): Promise<File> {
-    const { data } = await this.octokit.repos.createFile({
+    await this.octokit.repos.createFile({
       content: content ? Github.encodeToBase64(content) : '',
       message: Github.formCommitMessage(name, 'create'),
       owner,
       path: `${name}`,
       repo: `${this.repoNamespace}${repo}`,
     })
-    return this.formatFileResult(data.content)
+    return this.readFile(owner, repo, name)
   }
 
   public async updateFile(
@@ -54,7 +54,7 @@ export class FileManager extends Github {
       repo,
       name
     )
-    const { data } = await this.octokit.repos.updateFile({
+    await this.octokit.repos.updateFile({
       content:
         (content && Github.encodeToBase64(content)) || (originalContent || ''),
       message: Github.formCommitMessage(name, 'update'),
@@ -63,7 +63,7 @@ export class FileManager extends Github {
       repo: `${this.repoNamespace}${repo}`,
       sha,
     })
-    return this.formatFileResult(data.content)
+    return this.readFile(owner, repo, name)
   }
 
   public async deleteFile(
@@ -83,10 +83,13 @@ export class FileManager extends Github {
   }
 
   private formatFileResult(
-    file: Octokit.ReposCreateFileResponse['content']
+    file: Octokit.ReposCreateFileResponse['content'] & { content: string }
   ): File {
     return {
       ...file,
+      content: file.content
+        ? Github.decodeFromBase64(file.content)
+        : file.content,
       id: file.sha,
     }
   }
