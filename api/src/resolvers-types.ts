@@ -304,6 +304,7 @@ export type QueryListReposArgs = {
 
 export type QueryReadGithubUserAccessTokenArgs = {
   code: Scalars['String']
+  state: Scalars['String']
 }
 
 export type QueryReadUserArgs = {

@@ -1,6 +1,6 @@
 ## Base
 type Query {
-    readGithubUserAccessToken(code: String!): String!
+    readGithubUserAccessToken(code: String!, state: String!): String!
     readGithubUser: GithubUser
     readUser(id: ID!): User
     listUsers(filter: ModelUserFilterInput, limit: Int, offset: Int): ModelUserConnection

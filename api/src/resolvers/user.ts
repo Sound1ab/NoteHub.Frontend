@@ -40,10 +40,10 @@ export async function UserQueries() {
     ),
     async readGithubUserAccessToken(
       _,
-      { code }: QueryReadGithubUserAccessTokenArgs,
+      { code, state }: QueryReadGithubUserAccessTokenArgs,
       { userManager }: { userManager: UserManager }
     ): Promise<string> {
-      return userManager.readGithubUserAccessToken(code)
+      return userManager.readGithubUserAccessToken(code, state)
     },
     async readGithubUser(
       _0,
