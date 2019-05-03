@@ -2,10 +2,10 @@ import axios from 'axios'
 import { Github } from './Base'
 
 const GITHUB_ACCESS_TOKEN_LINK = process.env.GITHUB_ACCESS_TOKEN_LINK as string
-const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
-const REDIRECT_URL = process.env.REDIRECT_URL
-const STATE = process.env.STATE
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
+const REDIRECT_URL = process.env.REACT_APP_REDIRECT_URL
+const STATE = process.env.REACT_APP_STATE
 
 export class UserManager extends Github {
   public async readGithubUserAccessToken(code: string) {
@@ -19,10 +19,8 @@ export class UserManager extends Github {
     return data
   }
 
-  public async readUser(username: string) {
-    const { data } = await this.octokit.users.getByUsername({
-      username,
-    })
+  public async readUser() {
+    const { data } = await this.octokit.users.getAuthenticated()
     return data
   }
 }

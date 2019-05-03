@@ -82,6 +82,9 @@ export type File = {
 export type GithubUser = {
   id: Scalars['Int']
   login: Scalars['String']
+  avatar_url: Scalars['String']
+  html_url: Scalars['String']
+  name: Scalars['String']
 }
 
 export type Links = {
@@ -303,10 +306,6 @@ export type QueryReadGithubUserAccessTokenArgs = {
   code: Scalars['String']
 }
 
-export type QueryReadGithubUserArgs = {
-  username: Scalars['String']
-}
-
 export type QueryReadUserArgs = {
   id: Scalars['ID']
 }
@@ -514,6 +513,9 @@ export type GithubUserResolvers<
 > = {
   id?: Resolver<ResolversTypes['Int'], ParentType, Context>
   login?: Resolver<ResolversTypes['String'], ParentType, Context>
+  avatar_url?: Resolver<ResolversTypes['String'], ParentType, Context>
+  html_url?: Resolver<ResolversTypes['String'], ParentType, Context>
+  name?: Resolver<ResolversTypes['String'], ParentType, Context>
 }
 
 export type LinksResolvers<
@@ -760,8 +762,7 @@ export type QueryResolvers<
   readGithubUser?: Resolver<
     Maybe<ResolversTypes['GithubUser']>,
     ParentType,
-    Context,
-    QueryReadGithubUserArgs
+    Context
   >
   readUser?: Resolver<
     Maybe<ResolversTypes['User']>,

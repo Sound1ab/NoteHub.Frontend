@@ -1,7 +1,7 @@
 ## Base
 type Query {
     readGithubUserAccessToken(code: String!): String!
-    readGithubUser(username: String!): GithubUser
+    readGithubUser: GithubUser
     readUser(id: ID!): User
     listUsers(filter: ModelUserFilterInput, limit: Int, offset: Int): ModelUserConnection
 }
@@ -16,6 +16,9 @@ type Mutation {
 type GithubUser {
     id: Int!
     login: String!
+    avatar_url: String!
+    html_url: String!
+    name: String!
 }
 
 type User {
