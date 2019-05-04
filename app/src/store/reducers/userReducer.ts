@@ -1,5 +1,11 @@
-import { TReturnOfIsAuthorized, TReturnOfUsername, TUserActions } from '..'
-import { USER_ACTIONS } from '..'
+import {
+  RESET_ACTION,
+  TResetActions,
+  TReturnOfIsAuthorized,
+  TReturnOfUsername,
+  TUserActions,
+  USER_ACTIONS,
+} from '..'
 
 export const initialUserState = {
   isAuthorized: false,
@@ -8,7 +14,7 @@ export const initialUserState = {
 
 export function userReducer(
   state: typeof initialUserState,
-  action: TUserActions
+  action: TUserActions | TResetActions
 ) {
   switch (action.type) {
     case USER_ACTIONS.IS_AUTHORIZED:
@@ -21,6 +27,8 @@ export function userReducer(
         ...state,
         username: (action as TReturnOfUsername).payload.value,
       }
+    case RESET_ACTION.RESET:
+      return initialUserState
     default:
       return state
   }

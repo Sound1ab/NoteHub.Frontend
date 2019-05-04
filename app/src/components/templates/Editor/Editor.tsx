@@ -1,4 +1,5 @@
 import React from 'react'
+import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Ace, Container } from '../../atoms'
 import { CardList, Sidebar } from '../../organism'
@@ -26,36 +27,14 @@ const Style = styled.div`
   }
 `
 
-// export const ReadUserDocument = gql`
-//   ${UserFragment}
-//   ${NotebookFragment}
-//   ${NoteFragment}
-//   ${DateFragment}
-//   query ReadUser {
-//     readUser(id: "985d9b4d-920d-4b4f-9358-ab91146944d8") {
-//       ...user
-//       notebooks {
-//         ...notebook
-//         notes {
-//           ...note
-//         }
-//       }
-//       createdAt {
-//         ...date
-//       }
-//       updatedAt {
-//         ...date
-//       }
-//     }
-//   }
-// `
-
 export function Editor() {
+  const [state] = useStore()
+
   return (
     <Style>
       <Container className="Editor-page">
         <Sidebar />
-        <CardList />
+        {state.user.isAuthorized && state.user.username && <CardList />}
         <main className="Editor-main">
           <Ace />
         </main>

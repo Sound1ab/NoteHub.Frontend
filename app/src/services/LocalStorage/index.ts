@@ -19,4 +19,8 @@ export class LocalStorage {
       return item
     }
   }
+
+  static removeItem(key: string) {
+    localStorage.removeItem(key)
+  }
 }

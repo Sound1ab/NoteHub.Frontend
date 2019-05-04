@@ -21,8 +21,6 @@ export function Ace() {
     state.notebook.activeNote
   )
 
-  console.log('state', state)
-
   useEffect(() => {
     if (!note) {
       return

@@ -3,6 +3,7 @@ import express from 'express'
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import { config } from './config'
+import { ERRORS } from './errors'
 import { DateType } from './resolvers/date'
 import { FileMutations, FileQueries } from './resolvers/file'
 import { NoteMutations, NoteQueries } from './resolvers/note'
@@ -39,11 +40,24 @@ async function configureServer() {
 
   const server = new ApolloServer({
     context: ({ req }) => {
-      const token = req.headers.authorization || ''
+      const token = req.headers.authorization
+
+      const isAccessTokenRequest =
+        req.body.operationName === 'ReadGithubUserAccessToken'
+
+      if (!token && !isAccessTokenRequest) {
+        throw ERRORS.AUTHENTICATION_ERROR
+      }
+
       const fileManager = new FileManager(token)
       const repoManager = new RepoManager(token)
       const userManager = new UserManager(token)
       return { fileManager, repoManager, userManager }
+    },
+    formatError: error => {
+      const githubAuthError = error.message === 'Bad credentials'
+
+      return githubAuthError ? ERRORS.AUTHENTICATION_ERROR : error
     },
     resolvers,
     typeDefs,

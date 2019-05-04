@@ -1,36 +1,16 @@
-import {
-  ApolloClient,
-  ApolloLink,
-  HttpLink,
-  InMemoryCache,
-  NextLink,
-  Operation,
-} from 'apollo-boost'
-import { GRAPHQL, LOCAL_STORAGE } from '../../enums'
-import { LocalStorage } from '../LocalStorage'
+import { ApolloClient, ApolloLink, InMemoryCache } from 'apollo-boost'
+import React, { Dispatch, ReducerAction } from 'react'
+import { IState, TActions } from '../../store'
+import { authLink, errorLink, httpLink } from './links'
 
-const graphQL =
-  process.env.NODE_ENV === 'development'
-    ? GRAPHQL.DEV_GRAPHQL
-    : GRAPHQL.PROD_GRAPHQL
+export function createClient(
+  state: IState,
+  dispatch: Dispatch<ReducerAction<React.Reducer<IState, TActions>>>
+) {
+  const link = ApolloLink.from([errorLink(state, dispatch), authLink, httpLink])
 
-console.log(graphQL)
-
-const httpLink = new HttpLink({ uri: (graphQL as unknown) as string })
-
-const authLink = new ApolloLink((operation: Operation, forward?: NextLink) => {
-  const token = LocalStorage.getItem(LOCAL_STORAGE.KEY)
-
-  operation.setContext({
-    headers: {
-      authorization: token ? `${token}` : '',
-    },
+  return new ApolloClient({
+    cache: new InMemoryCache(),
+    link,
   })
-
-  return forward ? forward(operation) : null
-})
-
-export const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: authLink.concat(httpLink),
-})
+}

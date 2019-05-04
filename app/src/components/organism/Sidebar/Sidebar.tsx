@@ -46,7 +46,7 @@ export function Sidebar() {
             Notebooks
           </Heading>
         </div>
-        <Navigation />
+        {state.user.isAuthorized && state.user.username && <Navigation />}
       </Container>
     </Style>
   )

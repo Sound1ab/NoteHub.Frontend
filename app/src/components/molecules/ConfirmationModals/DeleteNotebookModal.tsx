@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { useDeleteNotebook } from '../../../hooks'
+import { useStore } from '../../../hooks'
+import { useDeleteRepo } from '../../../hooks/Repo/useDeleteRepo'
 import { Heading, Modal } from '../../atoms'
 
 interface IDeleteNotebookModal {
@@ -15,8 +16,9 @@ export function DeleteNotebookModal({
   activeNotebook,
   title,
 }: IDeleteNotebookModal) {
+  const [state] = useStore()
   const [inputValue, setInputValue] = useState('')
-  const deleteNotebook = useDeleteNotebook()
+  const deleteRepo = useDeleteRepo(state.user.username)
 
   async function handleDeleteNotebook() {
     if (!activeNotebook) {
@@ -27,10 +29,11 @@ export function DeleteNotebookModal({
       alert('Please confirm the notebook you wish to delete')
       return
     }
-    await deleteNotebook({
+    await deleteRepo({
       variables: {
         input: {
-          id: activeNotebook,
+          repo: activeNotebook,
+          username: state.user.username,
         },
       },
     })

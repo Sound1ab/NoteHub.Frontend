@@ -32,10 +32,13 @@ const Style = styled.div`
 `
 
 export function Profile() {
-  const [, dispatch] = useStore()
+  const [state, dispatch] = useStore()
   const user = useReadGithubUser()
 
   useEffect(() => {
+    if (state.user.username || !user) {
+      return
+    }
     dispatch(username((user && user.login) || ''))
   }, [user])
 

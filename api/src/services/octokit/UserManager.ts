@@ -20,9 +20,7 @@ export class UserManager extends Github {
     const includesAccessToken = data.includes('access_token')
 
     if (includesAccessToken) {
-      return data
-        .replace(/access_token=/gi, '')
-        .replace(new RegExp(`&scope=${SCOPE}&token_type=bearer`, 'ig'), '')
+      return data.replace(/access_token=/gi, '').split('&')[0]
     } else {
       throw new Error('Error retrieving access token')
     }

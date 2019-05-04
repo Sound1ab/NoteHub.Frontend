@@ -12,19 +12,21 @@ import {
   faTrash,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useReducer, useRef } from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import { Route } from 'react-router'
 import { GoogleFont, TypographyStyle } from 'react-typography'
 import { LOCAL_STORAGE } from '../enums'
-import { client } from '../services/Apollo/clientConfig'
+import { createClient } from '../services/Apollo/clientConfig'
 import { LocalStorage } from '../services/LocalStorage'
-import { isAuthorized } from '../store'
-import { TActions } from '../store'
-import { initialState } from '../store'
-import { NoteContext } from '../store'
-import { IState } from '../store'
+import {
+  initialState,
+  isAuthorized,
+  IState,
+  NoteContext,
+  TActions,
+} from '../store'
 import { combinedReducers } from '../store/reducers'
 import { typography } from '../theme/typography'
 import { Editor } from './templates'
@@ -51,6 +53,8 @@ export function App() {
     initialState
   )
 
+  const client = useRef(createClient(state, dispatch))
+
   const token = LocalStorage.getItem(LOCAL_STORAGE.KEY)
 
   useEffect(() => {
@@ -60,8 +64,8 @@ export function App() {
   }, [token])
 
   return (
-    <ApolloProvider client={client}>
-      <ApolloHooksProvider client={client}>
+    <ApolloProvider client={client.current}>
+      <ApolloHooksProvider client={client.current}>
         <ThemeProvider>
           <NoteContext.Provider value={[state, dispatch]}>
             <GlobalStyle />
