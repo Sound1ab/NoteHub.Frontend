@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
+import { CreateNotebookModal } from '..'
 import { COLOR } from '../../../enums'
-import { useStore } from '../../../hooks'
-import { useCreateRepo } from '../../../hooks/Repo/useCreateRepo'
 import { styled } from '../../../theme'
-import { Heading, Icon, Modal } from '../../atoms'
+import { Heading, Icon } from '../../atoms'
 
 const Style = styled.div`
   .NewNotebook-wrapper {
@@ -16,25 +15,7 @@ const Style = styled.div`
 `
 
 export function NewNotebook() {
-  const [state] = useStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [inputValue, setInputValue] = useState('')
-  const createNewRepo = useCreateRepo(state.user.username)
-
-  async function handleCreateNewRepo() {
-    await createNewRepo({
-      variables: {
-        input: {
-          name: inputValue,
-        },
-      },
-    })
-    setIsModalOpen(false)
-  }
-
-  function handleOnInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setInputValue(e.target.value)
-  }
 
   return (
     <Style>
@@ -53,23 +34,10 @@ export function NewNotebook() {
           New Notebook
         </Heading>
       </span>
-      <Modal
-        onContinue={handleCreateNewRepo}
-        title="Create new Notebook"
+      <CreateNotebookModal
         isOpen={isModalOpen}
         onRequestClose={setIsModalOpen.bind(null, false)}
-      >
-        <Heading type="h5" marginBottom>
-          Title
-        </Heading>
-        <input
-          value={inputValue}
-          onChange={handleOnInputChange}
-          className="NewNotebook-input"
-          type="text"
-          placeholder="Notebook name"
-        />
-      </Modal>
+      />
     </Style>
   )
 }

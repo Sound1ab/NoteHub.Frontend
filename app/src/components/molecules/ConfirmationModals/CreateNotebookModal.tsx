@@ -1,49 +1,35 @@
 import React, { useState } from 'react'
 import { useStore } from '../../../hooks'
-import { useDeleteRepo } from '../../../hooks/Repo/useDeleteRepo'
-import { resetNotebook } from '../../../store'
+import { useCreateRepo } from '../../../hooks/Repo/useCreateRepo'
 import { Heading, Modal } from '../../atoms'
 
-interface IDeleteNotebookModal {
+interface ICreateNotebookModal {
   isOpen: boolean
   onRequestClose: () => void
-  title: string | null
 }
 
-export function DeleteNotebookModal({
+export function CreateNotebookModal({
   isOpen,
   onRequestClose,
-  title,
-}: IDeleteNotebookModal) {
-  const [state, dispatch] = useStore()
+}: ICreateNotebookModal) {
+  const [state] = useStore()
   const [inputValue, setInputValue] = useState('')
   const [loading, setLoading] = useState(false)
-  const deleteRepo = useDeleteRepo(state.user.username)
+  const createNewRepo = useCreateRepo(state.user.username)
 
-  async function handleDeleteNotebook() {
-    if (!state.notebook.activeNotebook) {
-      alert('No active notebook')
-      return
-    }
-    if (inputValue !== title) {
-      alert('Please confirm the notebook you wish to delete')
-      return
-    }
-
+  async function handleCreateNewRepo() {
     setLoading(true)
     try {
-      await deleteRepo({
+      await createNewRepo({
         variables: {
           input: {
-            repo: state.notebook.activeNotebook,
-            username: state.user.username,
+            name: inputValue,
           },
         },
       })
-      dispatch(resetNotebook())
       handleRequestClose()
     } catch {
-      alert('There was an issue deleting your notebook, please try again')
+      alert('There was an issue creating your notebook, please try again')
     } finally {
       setLoading(false)
     }
@@ -60,19 +46,19 @@ export function DeleteNotebookModal({
 
   return (
     <Modal
-      onContinue={handleDeleteNotebook}
-      title="Delete Notebook"
+      onContinue={handleCreateNewRepo}
+      title="Create new Notebook"
       isOpen={isOpen}
       onRequestClose={handleRequestClose}
       loading={loading}
     >
-      <p>Please confirm the Notebook name you wish to delete.</p>
       <Heading type="h5" marginBottom>
-        Notebook
+        Title
       </Heading>
       <input
         value={inputValue}
         onChange={handleInputChange}
+        className="NewNotebook-input"
         type="text"
         placeholder="Notebook name"
       />

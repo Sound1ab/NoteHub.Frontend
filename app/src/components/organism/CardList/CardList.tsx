@@ -6,6 +6,7 @@ import { activeNote } from '../../../store'
 import { styled } from '../../../theme'
 import { Container } from '../../atoms'
 import { Card, CardHeader } from '../../molecules'
+import { Code } from 'react-content-loader'
 
 const Style = styled.div`
   position: relative;
@@ -25,6 +26,11 @@ const Style = styled.div`
   .CardList-card-wrapper {
     border-bottom: 1px solid ${({ theme }) => theme.colors.text.secondary};
   }
+  
+  .CardList-loader {
+    margin-left: ${({ theme }) => theme.spacing.s};
+    margin-top: ${({ theme }) => theme.spacing.s};
+  }
 `
 
 export function CardList() {
@@ -33,7 +39,10 @@ export function CardList() {
     state.user.username,
     state.notebook.activeNotebook
   )
-  const notes = useListFiles(state.user.username, state.notebook.activeNotebook)
+  const { files, loading } = useListFiles(
+    state.user.username,
+    state.notebook.activeNotebook
+  )
 
   function handleCardClick(note: string | null) {
     if (dispatch) dispatch(activeNote(note))
@@ -43,8 +52,14 @@ export function CardList() {
     <Style>
       <CardHeader title={notebook && notebook.name} />
       <Container className="CardList-wrapper">
-        {notes &&
-          notes
+        {loading ? (
+          <>
+            <Code className="CardList-loader" />
+            <Code className="CardList-loader" />
+          </>
+        ) : (
+          files &&
+          files
             .sort((noteA, noteB) => {
               if (!noteA || !noteB) return 0
               return noteA.filename < noteB.filename ? -1 : 1
@@ -69,7 +84,8 @@ export function CardList() {
                   />
                 </span>
               )
-            })}
+            })
+        )}
       </Container>
     </Style>
   )

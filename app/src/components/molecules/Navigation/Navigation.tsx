@@ -4,6 +4,7 @@ import { useListRepos } from '../../../hooks/Repo/useListRepos'
 import { activeNotebook } from '../../../store'
 import { styled } from '../../../theme'
 import { Heading } from '../../atoms'
+import { BulletList } from 'react-content-loader'
 
 const Style = styled.nav`
   position: relative;
@@ -40,7 +41,9 @@ const Style = styled.nav`
 
 export function Navigation() {
   const [state, dispatch] = useStore()
-  const repos = useListRepos(state.user.username)
+  const { repos, loading } = useListRepos(state.user.username)
+
+  console.log('loading', loading)
 
   function handleHeadingClick(notebook: string | null) {
     if (dispatch) {
@@ -50,24 +53,28 @@ export function Navigation() {
 
   return (
     <Style>
-      {repos.map(repo => (
-        <a key={(repo && repo.id) || 'repo'} href="javascript:">
-          <Heading
-            onClick={handleHeadingClick.bind(null, repo && repo.name)}
-            className={
-              state.notebook.activeNotebook &&
-              repo &&
-              repo.name === state.notebook.activeNotebook
-                ? 'Navigation-active-heading'
-                : ''
-            }
-            type="h5"
-            marginBottom
-          >
-            {repo && repo.name}
-          </Heading>
-        </a>
-      ))}
+      {loading ? (
+        <BulletList />
+      ) : (
+        repos.map(repo => (
+          <a key={(repo && repo.id) || 'repo'} href="javascript:">
+            <Heading
+              onClick={handleHeadingClick.bind(null, repo && repo.name)}
+              className={
+                state.notebook.activeNotebook &&
+                repo &&
+                repo.name === state.notebook.activeNotebook
+                  ? 'Navigation-active-heading'
+                  : ''
+              }
+              type="h5"
+              marginBottom
+            >
+              {repo && repo.name}
+            </Heading>
+          </a>
+        ))
+      )}
     </Style>
   )
 }

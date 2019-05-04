@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useStore } from '../../../hooks'
 import { useDeleteFile } from '../../../hooks/file/useDeleteFile'
 import { resetNotebook } from '../../../store'
@@ -11,6 +11,7 @@ interface IDeleteNoteModal {
 
 export function DeleteNoteModal({ isOpen, onRequestClose }: IDeleteNoteModal) {
   const [state, dispatch] = useStore()
+  const [loading, setLoading] = useState(false)
   const deleteFile = useDeleteFile(
     state.user.username,
     state.notebook.activeNotebook
@@ -20,17 +21,25 @@ export function DeleteNoteModal({ isOpen, onRequestClose }: IDeleteNoteModal) {
     if (!state.notebook.activeNote) {
       return
     }
-    await deleteFile({
-      variables: {
-        input: {
-          filename: state.notebook.activeNote,
-          repo: state.notebook.activeNotebook,
-          username: state.user.username,
+
+    setLoading(true)
+    try {
+      await deleteFile({
+        variables: {
+          input: {
+            filename: state.notebook.activeNote,
+            repo: state.notebook.activeNotebook,
+            username: state.user.username,
+          },
         },
-      },
-    })
-    dispatch(resetNotebook({ note: true }))
-    onRequestClose()
+      })
+      dispatch(resetNotebook({ note: true }))
+      onRequestClose()
+    } catch {
+      alert('There was an issue deleting your note, please try again')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

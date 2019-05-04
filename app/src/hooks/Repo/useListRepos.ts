@@ -18,7 +18,7 @@ export const ListReposDocument = gql`
 `
 
 export function useListRepos(username: string) {
-  const { data } = useQuery<ListReposQuery, ListReposQueryVariables>(
+  const { data, loading } = useQuery<ListReposQuery, ListReposQueryVariables>(
     ListReposDocument,
     {
       variables: {
@@ -27,5 +27,8 @@ export function useListRepos(username: string) {
     }
   )
 
-  return (data && data.listRepos && data.listRepos.items) || []
+  return {
+    repos: (data && data.listRepos && data.listRepos.items) || [],
+    loading,
+  }
 }

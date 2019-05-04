@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import ReactModal from 'react-modal'
-import { Heading, Icon } from '..'
+import { Heading, Icon, Spinner } from '..'
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 
@@ -11,6 +11,7 @@ interface IModal {
   onRequestClose: () => void
   title: string
   onContinue: () => void
+  loading?: boolean
   className?: string
   children?: ReactNode
   contentLabel?: string
@@ -22,6 +23,7 @@ export function ReactModalAdapter({
   onRequestClose,
   onContinue,
   title,
+  loading = false,
   className = 'ReactModal',
   contentLabel,
   role,
@@ -44,15 +46,16 @@ export function ReactModalAdapter({
     >
       <div className="heading-wrapper">
         <Heading type="h3">{title}</Heading>
-        <span className="close" onClick={onRequestClose}>
+        <span className="Modal-close" onClick={onRequestClose}>
           <Icon icon="times" color={COLOR.MEDIUM} size="lg" />
         </span>
       </div>
       {children}
-      <div className="button-wrapper">
+      <div className="Modal-button-wrapper">
         <button onClick={onRequestClose}>Cancel</button>
         <button onClick={onContinue}>Continue</button>
       </div>
+      {loading && <Spinner />}
     </ReactModal>
   )
 }
@@ -75,7 +78,6 @@ export const Modal = styled(ReactModalAdapter)`
 
     &.ReactModal__Overlay--after-open {
       opacity: 1;
-      transition: opacity 150ms;
     }
 
     &.ReactModal__Overlay--before-close {
@@ -114,11 +116,11 @@ export const Modal = styled(ReactModalAdapter)`
     margin-bottom: ${({ theme }) => theme.spacing.xs};
   }
 
-  .close {
+  .Modal-close {
     cursor: pointer;
   }
 
-  .button-wrapper {
+  .Modal-button-wrapper {
     display: flex;
     justify-content: flex-start;
 
@@ -129,5 +131,8 @@ export const Modal = styled(ReactModalAdapter)`
 
   button {
     margin-top: ${({ theme }) => theme.spacing.s};
+  }
+
+  .Modal-spinner-wrapper {
   }
 `

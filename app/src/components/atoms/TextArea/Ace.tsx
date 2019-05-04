@@ -4,13 +4,14 @@ import { useStore } from '../../../hooks'
 
 import 'brace/mode/markdown'
 import 'brace/theme/github'
+import { Spinner } from '..'
 import { useReadFile } from '../../../hooks/file/useReadFile'
 import { useUpdateFile } from '../../../hooks/file/useUpdateFile'
 
 export function Ace() {
   const [value, setValue] = useState('')
   const [state] = useStore()
-  const note = useReadFile(
+  const { file, loading } = useReadFile(
     state.user.username,
     state.notebook.activeNotebook,
     state.notebook.activeNote
@@ -22,8 +23,8 @@ export function Ace() {
   )
 
   useEffect(() => {
-    setValue((note && note.content) || '')
-  }, [note])
+    setValue((file && file.content) || '')
+  }, [file])
 
   function handleChange(newValue: string) {
     setValue(newValue)
@@ -48,17 +49,20 @@ export function Ace() {
   }
 
   return (
-    <AceEditor
-      value={value}
-      mode="markdown"
-      theme="github"
-      name="UNIQUE_ID_OF_DIV"
-      height="100%"
-      width="100%"
-      onChange={handleChange}
-      onBlur={handleBlur as any}
-      wrapEnabled={true}
-      editorProps={{ $blockScrolling: true }}
-    />
+    <>
+      {loading && <Spinner />}
+      <AceEditor
+        value={value}
+        mode="markdown"
+        theme="github"
+        name="UNIQUE_ID_OF_DIV"
+        height="100%"
+        width="100%"
+        onChange={handleChange}
+        onBlur={handleBlur as any}
+        wrapEnabled={true}
+        editorProps={{ $blockScrolling: true }}
+      />
+    </>
   )
 }
