@@ -11,6 +11,7 @@ interface ICreateNoteModal {
 export function CreateNoteModal({ isOpen, onRequestClose }: ICreateNoteModal) {
   const [state] = useStore()
   const [inputValue, setInputValue] = useState('')
+  const [loading, setLoading] = useState(false)
   const createNewNote = useCreateFile(
     state.user.username,
     state.notebook.activeNotebook || ''
@@ -21,17 +22,24 @@ export function CreateNoteModal({ isOpen, onRequestClose }: ICreateNoteModal) {
       alert('No active notebook')
       return
     }
-    await createNewNote({
-      variables: {
-        input: {
-          content: '',
-          filename: `${inputValue}.md`,
-          repo: state.notebook.activeNotebook,
-          username: state.user.username,
+    setLoading(true)
+    try {
+      await createNewNote({
+        variables: {
+          input: {
+            content: '',
+            filename: `${inputValue}.md`,
+            repo: state.notebook.activeNotebook,
+            username: state.user.username,
+          },
         },
-      },
-    })
-    handleRequestClose()
+      })
+      handleRequestClose()
+    } catch {
+      alert('There was an issue saving your note, please try again')
+    } finally {
+      setLoading(false)
+    }
   }
 
   function handleRequestClose() {
@@ -49,6 +57,7 @@ export function CreateNoteModal({ isOpen, onRequestClose }: ICreateNoteModal) {
       title="Create new Note"
       isOpen={isOpen}
       onRequestClose={handleRequestClose}
+      loading={loading}
     >
       <Heading type="h5" marginBottom>
         Title

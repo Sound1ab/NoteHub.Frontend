@@ -34,9 +34,14 @@ export function Editor() {
     <Style>
       <Container className="Editor-page">
         <Sidebar />
-        {state.user.isAuthorized && state.user.username && <CardList />}
+        {state.user.isAuthorized &&
+          state.user.username &&
+          state.notebook.activeNotebook && <CardList />}
         <main className="Editor-main">
-          <Ace />
+          {state.user.isAuthorized &&
+            state.user.username &&
+            state.notebook.activeNotebook &&
+            state.notebook.activeNote && <Ace />}
         </main>
       </Container>
     </Style>

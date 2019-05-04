@@ -18,7 +18,7 @@ export const ListFilesDocument = gql`
 `
 
 export function useListFiles(username: string, repo: string) {
-  const { data } = useQuery<ListFilesQuery, ListFilesQueryVariables>(
+  const { data, loading } = useQuery<ListFilesQuery, ListFilesQueryVariables>(
     ListFilesDocument,
     {
       variables: {
@@ -28,5 +28,8 @@ export function useListFiles(username: string, repo: string) {
     }
   )
 
-  return (data && data.listFiles && data.listFiles.items) || []
+  return {
+    files: (data && data.listFiles && data.listFiles.items) || [],
+    loading,
+  }
 }

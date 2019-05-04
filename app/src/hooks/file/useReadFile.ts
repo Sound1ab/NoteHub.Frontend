@@ -16,14 +16,17 @@ export const ReadFile = gql`
 `
 
 export function useReadFile(username: string, repo: string, filename: string) {
-  const { data } = useQuery<ReadFileQuery, ReadFileQueryVariables>(ReadFile, {
-    // fetchPolicy: 'no-cache',
-    variables: {
-      filename,
-      repo,
-      username,
-    },
-  })
+  const { data, loading } = useQuery<ReadFileQuery, ReadFileQueryVariables>(
+    ReadFile,
+    {
+      // fetchPolicy: 'no-cache',
+      variables: {
+        filename,
+        repo,
+        username,
+      },
+    }
+  )
 
-  return data && data.readFile
+  return { file: data && data.readFile, loading }
 }
