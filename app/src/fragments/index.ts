@@ -5,6 +5,7 @@ export const FileFragment = gql`
     filename
     path
     content
+    excerpt
     sha
     _links {
       html

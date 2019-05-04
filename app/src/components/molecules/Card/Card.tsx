@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { DeleteNoteModal } from '..'
 import { COLOR } from '../../../enums'
-import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
 
@@ -16,6 +15,10 @@ const Style = styled.div<{ isSelected?: boolean }>`
     isSelected ? theme.colors.link.active : 'transparent'};
   cursor: pointer;
   overflow: hidden;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.link.hover};
+  }
 
   .Card-heading {
     display: flex;
@@ -37,6 +40,10 @@ const Style = styled.div<{ isSelected?: boolean }>`
   .Card-options {
     display: flex;
     justify-content: flex-end;
+
+    * + * {
+      margin-left: ${({ theme }) => theme.spacing.xs};
+    }
   }
 `
 
@@ -45,10 +52,17 @@ interface ICard {
   title: string
   excerpt: string
   createdAt: string
+  githubLink: string
   isSelected?: boolean
 }
 
-export function Card({ title, excerpt, createdAt, isSelected }: ICard) {
+export function Card({
+  title,
+  excerpt,
+  githubLink,
+  createdAt,
+  isSelected,
+}: ICard) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   return (
@@ -61,6 +75,14 @@ export function Card({ title, excerpt, createdAt, isSelected }: ICard) {
       </div>
       <p className="Card-excerpt">{excerpt}</p>
       <div className="Card-options">
+        <a href={githubLink} target="_blank" rel="noopener">
+          <Icon
+            color={COLOR.MEDIUM}
+            icon="external-link-alt"
+            prefix="fa"
+            size="sm"
+          />
+        </a>
         <Icon
           color={COLOR.MEDIUM}
           icon="trash"

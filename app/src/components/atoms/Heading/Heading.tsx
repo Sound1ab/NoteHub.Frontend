@@ -8,10 +8,10 @@ const StyledHeading = styled('h1')<IHeading>`
   text-align: ${({ textAlign }) => textAlign};
   text-rendering: optimizeLegibility;
   margin-top: ${({ theme, marginTop }) => (marginTop ? theme.spacing.s : 0)};
-  
+
   margin-bottom: ${({ marginBottom }) => {
     return !marginBottom && 0
-  }}
+  }};
 
   color: ${({ theme, color }) => {
     switch (color) {

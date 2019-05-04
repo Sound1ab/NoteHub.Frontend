@@ -1,12 +1,11 @@
 import React from 'react'
+import { Code } from 'react-content-loader'
 import { useStore } from '../../../hooks'
 import { useListFiles } from '../../../hooks/file/useListFiles'
-import { useReadRepo } from '../../../hooks/Repo/useReadRepo'
 import { activeNote } from '../../../store'
 import { styled } from '../../../theme'
 import { Container } from '../../atoms'
 import { Card, CardHeader } from '../../molecules'
-import { Code } from 'react-content-loader'
 
 const Style = styled.div`
   position: relative;
@@ -35,10 +34,6 @@ const Style = styled.div`
 
 export function CardList() {
   const [state, dispatch] = useStore()
-  const notebook = useReadRepo(
-    state.user.username,
-    state.notebook.activeNotebook
-  )
   const { files, loading } = useListFiles(
     state.user.username,
     state.notebook.activeNotebook
@@ -50,7 +45,7 @@ export function CardList() {
 
   return (
     <Style>
-      <CardHeader title={notebook && notebook.name} />
+      <CardHeader title={state.notebook.activeNotebook} />
       <Container className="CardList-wrapper">
         {loading ? (
           <>
@@ -75,7 +70,8 @@ export function CardList() {
                     key={note.sha}
                     id={note.sha}
                     title={note.filename}
-                    excerpt={''}
+                    excerpt={note.excerpt || ''}
+                    githubLink={note._links.html}
                     createdAt={''}
                     isSelected={
                       !!state.notebook.activeNote &&

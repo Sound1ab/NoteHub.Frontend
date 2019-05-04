@@ -75,6 +75,7 @@ export type File = {
   filename: Scalars['String']
   path: Scalars['String']
   content?: Maybe<Scalars['String']>
+  excerpt?: Maybe<Scalars['String']>
   sha: Scalars['String']
   _links: Links
 }
@@ -368,7 +369,7 @@ export type User = {
 }
 export type FileFragment = { __typename?: 'File' } & Pick<
   File,
-  'filename' | 'path' | 'content' | 'sha'
+  'filename' | 'path' | 'content' | 'excerpt' | 'sha'
 > & { _links: { __typename?: 'Links' } & Pick<Links, 'html'> }
 
 export type RepoFragment = { __typename?: 'Repo' } & Pick<
@@ -602,6 +603,7 @@ export const fileFragmentDoc = gql`
     filename
     path
     content
+    excerpt
     sha
     _links {
       html

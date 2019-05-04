@@ -74,6 +74,7 @@ export type File = {
   filename: Scalars['String']
   path: Scalars['String']
   content?: Maybe<Scalars['String']>
+  excerpt?: Maybe<Scalars['String']>
   sha: Scalars['String']
   _links: Links
 }
@@ -502,6 +503,7 @@ export type FileResolvers<
   filename?: Resolver<ResolversTypes['String'], ParentType, Context>
   path?: Resolver<ResolversTypes['String'], ParentType, Context>
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, Context>
+  excerpt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, Context>
   sha?: Resolver<ResolversTypes['String'], ParentType, Context>
   _links?: Resolver<ResolversTypes['Links'], ParentType, Context>
 }

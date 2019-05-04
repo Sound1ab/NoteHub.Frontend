@@ -4,6 +4,7 @@ import {
   faBook,
   faComment,
   faEnvelope,
+  faExternalLinkAlt,
   faMoon,
   faPenSquare,
   faPlusCircle,
@@ -44,7 +45,8 @@ library.add(
   faPlusCircle,
   faSync,
   faTrash,
-  faTimes
+  faTimes,
+  faExternalLinkAlt
 )
 
 export function App() {

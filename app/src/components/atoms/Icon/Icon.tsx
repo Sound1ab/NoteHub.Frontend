@@ -8,7 +8,7 @@ const Style = styled.a<{ marginRight: boolean; color: COLOR; size: string }>`
   display: inline-block !important;
   margin-right: ${({ theme, marginRight }) =>
     marginRight ? theme.spacing.xxs : 0};
-  
+
   padding: ${({ size }) => {
     switch (size) {
       case 'xs':
@@ -27,7 +27,7 @@ const Style = styled.a<{ marginRight: boolean; color: COLOR; size: string }>`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
+
     color: ${({ theme, color }) => {
       switch (color) {
         case COLOR.DARK:
@@ -41,7 +41,12 @@ const Style = styled.a<{ marginRight: boolean; color: COLOR; size: string }>`
         default:
           return theme.colors.text.tertiary
       }
-    }}
+    }};
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 `
 
 interface IIcon {
@@ -55,6 +60,7 @@ interface IIcon {
     | 'trash'
     | 'sync'
     | 'times'
+    | 'external-link-alt'
   color?: COLOR
   link?: string
   prefix?: 'fab' | 'fa'

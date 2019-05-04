@@ -13,9 +13,11 @@ export class FileManager extends Github {
       path: `${name}`,
       repo: `${this.repoNamespace}${repo}`,
     })
+    const content = Github.decodeFromBase64(data.content)
     return {
       ...data,
-      content: Github.decodeFromBase64(data.content),
+      content,
+      excerpt: `${content.substring(0, 50)}...`,
       filename: data.name,
     }
   }

@@ -1,10 +1,11 @@
 import React from 'react'
+import { BulletList } from 'react-content-loader'
+import { COLOR } from '../../../enums'
 import { useStore } from '../../../hooks'
 import { useListRepos } from '../../../hooks/Repo/useListRepos'
 import { activeNotebook } from '../../../store'
 import { styled } from '../../../theme'
 import { Heading } from '../../atoms'
-import { BulletList } from 'react-content-loader'
 
 const Style = styled.nav`
   position: relative;
@@ -59,6 +60,7 @@ export function Navigation() {
         repos.map(repo => (
           <a key={(repo && repo.id) || 'repo'} href="javascript:">
             <Heading
+              color={COLOR.LIGHT}
               onClick={handleHeadingClick.bind(null, repo && repo.name)}
               className={
                 state.notebook.activeNotebook &&

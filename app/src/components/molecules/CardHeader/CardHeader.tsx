@@ -70,7 +70,6 @@ export function CardHeader({ title = '' }: ICardHeader) {
           </Heading>
         </div>
         <div className="CardHeader-options">
-          <Icon color={COLOR.MEDIUM} icon="sync" prefix="fa" size="sm" />
           <Icon
             color={COLOR.MEDIUM}
             icon="trash"

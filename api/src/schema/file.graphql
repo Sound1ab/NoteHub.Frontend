@@ -19,6 +19,7 @@ type File {
     filename: String!
     path: String!
     content: String
+    excerpt: String
     sha: String!
     _links: Links!
 }

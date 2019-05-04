@@ -9,14 +9,14 @@ export const theme = {
       tertiary: '#ffffff',
     },
     link: {
-      hover: '#d6d6d6',
-      active: '#f3f3f3'
+      hover: '#f0f0f0',
+      active: '#e8e8e8',
     },
     background: {
       primary: '#fff',
       secondary: '#f8f8f8',
       tertiary: '#151e31',
-    }
+    },
   },
   spacing: {
     l: typography.rhythm(3),
