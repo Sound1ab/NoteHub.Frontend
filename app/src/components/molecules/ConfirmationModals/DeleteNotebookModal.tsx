@@ -1,27 +1,26 @@
 import React, { useState } from 'react'
 import { useStore } from '../../../hooks'
 import { useDeleteRepo } from '../../../hooks/Repo/useDeleteRepo'
+import { resetNotebook } from '../../../store'
 import { Heading, Modal } from '../../atoms'
 
 interface IDeleteNotebookModal {
   isOpen: boolean
   onRequestClose: () => void
-  activeNotebook: string | null
   title: string | null
 }
 
 export function DeleteNotebookModal({
   isOpen,
   onRequestClose,
-  activeNotebook,
   title,
 }: IDeleteNotebookModal) {
-  const [state] = useStore()
+  const [state, dispatch] = useStore()
   const [inputValue, setInputValue] = useState('')
   const deleteRepo = useDeleteRepo(state.user.username)
 
   async function handleDeleteNotebook() {
-    if (!activeNotebook) {
+    if (!state.notebook.activeNotebook) {
       alert('No active notebook')
       return
     }
@@ -32,11 +31,12 @@ export function DeleteNotebookModal({
     await deleteRepo({
       variables: {
         input: {
-          repo: activeNotebook,
+          repo: state.notebook.activeNotebook,
           username: state.user.username,
         },
       },
     })
+    dispatch(resetNotebook())
     handleRequestClose()
   }
 

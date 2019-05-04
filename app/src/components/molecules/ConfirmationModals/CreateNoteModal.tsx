@@ -6,20 +6,18 @@ import { Heading, Modal } from '../../atoms'
 interface ICreateNoteModal {
   isOpen: boolean
   onRequestClose: () => void
-  activeNotebook: string | null
 }
 
-export function CreateNoteModal({
-  isOpen,
-  onRequestClose,
-  activeNotebook,
-}: ICreateNoteModal) {
+export function CreateNoteModal({ isOpen, onRequestClose }: ICreateNoteModal) {
   const [state] = useStore()
   const [inputValue, setInputValue] = useState('')
-  const createNewNote = useCreateFile(state.user.username, activeNotebook || '')
+  const createNewNote = useCreateFile(
+    state.user.username,
+    state.notebook.activeNotebook || ''
+  )
 
   async function handleCreateNewNote() {
-    if (!activeNotebook) {
+    if (!state.notebook.activeNotebook) {
       alert('No active notebook')
       return
     }
@@ -28,7 +26,7 @@ export function CreateNoteModal({
         input: {
           content: '',
           filename: `${inputValue}.md`,
-          repo: activeNotebook,
+          repo: state.notebook.activeNotebook,
           username: state.user.username,
         },
       },

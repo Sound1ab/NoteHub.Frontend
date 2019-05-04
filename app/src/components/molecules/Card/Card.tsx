@@ -49,7 +49,6 @@ interface ICard {
 }
 
 export function Card({ title, excerpt, createdAt, isSelected }: ICard) {
-  const [state] = useStore()
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   return (
@@ -73,8 +72,6 @@ export function Card({ title, excerpt, createdAt, isSelected }: ICard) {
       <DeleteNoteModal
         isOpen={isDeleteModalOpen}
         onRequestClose={setIsDeleteModalOpen.bind(null, false)}
-        activeNote={state.notebook.activeNote}
-        activeNotebook={state.notebook.activeNotebook}
       />
     </Style>
   )

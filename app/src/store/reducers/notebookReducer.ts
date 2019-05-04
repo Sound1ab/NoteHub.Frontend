@@ -1,10 +1,9 @@
 import {
   NOTEBOOK_ACTIONS,
-  RESET_ACTION,
   TNotebookActions,
-  TResetActions,
   TReturnOfActiveNote,
   TReturnOfActiveNotebook,
+  TReturnOfResetNotebook,
 } from '..'
 
 export const initialNotebookState = {
@@ -14,7 +13,7 @@ export const initialNotebookState = {
 
 export function notebookReducer(
   state: typeof initialNotebookState,
-  action: TNotebookActions | TResetActions
+  action: TNotebookActions
 ) {
   switch (action.type) {
     case NOTEBOOK_ACTIONS.ACTIVE_NOTE:
@@ -27,8 +26,23 @@ export function notebookReducer(
         ...state,
         activeNotebook: (action as TReturnOfActiveNotebook).payload.notebook,
       }
-    case RESET_ACTION.RESET:
-      return initialNotebookState
+    case NOTEBOOK_ACTIONS.RESET_NOTEBOOK:
+      const { notebook, note } = (action as TReturnOfResetNotebook).payload
+      if ((notebook && note) || (!notebook && !note)) {
+        return initialNotebookState
+      }
+      if (notebook) {
+        return {
+          ...state,
+          activeNotebook: '',
+        }
+      }
+      if (note) {
+        return {
+          ...state,
+          activeNote: '',
+        }
+      }
     default:
       return state
   }

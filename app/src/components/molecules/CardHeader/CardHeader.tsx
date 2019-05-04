@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { DeleteNotebookModal } from '..'
 import { CreateNoteModal } from '../'
 import { COLOR } from '../../../enums'
-import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
 
@@ -44,7 +43,6 @@ interface ICardHeader {
 }
 
 export function CardHeader({ title = '' }: ICardHeader) {
-  const [state] = useStore()
   const [isCreateNoteModalOpen, setIsCreateNoteModalOpen] = useState(false)
   const [isDeleteNotebookModalOpen, setIsDeleteNotebookModalOpen] = useState(
     false
@@ -85,12 +83,10 @@ export function CardHeader({ title = '' }: ICardHeader) {
       <CreateNoteModal
         isOpen={isCreateNoteModalOpen}
         onRequestClose={setIsCreateNoteModalOpen.bind(null, false)}
-        activeNotebook={state.notebook.activeNotebook}
       />
       <DeleteNotebookModal
         isOpen={isDeleteNotebookModalOpen}
         onRequestClose={setIsDeleteNotebookModalOpen.bind(null, false)}
-        activeNotebook={state.notebook.activeNotebook}
         title={title}
       />
     </Style>

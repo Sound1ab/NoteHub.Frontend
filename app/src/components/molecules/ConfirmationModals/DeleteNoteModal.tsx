@@ -1,34 +1,35 @@
 import React from 'react'
-import { useDeleteNote } from '../../../hooks'
+import { useStore } from '../../../hooks'
+import { useDeleteFile } from '../../../hooks/file/useDeleteFile'
+import { resetNotebook } from '../../../store'
 import { Modal } from '../../atoms'
 
 interface IDeleteNoteModal {
   isOpen: boolean
   onRequestClose: () => void
-  activeNote: string | null
-  activeNotebook: string | null
 }
 
-export function DeleteNoteModal({
-  isOpen,
-  onRequestClose,
-  activeNote,
-  activeNotebook,
-}: IDeleteNoteModal) {
-  const deleteNote = useDeleteNote(activeNotebook)
+export function DeleteNoteModal({ isOpen, onRequestClose }: IDeleteNoteModal) {
+  const [state, dispatch] = useStore()
+  const deleteFile = useDeleteFile(
+    state.user.username,
+    state.notebook.activeNotebook
+  )
 
   async function handleDeleteNote() {
-    if (!activeNote) {
-      alert('No active note')
+    if (!state.notebook.activeNote) {
       return
     }
-    await deleteNote({
+    await deleteFile({
       variables: {
         input: {
-          id: activeNote,
+          filename: state.notebook.activeNote,
+          repo: state.notebook.activeNotebook,
+          username: state.user.username,
         },
       },
     })
+    dispatch(resetNotebook({ note: true }))
     onRequestClose()
   }
 

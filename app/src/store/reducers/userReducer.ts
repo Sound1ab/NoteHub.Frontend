@@ -1,6 +1,4 @@
 import {
-  RESET_ACTION,
-  TResetActions,
   TReturnOfIsAuthorized,
   TReturnOfUsername,
   TUserActions,
@@ -14,7 +12,7 @@ export const initialUserState = {
 
 export function userReducer(
   state: typeof initialUserState,
-  action: TUserActions | TResetActions
+  action: TUserActions
 ) {
   switch (action.type) {
     case USER_ACTIONS.IS_AUTHORIZED:
@@ -27,7 +25,7 @@ export function userReducer(
         ...state,
         username: (action as TReturnOfUsername).payload.value,
       }
-    case RESET_ACTION.RESET:
+    case USER_ACTIONS.RESET_USER:
       return initialUserState
     default:
       return state

@@ -22,9 +22,6 @@ export function Ace() {
   )
 
   useEffect(() => {
-    if (!note) {
-      return
-    }
     setValue((note && note.content) || '')
   }, [note])
 

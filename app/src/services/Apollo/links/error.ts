@@ -1,7 +1,7 @@
 import { onError } from 'apollo-link-error'
 import React, { Dispatch, ReducerAction } from 'react'
 import { APOLLO_ERRORS, LOCAL_STORAGE } from '../../../enums'
-import { IState, reset, TActions } from '../../../store'
+import { IState, resetNotebook, resetUser, TActions } from '../../../store'
 import { LocalStorage } from '../../LocalStorage'
 
 export const errorLink = (
@@ -17,7 +17,8 @@ export const errorLink = (
         switch (err.extensions.code) {
           case APOLLO_ERRORS.UNAUTHENTICATED:
             LocalStorage.removeItem(LOCAL_STORAGE.KEY)
-            dispatch(reset())
+            dispatch(resetNotebook())
+            dispatch(resetUser())
             break
           default:
             return
