@@ -1,7 +1,7 @@
 ## Base
 extend type Query {
     readRepo(username: String!, repo: String!): Repo
-    listRepos(username: String!): ModelRepoConnection
+    listRepos(username: String!): ModelRepoConnection!
 }
 
 extend type Mutation {
@@ -21,7 +21,7 @@ type Repo {
 
 ## Query outputs
 type ModelRepoConnection {
-    items: [Repo]
+    items: [Repo!]!
 }
 
 ## Mutation inputs

@@ -1,5 +1,4 @@
 import React from 'react'
-import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Ace, Container } from '../../atoms'
 import { CardList, Sidebar } from '../../organism'
@@ -28,8 +27,6 @@ const Style = styled.div`
 `
 
 export function Editor() {
-  const [state] = useStore()
-
   return (
     <Style>
       <Container className="Editor-page">

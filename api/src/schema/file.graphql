@@ -1,7 +1,7 @@
 ## Base
 extend type Query {
     readFile(username: String!, repo: String!, filename: String!): File
-    listFiles(username: String!, repo: String!): ModelFileConnection
+    listFiles(username: String!, repo: String!): ModelFileConnection!
 }
 
 extend type Mutation {
@@ -26,7 +26,7 @@ type File {
 
 ## Query outputs
 type ModelFileConnection {
-    items: [File]!
+    items: [File!]!
 }
 
 ## Mutation inputs

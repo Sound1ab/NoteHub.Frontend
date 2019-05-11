@@ -3,19 +3,19 @@ import { typography } from './typography'
 export const theme = {
   colors: {
     accent: '#f442ff',
-    text: {
-      primary: '#171717',
-      secondary: '#acacac',
-      tertiary: '#ffffff',
-    },
-    link: {
-      hover: '#f0f0f0',
-      active: '#e8e8e8',
-    },
     background: {
       primary: '#fff',
       secondary: '#f8f8f8',
       tertiary: '#151e31',
+    },
+    link: {
+      active: '#e8e8e8',
+      hover: '#f0f0f0',
+    },
+    text: {
+      primary: '#171717',
+      secondary: '#acacac',
+      tertiary: '#ffffff',
     },
   },
   spacing: {
@@ -25,8 +25,8 @@ export const theme = {
     xl: typography.rhythm(7),
     xs: typography.rhythm(0.5),
     xxl: typography.rhythm(10),
-    xxxl: typography.rhythm(14),
     xxs: typography.rhythm(0.25),
+    xxxl: typography.rhythm(14),
     xxxs: typography.rhythm(0.1),
   },
 }

@@ -57,25 +57,29 @@ export function Navigation() {
       {loading ? (
         <BulletList />
       ) : (
-        repos.map(repo => (
-          <a key={(repo && repo.id) || 'repo'} href="javascript:">
-            <Heading
-              color={COLOR.LIGHT}
-              onClick={handleHeadingClick.bind(null, repo && repo.name)}
-              className={
-                state.notebook.activeNotebook &&
-                repo &&
-                repo.name === state.notebook.activeNotebook
-                  ? 'Navigation-active-heading'
-                  : ''
-              }
-              type="h5"
-              marginBottom
-            >
-              {repo && repo.name}
-            </Heading>
-          </a>
-        ))
+        repos
+          .sort((repoA, repoB) => {
+            return repoA.name.localeCompare(repoB.name)
+          })
+          .map(repo => (
+            <a key={(repo && repo.id) || 'repo'} href="javascript:">
+              <Heading
+                color={COLOR.LIGHT}
+                onClick={handleHeadingClick.bind(null, repo && repo.name)}
+                className={
+                  state.notebook.activeNotebook &&
+                  repo &&
+                  repo.name === state.notebook.activeNotebook
+                    ? 'Navigation-active-heading'
+                    : ''
+                }
+                type="h5"
+                marginBottom
+              >
+                {repo && repo.name}
+              </Heading>
+            </a>
+          ))
       )}
     </Style>
   )

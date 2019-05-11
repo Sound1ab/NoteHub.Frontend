@@ -53,16 +53,14 @@ export function CardList() {
             <Code className="CardList-loader" />
           </>
         ) : (
-          files &&
           files
             .sort((noteA, noteB) => {
-              if (!noteA || !noteB) return 0
-              return noteA.filename < noteB.filename ? -1 : 1
+              return noteA.filename.localeCompare(noteB.filename)
             })
             .map(note => {
-              if (!note) return
               return (
                 <span
+                  key={note.sha}
                   className="CardList-card-wrapper"
                   onClick={handleCardClick.bind(null, note.filename)}
                 >

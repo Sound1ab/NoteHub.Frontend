@@ -97,7 +97,7 @@ export type ModelBooleanFilterInput = {
 }
 
 export type ModelFileConnection = {
-  items?: Maybe<Array<Maybe<File>>>
+  items: Array<File>
 }
 
 export type ModelFloatFilterInput = {
@@ -133,7 +133,7 @@ export type ModelNoteFilterInput = {
 }
 
 export type ModelRepoConnection = {
-  items?: Maybe<Array<Maybe<Repo>>>
+  items: Array<Repo>
 }
 
 export enum ModelSortDirection {
@@ -250,13 +250,13 @@ export type Notebook = {
 
 export type Query = {
   readFile?: Maybe<File>
-  listFiles?: Maybe<ModelFileConnection>
+  listFiles: ModelFileConnection
   readNote?: Maybe<Note>
   listNotes?: Maybe<ModelNoteConnection>
   readNotebook?: Maybe<Notebook>
   listNotebooks?: Maybe<ModelNotebookConnection>
   readRepo?: Maybe<Repo>
-  listRepos?: Maybe<ModelRepoConnection>
+  listRepos: ModelRepoConnection
   readGithubUserAccessToken: Scalars['String']
   readGithubUser?: Maybe<GithubUser>
   readUser?: Maybe<User>
@@ -433,11 +433,9 @@ export type ListFilesQueryVariables = {
 }
 
 export type ListFilesQuery = { __typename?: 'Query' } & {
-  listFiles: Maybe<
-    { __typename?: 'ModelFileConnection' } & {
-      items: Maybe<Array<Maybe<{ __typename?: 'File' } & FileFragment>>>
-    }
-  >
+  listFiles: { __typename?: 'ModelFileConnection' } & {
+    items: Array<{ __typename?: 'File' } & FileFragment>
+  }
 }
 
 export type ReadFileQueryVariables = {
@@ -563,11 +561,9 @@ export type ListReposQueryVariables = {
 }
 
 export type ListReposQuery = { __typename?: 'Query' } & {
-  listRepos: Maybe<
-    { __typename?: 'ModelRepoConnection' } & {
-      items: Maybe<Array<Maybe<{ __typename?: 'Repo' } & RepoFragment>>>
-    }
-  >
+  listRepos: { __typename?: 'ModelRepoConnection' } & {
+    items: Array<{ __typename?: 'Repo' } & RepoFragment>
+  }
 }
 
 export type ReadRepoQueryVariables = {

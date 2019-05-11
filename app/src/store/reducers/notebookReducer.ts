@@ -43,6 +43,7 @@ export function notebookReducer(
           activeNote: '',
         }
       }
+      break
     default:
       return state
   }

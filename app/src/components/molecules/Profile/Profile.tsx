@@ -40,10 +40,14 @@ export function Profile() {
       return
     }
     dispatch(username((user && user.login) || ''))
-  }, [user])
+  }, [user, state.user.username, dispatch])
 
   return (
-    <a href={(user && user.html_url) || '#'} target="_blank" rel="noopener">
+    <a
+      href={(user && user.html_url) || '#'}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       <Style>
         <Avatar
           image={(user && user.avatar_url) || 'avatar-placeholder.png'}

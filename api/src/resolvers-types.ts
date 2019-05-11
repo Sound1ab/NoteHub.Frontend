@@ -96,7 +96,7 @@ export type ModelBooleanFilterInput = {
 }
 
 export type ModelFileConnection = {
-  items: Array<Maybe<File>>
+  items: Array<File>
 }
 
 export type ModelFloatFilterInput = {
@@ -132,7 +132,7 @@ export type ModelNoteFilterInput = {
 }
 
 export type ModelRepoConnection = {
-  items?: Maybe<Array<Maybe<Repo>>>
+  items: Array<Repo>
 }
 
 export enum ModelSortDirection {
@@ -249,13 +249,13 @@ export type Notebook = {
 
 export type Query = {
   readFile?: Maybe<File>
-  listFiles?: Maybe<ModelFileConnection>
+  listFiles: ModelFileConnection
   readNote?: Maybe<Note>
   listNotes?: Maybe<ModelNoteConnection>
   readNotebook?: Maybe<Notebook>
   listNotebooks?: Maybe<ModelNotebookConnection>
   readRepo?: Maybe<Repo>
-  listRepos?: Maybe<ModelRepoConnection>
+  listRepos: ModelRepoConnection
   readGithubUserAccessToken: Scalars['String']
   readGithubUser?: Maybe<GithubUser>
   readUser?: Maybe<User>
@@ -530,7 +530,7 @@ export type ModelFileConnectionResolvers<
   Context = any,
   ParentType = ResolversTypes['ModelFileConnection']
 > = {
-  items?: Resolver<Array<Maybe<ResolversTypes['File']>>, ParentType, Context>
+  items?: Resolver<Array<ResolversTypes['File']>, ParentType, Context>
 }
 
 export type ModelNotebookConnectionResolvers<
@@ -561,11 +561,7 @@ export type ModelRepoConnectionResolvers<
   Context = any,
   ParentType = ResolversTypes['ModelRepoConnection']
 > = {
-  items?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['Repo']>>>,
-    ParentType,
-    Context
-  >
+  items?: Resolver<Array<ResolversTypes['Repo']>, ParentType, Context>
 }
 
 export type ModelUserConnectionResolvers<
@@ -709,7 +705,7 @@ export type QueryResolvers<
     QueryReadFileArgs
   >
   listFiles?: Resolver<
-    Maybe<ResolversTypes['ModelFileConnection']>,
+    ResolversTypes['ModelFileConnection'],
     ParentType,
     Context,
     QueryListFilesArgs
@@ -745,7 +741,7 @@ export type QueryResolvers<
     QueryReadRepoArgs
   >
   listRepos?: Resolver<
-    Maybe<ResolversTypes['ModelRepoConnection']>,
+    ResolversTypes['ModelRepoConnection'],
     ParentType,
     Context,
     QueryListReposArgs

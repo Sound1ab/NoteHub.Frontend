@@ -1,5 +1,5 @@
 export class LocalStorage {
-  static setItem(key: string, item: any) {
+  public static setItem(key: string, item: any) {
     if (typeof item !== 'string' && typeof item !== 'number') {
       item = JSON.stringify(item)
     }
@@ -7,7 +7,7 @@ export class LocalStorage {
     localStorage.setItem(key, item)
   }
 
-  static getItem(key: string) {
+  public static getItem(key: string) {
     const item = localStorage.getItem(key)
     if (!item) {
       return
@@ -20,7 +20,7 @@ export class LocalStorage {
     }
   }
 
-  static removeItem(key: string) {
+  public static removeItem(key: string) {
     localStorage.removeItem(key)
   }
 }

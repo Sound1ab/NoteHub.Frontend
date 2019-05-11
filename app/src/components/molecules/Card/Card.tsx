@@ -75,7 +75,7 @@ export function Card({
       </div>
       <p className="Card-excerpt">{excerpt}</p>
       <div className="Card-options">
-        <a href={githubLink} target="_blank" rel="noopener">
+        <a href={githubLink} target="_blank" rel="noopener noreferrer">
           <Icon
             color={COLOR.MEDIUM}
             icon="external-link-alt"

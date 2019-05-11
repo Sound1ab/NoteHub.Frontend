@@ -12,10 +12,16 @@ export class RepoManager extends Github {
   }
 
   public async listRepos(username: string): Promise<Repo[]> {
-    const { data } = await this.octokit.repos.listForUser({
-      username,
-    })
-    return data
+    let result
+    try {
+      const { data } = await this.octokit.repos.listForUser({
+        username,
+      })
+      result = data
+    } catch {
+      result = []
+    }
+    return result
       .filter((repo: Octokit.AnyResponse['data']) =>
         repo.name.includes(this.repoNamespace)
       )

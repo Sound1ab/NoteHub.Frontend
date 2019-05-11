@@ -4,13 +4,13 @@ import { TUserActions } from './actions/userAction'
 import { initialNotebookState } from './reducers/notebookReducer'
 import { initialUserState } from './reducers/userReducer'
 
-export type IState = typeof initialState
-export type TActions = TNotebookActions | TUserActions
-
 export const initialState = {
   notebook: initialNotebookState,
   user: initialUserState,
 }
+
+export type IState = typeof initialState
+export type TActions = TNotebookActions | TUserActions
 
 export const NoteContext = React.createContext<
   [IState, Dispatch<ReducerAction<React.Reducer<IState, TActions>>>]

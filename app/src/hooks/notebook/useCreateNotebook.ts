@@ -3,15 +3,10 @@ import { useMutation } from 'react-apollo-hooks'
 import {
   CreateNotebookMutation,
   CreateNotebookMutationVariables,
-  CreateNoteMutation,
-  CreateNoteMutationVariables,
   ListNotebooksDocument,
   ListNotebooksQuery,
-  ListNotesDocument,
-  ListNotesQuery,
-  ListNotesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
-import { NotebookFragment, NoteFragment } from '../../fragments'
+import { NotebookFragment } from '../../fragments'
 
 export const CreateNotebookDocument = gql`
   ${NotebookFragment}
