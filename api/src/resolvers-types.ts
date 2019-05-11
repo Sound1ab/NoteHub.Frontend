@@ -96,7 +96,7 @@ export type ModelBooleanFilterInput = {
 }
 
 export type ModelFileConnection = {
-  items?: Maybe<Array<Maybe<File>>>
+  items: Array<Maybe<File>>
 }
 
 export type ModelFloatFilterInput = {
@@ -530,11 +530,7 @@ export type ModelFileConnectionResolvers<
   Context = any,
   ParentType = ResolversTypes['ModelFileConnection']
 > = {
-  items?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['File']>>>,
-    ParentType,
-    Context
-  >
+  items?: Resolver<Array<Maybe<ResolversTypes['File']>>, ParentType, Context>
 }
 
 export type ModelNotebookConnectionResolvers<

@@ -21,6 +21,7 @@ export function useListRepos(username: string) {
   const { data, loading } = useQuery<ListReposQuery, ListReposQueryVariables>(
     ListReposDocument,
     {
+      skip: !username,
       variables: {
         username: username || '',
       },
@@ -28,7 +29,7 @@ export function useListRepos(username: string) {
   )
 
   return {
-    repos: (data && data.listRepos && data.listRepos.items) || [],
     loading,
+    repos: (data && data.listRepos && data.listRepos.items) || [],
   }
 }

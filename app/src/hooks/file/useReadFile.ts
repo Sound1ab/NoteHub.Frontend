@@ -20,6 +20,7 @@ export function useReadFile(username: string, repo: string, filename: string) {
     ReadFile,
     {
       // fetchPolicy: 'no-cache',
+      skip: !username || !repo || !filename,
       variables: {
         filename,
         repo,

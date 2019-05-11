@@ -45,7 +45,6 @@ export function useCreateFile(username: string, repo: string) {
         cache.writeQuery<ListFilesQuery, ListFilesQueryVariables>({
           data: {
             listFiles: {
-              __typename: 'ModelFileConnection',
               items: files.concat([{ ...newFile }]),
             },
           },

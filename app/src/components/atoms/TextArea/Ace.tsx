@@ -32,7 +32,6 @@ export function Ace() {
 
   async function handleBlur(e: React.MouseEvent<HTMLDivElement>, editor: any) {
     if (!state.notebook.activeNote) {
-      alert('No active note')
       return
     }
     await updateFile({

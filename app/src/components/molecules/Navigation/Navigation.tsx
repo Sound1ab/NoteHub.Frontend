@@ -9,6 +9,8 @@ import { Heading } from '../../atoms'
 
 const Style = styled.nav`
   position: relative;
+  height: 100%;
+  overflow-y: auto;
 
   .Navigation-active-heading {
     color: ${({ theme }) => theme.colors.accent};
@@ -43,8 +45,6 @@ const Style = styled.nav`
 export function Navigation() {
   const [state, dispatch] = useStore()
   const { repos, loading } = useListRepos(state.user.username)
-
-  console.log('loading', loading)
 
   function handleHeadingClick(notebook: string | null) {
     if (dispatch) {

@@ -25,7 +25,6 @@ export function useCreateRepo(username: string) {
       update: (cache, { data }) => {
         const newRepo = data && data.createRepo
         if (!newRepo) return
-
         const result = cache.readQuery<ListReposQuery, ListReposQueryVariables>(
           {
             query: ListReposDocument,
@@ -37,11 +36,13 @@ export function useCreateRepo(username: string) {
 
         const repos =
           (result && result.listRepos && result.listRepos.items) || []
+        const listRepos = (result && result.listRepos) || []
 
         cache.writeQuery<ListReposQuery, ListReposQueryVariables>({
           data: {
             listRepos: {
-              items: repos.concat([{ ...newRepo }]),
+              ...listRepos,
+              items: [...repos, newRepo],
             },
           },
           query: ListReposDocument,

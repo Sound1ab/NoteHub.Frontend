@@ -17,6 +17,7 @@ const Style = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     padding: ${({ theme }) => theme.spacing.s};
+    height: 100%;
   }
 
   .Sidebar-title-wrapper {

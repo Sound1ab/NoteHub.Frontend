@@ -37,10 +37,12 @@ export function useDeleteRepo(username: string) {
 
         const notebooks =
           (result && result.listRepos && result.listRepos.items) || []
+        const listRepos = (result && result.listRepos) || {}
 
         cache.writeQuery<ListReposQuery, ListReposQueryVariables>({
           data: {
             listRepos: {
+              ...listRepos,
               items: notebooks.filter(
                 notebook => notebook && notebook.id !== deletedRepo.id
               ),

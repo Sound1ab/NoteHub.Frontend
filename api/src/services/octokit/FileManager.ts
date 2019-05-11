@@ -23,12 +23,21 @@ export class FileManager extends Github {
   }
 
   public async listFiles(owner: string, repo: string): Promise<File[]> {
-    const { data } = await this.octokit.repos.getContents({
-      owner,
-      path: '/',
-      repo: `${this.repoNamespace}${repo}`,
-    })
-    return data.map((file: Octokit.AnyResponse['data']) => ({
+    let result
+    try {
+      const { data } = await this.octokit.repos.getContents({
+        owner,
+        path: '/',
+        repo: `${this.repoNamespace}${repo}`,
+      })
+      result = data
+    } catch (error) {
+      if (error.message === 'Not Found') {
+        throw error
+      }
+      result = []
+    }
+    return result.map((file: Octokit.AnyResponse['data']) => ({
       ...file,
       filename: file.name,
     }))

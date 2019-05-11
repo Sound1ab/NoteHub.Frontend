@@ -21,6 +21,7 @@ export function useListFiles(username: string, repo: string) {
   const { data, loading } = useQuery<ListFilesQuery, ListFilesQueryVariables>(
     ListFilesDocument,
     {
+      skip: !username || !repo,
       variables: {
         repo,
         username,
