@@ -39,7 +39,7 @@ export function Authorize() {
       href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&state=${STATE}&scope=${SCOPE}`}
     >
       <Style>
-        <Avatar image="avatar-placeholder.png" className="Authorize-avatar" />
+        <Avatar className="Authorize-avatar" />
         <div className="Authorize-details">
           <Heading color={COLOR.LIGHT} className="Authorize-name" type="h4">
             Authorize

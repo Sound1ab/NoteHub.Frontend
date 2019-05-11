@@ -10,17 +10,28 @@ const Style = styled.div`
     height: 50px;
     width: 50px;
   }
+
+  .Avatar-placeholder {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    background-color: ${({ theme }) => theme.colors.accent};
+  }
 `
 
 interface IAvatar {
-  image: string
+  image?: string | null
   className?: string
 }
 
 export function Avatar({ className, image }: IAvatar) {
   return (
     <Style className={className}>
-      <img src={image} alt="avatar" />
+      {image ? (
+        <img src={image} alt="avatar" />
+      ) : (
+        <div className="Avatar-placeholder" />
+      )}
     </Style>
   )
 }

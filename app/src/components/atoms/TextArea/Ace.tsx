@@ -61,6 +61,17 @@ export function Ace() {
         onBlur={handleBlur as any}
         wrapEnabled={true}
         editorProps={{ $blockScrolling: true }}
+        annotations={[{ row: 0, column: 2, type: '', text: 'Some error.' }]}
+        markers={[
+          {
+            startRow: 0,
+            startCol: 2,
+            endRow: 1,
+            endCol: 20,
+            className: 'error-marker',
+            type: 'background',
+          },
+        ]}
       />
     </>
   )

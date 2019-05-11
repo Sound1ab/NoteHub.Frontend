@@ -49,10 +49,7 @@ export function Profile() {
       rel="noopener noreferrer"
     >
       <Style>
-        <Avatar
-          image={(user && user.avatar_url) || 'avatar-placeholder.png'}
-          className="Profile-avatar"
-        />
+        <Avatar image={user && user.avatar_url} className="Profile-avatar" />
         <div className="Profile-details">
           <Heading color={COLOR.LIGHT} className="Profile-name" type="h4">
             {user && user.login}

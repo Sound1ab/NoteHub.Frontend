@@ -8,7 +8,8 @@ import { Authorize } from '../../molecules/Authorize/Authorize'
 
 const Style = styled.div`
   position: relative;
-  flex: 0 0 ${({ theme }) => theme.spacing.xxl};
+  flex: 0 0 auto;
+  width: ${({ theme }) => theme.spacing.xxl};
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.tertiary};
 

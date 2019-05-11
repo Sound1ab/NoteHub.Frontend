@@ -60,7 +60,7 @@ export function CardList() {
             .map(note => {
               return (
                 <span
-                  key={note.sha}
+                  key={`${note.sha}-${note.filename}`}
                   className="CardList-card-wrapper"
                   onClick={handleCardClick.bind(null, note.filename)}
                 >
