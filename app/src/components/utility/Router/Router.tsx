@@ -1,14 +1,15 @@
 import React, { ReactNode } from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
+import { Callback } from '..'
+import { Editor } from '../../templates'
 
-interface IRouter {
-  children: ReactNode
-}
-
-export function Router({ children }: IRouter) {
+export function Router() {
   return (
     <BrowserRouter>
-      <>{children}</>
+      <>
+        <Route path="/" exact component={Editor} />
+        <Route path="/callback" exact component={Callback} />
+      </>
     </BrowserRouter>
   )
 }
