@@ -32,7 +32,10 @@ export class FileManager extends Github {
       })
       result = data
     } catch (error) {
-      if (error.message === 'Not Found') {
+      if (
+        error.message === 'Not Found' ||
+        error.message === 'Bad credentials'
+      ) {
         throw error
       }
       result = []

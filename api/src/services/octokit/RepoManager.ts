@@ -18,7 +18,10 @@ export class RepoManager extends Github {
         username,
       })
       result = data
-    } catch {
+    } catch (error) {
+      if (error.message === 'Bad credentials') {
+        throw error
+      }
       result = []
     }
     return result
