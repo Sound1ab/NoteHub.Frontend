@@ -2,10 +2,8 @@ import { Location } from 'history'
 import React from 'react'
 import { Redirect } from 'react-router'
 import { LOCAL_STORAGE } from '../../../enums'
-import { useStore } from '../../../hooks'
+import { writeStorage } from '../../../hooks'
 import { useReadGithubUserAccessToken } from '../../../hooks/user/useReadGithubUserAccessToken'
-import { LocalStorage } from '../../../services/LocalStorage'
-import { isAuthorized } from '../../../store'
 import { styled } from '../../../theme'
 
 const Style = styled.div`
@@ -17,7 +15,6 @@ interface ICallback {
 }
 
 export function Callback({ location }: ICallback) {
-  const [, dispatch] = useStore()
   const params = new URLSearchParams(location.search)
   const code = params.get('code')
   const state = params.get('state')
@@ -25,8 +22,7 @@ export function Callback({ location }: ICallback) {
   const accessToken = useReadGithubUserAccessToken(code, state)
 
   if (accessToken) {
-    LocalStorage.setItem(LOCAL_STORAGE.KEY, accessToken)
-    dispatch(isAuthorized(true))
+    writeStorage(LOCAL_STORAGE.KEY, accessToken)
     return <Redirect to="/" push={true} />
   }
 

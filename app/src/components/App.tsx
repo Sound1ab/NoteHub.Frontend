@@ -1,10 +1,14 @@
-import React, { useReducer } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { GoogleFont, TypographyStyle } from 'react-typography'
-import { useToken } from '../hooks'
+import { LOCAL_STORAGE } from '../enums'
+import { useLocalStorage } from '../hooks'
 import {
   initialState,
+  isAuthorized,
   IState,
   NoteContext,
+  resetNotebook,
+  resetUser,
   TActions,
 } from '../store'
 import { combinedReducers } from '../store/reducers'
@@ -17,7 +21,17 @@ export function App() {
     combinedReducers as any,
     initialState
   )
-  useToken(dispatch)
+  const [token] = useLocalStorage(LOCAL_STORAGE.KEY)
+
+  useEffect(() => {
+    if (token) {
+      dispatch(isAuthorized(true))
+    } else {
+      dispatch(isAuthorized(false))
+      dispatch(resetNotebook())
+      dispatch(resetUser())
+    }
+  }, [token])
 
   return (
     <NoteContext.Provider value={[state, dispatch]}>

@@ -1,5 +1,5 @@
 export * from './useStore'
-export * from './useToken'
+export * from './useLocalStorage'
 export * from './note/useCreateNote'
 export * from './notebook/useDeleteNotebook'
 export * from './notebook/useReadNotebook'
