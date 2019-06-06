@@ -10,7 +10,7 @@ export class FileManager extends Github {
   ): Promise<File> {
     const { data } = await this.octokit.repos.getContents({
       owner,
-      path: `${name}`,
+      path: name,
       repo: `${this.repoNamespace}${repo}`,
     })
     const content = Github.decodeFromBase64(data.content)
@@ -22,12 +22,16 @@ export class FileManager extends Github {
     }
   }
 
-  public async listFiles(owner: string, repo: string): Promise<File[]> {
+  public async listFiles(
+    owner: string,
+    repo: string,
+    path: string = '/'
+  ): Promise<File[]> {
     let result
     try {
       const { data } = await this.octokit.repos.getContents({
         owner,
-        path: '/',
+        path,
         repo: `${this.repoNamespace}${repo}`,
       })
       result = data
@@ -52,13 +56,19 @@ export class FileManager extends Github {
     name: string,
     content?: string | null
   ): Promise<File> {
-    await this.octokit.repos.createFile({
-      content: content ? Github.encodeToBase64(content) : '',
-      message: Github.formCommitMessage(name, 'create'),
-      owner,
-      path: `${name}`,
-      repo: `${this.repoNamespace}${repo}`,
-    })
+    try {
+      await this.octokit.repos.createFile({
+        content: content ? Github.encodeToBase64(content) : '',
+        message: Github.formCommitMessage(name, 'create'),
+        owner,
+        path: name,
+        repo: `${this.repoNamespace}${repo}`,
+      })
+    } catch (error) {
+      if (!error.message.includes('"sha" wasn\'t supplied')) {
+        throw error
+      }
+    }
     return this.readFile(owner, repo, name)
   }
 

@@ -158,6 +158,9 @@ export type Mutation = {
   createFile?: Maybe<File>
   updateFile?: Maybe<File>
   deleteFile?: Maybe<File>
+  createImage?: Maybe<File>
+  updateImage?: Maybe<File>
+  deleteImage?: Maybe<File>
   createNote?: Maybe<Note>
   updateNote?: Maybe<Note>
   deleteNote?: Maybe<Note>
@@ -181,6 +184,18 @@ export type MutationUpdateFileArgs = {
 }
 
 export type MutationDeleteFileArgs = {
+  input: DeleteFileInput
+}
+
+export type MutationCreateImageArgs = {
+  input: CreateFileInput
+}
+
+export type MutationUpdateImageArgs = {
+  input: UpdateFileInput
+}
+
+export type MutationDeleteImageArgs = {
   input: DeleteFileInput
 }
 
@@ -251,6 +266,8 @@ export type Notebook = {
 export type Query = {
   readFile?: Maybe<File>
   listFiles: ModelFileConnection
+  readImage?: Maybe<File>
+  listImages: ModelFileConnection
   readNote?: Maybe<Note>
   listNotes?: Maybe<ModelNoteConnection>
   readNotebook?: Maybe<Notebook>
@@ -270,6 +287,17 @@ export type QueryReadFileArgs = {
 }
 
 export type QueryListFilesArgs = {
+  username: Scalars['String']
+  repo: Scalars['String']
+}
+
+export type QueryReadImageArgs = {
+  username: Scalars['String']
+  repo: Scalars['String']
+  filename: Scalars['String']
+}
+
+export type QueryListImagesArgs = {
   username: Scalars['String']
   repo: Scalars['String']
 }
@@ -454,6 +482,51 @@ export type UpdateFileMutationVariables = {
 
 export type UpdateFileMutation = { __typename?: 'Mutation' } & {
   updateFile: Maybe<{ __typename?: 'File' } & FileFragment>
+}
+
+export type CreateImageMutationVariables = {
+  input: CreateFileInput
+}
+
+export type CreateImageMutation = { __typename?: 'Mutation' } & {
+  createImage: Maybe<{ __typename?: 'File' } & FileFragment>
+}
+
+export type DeleteImageMutationVariables = {
+  input: DeleteFileInput
+}
+
+export type DeleteImageMutation = { __typename?: 'Mutation' } & {
+  deleteImage: Maybe<{ __typename?: 'File' } & FileFragment>
+}
+
+export type ListImagesQueryVariables = {
+  username: Scalars['String']
+  repo: Scalars['String']
+}
+
+export type ListImagesQuery = { __typename?: 'Query' } & {
+  listImages: { __typename?: 'ModelFileConnection' } & {
+    items: Array<{ __typename?: 'File' } & FileFragment>
+  }
+}
+
+export type ReadImageQueryVariables = {
+  username: Scalars['String']
+  repo: Scalars['String']
+  filename: Scalars['String']
+}
+
+export type ReadImageQuery = { __typename?: 'Query' } & {
+  readImage: Maybe<{ __typename?: 'File' } & FileFragment>
+}
+
+export type UpdateImageMutationVariables = {
+  input: UpdateFileInput
+}
+
+export type UpdateImageMutation = { __typename?: 'Mutation' } & {
+  updateImage: Maybe<{ __typename?: 'File' } & FileFragment>
 }
 
 export type CreateNoteMutationVariables = {
@@ -903,6 +976,236 @@ export function withUpdateFile<TProps, TChildProps = {}>(
     UpdateFileMutationVariables,
     UpdateFileProps<TChildProps>
   >(UpdateFileDocument, operationOptions)
+}
+export const CreateImageDocument = gql`
+  mutation CreateImage($input: CreateFileInput!) {
+    createImage(input: $input) {
+      ...file
+    }
+  }
+  ${fileFragmentDoc}
+`
+
+export class CreateImageComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<CreateImageMutation, CreateImageMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<CreateImageMutation, CreateImageMutationVariables>
+        mutation={CreateImageDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type CreateImageProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<CreateImageMutation, CreateImageMutationVariables>
+> &
+  TChildProps
+export type CreateImageMutationFn = ReactApollo.MutationFn<
+  CreateImageMutation,
+  CreateImageMutationVariables
+>
+export function withCreateImage<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        CreateImageMutation,
+        CreateImageMutationVariables,
+        CreateImageProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    CreateImageMutation,
+    CreateImageMutationVariables,
+    CreateImageProps<TChildProps>
+  >(CreateImageDocument, operationOptions)
+}
+export const DeleteImageDocument = gql`
+  mutation DeleteImage($input: DeleteFileInput!) {
+    deleteImage(input: $input) {
+      ...file
+    }
+  }
+  ${fileFragmentDoc}
+`
+
+export class DeleteImageComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<DeleteImageMutation, DeleteImageMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<DeleteImageMutation, DeleteImageMutationVariables>
+        mutation={DeleteImageDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type DeleteImageProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<DeleteImageMutation, DeleteImageMutationVariables>
+> &
+  TChildProps
+export type DeleteImageMutationFn = ReactApollo.MutationFn<
+  DeleteImageMutation,
+  DeleteImageMutationVariables
+>
+export function withDeleteImage<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        DeleteImageMutation,
+        DeleteImageMutationVariables,
+        DeleteImageProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    DeleteImageMutation,
+    DeleteImageMutationVariables,
+    DeleteImageProps<TChildProps>
+  >(DeleteImageDocument, operationOptions)
+}
+export const ListImagesDocument = gql`
+  query ListImages($username: String!, $repo: String!) {
+    listImages(username: $username, repo: $repo) {
+      items {
+        ...file
+      }
+    }
+  }
+  ${fileFragmentDoc}
+`
+
+export class ListImagesComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ListImagesQuery, ListImagesQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ListImagesQuery, ListImagesQueryVariables>
+        query={ListImagesDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type ListImagesProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ListImagesQuery, ListImagesQueryVariables>
+> &
+  TChildProps
+export function withListImages<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ListImagesQuery,
+        ListImagesQueryVariables,
+        ListImagesProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ListImagesQuery,
+    ListImagesQueryVariables,
+    ListImagesProps<TChildProps>
+  >(ListImagesDocument, operationOptions)
+}
+export const ReadImageDocument = gql`
+  query ReadImage($username: String!, $repo: String!, $filename: String!) {
+    readImage(username: $username, repo: $repo, filename: $filename) {
+      ...file
+    }
+  }
+  ${fileFragmentDoc}
+`
+
+export class ReadImageComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ReadImageQuery, ReadImageQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ReadImageQuery, ReadImageQueryVariables>
+        query={ReadImageDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type ReadImageProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ReadImageQuery, ReadImageQueryVariables>
+> &
+  TChildProps
+export function withReadImage<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ReadImageQuery,
+        ReadImageQueryVariables,
+        ReadImageProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ReadImageQuery,
+    ReadImageQueryVariables,
+    ReadImageProps<TChildProps>
+  >(ReadImageDocument, operationOptions)
+}
+export const UpdateImageDocument = gql`
+  mutation UpdateImage($input: UpdateFileInput!) {
+    updateImage(input: $input) {
+      ...file
+    }
+  }
+  ${fileFragmentDoc}
+`
+
+export class UpdateImageComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<UpdateImageMutation, UpdateImageMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<UpdateImageMutation, UpdateImageMutationVariables>
+        mutation={UpdateImageDocument}
+        {...(this as any)['props'] as any}
+      />
+    )
+  }
+}
+export type UpdateImageProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<UpdateImageMutation, UpdateImageMutationVariables>
+> &
+  TChildProps
+export type UpdateImageMutationFn = ReactApollo.MutationFn<
+  UpdateImageMutation,
+  UpdateImageMutationVariables
+>
+export function withUpdateImage<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        UpdateImageMutation,
+        UpdateImageMutationVariables,
+        UpdateImageProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    UpdateImageMutation,
+    UpdateImageMutationVariables,
+    UpdateImageProps<TChildProps>
+  >(UpdateImageDocument, operationOptions)
 }
 export const CreateNoteDocument = gql`
   mutation CreateNote($input: CreateNoteInput!) {

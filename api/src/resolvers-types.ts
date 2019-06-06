@@ -157,6 +157,9 @@ export type Mutation = {
   createFile?: Maybe<File>
   updateFile?: Maybe<File>
   deleteFile?: Maybe<File>
+  createImage?: Maybe<File>
+  updateImage?: Maybe<File>
+  deleteImage?: Maybe<File>
   createNote?: Maybe<Note>
   updateNote?: Maybe<Note>
   deleteNote?: Maybe<Note>
@@ -180,6 +183,18 @@ export type MutationUpdateFileArgs = {
 }
 
 export type MutationDeleteFileArgs = {
+  input: DeleteFileInput
+}
+
+export type MutationCreateImageArgs = {
+  input: CreateFileInput
+}
+
+export type MutationUpdateImageArgs = {
+  input: UpdateFileInput
+}
+
+export type MutationDeleteImageArgs = {
   input: DeleteFileInput
 }
 
@@ -250,6 +265,8 @@ export type Notebook = {
 export type Query = {
   readFile?: Maybe<File>
   listFiles: ModelFileConnection
+  readImage?: Maybe<File>
+  listImages: ModelFileConnection
   readNote?: Maybe<Note>
   listNotes?: Maybe<ModelNoteConnection>
   readNotebook?: Maybe<Notebook>
@@ -269,6 +286,17 @@ export type QueryReadFileArgs = {
 }
 
 export type QueryListFilesArgs = {
+  username: Scalars['String']
+  repo: Scalars['String']
+}
+
+export type QueryReadImageArgs = {
+  username: Scalars['String']
+  repo: Scalars['String']
+  filename: Scalars['String']
+}
+
+export type QueryListImagesArgs = {
   username: Scalars['String']
   repo: Scalars['String']
 }
@@ -598,6 +626,24 @@ export type MutationResolvers<
     Context,
     MutationDeleteFileArgs
   >
+  createImage?: Resolver<
+    Maybe<ResolversTypes['File']>,
+    ParentType,
+    Context,
+    MutationCreateImageArgs
+  >
+  updateImage?: Resolver<
+    Maybe<ResolversTypes['File']>,
+    ParentType,
+    Context,
+    MutationUpdateImageArgs
+  >
+  deleteImage?: Resolver<
+    Maybe<ResolversTypes['File']>,
+    ParentType,
+    Context,
+    MutationDeleteImageArgs
+  >
   createNote?: Resolver<
     Maybe<ResolversTypes['Note']>,
     ParentType,
@@ -709,6 +755,18 @@ export type QueryResolvers<
     ParentType,
     Context,
     QueryListFilesArgs
+  >
+  readImage?: Resolver<
+    Maybe<ResolversTypes['File']>,
+    ParentType,
+    Context,
+    QueryReadImageArgs
+  >
+  listImages?: Resolver<
+    ResolversTypes['ModelFileConnection'],
+    ParentType,
+    Context,
+    QueryListImagesArgs
   >
   readNote?: Resolver<
     Maybe<ResolversTypes['Note']>,

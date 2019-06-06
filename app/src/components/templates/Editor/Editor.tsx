@@ -1,6 +1,7 @@
 import React from 'react'
 import { styled } from '../../../theme'
 import { Ace, Container } from '../../atoms'
+import { Dropzone } from '../../atoms/Dropzone/Dropzone'
 import { CardList, Sidebar } from '../../organism'
 
 const Style = styled.div`
@@ -33,7 +34,9 @@ export function Editor() {
         <Sidebar />
         <CardList />
         <main className="Editor-main">
-          <Ace />
+          <Dropzone>
+            <Ace />
+          </Dropzone>
         </main>
       </Container>
     </Style>

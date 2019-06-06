@@ -6,12 +6,14 @@ import { config } from './config'
 import { ERRORS } from './errors'
 import { DateType } from './resolvers/date'
 import { FileMutations, FileQueries } from './resolvers/file'
+import { ImageMutations, ImageQueries } from './resolvers/image'
 import { NoteMutations, NoteQueries } from './resolvers/note'
 import { NotebookMutations, NotebookQueries } from './resolvers/notebook'
 import { RepoMutations, RepoQueries } from './resolvers/repo'
 import { UserMutations, UserQueries } from './resolvers/user'
 import { typeDefs } from './schema'
 import { FileManager, RepoManager, UserManager } from './services/octokit'
+const bodyParser = require('body-parser')
 
 const port = process.env.PORT || 8088
 
@@ -19,6 +21,9 @@ async function configureServer() {
   const app = express()
 
   app.set('env', process.env.APP_ENV)
+
+  app.use(bodyParser.json({ limit: '50mb' }))
+  app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }))
 
   const resolvers = {
     Date: DateType,
@@ -28,6 +33,7 @@ async function configureServer() {
       ...(await NotebookMutations()),
       ...RepoMutations(),
       ...FileMutations(),
+      ...ImageMutations(),
     },
     Query: {
       ...(await UserQueries()),
@@ -35,6 +41,7 @@ async function configureServer() {
       ...(await NotebookQueries()),
       ...RepoQueries(),
       ...FileQueries(),
+      ...ImageQueries(),
     },
   }
 

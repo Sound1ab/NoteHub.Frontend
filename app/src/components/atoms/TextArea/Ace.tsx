@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import AceEditor from 'react-ace'
 import { useStore } from '../../../hooks'
 
@@ -7,8 +7,11 @@ import 'brace/theme/github'
 import { Spinner } from '..'
 import { useReadFile } from '../../../hooks/file/useReadFile'
 import { useUpdateFile } from '../../../hooks/file/useUpdateFile'
+import { DropzoneContext } from '../Dropzone/Dropzone'
 
 export function Ace() {
+  const [handleFileSelect, dropzoneLoading] = useContext(DropzoneContext)
+  const aceEditor = useRef<any>(null)
   const [value, setValue] = useState('')
   const [state] = useStore()
   const { file, loading } = useReadFile(
@@ -47,10 +50,24 @@ export function Ace() {
     })
   }
 
+  async function uploadImage() {
+    const filename = await handleFileSelect()
+    insertMarkdownImage(filename)
+  }
+
+  function insertMarkdownImage(filename: string) {
+    if (aceEditor && aceEditor.current) {
+      console.log(aceEditor.current)
+      const markdown = `![](images/${filename})`
+      aceEditor.current.editor.insert(markdown)
+    }
+  }
+
   return (
     <>
-      {loading && <Spinner />}
+      {(dropzoneLoading || loading) && <Spinner />}
       <AceEditor
+        ref={aceEditor}
         value={value}
         mode="markdown"
         theme="github"
@@ -61,15 +78,11 @@ export function Ace() {
         onBlur={handleBlur as any}
         wrapEnabled={true}
         editorProps={{ $blockScrolling: true }}
-        annotations={[{ row: 0, column: 2, type: '', text: 'Some error.' }]}
-        markers={[
+        commands={[
           {
-            startRow: 0,
-            startCol: 2,
-            endRow: 1,
-            endCol: 20,
-            className: 'error-marker',
-            type: 'background',
+            bindKey: { win: 'Ctrl-M', mac: 'Command-M' },
+            exec: uploadImage,
+            name: 'myCommand',
           },
         ]}
       />
