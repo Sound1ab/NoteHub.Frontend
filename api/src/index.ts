@@ -4,13 +4,10 @@ import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import { config } from './config'
 import { ERRORS } from './errors'
-import { DateType } from './resolvers/date'
 import { FileMutations, FileQueries } from './resolvers/file'
 import { ImageMutations, ImageQueries } from './resolvers/image'
-import { NoteMutations, NoteQueries } from './resolvers/note'
-import { NotebookMutations, NotebookQueries } from './resolvers/notebook'
 import { RepoMutations, RepoQueries } from './resolvers/repo'
-import { UserMutations, UserQueries } from './resolvers/user'
+import { UserQueries } from './resolvers/user'
 import { typeDefs } from './schema'
 import { FileManager, RepoManager, UserManager } from './services/octokit'
 const bodyParser = require('body-parser')
@@ -26,19 +23,13 @@ async function configureServer() {
   app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }))
 
   const resolvers = {
-    Date: DateType,
     Mutation: {
-      ...(await UserMutations()),
-      ...(await NoteMutations()),
-      ...(await NotebookMutations()),
       ...RepoMutations(),
       ...FileMutations(),
       ...ImageMutations(),
     },
     Query: {
-      ...(await UserQueries()),
-      ...(await NoteQueries()),
-      ...(await NotebookQueries()),
+      ...UserQueries(),
       ...RepoQueries(),
       ...FileQueries(),
       ...ImageQueries(),

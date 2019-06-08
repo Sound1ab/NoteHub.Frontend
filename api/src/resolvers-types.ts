@@ -17,34 +17,9 @@ export type CreateFileInput = {
   content?: Maybe<Scalars['String']>
 }
 
-export type CreateNotebookInput = {
-  userId: Scalars['ID']
-  title: Scalars['String']
-}
-
-export type CreateNoteInput = {
-  notebookId: Scalars['ID']
-  title: Scalars['String']
-  content: Scalars['String']
-  excerpt: Scalars['String']
-}
-
 export type CreateRepoInput = {
   name: Scalars['String']
   description?: Maybe<Scalars['String']>
-}
-
-export type CreateUserInput = {
-  firstName: Scalars['String']
-  lastName: Scalars['String']
-  email: Scalars['String']
-}
-
-export type Date = {
-  dayOfWeek: Scalars['String']
-  dayOfMonth: Scalars['Int']
-  month: Scalars['String']
-  dateLongForm: Scalars['String']
 }
 
 export type DeleteFileInput = {
@@ -53,21 +28,9 @@ export type DeleteFileInput = {
   filename: Scalars['String']
 }
 
-export type DeleteNotebookInput = {
-  id?: Maybe<Scalars['ID']>
-}
-
-export type DeleteNoteInput = {
-  id?: Maybe<Scalars['ID']>
-}
-
 export type DeleteRepoInput = {
   username: Scalars['String']
   repo: Scalars['String']
-}
-
-export type DeleteUserInput = {
-  id?: Maybe<Scalars['ID']>
 }
 
 export type File = {
@@ -91,66 +54,12 @@ export type Links = {
   html: Scalars['String']
 }
 
-export type ModelBooleanFilterInput = {
-  eq?: Maybe<Scalars['Boolean']>
-}
-
 export type ModelFileConnection = {
   items: Array<File>
 }
 
-export type ModelFloatFilterInput = {
-  eq?: Maybe<Scalars['Float']>
-}
-
-export type ModelIdFilterInput = {
-  eq?: Maybe<Scalars['ID']>
-}
-
-export type ModelIntFilterInput = {
-  eq?: Maybe<Scalars['Int']>
-}
-
-export type ModelNotebookConnection = {
-  items?: Maybe<Array<Maybe<Notebook>>>
-  nextOffset?: Maybe<Scalars['Int']>
-}
-
-export type ModelNotebookFilterInput = {
-  id?: Maybe<ModelIdFilterInput>
-  userId?: Maybe<ModelIdFilterInput>
-}
-
-export type ModelNoteConnection = {
-  items?: Maybe<Array<Maybe<Note>>>
-  nextOffset?: Maybe<Scalars['Int']>
-}
-
-export type ModelNoteFilterInput = {
-  id?: Maybe<ModelIdFilterInput>
-  notebookId?: Maybe<ModelIdFilterInput>
-}
-
 export type ModelRepoConnection = {
   items: Array<Repo>
-}
-
-export enum ModelSortDirection {
-  Asc = 'ASC',
-  Desc = 'DESC',
-}
-
-export type ModelStringFilterInput = {
-  eq?: Maybe<Scalars['String']>
-}
-
-export type ModelUserConnection = {
-  items?: Maybe<Array<Maybe<User>>>
-  nextOffset?: Maybe<Scalars['Int']>
-}
-
-export type ModelUserFilterInput = {
-  id?: Maybe<ModelIdFilterInput>
 }
 
 export type Mutation = {
@@ -160,18 +69,9 @@ export type Mutation = {
   createImage?: Maybe<File>
   updateImage?: Maybe<File>
   deleteImage?: Maybe<File>
-  createNote?: Maybe<Note>
-  updateNote?: Maybe<Note>
-  deleteNote?: Maybe<Note>
-  createNotebook?: Maybe<Notebook>
-  updateNotebook?: Maybe<Notebook>
-  deleteNotebook?: Maybe<Notebook>
   createRepo?: Maybe<Repo>
   updateRepo?: Maybe<Repo>
   deleteRepo?: Maybe<Repo>
-  createUser?: Maybe<User>
-  updateUser?: Maybe<User>
-  deleteUser?: Maybe<User>
 }
 
 export type MutationCreateFileArgs = {
@@ -198,30 +98,6 @@ export type MutationDeleteImageArgs = {
   input: DeleteFileInput
 }
 
-export type MutationCreateNoteArgs = {
-  input: CreateNoteInput
-}
-
-export type MutationUpdateNoteArgs = {
-  input: UpdateNoteInput
-}
-
-export type MutationDeleteNoteArgs = {
-  input: DeleteNoteInput
-}
-
-export type MutationCreateNotebookArgs = {
-  input: CreateNotebookInput
-}
-
-export type MutationUpdateNotebookArgs = {
-  input: UpdateNotebookInput
-}
-
-export type MutationDeleteNotebookArgs = {
-  input: DeleteNotebookInput
-}
-
 export type MutationCreateRepoArgs = {
   input: CreateRepoInput
 }
@@ -234,49 +110,15 @@ export type MutationDeleteRepoArgs = {
   input: DeleteRepoInput
 }
 
-export type MutationCreateUserArgs = {
-  input: CreateUserInput
-}
-
-export type MutationUpdateUserArgs = {
-  input: UpdateUserInput
-}
-
-export type MutationDeleteUserArgs = {
-  input: DeleteUserInput
-}
-
-export type Note = {
-  id: Scalars['ID']
-  title: Scalars['String']
-  content: Scalars['String']
-  excerpt: Scalars['String']
-  createdAt: Date
-  updatedAt: Date
-}
-
-export type Notebook = {
-  id: Scalars['ID']
-  title: Scalars['String']
-  createdAt: Date
-  updatedAt: Date
-}
-
 export type Query = {
   readFile?: Maybe<File>
   listFiles: ModelFileConnection
   readImage?: Maybe<File>
   listImages: ModelFileConnection
-  readNote?: Maybe<Note>
-  listNotes?: Maybe<ModelNoteConnection>
-  readNotebook?: Maybe<Notebook>
-  listNotebooks?: Maybe<ModelNotebookConnection>
   readRepo?: Maybe<Repo>
   listRepos: ModelRepoConnection
   readGithubUserAccessToken: Scalars['String']
   readGithubUser?: Maybe<GithubUser>
-  readUser?: Maybe<User>
-  listUsers?: Maybe<ModelUserConnection>
 }
 
 export type QueryReadFileArgs = {
@@ -301,26 +143,6 @@ export type QueryListImagesArgs = {
   repo: Scalars['String']
 }
 
-export type QueryReadNoteArgs = {
-  id: Scalars['ID']
-}
-
-export type QueryListNotesArgs = {
-  filter?: Maybe<ModelNoteFilterInput>
-  limit?: Maybe<Scalars['Int']>
-  offset?: Maybe<Scalars['Int']>
-}
-
-export type QueryReadNotebookArgs = {
-  id: Scalars['ID']
-}
-
-export type QueryListNotebooksArgs = {
-  filter?: Maybe<ModelNotebookFilterInput>
-  limit?: Maybe<Scalars['Int']>
-  offset?: Maybe<Scalars['Int']>
-}
-
 export type QueryReadRepoArgs = {
   username: Scalars['String']
   repo: Scalars['String']
@@ -333,16 +155,6 @@ export type QueryListReposArgs = {
 export type QueryReadGithubUserAccessTokenArgs = {
   code: Scalars['String']
   state: Scalars['String']
-}
-
-export type QueryReadUserArgs = {
-  id: Scalars['ID']
-}
-
-export type QueryListUsersArgs = {
-  filter?: Maybe<ModelUserFilterInput>
-  limit?: Maybe<Scalars['Int']>
-  offset?: Maybe<Scalars['Int']>
 }
 
 export type Repo = {
@@ -360,39 +172,11 @@ export type UpdateFileInput = {
   content?: Maybe<Scalars['String']>
 }
 
-export type UpdateNotebookInput = {
-  id: Scalars['ID']
-  title?: Maybe<Scalars['String']>
-}
-
-export type UpdateNoteInput = {
-  id: Scalars['ID']
-  title?: Maybe<Scalars['String']>
-  content?: Maybe<Scalars['String']>
-  excerpt?: Maybe<Scalars['String']>
-}
-
 export type UpdateRepoInput = {
   username: Scalars['String']
   repo: Scalars['String']
   name?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
-}
-
-export type UpdateUserInput = {
-  id: Scalars['ID']
-  firstName?: Maybe<Scalars['String']>
-  lastName?: Maybe<Scalars['String']>
-  email?: Maybe<Scalars['String']>
-}
-
-export type User = {
-  id: Scalars['ID']
-  firstName: Scalars['String']
-  lastName: Scalars['String']
-  email: Scalars['String']
-  createdAt: Date
-  updatedAt: Date
 }
 
 import { GraphQLResolveInfo } from 'graphql'
@@ -473,55 +257,18 @@ export type ResolversTypes = {
   File: File
   Links: Links
   ModelFileConnection: ModelFileConnection
-  ID: Scalars['ID']
-  Note: Note
-  Date: Date
-  Int: Scalars['Int']
-  ModelNoteFilterInput: ModelNoteFilterInput
-  ModelIDFilterInput: ModelIdFilterInput
-  ModelNoteConnection: ModelNoteConnection
-  Notebook: Notebook
-  ModelNotebookFilterInput: ModelNotebookFilterInput
-  ModelNotebookConnection: ModelNotebookConnection
   Repo: Repo
+  Int: Scalars['Int']
   ModelRepoConnection: ModelRepoConnection
   GithubUser: GithubUser
-  User: User
-  ModelUserFilterInput: ModelUserFilterInput
-  ModelUserConnection: ModelUserConnection
   Mutation: Mutation
   CreateFileInput: CreateFileInput
   UpdateFileInput: UpdateFileInput
   DeleteFileInput: DeleteFileInput
-  CreateNoteInput: CreateNoteInput
-  UpdateNoteInput: UpdateNoteInput
-  DeleteNoteInput: DeleteNoteInput
-  CreateNotebookInput: CreateNotebookInput
-  UpdateNotebookInput: UpdateNotebookInput
-  DeleteNotebookInput: DeleteNotebookInput
   CreateRepoInput: CreateRepoInput
   UpdateRepoInput: UpdateRepoInput
   DeleteRepoInput: DeleteRepoInput
-  CreateUserInput: CreateUserInput
-  UpdateUserInput: UpdateUserInput
-  DeleteUserInput: DeleteUserInput
   Boolean: Scalars['Boolean']
-  ModelSortDirection: ModelSortDirection
-  ModelStringFilterInput: ModelStringFilterInput
-  ModelIntFilterInput: ModelIntFilterInput
-  ModelFloatFilterInput: ModelFloatFilterInput
-  Float: Scalars['Float']
-  ModelBooleanFilterInput: ModelBooleanFilterInput
-}
-
-export type DateResolvers<
-  Context = any,
-  ParentType = ResolversTypes['Date']
-> = {
-  dayOfWeek?: Resolver<ResolversTypes['String'], ParentType, Context>
-  dayOfMonth?: Resolver<ResolversTypes['Int'], ParentType, Context>
-  month?: Resolver<ResolversTypes['String'], ParentType, Context>
-  dateLongForm?: Resolver<ResolversTypes['String'], ParentType, Context>
 }
 
 export type FileResolvers<
@@ -561,47 +308,11 @@ export type ModelFileConnectionResolvers<
   items?: Resolver<Array<ResolversTypes['File']>, ParentType, Context>
 }
 
-export type ModelNotebookConnectionResolvers<
-  Context = any,
-  ParentType = ResolversTypes['ModelNotebookConnection']
-> = {
-  items?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['Notebook']>>>,
-    ParentType,
-    Context
-  >
-  nextOffset?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, Context>
-}
-
-export type ModelNoteConnectionResolvers<
-  Context = any,
-  ParentType = ResolversTypes['ModelNoteConnection']
-> = {
-  items?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['Note']>>>,
-    ParentType,
-    Context
-  >
-  nextOffset?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, Context>
-}
-
 export type ModelRepoConnectionResolvers<
   Context = any,
   ParentType = ResolversTypes['ModelRepoConnection']
 > = {
   items?: Resolver<Array<ResolversTypes['Repo']>, ParentType, Context>
-}
-
-export type ModelUserConnectionResolvers<
-  Context = any,
-  ParentType = ResolversTypes['ModelUserConnection']
-> = {
-  items?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['User']>>>,
-    ParentType,
-    Context
-  >
-  nextOffset?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, Context>
 }
 
 export type MutationResolvers<
@@ -644,42 +355,6 @@ export type MutationResolvers<
     Context,
     MutationDeleteImageArgs
   >
-  createNote?: Resolver<
-    Maybe<ResolversTypes['Note']>,
-    ParentType,
-    Context,
-    MutationCreateNoteArgs
-  >
-  updateNote?: Resolver<
-    Maybe<ResolversTypes['Note']>,
-    ParentType,
-    Context,
-    MutationUpdateNoteArgs
-  >
-  deleteNote?: Resolver<
-    Maybe<ResolversTypes['Note']>,
-    ParentType,
-    Context,
-    MutationDeleteNoteArgs
-  >
-  createNotebook?: Resolver<
-    Maybe<ResolversTypes['Notebook']>,
-    ParentType,
-    Context,
-    MutationCreateNotebookArgs
-  >
-  updateNotebook?: Resolver<
-    Maybe<ResolversTypes['Notebook']>,
-    ParentType,
-    Context,
-    MutationUpdateNotebookArgs
-  >
-  deleteNotebook?: Resolver<
-    Maybe<ResolversTypes['Notebook']>,
-    ParentType,
-    Context,
-    MutationDeleteNotebookArgs
-  >
   createRepo?: Resolver<
     Maybe<ResolversTypes['Repo']>,
     ParentType,
@@ -698,46 +373,6 @@ export type MutationResolvers<
     Context,
     MutationDeleteRepoArgs
   >
-  createUser?: Resolver<
-    Maybe<ResolversTypes['User']>,
-    ParentType,
-    Context,
-    MutationCreateUserArgs
-  >
-  updateUser?: Resolver<
-    Maybe<ResolversTypes['User']>,
-    ParentType,
-    Context,
-    MutationUpdateUserArgs
-  >
-  deleteUser?: Resolver<
-    Maybe<ResolversTypes['User']>,
-    ParentType,
-    Context,
-    MutationDeleteUserArgs
-  >
-}
-
-export type NoteResolvers<
-  Context = any,
-  ParentType = ResolversTypes['Note']
-> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, Context>
-  title?: Resolver<ResolversTypes['String'], ParentType, Context>
-  content?: Resolver<ResolversTypes['String'], ParentType, Context>
-  excerpt?: Resolver<ResolversTypes['String'], ParentType, Context>
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
-  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
-}
-
-export type NotebookResolvers<
-  Context = any,
-  ParentType = ResolversTypes['Notebook']
-> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, Context>
-  title?: Resolver<ResolversTypes['String'], ParentType, Context>
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
-  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
 }
 
 export type QueryResolvers<
@@ -768,30 +403,6 @@ export type QueryResolvers<
     Context,
     QueryListImagesArgs
   >
-  readNote?: Resolver<
-    Maybe<ResolversTypes['Note']>,
-    ParentType,
-    Context,
-    QueryReadNoteArgs
-  >
-  listNotes?: Resolver<
-    Maybe<ResolversTypes['ModelNoteConnection']>,
-    ParentType,
-    Context,
-    QueryListNotesArgs
-  >
-  readNotebook?: Resolver<
-    Maybe<ResolversTypes['Notebook']>,
-    ParentType,
-    Context,
-    QueryReadNotebookArgs
-  >
-  listNotebooks?: Resolver<
-    Maybe<ResolversTypes['ModelNotebookConnection']>,
-    ParentType,
-    Context,
-    QueryListNotebooksArgs
-  >
   readRepo?: Resolver<
     Maybe<ResolversTypes['Repo']>,
     ParentType,
@@ -815,18 +426,6 @@ export type QueryResolvers<
     ParentType,
     Context
   >
-  readUser?: Resolver<
-    Maybe<ResolversTypes['User']>,
-    ParentType,
-    Context,
-    QueryReadUserArgs
-  >
-  listUsers?: Resolver<
-    Maybe<ResolversTypes['ModelUserConnection']>,
-    ParentType,
-    Context,
-    QueryListUsersArgs
-  >
 }
 
 export type RepoResolvers<
@@ -840,34 +439,15 @@ export type RepoResolvers<
   description?: Resolver<ResolversTypes['String'], ParentType, Context>
 }
 
-export type UserResolvers<
-  Context = any,
-  ParentType = ResolversTypes['User']
-> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, Context>
-  firstName?: Resolver<ResolversTypes['String'], ParentType, Context>
-  lastName?: Resolver<ResolversTypes['String'], ParentType, Context>
-  email?: Resolver<ResolversTypes['String'], ParentType, Context>
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
-  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, Context>
-}
-
 export type Resolvers<Context = any> = {
-  Date?: DateResolvers<Context>
   File?: FileResolvers<Context>
   GithubUser?: GithubUserResolvers<Context>
   Links?: LinksResolvers<Context>
   ModelFileConnection?: ModelFileConnectionResolvers<Context>
-  ModelNotebookConnection?: ModelNotebookConnectionResolvers<Context>
-  ModelNoteConnection?: ModelNoteConnectionResolvers<Context>
   ModelRepoConnection?: ModelRepoConnectionResolvers<Context>
-  ModelUserConnection?: ModelUserConnectionResolvers<Context>
   Mutation?: MutationResolvers<Context>
-  Note?: NoteResolvers<Context>
-  Notebook?: NotebookResolvers<Context>
   Query?: QueryResolvers<Context>
   Repo?: RepoResolvers<Context>
-  User?: UserResolvers<Context>
 }
 
 /**

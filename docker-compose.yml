@@ -13,19 +13,8 @@ services:
     ports:
       - 8088:8088
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; npm start'
-    depends_on:
-      - db
     env_file:
       - .env
-  db:
-    image: postgres:10
-    restart: always
-    volumes:
-      - $HOME/docker/volumes/postgres:/var/lib/postgresql/data
-    env_file:
-      - .env
-    ports:
-      - 5431:5432
   app:
     working_dir: /usr/src/app
     build: ./app

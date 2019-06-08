@@ -4,7 +4,7 @@ extend type Query {
     listRepos(username: String!): ModelRepoConnection!
 }
 
-extend type Mutation {
+type Mutation {
     createRepo(input: CreateRepoInput!): Repo
     updateRepo(input: UpdateRepoInput!): Repo
     deleteRepo(input: DeleteRepoInput!): Repo

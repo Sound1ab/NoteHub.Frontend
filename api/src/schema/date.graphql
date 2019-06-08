@@ -1,6 +1,0 @@
-type Date {
-    dayOfWeek: String!
-    dayOfMonth: Int!
-    month: String!
-    dateLongForm: String!
-}
