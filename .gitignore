@@ -142,3 +142,5 @@ fabric.properties
 .idea/vcs.xml
 .idea
 
+api/.serverless
+api/.webpack

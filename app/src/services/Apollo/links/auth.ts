@@ -8,7 +8,7 @@ export const authLink = new ApolloLink(
 
     operation.setContext({
       headers: {
-        authorization: token ? `${token}` : '',
+        Authorization: token ? `${token}` : '',
       },
     })
 

@@ -4,7 +4,9 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsnd --respawn --transpileOnly ./src/index.ts",
+    "start": "tsnd --respawn --transpileOnly ./src/server.ts",
+    "sls:offline": "sls offline start",
+    "sls:deploy": "sls deploy",
     "docker:up": "cd ../ && docker-compose up",
     "docker:down": "cd ../ && docker-compose down",
     "ssh": "docker exec -it $CONTAINER sh",
@@ -19,33 +21,36 @@
     "@graphql-codegen/introspection": "^1.0.7",
     "@graphql-codegen/typescript": "1.0.7",
     "@graphql-codegen/typescript-resolvers": "1.0.7",
+    "@types/aws-lambda": "^8.10.17",
     "@types/express": "^4.16.1",
     "@types/graphql": "^14.2.0",
     "@types/node": "^11.13.0",
     "graphql": "^14.2.1",
+    "graphql-tag": "^2.10.1",
+    "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-offline": "^5.3.1",
+    "serverless-webpack": "^5.2.0",
     "ts-loader": "^5.3.3",
     "ts-node-dev": "^1.0.0-pre.32",
     "typescript": "^3.4.1",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "source-map-support": "^0.5.10",
+    "webpack-node-externals": "^1.7.2",
+    "ts-node": "^8.0.3",
+    "dotenv": "^7.0.0",
+
+    "class-validator": "^0.9.1"
+
   },
   "dependencies": {
     "@octokit/plugin-throttling": "^2.4.0",
     "@octokit/rest": "^16.25.1",
     "apollo-server-express": "^2.4.8",
-    "axios": "^0.18.0",
-    "body-parser": "^1.19.0",
-    "class-validator": "^0.9.1",
-    "dotenv": "^7.0.0",
-    "express": "^4.16.4",
+    "apollo-server-lambda": "^2.6.2",
+    "axios": "^0.19.0",
     "graphql": "^14.2.1",
-    "lodash": "^4.17.11",
     "merge-graphql-schemas": "^1.5.8",
-    "pg": "^7.9.0",
-    "pg-hstore": "^2.3.2",
-    "pg-native": "^3.0.0",
-    "reflect-metadata": "^0.1.13",
-    "ts-node": "^8.0.3",
-    "typeorm": "^0.2.16"
+    "body-parser": "^1.19.0",
+    "express": "^4.16.4"
   }
 }
