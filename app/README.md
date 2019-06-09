@@ -10,15 +10,6 @@ Lint: `npm run lint`
 
 Test: `npm run test`
 
-## Preview Links
-
-[Master]()
-
-## CircleCI
-
-[Continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) provided by [CircleCI](https://circleci.com/) when either
-Master or Staging receives a push or PR.
-
 ## Typescript
 
 [Typescript](https://www.typescriptlang.org/) is used throughout the project to provide static type checking. Any new
