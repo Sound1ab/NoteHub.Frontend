@@ -10,11 +10,16 @@ const Style = styled.div`
   height: 100vh;
 
   .Editor-page {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns:
+      minmax(0, ${({ theme }) => theme.spacing.xxl}) minmax(
+        0,
+        ${({ theme }) => theme.spacing.xxxl}
+      )
+      1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 'sidebar cardlist editor';
+    height: 100%;
   }
 
   .Editor-main {

@@ -10,7 +10,7 @@ import { Card, CardHeader } from '../../molecules'
 const Style = styled.div`
   position: relative;
   flex: 0 0 auto;
-  width: ${({ theme }) => theme.spacing.xxxl}
+  //width: ${({ theme }) => theme.spacing.xxxl}
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.secondary};
   overflow-y: auto;
