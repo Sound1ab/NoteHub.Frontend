@@ -50,7 +50,6 @@ jobs:
       REGION: us-east-1
     steps:
       - checkout
-      # Log the current branch
       - run:
           name: Show current branch
           command: echo ${CIRCLE_BRANCH}
@@ -58,39 +57,19 @@ jobs:
           name: Install local dependencies
           command: |
             cd app && npm install
-#      # Cache local dependencies if they don't exist
-#      - save_cache:
-#          key: v1-dependencies-{{ checksum "package.json" }}
-#          paths:
-#            - node_modules
-      # Build portfolio-v2 with different configuration based on
-      # the current branch
       - run:
           name: Building
           command: |
             cd app && npm run build
-      # Cache the dist folder for the deploy job
-#      - save_cache:
-#          key: v1-public-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
-#          paths:
-#            - public
-
-      # Restore cache from the build job which contains the
-      # dist folder that needs to be deployed
-#        - restore_cache:
-#            key: v1-public-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Install pip
           command: sudo apt-get install python-dev python-pip
-      # Install AWS cli
       - run:
           name: Install aws cli
           command: sudo pip install awscli
-      # Set the signature version for the S3 auth
       - run:
           name: Setting Signature Version 4 for S3 Request Authentication
           command: aws configure set default.s3.signature_version s3v4
-      # Deploy to the S3 bucket corresponding to the current branch
       - run:
           name: Deploy to S3
           command: |
@@ -101,9 +80,28 @@ jobs:
             echo "aws --region ${REGION} s3 sync app/build s3://${BUCKET}-master/ --delete"
                 aws --region ${REGION} s3 sync app/build s3://${BUCKET}-master/ --delete
             fi
-#      - run:
-#          name: Invalidate Cloudfron cache
-#          command: |
-#            aws configure set preview.cloudfront true  # Turn on cloudfront in AWS CLI
-#            aws configure set preview.create-invalidation true
-#            aws cloudfront create-invalidation --distribution-id ${DISTRIBUTION_ID} --paths /\*
+  api:
+    working_directory: ~/noted
+    docker:
+      - image: circleci/node:8.12-browsers-legacy
+    steps:
+      - checkout
+      - run:
+          name: Show current branch
+          command: echo ${CIRCLE_BRANCH}
+      - run:
+          name: Install local dependencies
+          command: |
+            cd api && npm install
+      - run:
+          name: Install pip
+          command: sudo apt-get install python-dev python-pip
+      - run:
+          name: Install aws cli
+          command: sudo pip install AWS CLI
+      - run:
+          name: Install Serverless CLI
+          command: sudo npm i -g serverless
+      - run:
+          name: Deploy
+          command: sls deploy --stage prod
