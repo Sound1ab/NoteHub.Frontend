@@ -104,4 +104,4 @@ jobs:
           command: sudo npm i -g serverless
       - run:
           name: Deploy
-          command: sls deploy --stage prod
+          command: cd api && sls deploy --stage prod
