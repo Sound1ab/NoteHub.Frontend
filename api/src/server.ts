@@ -61,7 +61,6 @@ function configureServer() {
       ...ImageQueries(),
     },
   }
-
   return new ApolloServer({
     context: isDev ? expressContext : lambdaContext,
     formatError: (error: Error): GraphQLFormattedError => {
