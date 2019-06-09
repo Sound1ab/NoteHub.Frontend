@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import { styled } from '../../../theme'
 
+/*eslint-disable */
 export const Style = styled.section<{
   marginBottom?: boolean
   marginTop?: boolean

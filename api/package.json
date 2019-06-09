@@ -38,7 +38,6 @@
     "webpack-node-externals": "^1.7.2",
     "ts-node": "^8.0.3",
     "dotenv": "^7.0.0",
-
     "class-validator": "^0.9.1"
 
   },

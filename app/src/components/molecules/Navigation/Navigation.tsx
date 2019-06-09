@@ -11,9 +11,17 @@ const Style = styled.nav`
   position: relative;
   height: 100%;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
   .Navigation-active-heading {
     color: ${({ theme }) => theme.colors.accent};
+  }
+
+  .Navigation-button {
+    background-color: transparent;
+    margin-bottom: ${({ theme }) => theme.spacing.xxs};
   }
 
   > a {
@@ -62,7 +70,10 @@ export function Navigation() {
             return repoA.name.localeCompare(repoB.name)
           })
           .map(repo => (
-            <a key={(repo && repo.id) || 'repo'} href="javascript:">
+            <button
+              className="Navigation-button"
+              key={(repo && repo.id) || 'repo'}
+            >
               <Heading
                 color={COLOR.LIGHT}
                 onClick={handleHeadingClick.bind(null, repo && repo.name)}
@@ -74,11 +85,10 @@ export function Navigation() {
                     : ''
                 }
                 type="h5"
-                marginBottom
               >
                 {repo && repo.name}
               </Heading>
-            </a>
+            </button>
           ))
       )}
     </Style>

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 import { Callback } from '..'
 import { Editor } from '../../templates'

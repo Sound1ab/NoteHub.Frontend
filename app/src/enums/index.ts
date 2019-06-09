@@ -11,7 +11,7 @@ export enum LOCAL_STORAGE {
 
 export enum GRAPHQL {
   DEV_GRAPHQL = process.env.REACT_APP_GRAPHQL_DEV! as any,
-  PROD_GRAPHQL = process.env.NODE_ENV! as any,
+  PROD_GRAPHQL = process.env.REACT_APP_GRAPHQL_PROD! as any,
 }
 
 export enum APOLLO_ERRORS {

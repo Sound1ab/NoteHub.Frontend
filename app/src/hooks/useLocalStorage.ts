@@ -79,19 +79,19 @@ export function useLocalStorage(
 ): [string | null, Dispatch<string>, Dispatch<void>] {
   const [localState, updateLocalState] = useState(localStorage.getItem(key))
 
-  function onLocalStorageChange(event: LocalStorageChanged | StorageEvent) {
-    if (event instanceof LocalStorageChanged) {
-      if (event.detail.key === key) {
-        updateLocalState(event.detail.value)
-      }
-    } else {
-      if (event.key === key) {
-        updateLocalState(event.newValue)
+  useEffect(() => {
+    function onLocalStorageChange(event: LocalStorageChanged | StorageEvent) {
+      if (event instanceof LocalStorageChanged) {
+        if (event.detail.key === key) {
+          updateLocalState(event.detail.value)
+        }
+      } else {
+        if (event.key === key) {
+          updateLocalState(event.newValue)
+        }
       }
     }
-  }
 
-  useEffect(() => {
     window.addEventListener(LocalStorageChanged.eventName, (e: any) =>
       onLocalStorageChange(e as LocalStorageChanged)
     )
@@ -103,7 +103,7 @@ export function useLocalStorage(
       )
       window.removeEventListener('storage', e => onLocalStorageChange(e))
     }
-  }, [])
+  }, [key])
 
   return [
     localState,
