@@ -97,8 +97,8 @@ jobs:
           name: Install pip
           command: sudo apt-get install python-dev python-pip
       - run:
-          name: Install aws cli
-          command: sudo pip install AWS CLI
+          name: Install AWS CLI
+          command: sudo pip install awscli
       - run:
           name: Install Serverless CLI
           command: sudo npm i -g serverless
