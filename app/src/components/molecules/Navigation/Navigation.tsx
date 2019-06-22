@@ -60,7 +60,7 @@ export function Navigation() {
                 <div className="Navigation-wrapper">
                   <Icon
                     size="xs"
-                    color={isActive ? COLOR.ACTIVE : COLOR.LIGHT}
+                    color={isActive ? COLOR.ACTIVE : COLOR.DARK}
                     icon={isActive ? 'chevron-down' : 'chevron-right'}
                     prefix="fa"
                     marginRight
@@ -70,7 +70,7 @@ export function Navigation() {
                     key={(repo && repo.id) || 'repo'}
                   >
                     <Heading
-                      color={isActive ? COLOR.ACTIVE : COLOR.LIGHT}
+                      color={isActive ? COLOR.ACTIVE : COLOR.DARK}
                       onClick={handleHeadingClick.bind(null, repo && repo.name)}
                       type="h5"
                     >

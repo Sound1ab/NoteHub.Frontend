@@ -78,6 +78,7 @@ export function Ace() {
         onBlur={handleBlur as any}
         wrapEnabled={true}
         editorProps={{ $blockScrolling: true }}
+        showGutter={false}
         commands={[
           {
             bindKey: { win: 'Ctrl-M', mac: 'Command-M' },

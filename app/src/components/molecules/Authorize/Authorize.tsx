@@ -47,7 +47,7 @@ export function Authorize() {
       <Style>
         <Avatar className="Authorize-avatar" />
         <div className="Authorize-details">
-          <Heading color={COLOR.LIGHT} className="Authorize-name" type="h4">
+          <Heading color={COLOR.DARK} className="Authorize-name" type="h4">
             Authorize
           </Heading>
         </div>

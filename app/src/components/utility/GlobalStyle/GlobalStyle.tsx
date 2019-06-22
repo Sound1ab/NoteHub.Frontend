@@ -67,6 +67,27 @@ export const GlobalStyle = createGlobalStyle`
   p {
     color: ${({ theme }: { theme: any }) => theme.colors.text.primary};
   }
+ 
+
+  a {
+    text-decoration: none;
+  }
+
+  a:link {
+    color: ${({ theme }) => theme.colors.text.tertiary};
+  }
+
+  a:visited {
+    color: ${({ theme }) => theme.colors.text.tertiary};
+  }
+
+  a:hover {
+    color: ${({ theme }) => theme.colors.text.secondary};
+  }
+
+  a:active {
+    color: ${({ theme }) => theme.colors.accent};
+  }
   
   
   

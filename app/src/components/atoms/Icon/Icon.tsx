@@ -77,7 +77,7 @@ export function Icon({
   prefix,
   onClick,
   marginRight = false,
-  color = COLOR.LIGHT,
+  color = COLOR.DARK,
   size = 'xs',
 }: IIcon) {
   const FontAwesomeIconComponent = React.cloneElement(

@@ -48,7 +48,7 @@ export function FileList() {
                 <button className="FileList-button">
                   <Heading
                     key={note.sha}
-                    color={isActive ? COLOR.ACTIVE : COLOR.LIGHT}
+                    color={isActive ? COLOR.ACTIVE : COLOR.DARK}
                     onClick={handleCardClick.bind(null, note.filename)}
                     type="h6"
                   >

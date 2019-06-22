@@ -2,11 +2,11 @@ import { typography } from './typography'
 
 export const theme = {
   colors: {
-    accent: '#f0e1ff',
+    accent: '#ffd21c',
     background: {
       primary: '#fff',
       secondary: '#f8f8f8',
-      tertiary: '#302831',
+      tertiary: '#f5f5f5',
     },
     link: {
       active: '#e8e8e8',

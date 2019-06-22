@@ -39,7 +39,7 @@ export function Sidebar() {
         <div className="Sidebar-title-wrapper">
           <Icon icon="book" prefix="fa" marginRight />
           <Heading
-            color={COLOR.LIGHT}
+            color={COLOR.DARK}
             className="category-heading"
             type="h4"
             textTransform="uppercase"

@@ -30,7 +30,7 @@ export function NewNotebook() {
           prefix="fa"
           marginRight
         />
-        <Heading color={COLOR.LIGHT} type="h3">
+        <Heading color={COLOR.DARK} type="h3">
           New Notebook
         </Heading>
       </span>

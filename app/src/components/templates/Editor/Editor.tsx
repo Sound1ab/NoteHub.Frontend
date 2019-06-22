@@ -12,7 +12,7 @@ const Style = styled.div`
   .Editor-page {
     display: grid;
     grid-template-columns:
-      minmax(0, ${({ theme }) => theme.spacing.xxl})
+      minmax(0, ${({ theme }) => theme.spacing.xxxl})
       1fr;
     grid-template-rows: auto;
     grid-template-areas: 'sidebar editor';

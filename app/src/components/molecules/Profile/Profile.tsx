@@ -51,12 +51,12 @@ export function Profile() {
       <Style>
         <Avatar image={user && user.avatar_url} className="Profile-avatar" />
         <div className="Profile-details">
-          <Heading color={COLOR.LIGHT} className="Profile-name" type="h4">
+          <Heading color={COLOR.DARK} className="Profile-name" type="h4">
             {user && user.login}
           </Heading>
           <div className="Profile-github">
             <Icon icon="github" prefix="fab" marginRight />
-            <Heading color={COLOR.LIGHT} type="h6">
+            <Heading color={COLOR.DARK} type="h6">
               View Github
             </Heading>
           </div>

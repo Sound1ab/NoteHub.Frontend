@@ -1,9 +1,32 @@
 import Typography from 'typography'
-import moragaTheme from 'typography-theme-moraga'
 
 export const typography = new Typography({
-  ...moragaTheme,
   baseFontSize: '16px',
+  headerFontFamily: [
+    '-apple-system',
+    'BlinkMacSystemFont',
+    'Segoe UI',
+    'Oxygen',
+    'Roboto',
+    'Ubuntu',
+    'Cantarell',
+    'Open Sans',
+    'Helvetica Neue',
+    'sans-serif',
+  ],
+  bodyFontFamily: [
+    '-apple-system',
+    'BlinkMacSystemFont',
+    'Segoe UI',
+    'Oxygen',
+    'Roboto',
+    'Ubuntu',
+    'Cantarell',
+    'Open Sans',
+    'Helvetica Neue',
+    'sans-serif',
+  ],
+  headerWeight: 300,
   overrideThemeStyles: ({ rhythm }) => ({
     h5: {
       marginBottom: rhythm(0.25),
