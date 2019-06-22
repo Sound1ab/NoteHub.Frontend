@@ -2,6 +2,8 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faGithub, faSoundcloud } from '@fortawesome/free-brands-svg-icons'
 import {
   faBook,
+  faChevronDown,
+  faChevronRight,
   faComment,
   faEnvelope,
   faExternalLinkAlt,
@@ -28,7 +30,9 @@ library.add(
   faSync,
   faTrash,
   faTimes,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faChevronRight,
+  faChevronDown
 )
 
 interface IIconProvider {

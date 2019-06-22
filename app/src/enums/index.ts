@@ -3,6 +3,7 @@ export enum COLOR {
   LIGHT = 'light',
   ACCENT = 'accent',
   MEDIUM = 'medium',
+  ACTIVE = 'active',
 }
 
 export enum LOCAL_STORAGE {

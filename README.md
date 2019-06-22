@@ -49,3 +49,7 @@ To deploy the back end manually:
 It can also be run offline:
 
 `npm run sls:offline`
+
+## Todo
+
+Configure api CI on CircleCI. Need to set user permissions to access cloudformation.

@@ -12,13 +12,10 @@ const Style = styled.div`
   .Editor-page {
     display: grid;
     grid-template-columns:
-      minmax(0, ${({ theme }) => theme.spacing.xxl}) minmax(
-        0,
-        ${({ theme }) => theme.spacing.xxxl}
-      )
+      minmax(0, ${({ theme }) => theme.spacing.xxl})
       1fr;
     grid-template-rows: auto;
-    grid-template-areas: 'sidebar cardlist editor';
+    grid-template-areas: 'sidebar editor';
     height: 100%;
   }
 
@@ -37,7 +34,6 @@ export function Editor() {
     <Style>
       <Container className="Editor-page">
         <Sidebar />
-        <CardList />
         <main className="Editor-main">
           <Dropzone>
             <Ace />

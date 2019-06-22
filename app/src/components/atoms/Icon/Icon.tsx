@@ -12,7 +12,7 @@ const Style = styled.a<{ marginRight: boolean; color: COLOR; size: string }>`
   padding: ${({ size }) => {
     switch (size) {
       case 'xs':
-        return '6px'
+        return '5px'
       case 'sm':
         return '5px'
       case 'lg':
@@ -61,6 +61,8 @@ interface IIcon {
     | 'sync'
     | 'times'
     | 'external-link-alt'
+    | 'chevron-right'
+    | 'chevron-down'
   color?: COLOR
   link?: string
   prefix?: 'fab' | 'fa'

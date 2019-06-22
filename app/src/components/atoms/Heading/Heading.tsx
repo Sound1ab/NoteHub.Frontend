@@ -23,6 +23,8 @@ const StyledHeading = styled('h1')<IHeading>`
         return theme.colors.accent
       case COLOR.MEDIUM:
         return theme.colors.text.secondary
+      case COLOR.ACTIVE:
+        return theme.colors.accent
       default:
         return theme.colors.text.primary
     }
