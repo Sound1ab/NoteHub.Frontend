@@ -2,7 +2,8 @@ import React from 'react'
 import { styled } from '../../../theme'
 import { Ace, Container } from '../../atoms'
 import { Dropzone } from '../../atoms/Dropzone/Dropzone'
-import { CardList, Sidebar } from '../../organism'
+import { Toolbar } from '../../molecules/Toolbar/Toolbar'
+import { Sidebar } from '../../organism'
 
 const Style = styled.div`
   display: flex;
@@ -14,17 +15,10 @@ const Style = styled.div`
     grid-template-columns:
       minmax(0, ${({ theme }) => theme.spacing.xxxl})
       1fr;
-    grid-template-rows: auto;
-    grid-template-areas: 'sidebar editor';
-    height: 100%;
-  }
-
-  .Editor-main {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    position: relative;
-    min-width: 0;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'sidebar toolbar'
+      'sidebar editor';
     height: 100%;
   }
 `
@@ -34,11 +28,10 @@ export function Editor() {
     <Style>
       <Container className="Editor-page">
         <Sidebar />
-        <main className="Editor-main">
-          <Dropzone>
-            <Ace />
-          </Dropzone>
-        </main>
+        <Dropzone>
+          <Toolbar dummyProp="hey" />
+          <Ace />
+        </Dropzone>
       </Container>
     </Style>
   )

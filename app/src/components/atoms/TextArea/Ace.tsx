@@ -8,6 +8,13 @@ import { Spinner } from '..'
 import { useReadFile } from '../../../hooks/file/useReadFile'
 import { useUpdateFile } from '../../../hooks/file/useUpdateFile'
 import { DropzoneContext } from '../Dropzone/Dropzone'
+import { styled } from '../../../theme'
+
+const Style = styled.div`
+  grid-area: editor;
+  width: 70%;
+  margin: 0 auto;
+`
 
 export function Ace() {
   const [handleFileSelect, dropzoneLoading] = useContext(DropzoneContext)
@@ -64,7 +71,7 @@ export function Ace() {
   }
 
   return (
-    <>
+    <Style>
       {(dropzoneLoading || loading) && <Spinner />}
       <AceEditor
         ref={aceEditor}
@@ -79,6 +86,8 @@ export function Ace() {
         wrapEnabled={true}
         editorProps={{ $blockScrolling: true }}
         showGutter={false}
+        showPrintMargin={false}
+        highlightActiveLine={false}
         commands={[
           {
             bindKey: { win: 'Ctrl-M', mac: 'Command-M' },
@@ -87,6 +96,6 @@ export function Ace() {
           },
         ]}
       />
-    </>
+    </Style>
   )
 }

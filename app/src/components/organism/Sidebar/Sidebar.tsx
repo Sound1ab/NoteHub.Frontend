@@ -7,6 +7,7 @@ import { Navigation, NewNotebook, Profile } from '../../molecules'
 import { Authorize } from '../../molecules/Authorize/Authorize'
 
 const Style = styled.div`
+  grid-area: sidebar;
   position: relative;
   flex: 0 0 auto;
   height: 100%;
