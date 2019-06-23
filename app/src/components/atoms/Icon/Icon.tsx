@@ -3,6 +3,7 @@ import React from 'react'
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 
+/*eslint-disable */
 const Style = styled.a<{
   marginRight: boolean
   marginLeft: boolean
