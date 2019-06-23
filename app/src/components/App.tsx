@@ -21,6 +21,7 @@ export function App() {
     combinedReducers as any,
     initialState
   )
+
   const [token] = useLocalStorage(LOCAL_STORAGE.KEY)
 
   useEffect(() => {
