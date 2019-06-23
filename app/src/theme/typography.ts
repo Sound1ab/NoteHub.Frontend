@@ -2,7 +2,7 @@ import Typography from 'typography'
 
 export const typography = new Typography({
   baseFontSize: '16px',
-  headerFontFamily: [
+  bodyFontFamily: [
     '-apple-system',
     'BlinkMacSystemFont',
     'Segoe UI',
@@ -14,7 +14,7 @@ export const typography = new Typography({
     'Helvetica Neue',
     'sans-serif',
   ],
-  bodyFontFamily: [
+  headerFontFamily: [
     '-apple-system',
     'BlinkMacSystemFont',
     'Segoe UI',
