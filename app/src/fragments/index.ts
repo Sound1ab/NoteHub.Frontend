@@ -19,6 +19,7 @@ export const RepoFragment = gql`
     node_id
     name
     full_name
+    description
   }
 `
 

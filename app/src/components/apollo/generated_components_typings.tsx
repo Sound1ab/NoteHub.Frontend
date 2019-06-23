@@ -163,7 +163,7 @@ export type Repo = {
   node_id: Scalars['String']
   name: Scalars['String']
   full_name: Scalars['String']
-  description: Scalars['String']
+  description?: Maybe<Scalars['String']>
 }
 
 export type UpdateFileInput = {
@@ -186,7 +186,7 @@ export type FileFragment = { __typename?: 'File' } & Pick<
 
 export type RepoFragment = { __typename?: 'Repo' } & Pick<
   Repo,
-  'id' | 'node_id' | 'name' | 'full_name'
+  'id' | 'node_id' | 'name' | 'full_name' | 'description'
 >
 
 export type GithubUserFragment = { __typename?: 'GithubUser' } & Pick<
@@ -356,6 +356,7 @@ export const repoFragmentDoc = gql`
     node_id
     name
     full_name
+    description
   }
 `
 export const githubUserFragmentDoc = gql`

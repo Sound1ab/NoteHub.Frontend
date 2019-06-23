@@ -29,7 +29,7 @@ export function Editor() {
       <Container className="Editor-page">
         <Sidebar />
         <Dropzone>
-          <Toolbar dummyProp="hey" />
+          <Toolbar />
           <Ace />
         </Dropzone>
       </Container>

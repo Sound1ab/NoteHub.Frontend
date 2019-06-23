@@ -24,13 +24,13 @@ export function Ace() {
   const [state] = useStore()
   const { file, loading } = useReadFile(
     state.user.username,
-    state.repo.activeRepo,
-    state.repo.activeFile
+    state.repo.activeRepo.name,
+    state.repo.activeFile.filename
   )
   const updateFile = useUpdateFile(
     state.user.username,
-    state.repo.activeRepo,
-    state.repo.activeFile
+    state.repo.activeRepo.name,
+    state.repo.activeFile.filename
   )
 
   useEffect(() => {
@@ -50,8 +50,8 @@ export function Ace() {
         input: {
           // excerpt: editor.session.getLine(0),
           content: editor.getValue(),
-          filename: state.repo.activeFile,
-          repo: state.repo.activeRepo,
+          filename: state.repo.activeFile.filename,
+          repo: state.repo.activeRepo.name,
           username: state.user.username,
         },
       },

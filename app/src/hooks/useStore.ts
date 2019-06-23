@@ -1,5 +1,5 @@
 import { Dispatch, Reducer, ReducerAction, useContext } from 'react'
-import { IState, FileContext, TActions } from '../store'
+import { FileContext, IState, TActions } from '../store'
 
 export function useStore() {
   return useContext<

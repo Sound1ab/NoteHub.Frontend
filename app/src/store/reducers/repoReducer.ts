@@ -5,10 +5,33 @@ import {
   TReturnOfActiveRepo,
   TReturnOfResetRepo,
 } from '..'
+import {
+  File,
+  Repo,
+} from '../../components/apollo/generated_components_typings'
+
+const emptyFile: File = {
+  _links: {
+    html: '',
+  },
+  content: '',
+  excerpt: '',
+  filename: '',
+  path: '',
+  sha: '',
+}
+
+const emptyRepo: Repo = {
+  description: '',
+  full_name: '',
+  id: 0,
+  name: '',
+  node_id: '',
+}
 
 export const initialRepoState = {
-  activeFile: '',
-  activeRepo: '',
+  activeFile: emptyFile,
+  activeRepo: emptyRepo,
 }
 
 export function repoReducer(
@@ -34,13 +57,13 @@ export function repoReducer(
       if (repo) {
         return {
           ...state,
-          activeRepo: '',
+          activeRepo: emptyRepo,
         }
       }
       if (file) {
         return {
           ...state,
-          activeFile: '',
+          activeFile: emptyFile,
         }
       }
       break

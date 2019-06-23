@@ -162,7 +162,7 @@ export type Repo = {
   node_id: Scalars['String']
   name: Scalars['String']
   full_name: Scalars['String']
-  description: Scalars['String']
+  description?: Maybe<Scalars['String']>
 }
 
 export type UpdateFileInput = {
@@ -436,7 +436,7 @@ export type RepoResolvers<
   node_id?: Resolver<ResolversTypes['String'], ParentType, Context>
   name?: Resolver<ResolversTypes['String'], ParentType, Context>
   full_name?: Resolver<ResolversTypes['String'], ParentType, Context>
-  description?: Resolver<ResolversTypes['String'], ParentType, Context>
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, Context>
 }
 
 export type Resolvers<Context = any> = {

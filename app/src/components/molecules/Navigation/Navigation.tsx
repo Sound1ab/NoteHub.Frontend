@@ -6,6 +6,7 @@ import { useStore } from '../../../hooks'
 import { useListRepos } from '../../../hooks/Repo/useListRepos'
 import { activeRepo, resetRepo } from '../../../store'
 import { styled } from '../../../theme'
+import { Repo } from '../../apollo/generated_components_typings'
 import { Heading, Icon } from '../../atoms'
 
 const Style = styled.nav`
@@ -29,16 +30,18 @@ export function Navigation() {
   const [state, dispatch] = useStore()
   const { repos, loading } = useListRepos(state.user.username)
 
-  function handleHeadingClick(repo: string | null) {
+  function handleHeadingClick(repo: Repo) {
     if (!dispatch) {
       return
     }
-    if (state.repo.activeRepo === repo) {
+    if (state.repo.activeRepo.name === repo.name) {
       dispatch(resetRepo())
     } else {
       dispatch(activeRepo(repo))
     }
   }
+
+  console.log('here', repos)
 
   return (
     <Style>
@@ -53,7 +56,7 @@ export function Navigation() {
             const isActive =
               state.repo.activeRepo &&
               repo &&
-              repo.name === state.repo.activeRepo
+              repo.name === state.repo.activeRepo.name
 
             return (
               <>
@@ -71,7 +74,7 @@ export function Navigation() {
                   >
                     <Heading
                       color={isActive ? COLOR.ACTIVE : COLOR.DARK}
-                      onClick={handleHeadingClick.bind(null, repo && repo.name)}
+                      onClick={handleHeadingClick.bind(null, repo)}
                       type="h5"
                     >
                       {repo && repo.name}

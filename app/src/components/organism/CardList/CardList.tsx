@@ -4,6 +4,7 @@ import { useStore } from '../../../hooks'
 import { useListFiles } from '../../../hooks/file/useListFiles'
 import { activeFile } from '../../../store'
 import { styled } from '../../../theme'
+import { File } from '../../apollo/generated_components_typings'
 import { Container } from '../../atoms'
 import { Card, CardHeader } from '../../molecules'
 
@@ -36,16 +37,16 @@ export function CardList() {
   const [state, dispatch] = useStore()
   const { files, loading } = useListFiles(
     state.user.username,
-    state.repo.activeRepo
+    state.repo.activeRepo.name
   )
 
-  function handleCardClick(file: string | null) {
+  function handleCardClick(file: File) {
     if (dispatch) dispatch(activeFile(file))
   }
 
   return (
     <Style>
-      <CardHeader title={state.repo.activeRepo} />
+      <CardHeader title={state.repo.activeRepo.name} />
       <Container className="CardList-wrapper">
         {loading ? (
           <>
@@ -62,7 +63,7 @@ export function CardList() {
                 <span
                   key={`${file.sha}-${file.filename}`}
                   className="CardList-card-wrapper"
-                  onClick={handleCardClick.bind(null, file.filename)}
+                  onClick={handleCardClick.bind(null, file)}
                 >
                   <Card
                     key={file.sha}
@@ -73,7 +74,7 @@ export function CardList() {
                     createdAt={''}
                     isSelected={
                       !!state.repo.activeFile &&
-                      state.repo.activeFile === file.filename
+                      state.repo.activeFile.filename === file.filename
                     }
                   />
                 </span>

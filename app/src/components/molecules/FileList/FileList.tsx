@@ -5,7 +5,8 @@ import { useStore } from '../../../hooks'
 import { useListFiles } from '../../../hooks/file/useListFiles'
 import { activeFile } from '../../../store'
 import { styled } from '../../../theme'
-import { Heading, Icon } from '../../atoms'
+import { File } from '../../apollo/generated_components_typings'
+import { Heading } from '../../atoms'
 
 const Style = styled.div`
   line-height: 0;
@@ -21,10 +22,10 @@ export function FileList() {
   const [state, dispatch] = useStore()
   const { files, loading } = useListFiles(
     state.user.username,
-    state.repo.activeRepo
+    state.repo.activeRepo.name
   )
 
-  function handleCardClick(file: string | null) {
+  function handleCardClick(file: File) {
     if (dispatch) dispatch(activeFile(file))
   }
 
@@ -41,7 +42,7 @@ export function FileList() {
             const isActive =
               state.repo.activeFile &&
               file &&
-              file.filename === state.repo.activeFile
+              file.filename === state.repo.activeFile.filename
 
             return (
               <Style>
@@ -49,7 +50,7 @@ export function FileList() {
                   <Heading
                     key={file.sha}
                     color={isActive ? COLOR.ACTIVE : COLOR.DARK}
-                    onClick={handleCardClick.bind(null, file.filename)}
+                    onClick={handleCardClick.bind(null, file)}
                     type="h6"
                   >
                     {file.filename}

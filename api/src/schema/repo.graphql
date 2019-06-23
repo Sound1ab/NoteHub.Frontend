@@ -16,7 +16,7 @@ type Repo {
     node_id: String!
     name: String!
     full_name: String!
-    description: String!
+    description: String
 }
 
 ## Query outputs

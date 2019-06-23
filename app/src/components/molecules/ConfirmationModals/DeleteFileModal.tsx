@@ -12,7 +12,10 @@ interface IDeleteFileModal {
 export function DeleteFileModal({ isOpen, onRequestClose }: IDeleteFileModal) {
   const [state, dispatch] = useStore()
   const [loading, setLoading] = useState(false)
-  const deleteFile = useDeleteFile(state.user.username, state.repo.activeRepo)
+  const deleteFile = useDeleteFile(
+    state.user.username,
+    state.repo.activeRepo.name
+  )
 
   async function handleDeleteFile() {
     if (!state.repo.activeFile) {
@@ -24,8 +27,8 @@ export function DeleteFileModal({ isOpen, onRequestClose }: IDeleteFileModal) {
       await deleteFile({
         variables: {
           input: {
-            filename: state.repo.activeFile,
-            repo: state.repo.activeRepo,
+            filename: state.repo.activeFile.filename,
+            repo: state.repo.activeRepo.name,
             username: state.user.username,
           },
         },

@@ -3,10 +3,10 @@ import { GoogleFont, TypographyStyle } from 'react-typography'
 import { LOCAL_STORAGE } from '../enums'
 import { useLocalStorage } from '../hooks'
 import {
+  FileContext,
   initialState,
   isAuthorized,
   IState,
-  FileContext,
   resetRepo,
   resetUser,
   TActions,

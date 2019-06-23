@@ -35,7 +35,7 @@ export function DeleteRepoModal({
       await deleteRepo({
         variables: {
           input: {
-            repo: state.repo.activeRepo,
+            repo: state.repo.activeRepo.name,
             username: state.user.username,
           },
         },

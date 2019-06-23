@@ -14,7 +14,7 @@ export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
   const [loading, setLoading] = useState(false)
   const createNewFile = useCreateFile(
     state.user.username,
-    state.repo.activeRepo || ''
+    state.repo.activeRepo.name
   )
 
   async function handleCreateNewFile() {
@@ -29,7 +29,7 @@ export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
           input: {
             content: '',
             filename: `${inputValue}.md`,
-            repo: state.repo.activeRepo,
+            repo: state.repo.activeRepo.name,
             username: state.user.username,
           },
         },

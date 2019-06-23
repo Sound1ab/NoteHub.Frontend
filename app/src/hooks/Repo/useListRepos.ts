@@ -18,6 +18,7 @@ export const ListReposDocument = gql`
 `
 
 export function useListRepos(username: string) {
+  console.log('here2', username)
   const { data, loading } = useQuery<ListReposQuery, ListReposQueryVariables>(
     ListReposDocument,
     {

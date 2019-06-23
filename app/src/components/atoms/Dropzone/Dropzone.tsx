@@ -39,7 +39,7 @@ export function Dropzone({ children }: IDropzone) {
           input: {
             content,
             filename,
-            repo: state.repo.activeRepo,
+            repo: state.repo.activeRepo.name,
             username: state.user.username,
           },
         },
