@@ -47,6 +47,7 @@
     "react-ace": "^6.5.0",
     "react-apollo": "^2.5.5",
     "react-apollo-hooks": "^0.4.5",
+    "react-awesome-popover": "^4.0.2",
     "react-content-loader": "^4.2.1",
     "react-dom": "^16.8.4",
     "react-dropzone": "^10.1.5",

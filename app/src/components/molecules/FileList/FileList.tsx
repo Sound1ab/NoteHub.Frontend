@@ -1,5 +1,5 @@
 import React from 'react'
-import { BulletList } from 'react-content-loader'
+import ContentLoader from 'react-content-loader'
 import { COLOR } from '../../../enums'
 import { useStore } from '../../../hooks'
 import { useListFiles } from '../../../hooks/file/useListFiles'
@@ -10,11 +10,14 @@ import { Heading } from '../../atoms'
 
 const Style = styled.div`
   line-height: 0;
-  margin-bottom: ${({ theme }) => theme.spacing.xxs};
   margin-left: ${({ theme }) => theme.spacing.s};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
   .FileList-button {
     background-color: transparent;
+    margin-bottom: ${({ theme }) => theme.spacing.xs};
   }
 `
 
@@ -30,9 +33,12 @@ export function FileList() {
   }
 
   return (
-    <>
+    <Style>
       {loading ? (
-        <BulletList />
+        <ContentLoader height={50}>
+          <circle cx="10" cy="20" r="8" />
+          <rect x="25" y="15" rx="5" ry="5" width="220" height="10" />
+        </ContentLoader>
       ) : (
         files
           .sort((fileA, fileB) => {
@@ -45,21 +51,19 @@ export function FileList() {
               file.filename === state.repo.activeFile.filename
 
             return (
-              <Style>
-                <button className="FileList-button">
-                  <Heading
-                    key={file.sha}
-                    color={isActive ? COLOR.ACTIVE : COLOR.DARK}
-                    onClick={handleCardClick.bind(null, file)}
-                    type="h6"
-                  >
-                    {file.filename}
-                  </Heading>
-                </button>
-              </Style>
+              <button className="FileList-button">
+                <Heading
+                  key={file.sha}
+                  color={isActive ? COLOR.ACTIVE : COLOR.INHERIT}
+                  onClick={handleCardClick.bind(null, file)}
+                  type="h6"
+                >
+                  {file.filename}
+                </Heading>
+              </button>
             )
           })
       )}
-    </>
+    </Style>
   )
 }

@@ -18,7 +18,7 @@ const Style = styled.nav`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-bottom: ${({ theme }) => theme.spacing.xxs};
+    margin-bottom: ${({ theme }) => theme.spacing.xs};
   }
 
   .Navigation-button {
@@ -37,6 +37,7 @@ export function Navigation() {
     if (state.repo.activeRepo.name === repo.name) {
       dispatch(resetRepo())
     } else {
+      dispatch(resetRepo())
       dispatch(activeRepo(repo))
     }
   }
@@ -63,7 +64,7 @@ export function Navigation() {
                 <div className="Navigation-wrapper">
                   <Icon
                     size="xs"
-                    color={isActive ? COLOR.ACTIVE : COLOR.DARK}
+                    color={COLOR.DARK}
                     icon={isActive ? 'chevron-down' : 'chevron-right'}
                     prefix="fa"
                     marginRight
@@ -73,7 +74,7 @@ export function Navigation() {
                     key={(repo && repo.id) || 'repo'}
                   >
                     <Heading
-                      color={isActive ? COLOR.ACTIVE : COLOR.DARK}
+                      color={isActive ? COLOR.ACTIVE : COLOR.INHERIT}
                       onClick={handleHeadingClick.bind(null, repo)}
                       type="h5"
                     >

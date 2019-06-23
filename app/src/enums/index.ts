@@ -4,6 +4,7 @@ export enum COLOR {
   ACCENT = 'accent',
   MEDIUM = 'medium',
   ACTIVE = 'active',
+  INHERIT = 'inherit',
 }
 
 export enum LOCAL_STORAGE {

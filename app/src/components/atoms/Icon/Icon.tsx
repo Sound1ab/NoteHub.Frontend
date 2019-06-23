@@ -3,18 +3,25 @@ import React from 'react'
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 
-const Style = styled.a<{ marginRight: boolean; color: COLOR; size: string }>`
+const Style = styled.a<{
+  marginRight: boolean
+  marginLeft: boolean
+  color: COLOR
+  size: string
+}>`
   position: relative;
   display: inline-block !important;
   margin-right: ${({ theme, marginRight }) =>
     marginRight ? theme.spacing.xxs : 0};
+  margin-left: ${({ theme, marginLeft }) =>
+    marginLeft ? theme.spacing.xxs : 0};
 
   padding: ${({ size }) => {
     switch (size) {
       case 'xs':
         return '5px'
       case 'sm':
-        return '5px'
+        return '6px'
       case 'lg':
         return '10px'
       default:
@@ -63,10 +70,13 @@ interface IIcon {
     | 'external-link-alt'
     | 'chevron-right'
     | 'chevron-down'
+    | 'ellipsis-h'
+    | 'grip-lines-vertical'
   color?: COLOR
   link?: string
   prefix?: 'fab' | 'fa'
   marginRight?: boolean
+  marginLeft?: boolean
   size?: 'xs' | 'sm' | 'lg'
   onClick?: () => void
 }
@@ -77,6 +87,7 @@ export function Icon({
   prefix,
   onClick,
   marginRight = false,
+  marginLeft = false,
   color = COLOR.DARK,
   size = 'xs',
 }: IIcon) {
@@ -94,6 +105,7 @@ export function Icon({
       rel="noopener"
       target="_blank"
       marginRight={marginRight}
+      marginLeft={marginLeft}
       size={size}
       onClick={onClick}
     >
@@ -102,7 +114,7 @@ export function Icon({
   ) : (
     React.createElement(
       Style.withComponent('div'),
-      { marginRight, color, size, onClick },
+      { marginRight, marginLeft, color, size, onClick },
       FontAwesomeIconComponent
     )
   )

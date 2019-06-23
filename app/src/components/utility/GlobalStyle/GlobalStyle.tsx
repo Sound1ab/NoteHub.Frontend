@@ -74,15 +74,15 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   a:link {
-    color: ${({ theme }) => theme.colors.text.tertiary};
+    color: ${({ theme }) => theme.colors.text.primary};
   }
 
   a:visited {
-    color: ${({ theme }) => theme.colors.text.tertiary};
+    color: ${({ theme }) => theme.colors.text.primary};
   }
 
   a:hover {
-    color: ${({ theme }) => theme.colors.text.secondary};
+    color: ${({ theme }) => theme.colors.accent};
   }
 
   a:active {
@@ -240,7 +240,9 @@ export const GlobalStyle = createGlobalStyle`
   button {
     padding: 0;
     cursor: pointer;
-    color: ${({ theme }) => theme.colors.text.secondary};
+    color: ${({ theme }) => theme.colors.text.primary};
+    background-color: transparent;
+    display: flex;
   }
   
   button:hover {

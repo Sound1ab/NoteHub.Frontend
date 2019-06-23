@@ -25,6 +25,8 @@ const StyledHeading = styled('h1')<IHeading>`
         return theme.colors.text.secondary
       case COLOR.ACTIVE:
         return theme.colors.accent
+      case COLOR.INHERIT:
+        return 'inherit'
       default:
         return theme.colors.text.primary
     }
