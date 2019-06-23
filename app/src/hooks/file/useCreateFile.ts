@@ -26,7 +26,7 @@ export function useCreateFile(username: string, repo: string) {
         const newFile = data && data.createFile
         if (!newFile) return
         if (!repo) {
-          alert('No active notebook to save note to')
+          alert('No active repo to save note to')
         }
 
         const result = cache.readQuery<ListFilesQuery, ListFilesQueryVariables>(

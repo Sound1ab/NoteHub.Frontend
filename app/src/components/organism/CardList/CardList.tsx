@@ -2,7 +2,7 @@ import React from 'react'
 import { Code } from 'react-content-loader'
 import { useStore } from '../../../hooks'
 import { useListFiles } from '../../../hooks/file/useListFiles'
-import { activeNote } from '../../../store'
+import { activeFile } from '../../../store'
 import { styled } from '../../../theme'
 import { Container } from '../../atoms'
 import { Card, CardHeader } from '../../molecules'
@@ -36,16 +36,16 @@ export function CardList() {
   const [state, dispatch] = useStore()
   const { files, loading } = useListFiles(
     state.user.username,
-    state.notebook.activeNotebook
+    state.repo.activeRepo
   )
 
-  function handleCardClick(note: string | null) {
-    if (dispatch) dispatch(activeNote(note))
+  function handleCardClick(file: string | null) {
+    if (dispatch) dispatch(activeFile(file))
   }
 
   return (
     <Style>
-      <CardHeader title={state.notebook.activeNotebook} />
+      <CardHeader title={state.repo.activeRepo} />
       <Container className="CardList-wrapper">
         {loading ? (
           <>
@@ -54,26 +54,26 @@ export function CardList() {
           </>
         ) : (
           files
-            .sort((noteA, noteB) => {
-              return noteA.filename.localeCompare(noteB.filename)
+            .sort((fileA, fileB) => {
+              return fileA.filename.localeCompare(fileB.filename)
             })
-            .map(note => {
+            .map(file => {
               return (
                 <span
-                  key={`${note.sha}-${note.filename}`}
+                  key={`${file.sha}-${file.filename}`}
                   className="CardList-card-wrapper"
-                  onClick={handleCardClick.bind(null, note.filename)}
+                  onClick={handleCardClick.bind(null, file.filename)}
                 >
                   <Card
-                    key={note.sha}
-                    id={note.sha}
-                    title={note.filename}
-                    excerpt={note.excerpt || ''}
-                    githubLink={note._links.html}
+                    key={file.sha}
+                    id={file.sha}
+                    title={file.filename}
+                    excerpt={file.excerpt || ''}
+                    githubLink={file._links.html}
                     createdAt={''}
                     isSelected={
-                      !!state.notebook.activeNote &&
-                      state.notebook.activeNote === note.filename
+                      !!state.repo.activeFile &&
+                      state.repo.activeFile === file.filename
                     }
                   />
                 </span>

@@ -1,24 +1,21 @@
 import React, { useState } from 'react'
 import { useStore } from '../../../hooks'
 import { useDeleteFile } from '../../../hooks/file/useDeleteFile'
-import { resetNotebook } from '../../../store'
+import { resetRepo } from '../../../store'
 import { Modal } from '../../atoms'
 
-interface IDeleteNoteModal {
+interface IDeleteFileModal {
   isOpen: boolean
   onRequestClose: () => void
 }
 
-export function DeleteNoteModal({ isOpen, onRequestClose }: IDeleteNoteModal) {
+export function DeleteFileModal({ isOpen, onRequestClose }: IDeleteFileModal) {
   const [state, dispatch] = useStore()
   const [loading, setLoading] = useState(false)
-  const deleteFile = useDeleteFile(
-    state.user.username,
-    state.notebook.activeNotebook
-  )
+  const deleteFile = useDeleteFile(state.user.username, state.repo.activeRepo)
 
-  async function handleDeleteNote() {
-    if (!state.notebook.activeNote) {
+  async function handleDeleteFile() {
+    if (!state.repo.activeFile) {
       return
     }
 
@@ -27,16 +24,16 @@ export function DeleteNoteModal({ isOpen, onRequestClose }: IDeleteNoteModal) {
       await deleteFile({
         variables: {
           input: {
-            filename: state.notebook.activeNote,
-            repo: state.notebook.activeNotebook,
+            filename: state.repo.activeFile,
+            repo: state.repo.activeRepo,
             username: state.user.username,
           },
         },
       })
-      dispatch(resetNotebook({ note: true }))
+      dispatch(resetRepo({ file: true }))
       onRequestClose()
     } catch {
-      alert('There was an issue deleting your note, please try again')
+      alert('There was an issue deleting your file, please try again')
     } finally {
       setLoading(false)
     }
@@ -44,13 +41,13 @@ export function DeleteNoteModal({ isOpen, onRequestClose }: IDeleteNoteModal) {
 
   return (
     <Modal
-      onContinue={handleDeleteNote}
-      title="Delete Note"
+      onContinue={handleDeleteFile}
+      title="Delete File"
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       loading={loading}
     >
-      <span>Please confirm you wish to delete a note.</span>
+      <span>Please confirm you wish to delete a file.</span>
     </Modal>
   )
 }

@@ -3,7 +3,7 @@ import { COLOR } from '../../../enums'
 import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Container, Heading, Icon } from '../../atoms'
-import { Navigation, NewNotebook, Profile } from '../../molecules'
+import { Navigation, NewRepo, Profile } from '../../molecules'
 import { Authorize } from '../../molecules/Authorize/Authorize'
 
 const Style = styled.div`
@@ -36,7 +36,7 @@ export function Sidebar() {
     <Style>
       <Container className="Sidebar-wrapper">
         {state.user.isAuthorized ? <Profile /> : <Authorize />}
-        <NewNotebook />
+        <NewRepo />
         <div className="Sidebar-title-wrapper">
           <Icon icon="book" prefix="fa" marginRight />
           <Heading
@@ -45,7 +45,7 @@ export function Sidebar() {
             type="h4"
             textTransform="uppercase"
           >
-            Notebooks
+            Repos
           </Heading>
         </div>
         {state.user.isAuthorized && state.user.username && <Navigation />}

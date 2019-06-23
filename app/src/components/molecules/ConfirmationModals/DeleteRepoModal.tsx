@@ -1,35 +1,49 @@
 import React, { useState } from 'react'
 import { useStore } from '../../../hooks'
-import { useCreateRepo } from '../../../hooks/Repo/useCreateRepo'
+import { useDeleteRepo } from '../../../hooks/Repo/useDeleteRepo'
+import { resetRepo } from '../../../store'
 import { Heading, Modal } from '../../atoms'
 
-interface ICreateNotebookModal {
+interface IDeleteRepoModal {
   isOpen: boolean
   onRequestClose: () => void
+  title: string | null
 }
 
-export function CreateNotebookModal({
+export function DeleteRepoModal({
   isOpen,
   onRequestClose,
-}: ICreateNotebookModal) {
-  const [state] = useStore()
+  title,
+}: IDeleteRepoModal) {
+  const [state, dispatch] = useStore()
   const [inputValue, setInputValue] = useState('')
   const [loading, setLoading] = useState(false)
-  const createNewRepo = useCreateRepo(state.user.username)
+  const deleteRepo = useDeleteRepo(state.user.username)
 
-  async function handleCreateNewRepo() {
+  async function handleDeleteRepo() {
+    if (!state.repo.activeRepo) {
+      alert('No active repo')
+      return
+    }
+    if (inputValue !== title) {
+      alert('Please confirm the repo you wish to delete')
+      return
+    }
+
     setLoading(true)
     try {
-      await createNewRepo({
+      await deleteRepo({
         variables: {
           input: {
-            name: inputValue,
+            repo: state.repo.activeRepo,
+            username: state.user.username,
           },
         },
       })
+      dispatch(resetRepo())
       handleRequestClose()
     } catch {
-      alert('There was an issue creating your notebook, please try again')
+      alert('There was an issue deleting your repo, please try again')
     } finally {
       setLoading(false)
     }
@@ -46,21 +60,21 @@ export function CreateNotebookModal({
 
   return (
     <Modal
-      onContinue={handleCreateNewRepo}
-      title="Create new Notebook"
+      onContinue={handleDeleteRepo}
+      title="Delete Repo"
       isOpen={isOpen}
       onRequestClose={handleRequestClose}
       loading={loading}
     >
+      <p>Please confirm the Repo name you wish to delete.</p>
       <Heading type="h5" marginBottom>
-        Title
+        Repo
       </Heading>
       <input
         value={inputValue}
         onChange={handleInputChange}
-        className="NewNotebook-input"
         type="text"
-        placeholder="Notebook name"
+        placeholder="Repo name"
       />
     </Modal>
   )

@@ -3,33 +3,33 @@ import { useStore } from '../../../hooks'
 import { useCreateFile } from '../../../hooks/file/useCreateFile'
 import { Heading, Modal } from '../../atoms'
 
-interface ICreateNoteModal {
+interface ICreateFileModal {
   isOpen: boolean
   onRequestClose: () => void
 }
 
-export function CreateNoteModal({ isOpen, onRequestClose }: ICreateNoteModal) {
+export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
   const [state] = useStore()
   const [inputValue, setInputValue] = useState('')
   const [loading, setLoading] = useState(false)
-  const createNewNote = useCreateFile(
+  const createNewFile = useCreateFile(
     state.user.username,
-    state.notebook.activeNotebook || ''
+    state.repo.activeRepo || ''
   )
 
-  async function handleCreateNewNote() {
-    if (!state.notebook.activeNotebook) {
-      alert('No active notebook')
+  async function handleCreateNewFile() {
+    if (!state.repo.activeRepo) {
+      alert('No active repo')
       return
     }
     setLoading(true)
     try {
-      await createNewNote({
+      await createNewFile({
         variables: {
           input: {
             content: '',
             filename: `${inputValue}.md`,
-            repo: state.notebook.activeNotebook,
+            repo: state.repo.activeRepo,
             username: state.user.username,
           },
         },
@@ -53,8 +53,8 @@ export function CreateNoteModal({ isOpen, onRequestClose }: ICreateNoteModal) {
 
   return (
     <Modal
-      onContinue={handleCreateNewNote}
-      title="Create new Note"
+      onContinue={handleCreateNewFile}
+      title="Create new File"
       isOpen={isOpen}
       onRequestClose={handleRequestClose}
       loading={loading}
@@ -65,9 +65,9 @@ export function CreateNoteModal({ isOpen, onRequestClose }: ICreateNoteModal) {
       <input
         value={inputValue}
         onChange={handleOnInputChange}
-        className="NewNote-input"
+        className="NewFile-input"
         type="text"
-        placeholder="Note name"
+        placeholder="File name"
       />
     </Modal>
   )

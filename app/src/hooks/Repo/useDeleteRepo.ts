@@ -35,7 +35,7 @@ export function useDeleteRepo(username: string) {
           }
         )
 
-        const notebooks =
+        const repos =
           (result && result.listRepos && result.listRepos.items) || []
         const listRepos = (result && result.listRepos) || {}
 
@@ -43,9 +43,7 @@ export function useDeleteRepo(username: string) {
           data: {
             listRepos: {
               ...listRepos,
-              items: notebooks.filter(
-                notebook => notebook && notebook.id !== deletedRepo.id
-              ),
+              items: repos.filter(repo => repo && repo.id !== deletedRepo.id),
             },
           },
           query: ListReposDocument,

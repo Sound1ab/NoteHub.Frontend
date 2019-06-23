@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { DeleteNotebookModal } from '..'
-import { CreateNoteModal } from '../'
+import { DeleteRepoModal } from '..'
+import { CreateFileModal } from '../'
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
@@ -43,10 +43,8 @@ interface ICardHeader {
 }
 
 export function CardHeader({ title = '' }: ICardHeader) {
-  const [isCreateNoteModalOpen, setIsCreateNoteModalOpen] = useState(false)
-  const [isDeleteNotebookModalOpen, setIsDeleteNotebookModalOpen] = useState(
-    false
-  )
+  const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
+  const [isDeleteRepoModalOpen, setIsDeleteRepoModalOpen] = useState(false)
 
   return (
     <Style>
@@ -56,7 +54,7 @@ export function CardHeader({ title = '' }: ICardHeader) {
       <div className="CardHeader-wrapper">
         <div
           className="CardHeader-new-note"
-          onClick={setIsCreateNoteModalOpen.bind(null, true)}
+          onClick={setIsCreateFileModalOpen.bind(null, true)}
         >
           <Icon
             size="lg"
@@ -66,7 +64,7 @@ export function CardHeader({ title = '' }: ICardHeader) {
             marginRight
           />
           <Heading color={COLOR.DARK} type="h3">
-            New Note
+            New File
           </Heading>
         </div>
         <div className="CardHeader-options">
@@ -75,17 +73,17 @@ export function CardHeader({ title = '' }: ICardHeader) {
             icon="trash"
             prefix="fa"
             size="sm"
-            onClick={setIsDeleteNotebookModalOpen.bind(null, true)}
+            onClick={setIsDeleteRepoModalOpen.bind(null, true)}
           />
         </div>
       </div>
-      <CreateNoteModal
-        isOpen={isCreateNoteModalOpen}
-        onRequestClose={setIsCreateNoteModalOpen.bind(null, false)}
+      <CreateFileModal
+        isOpen={isCreateFileModalOpen}
+        onRequestClose={setIsCreateFileModalOpen.bind(null, false)}
       />
-      <DeleteNotebookModal
-        isOpen={isDeleteNotebookModalOpen}
-        onRequestClose={setIsDeleteNotebookModalOpen.bind(null, false)}
+      <DeleteRepoModal
+        isOpen={isDeleteRepoModalOpen}
+        onRequestClose={setIsDeleteRepoModalOpen.bind(null, false)}
         title={title}
       />
     </Style>

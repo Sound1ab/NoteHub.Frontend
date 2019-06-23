@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { CreateNotebookModal } from '..'
+import { CreateRepoModal } from '..'
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
 
 const Style = styled.div`
-  .NewNotebook-wrapper {
+  .NewRepo-wrapper {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -14,13 +14,13 @@ const Style = styled.div`
   }
 `
 
-export function NewNotebook() {
+export function NewRepo() {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <Style>
       <span
-        className="NewNotebook-wrapper"
+        className="NewRepo-wrapper"
         onClick={setIsModalOpen.bind(null, true)}
       >
         <Icon
@@ -31,10 +31,10 @@ export function NewNotebook() {
           marginRight
         />
         <Heading color={COLOR.DARK} type="h3">
-          New Notebook
+          New Repo
         </Heading>
       </span>
-      <CreateNotebookModal
+      <CreateRepoModal
         isOpen={isModalOpen}
         onRequestClose={setIsModalOpen.bind(null, false)}
       />

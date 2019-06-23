@@ -1,8 +1,8 @@
 import { IState } from '../store'
-import { notebookReducer } from './notebookReducer'
+import { repoReducer } from './repoReducer'
 import { userReducer } from './userReducer'
 
-export const combinedReducers = ({ notebook, user }: IState, action: any) => ({
-  notebook: notebookReducer(notebook, action),
+export const combinedReducers = ({ repo, user }: IState, action: any) => ({
+  repo: repoReducer(repo, action),
   user: userReducer(user, action),
 })

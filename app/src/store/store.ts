@@ -1,17 +1,17 @@
 import React, { Dispatch, ReducerAction } from 'react'
-import { TNotebookActions } from './actions/notebookAction'
+import { TRepoActions } from './actions/repoAction'
 import { TUserActions } from './actions/userAction'
-import { initialNotebookState } from './reducers/notebookReducer'
+import { initialRepoState } from './reducers/repoReducer'
 import { initialUserState } from './reducers/userReducer'
 
 export const initialState = {
-  notebook: initialNotebookState,
+  repo: initialRepoState,
   user: initialUserState,
 }
 
 export type IState = typeof initialState
-export type TActions = TNotebookActions | TUserActions
+export type TActions = TRepoActions | TUserActions
 
-export const NoteContext = React.createContext<
+export const FileContext = React.createContext<
   [IState, Dispatch<ReducerAction<React.Reducer<IState, TActions>>>]
 >([initialState, () => null])

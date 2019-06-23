@@ -1,5 +1,5 @@
-export * from './actions/notebookAction'
+export * from './actions/repoAction'
 export * from './actions/userAction'
-export * from './reducers/notebookReducer'
+export * from './reducers/repoReducer'
 export * from './reducers/userReducer'
 export * from './store'

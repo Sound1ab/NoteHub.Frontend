@@ -6,8 +6,8 @@ import {
   initialState,
   isAuthorized,
   IState,
-  NoteContext,
-  resetNotebook,
+  FileContext,
+  resetRepo,
   resetUser,
   TActions,
 } from '../store'
@@ -28,13 +28,13 @@ export function App() {
       dispatch(isAuthorized(true))
     } else {
       dispatch(isAuthorized(false))
-      dispatch(resetNotebook())
+      dispatch(resetRepo())
       dispatch(resetUser())
     }
   }, [token])
 
   return (
-    <NoteContext.Provider value={[state, dispatch]}>
+    <FileContext.Provider value={[state, dispatch]}>
       <ApolloProvider>
         <ThemeProvider>
           <IconProvider>
@@ -45,6 +45,6 @@ export function App() {
           </IconProvider>
         </ThemeProvider>
       </ApolloProvider>
-    </NoteContext.Provider>
+    </FileContext.Provider>
   )
 }

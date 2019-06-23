@@ -3,7 +3,7 @@ import { BulletList } from 'react-content-loader'
 import { COLOR } from '../../../enums'
 import { useStore } from '../../../hooks'
 import { useListFiles } from '../../../hooks/file/useListFiles'
-import { activeNote } from '../../../store'
+import { activeFile } from '../../../store'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
 
@@ -21,11 +21,11 @@ export function FileList() {
   const [state, dispatch] = useStore()
   const { files, loading } = useListFiles(
     state.user.username,
-    state.notebook.activeNotebook
+    state.repo.activeRepo
   )
 
-  function handleCardClick(note: string | null) {
-    if (dispatch) dispatch(activeNote(note))
+  function handleCardClick(file: string | null) {
+    if (dispatch) dispatch(activeFile(file))
   }
 
   return (
@@ -34,25 +34,25 @@ export function FileList() {
         <BulletList />
       ) : (
         files
-          .sort((noteA, noteB) => {
-            return noteA.filename.localeCompare(noteB.filename)
+          .sort((fileA, fileB) => {
+            return fileA.filename.localeCompare(fileB.filename)
           })
-          .map(note => {
+          .map(file => {
             const isActive =
-              state.notebook.activeNote &&
-              note &&
-              note.filename === state.notebook.activeNote
+              state.repo.activeFile &&
+              file &&
+              file.filename === state.repo.activeFile
 
             return (
               <Style>
                 <button className="FileList-button">
                   <Heading
-                    key={note.sha}
+                    key={file.sha}
                     color={isActive ? COLOR.ACTIVE : COLOR.DARK}
-                    onClick={handleCardClick.bind(null, note.filename)}
+                    onClick={handleCardClick.bind(null, file.filename)}
                     type="h6"
                   >
-                    {note.filename}
+                    {file.filename}
                   </Heading>
                 </button>
               </Style>

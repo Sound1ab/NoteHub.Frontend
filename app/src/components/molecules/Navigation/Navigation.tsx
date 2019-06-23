@@ -4,7 +4,7 @@ import { FileList } from '..'
 import { COLOR } from '../../../enums'
 import { useStore } from '../../../hooks'
 import { useListRepos } from '../../../hooks/Repo/useListRepos'
-import { activeNotebook, resetNotebook } from '../../../store'
+import { activeRepo, resetRepo } from '../../../store'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
 
@@ -29,14 +29,14 @@ export function Navigation() {
   const [state, dispatch] = useStore()
   const { repos, loading } = useListRepos(state.user.username)
 
-  function handleHeadingClick(notebook: string | null) {
+  function handleHeadingClick(repo: string | null) {
     if (!dispatch) {
       return
     }
-    if (state.notebook.activeNotebook === notebook) {
-      dispatch(resetNotebook())
+    if (state.repo.activeRepo === repo) {
+      dispatch(resetRepo())
     } else {
-      dispatch(activeNotebook(notebook))
+      dispatch(activeRepo(repo))
     }
   }
 
@@ -51,9 +51,9 @@ export function Navigation() {
           })
           .map(repo => {
             const isActive =
-              state.notebook.activeNotebook &&
+              state.repo.activeRepo &&
               repo &&
-              repo.name === state.notebook.activeNotebook
+              repo.name === state.repo.activeRepo
 
             return (
               <>

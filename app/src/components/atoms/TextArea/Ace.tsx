@@ -7,10 +7,11 @@ import 'brace/theme/github'
 import { Spinner } from '..'
 import { useReadFile } from '../../../hooks/file/useReadFile'
 import { useUpdateFile } from '../../../hooks/file/useUpdateFile'
-import { DropzoneContext } from '../Dropzone/Dropzone'
 import { styled } from '../../../theme'
+import { DropzoneContext } from '../Dropzone/Dropzone'
 
 const Style = styled.div`
+  position: relative;
   grid-area: editor;
   width: 70%;
   margin: 0 auto;
@@ -23,13 +24,13 @@ export function Ace() {
   const [state] = useStore()
   const { file, loading } = useReadFile(
     state.user.username,
-    state.notebook.activeNotebook,
-    state.notebook.activeNote
+    state.repo.activeRepo,
+    state.repo.activeFile
   )
   const updateFile = useUpdateFile(
     state.user.username,
-    state.notebook.activeNotebook,
-    state.notebook.activeNote
+    state.repo.activeRepo,
+    state.repo.activeFile
   )
 
   useEffect(() => {
@@ -41,7 +42,7 @@ export function Ace() {
   }
 
   async function handleBlur(e: React.MouseEvent<HTMLDivElement>, editor: any) {
-    if (!state.notebook.activeNote) {
+    if (!state.repo.activeFile) {
       return
     }
     await updateFile({
@@ -49,8 +50,8 @@ export function Ace() {
         input: {
           // excerpt: editor.session.getLine(0),
           content: editor.getValue(),
-          filename: state.notebook.activeNote,
-          repo: state.notebook.activeNotebook,
+          filename: state.repo.activeFile,
+          repo: state.repo.activeRepo,
           username: state.user.username,
         },
       },

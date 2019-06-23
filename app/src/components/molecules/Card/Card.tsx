@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { DeleteNoteModal } from '..'
+import { DeleteFileModal } from '..'
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
@@ -91,7 +91,7 @@ export function Card({
           onClick={setIsDeleteModalOpen.bind(null, true)}
         />
       </div>
-      <DeleteNoteModal
+      <DeleteFileModal
         isOpen={isDeleteModalOpen}
         onRequestClose={setIsDeleteModalOpen.bind(null, false)}
       />

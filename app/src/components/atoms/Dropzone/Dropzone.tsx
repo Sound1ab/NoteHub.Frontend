@@ -28,8 +28,8 @@ export function Dropzone({ children }: IDropzone) {
       alert('no content')
       return
     }
-    if (!state.notebook.activeNotebook) {
-      alert('No active notebook')
+    if (!state.repo.activeRepo) {
+      alert('No active repo')
       return
     }
     setLoading(true)
@@ -39,7 +39,7 @@ export function Dropzone({ children }: IDropzone) {
           input: {
             content,
             filename,
-            repo: state.notebook.activeNotebook,
+            repo: state.repo.activeRepo,
             username: state.user.username,
           },
         },
