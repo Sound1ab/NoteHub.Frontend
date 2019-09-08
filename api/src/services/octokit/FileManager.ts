@@ -27,27 +27,38 @@ export class FileManager extends Github {
     repo: string,
     path: string = '/'
   ): Promise<File[]> {
-    let result
+
     try {
       const { data } = await this.octokit.repos.getContents({
         owner,
         path,
         repo: `${this.repoNamespace}${repo}`,
       })
-      result = data
+      // Files have been previously added but all have been deleted
+      if (data.length === 0) {
+        const file = await this.createFile(owner, repo, 'my note.md', '')
+        return [file]
+      }
+      return data.map((file: Octokit.AnyResponse['data']) => ({
+        ...file,
+        filename: file.name,
+      }))
     } catch (error) {
+      // First time creating a repo a no new files have been added before
+      if (error.message === 'This repository is empty.') {
+        console.log('here')
+        const file = await this.createFile(owner, repo, 'my note.md', '')
+        return [file]
+      }
       if (
         error.message === 'Not Found' ||
         error.message === 'Bad credentials'
       ) {
         throw error
       }
-      result = []
+      return []
     }
-    return result.map((file: Octokit.AnyResponse['data']) => ({
-      ...file,
-      filename: file.name,
-    }))
+
   }
 
   public async createFile(

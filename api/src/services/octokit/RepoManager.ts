@@ -45,13 +45,13 @@ export class RepoManager extends Github {
   public async updateRepo(
     owner: string,
     repo: string,
-    name?: string | null,
-    description?: string | null
+    updatedName?: string | null,
+    updatedDescription?: string | null
   ): Promise<Repo> {
-    const originalRepo = await this.readRepo(owner, repo)
+    const {description, name} = await this.readRepo(owner, repo)
     const { data } = await this.octokit.repos.update({
-      description: description || originalRepo.description,
-      name: name || originalRepo.name,
+      description: updatedDescription || description || '',
+      name: updatedName || name || '',
       owner,
       repo: `${this.repoNamespace}${repo}`,
     })

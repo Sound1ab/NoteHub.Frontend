@@ -1,6 +1,5 @@
 import { History, Location } from 'history'
 import React from 'react'
-import { Redirect } from 'react-router'
 import { withRouter } from 'react-router-dom'
 import { LOCAL_STORAGE } from '../../../enums'
 import { writeStorage } from '../../../hooks'
