@@ -2,13 +2,13 @@
 
 ## Development
 
-Development: `npm run start`
+Development: `yarn start`
 
-Build: `npm run build`
+Build: `yarn build`
 
-Lint: `npm run lint`
+Lint: `yarn lint`
 
-Test: `npm run test`
+Test: `yarn test`
 
 ## Typescript
 
