@@ -62,7 +62,10 @@
     "typography-theme-moraga": "^0.16.19"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "prestart": "cp ../.env ./",
+    "start": "PORT=8080 react-scripts start",
+    "poststart": "rm -rf ./.env",
+    "start:docker": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject",

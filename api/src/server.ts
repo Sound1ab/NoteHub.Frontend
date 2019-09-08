@@ -3,6 +3,7 @@ import { ApolloServer as ApolloServerLambda } from 'apollo-server-lambda'
 import bodyParser from 'body-parser'
 import express from 'express'
 import { GraphQLFormattedError } from 'graphql'
+import './env';
 import { ERRORS } from './errors'
 import { FileMutations, FileQueries } from './resolvers/file'
 import { ImageMutations, ImageQueries } from './resolvers/image'
