@@ -1,6 +1,7 @@
-import { Location } from 'history'
+import { History, Location } from 'history'
 import React from 'react'
 import { Redirect } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { LOCAL_STORAGE } from '../../../enums'
 import { writeStorage } from '../../../hooks'
 import { useReadGithubUserAccessToken } from '../../../hooks/user/useReadGithubUserAccessToken'
@@ -12,9 +13,10 @@ const Style = styled.div`
 
 interface ICallback {
   location: Location
+  history: History
 }
 
-export function Callback({ location }: ICallback) {
+export const Callback = withRouter(({ location, history }: ICallback) => {
   const params = new URLSearchParams(location.search)
   const code = params.get('code')
   const state = params.get('state')
@@ -23,8 +25,8 @@ export function Callback({ location }: ICallback) {
 
   if (accessToken) {
     writeStorage(LOCAL_STORAGE.KEY, accessToken)
-    return <Redirect to="/" push={true} />
+    history.push("/")
   }
 
   return <Style>Redirecting</Style>
-}
+})
