@@ -13,6 +13,7 @@ export function UserQueries() {
     ): Promise<string> {
       return userManager.readGithubUserAccessToken(code, state)
     },
+
     readGithubUser(
       _0,
       _1,
