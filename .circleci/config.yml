@@ -1,50 +1,9 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: circleci/golang
-    steps:
-      - checkout
-      - run:
-          name: Determine which projects have changed and trigger the builds
-          command: |
-            # Identify modified directories
-            LAST_SUCCESSFUL_BUILD_URL="https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH?filter=completed&limit=1"
-            LAST_SUCCESSFUL_COMMIT=`curl -Ss -u "$CIRCLE_TOKEN:" $LAST_SUCCESSFUL_BUILD_URL | jq -r '.[0]["vcs_revision"]'`
-            #first commit in a branch
-            if [[ ${LAST_SUCCESSFUL_COMMIT} == "null" ]]; then
-              COMMITS="origin/master"
-            else
-              COMMITS="${CIRCLE_SHA1}..${LAST_SUCCESSFUL_COMMIT}"
-            fi
-            buildall=0
-
-            git diff --name-only $COMMITS | cut -d/ -f1 | sort -u > projects || buildall=1
-
-            if [[ ${buildall} -eq 1 ]]; then
-              printf "\nTriggerring build for all projects"
-              for project in `cat projects`; do
-                curl -s -u ${CIRCLE_TOKEN}: \
-                  -d build_parameters[CIRCLE_JOB]=${project} \
-                  https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH
-              done
-              exit 0
-            fi
-
-            echo -e "Modified directories:\n`cat projects`\n"
-
-            for project in `cat projects`; do
-              if grep -Fxq $project project-dirs; then
-                printf "\nTriggerring build for project: "$project
-                curl -s -u ${CIRCLE_TOKEN}: \
-                  -d build_parameters[CIRCLE_JOB]=${project} \
-                  https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH
-              fi
-            done
-  app:
     working_directory: ~/noted
     docker:
-      - image: circleci/node:8.12-browsers-legacy
+      - image: circleci/node:carbon
     environment:
       BUCKET: noted
       REGION: us-east-1
@@ -55,12 +14,10 @@ jobs:
           command: echo ${CIRCLE_BRANCH}
       - run:
           name: Install local dependencies
-          command: |
-            cd app && npm install
+          command: npm install
       - run:
           name: Building
-          command: |
-            cd app && npm run build
+          command: npm run build
       - run:
           name: Install pip
           command: sudo apt-get install python-dev python-pip
@@ -74,34 +31,9 @@ jobs:
           name: Deploy to S3
           command: |
             if [ "${CIRCLE_BRANCH}" == "staging" ]; then
-                echo "aws --region ${REGION} s3 sync app/build s3://${BUCKET}-staging/ --delete"
-                aws --region ${REGION} s3 sync app/build s3://${BUCKET}-staging/ --delete
+                echo "aws --region ${REGION} s3 sync build s3://${BUCKET}-staging/ --delete"
+                aws --region ${REGION} s3 sync build s3://${BUCKET}-staging/ --delete
             elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-            echo "aws --region ${REGION} s3 sync app/build s3://${BUCKET}-master/ --delete"
-                aws --region ${REGION} s3 sync app/build s3://${BUCKET}-master/ --delete
+            echo "aws --region ${REGION} s3 sync build s3://${BUCKET}-master/ --delete"
+                aws --region ${REGION} s3 sync build s3://${BUCKET}-master/ --delete
             fi
-  api:
-    working_directory: ~/noted
-    docker:
-      - image: circleci/node:8.12-browsers-legacy
-    steps:
-      - checkout
-      - run:
-          name: Show current branch
-          command: echo ${CIRCLE_BRANCH}
-      - run:
-          name: Install local dependencies
-          command: |
-            cd api && npm install
-      - run:
-          name: Install pip
-          command: sudo apt-get install python-dev python-pip
-      - run:
-          name: Install AWS CLI
-          command: sudo pip install awscli
-      - run:
-          name: Install Serverless CLI
-          command: sudo npm i -g serverless
-      - run:
-          name: Deploy
-          command: cd api && sls deploy --stage prod

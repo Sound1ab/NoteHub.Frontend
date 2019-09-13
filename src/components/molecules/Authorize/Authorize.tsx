@@ -28,14 +28,8 @@ const Style = styled.div`
   }
 `
 
-const isDev = process.env.NODE_ENV === 'development'
-
-const CLIENT_ID = isDev
-  ? process.env.REACT_APP_CLIENT_ID_DEV
-  : process.env.REACT_APP_CLIENT_ID_PROD
-const REDIRECT_URL = isDev
-  ? process.env.REACT_APP_REDIRECT_URL_DEV
-  : process.env.REACT_APP_REDIRECT_URL_PROD
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
+const REDIRECT_URL = process.env.REACT_APP_REDIRECT_URL
 const STATE = process.env.REACT_APP_STATE
 const SCOPE = process.env.REACT_APP_SCOPE
 

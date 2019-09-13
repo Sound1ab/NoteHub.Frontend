@@ -19,7 +19,7 @@ export const Callback = withRouter(({ location, history }: ICallback) => {
   const params = new URLSearchParams(location.search)
   const code = params.get('code')
   const state = params.get('state')
-  
+  console.log('redircting')
 
   const accessToken = useReadGithubUserAccessToken(code, state)
 
