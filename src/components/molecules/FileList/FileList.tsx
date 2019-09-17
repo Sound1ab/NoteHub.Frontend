@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ContentLoader from 'react-content-loader'
 import { COLOR } from '../../../enums'
 import { useStore } from '../../../hooks'
@@ -27,6 +27,14 @@ export function FileList() {
     state.user.username,
     state.repo.activeRepo.name
   )
+
+  useEffect(() => {
+    if (files.length === 0) {
+      return
+    }
+    const [file] = files
+    dispatch(activeFile(file))
+  }, [files])
 
   function handleCardClick(file: File) {
     if (dispatch) dispatch(activeFile(file))

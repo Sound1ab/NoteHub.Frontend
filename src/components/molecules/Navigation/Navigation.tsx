@@ -42,8 +42,6 @@ export function Navigation() {
     }
   }
 
-  console.log('here', repos)
-
   return (
     <Style>
       {loading ? (
