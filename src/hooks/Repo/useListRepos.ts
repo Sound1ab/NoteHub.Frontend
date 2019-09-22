@@ -8,8 +8,8 @@ import { RepoFragment } from '../../fragments'
 
 export const ListReposDocument = gql`
   ${RepoFragment}
-  query ListRepos($username: String!) {
-    listRepos(username: $username) {
+  query ListRepos {
+    listRepos {
       items {
         ...repo
       }
@@ -18,14 +18,10 @@ export const ListReposDocument = gql`
 `
 
 export function useListRepos(username: string) {
-  console.log('here2', username)
   const { data, loading } = useQuery<ListReposQuery, ListReposQueryVariables>(
     ListReposDocument,
     {
       skip: !username,
-      variables: {
-        username: username || '',
-      },
     }
   )
 

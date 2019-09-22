@@ -27,6 +27,7 @@ export type CreateFileInput = {
 export type CreateRepoInput = {
   name: Scalars['String'],
   description?: Maybe<Scalars['String']>,
+  private?: Maybe<Scalars['Boolean']>,
 };
 
 export type DeleteFileInput = {
@@ -170,11 +171,6 @@ export type QueryReadRepoArgs = {
 };
 
 
-export type QueryListReposArgs = {
-  username: Scalars['String']
-};
-
-
 export type QueryReadGithubUserAccessTokenArgs = {
   code: Scalars['String'],
   state: Scalars['String']
@@ -186,6 +182,7 @@ export type Repo = {
   name: Scalars['String'],
   full_name: Scalars['String'],
   description?: Maybe<Scalars['String']>,
+  private: Scalars['Boolean'],
 };
 
 export type UpdateFileInput = {
@@ -204,7 +201,7 @@ export type UpdateRepoInput = {
 };
 export type FileFragment = ({ __typename?: 'File' } & Pick<File, 'filename' | 'path' | 'content' | 'excerpt' | 'sha'> & { _links: ({ __typename?: 'Links' } & Pick<Links, 'html'>) });
 
-export type RepoFragment = ({ __typename?: 'Repo' } & Pick<Repo, 'id' | 'node_id' | 'name' | 'full_name' | 'description'>);
+export type RepoFragment = ({ __typename?: 'Repo' } & Pick<Repo, 'id' | 'node_id' | 'name' | 'full_name' | 'description' | 'private'>);
 
 export type GithubUserFragment = ({ __typename?: 'GithubUser' } & Pick<GithubUser, 'id' | 'login' | 'avatar_url' | 'html_url' | 'name'>);
 
@@ -222,9 +219,7 @@ export type DeleteRepoMutationVariables = {
 
 export type DeleteRepoMutation = ({ __typename?: 'Mutation' } & { deleteRepo: Maybe<({ __typename?: 'Repo' } & RepoFragment)> });
 
-export type ListReposQueryVariables = {
-  username: Scalars['String']
-};
+export type ListReposQueryVariables = {};
 
 
 export type ListReposQuery = ({ __typename?: 'Query' } & { listRepos: ({ __typename?: 'ModelRepoConnection' } & { items: Array<({ __typename?: 'Repo' } & RepoFragment)> }) });
@@ -348,6 +343,7 @@ export const repoFragmentDoc = gql`
   name
   full_name
   description
+  private
 }
     `;
 export const githubUserFragmentDoc = gql`
@@ -408,8 +404,8 @@ export function withDeleteRepo<TProps, TChildProps = {}>(operationOptions: React
     return ReactApollo.withMutation<TProps, DeleteRepoMutation, DeleteRepoMutationVariables, DeleteRepoProps<TChildProps>>(DeleteRepoDocument, operationOptions);
 };
 export const ListReposDocument = gql`
-    query ListRepos($username: String!) {
-  listRepos(username: $username) {
+    query ListRepos {
+  listRepos {
     items {
       ...repo
     }

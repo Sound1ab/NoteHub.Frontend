@@ -170,7 +170,7 @@ export const GlobalStyle = createGlobalStyle`
    * 1. Change the font styles in all browsers.
    * 2. Remove the margin in Firefox and Safari.
    */
-  
+   
   button,
   input,
   optgroup,

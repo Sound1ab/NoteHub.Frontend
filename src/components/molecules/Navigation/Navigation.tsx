@@ -23,6 +23,9 @@ const Style = styled.nav`
 
   .Navigation-button {
     background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `
 
@@ -60,24 +63,31 @@ export function Navigation() {
             return (
               <>
                 <div className="Navigation-wrapper">
-                  <Icon
-                    size="xs"
-                    color={COLOR.DARK}
-                    icon={isActive ? 'chevron-down' : 'chevron-right'}
-                    prefix="fa"
-                    marginRight
-                  />
                   <button
                     className="Navigation-button"
                     key={(repo && repo.id) || 'repo'}
+                    onClick={handleHeadingClick.bind(null, repo)}
                   >
+                    <Icon
+                      size="xs"
+                      color={isActive ? COLOR.ACTIVE : COLOR.DARK}
+                      icon={isActive ? 'chevron-down' : 'chevron-right'}
+                      prefix="fa"
+                      marginRight
+                    />
                     <Heading
                       color={isActive ? COLOR.ACTIVE : COLOR.INHERIT}
-                      onClick={handleHeadingClick.bind(null, repo)}
                       type="h5"
                     >
                       {repo && repo.name}
                     </Heading>
+                    {repo.private && <Icon
+                      size="xs"
+                      color={COLOR.DARK}
+                      icon="product-hunt"
+                      prefix="fab"
+                      marginLeft
+                    />}
                   </button>
                 </div>
                 {isActive && <FileList />}

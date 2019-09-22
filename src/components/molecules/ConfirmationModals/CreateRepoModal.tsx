@@ -1,7 +1,18 @@
 import React, { useState } from 'react'
 import { useStore } from '../../../hooks'
 import { useCreateRepo } from '../../../hooks/Repo/useCreateRepo'
+import { styled } from '../../../theme'
 import { Heading, Modal } from '../../atoms'
+
+const Style = styled.div`
+  .CreateRepo-input {
+    margin-bottom: ${({theme}) => theme.spacing.xs};
+  }
+  
+  .CreateRepo-checkbox {
+    width: auto;
+  }
+`
 
 interface ICreateRepoModal {
   isOpen: boolean
@@ -10,7 +21,8 @@ interface ICreateRepoModal {
 
 export function CreateRepoModal({ isOpen, onRequestClose }: ICreateRepoModal) {
   const [state] = useStore()
-  const [inputValue, setInputValue] = useState('')
+  const defaultState = {name: '', isPrivate: false}
+  const [{name, isPrivate}, setForm] = useState<{[key: string]: any}>(defaultState)
   const [loading, setLoading] = useState(false)
   const createNewRepo = useCreateRepo(state.user.username)
 
@@ -20,7 +32,8 @@ export function CreateRepoModal({ isOpen, onRequestClose }: ICreateRepoModal) {
       await createNewRepo({
         variables: {
           input: {
-            name: inputValue,
+            name,
+            private: isPrivate
           },
         },
       })
@@ -33,12 +46,19 @@ export function CreateRepoModal({ isOpen, onRequestClose }: ICreateRepoModal) {
   }
 
   function handleRequestClose() {
-    setInputValue('')
+    setForm(defaultState)
     onRequestClose()
   }
 
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setInputValue(e.target.value)
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const targetName = target.name;
+
+    setForm((prevState) => ({
+      ...prevState,
+      [targetName]: value
+    }));
   }
 
   return (
@@ -49,16 +69,34 @@ export function CreateRepoModal({ isOpen, onRequestClose }: ICreateRepoModal) {
       onRequestClose={handleRequestClose}
       loading={loading}
     >
-      <Heading type="h5" marginBottom>
-        Title
-      </Heading>
-      <input
-        value={inputValue}
-        onChange={handleInputChange}
-        className="NewRepo-input"
-        type="text"
-        placeholder="Repo name"
-      />
+      <Style>
+        <label>
+          <Heading type="h5" marginBottom>
+            Title
+          </Heading>
+        </label>
+        <form>
+        <input
+          value={name}
+          onChange={handleInputChange}
+          className="CreateRepo-input"
+          type="text"
+          placeholder="Repo name"
+          name="name"
+        />
+          <label>
+            <Heading type="h5" marginBottom>
+              Private
+            </Heading>
+          </label>
+          <input
+            name="isPrivate"
+            type="checkbox"
+            className="CreateRepo-checkbox"
+            checked={isPrivate}
+            onChange={handleInputChange} />
+        </form>
+      </Style>
     </Modal>
   )
 }

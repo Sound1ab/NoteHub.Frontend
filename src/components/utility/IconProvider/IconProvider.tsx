@@ -1,5 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faGithub, faSoundcloud } from '@fortawesome/free-brands-svg-icons'
+import { faGithub, faProductHunt, faSoundcloud } from '@fortawesome/free-brands-svg-icons'
 import {
   faBook,
   faChevronDown,
@@ -36,7 +36,8 @@ library.add(
   faChevronRight,
   faChevronDown,
   faEllipsisH,
-  faGripLinesVertical
+  faGripLinesVertical,
+  faProductHunt
 )
 
 interface IIconProvider {

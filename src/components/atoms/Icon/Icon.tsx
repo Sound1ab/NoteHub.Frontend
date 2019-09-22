@@ -46,6 +46,8 @@ const Style = styled.a<{
           return theme.colors.accent
         case COLOR.MEDIUM:
           return theme.colors.text.secondary
+        case COLOR.ACTIVE:
+          return theme.colors.accent
         default:
           return theme.colors.text.tertiary
       }
@@ -73,6 +75,7 @@ interface IIcon {
     | 'chevron-down'
     | 'ellipsis-h'
     | 'grip-lines-vertical'
+    | 'product-hunt'
   color?: COLOR
   link?: string
   prefix?: 'fab' | 'fa'

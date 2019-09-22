@@ -27,6 +27,7 @@ const emptyRepo: Repo = {
   id: 0,
   name: '',
   node_id: '',
+  private: false
 }
 
 export const initialRepoState = {

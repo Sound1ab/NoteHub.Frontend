@@ -28,11 +28,14 @@ export const typography = new Typography({
   ],
   headerWeight: 300,
   overrideThemeStyles: ({ rhythm }) => ({
+    form: {
+      marginBottom: 0,
+    },
     h5: {
       marginBottom: rhythm(0.25),
     },
     h6: {
       marginBottom: rhythm(0.25),
-    },
+    }
   }),
 })
