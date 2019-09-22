@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useStore } from '../../../hooks'
 import { useDeleteRepo } from '../../../hooks/Repo/useDeleteRepo'
 import { resetRepo } from '../../../store'
@@ -15,6 +15,7 @@ export function DeleteRepoModal({
   onRequestClose,
   title,
 }: IDeleteRepoModal) {
+  const inputEl = useRef<HTMLInputElement>(null);
   const [state, dispatch] = useStore()
   const [inputValue, setInputValue] = useState('')
   const [loading, setLoading] = useState(false)
@@ -58,6 +59,23 @@ export function DeleteRepoModal({
     setInputValue(e.target.value)
   }
 
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    // If it's dumb and it works it's not dumb
+    // Input hasn't rendered before the effect runs so pushing onto the
+    // callback queue so event loop will process after the stack (and as
+    // consequence) rendering the input
+    setTimeout(() => {
+      if (!inputEl || !inputEl.current) {
+        return
+      }
+      inputEl.current.focus();
+    }, 1)
+  }, [isOpen])
+
   return (
     <Modal
       onContinue={handleDeleteRepo}
@@ -71,6 +89,7 @@ export function DeleteRepoModal({
         Repo
       </Heading>
       <input
+        ref={inputEl}
         value={inputValue}
         onChange={handleInputChange}
         type="text"

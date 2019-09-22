@@ -34,7 +34,7 @@ export function FileList() {
     }
     const [file] = files
     dispatch(activeFile(file))
-  }, [files])
+  }, [files, dispatch])
 
   function handleCardClick(file: File) {
     if (dispatch) dispatch(activeFile(file))

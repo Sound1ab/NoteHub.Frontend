@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useStore } from '../../../hooks'
 import { useCreateFile } from '../../../hooks/file/useCreateFile'
 import { Heading, Modal } from '../../atoms'
@@ -9,6 +9,7 @@ interface ICreateFileModal {
 }
 
 export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
+  const inputEl = useRef<HTMLInputElement>(null);
   const [state] = useStore()
   const [inputValue, setInputValue] = useState('')
   const [loading, setLoading] = useState(false)
@@ -51,6 +52,23 @@ export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
     setInputValue(e.target.value)
   }
 
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    // If it's dumb and it works it's not dumb
+    // Input hasn't rendered before the effect runs so pushing onto the
+    // callback queue so event loop will process after the stack (and as
+    // consequence) rendering the input
+    setTimeout(() => {
+      if (!inputEl || !inputEl.current) {
+        return
+      }
+      inputEl.current.focus();
+    }, 1)
+  }, [isOpen])
+
   return (
     <Modal
       onContinue={handleCreateNewFile}
@@ -63,6 +81,7 @@ export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
         Title
       </Heading>
       <input
+        ref={inputEl}
         value={inputValue}
         onChange={handleOnInputChange}
         className="NewFile-input"

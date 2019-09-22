@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useStore } from '../../../hooks'
 import { useCreateRepo } from '../../../hooks/Repo/useCreateRepo'
 import { styled } from '../../../theme'
@@ -20,6 +20,7 @@ interface ICreateRepoModal {
 }
 
 export function CreateRepoModal({ isOpen, onRequestClose }: ICreateRepoModal) {
+  const inputEl = useRef<HTMLInputElement>(null);
   const [state] = useStore()
   const defaultState = {name: '', isPrivate: false}
   const [{name, isPrivate}, setForm] = useState<{[key: string]: any}>(defaultState)
@@ -61,6 +62,23 @@ export function CreateRepoModal({ isOpen, onRequestClose }: ICreateRepoModal) {
     }));
   }
 
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    // If it's dumb and it works it's not dumb
+    // Input hasn't rendered before the effect runs so pushing onto the
+    // callback queue so event loop will process after the stack (and as
+    // consequence) rendering the input
+    setTimeout(() => {
+      if (!inputEl || !inputEl.current) {
+        return
+      }
+      inputEl.current.focus();
+    }, 1)
+  }, [isOpen])
+
   return (
     <Modal
       onContinue={handleCreateNewRepo}
@@ -77,6 +95,7 @@ export function CreateRepoModal({ isOpen, onRequestClose }: ICreateRepoModal) {
         </label>
         <form>
         <input
+          ref={inputEl}
           value={name}
           onChange={handleInputChange}
           className="CreateRepo-input"
