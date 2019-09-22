@@ -1,20 +1,14 @@
 {
-  "name": "GraphQL Schemas with Shared Types",
-  "projects": {
-    "api": {
-      "includes": [
-        "api/src/schema/**"
-      ]
-    }
-  },
+  "name": "Remote Schema",
+  "schemaPath": "schema.graphql",
   "extensions": {
     "endpoints": {
-      "Default GraphQL Endpoint": {
-        "url": "http://localhost:8088/graphql",
+      "Remote GraphQL Endpoint": {
+        "url": "http://localhost:3000/graphql",
         "headers": {
           "user-agent": "JS GraphQL"
         },
-        "introspect": false
+        "introspect": true
       }
     }
   }

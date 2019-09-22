@@ -21,7 +21,7 @@ export const UpdateFileDocument = gql`
 export function useUpdateFile(
   username: string,
   repo: string,
-  filename: string
+  filename: string,
 ) {
   return useMutation<UpdateFileMutation, UpdateFileMutationVariables>(
     UpdateFileDocument,

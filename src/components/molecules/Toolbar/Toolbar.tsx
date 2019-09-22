@@ -5,6 +5,7 @@ import { COLOR } from '../../../enums'
 import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
+import { UpdateFileModal } from '../ConfirmationModals/UpdateFileModal'
 
 const Style = styled.div`
   grid-area: toolbar;
@@ -53,6 +54,7 @@ export function Toolbar() {
   const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
   const [isDeleteRepoModalOpen, setIsDeleteRepoModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
 
   return (
     <Style>
@@ -149,6 +151,10 @@ export function Toolbar() {
       <DeleteFileModal
         isOpen={isDeleteModalOpen}
         onRequestClose={setIsDeleteModalOpen.bind(null, false)}
+      />
+      <UpdateFileModal
+        isOpen={isUpdateModalOpen}
+        onRequestClose={setIsUpdateModalOpen.bind(null, false)}
       />
     </Style>
   )
