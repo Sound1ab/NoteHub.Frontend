@@ -52,7 +52,6 @@ export function Ace() {
           content: editor.getValue(),
           filename: state.repo.activeFile.filename,
           repo: state.repo.activeRepo.name,
-          sha: state.repo.activeFile.sha,
           username: state.user.username,
         },
       },

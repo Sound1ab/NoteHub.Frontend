@@ -61,7 +61,7 @@ export function Navigation() {
               repo.name === state.repo.activeRepo.name
 
             return (
-              <>
+              <div key={repo.id}>
                 <div className="Navigation-wrapper">
                   <button
                     className="Navigation-button"
@@ -91,7 +91,7 @@ export function Navigation() {
                   </button>
                 </div>
                 {isActive && <FileList />}
-              </>
+              </div>
             )
           })
       )}

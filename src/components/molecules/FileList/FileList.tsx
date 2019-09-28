@@ -59,9 +59,8 @@ export function FileList() {
               file.filename === state.repo.activeFile.filename
 
             return (
-              <button className="FileList-button">
+              <button className="FileList-button" key={file.sha}>
                 <Heading
-                  key={file.sha}
                   color={isActive ? COLOR.ACTIVE : COLOR.INHERIT}
                   onClick={handleCardClick.bind(null, file)}
                   type="h6"
