@@ -3,11 +3,14 @@ import AceEditor from 'react-ace'
 import { useStore } from '../../../hooks'
 
 import 'brace/mode/markdown'
+import 'brace/theme/dracula'
 import 'brace/theme/github'
 import { Spinner } from '..'
+import { COLOR_MODE } from '../../../enums'
 import { useReadFile } from '../../../hooks/file/useReadFile'
 import { useUpdateFile } from '../../../hooks/file/useUpdateFile'
 import { styled } from '../../../theme'
+import { ColorModeContext } from '../../utility'
 import { DropzoneContext } from '../Dropzone/Dropzone'
 
 const Style = styled.div`
@@ -18,6 +21,7 @@ const Style = styled.div`
 `
 
 export function Ace() {
+  const {colorMode} = useContext(ColorModeContext)
   const [handleFileSelect, dropzoneLoading] = useContext(DropzoneContext)
   const aceEditor = useRef<any>(null)
   const [value, setValue] = useState('')
@@ -78,7 +82,7 @@ export function Ace() {
         ref={aceEditor}
         value={value}
         mode="markdown"
-        theme="github"
+        theme={colorMode === COLOR_MODE.LIGHT ? 'github' : 'dracula'}
         name="UNIQUE_ID_OF_DIV"
         height="100%"
         width="100%"

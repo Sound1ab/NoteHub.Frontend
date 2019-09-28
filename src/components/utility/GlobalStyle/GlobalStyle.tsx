@@ -48,6 +48,7 @@ export const GlobalStyle = createGlobalStyle`
   
   body {
     margin: 0;
+    background-color: ${({ theme }: { theme: any }) => theme.colors.background.primary};
   }
   
   img {

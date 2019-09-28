@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import Popup from 'reactjs-popup'
-import { CreateFileModal, DeleteFileModal, DeleteRepoModal } from '..'
 import { COLOR } from '../../../enums'
 import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
 import { ColorModeButton, Heading, Icon } from '../../atoms'
-import { UpdateFileModal } from '../ConfirmationModals/UpdateFileModal'
+import {
+  CreateFileModal,
+  DeleteFileModal,
+  DeleteRepoModal,
+} from '../../molecules'
+import { FilePopup } from '../../molecules/Popups/FilePopup'
 
 const Style = styled.div`
   grid-area: toolbar;
@@ -52,35 +56,12 @@ const Style = styled.div`
 export function Toolbar() {
   const [state] = useStore()
   const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
-  const [isDeleteRepoModalOpen, setIsDeleteRepoModalOpen] = useState(false)
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
 
   return (
     <Style>
-      <Popup
-        trigger={
-          <button>
-            {state.repo.activeRepo.name && (
-              <Heading color={COLOR.INHERIT} type="h4">
-                {state.repo.activeRepo.name}
-              </Heading>
-            )}
-          </button>
-        }
-        position="bottom left"
-        className="Toolbar-tooltip"
-      >
-        <button
-          className="Toolbar-option"
-          onClick={setIsDeleteRepoModalOpen.bind(null, true)}
-        >
-          <Icon icon="trash" prefix="fa" size="sm" marginRight />
-          <Heading color={COLOR.INHERIT} type="h5">
-            Delete Repo
-          </Heading>
-        </button>
-      </Popup>
+      <FilePopup />
       <div
         className="Toolbar-new-note"
         onClick={setIsCreateFileModalOpen.bind(null, true)}
@@ -103,7 +84,13 @@ export function Toolbar() {
       <Popup
         trigger={
           <button>
-            <Icon icon="ellipsis-h" prefix="fa" size="lg" marginLeft marginRight />
+            <Icon
+              icon="ellipsis-h"
+              prefix="fa"
+              size="lg"
+              marginLeft
+              marginRight
+            />
           </button>
         }
         position="bottom right"
@@ -145,23 +132,15 @@ export function Toolbar() {
         size="lg"
         color={COLOR.MEDIUM}
       />
-      <ColorModeButton/>
+      <ColorModeButton />
       <CreateFileModal
         isOpen={isCreateFileModalOpen}
         onRequestClose={setIsCreateFileModalOpen.bind(null, false)}
       />
-      <DeleteRepoModal
-        isOpen={isDeleteRepoModalOpen}
-        onRequestClose={setIsDeleteRepoModalOpen.bind(null, false)}
-        title={state.repo.activeRepo.name}
-      />
+
       <DeleteFileModal
         isOpen={isDeleteModalOpen}
         onRequestClose={setIsDeleteModalOpen.bind(null, false)}
-      />
-      <UpdateFileModal
-        isOpen={isUpdateModalOpen}
-        onRequestClose={setIsUpdateModalOpen.bind(null, false)}
       />
     </Style>
   )
