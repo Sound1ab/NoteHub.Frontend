@@ -78,7 +78,7 @@ export function Dropzone({ children }: IDropzone) {
     reader.readAsBinaryString(file)
   }
 
-  function handleFileSelect() {
+  function selectFileAndUpload(): Promise<string> {
     return new Promise((resolve, reject) => {
       if (!input.current) {
         return
@@ -93,7 +93,7 @@ export function Dropzone({ children }: IDropzone) {
   }
 
   return (
-    <DropzoneContext.Provider value={[handleFileSelect as any, loading]}>
+    <DropzoneContext.Provider value={[selectFileAndUpload, loading]}>
       <Style
         autoComplete="off"
         accept="image/png"

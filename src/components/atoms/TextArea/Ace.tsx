@@ -1,17 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import AceEditor from 'react-ace'
+import React, { useContext, useEffect, useState } from 'react'
+
 import { useStore } from '../../../hooks'
 
-import 'brace/mode/markdown'
-import 'brace/theme/dracula'
-import 'brace/theme/github'
-import { Spinner } from '..'
+import { DropzoneContext, Editor, Spinner } from '..'
 import { COLOR_MODE } from '../../../enums'
 import { useReadFile } from '../../../hooks/file/useReadFile'
 import { useUpdateFile } from '../../../hooks/file/useUpdateFile'
 import { styled } from '../../../theme'
 import { ColorModeContext } from '../../utility'
-import { DropzoneContext } from '../Dropzone/Dropzone'
 
 const Style = styled.div`
   position: relative;
@@ -20,10 +16,17 @@ const Style = styled.div`
   margin: 0 auto;
 `
 
+export const EditorContext = React.createContext<{
+  colorMode: COLOR_MODE
+  value: string
+  setValue: (value: string) => void
+  saveFile: (content: string) => void
+  uploadImage: () => void
+} | null>(null)
+
 export function Ace() {
-  const {colorMode} = useContext(ColorModeContext)
-  const [handleFileSelect, dropzoneLoading] = useContext(DropzoneContext)
-  const aceEditor = useRef<any>(null)
+  const { colorMode } = useContext(ColorModeContext)
+  const [selectFileAndUpload, dropzoneLoading] = useContext(DropzoneContext)
   const [value, setValue] = useState('')
   const [state] = useStore()
   const { file, loading } = useReadFile(
@@ -41,19 +44,14 @@ export function Ace() {
     setValue((file && file.content) || '')
   }, [file])
 
-  function handleChange(newValue: string) {
-    setValue(newValue)
-  }
-
-  async function handleBlur(e: React.MouseEvent<HTMLDivElement>, editor: any) {
+  async function saveFile(content: string) {
     if (!state.repo.activeFile) {
       return
     }
     await updateFile({
       variables: {
         input: {
-          // excerpt: editor.session.getLine(0),
-          content: editor.getValue(),
+          content,
           filename: state.repo.activeFile.filename,
           repo: state.repo.activeRepo.name,
           username: state.user.username,
@@ -63,44 +61,16 @@ export function Ace() {
   }
 
   async function uploadImage() {
-    const filename = await handleFileSelect()
-    insertMarkdownImage(filename)
-  }
-
-  function insertMarkdownImage(filename: string) {
-    if (aceEditor && aceEditor.current) {
-      console.log(aceEditor.current)
-      const markdown = `![](images/${filename})`
-      aceEditor.current.editor.insert(markdown)
-    }
+    const filename = await selectFileAndUpload()
+    setValue(currentValue => `${currentValue}![](images/${filename})`)
   }
 
   return (
     <Style>
       {(dropzoneLoading || loading) && <Spinner />}
-      <AceEditor
-        ref={aceEditor}
-        value={value}
-        mode="markdown"
-        theme={colorMode === COLOR_MODE.LIGHT ? 'github' : 'dracula'}
-        name="UNIQUE_ID_OF_DIV"
-        height="100%"
-        width="100%"
-        onChange={handleChange}
-        onBlur={handleBlur as any}
-        wrapEnabled={true}
-        editorProps={{ $blockScrolling: true }}
-        showGutter={false}
-        showPrintMargin={false}
-        highlightActiveLine={false}
-        commands={[
-          {
-            bindKey: { win: 'Ctrl-M', mac: 'Command-M' },
-            exec: uploadImage,
-            name: 'myCommand',
-          },
-        ]}
-      />
+      <EditorContext.Provider value={{ colorMode, value, saveFile, setValue, uploadImage }}>
+        <Editor />
+      </EditorContext.Provider>
     </Style>
   )
 }
