@@ -1,9 +1,7 @@
 import React from 'react'
 import { styled } from '../../../theme'
-import { Ace, Container } from '../../atoms'
-import { Dropzone } from '../../atoms/Dropzone/Dropzone'
-import { Toolbar } from '../../molecules/Toolbar/Toolbar'
-import { Sidebar } from '../../organism'
+import { Ace, Container, Dropzone } from '../../atoms'
+import { Sidebar, Toolbar } from '../../organism'
 
 const Style = styled.div`
   display: flex;
