@@ -23,7 +23,7 @@ export const theme = {
     [COLOR_MODE.DARK]: {
       accent: '#ffd21c',
       background: {
-        primary: '#282a36',
+        primary: '#272822',
         secondary: '#272727',
         tertiary: '#4b4b4b',
       },

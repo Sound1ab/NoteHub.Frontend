@@ -1,6 +1,7 @@
 import React from 'react'
 import { styled } from '../../../theme'
-import { Ace, Container, Dropzone } from '../../atoms'
+import { Container, Dropzone } from '../../atoms'
+import { Editor as MonacoEditor } from '../../molecules'
 import { Sidebar, Toolbar } from '../../organism'
 
 const Style = styled.div`
@@ -28,7 +29,7 @@ export function Editor() {
         <Sidebar />
         <Dropzone>
           <Toolbar />
-          <Ace />
+          <MonacoEditor />
         </Dropzone>
       </Container>
     </Style>
