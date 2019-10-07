@@ -1,31 +1,11 @@
 import React, { useState } from 'react'
-import Popup from 'reactjs-popup'
-import { DeleteRepoModal } from '..'
+import { DeleteRepoModal, Popup } from '..'
 import { COLOR } from '../../../enums'
 import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
 
 const Style = styled.div`
-  .RepoPopup-content {
-    padding: ${({ theme }) => theme.spacing.xs}!important;
-    background-color: ${({ theme }) =>
-      theme.colors.background.tertiary}!important;
-    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.2) !important;
-    border: none !important;
-
-    & > button + button {
-      margin-top: ${({ theme }) => theme.spacing.xs};
-    }
-  }
-
-  .RepoPopup-arrow {
-    background-color: ${({ theme }) =>
-      theme.colors.background.tertiary}!important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
   .RepoPopup-option {
     display: flex;
     justify-content: flex-start;
@@ -57,7 +37,6 @@ export function RepoPopup() {
           </button>
         }
         position="bottom left"
-        className="RepoPopup"
       >
         <button
           className="RepoPopup-option"

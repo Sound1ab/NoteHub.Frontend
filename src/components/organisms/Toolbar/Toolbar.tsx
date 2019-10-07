@@ -1,12 +1,9 @@
 import React, { useState } from 'react'
 import { COLOR } from '../../../enums'
+import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
-import { ColorModeButton, Icon } from '../../atoms'
-import {
-  CreateFileModal,
-  FilePopup,
-  RepoPopup,
-} from '../../molecules'
+import { Icon } from '../../atoms'
+import { CreateFileModal, FilePopup, RepoPopup } from '../../molecules'
 
 const Style = styled.div`
   grid-area: toolbar;
@@ -28,9 +25,26 @@ const Style = styled.div`
 export function Toolbar() {
   const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
 
+  const [
+    {
+      repo: {
+        activeFile: { filename },
+      },
+    },
+  ] = useStore()
+
   return (
     <Style>
       <RepoPopup />
+      {filename && (
+        <Icon
+          icon="grip-lines-vertical"
+          prefix="fa"
+          size="lg"
+          color={COLOR.MEDIUM}
+        />
+      )}
+      <FilePopup />
       <div
         className="Toolbar-new-note"
         onClick={setIsCreateFileModalOpen.bind(null, true)}
@@ -43,20 +57,6 @@ export function Toolbar() {
           marginRight
         />
       </div>
-      <Icon
-        icon="grip-lines-vertical"
-        prefix="fa"
-        size="lg"
-        color={COLOR.MEDIUM}
-      />
-      <FilePopup />
-      <Icon
-        icon="grip-lines-vertical"
-        prefix="fa"
-        size="lg"
-        color={COLOR.MEDIUM}
-      />
-      <ColorModeButton />
       <CreateFileModal
         isOpen={isCreateFileModalOpen}
         onRequestClose={setIsCreateFileModalOpen.bind(null, false)}

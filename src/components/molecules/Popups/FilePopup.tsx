@@ -1,31 +1,12 @@
 import React, { useState } from 'react'
-import Popup from 'reactjs-popup'
 import { DeleteFileModal } from '..'
 import { COLOR } from '../../../enums'
 import { useStore } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
+import {Popup} from './Popup'
 
 const Style = styled.div`
-  .FilePopup-content {
-    padding: ${({ theme }) => theme.spacing.xs}!important;
-    background-color: ${({ theme }) =>
-      theme.colors.background.tertiary}!important;
-    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.2) !important;
-    border: none !important;
-
-    & > button + button {
-      margin-top: ${({ theme }) => theme.spacing.xs};
-    }
-  }
-
-  .FilePopup-arrow {
-    background-color: ${({ theme }) =>
-      theme.colors.background.tertiary}!important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
   .FilePopup-option {
     display: flex;
     justify-content: flex-start;
@@ -39,7 +20,7 @@ export function FilePopup() {
   const [
     {
       repo: {
-        activeFile: { _links },
+        activeFile: { filename, _links },
       },
     },
   ] = useStore()
@@ -49,17 +30,14 @@ export function FilePopup() {
       <Popup
         trigger={
           <button>
-            <Icon
-              icon="ellipsis-h"
-              prefix="fa"
-              size="lg"
-              marginLeft
-              marginRight
-            />
+            {filename && (
+              <Heading color={COLOR.INHERIT} type="h4">
+                {filename}
+              </Heading>
+            )}
           </button>
         }
         position="bottom right"
-        className="FilePopup"
       >
         <>
           <button

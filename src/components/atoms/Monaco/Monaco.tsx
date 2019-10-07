@@ -4,8 +4,8 @@ import MonacoEditor, {
   EditorDidMount,
   EditorWillMount,
 } from 'react-monaco-editor'
-import { EditorContext } from '../../molecules'
 import { COLOR_MODE } from '../../../enums'
+import { EditorContext } from '../../molecules'
 
 const theme = {
   [COLOR_MODE.DARK]: 'monokai',
