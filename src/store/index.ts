@@ -1,5 +1,7 @@
 export * from './actions/repoAction'
 export * from './actions/userAction'
+export * from './actions/toolbarAction'
 export * from './reducers/repoReducer'
 export * from './reducers/userReducer'
+export * from './reducers/toolbarReducer'
 export * from './store'

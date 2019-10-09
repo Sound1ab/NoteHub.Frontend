@@ -4,14 +4,14 @@ import { useStore } from '../../../hooks'
 import { useReadFile } from '../../../hooks/file/useReadFile'
 import { useUpdateFile } from '../../../hooks/file/useUpdateFile'
 import { styled } from '../../../theme'
-import { DropzoneContext, Monaco, Spinner } from '../../atoms'
+import { DropzoneContext, MarkdownPreview, Monaco, Spinner } from '../../atoms'
 import { ColorModeContext } from '../../utility'
 
 const Style = styled.div`
   position: relative;
   grid-area: editor;
   width: 70%;
-  margin: 0 auto ${({theme}) => theme.spacing.m} auto;
+  margin: 0 auto ${({ theme }) => theme.spacing.m} auto;
 `
 
 export const EditorContext = React.createContext<{
@@ -66,8 +66,10 @@ export function Editor() {
   return (
     <Style>
       {(dropzoneLoading || loading) && <Spinner />}
-      <EditorContext.Provider value={{ colorMode, value, saveFile, setValue, uploadImage }}>
-        <Monaco />
+      <EditorContext.Provider
+        value={{ colorMode, value, saveFile, setValue, uploadImage }}
+      >
+        {state.toolbar.isPreview ? <Monaco /> : <MarkdownPreview />}
       </EditorContext.Provider>
     </Style>
   )

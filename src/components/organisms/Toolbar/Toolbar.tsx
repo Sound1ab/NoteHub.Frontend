@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { COLOR } from '../../../enums'
 import { useStore } from '../../../hooks'
+import { isPreview } from '../../../store'
 import { styled } from '../../../theme'
 import { Icon } from '../../atoms'
 import { CreateFileModal, FilePopup, RepoPopup } from '../../molecules'
@@ -24,6 +25,7 @@ const Style = styled.div`
 
 export function Toolbar() {
   const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
+  const [state, dispatch] = useStore()
 
   const [
     {
@@ -32,6 +34,10 @@ export function Toolbar() {
       },
     },
   ] = useStore()
+
+  function handleSetPreview(){
+    dispatch(isPreview(!state.toolbar.isPreview))
+  }
 
   return (
     <Style>
@@ -45,6 +51,7 @@ export function Toolbar() {
         />
       )}
       <FilePopup />
+      <button onClick={handleSetPreview}>click</button>
       <div
         className="Toolbar-new-note"
         onClick={setIsCreateFileModalOpen.bind(null, true)}
