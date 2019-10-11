@@ -3,11 +3,11 @@ import React from 'react'
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 
-/*eslint-disable */
+// eslint-disable-next-line
 const Style = styled.a<{
   marginRight: boolean
   marginLeft: boolean
-  color: COLOR
+  color?: COLOR
   size: string
 }>`
   position: relative;
@@ -35,27 +35,6 @@ const Style = styled.a<{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
-    color: ${({ theme, color }) => {
-      switch (color) {
-        case COLOR.DARK:
-          return theme.colors.text.primary
-        case COLOR.LIGHT:
-          return theme.colors.text.tertiary
-        case COLOR.ACCENT:
-          return theme.colors.accent
-        case COLOR.MEDIUM:
-          return theme.colors.text.secondary
-        case COLOR.ACTIVE:
-          return theme.colors.accent
-        default:
-          return theme.colors.text.tertiary
-      }
-    }};
-
-    &:hover {
-      opacity: 0.8;
-    }
   }
 `
 
@@ -76,6 +55,8 @@ interface IIcon {
     | 'ellipsis-h'
     | 'grip-lines-vertical'
     | 'product-hunt'
+    | 'edit'
+    | 'pen'
   color?: COLOR
   link?: string
   prefix?: 'fab' | 'fa'
@@ -83,6 +64,7 @@ interface IIcon {
   marginLeft?: boolean
   size?: 'xs' | 'sm' | 'lg'
   onClick?: () => void
+  className?: string
 }
 
 export function Icon({
@@ -92,8 +74,9 @@ export function Icon({
   onClick,
   marginRight = false,
   marginLeft = false,
-  color = COLOR.DARK,
+  color,
   size = 'xs',
+  className,
 }: IIcon) {
   const FontAwesomeIconComponent = React.cloneElement(
     <FontAwesomeIcon
@@ -104,6 +87,7 @@ export function Icon({
   )
   return link ? (
     <Style
+      className={className}
       color={color}
       href={link}
       rel="noopener"
@@ -118,7 +102,7 @@ export function Icon({
   ) : (
     React.createElement(
       Style.withComponent('div'),
-      { marginRight, marginLeft, color, size, onClick },
+      { className, marginRight, marginLeft, color, size, onClick },
       FontAwesomeIconComponent
     )
   )

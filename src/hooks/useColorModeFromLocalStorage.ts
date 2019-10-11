@@ -4,11 +4,11 @@ import { useLocalStorage } from './useLocalStorage'
 
 const DEFAULT_COLOR_MODE = COLOR_MODE.LIGHT
 
-export function useColorModeFromLocalStorage(): [
-  COLOR_MODE,
-  (newColorMode: COLOR_MODE) => void,
-  boolean
-] {
+export function useColorModeFromLocalStorage(): {
+  colorMode: COLOR_MODE,
+  toggleColorMode: () => void,
+  loading: boolean
+} {
   const [storedColorMode, storeColorMode] = useLocalStorage(LOCAL_STORAGE.COLOR_MODE)
   const [colorMode, setColorMode] = useState(DEFAULT_COLOR_MODE)
   const [loading, setLoading] = useState(true)
@@ -18,6 +18,11 @@ export function useColorModeFromLocalStorage(): [
     setColorMode(newColorMode)
   }, [storeColorMode])
 
+  const toggleColorMode = () => {
+    const newMode = colorMode === COLOR_MODE.DARK ? COLOR_MODE.LIGHT : COLOR_MODE.DARK
+    storeAndSetColorMode(newMode)
+  }
+
   useLayoutEffect(() => {
     const loadedColorMode =
       storedColorMode ||
@@ -26,5 +31,5 @@ export function useColorModeFromLocalStorage(): [
     setLoading(false)
   }, [storeAndSetColorMode, storedColorMode])
 
-  return [colorMode, storeAndSetColorMode, loading]
+  return {colorMode, toggleColorMode, loading}
 }

@@ -8,28 +8,10 @@ const StyledHeading = styled('h1')<IHeading>`
   text-align: ${({ textAlign }) => textAlign};
   text-rendering: optimizeLegibility;
   margin-top: ${({ theme, marginTop }) => (marginTop ? theme.spacing.s : 0)};
+  color: inherit;
 
   margin-bottom: ${({ marginBottom }) => {
     return !marginBottom && 0
-  }};
-
-  color: ${({ theme, color }) => {
-    switch (color) {
-      case COLOR.DARK:
-        return theme.colors.text.primary
-      case COLOR.LIGHT:
-        return theme.colors.text.tertiary
-      case COLOR.ACCENT:
-        return theme.colors.accent
-      case COLOR.MEDIUM:
-        return theme.colors.text.secondary
-      case COLOR.ACTIVE:
-        return theme.colors.accent
-      case COLOR.INHERIT:
-        return 'inherit'
-      default:
-        return theme.colors.text.primary
-    }
   }};
 `
 

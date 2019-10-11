@@ -1,8 +1,6 @@
-import React, { useState } from 'react'
-import { DeleteFileModal } from '..'
-import { COLOR } from '../../../enums'
+import React from 'react'
 import { styled } from '../../../theme'
-import { Heading, Icon } from '../../atoms'
+import { Heading } from '../../atoms'
 
 const Style = styled.div<{ isSelected?: boolean }>`
   position: relative;
@@ -10,91 +8,40 @@ const Style = styled.div<{ isSelected?: boolean }>`
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  padding: ${({ theme }) => theme.spacing.s};
+  padding: ${({ theme }) => theme.spacing.xs};
   background-color: ${({ theme, isSelected }) =>
-    isSelected ? theme.colors.link.active : 'transparent'};
+    isSelected ? theme.colors.background.quaternary : 'transparent'};
   cursor: pointer;
   overflow: hidden;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.link.hover};
+    opacity: 0.8;
   }
 
   .Card-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: ${({ theme }) => theme.spacing.xs};
-  }
-
-  .Card-excerpt {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .Card-created-at {
-    white-space: nowrap;
-  }
-
-  .Card-options {
-    display: flex;
-    justify-content: flex-end;
-
-    * + * {
-      margin-left: ${({ theme }) => theme.spacing.xs};
-    }
+    color: ${({ theme }) => theme.colors.text.primary};
   }
 `
 
 interface ICard {
-  id: string
   title: string
-  excerpt: string
-  createdAt: string
-  githubLink: string
+  onClick: () => void
   isSelected?: boolean
+  key: string
 }
 
-export function Card({
-  title,
-  excerpt,
-  githubLink,
-  createdAt,
-  isSelected,
-}: ICard) {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-
+export function Card({ title, onClick, isSelected, key }: ICard) {
   return (
-    <Style data-testid="Card" isSelected={isSelected}>
-      <div className="Card-heading">
-        <Heading type="h4">{title}</Heading>
-        <Heading className="Card-created-at" color={COLOR.MEDIUM} type="h6">
-          {createdAt}
-        </Heading>
-      </div>
-      <p className="Card-excerpt">{excerpt}</p>
-      <div className="Card-options">
-        <a href={githubLink} target="_blank" rel="noopener noreferrer">
-          <Icon
-            color={COLOR.MEDIUM}
-            icon="external-link-alt"
-            prefix="fa"
-            size="sm"
-          />
-        </a>
-        <Icon
-          color={COLOR.MEDIUM}
-          icon="trash"
-          prefix="fa"
-          size="sm"
-          onClick={setIsDeleteModalOpen.bind(null, true)}
-        />
-      </div>
-      <DeleteFileModal
-        isOpen={isDeleteModalOpen}
-        onRequestClose={setIsDeleteModalOpen.bind(null, false)}
-      />
+    <Style
+      key={key}
+      onClick={onClick}
+      data-testid="Card"
+      isSelected={isSelected}
+    >
+      <Heading className="Card-heading" type="h5" marginBottom>
+        {title}
+      </Heading>
     </Style>
   )
 }

@@ -6,10 +6,12 @@ export const theme = {
     [COLOR_MODE.LIGHT]: {
       accent: '#ffd21c',
       background: {
-        primary: '#fff',
+        primary: '#ffffff',
         secondary: '#f8f8f8',
         tertiary: '#f5f5f5',
+        quaternary: '#f5f5f5',
       },
+      border: '#d8d8d8',
       link: {
         active: '#e8e8e8',
         hover: '#f0f0f0',
@@ -17,16 +19,18 @@ export const theme = {
       text: {
         primary: '#171717',
         secondary: '#e1e1e1',
-        tertiary: '#ffffff',
+        tertiary: '#e6e6e6',
       },
     },
     [COLOR_MODE.DARK]: {
       accent: '#ffd21c',
       background: {
         primary: '#272822',
-        secondary: '#272727',
-        tertiary: '#4b4b4b',
+        secondary: '#282828',
+        tertiary: '#1e1e1e',
+        quaternary: '#3a3a3a',
       },
+      border: '#303030',
       link: {
         active: '#e8e8e8',
         hover: '#f0f0f0',

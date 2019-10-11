@@ -1,8 +1,8 @@
 import React from 'react'
 import { styled } from '../../../theme'
-import { Container, Dropzone } from '../../atoms'
+import { Dropzone } from '../../atoms'
 import { Editor as MonacoEditor } from '../../molecules'
-import { Sidebar, Toolbar } from '../../organisms'
+import { CardList, Sidebar, Toolbar } from '../../organisms'
 
 const Style = styled.div`
   display: flex;
@@ -12,26 +12,29 @@ const Style = styled.div`
   .Editor-page {
     display: grid;
     grid-template-columns:
-      minmax(0, ${({ theme }) => theme.spacing.xxxl})
-      1fr;
+      minmax(0, 1fr)
+      minmax(0, 1.5fr)
+      3fr;
     grid-template-rows: auto 1fr;
     grid-template-areas:
-      'sidebar toolbar'
-      'sidebar editor';
+      'toolbar toolbar toolbar'
+      'sidebar filelist editor';
     height: 100%;
+    width: 100%;
   }
 `
 
 export function Editor() {
   return (
     <Style>
-      <Container className="Editor-page">
+      <div className="Editor-page">
         <Sidebar />
+        <CardList />
         <Dropzone>
           <Toolbar />
           <MonacoEditor />
         </Dropzone>
-      </Container>
+      </div>
     </Style>
   )
 }

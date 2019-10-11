@@ -60,7 +60,7 @@ export const GlobalStyle = createGlobalStyle`
   
   
   h1,h2,h3,h4,h5,h6 {
-    color: ${({ theme }: { theme: any }) => theme.colors.brand};
+    color: ${({ theme }: { theme: any }) => theme.colors.accent};
   }
   
   /* unvisited link */

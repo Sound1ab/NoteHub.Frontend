@@ -5,11 +5,13 @@ import {
   faChevronDown,
   faChevronRight,
   faComment,
+  faEdit,
   faEllipsisH,
   faEnvelope,
   faExternalLinkAlt,
   faGripLinesVertical,
   faMoon,
+  faPen,
   faPenSquare,
   faPlusCircle,
   faSync,
@@ -37,7 +39,9 @@ library.add(
   faChevronDown,
   faEllipsisH,
   faGripLinesVertical,
-  faProductHunt
+  faProductHunt,
+  faEdit,
+  faPen,
 )
 
 interface IIconProvider {

@@ -3,18 +3,20 @@ import { styled } from '../../../theme'
 
 const Style = styled.div`
   position: relative;
+  height: ${({theme}) => theme.spacing.m};
+  width: ${({theme}) => theme.spacing.m};
 
   img {
     object-fit: cover;
     border-radius: 50%;
-    height: 50px;
-    width: 50px;
+    height: 100%;
+    width: 100%;
   }
 
   .Avatar-placeholder {
     border-radius: 50%;
-    height: 50px;
-    width: 50px;
+    height: 100%;
+    width: 100%;
     background-color: ${({ theme }) => theme.colors.accent};
   }
 `

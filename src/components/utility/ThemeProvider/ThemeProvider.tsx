@@ -6,7 +6,7 @@ import { theme } from '../../../theme/theme'
 
 export const ColorModeContext = createContext<{
   colorMode: COLOR_MODE
-  setColorMode: (newColorMode: COLOR_MODE) => void
+  toggleColorMode: () => void
 }>(null as any)
 
 interface IThemeProvider {
@@ -14,7 +14,7 @@ interface IThemeProvider {
 }
 
 export function ThemeProvider({ children }: IThemeProvider) {
-  const [colorMode, setColorMode, loading] = useColorModeFromLocalStorage()
+  const {colorMode, toggleColorMode, loading} = useColorModeFromLocalStorage()
 
   return (
     <StyledThemeProvider theme={{
@@ -22,7 +22,7 @@ export function ThemeProvider({ children }: IThemeProvider) {
       colors: theme.colors[colorMode],
     }}>
       <ColorModeContext.Provider
-        value={{ colorMode, setColorMode }}
+        value={{ colorMode, toggleColorMode }}
       >
       {!loading && children}
       </ColorModeContext.Provider>

@@ -10,8 +10,10 @@ import { ColorModeContext } from '../../utility'
 const Style = styled.div`
   position: relative;
   grid-area: editor;
-  width: 70%;
-  margin: 0 auto ${({ theme }) => theme.spacing.m} auto;
+  padding: ${({ theme }) => theme.spacing.xs};
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `
 
 export const EditorContext = React.createContext<{
