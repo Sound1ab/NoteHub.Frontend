@@ -5,6 +5,7 @@ import { activeFile } from '../../../store'
 import { styled } from '../../../theme'
 import { File } from '../../apollo/generated_components_typings'
 import { Card } from '../../molecules'
+import { Spinner } from '../../atoms'
 
 const Style = styled.div`
   grid-area: filelist;
@@ -19,7 +20,7 @@ const Style = styled.div`
 
 export function CardList() {
   const [state, dispatch] = useStore()
-  const { files } = useListFiles(
+  const { files, loading } = useListFiles(
     state.user.username,
     state.repo.activeRepo.name
   )
@@ -30,6 +31,7 @@ export function CardList() {
 
   return (
     <Style>
+      {loading && <Spinner />}
       {files
         .sort((fileA, fileB) => {
           return fileA.filename.localeCompare(fileB.filename)

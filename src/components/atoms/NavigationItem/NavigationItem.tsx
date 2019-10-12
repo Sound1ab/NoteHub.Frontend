@@ -7,13 +7,14 @@ const Style = styled.div<{ isActive: boolean }>`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: ${({theme}) => theme.spacing.xxs};
+  margin-bottom: ${({ theme }) => theme.spacing.xxs};
 
   .NavigationItem-button {
     background-color: transparent;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    width: 100%;
   }
 
   .NavigationItem-icon {
@@ -21,6 +22,9 @@ const Style = styled.div<{ isActive: boolean }>`
   }
 
   .NavigationItem-heading {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: ${({ theme, isActive }) =>
       isActive ? theme.colors.accent : theme.colors.text.primary};
     &:hover {
@@ -47,19 +51,19 @@ export function NavigationItem({
   return (
     <Style isActive={isActive} key={key}>
       <button className="NavigationItem-button" onClick={onClick}>
+        {isPrivate && (
+          <Icon
+            className="NavigationItem-icon"
+            size="xs"
+            icon="product-hunt"
+            prefix="fab"
+            marginRight
+          />
+        )}
         <Heading className="NavigationItem-heading" type="h5">
           {heading}
         </Heading>
       </button>
-      {isPrivate && (
-        <Icon
-          className="NavigationItem-icon"
-          size="xs"
-          icon="product-hunt"
-          prefix="fab"
-          marginLeft
-        />
-      )}
     </Style>
   )
 }

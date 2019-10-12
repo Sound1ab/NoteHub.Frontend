@@ -36,21 +36,18 @@ export function Profile() {
   }, [user, state.user.username, dispatch])
 
   const isAuthorized = state.user.isAuthorized
+  const link = isAuthorized ? user && user.html_url || '': `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&state=${STATE}&scope=${SCOPE}`
 
   return (
     <Style>
-      {isAuthorized ? (
-        <div className="Profile-wrapper">
-          <Avatar className="Profile-avatar" image={user && user.avatar_url} />
-        </div>
-      ) : (
-        <a
-          className="Profile-wrapper"
-          href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&state=${STATE}&scope=${SCOPE}`}
-        >
-          <Avatar className="Profile-avatar" />
-        </a>
-      )}
+      <a
+        className="Profile-wrapper"
+        href={link}
+        target="_blank"
+        rel="noopener"
+      >
+        <Avatar className="Profile-avatar" image={user && user.avatar_url} />
+      </a>
     </Style>
   )
 }
