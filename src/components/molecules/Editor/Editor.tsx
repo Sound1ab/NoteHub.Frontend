@@ -4,13 +4,21 @@ import { useStore } from '../../../hooks'
 import { useReadFile } from '../../../hooks/file/useReadFile'
 import { useUpdateFile } from '../../../hooks/file/useUpdateFile'
 import { styled } from '../../../theme'
+import { css } from 'styled-components'
 import { DropzoneContext, MarkdownPreview, Monaco, Spinner } from '../../atoms'
 import { ColorModeContext } from '../../utility'
 
-const Style = styled.div`
+const Style = styled.div<{ isPreview: boolean }>`
   position: relative;
   grid-area: editor;
-  padding: ${({ theme }) => theme.spacing.xs};
+  ${({ theme, isPreview }) =>
+    isPreview
+      ? css`
+          padding: ${theme.spacing.xs} 0;
+        `
+      : css`
+          padding: ${theme.spacing.xs};
+        `};
   height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -66,7 +74,7 @@ export function Editor() {
   }
 
   return (
-    <Style>
+    <Style isPreview={state.toolbar.isPreview}>
       {(dropzoneLoading || loading) && <Spinner />}
       <EditorContext.Provider
         value={{ colorMode, value, saveFile, setValue, uploadImage }}
