@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { useStore } from '../../../hooks'
-import { isPreview } from '../../../store'
+import { setIsPreview } from '../../../store'
 import { styled } from '../../../theme'
 import { Button, Icon } from '../../atoms'
 import { CreateFileModal, DeleteFileModal, Profile } from '../../molecules'
@@ -46,31 +46,47 @@ const Style = styled.div`
 export function Toolbar() {
   const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
   const [isDeleteFileModalOpen, setIsDeleteFileModalOpen] = useState(false)
-  const [state, dispatch] = useStore()
-  const { toggleColorMode } = useContext(ColorModeContext)
+  const [
+    {
+      toolbar: { isPreview },
+      repo: {
+        activeRepo: { id },
+      },
+    },
+    dispatch,
+  ] = useStore()
+  const { toggleColorMode, isDarkMode } = useContext(ColorModeContext)
 
   function handleSetPreview() {
-    dispatch(isPreview(!state.toolbar.isPreview))
+    dispatch(setIsPreview(!isPreview))
   }
 
   return (
     <Style>
       <div className="Toolbar-actions Toolbar-file-actions">
         <Button
+          isDisabled={!id}
           className="Toolbar-button"
           onClick={setIsCreateFileModalOpen.bind(null, true)}
         >
           <Icon size="sm" icon="edit" prefix="fa" />
         </Button>
-        <Button onClick={setIsDeleteFileModalOpen.bind(null, true)}>
+        <Button
+          isDisabled={!id}
+          onClick={setIsDeleteFileModalOpen.bind(null, true)}
+        >
           <Icon size="sm" icon="trash" prefix="fa" />
         </Button>
       </div>
       <div className="Toolbar-actions Toolbar-editor-actions">
-        <Button className="Toolbar-button" onClick={handleSetPreview}>
+        <Button
+          isActive={isPreview}
+          className="Toolbar-button"
+          onClick={handleSetPreview}
+        >
           <Icon size="sm" icon="pen" prefix="fa" />
         </Button>
-        <Button onClick={toggleColorMode}>
+        <Button isActive={isDarkMode} onClick={toggleColorMode}>
           <Icon size="sm" icon="moon" prefix="fa" />
         </Button>
         <div className="Toolbar-profile">

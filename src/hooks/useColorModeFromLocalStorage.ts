@@ -8,6 +8,7 @@ export function useColorModeFromLocalStorage(): {
   colorMode: COLOR_MODE,
   toggleColorMode: () => void,
   loading: boolean
+  isDarkMode: boolean
 } {
   const [storedColorMode, storeColorMode] = useLocalStorage(LOCAL_STORAGE.COLOR_MODE)
   const [colorMode, setColorMode] = useState(DEFAULT_COLOR_MODE)
@@ -31,5 +32,7 @@ export function useColorModeFromLocalStorage(): {
     setLoading(false)
   }, [storeAndSetColorMode, storedColorMode])
 
-  return {colorMode, toggleColorMode, loading}
+  const isDarkMode = colorMode === COLOR_MODE.DARK
+
+  return {colorMode, toggleColorMode, loading, isDarkMode}
 }

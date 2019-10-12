@@ -1,34 +1,54 @@
 import React, { ReactNode } from 'react'
 import { styled } from '../../../theme'
 
-const Style = styled.button`
+const Style = styled.button<Pick<IButton, 'isActive'>>`
   position: relative;
-  padding: ${({theme}) => theme.spacing.xs};
-  background-color: ${({theme}) => theme.colors.background.secondary};
+  padding: ${({ theme }) => theme.spacing.xs};
+  background-color: ${({ theme, isActive }) =>
+    isActive
+      ? theme.colors.background.tertiary
+      : theme.colors.background.secondary};
   border-radius: 5px;
-  box-shadow: inset 0px 0px 1px 1px ${({theme}) => theme.colors.border};
-  
+  box-shadow: inset 0px 0px 1px 1px ${({ theme }) => theme.colors.border};
+
   > * {
-    color: ${({theme}) => theme.colors.text.secondary}
+    color: ${({ theme, isActive }) =>
+      isActive ? theme.colors.accent : theme.colors.text.primary};
   }
-  
-  &:hover {
-    background-color: ${({theme}) => theme.colors.background.tertiary};
+
+  &:disabled {
     > * {
-      color: ${({theme}) => theme.colors.accent}
+      color: ${({ theme }) => theme.colors.text.secondary};
     }
+  }
+
+  &:hover:not(:disabled) {
+    opacity: 0.6;
   }
 `
 
 interface IButton {
+  isActive?: boolean
+  isDisabled?: boolean
   children?: ReactNode
   onClick: () => void
   className?: string
 }
 
-export function Button({ children, onClick, className }: IButton) {
+export function Button({
+  isActive = false,
+  isDisabled = false,
+  children,
+  onClick,
+  className,
+}: IButton) {
   return (
-    <Style className={className} onClick={onClick}>
+    <Style
+      isActive={isActive}
+      disabled={isDisabled}
+      className={className}
+      onClick={onClick}
+    >
       {children}
     </Style>
   )
