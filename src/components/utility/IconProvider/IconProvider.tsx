@@ -18,6 +18,7 @@ import {
   faTimes,
   faTrash,
   faUser,
+  faImage,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { ReactNode } from 'react'
 
@@ -42,6 +43,7 @@ library.add(
   faProductHunt,
   faEdit,
   faPen,
+  faImage,
 )
 
 interface IIconProvider {

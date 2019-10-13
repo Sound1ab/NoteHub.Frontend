@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { ReactNode, useContext, useEffect, useState } from 'react'
 import { COLOR_MODE } from '../../../enums'
 import { useStore } from '../../../hooks'
 import { useReadFile } from '../../../hooks/file/useReadFile'
@@ -32,7 +32,11 @@ export const EditorContext = React.createContext<{
   uploadImage: () => void
 } | null>(null)
 
-export function Editor() {
+interface IEditor {
+  children: ReactNode
+}
+
+export function Editor({ children }: IEditor) {
   const { colorMode } = useContext(ColorModeContext)
   const [selectFileAndUpload, dropzoneLoading] = useContext(DropzoneContext)
   const [value, setValue] = useState('')
@@ -74,13 +78,15 @@ export function Editor() {
   }
 
   return (
-    <Style isPreview={state.toolbar.isPreview}>
-      {(dropzoneLoading || loading) && <Spinner />}
-      <EditorContext.Provider
-        value={{ colorMode, value, saveFile, setValue, uploadImage }}
-      >
+    <EditorContext.Provider
+      value={{ colorMode, value, saveFile, setValue, uploadImage }}
+    >
+      {children}
+      <Style isPreview={state.toolbar.isPreview}>
+        {(dropzoneLoading || loading) && <Spinner />}
+
         {state.toolbar.isPreview ? <Monaco /> : <MarkdownPreview />}
-      </EditorContext.Provider>
-    </Style>
+      </Style>
+    </EditorContext.Provider>
   )
 }

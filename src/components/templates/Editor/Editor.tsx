@@ -31,8 +31,9 @@ export function Editor() {
         <Sidebar />
         <CardList />
         <Dropzone>
-          <Toolbar />
-          <MonacoEditor />
+          <MonacoEditor>
+            <Toolbar />
+          </MonacoEditor>
         </Dropzone>
       </div>
     </Style>

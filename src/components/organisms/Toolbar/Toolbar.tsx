@@ -3,7 +3,12 @@ import { useStore } from '../../../hooks'
 import { setIsPreview } from '../../../store'
 import { styled } from '../../../theme'
 import { Button, Icon } from '../../atoms'
-import { CreateFileModal, DeleteFileModal, Profile } from '../../molecules'
+import {
+  CreateFileModal,
+  DeleteFileModal,
+  EditorContext,
+  Profile,
+} from '../../molecules'
 import { ColorModeContext } from '../../utility'
 
 const Style = styled.div`
@@ -45,7 +50,11 @@ const Style = styled.div`
 
 export function Toolbar() {
   const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
+
   const [isDeleteFileModalOpen, setIsDeleteFileModalOpen] = useState(false)
+
+  const editorContext = useContext(EditorContext)
+
   const [
     {
       toolbar: { isPreview },
@@ -59,6 +68,14 @@ export function Toolbar() {
 
   function handleSetPreview() {
     dispatch(setIsPreview(!isPreview))
+  }
+
+  function handleUploadImage() {
+    console.log(editorContext)
+    if (!editorContext) {
+      return
+    }
+    editorContext.uploadImage()
   }
 
   return (
@@ -86,7 +103,14 @@ export function Toolbar() {
         >
           <Icon size="sm" icon="pen" prefix="fa" />
         </Button>
-        <Button isActive={isDarkMode} onClick={toggleColorMode}>
+        <Button className="Toolbar-button" onClick={handleUploadImage}>
+          <Icon size="sm" icon="image" prefix="fa" />
+        </Button>
+        <Button
+          className="Toolbar-button"
+          isActive={isDarkMode}
+          onClick={toggleColorMode}
+        >
           <Icon size="sm" icon="moon" prefix="fa" />
         </Button>
         <div className="Toolbar-profile">

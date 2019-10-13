@@ -57,6 +57,7 @@ interface IIcon {
     | 'product-hunt'
     | 'edit'
     | 'pen'
+    | 'image'
   color?: COLOR
   link?: string
   prefix?: 'fab' | 'fa'

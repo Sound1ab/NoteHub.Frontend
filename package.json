@@ -65,7 +65,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "test": "react-app-rewired test --env=jsdom",
-    "build": "react-scripts build",
+    "build": "react-app-rewired build",
     "eject": "react-scripts eject",
     "lint": "eslint './src/**/*.{ts,tsx}'",
     "codegen": "graphql-codegen --config codegen.yml",
