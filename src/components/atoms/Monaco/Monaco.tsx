@@ -38,7 +38,6 @@ export function Monaco() {
       editor: edit,
       monaco,
     }
-    edit.onDidBlurEditorText(saveFile)
   }
 
   if (
