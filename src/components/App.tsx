@@ -12,15 +12,28 @@ import {
   TActions,
 } from '../store'
 import { combinedReducers } from '../store/reducers'
-import { typography } from '../theme/typography'
-import { ApolloProvider, GlobalStyle, Router, ThemeProvider } from './utility'
+import {
+  ApolloProvider,
+  ColorModeContext,
+  GlobalStyle,
+  Router,
+  ThemeProvider,
+} from './utility'
 import { IconProvider } from './utility/IconProvider/IconProvider'
+import { useColorModeFromLocalStorage } from '../hooks/useColorModeFromLocalStorage'
+import Typography from 'typography'
 
 export function App() {
   const [state, dispatch] = useReducer<React.Reducer<IState, TActions>>(
     combinedReducers as any,
     initialState
   )
+  const {
+    colorMode,
+    toggleColorMode,
+    loading,
+    isDarkMode,
+  } = useColorModeFromLocalStorage()
 
   const [token] = useLocalStorage(LOCAL_STORAGE.KEY)
 
@@ -37,14 +50,22 @@ export function App() {
   return (
     <FileContext.Provider value={[state, dispatch]}>
       <ApolloProvider>
-        <ThemeProvider>
-          <IconProvider>
-            <GlobalStyle />
-            <TypographyStyle typography={typography} />
-            <GoogleFont typography={typography} />
-            <Router />
-          </IconProvider>
-        </ThemeProvider>
+        <ColorModeContext.Provider
+          value={{ colorMode, toggleColorMode, isDarkMode }}
+        >
+          {!loading && (
+            <ThemeProvider>
+              {(typography: Typography) => (
+                <IconProvider>
+                  <GlobalStyle isDarkMode />
+                  <TypographyStyle typography={typography} />
+                  <GoogleFont typography={typography} />
+                  <Router />
+                </IconProvider>
+              )}
+            </ThemeProvider>
+          )}
+        </ColorModeContext.Provider>
       </ApolloProvider>
     </FileContext.Provider>
   )

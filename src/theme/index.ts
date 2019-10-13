@@ -1,10 +1,12 @@
 import baseStyled, { ThemedStyledInterface } from 'styled-components'
-import { COLOR_MODE } from '../enums'
-import { theme } from './theme'
+import { colors, createSpacing } from './theme'
+
+type TSpacing = ReturnType<typeof createSpacing>
+export type TColors = typeof colors['dark']
 
 export interface ITheme {
-  colors: typeof theme.colors[COLOR_MODE.DARK]
-  spacing: typeof theme.spacing
+  colors: TColors
+  spacing: TSpacing
 }
 
 export const styled = baseStyled as ThemedStyledInterface<ITheme>

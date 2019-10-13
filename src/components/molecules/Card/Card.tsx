@@ -28,13 +28,11 @@ interface ICard {
   title: string
   onClick: () => void
   isSelected?: boolean
-  key: string
 }
 
-export function Card({ title, onClick, isSelected, key }: ICard) {
+export function Card({ title, onClick, isSelected }: ICard) {
   return (
     <Style
-      key={key}
       onClick={onClick}
       data-testid="Card"
       isSelected={isSelected}

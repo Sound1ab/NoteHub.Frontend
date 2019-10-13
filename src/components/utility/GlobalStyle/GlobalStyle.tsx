@@ -1,6 +1,7 @@
 import { createGlobalStyle } from 'styled-components'
+import { ITheme } from '../../../theme'
 
-export const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle<{theme: ITheme, isDarkMode: boolean}>`
   /*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */
 
   /* Document
@@ -58,17 +59,7 @@ export const GlobalStyle = createGlobalStyle`
   /* Text-level semantics
      ========================================================================== */
   
-  
-  h1,h2,h3,h4,h5,h6 {
-    color: ${({ theme }: { theme: any }) => theme.colors.accent};
-  }
-  
   /* unvisited link */
-  
-  p {
-    color: ${({ theme }: { theme: any }) => theme.colors.text.primary};
-  }
- 
 
   a {
     text-decoration: none;
@@ -241,15 +232,9 @@ export const GlobalStyle = createGlobalStyle`
   button {
     padding: 0;
     cursor: pointer;
-    color: ${({ theme }) => theme.colors.text.primary};
     background-color: transparent;
     display: flex;
   }
-  
-  button:hover {
-    color: ${({ theme }) => theme.colors.accent};
-  }
-  
   
   /**
    * Correct the padding in Firefox.

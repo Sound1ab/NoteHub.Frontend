@@ -35,7 +35,6 @@ const Style = styled.div<{ isActive: boolean }>`
 
 interface INavigationItem {
   isActive: boolean
-  key: string
   onClick: () => void
   heading: string
   isPrivate: boolean
@@ -43,13 +42,12 @@ interface INavigationItem {
 
 export function NavigationItem({
   isActive,
-  key,
   heading,
   isPrivate,
   onClick,
 }: INavigationItem) {
   return (
-    <Style isActive={isActive} key={key}>
+    <Style isActive={isActive}>
       <button className="NavigationItem-button" onClick={onClick}>
         {isPrivate && (
           <Icon
