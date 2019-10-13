@@ -57,7 +57,7 @@ export function Editor({ children }: IEditor) {
   }, [file])
 
   async function saveFile() {
-    if (!state.repo.activeFile) {
+    if (!state.repo.activeFile.filename) {
       return
     }
     await updateFile({

@@ -13,10 +13,6 @@ const Style = styled.div`
     justify-content: center;
     align-items: center;
   }
-
-  .Profile-avatar {
-    margin-right: ${({ theme }) => theme.spacing.xs};
-  }
 `
 
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
@@ -43,7 +39,7 @@ export function Profile() {
   return (
     <Style>
       <a className="Profile-wrapper" href={link} target="_blank" rel="noopener noreferrer">
-        <Avatar className="Profile-avatar" image={user && user.avatar_url} />
+        <Avatar image={user && user.avatar_url} />
       </a>
     </Style>
   )
