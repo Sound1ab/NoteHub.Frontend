@@ -1,7 +1,7 @@
-import { TReturnOfSetIsPreview, TOOLBAR_ACTIONS, TToolbarActions } from '..'
+import { TOOLBAR_ACTIONS, TToolbarActions } from '..'
 
 export const initialToolbarState = {
-  isPreview: false,
+  isEdit: true,
 }
 
 export function toolbarReducer(
@@ -12,7 +12,7 @@ export function toolbarReducer(
     case TOOLBAR_ACTIONS.SET_IS_PREVIEW:
       return {
         ...state,
-        isPreview: (action as TReturnOfSetIsPreview).payload.value,
+        isEdit: action.payload.value,
       }
     default:
       return state

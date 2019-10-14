@@ -1,6 +1,4 @@
 import {
-  TReturnOfIsAuthorized,
-  TReturnOfUsername,
   TUserActions,
   USER_ACTIONS,
 } from '..'
@@ -18,12 +16,12 @@ export function userReducer(
     case USER_ACTIONS.IS_AUTHORIZED:
       return {
         ...state,
-        isAuthorized: (action as TReturnOfIsAuthorized).payload.value,
+        isAuthorized: action.payload.value,
       }
     case USER_ACTIONS.USERNAME:
       return {
         ...state,
-        username: (action as TReturnOfUsername).payload.value,
+        username: action.payload.value,
       }
     case USER_ACTIONS.RESET_USER:
       return initialUserState

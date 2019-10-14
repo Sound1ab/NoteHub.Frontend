@@ -1,17 +1,15 @@
-export type TReturnOfSetIsPreview = ReturnType<typeof setIsPreview>
-
 export type TToolbarActions =
-  | TReturnOfSetIsPreview
+  | ReturnType<typeof setIsEdit>
 
 export enum TOOLBAR_ACTIONS {
   SET_IS_PREVIEW = 'SET_IS_PREVIEW',
 }
 
-export function setIsPreview(value: boolean) {
+export function setIsEdit(value: boolean) {
   return {
     payload: {
       value,
     },
-    type: TOOLBAR_ACTIONS.SET_IS_PREVIEW,
+    type: TOOLBAR_ACTIONS.SET_IS_PREVIEW as const,
   }
 }

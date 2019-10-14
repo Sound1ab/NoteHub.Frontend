@@ -1,11 +1,7 @@
-export type TReturnOfIsAuthorized = ReturnType<typeof isAuthorized>
-export type TReturnOfUsername = ReturnType<typeof username>
-export type TReturnOfResetUser = ReturnType<typeof resetUser>
-
 export type TUserActions =
-  | TReturnOfIsAuthorized
-  | TReturnOfUsername
-  | TReturnOfResetUser
+  | ReturnType<typeof isAuthorized>
+  | ReturnType<typeof username>
+  | ReturnType<typeof resetUser>
 
 export enum USER_ACTIONS {
   IS_AUTHORIZED = 'IS_AUTHORIZED',
@@ -18,7 +14,7 @@ export function isAuthorized(value: boolean) {
     payload: {
       value,
     },
-    type: USER_ACTIONS.IS_AUTHORIZED,
+    type: USER_ACTIONS.IS_AUTHORIZED as const,
   }
 }
 
@@ -27,12 +23,12 @@ export function username(value: string) {
     payload: {
       value,
     },
-    type: USER_ACTIONS.USERNAME,
+    type: USER_ACTIONS.USERNAME as const,
   }
 }
 
 export function resetUser() {
   return {
-    type: USER_ACTIONS.RESET_USER,
+    type: USER_ACTIONS.RESET_USER as const,
   }
 }

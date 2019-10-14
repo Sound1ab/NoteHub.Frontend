@@ -3,14 +3,10 @@ import {
   Repo,
 } from '../../components/apollo/generated_components_typings'
 
-export type TReturnOfActiveFile = ReturnType<typeof activeFile>
-export type TReturnOfActiveRepo = ReturnType<typeof activeRepo>
-export type TReturnOfResetRepo = ReturnType<typeof resetRepo>
-
 export type TRepoActions =
-  | TReturnOfActiveFile
-  | TReturnOfActiveRepo
-  | TReturnOfResetRepo
+  | ReturnType<typeof activeFile>
+  | ReturnType<typeof activeRepo>
+  | ReturnType<typeof resetRepo>
 
 export enum REPO_ACTIONS {
   ACTIVE_FILE = 'ACTIVE_FILE',
@@ -23,7 +19,7 @@ export function activeFile(file: File) {
     payload: {
       file,
     },
-    type: REPO_ACTIONS.ACTIVE_FILE,
+    type: REPO_ACTIONS.ACTIVE_FILE as const,
   }
 }
 
@@ -32,7 +28,7 @@ export function activeRepo(repo: Repo) {
     payload: {
       repo,
     },
-    type: REPO_ACTIONS.ACTIVE_REPO,
+    type: REPO_ACTIONS.ACTIVE_REPO as const,
   }
 }
 
@@ -48,6 +44,6 @@ export function resetRepo({
       file,
       repo,
     },
-    type: REPO_ACTIONS.RESET_REPO,
+    type: REPO_ACTIONS.RESET_REPO as const,
   }
 }

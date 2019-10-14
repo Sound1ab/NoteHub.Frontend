@@ -8,11 +8,11 @@ import { css } from 'styled-components'
 import { DropzoneContext, MarkdownPreview, Monaco, Spinner } from '../../atoms'
 import { ColorModeContext } from '../../utility'
 
-const Style = styled.div<{ isPreview: boolean }>`
+const Style = styled.div<{ isEdit: boolean }>`
   position: relative;
   grid-area: editor;
-  ${({ theme, isPreview }) =>
-    isPreview
+  ${({ theme, isEdit }) =>
+    isEdit
       ? css`
           padding: ${theme.spacing.xs} 0;
         `
@@ -82,10 +82,10 @@ export function Editor({ children }: IEditor) {
       value={{ colorMode, value, saveFile, setValue, uploadImage }}
     >
       {children}
-      <Style isPreview={state.toolbar.isPreview}>
+      <Style isEdit={state.toolbar.isEdit}>
         {(dropzoneLoading || loading) && <Spinner />}
 
-        {state.toolbar.isPreview ? <Monaco /> : <MarkdownPreview />}
+        {state.toolbar.isEdit ? <Monaco /> : <MarkdownPreview />}
       </Style>
     </EditorContext.Provider>
   )

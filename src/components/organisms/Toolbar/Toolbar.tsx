@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { useStore } from '../../../hooks'
-import { setIsPreview } from '../../../store'
+import { setIsEdit } from '../../../store'
 import { styled } from '../../../theme'
 import { Button, Icon } from '../../atoms'
 import {
@@ -57,7 +57,7 @@ export function Toolbar() {
 
   const [
     {
-      toolbar: { isPreview },
+      toolbar: { isEdit },
       repo: {
         activeRepo: { id },
       },
@@ -67,7 +67,7 @@ export function Toolbar() {
   const { toggleColorMode, isDarkMode } = useContext(ColorModeContext)
 
   function handleSetPreview() {
-    dispatch(setIsPreview(!isPreview))
+    dispatch(setIsEdit(!isEdit))
   }
 
   function handleUploadImage() {
@@ -97,7 +97,7 @@ export function Toolbar() {
       </div>
       <div className="Toolbar-actions Toolbar-editor-actions">
         <Button
-          isActive={isPreview}
+          isActive={isEdit}
           className="Toolbar-button"
           onClick={handleSetPreview}
         >

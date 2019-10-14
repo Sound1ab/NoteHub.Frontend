@@ -1,9 +1,6 @@
 import {
   REPO_ACTIONS,
   TRepoActions,
-  TReturnOfActiveFile,
-  TReturnOfActiveRepo,
-  TReturnOfResetRepo,
 } from '..'
 import {
   File,
@@ -43,15 +40,15 @@ export function repoReducer(
     case REPO_ACTIONS.ACTIVE_FILE:
       return {
         ...state,
-        activeFile: (action as TReturnOfActiveFile).payload.file,
+        activeFile: action.payload.file,
       }
     case REPO_ACTIONS.ACTIVE_REPO:
       return {
         ...state,
-        activeRepo: (action as TReturnOfActiveRepo).payload.repo,
+        activeRepo: action.payload.repo,
       }
     case REPO_ACTIONS.RESET_REPO:
-      const { repo, file } = (action as TReturnOfResetRepo).payload
+      const { repo, file } = action.payload
       if ((repo && file) || (!repo && !file)) {
         return initialRepoState
       }
