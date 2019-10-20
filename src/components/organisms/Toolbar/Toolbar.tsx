@@ -71,7 +71,6 @@ export function Toolbar() {
   }
 
   function handleUploadImage() {
-    console.log(editorContext)
     if (!editorContext) {
       return
     }

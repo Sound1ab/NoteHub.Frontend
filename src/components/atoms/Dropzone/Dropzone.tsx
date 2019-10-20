@@ -45,7 +45,6 @@ export function Dropzone({ children }: IDropzone) {
         },
       })
     } catch (e) {
-      console.log(e)
       alert('There was an issue saving your image, please try again')
     } finally {
       setLoading(false)

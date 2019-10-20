@@ -1,5 +1,5 @@
-import monacoEditor from 'monaco-editor'
-import React, { useContext, useRef } from 'react'
+import monacoEditor, { editor } from 'monaco-editor'
+import React, { useContext, useImperativeHandle, useRef } from 'react'
 import MonacoEditor, {
   EditorDidMount,
   EditorWillMount,
@@ -12,12 +12,19 @@ const theme = {
   [COLOR_MODE.LIGHT]: 'vs',
 }
 
+export interface Ref {
+  loadValue: editor.IStandaloneCodeEditor['setValue']
+  getPosition: editor.IStandaloneCodeEditor['getPosition']
+  executeEdits: editor.IStandaloneCodeEditor['executeEdits']
+  monaco: typeof monacoEditor | null
+}
+
 interface IMonaco {
   editor: monacoEditor.editor.IStandaloneCodeEditor
   monaco: typeof monacoEditor
 }
 
-export function Monaco() {
+export const Monaco = React.forwardRef((_, ref) => {
   const editorContext = useContext(EditorContext)
   const monacoRef = useRef<IMonaco | null>(null)
 
@@ -25,7 +32,7 @@ export function Monaco() {
     return null
   }
 
-  const { value, uploadImage, colorMode, saveFile, setValue } = editorContext
+  const { colorMode, onChange } = editorContext
 
   const editorWillMount: EditorWillMount = monaco => {
     const Monokai = require('monaco-themes/themes/Monokai.json')
@@ -40,21 +47,36 @@ export function Monaco() {
     }
   }
 
-  if (
-    monacoRef &&
-    monacoRef.current &&
-    monacoRef.current.editor &&
-    monacoRef.current.monaco
-  ) {
-    const monaco = monacoRef.current.monaco
-    const edit = monacoRef.current.editor
-    edit.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
-      saveFile()
+  useImperativeHandle(
+    ref,
+    (): Ref => ({
+      loadValue(value) {
+        monacoRef &&
+          monacoRef.current &&
+          monacoRef.current.editor.setValue(value)
+      },
+      getPosition() {
+        return (
+          monacoRef &&
+          monacoRef.current &&
+          monacoRef.current.editor.getPosition()
+        )
+      },
+      executeEdits(source, edits, endCursorState) {
+        return (
+          (monacoRef &&
+            monacoRef.current &&
+            monacoRef.current.editor.executeEdits(
+              source,
+              edits,
+              endCursorState
+            )) ||
+          false
+        )
+      },
+      monaco: monacoRef && monacoRef.current && monacoRef.current.monaco,
     })
-    edit.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_I, () => {
-      uploadImage()
-    })
-  }
+  )
 
   return (
     <MonacoEditor
@@ -62,7 +84,6 @@ export function Monaco() {
       height="100%"
       language="markdown"
       theme={theme[colorMode]}
-      value={value}
       options={{
         automaticLayout: true,
         fontSize: 11,
@@ -76,9 +97,9 @@ export function Monaco() {
         selectOnLineNumbers: true,
         wordWrap: 'on',
       }}
-      onChange={setValue}
+      onChange={onChange}
       editorWillMount={editorWillMount}
       editorDidMount={editorDidMount}
     />
   )
-}
+})
