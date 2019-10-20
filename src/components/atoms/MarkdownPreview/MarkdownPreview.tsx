@@ -7,6 +7,11 @@ import 'highlight.js/styles/darkula.css'
 
 const Style = styled.div`
   position: relative;
+  
+  h1, h2 {
+    border-bottom: solid 1px ${({theme}) => theme.colors.accent};
+    padding-bottom: ${({theme}) => theme.rhythm(0.5)};
+  }
 `
 
 const markdown: any = MarkdownIt({
