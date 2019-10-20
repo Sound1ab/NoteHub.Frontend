@@ -134,7 +134,7 @@ export function Editor({ children }: IEditor) {
       line.column
     )
     const id = { major: 1, minor: 1 }
-    const text = `![](images/${filename})`
+    const text = `![](https://github.com/${username}/noted-app-notes--${name}/blob/master/images/${filename}?raw=true)`
     const op = {
       identifier: id,
       range: range,
