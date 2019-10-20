@@ -16,6 +16,10 @@ const Style = styled.div`
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   border-right: 1px solid ${({ theme }) => theme.colors.border};
+  overflow: auto;
+  resize: horizontal;
+  min-width: ${({ theme }) => theme.spacing.xxl};
+  max-width: 50vw;
 `
 
 export function CardList() {

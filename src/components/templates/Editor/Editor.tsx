@@ -12,8 +12,8 @@ const Style = styled.div`
   .Editor-page {
     display: grid;
     grid-template-columns:
-      minmax(0, ${({theme}) => theme.spacing.xl})
-      minmax(0, ${({theme}) => theme.spacing.xxl})
+      min-content
+      min-content
       3fr;
     grid-template-rows: auto 1fr;
     grid-template-areas:

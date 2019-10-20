@@ -12,6 +12,10 @@ const Style = styled.div`
   justify-content: flex-start;
   padding: ${({ theme }) => theme.spacing.xs};
   border-right: 1px solid ${({ theme }) => theme.colors.border};
+  overflow: auto;
+  resize: horizontal;
+  min-width: ${({ theme }) => theme.spacing.xl};
+  max-width: 50vw;
 
   .Sidebar-title-wrapper {
     display: flex;
