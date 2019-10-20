@@ -27,7 +27,7 @@ const Style = styled.div<{ isEdit: boolean }>`
           padding: ${theme.spacing.xs};
         `};
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 `
 
