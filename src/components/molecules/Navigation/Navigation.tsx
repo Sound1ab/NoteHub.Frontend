@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { BulletList } from 'react-content-loader'
 import { useStore } from '../../../hooks'
 import { useListRepos } from '../../../hooks/Repo/useListRepos'
@@ -6,6 +6,8 @@ import { activeRepo, resetRepo } from '../../../store'
 import { styled } from '../../../theme'
 import { Repo } from '../../apollo/generated_components_typings'
 import { NavigationItem } from '../../atoms'
+import { RepoInput } from '../RepoInput/RepoInput'
+import { NewRepoContext } from '../../organisms'
 
 const Style = styled.nav`
   position: relative;
@@ -14,6 +16,7 @@ const Style = styled.nav`
 `
 
 export function Navigation() {
+  const context = useContext(NewRepoContext)
   const [state, dispatch] = useStore()
   const { repos, loading } = useListRepos(state.user.username)
 
@@ -55,6 +58,7 @@ export function Navigation() {
             )
           })
       )}
+      {context && context.isNewRepoOpen && <RepoInput />}
     </Style>
   )
 }

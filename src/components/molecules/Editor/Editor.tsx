@@ -73,15 +73,25 @@ export function Editor({ children }: IEditor) {
 
   const { file, loading } = useReadFile(username, name, filename)
 
+  let latestFile = useRef(file)
+  useEffect(() => {
+    latestFile.current = file
+  })
+
   const updateFile = useUpdateFile(username, name, filename)
 
   const path = file && file.path
 
   useEffect(() => {
-    if (!file || !file.content) {
+    if (
+      !latestFile ||
+      !latestFile.current ||
+      !latestFile.current ||
+      !latestFile.current.content
+    ) {
       return
     }
-    value.current = file.content
+    value.current = latestFile.current.content
     const editor = editorRef && editorRef.current
     editor && editor.loadValue(value.current)
     return () => editor && editor.loadValue('')

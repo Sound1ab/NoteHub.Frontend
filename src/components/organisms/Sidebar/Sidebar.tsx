@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createContext, Dispatch, SetStateAction, useState } from 'react'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
 import { Navigation, NewRepo } from '../../molecules'
@@ -33,26 +33,35 @@ const Style = styled.div`
   }
 `
 
+export const NewRepoContext = createContext<{
+  isNewRepoOpen: boolean
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>
+} | null>(null)
+
 export function Sidebar() {
+  const [isNewRepoOpen, setIsModalOpen] = useState(false)
+
   return (
-    <Style>
-      <div className="Sidebar-title-wrapper">
-        <Icon
-          className="Sidebar-title-icon"
-          icon="book"
-          prefix="fa"
-          marginRight
-        />
-        <Heading
-          className="Sidebar-title-heading"
-          type="h4"
-          textTransform="uppercase"
-        >
-          Repos
-        </Heading>
-      </div>
-      <Navigation />
-      <NewRepo />
-    </Style>
+    <NewRepoContext.Provider value={{ isNewRepoOpen, setIsModalOpen }}>
+      <Style>
+        <div className="Sidebar-title-wrapper">
+          <Icon
+            className="Sidebar-title-icon"
+            icon="book"
+            prefix="fa"
+            marginRight
+          />
+          <Heading
+            className="Sidebar-title-heading"
+            type="h4"
+            textTransform="uppercase"
+          >
+            Repos
+          </Heading>
+        </div>
+        <Navigation />
+        <NewRepo />
+      </Style>
+    </NewRepoContext.Provider>
   )
 }
