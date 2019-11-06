@@ -39,13 +39,15 @@ export function useCreateFile(username: string, repo: string) {
           }
         )
 
-        const files =
-          (result && result.listFiles && result.listFiles.items) || []
+        if (!result || !result.listFiles || !result.listFiles.items) {
+          return
+        }
 
         cache.writeQuery<ListFilesQuery, ListFilesQueryVariables>({
           data: {
             listFiles: {
-              items: files.concat([{ ...newFile }]),
+              ...result.listFiles,
+              items: [newFile, ...result.listFiles.items],
             },
           },
           query: ListFilesDocument,

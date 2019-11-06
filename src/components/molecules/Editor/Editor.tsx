@@ -73,21 +73,22 @@ export function Editor({ children }: IEditor) {
 
   const { file, loading } = useReadFile(username, name, filename)
 
-  let latestFile = useRef(file)
+  const latestFile = useRef(file)
+
   useEffect(() => {
-    latestFile.current = file
-  })
+      latestFile.current = file
+  }, [file])
 
   const updateFile = useUpdateFile(username, name, filename)
 
-  const path = file && file.path
+  const path = file && `${name}-${file.path}`
+  console.log('path', path)
 
   useEffect(() => {
     if (
       !latestFile ||
       !latestFile.current ||
-      !latestFile.current ||
-      !latestFile.current.content
+      typeof latestFile.current.content !== 'string'
     ) {
       return
     }
@@ -102,7 +103,7 @@ export function Editor({ children }: IEditor) {
   }, [isEdit])
 
   function onChange(newValue: string) {
-    if (!file || !file.content) {
+    if (!file || typeof file.content !== 'string') {
       return
     }
 
