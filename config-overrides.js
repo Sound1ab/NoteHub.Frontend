@@ -1,7 +1,8 @@
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
-module.exports = function override(config) {
-  //do stuff with the webpack config...
+const { useBabelRc, override } = require('customize-cra')
+
+const useMonaco = () => config => {
   return {
     ...config,
     plugins: [
@@ -12,3 +13,8 @@ module.exports = function override(config) {
     ]
   };
 }
+
+module.exports = override(
+  useBabelRc(),
+  useMonaco()
+)

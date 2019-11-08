@@ -1,8 +1,6 @@
-import React, { ReactNode, useContext, useEffect, useRef } from 'react'
+import React, { ReactNode, useContext, useRef } from 'react'
 import { COLOR_MODE } from '../../../enums'
 import { useStore } from '../../../hooks'
-import { useReadFile } from '../../../hooks/file/useReadFile'
-import { useUpdateFile } from '../../../hooks/file/useUpdateFile'
 import { styled } from '../../../theme'
 import { css } from 'styled-components'
 import {
@@ -13,7 +11,7 @@ import {
   Spinner,
 } from '../../atoms'
 import { ColorModeContext } from '../../utility'
-import { debounce } from '../../../utils'
+import { useFile } from '../../../hooks/monaco/useFile'
 
 const Style = styled.div<{ isEdit: boolean }>`
   position: relative;
@@ -42,101 +40,34 @@ interface IEditor {
   children: ReactNode
 }
 
-let abortController: AbortController
-
-const debouncedSave = debounce((updateFile, options) => {
-  const controller = new window.AbortController()
-  abortController = controller
-
-  updateFile({
-    ...options,
-    context: { fetchOptions: { signal: controller.signal } },
-  })
-}, 1000)
-
 export function Editor({ children }: IEditor) {
-  const value = useRef('')
-  const editorRef = useRef<Ref>()
+  const editorRef = useRef<Ref | null>(null)
   const { colorMode } = useContext(ColorModeContext)
   const [selectFileAndUpload, dropzoneLoading] = useContext(DropzoneContext)
-
   const [
     {
       user: { username },
       repo: {
         activeRepo: { name },
-        activeFile: { filename },
       },
       toolbar: { isEdit },
     },
   ] = useStore()
-
-  const { file, loading } = useReadFile(username, name, filename)
-
-  const latestFile = useRef(file)
-
-  useEffect(() => {
-      latestFile.current = file
-  }, [file])
-
-  const updateFile = useUpdateFile(username, name, filename)
-
-  const path = file && `${name}-${file.path}`
-  console.log('path', path)
-
-  useEffect(() => {
-    if (
-      !latestFile ||
-      !latestFile.current ||
-      typeof latestFile.current.content !== 'string'
-    ) {
-      return
-    }
-    value.current = latestFile.current.content
-    const editor = editorRef && editorRef.current
-    editor && editor.loadValue(value.current)
-    return () => editor && editor.loadValue('')
-  }, [path])
-
-  useEffect(() => {
-    editorRef && editorRef.current && editorRef.current.loadValue(value.current)
-  }, [isEdit])
-
-  function onChange(newValue: string) {
-    if (!file || typeof file.content !== 'string') {
-      return
-    }
-
-    if (newValue === value.current) {
-      return
-    }
-
-    value.current = newValue
-
-    abortController && abortController.abort()
-
-    debouncedSave(updateFile, {
-      variables: {
-        input: {
-          content: value.current,
-          filename,
-          repo: name,
-          username: username,
-        },
-      },
-    })
-  }
+  const { setValue, loading, value } = useFile()
 
   async function uploadImage() {
-    const line =
-      editorRef && editorRef.current && editorRef.current.getPosition()
+    const line = editorRef?.current?.getPosition()
+
     if (!line) {
       return
     }
-    const monaco = editorRef && editorRef.current && editorRef.current.monaco
+
+    const monaco = editorRef?.current?.monaco
+
     if (!monaco) {
       return
     }
+
     const filename = await selectFileAndUpload()
     const range = new monaco.Range(
       line.lineNumber,
@@ -144,6 +75,7 @@ export function Editor({ children }: IEditor) {
       line.lineNumber,
       line.column
     )
+
     const id = { major: 1, minor: 1 }
     const text = `![](https://github.com/${username}/noted-app-notes--${name}/blob/master/images/${filename}?raw=true)`
     const op = {
@@ -152,14 +84,13 @@ export function Editor({ children }: IEditor) {
       text: text,
       forceMoveMarkers: true,
     }
-    editorRef &&
-      editorRef.current &&
-      editorRef.current.executeEdits('my-source', [op])
+
+    editorRef?.current?.executeEdits('my-source', [op])
   }
 
   return (
     <EditorContext.Provider
-      value={{ colorMode, value: value.current, onChange, uploadImage }}
+      value={{ colorMode, value, onChange: setValue, uploadImage }}
     >
       {children}
       <Style isEdit={isEdit}>

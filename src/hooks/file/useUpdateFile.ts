@@ -21,7 +21,7 @@ export const UpdateFileDocument = gql`
 export function useUpdateFile(
   username: string,
   repo: string,
-  filename: string,
+  filename: string
 ) {
   return useMutation<UpdateFileMutation, UpdateFileMutationVariables>(
     UpdateFileDocument,
@@ -29,6 +29,8 @@ export function useUpdateFile(
       update: (cache, { data }) => {
         const updatedFile = data && data.updateFile
         if (!updatedFile) return
+
+        console.log(updatedFile.content)
 
         cache.writeQuery<ReadFileQuery, ReadFileQueryVariables>({
           data: {

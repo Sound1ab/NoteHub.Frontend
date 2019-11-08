@@ -1,6 +1,7 @@
 import monacoEditor, { editor } from 'monaco-editor'
 import React, { useContext, useImperativeHandle, useRef } from 'react'
 import MonacoEditor, {
+  ChangeHandler,
   EditorDidMount,
   EditorWillMount,
 } from 'react-monaco-editor'
@@ -14,9 +15,12 @@ const theme = {
 
 export interface Ref {
   loadValue: editor.IStandaloneCodeEditor['setValue']
-  getPosition: editor.IStandaloneCodeEditor['getPosition']
-  executeEdits: editor.IStandaloneCodeEditor['executeEdits']
-  monaco: typeof monacoEditor | null
+  getPosition: () => monacoEditor.Position | undefined | null
+  executeEdits: (
+    source: string,
+    editor: editor.IIdentifiedSingleEditOperation[]
+  ) => boolean | undefined | null
+  monaco: typeof monacoEditor | null | undefined
 }
 
 interface IMonaco {
@@ -32,7 +36,7 @@ export const Monaco = React.forwardRef((_, ref) => {
     return null
   }
 
-  const { colorMode, onChange } = editorContext
+  const { colorMode, onChange, value } = editorContext
 
   const editorWillMount: EditorWillMount = monaco => {
     const Monokai = require('monaco-themes/themes/Monokai.json')
@@ -51,32 +55,24 @@ export const Monaco = React.forwardRef((_, ref) => {
     ref,
     (): Ref => ({
       loadValue(value) {
-        monacoRef &&
-          monacoRef.current &&
-          monacoRef.current.editor.setValue(value)
+        monacoRef?.current?.editor.setValue(value)
       },
       getPosition() {
-        return (
-          monacoRef &&
-          monacoRef.current &&
-          monacoRef.current.editor.getPosition()
-        )
+        return monacoRef?.current?.editor.getPosition()
       },
-      executeEdits(source, edits, endCursorState) {
-        return (
-          (monacoRef &&
-            monacoRef.current &&
-            monacoRef.current.editor.executeEdits(
-              source,
-              edits,
-              endCursorState
-            )) ||
-          false
-        )
+      executeEdits(source, edits) {
+        return monacoRef?.current?.editor.executeEdits(source, edits)
       },
-      monaco: monacoRef && monacoRef.current && monacoRef.current.monaco,
+      monaco: monacoRef?.current?.monaco,
     })
   )
+
+  const handleOnChange: ChangeHandler = (newValue, event) => {
+    if (event.isFlush) {
+      return
+    }
+    onChange(newValue)
+  }
 
   return (
     <MonacoEditor
@@ -97,7 +93,8 @@ export const Monaco = React.forwardRef((_, ref) => {
         selectOnLineNumbers: true,
         wordWrap: 'on',
       }}
-      onChange={onChange}
+      value={value}
+      onChange={handleOnChange}
       editorWillMount={editorWillMount}
       editorDidMount={editorDidMount}
     />
