@@ -24,7 +24,7 @@ export const Callback = withRouter(({ location, history }: ICallback) => {
 
   if (accessToken) {
     writeStorage(LOCAL_STORAGE.KEY, accessToken)
-    history.push("/")
+    history.push('/dashboard')
   }
 
   return <Style>Redirecting</Style>

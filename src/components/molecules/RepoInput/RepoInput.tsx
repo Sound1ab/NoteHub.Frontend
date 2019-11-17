@@ -98,7 +98,7 @@ export function RepoInput({ setIsNewRepoOpen }: IRepoInput) {
     return () => {
       document.removeEventListener('mousedown', handleClick)
     }
-  }, [])
+  }, [setIsNewRepoOpen])
 
   return (
     <Style

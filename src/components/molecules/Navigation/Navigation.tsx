@@ -21,6 +21,10 @@ export function Navigation({ isNewRepoOpen, setIsNewRepoOpen }: INavigation) {
   const { currentRepoName, client } = useReadCurrentRepoName()
   const { repos, loading } = useListRepos()
 
+  if (!repos) {
+    return null
+  }
+
   function handleHeadingClick(repoName: String) {
     if (currentRepoName === repoName) {
       client.writeData({ data: { currentRepoName: null } })

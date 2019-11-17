@@ -70,7 +70,7 @@ export function Editor({ children }: IEditor) {
       return
     }
 
-    const filename = await selectFileAndUpload()
+    await selectFileAndUpload()
     const range = new monaco.Range(
       line.lineNumber,
       line.column,

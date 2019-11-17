@@ -1,7 +1,7 @@
 import React from 'react'
 import { styled } from '../../../theme'
 import { Dropzone } from '../../atoms'
-import { Editor as MonacoEditor } from '../../molecules'
+import { Editor } from '../../molecules'
 import { CardList, Sidebar, Toolbar } from '../../organisms'
 
 const Style = styled.div`
@@ -9,7 +9,7 @@ const Style = styled.div`
   flex-direction: column;
   height: 100vh;
 
-  .Editor-page {
+  .Dashboard-page {
     display: grid;
     grid-template-columns:
       min-content
@@ -24,16 +24,16 @@ const Style = styled.div`
   }
 `
 
-export function Editor() {
+export function Dashboard() {
   return (
     <Style>
-      <div className="Editor-page">
+      <div className="Dashboard-page">
         <Sidebar />
         <CardList />
         <Dropzone>
-          <MonacoEditor>
+          <Editor>
             <Toolbar />
-          </MonacoEditor>
+          </Editor>
         </Dropzone>
       </div>
     </Style>
