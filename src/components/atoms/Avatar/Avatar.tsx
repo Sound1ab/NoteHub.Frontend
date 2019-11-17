@@ -3,8 +3,8 @@ import { styled } from '../../../theme'
 
 const Style = styled.div`
   position: relative;
-  height: ${({theme}) => theme.spacing.m};
-  width: ${({theme}) => theme.spacing.m};
+  height: ${({ theme }) => theme.spacing.m};
+  width: ${({ theme }) => theme.spacing.m};
 
   img {
     object-fit: cover;

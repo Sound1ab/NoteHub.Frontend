@@ -25,7 +25,7 @@ export function ThemeProvider({ children }: IThemeProvider) {
       theme={{
         spacing,
         colors: themeColors,
-        rhythm: typography.rhythm
+        rhythm: typography.rhythm,
       }}
     >
       {children(typography)}
