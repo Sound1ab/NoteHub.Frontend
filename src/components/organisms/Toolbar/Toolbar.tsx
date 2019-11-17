@@ -10,6 +10,7 @@ import {
   Profile,
 } from '../../molecules'
 import { ColorModeContext } from '../../utility'
+import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
 
 const Style = styled.div`
   grid-area: toolbar;
@@ -50,17 +51,13 @@ const Style = styled.div`
 
 export function Toolbar() {
   const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
-
   const [isDeleteFileModalOpen, setIsDeleteFileModalOpen] = useState(false)
-
   const editorContext = useContext(EditorContext)
+  const { currentRepoName } = useReadCurrentRepoName()
 
   const [
     {
       toolbar: { isEdit },
-      repo: {
-        activeRepo: { id },
-      },
     },
     dispatch,
   ] = useStore()
@@ -81,14 +78,14 @@ export function Toolbar() {
     <Style>
       <div className="Toolbar-actions Toolbar-file-actions">
         <Button
-          isDisabled={!id}
+          isDisabled={!currentRepoName}
           className="Toolbar-button"
           onClick={setIsCreateFileModalOpen.bind(null, true)}
         >
           <Icon size="sm" icon="edit" prefix="fa" />
         </Button>
         <Button
-          isDisabled={!id}
+          isDisabled={!currentRepoName}
           onClick={setIsDeleteFileModalOpen.bind(null, true)}
         >
           <Icon size="sm" icon="trash" prefix="fa" />

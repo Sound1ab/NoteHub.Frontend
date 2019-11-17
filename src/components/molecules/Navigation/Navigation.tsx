@@ -1,13 +1,11 @@
 import React, { useContext } from 'react'
 import { BulletList } from 'react-content-loader'
-import { useStore } from '../../../hooks'
 import { useListRepos } from '../../../hooks/Repo/useListRepos'
-import { activeRepo, resetRepo } from '../../../store'
 import { styled } from '../../../theme'
-import { Repo } from '../../apollo/generated_components_typings'
 import { NavigationItem } from '../../atoms'
 import { RepoInput } from '../RepoInput/RepoInput'
 import { NewRepoContext } from '../../organisms'
+import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
 
 const Style = styled.nav`
   position: relative;
@@ -16,19 +14,15 @@ const Style = styled.nav`
 `
 
 export function Navigation() {
+  const { currentRepoName, client } = useReadCurrentRepoName()
   const context = useContext(NewRepoContext)
-  const [state, dispatch] = useStore()
-  const { repos, loading } = useListRepos(state.user.username)
+  const { repos, loading } = useListRepos()
 
-  function handleHeadingClick(repo: Repo) {
-    if (!dispatch) {
-      return
-    }
-    if (state.repo.activeRepo.name === repo.name) {
-      dispatch(resetRepo())
+  function handleHeadingClick(repoName: String) {
+    if (currentRepoName === repoName) {
+      client.writeData({ data: { currentRepoName: null } })
     } else {
-      dispatch(resetRepo())
-      dispatch(activeRepo(repo))
+      client.writeData({ data: { currentRepoName: repoName } })
     }
   }
 
@@ -42,16 +36,13 @@ export function Navigation() {
             return repoA.name.localeCompare(repoB.name)
           })
           .map(repo => {
-            const isActive =
-              state.repo.activeRepo &&
-              repo &&
-              repo.name === state.repo.activeRepo.name
+            const isActive = repo.name === currentRepoName
 
             return (
               <NavigationItem
                 isActive={isActive}
                 key={repo.id.toString()}
-                onClick={handleHeadingClick.bind(null, repo)}
+                onClick={handleHeadingClick.bind(null, repo.name)}
                 heading={repo && repo.name}
                 isPrivate={repo.private}
               />

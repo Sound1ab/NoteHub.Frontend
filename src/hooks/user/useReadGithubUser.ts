@@ -20,5 +20,5 @@ export function useReadGithubUser() {
     ReadGithubUserDocument
   )
 
-  return data && data.readGithubUser
+  return data?.readGithubUser
 }

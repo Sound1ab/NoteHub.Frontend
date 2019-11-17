@@ -8,6 +8,7 @@ import {
   ListReposQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
+import { useReadGithubUser } from '../user/useReadGithubUser'
 
 export const CreateRepoDocument = gql`
   ${RepoFragment}
@@ -18,18 +19,20 @@ export const CreateRepoDocument = gql`
   }
 `
 
-export function useCreateRepo(username: string) {
+export function useCreateRepo() {
+  const user = useReadGithubUser()
+
   return useMutation<CreateRepoMutation, CreateRepoMutationVariables>(
     CreateRepoDocument,
     {
       update: (cache, { data }) => {
         const newRepo = data && data.createRepo
-        if (!newRepo) return
+        if (!newRepo || !user) return
         const result = cache.readQuery<ListReposQuery, ListReposQueryVariables>(
           {
             query: ListReposDocument,
             variables: {
-              username,
+              username: user.name,
             },
           }
         )
@@ -47,7 +50,7 @@ export function useCreateRepo(username: string) {
           },
           query: ListReposDocument,
           variables: {
-            username,
+            username: user.name,
           },
         })
       },

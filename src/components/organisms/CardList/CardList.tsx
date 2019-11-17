@@ -1,11 +1,9 @@
 import React from 'react'
-import { useStore } from '../../../hooks'
 import { useListFiles } from '../../../hooks/file/useListFiles'
-import { activeFile } from '../../../store'
 import { styled } from '../../../theme'
-import { File } from '../../apollo/generated_components_typings'
 import { Card } from '../../molecules'
 import { Spinner } from '../../atoms'
+import { useReadCurrentFileName } from '../../../hooks/file/useReadCurrentFileName'
 
 const Style = styled.div`
   grid-area: filelist;
@@ -23,14 +21,11 @@ const Style = styled.div`
 `
 
 export function CardList() {
-  const [state, dispatch] = useStore()
-  const { files, loading } = useListFiles(
-    state.user.username,
-    state.repo.activeRepo.name
-  )
+  const { currentFileName, client } = useReadCurrentFileName()
+  const { files, loading } = useListFiles()
 
-  function handleCardClick(file: File) {
-    if (dispatch) dispatch(activeFile(file))
+  function handleCardClick(filename: string) {
+    client.writeData({ data: { currentFileName: filename } })
   }
 
   return (
@@ -44,12 +39,9 @@ export function CardList() {
           return (
             <Card
               key={`${file.sha}-${file.filename}`}
-              onClick={handleCardClick.bind(null, file)}
+              onClick={handleCardClick.bind(null, file.filename)}
               title={file.filename}
-              isSelected={
-                !!state.repo.activeFile &&
-                state.repo.activeFile.filename === file.filename
-              }
+              isSelected={currentFileName === file.filename}
             />
           )
         })}

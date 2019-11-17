@@ -8,6 +8,8 @@ import {
   ListFilesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
+import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
+import { useReadGithubUser } from '../user/useReadGithubUser'
 
 export const CreateFileDocument = gql`
   ${FileFragment}
@@ -18,23 +20,27 @@ export const CreateFileDocument = gql`
   }
 `
 
-export function useCreateFile(username: string, repo: string) {
+export function useCreateFile() {
+  const { currentRepoName } = useReadCurrentRepoName()
+  const user = useReadGithubUser()
+
   return useMutation<CreateFileMutation, CreateFileMutationVariables>(
     CreateFileDocument,
     {
       update: (cache, { data }) => {
         const newFile = data && data.createFile
         if (!newFile) return
-        if (!repo) {
-          alert('No active repo to save note to')
+        if (!user || !currentRepoName) {
+          alert('Error')
+          return
         }
 
         const result = cache.readQuery<ListFilesQuery, ListFilesQueryVariables>(
           {
             query: ListFilesDocument,
             variables: {
-              repo,
-              username,
+              repo: currentRepoName,
+              username: user.name,
             },
           }
         )
@@ -52,8 +58,8 @@ export function useCreateFile(username: string, repo: string) {
           },
           query: ListFilesDocument,
           variables: {
-            repo,
-            username,
+            repo: currentRepoName,
+            username: user.name,
           },
         })
       },

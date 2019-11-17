@@ -5,6 +5,7 @@ import {
   ListReposQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
+import { useReadGithubUser } from '../user/useReadGithubUser'
 
 export const ListReposDocument = gql`
   ${RepoFragment}
@@ -17,16 +18,18 @@ export const ListReposDocument = gql`
   }
 `
 
-export function useListRepos(username: string) {
+export function useListRepos() {
+  const user = useReadGithubUser()
+
   const { data, loading } = useQuery<ListReposQuery, ListReposQueryVariables>(
     ListReposDocument,
     {
-      skip: !username,
+      skip: !user,
     }
   )
 
   return {
     loading,
-    repos: (data && data.listRepos && data.listRepos.items) || [],
+    repos: data?.listRepos?.items ?? [],
   }
 }

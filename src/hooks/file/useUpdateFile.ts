@@ -8,6 +8,9 @@ import {
   UpdateFileMutationVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
+import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
+import { useReadCurrentFileName } from './useReadCurrentFileName'
+import { useReadGithubUser } from '../user/useReadGithubUser'
 
 export const UpdateFileDocument = gql`
   ${FileFragment}
@@ -18,11 +21,11 @@ export const UpdateFileDocument = gql`
   }
 `
 
-export function useUpdateFile(
-  username: string,
-  repo: string,
-  filename: string
-) {
+export function useUpdateFile() {
+  const { currentRepoName } = useReadCurrentRepoName()
+  const { currentFileName } = useReadCurrentFileName()
+  const user = useReadGithubUser()
+
   return useMutation<UpdateFileMutation, UpdateFileMutationVariables>(
     UpdateFileDocument,
     {
@@ -38,9 +41,9 @@ export function useUpdateFile(
           },
           query: ReadFileDocument,
           variables: {
-            filename,
-            repo,
-            username,
+            filename: currentFileName ?? '',
+            repo: currentRepoName ?? '',
+            username: user?.name ?? '',
           },
         })
       },

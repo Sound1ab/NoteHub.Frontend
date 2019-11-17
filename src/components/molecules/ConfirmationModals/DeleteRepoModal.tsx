@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useStore } from '../../../hooks'
 import { useDeleteRepo } from '../../../hooks/Repo/useDeleteRepo'
-import { resetRepo } from '../../../store'
 import { Heading, Modal } from '../../atoms'
+import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
+import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
+import { useApolloClient } from 'react-apollo-hooks'
 
 interface IDeleteRepoModal {
   isOpen: boolean
@@ -15,15 +16,17 @@ export function DeleteRepoModal({
   onRequestClose,
   title,
 }: IDeleteRepoModal) {
-  const inputEl = useRef<HTMLInputElement>(null);
-  const [state, dispatch] = useStore()
+  const inputEl = useRef<HTMLInputElement>(null)
+  const user = useReadGithubUser()
   const [inputValue, setInputValue] = useState('')
   const [loading, setLoading] = useState(false)
-  const deleteRepo = useDeleteRepo(state.user.username)
+  const deleteRepo = useDeleteRepo()
+  const client = useApolloClient()
+  const { currentRepoName } = useReadCurrentRepoName()
 
   async function handleDeleteRepo() {
-    if (!state.repo.activeRepo) {
-      alert('No active repo')
+    if (!user || !currentRepoName) {
+      alert('Error')
       return
     }
     if (inputValue !== title) {
@@ -36,12 +39,14 @@ export function DeleteRepoModal({
       await deleteRepo({
         variables: {
           input: {
-            repo: state.repo.activeRepo.name,
-            username: state.user.username,
+            repo: currentRepoName,
+            username: user.name,
           },
         },
       })
-      dispatch(resetRepo())
+      client.writeData({
+        data: { currentRepoName: null, currentFileName: null },
+      })
       handleRequestClose()
     } catch {
       alert('There was an issue deleting your repo, please try again')
@@ -72,7 +77,7 @@ export function DeleteRepoModal({
       if (!inputEl || !inputEl.current) {
         return
       }
-      inputEl.current.focus();
+      inputEl.current.focus()
     }, 1)
   }, [isOpen])
 

@@ -1,16 +1,6 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useReducer } from 'react'
 import { GoogleFont, TypographyStyle } from 'react-typography'
-import { LOCAL_STORAGE } from '../enums'
-import { useLocalStorage } from '../hooks'
-import {
-  FileContext,
-  initialState,
-  isAuthorized,
-  IState,
-  resetRepo,
-  resetUser,
-  TActions,
-} from '../store'
+import { FileContext, initialState, IState, TActions } from '../store'
 import { combinedReducers } from '../store/reducers'
 import {
   ApolloProvider,
@@ -34,18 +24,6 @@ export function App() {
     loading,
     isDarkMode,
   } = useColorModeFromLocalStorage()
-
-  const [token] = useLocalStorage(LOCAL_STORAGE.KEY)
-
-  useEffect(() => {
-    if (token) {
-      dispatch(isAuthorized(true))
-    } else {
-      dispatch(isAuthorized(false))
-      dispatch(resetRepo())
-      dispatch(resetUser())
-    }
-  }, [token])
 
   return (
     <FileContext.Provider value={[state, dispatch]}>

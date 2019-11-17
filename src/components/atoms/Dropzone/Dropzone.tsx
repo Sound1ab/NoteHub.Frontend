@@ -1,7 +1,8 @@
 import React, { ReactNode, useRef, useState } from 'react'
-import { useStore } from '../../../hooks'
 import { useCreateImage } from '../../../hooks/image/useCreateImage'
 import { styled } from '../../../theme'
+import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
+import { useReadCurrentFileName } from '../../../hooks/file/useReadCurrentFileName'
 
 export const DropzoneContext = React.createContext<
   [() => Promise<string>, boolean]
@@ -17,19 +18,20 @@ interface IDropzone {
 
 export function Dropzone({ children }: IDropzone) {
   const input = useRef<HTMLInputElement>(null)
-  const [state] = useStore()
   const [loading, setLoading] = useState(false)
   const resolver = useRef<(value?: any | PromiseLike<any>) => void>(null)
   const rejecter = useRef<(value?: any | PromiseLike<any>) => void>(null)
   const createNewImage = useCreateImage()
+  const { currentRepoName } = useReadCurrentRepoName()
+  const { currentFileName } = useReadCurrentFileName()
 
   async function handleCreateNewImage(filename: string, content: any) {
     if (!content) {
       alert('no content')
       return
     }
-    if (!state.repo.activeRepo) {
-      alert('No active repo')
+    if (!currentRepoName || !currentFileName) {
+      alert('Error')
       return
     }
     setLoading(true)
@@ -39,8 +41,8 @@ export function Dropzone({ children }: IDropzone) {
           input: {
             content,
             filename,
-            repo: state.repo.activeRepo.name,
-            username: state.user.username,
+            repo: currentRepoName,
+            username: currentFileName,
           },
         },
       })

@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { useStore } from '../../../hooks'
 import { useDeleteFile } from '../../../hooks/file/useDeleteFile'
-import { resetRepo } from '../../../store'
 import { Modal } from '../../atoms'
+import { useApolloClient } from 'react-apollo-hooks'
+import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
+import { useReadCurrentFileName } from '../../../hooks/file/useReadCurrentFileName'
+import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
 
 interface IDeleteFileModal {
   isOpen: boolean
@@ -10,15 +12,16 @@ interface IDeleteFileModal {
 }
 
 export function DeleteFileModal({ isOpen, onRequestClose }: IDeleteFileModal) {
-  const [state, dispatch] = useStore()
   const [loading, setLoading] = useState(false)
-  const deleteFile = useDeleteFile(
-    state.user.username,
-    state.repo.activeRepo.name
-  )
+  const deleteFile = useDeleteFile()
+  const client = useApolloClient()
+  const user = useReadGithubUser()
+  const { currentRepoName } = useReadCurrentRepoName()
+  const { currentFileName } = useReadCurrentFileName()
 
   async function handleDeleteFile() {
-    if (!state.repo.activeFile) {
+    if (!user || !currentRepoName || !currentFileName) {
+      alert('Error')
       return
     }
 
@@ -27,13 +30,15 @@ export function DeleteFileModal({ isOpen, onRequestClose }: IDeleteFileModal) {
       await deleteFile({
         variables: {
           input: {
-            filename: state.repo.activeFile.filename,
-            repo: state.repo.activeRepo.name,
-            username: state.user.username,
+            filename: currentFileName,
+            repo: currentRepoName,
+            username: user.name,
           },
         },
       })
-      dispatch(resetRepo({ file: true }))
+      client.writeData({
+        data: { currentRepoName: null },
+      })
       onRequestClose()
     } catch {
       alert('There was an issue deleting your file, please try again')

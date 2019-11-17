@@ -8,6 +8,7 @@ import {
   ListReposQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
+import { useReadGithubUser } from '../user/useReadGithubUser'
 
 export const DeleteRepoDocument = gql`
   ${RepoFragment}
@@ -18,7 +19,9 @@ export const DeleteRepoDocument = gql`
   }
 `
 
-export function useDeleteRepo(username: string) {
+export function useDeleteRepo() {
+  const user = useReadGithubUser()
+
   return useMutation<DeleteRepoMutation, DeleteRepoMutationVariables>(
     DeleteRepoDocument,
     {
@@ -30,7 +33,7 @@ export function useDeleteRepo(username: string) {
           {
             query: ListReposDocument,
             variables: {
-              username,
+              username: user?.name,
             },
           }
         )
@@ -48,7 +51,7 @@ export function useDeleteRepo(username: string) {
           },
           query: ListReposDocument,
           variables: {
-            username,
+            username: user?.name,
           },
         })
       },

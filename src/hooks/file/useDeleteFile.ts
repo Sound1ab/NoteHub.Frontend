@@ -8,6 +8,8 @@ import {
   ListFilesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
+import { useReadGithubUser } from '../user/useReadGithubUser'
+import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
 
 export const DeleteFileDocument = gql`
   ${FileFragment}
@@ -18,7 +20,10 @@ export const DeleteFileDocument = gql`
   }
 `
 
-export function useDeleteFile(username: string, repo: string) {
+export function useDeleteFile() {
+  const { currentRepoName } = useReadCurrentRepoName()
+  const user = useReadGithubUser()
+
   return useMutation<DeleteFileMutation, DeleteFileMutationVariables>(
     DeleteFileDocument,
     {
@@ -30,8 +35,8 @@ export function useDeleteFile(username: string, repo: string) {
           {
             query: ListFilesDocument,
             variables: {
-              repo,
-              username,
+              repo: currentRepoName ?? '',
+              username: user?.name ?? '',
             },
           }
         )
@@ -51,8 +56,8 @@ export function useDeleteFile(username: string, repo: string) {
           },
           query: ListFilesDocument,
           variables: {
-            repo,
-            username,
+            repo: currentRepoName ?? '',
+            username: user?.name ?? '',
           },
         })
       },

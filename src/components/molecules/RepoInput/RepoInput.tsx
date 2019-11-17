@@ -1,20 +1,14 @@
-import React, {
-  useContext,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react'
+import React, { useContext, useLayoutEffect, useRef, useState } from 'react'
 import { styled } from '../../../theme'
 import { Icon, Input } from '../../atoms'
 import { useCreateRepo } from '../../../hooks/Repo/useCreateRepo'
-import { useStore } from '../../../hooks'
 import { NewRepoContext } from '../../organisms'
 
 const Style = styled.form<{ isPrivate: boolean }>`
   position: relative;
   display: flex;
   width: 100%;
-  margin-bottom: ${({theme}) => theme.spacing.xxs};
+  margin-bottom: ${({ theme }) => theme.spacing.xxs};
 
   input {
     flex: 1;
@@ -40,12 +34,8 @@ export function RepoInput() {
   const [{ name, isPrivate }, setForm] = useState<{ [key: string]: any }>(
     defaultState
   )
-  const [
-    {
-      user: { username },
-    },
-  ] = useStore()
-  const createNewRepo = useCreateRepo(username)
+
+  const createNewRepo = useCreateRepo()
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target
@@ -90,20 +80,28 @@ export function RepoInput() {
 
   useLayoutEffect(() => {
     const handleClick = (e: any) => {
-      if (wrapperRef && wrapperRef.current && wrapperRef.current.contains(e.target)) {
-        return;
+      if (
+        wrapperRef &&
+        wrapperRef.current &&
+        wrapperRef.current.contains(e.target)
+      ) {
+        return
       }
       context && context.setIsModalOpen(false)
-    };
+    }
 
-    document.addEventListener("mousedown", handleClick);
+    document.addEventListener('mousedown', handleClick)
     return () => {
-      document.removeEventListener("mousedown", handleClick);
-    };
-  }, [context]);
+      document.removeEventListener('mousedown', handleClick)
+    }
+  }, [context])
 
   return (
-    <Style ref={wrapperRef} isPrivate={isPrivate} onSubmit={handleCreateNewRepo}>
+    <Style
+      ref={wrapperRef}
+      isPrivate={isPrivate}
+      onSubmit={handleCreateNewRepo}
+    >
       <Icon
         onClick={handleOnClick}
         className="RepoInput-icon"

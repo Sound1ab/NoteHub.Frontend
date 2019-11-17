@@ -1,9 +1,10 @@
 import { debounce } from '../../utils'
 import { useEffect, useRef, useState } from 'react'
 import { File } from '../../components/apollo/generated_components_typings'
-import { useStore } from '../useStore'
 import { useUpdateFile } from '../file/useUpdateFile'
 import { useReadFile } from '../file/useReadFile'
+import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
+import { useReadGithubUser } from '../user/useReadGithubUser'
 
 let abortController: AbortController
 
@@ -22,23 +23,16 @@ const debouncedSave = debounce((updateFile, options) => {
 export function useFile() {
   const [stateValue, setStateValue] = useState('')
   const latestFile = useRef<File | null | undefined>(null)
-  const [
-    {
-      user: { username },
-      repo: {
-        activeRepo: { name },
-        activeFile: { filename },
-      },
-    },
-  ] = useStore()
-  const updateFile = useUpdateFile(username, name, filename)
-  const { file, loading } = useReadFile(username, name, filename)
+  const user = useReadGithubUser()
+  const updateFile = useUpdateFile()
+  const { file, loading } = useReadFile()
+  const { currentRepoName } = useReadCurrentRepoName()
 
   useEffect(() => {
     latestFile.current = file
   }, [file])
 
-  const path = file && `${name}-${file.path}`
+  const path = file && `${currentRepoName}-${file.path}`
 
   const content = file?.content
 
@@ -64,9 +58,9 @@ export function useFile() {
       variables: {
         input: {
           content: newValue,
-          filename,
-          repo: name,
-          username: username,
+          filename: file.filename,
+          repo: currentRepoName,
+          username: user?.name,
         },
       },
     })

@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useStore } from '../../../hooks'
 import { useCreateFile } from '../../../hooks/file/useCreateFile'
 import { Heading, Modal } from '../../atoms'
+import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
+import { useReadCurrentFileName } from '../../../hooks/file/useReadCurrentFileName'
+import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
 
 interface ICreateFileModal {
   isOpen: boolean
@@ -9,18 +11,17 @@ interface ICreateFileModal {
 }
 
 export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
-  const inputEl = useRef<HTMLInputElement>(null);
-  const [state] = useStore()
+  const inputEl = useRef<HTMLInputElement>(null)
   const [inputValue, setInputValue] = useState('')
   const [loading, setLoading] = useState(false)
-  const createNewFile = useCreateFile(
-    state.user.username,
-    state.repo.activeRepo.name
-  )
+  const createNewFile = useCreateFile()
+  const user = useReadGithubUser()
+  const { currentRepoName } = useReadCurrentRepoName()
+  const { currentFileName } = useReadCurrentFileName()
 
   async function handleCreateNewFile() {
-    if (!state.repo.activeRepo) {
-      alert('No active repo')
+    if (!user || !currentRepoName || !currentFileName) {
+      alert('Error')
       return
     }
     setLoading(true)
@@ -30,8 +31,8 @@ export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
           input: {
             content: '',
             filename: `${inputValue}.md`,
-            repo: state.repo.activeRepo.name,
-            username: state.user.username,
+            repo: currentRepoName,
+            username: user.name,
           },
         },
       })
@@ -65,7 +66,7 @@ export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
       if (!inputEl || !inputEl.current) {
         return
       }
-      inputEl.current.focus();
+      inputEl.current.focus()
     }, 1)
   }, [isOpen])
 

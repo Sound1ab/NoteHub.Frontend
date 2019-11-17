@@ -5,6 +5,9 @@ import {
   ReadFileQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
+import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
+import { useReadCurrentFileName } from './useReadCurrentFileName'
+import { useReadGithubUser } from '../user/useReadGithubUser'
 
 export const ReadFile = gql`
   ${FileFragment}
@@ -15,16 +18,20 @@ export const ReadFile = gql`
   }
 `
 
-export function useReadFile(username: string, repo: string, filename: string) {
+export function useReadFile() {
+  const { currentRepoName } = useReadCurrentRepoName()
+  const { currentFileName } = useReadCurrentFileName()
+  const user = useReadGithubUser()
+
   const { data, loading } = useQuery<ReadFileQuery, ReadFileQueryVariables>(
     ReadFile,
     {
       // fetchPolicy: 'no-cache',
-      skip: !username || !repo || !filename,
+      skip: !user?.name || !currentRepoName || !currentFileName,
       variables: {
-        filename,
-        repo,
-        username,
+        filename: currentFileName ?? '',
+        repo: currentRepoName ?? '',
+        username: user?.name ?? '',
       },
     }
   )

@@ -12,6 +12,9 @@ import {
 } from '../../atoms'
 import { ColorModeContext } from '../../utility'
 import { useFile } from '../../../hooks/monaco/useFile'
+import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
+import { useReadCurrentFileName } from '../../../hooks/file/useReadCurrentFileName'
+import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
 
 const Style = styled.div<{ isEdit: boolean }>`
   position: relative;
@@ -46,14 +49,13 @@ export function Editor({ children }: IEditor) {
   const [selectFileAndUpload, dropzoneLoading] = useContext(DropzoneContext)
   const [
     {
-      user: { username },
-      repo: {
-        activeRepo: { name },
-      },
       toolbar: { isEdit },
     },
   ] = useStore()
   const { setValue, loading, value } = useFile()
+  const { currentRepoName } = useReadCurrentRepoName()
+  const { currentFileName } = useReadCurrentFileName()
+  const user = useReadGithubUser()
 
   async function uploadImage() {
     const line = editorRef?.current?.getPosition()
@@ -77,7 +79,7 @@ export function Editor({ children }: IEditor) {
     )
 
     const id = { major: 1, minor: 1 }
-    const text = `![](https://github.com/${username}/noted-app-notes--${name}/blob/master/images/${filename}?raw=true)`
+    const text = `![](https://github.com/${user?.name}/noted-app-notes--${currentRepoName}/blob/master/images/${currentFileName}?raw=true)`
     const op = {
       identifier: id,
       range: range,

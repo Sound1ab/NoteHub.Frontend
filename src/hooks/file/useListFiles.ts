@@ -5,6 +5,8 @@ import {
   ListFilesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
+import { useReadGithubUser } from '../user/useReadGithubUser'
+import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
 
 export const ListFilesDocument = gql`
   ${FileFragment}
@@ -17,14 +19,17 @@ export const ListFilesDocument = gql`
   }
 `
 
-export function useListFiles(username: string, repo: string) {
+export function useListFiles() {
+  const user = useReadGithubUser()
+  const { currentRepoName } = useReadCurrentRepoName()
+
   const { data, loading } = useQuery<ListFilesQuery, ListFilesQueryVariables>(
     ListFilesDocument,
     {
-      skip: !username || !repo,
+      skip: !user?.name || !currentRepoName,
       variables: {
-        repo,
-        username,
+        repo: currentRepoName ?? '',
+        username: user?.name ?? '',
       },
     }
   )

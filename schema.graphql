@@ -99,7 +99,6 @@ input UpdateFileInput {
     content: String
     filename: String!
     repo: String!
-    sha: String
     username: String!
 }
 
