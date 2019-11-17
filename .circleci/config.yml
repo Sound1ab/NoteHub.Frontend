@@ -8,6 +8,9 @@ jobs:
       BUCKET: noted
       REGION: us-east-1
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "5a:9d:8b:79:ee:c3:d8:ed:5f:8f:72:80:b4:50:3a:40"
       - checkout
       - run:
           name: Show current branch
