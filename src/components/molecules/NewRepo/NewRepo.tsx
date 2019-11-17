@@ -1,9 +1,6 @@
-import React, {
-  useContext,
-} from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
-import { NewRepoContext } from '../../organisms'
 
 const Style = styled.div`
   display: flex;
@@ -20,15 +17,13 @@ const Style = styled.div`
   }
 `
 
-export function NewRepo() {
-  const context = useContext(NewRepoContext)
+interface INewRepo {
+  setIsNewRepoOpen: Dispatch<SetStateAction<boolean>>
+}
 
-  function handleOnClick(){
-    if (!context) {
-      return
-    }
-    const {isNewRepoOpen, setIsModalOpen} = context
-    setIsModalOpen(!isNewRepoOpen)
+export function NewRepo({ setIsNewRepoOpen }: INewRepo) {
+  function handleOnClick() {
+    setIsNewRepoOpen(isNewRepoOpen => !isNewRepoOpen)
   }
 
   return (

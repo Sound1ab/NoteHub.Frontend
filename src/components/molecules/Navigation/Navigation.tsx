@@ -1,11 +1,15 @@
-import React, { useContext } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { BulletList } from 'react-content-loader'
 import { useListRepos } from '../../../hooks/Repo/useListRepos'
 import { styled } from '../../../theme'
 import { NavigationItem } from '../../atoms'
 import { RepoInput } from '../RepoInput/RepoInput'
-import { NewRepoContext } from '../../organisms'
 import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
+
+interface INavigation {
+  isNewRepoOpen: boolean
+  setIsNewRepoOpen: Dispatch<SetStateAction<boolean>>
+}
 
 const Style = styled.nav`
   position: relative;
@@ -13,9 +17,8 @@ const Style = styled.nav`
   overflow-y: auto;
 `
 
-export function Navigation() {
+export function Navigation({ isNewRepoOpen, setIsNewRepoOpen }: INavigation) {
   const { currentRepoName, client } = useReadCurrentRepoName()
-  const context = useContext(NewRepoContext)
   const { repos, loading } = useListRepos()
 
   function handleHeadingClick(repoName: String) {
@@ -49,7 +52,7 @@ export function Navigation() {
             )
           })
       )}
-      {context && context.isNewRepoOpen && <RepoInput />}
+      {isNewRepoOpen && <RepoInput setIsNewRepoOpen={setIsNewRepoOpen} />}
     </Style>
   )
 }

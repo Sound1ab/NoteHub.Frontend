@@ -1,8 +1,13 @@
-import React, { useContext, useLayoutEffect, useRef, useState } from 'react'
+import React, {
+  Dispatch,
+  SetStateAction,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 import { styled } from '../../../theme'
 import { Icon, Input } from '../../atoms'
 import { useCreateRepo } from '../../../hooks/Repo/useCreateRepo'
-import { NewRepoContext } from '../../organisms'
 
 const Style = styled.form<{ isPrivate: boolean }>`
   position: relative;
@@ -26,10 +31,13 @@ const Style = styled.form<{ isPrivate: boolean }>`
   }
 `
 
-export function RepoInput() {
-  const context = useContext(NewRepoContext)
-  const inputRef = useRef<{ ref: HTMLInputElement }>(null)
-  const wrapperRef = useRef<HTMLFormElement>(null)
+interface IRepoInput {
+  setIsNewRepoOpen: Dispatch<SetStateAction<boolean>>
+}
+
+export function RepoInput({ setIsNewRepoOpen }: IRepoInput) {
+  const inputRef = useRef<{ ref: HTMLInputElement } | null>(null)
+  const wrapperRef = useRef<HTMLFormElement | null>(null)
   const defaultState = { name: '', isPrivate: false }
   const [{ name, isPrivate }, setForm] = useState<{ [key: string]: any }>(
     defaultState
@@ -67,12 +75,12 @@ export function RepoInput() {
       alert('There was an issue creating your repo, please try again')
     } finally {
       setForm(defaultState)
-      context && context.setIsModalOpen(false)
+      setIsNewRepoOpen(false)
     }
   }
 
   useLayoutEffect(() => {
-    if (!inputRef || !inputRef.current) {
+    if (!inputRef.current) {
       return
     }
     inputRef.current.ref.focus()
@@ -80,21 +88,17 @@ export function RepoInput() {
 
   useLayoutEffect(() => {
     const handleClick = (e: any) => {
-      if (
-        wrapperRef &&
-        wrapperRef.current &&
-        wrapperRef.current.contains(e.target)
-      ) {
+      if (wrapperRef?.current?.contains(e.target)) {
         return
       }
-      context && context.setIsModalOpen(false)
+      setIsNewRepoOpen(false)
     }
 
     document.addEventListener('mousedown', handleClick)
     return () => {
       document.removeEventListener('mousedown', handleClick)
     }
-  }, [context])
+  }, [])
 
   return (
     <Style

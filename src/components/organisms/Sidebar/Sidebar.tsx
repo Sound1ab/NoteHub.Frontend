@@ -33,35 +33,31 @@ const Style = styled.div`
   }
 `
 
-export const NewRepoContext = createContext<{
-  isNewRepoOpen: boolean
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>
-} | null>(null)
-
 export function Sidebar() {
-  const [isNewRepoOpen, setIsModalOpen] = useState(false)
+  const [isNewRepoOpen, setIsNewRepoOpen] = useState(false)
 
   return (
-    <NewRepoContext.Provider value={{ isNewRepoOpen, setIsModalOpen }}>
-      <Style>
-        <div className="Sidebar-title-wrapper">
-          <Icon
-            className="Sidebar-title-icon"
-            icon="book"
-            prefix="fa"
-            marginRight
-          />
-          <Heading
-            className="Sidebar-title-heading"
-            type="h4"
-            textTransform="uppercase"
-          >
-            Repos
-          </Heading>
-        </div>
-        <Navigation />
-        <NewRepo />
-      </Style>
-    </NewRepoContext.Provider>
+    <Style>
+      <div className="Sidebar-title-wrapper">
+        <Icon
+          className="Sidebar-title-icon"
+          icon="book"
+          prefix="fa"
+          marginRight
+        />
+        <Heading
+          className="Sidebar-title-heading"
+          type="h4"
+          textTransform="uppercase"
+        >
+          Repos
+        </Heading>
+      </div>
+      <Navigation
+        isNewRepoOpen={isNewRepoOpen}
+        setIsNewRepoOpen={setIsNewRepoOpen}
+      />
+      <NewRepo setIsNewRepoOpen={setIsNewRepoOpen} />
+    </Style>
   )
 }
