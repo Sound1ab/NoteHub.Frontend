@@ -142,4 +142,4 @@ fabric.properties
 api/.serverless
 api/.webpack
 
-app/build
+build
