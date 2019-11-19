@@ -20,8 +20,8 @@ export function useReadGithubUserAccessToken(
     ReadGithubUserAccessTokenQueryVariables
   >(ReadGithubUserDocument, {
     variables: {
-      code: code || '',
-      state: state || '',
+      code: code ?? '',
+      state: state ?? '',
     },
   })
 

@@ -45,7 +45,7 @@ export function useCreateFile() {
           }
         )
 
-        if (!result || !result.listFiles || !result.listFiles.items) {
+        if (!result?.listFiles.items) {
           return
         }
 

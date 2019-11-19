@@ -37,9 +37,8 @@ export function useCreateRepo() {
           }
         )
 
-        const repos =
-          (result && result.listRepos && result.listRepos.items) || []
-        const listRepos = (result && result.listRepos) || []
+        const repos = result?.listRepos.items ?? []
+        const listRepos = result?.listRepos ?? []
 
         cache.writeQuery<ListReposQuery, ListReposQueryVariables>({
           data: {

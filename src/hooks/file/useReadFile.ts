@@ -26,7 +26,6 @@ export function useReadFile() {
   const { data, loading } = useQuery<ReadFileQuery, ReadFileQueryVariables>(
     ReadFile,
     {
-      // fetchPolicy: 'no-cache',
       skip: !user?.name || !currentRepoName || !currentFileName,
       variables: {
         filename: currentFileName ?? '',

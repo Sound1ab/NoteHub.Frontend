@@ -37,16 +37,15 @@ export function useDeleteImage(username: string, repo: string) {
           },
         })
 
-        const files =
-          (result && result.listImages && result.listImages.items) || []
-        const listImages = result && result.listImages
+        const files = result?.listImages.items ?? []
+        const listImages = result?.listImages
 
         cache.writeQuery<ListImagesQuery, ListImagesQueryVariables>({
           data: {
             listImages: {
               ...listImages,
               items: files.filter(
-                file => file && file.filename !== deletedImage.filename
+                file => file.filename !== deletedImage.filename
               ),
             },
           },

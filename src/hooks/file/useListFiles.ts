@@ -35,7 +35,7 @@ export function useListFiles() {
   )
 
   return {
-    files: (data && data.listFiles && data.listFiles.items) || [],
+    files: data?.listFiles?.items ?? [],
     loading,
   }
 }

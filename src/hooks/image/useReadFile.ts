@@ -19,7 +19,6 @@ export function useReadImage(username: string, repo: string, filename: string) {
   const { data, loading } = useQuery<ReadImageQuery, ReadImageQueryVariables>(
     ReadImage,
     {
-      // fetchPolicy: 'no-cache',
       skip: !username || !repo || !filename,
       variables: {
         filename,
@@ -29,5 +28,5 @@ export function useReadImage(username: string, repo: string, filename: string) {
     }
   )
 
-  return { file: data && data.readImage, loading }
+  return { file: data?.readImage, loading }
 }

@@ -38,15 +38,14 @@ export function useDeleteRepo() {
           }
         )
 
-        const repos =
-          (result && result.listRepos && result.listRepos.items) || []
-        const listRepos = (result && result.listRepos) || {}
+        const repos = result?.listRepos.items ?? []
+        const listRepos = result?.listRepos ?? {}
 
         cache.writeQuery<ListReposQuery, ListReposQueryVariables>({
           data: {
             listRepos: {
               ...listRepos,
-              items: repos.filter(repo => repo && repo.id !== deletedRepo.id),
+              items: repos.filter(repo => repo.id !== deletedRepo.id),
             },
           },
           query: ListReposDocument,

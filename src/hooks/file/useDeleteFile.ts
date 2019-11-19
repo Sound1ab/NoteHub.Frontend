@@ -41,9 +41,8 @@ export function useDeleteFile() {
           }
         )
 
-        const files =
-          (result && result.listFiles && result.listFiles.items) || []
-        const listFiles = result && result.listFiles
+        const files = result?.listFiles.items ?? []
+        const listFiles = result?.listFiles
 
         cache.writeQuery<ListFilesQuery, ListFilesQueryVariables>({
           data: {

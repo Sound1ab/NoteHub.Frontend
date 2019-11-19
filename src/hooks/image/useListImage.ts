@@ -30,7 +30,7 @@ export function useListImages(username: string, repo: string) {
   )
 
   return {
-    files: (data && data.listImages && data.listImages.items) || [],
+    files: data?.listImages.items ?? [],
     loading,
   }
 }
