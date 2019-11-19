@@ -29,11 +29,7 @@ export function useCreateFile() {
     {
       update: (cache, { data }) => {
         const newFile = data && data.createFile
-        if (!newFile) return
-        if (!user || !currentRepoName) {
-          alert('Error')
-          return
-        }
+        if (!newFile || !user || !currentRepoName) return
 
         const result = cache.readQuery<ListFilesQuery, ListFilesQueryVariables>(
           {

@@ -27,13 +27,13 @@ export function useDeleteRepo() {
     {
       update: (cache, { data }) => {
         const deletedRepo = data && data.deleteRepo
-        if (!deletedRepo) return
+        if (!deletedRepo || !user) return
 
         const result = cache.readQuery<ListReposQuery, ListReposQueryVariables>(
           {
             query: ListReposDocument,
             variables: {
-              username: user?.name,
+              username: user.name,
             },
           }
         )
@@ -50,7 +50,7 @@ export function useDeleteRepo() {
           },
           query: ListReposDocument,
           variables: {
-            username: user?.name,
+            username: user.name,
           },
         })
       },

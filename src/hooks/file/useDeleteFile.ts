@@ -29,14 +29,14 @@ export function useDeleteFile() {
     {
       update: (cache, { data }) => {
         const deletedFile = data && data.deleteFile
-        if (!deletedFile) return
+        if (!deletedFile || !currentRepoName || !user) return
 
         const result = cache.readQuery<ListFilesQuery, ListFilesQueryVariables>(
           {
             query: ListFilesDocument,
             variables: {
-              repo: currentRepoName ?? '',
-              username: user?.name ?? '',
+              repo: currentRepoName,
+              username: user.name,
             },
           }
         )
@@ -49,14 +49,14 @@ export function useDeleteFile() {
             listFiles: {
               ...listFiles,
               items: files.filter(
-                file => file && file.filename !== deletedFile.filename
+                file => file.filename !== deletedFile.filename
               ),
             },
           },
           query: ListFilesDocument,
           variables: {
-            repo: currentRepoName ?? '',
-            username: user?.name ?? '',
+            repo: currentRepoName,
+            username: user.name,
           },
         })
       },

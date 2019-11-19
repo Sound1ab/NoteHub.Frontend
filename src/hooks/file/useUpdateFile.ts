@@ -31,7 +31,8 @@ export function useUpdateFile() {
     {
       update: (cache, { data }) => {
         const updatedFile = data && data.updateFile
-        if (!updatedFile) return
+        if (!updatedFile || !currentFileName || !currentRepoName || !user)
+          return
 
         console.log(updatedFile.content)
 
@@ -41,9 +42,9 @@ export function useUpdateFile() {
           },
           query: ReadFileDocument,
           variables: {
-            filename: currentFileName ?? '',
-            repo: currentRepoName ?? '',
-            username: user?.name ?? '',
+            filename: currentFileName,
+            repo: currentRepoName,
+            username: user.name,
           },
         })
       },
