@@ -1,14 +1,8 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { styled } from '../../../theme'
 import { CardList, Sidebar, Toolbar } from '../../organisms'
-import {
-  useReadCurrentRepoName,
-  useReadGithubUser,
-  useFile,
-  useDropzone,
-  useIsEdit,
-} from '../../../hooks'
-import { MarkdownPreview, Monaco, Ref } from '../../atoms'
+import { useCommands } from '../../../hooks'
+import { MarkdownPreview, Monaco } from '../../atoms'
 
 const Style = styled.div`
   display: flex;
@@ -31,26 +25,15 @@ const Style = styled.div`
 `
 
 export function Dashboard() {
-  const ref = useRef<Ref | null>(null)
-  const { currentRepoName } = useReadCurrentRepoName()
-  const user = useReadGithubUser()
-  const { isEdit } = useIsEdit()
   const {
-    selectFileAndUpload,
+    setValue,
+    isEdit,
+    loading,
     Dropzone,
-    loading: uploadingImage,
-  } = useDropzone()
-  const { setValue, loading: loadingFile, value } = useFile()
-
-  async function uploadImage() {
-    try {
-      const filename = await selectFileAndUpload()
-      const text = `![](https://github.com/${user?.name}/noted-app-notes--${currentRepoName}/blob/master/images/${filename}?raw=true)`
-      ref?.current?.insertTextAtCursorPosition(text)
-    } catch (error) {
-      console.log(`Could not upload image: ${error}`)
-    }
-  }
+    editorRef,
+    uploadImage,
+    value,
+  } = useCommands()
 
   return (
     <Style>
@@ -63,8 +46,8 @@ export function Dashboard() {
           <Monaco
             onChange={setValue}
             value={value}
-            loading={loadingFile || uploadingImage}
-            ref={ref}
+            loading={loading}
+            ref={editorRef}
           />
         ) : (
           <MarkdownPreview value={value} />
