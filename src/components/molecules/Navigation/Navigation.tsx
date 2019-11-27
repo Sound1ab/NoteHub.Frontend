@@ -1,10 +1,9 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import { BulletList } from 'react-content-loader'
-import { useListRepos } from '../../../hooks/Repo/useListRepos'
+import { useListRepos, useReadCurrentRepoName } from '../../../hooks'
 import { styled } from '../../../theme'
 import { NavigationItem } from '../../atoms'
 import { RepoInput } from '../RepoInput/RepoInput'
-import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
 
 interface INavigation {
   isNewRepoOpen: boolean

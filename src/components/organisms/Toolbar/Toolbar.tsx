@@ -1,11 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { useStore } from '../../../hooks'
-import { setIsEdit } from '../../../store'
 import { styled } from '../../../theme'
 import { Button, Icon } from '../../atoms'
 import { CreateFileModal, DeleteFileModal, Profile } from '../../molecules'
 import { ColorModeContext } from '../../utility'
-import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
+import { useIsEdit, useReadCurrentRepoName } from '../../../hooks'
 
 const Style = styled.div`
   grid-area: toolbar;
@@ -52,17 +50,11 @@ export function Toolbar({ uploadImage }: IToolbar) {
   const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
   const [isDeleteFileModalOpen, setIsDeleteFileModalOpen] = useState(false)
   const { currentRepoName } = useReadCurrentRepoName()
-
-  const [
-    {
-      toolbar: { isEdit },
-    },
-    dispatch,
-  ] = useStore()
   const { toggleColorMode, isDarkMode } = useContext(ColorModeContext)
+  const { isEdit, client } = useIsEdit()
 
   function handleSetPreview() {
-    dispatch(setIsEdit(!isEdit))
+    client.writeData({ data: { isEdit: !isEdit } })
   }
 
   return (

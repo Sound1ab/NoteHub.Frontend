@@ -1,4 +1,5 @@
 type Query {
     currentRepoName: String
     currentFileName: String
+    isEdit: Boolean!
 }

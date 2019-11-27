@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { styled } from '../../../theme'
 import { Icon, Input } from '../../atoms'
-import { useCreateRepo } from '../../../hooks/Repo/useCreateRepo'
+import { useCreateRepo } from '../../../hooks'
 
 const Style = styled.form<{ isPrivate: boolean }>`
   position: relative;

@@ -128,6 +128,7 @@ export type Query = {
   readGithubUser?: Maybe<GithubUser>
   currentRepoName?: Maybe<Scalars['String']>
   currentFileName?: Maybe<Scalars['String']>
+  isEdit: Scalars['Boolean']
 }
 
 export type QueryReadFileArgs = {
@@ -351,6 +352,10 @@ export type ReadGithubUserAccessTokenQuery = { __typename?: 'Query' } & Pick<
   Query,
   'readGithubUserAccessToken'
 >
+
+export type ReadIsEditQueryVariables = {}
+
+export type ReadIsEditQuery = { __typename?: 'Query' } & Pick<Query, 'isEdit'>
 
 import gql from 'graphql-tag'
 import * as React from 'react'
@@ -1221,6 +1226,45 @@ export function withReadGithubUserAccessToken<TProps, TChildProps = {}>(
     ReadGithubUserAccessTokenQueryVariables,
     ReadGithubUserAccessTokenProps<TChildProps>
   >(ReadGithubUserAccessTokenDocument, operationOptions)
+}
+export const ReadIsEditDocument = gql`
+  query ReadIsEdit {
+    isEdit @client
+  }
+`
+
+export class ReadIsEditComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<ReadIsEditQuery, ReadIsEditQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ReadIsEditQuery, ReadIsEditQueryVariables>
+        query={ReadIsEditDocument}
+        {...((this as any)['props'] as any)}
+      />
+    )
+  }
+}
+export type ReadIsEditProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<ReadIsEditQuery, ReadIsEditQueryVariables>
+> &
+  TChildProps
+export function withReadIsEdit<TProps, TChildProps = {}>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ReadIsEditQuery,
+        ReadIsEditQueryVariables,
+        ReadIsEditProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    ReadIsEditQuery,
+    ReadIsEditQueryVariables,
+    ReadIsEditProps<TChildProps>
+  >(ReadIsEditDocument, operationOptions)
 }
 export interface IntrospectionResultData {
   __schema: {

@@ -1,11 +1,14 @@
 import React, { useRef } from 'react'
 import { styled } from '../../../theme'
 import { CardList, Sidebar, Toolbar } from '../../organisms'
-import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
-import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
+import {
+  useReadCurrentRepoName,
+  useReadGithubUser,
+  useFile,
+  useDropzone,
+  useIsEdit,
+} from '../../../hooks'
 import { MarkdownPreview, Monaco, Ref } from '../../atoms'
-import { useDropzone, useStore } from '../../../hooks'
-import { useFile } from '../../../hooks/monaco/useFile'
 
 const Style = styled.div`
   display: flex;
@@ -31,16 +34,12 @@ export function Dashboard() {
   const ref = useRef<Ref | null>(null)
   const { currentRepoName } = useReadCurrentRepoName()
   const user = useReadGithubUser()
+  const { isEdit } = useIsEdit()
   const {
     selectFileAndUpload,
     Dropzone,
     loading: uploadingImage,
   } = useDropzone()
-  const [
-    {
-      toolbar: { isEdit },
-    },
-  ] = useStore()
   const { setValue, loading: loadingFile, value } = useFile()
 
   async function uploadImage() {

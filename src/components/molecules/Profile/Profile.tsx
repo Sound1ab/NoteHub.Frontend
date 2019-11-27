@@ -1,5 +1,5 @@
 import React from 'react'
-import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
+import { useReadGithubUser } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Avatar } from '../../atoms'
 

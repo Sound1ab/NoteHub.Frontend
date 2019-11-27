@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import { useDeleteFile } from '../../../hooks/file/useDeleteFile'
+import {
+  useDeleteFile,
+  useReadCurrentRepoName,
+  useReadCurrentFileName,
+  useReadGithubUser,
+} from '../../../hooks'
 import { Modal } from '../../atoms'
 import { useApolloClient } from 'react-apollo-hooks'
-import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
-import { useReadCurrentFileName } from '../../../hooks/file/useReadCurrentFileName'
-import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
 
 interface IDeleteFileModal {
   isOpen: boolean

@@ -1,9 +1,8 @@
 import React from 'react'
-import { useListFiles } from '../../../hooks/file/useListFiles'
+import { useListFiles, useReadCurrentFileName } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Card } from '../../molecules'
 import { Spinner } from '../../atoms'
-import { useReadCurrentFileName } from '../../../hooks/file/useReadCurrentFileName'
 
 const Style = styled.div`
   grid-area: filelist;

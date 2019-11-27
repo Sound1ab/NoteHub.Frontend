@@ -5,7 +5,7 @@ import {
   ReadGithubUserAccessTokenQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 
-export const ReadGithubUserDocument = gql`
+export const ReadGithubUserAccessTokenDocument = gql`
   query ReadGithubUserAccessToken($code: String!, $state: String!) {
     readGithubUserAccessToken(code: $code, state: $state)
   }
@@ -18,7 +18,7 @@ export function useReadGithubUserAccessToken(
   const { data } = useQuery<
     ReadGithubUserAccessTokenQuery,
     ReadGithubUserAccessTokenQueryVariables
-  >(ReadGithubUserDocument, {
+  >(ReadGithubUserAccessTokenDocument, {
     variables: {
       code: code ?? '',
       state: state ?? '',

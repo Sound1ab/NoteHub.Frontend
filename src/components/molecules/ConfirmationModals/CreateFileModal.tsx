@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useCreateFile } from '../../../hooks/file/useCreateFile'
+import {
+  useCreateFile,
+  useReadCurrentRepoName,
+  useReadCurrentFileName,
+  useReadGithubUser,
+} from '../../../hooks'
 import { Heading, Modal } from '../../atoms'
-import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
-import { useReadCurrentFileName } from '../../../hooks/file/useReadCurrentFileName'
-import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
 
 interface ICreateFileModal {
   isOpen: boolean

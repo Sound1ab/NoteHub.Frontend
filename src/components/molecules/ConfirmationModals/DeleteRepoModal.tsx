@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useDeleteRepo } from '../../../hooks/Repo/useDeleteRepo'
+import {
+  useReadCurrentRepoName,
+  useDeleteRepo,
+  useReadGithubUser,
+} from '../../../hooks'
 import { Heading, Modal } from '../../atoms'
-import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
-import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
 import { useApolloClient } from 'react-apollo-hooks'
 
 interface IDeleteRepoModal {

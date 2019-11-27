@@ -10,4 +10,6 @@ export const client = new ApolloClient({
   link,
 })
 
-cache.writeData({ data: { currentRepoName: null, currentFileName: null } })
+cache.writeData({
+  data: { currentRepoName: null, currentFileName: null, isEdit: true },
+})
