@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/noted
     docker:
-      - image: circleci/node:carbon
+      - image: circleci/node:erbium
     environment:
       BUCKET: noted
       REGION: us-east-1
@@ -17,10 +17,10 @@ jobs:
           command: echo ${CIRCLE_BRANCH}
       - run:
           name: Install local dependencies
-          command: npm install
+          command: yarn
       - run:
           name: Building
-          command: npm run build
+          command: yarn build
       - run:
           name: Install pip
           command: sudo apt-get install python-dev python-pip
