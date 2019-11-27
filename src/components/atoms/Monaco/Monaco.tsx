@@ -111,7 +111,7 @@ export const Monaco = React.forwardRef(
           theme={theme[colorMode]}
           options={{
             automaticLayout: true,
-            fontSize: 11,
+            fontSize: 12,
             highlightActiveIndentGuide: false,
             lineDecorationsWidth: 0,
             lineNumbers: 'off',

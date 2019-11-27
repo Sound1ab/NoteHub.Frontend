@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components'
 import { ITheme } from '../../../theme'
 
-export const GlobalStyle = createGlobalStyle<{theme: ITheme, isDarkMode: boolean}>`
+export const GlobalStyle = createGlobalStyle<{ theme: ITheme, isDarkMode: boolean }>`
   /*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */
   
   ::-webkit-scrollbar {
@@ -17,7 +17,9 @@ export const GlobalStyle = createGlobalStyle<{theme: ITheme, isDarkMode: boolean
   
   html {
     box-sizing: border-box;
-    overflow: auto!important;
+    height: 100%;
+    width: 100%;
+    overflow: hidden!important;
   }
   
   *,
@@ -53,7 +55,8 @@ export const GlobalStyle = createGlobalStyle<{theme: ITheme, isDarkMode: boolean
   
   body {
     margin: 0;
-    background-color: ${({ theme }: { theme: any }) => theme.colors.background.primary};
+    background-color: ${({ theme }: { theme: any }) =>
+      theme.colors.background.primary};
   }
   
   img {
