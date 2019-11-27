@@ -1,4 +1,4 @@
-import monacoEditor, { editor } from 'monaco-editor'
+import monacoEditor from 'monaco-editor'
 import React, { useContext, useImperativeHandle, useRef } from 'react'
 import MonacoEditor, {
   ChangeHandler,
@@ -6,97 +6,128 @@ import MonacoEditor, {
   EditorWillMount,
 } from 'react-monaco-editor'
 import { COLOR_MODE } from '../../../enums'
-import { EditorContext } from '../../molecules'
+import { ColorModeContext } from '../../utility'
+import { styled } from '../../../theme'
+import { Spinner } from '..'
 
 const theme = {
   [COLOR_MODE.DARK]: 'monokai',
   [COLOR_MODE.LIGHT]: 'vs',
 }
 
+const Style = styled.div`
+  position: relative;
+  grid-area: editor;
+  padding: ${({ theme }) => theme.spacing.xs} 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+`
+
 export interface Ref {
-  loadValue: editor.IStandaloneCodeEditor['setValue']
-  getPosition: () => monacoEditor.Position | undefined | null
-  executeEdits: (
-    source: string,
-    editor: editor.IIdentifiedSingleEditOperation[]
-  ) => boolean | undefined | null
-  monaco: typeof monacoEditor | null | undefined
+  insertTextAtCursorPosition: (text: string) => void
 }
 
-interface IMonaco {
+interface IMonacoEditor {
   editor: monacoEditor.editor.IStandaloneCodeEditor
   monaco: typeof monacoEditor
 }
 
-export const Monaco = React.forwardRef((_, ref) => {
-  const editorContext = useContext(EditorContext)
-  const monacoRef = useRef<IMonaco | null>(null)
+interface IMonaco {
+  onChange: (newValue: string) => void
+  value: string
+  loading: boolean
+}
 
-  if (!editorContext) {
-    return null
-  }
+export const Monaco = React.forwardRef(
+  ({ onChange, value, loading }: IMonaco, ref) => {
+    const monacoRef = useRef<IMonacoEditor | null>(null)
+    const { colorMode } = useContext(ColorModeContext)
 
-  const { colorMode, onChange, value } = editorContext
-
-  const editorWillMount: EditorWillMount = monaco => {
-    const Monokai = require('monaco-themes/themes/Monokai.json')
-    monaco.editor.defineTheme('monokai', Monokai)
-    monaco.editor.setTheme('monokai')
-  }
-
-  const editorDidMount: EditorDidMount = (edit, monaco) => {
-    monacoRef.current = {
-      editor: edit,
-      monaco,
+    const editorWillMount: EditorWillMount = monaco => {
+      const Monokai = require('monaco-themes/themes/Monokai.json')
+      monaco.editor.defineTheme('monokai', Monokai)
+      monaco.editor.setTheme('monokai')
     }
-  }
 
-  useImperativeHandle(
-    ref,
-    (): Ref => ({
-      loadValue(value) {
-        monacoRef?.current?.editor.setValue(value)
-      },
-      getPosition() {
-        return monacoRef?.current?.editor.getPosition()
-      },
-      executeEdits(source, edits) {
-        return monacoRef?.current?.editor.executeEdits(source, edits)
-      },
-      monaco: monacoRef?.current?.monaco,
-    })
-  )
-
-  const handleOnChange: ChangeHandler = (newValue, event) => {
-    if (event.isFlush) {
-      return
+    const editorDidMount: EditorDidMount = (edit, monaco) => {
+      monacoRef.current = {
+        editor: edit,
+        monaco,
+      }
     }
-    onChange(newValue)
-  }
 
-  return (
-    <MonacoEditor
-      width="100%"
-      height="100%"
-      language="markdown"
-      theme={theme[colorMode]}
-      options={{
-        automaticLayout: true,
-        fontSize: 11,
-        highlightActiveIndentGuide: false,
-        lineDecorationsWidth: 0,
-        lineNumbers: 'off',
-        minimap: { enabled: false },
-        overviewRulerBorder: false,
-        renderIndentGuides: false,
-        scrollbar: { vertical: 'hidden', horizontal: 'hidden' },
-        selectOnLineNumbers: true,
-        wordWrap: 'on',
-      }}
-      value={value}
-      onChange={handleOnChange}
-      editorWillMount={editorWillMount}
-      editorDidMount={editorDidMount}
-    />
-  )
-})
+    useImperativeHandle(
+      ref,
+      (): Ref => ({
+        insertTextAtCursorPosition,
+      })
+    )
+
+    function insertTextAtCursorPosition(text: string) {
+      try {
+        const line = monacoRef?.current?.editor.getPosition()
+        const monaco = monacoRef?.current?.monaco
+
+        if (!line || !monaco) {
+          throw new Error('Editor unavailable')
+        }
+
+        const range = new monaco.Range(
+          line.lineNumber,
+          line.column,
+          line.lineNumber,
+          line.column
+        )
+
+        const id = { major: 1, minor: 1 }
+        const op = {
+          identifier: id,
+          range: range,
+          text: text,
+          forceMoveMarkers: true,
+        }
+
+        monacoRef?.current?.editor.executeEdits('my-source', [op])
+      } catch (error) {
+        console.log('ERROR:', error.message)
+      }
+    }
+
+    const handleOnChange: ChangeHandler = (newValue, event) => {
+      if (event.isFlush) {
+        return
+      }
+      onChange(newValue)
+    }
+
+    return (
+      <Style>
+        {loading && <Spinner />}
+        <MonacoEditor
+          width="100%"
+          height="100%"
+          language="markdown"
+          theme={theme[colorMode]}
+          options={{
+            automaticLayout: true,
+            fontSize: 11,
+            highlightActiveIndentGuide: false,
+            lineDecorationsWidth: 0,
+            lineNumbers: 'off',
+            minimap: { enabled: false },
+            overviewRulerBorder: false,
+            renderIndentGuides: false,
+            scrollbar: { vertical: 'hidden', horizontal: 'hidden' },
+            selectOnLineNumbers: true,
+            wordWrap: 'on',
+          }}
+          value={value}
+          onChange={handleOnChange}
+          editorWillMount={editorWillMount}
+          editorDidMount={editorDidMount}
+        />
+      </Style>
+    )
+  }
+)

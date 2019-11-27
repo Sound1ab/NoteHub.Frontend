@@ -3,12 +3,7 @@ import { useStore } from '../../../hooks'
 import { setIsEdit } from '../../../store'
 import { styled } from '../../../theme'
 import { Button, Icon } from '../../atoms'
-import {
-  CreateFileModal,
-  DeleteFileModal,
-  EditorContext,
-  Profile,
-} from '../../molecules'
+import { CreateFileModal, DeleteFileModal, Profile } from '../../molecules'
 import { ColorModeContext } from '../../utility'
 import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
 
@@ -49,10 +44,13 @@ const Style = styled.div`
   }
 `
 
-export function Toolbar() {
+interface IToolbar {
+  uploadImage: () => void
+}
+
+export function Toolbar({ uploadImage }: IToolbar) {
   const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
   const [isDeleteFileModalOpen, setIsDeleteFileModalOpen] = useState(false)
-  const editorContext = useContext(EditorContext)
   const { currentRepoName } = useReadCurrentRepoName()
 
   const [
@@ -65,13 +63,6 @@ export function Toolbar() {
 
   function handleSetPreview() {
     dispatch(setIsEdit(!isEdit))
-  }
-
-  function handleUploadImage() {
-    if (!editorContext) {
-      return
-    }
-    editorContext.uploadImage()
   }
 
   return (
@@ -99,7 +90,7 @@ export function Toolbar() {
         >
           <Icon size="sm" icon="pen" prefix="fa" />
         </Button>
-        <Button className="Toolbar-button" onClick={handleUploadImage}>
+        <Button className="Toolbar-button" onClick={uploadImage}>
           <Icon size="sm" icon="image" prefix="fa" />
         </Button>
         <Button

@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { styled } from '../../../theme'
-import { Dropzone } from '../../atoms'
-import { Editor } from '../../molecules'
 import { CardList, Sidebar, Toolbar } from '../../organisms'
+import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
+import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
+import { MarkdownPreview, Monaco, Ref } from '../../atoms'
+import { useDropzone, useStore } from '../../../hooks'
+import { useFile } from '../../../hooks/monaco/useFile'
 
 const Style = styled.div`
   display: flex;
@@ -25,16 +28,48 @@ const Style = styled.div`
 `
 
 export function Dashboard() {
+  const ref = useRef<Ref | null>(null)
+  const { currentRepoName } = useReadCurrentRepoName()
+  const user = useReadGithubUser()
+  const {
+    selectFileAndUpload,
+    Dropzone,
+    loading: uploadingImage,
+  } = useDropzone()
+  const [
+    {
+      toolbar: { isEdit },
+    },
+  ] = useStore()
+  const { setValue, loading: loadingFile, value } = useFile()
+
+  async function uploadImage() {
+    try {
+      const filename = await selectFileAndUpload()
+      const text = `![](https://github.com/${user?.name}/noted-app-notes--${currentRepoName}/blob/master/images/${filename}?raw=true)`
+      ref?.current?.insertTextAtCursorPosition(text)
+    } catch (error) {
+      console.log(`Could not upload image: ${error}`)
+    }
+  }
+
   return (
     <Style>
+      <Dropzone />
       <div className="Dashboard-page">
         <Sidebar />
         <CardList />
-        <Dropzone>
-          <Editor>
-            <Toolbar />
-          </Editor>
-        </Dropzone>
+        <Toolbar uploadImage={uploadImage} />
+        {isEdit ? (
+          <Monaco
+            onChange={setValue}
+            value={value}
+            loading={loadingFile || uploadingImage}
+            ref={ref}
+          />
+        ) : (
+          <MarkdownPreview value={value} />
+        )}
       </div>
     </Style>
   )

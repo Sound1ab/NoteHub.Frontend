@@ -1,16 +1,21 @@
 import MarkdownIt from 'markdown-it'
-import React, { useContext, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { styled } from '../../../theme'
-import { EditorContext } from '../../molecules'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/darkula.css'
 
 const Style = styled.div`
   position: relative;
-  
-  h1, h2 {
-    border-bottom: solid 1px ${({theme}) => theme.colors.accent};
-    padding-bottom: ${({theme}) => theme.rhythm(0.5)};
+  grid-area: editor;
+  padding: ${({ theme }) => theme.spacing.xs};
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  h1,
+  h2 {
+    border-bottom: solid 1px ${({ theme }) => theme.colors.accent};
+    padding-bottom: ${({ theme }) => theme.rhythm(0.5)};
   }
 `
 
@@ -34,11 +39,11 @@ const markdown: any = MarkdownIt({
   },
 })
 
-export function MarkdownPreview() {
-  const editorContext = useContext(EditorContext)
+interface IMarkdownPreview {
+  value: string
+}
 
-  const value = (editorContext && editorContext.value) || ''
-
+export function MarkdownPreview({ value }: IMarkdownPreview) {
   const html = useMemo<string>(() => markdown.render(value), [value])
 
   return (

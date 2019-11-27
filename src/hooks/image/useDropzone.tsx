@@ -1,36 +1,28 @@
-import React, { ReactNode, useRef, useState } from 'react'
-import { useCreateImage } from '../../../hooks/image/useCreateImage'
-import { styled } from '../../../theme'
-import { useReadCurrentRepoName } from '../../../hooks/Repo/useReadCurrentRepoName'
-import { useReadCurrentFileName } from '../../../hooks/file/useReadCurrentFileName'
-
-export const DropzoneContext = React.createContext<
-  [() => Promise<string>, boolean]
->([null as any, false])
+import React, { useRef, useState } from 'react'
+import { useCreateImage } from './useCreateImage'
+import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
+import { styled } from '../../theme'
+import { useReadGithubUser } from '../user/useReadGithubUser'
 
 const Style = styled.input`
   display: none;
 `
 
-interface IDropzone {
-  children: ReactNode
-}
-
-export function Dropzone({ children }: IDropzone) {
+export function useDropzone() {
   const input = useRef<HTMLInputElement>(null)
   const [loading, setLoading] = useState(false)
   const resolver = useRef<(value?: any | PromiseLike<any>) => void>(null)
   const rejecter = useRef<(value?: any | PromiseLike<any>) => void>(null)
   const createNewImage = useCreateImage()
   const { currentRepoName } = useReadCurrentRepoName()
-  const { currentFileName } = useReadCurrentFileName()
+  const user = useReadGithubUser()
 
   async function handleCreateNewImage(filename: string, content: any) {
     if (!content) {
       alert('no content')
       return
     }
-    if (!currentRepoName || !currentFileName) {
+    if (!currentRepoName || !user?.name) {
       alert('Error')
       return
     }
@@ -42,28 +34,26 @@ export function Dropzone({ children }: IDropzone) {
             content,
             filename,
             repo: currentRepoName,
-            username: currentFileName,
+            username: user.name,
           },
         },
       })
     } catch (e) {
-      alert('There was an issue saving your image, please try again')
+      alert(`There was an issue saving your image, please try again: ${e}`)
     } finally {
       setLoading(false)
     }
   }
 
-  const handleDrop = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const acceptedFiles = e.target.files
+  function handleDrop(e: React.ChangeEvent<HTMLInputElement>) {
+    const { files } = e.target
 
-    if (!acceptedFiles || acceptedFiles.length === 0) {
-      if (rejecter && rejecter.current) {
-        rejecter.current()
-      }
+    if (!files || files.length === 0) {
+      rejecter?.current?.()
       return
     }
 
-    const [file] = acceptedFiles
+    const [file] = files
     const reader = new FileReader()
 
     reader.onabort = () => console.log('file reading was aborted')
@@ -93,18 +83,19 @@ export function Dropzone({ children }: IDropzone) {
     })
   }
 
-  return (
-    <DropzoneContext.Provider value={[selectFileAndUpload, loading]}>
+  const inputElement = () => {
+    return (
       <Style
         autoComplete="off"
-        accept="image/png"
+        accept="image/*"
         multiple={false}
         ref={input}
         tabIndex={-1}
         type="file"
         onChange={handleDrop}
       />
-      {children}
-    </DropzoneContext.Provider>
-  )
+    )
+  }
+
+  return { Dropzone: inputElement, selectFileAndUpload, loading }
 }
