@@ -45,6 +45,10 @@ export function useDropzone() {
     }
   }
 
+  function removeWhiteSpace(str: string) {
+    return str.replace(/\s+/g, '')
+  }
+
   function handleDrop(e: React.ChangeEvent<HTMLInputElement>) {
     const { files } = e.target
 
@@ -60,9 +64,10 @@ export function useDropzone() {
     reader.onerror = () => console.log('file reading has failed')
     reader.onload = async () => {
       const { name } = file
-      await handleCreateNewImage(name, reader.result)
+      const validatedName = removeWhiteSpace(name)
+      await handleCreateNewImage(validatedName, reader.result)
       if (resolver && resolver.current) {
-        resolver.current(name)
+        resolver.current(validatedName)
       }
     }
 
