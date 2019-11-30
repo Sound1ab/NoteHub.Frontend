@@ -34,7 +34,7 @@ export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
             content: '',
             filename: `${inputValue}.md`,
             repo: currentRepoName,
-            username: user.name,
+            username: user.login,
           },
         },
       })

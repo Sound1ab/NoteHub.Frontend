@@ -32,7 +32,7 @@ export function useCreateRepo() {
           {
             query: ListReposDocument,
             variables: {
-              username: user.name,
+              username: user.login,
             },
           }
         )
@@ -49,7 +49,7 @@ export function useCreateRepo() {
           },
           query: ListReposDocument,
           variables: {
-            username: user.name,
+            username: user.login,
           },
         })
       },

@@ -44,7 +44,7 @@ export function useUpdateFile() {
           variables: {
             filename: currentFileName,
             repo: currentRepoName,
-            username: user.name,
+            username: user.login,
           },
         })
       },

@@ -42,7 +42,7 @@ export function DeleteRepoModal({
         variables: {
           input: {
             repo: currentRepoName,
-            username: user.name,
+            username: user.login,
           },
         },
       })

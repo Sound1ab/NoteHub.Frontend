@@ -34,7 +34,7 @@ export function DeleteFileModal({ isOpen, onRequestClose }: IDeleteFileModal) {
           input: {
             filename: currentFileName,
             repo: currentRepoName,
-            username: user.name,
+            username: user.login,
           },
         },
       })

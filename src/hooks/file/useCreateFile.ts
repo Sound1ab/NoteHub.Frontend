@@ -36,7 +36,7 @@ export function useCreateFile() {
             query: ListFilesDocument,
             variables: {
               repo: currentRepoName,
-              username: user.name,
+              username: user.login,
             },
           }
         )
@@ -55,7 +55,7 @@ export function useCreateFile() {
           query: ListFilesDocument,
           variables: {
             repo: currentRepoName,
-            username: user.name,
+            username: user.login,
           },
         })
       },

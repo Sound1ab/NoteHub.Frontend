@@ -26,11 +26,11 @@ export function useReadFile() {
   const { data, loading } = useQuery<ReadFileQuery, ReadFileQueryVariables>(
     ReadFile,
     {
-      skip: !user?.name || !currentRepoName || !currentFileName,
+      skip: !user?.login || !currentRepoName || !currentFileName,
       variables: {
         filename: currentFileName ?? '',
         repo: currentRepoName ?? '',
-        username: user?.name ?? '',
+        username: user?.login ?? '',
       },
     }
   )

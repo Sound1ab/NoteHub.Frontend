@@ -22,7 +22,7 @@ export function useDropzone() {
       alert('no content')
       return
     }
-    if (!currentRepoName || !user?.name) {
+    if (!currentRepoName || !user?.login) {
       alert('Error')
       return
     }
@@ -34,7 +34,7 @@ export function useDropzone() {
             content,
             filename,
             repo: currentRepoName,
-            username: user.name,
+            username: user.login,
           },
         },
       })

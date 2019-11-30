@@ -76,7 +76,7 @@ export function Toolbar({ children }: IToolbar) {
   async function uploadImage() {
     try {
       const filename = await selectFileAndUpload()
-      const text = `![](https://github.com/${user?.name}/noted-app-notes--${currentRepoName}/blob/master/images/${filename}?raw=true)`
+      const text = `![](https://github.com/${user?.login}/noted-app-notes--${currentRepoName}/blob/master/images/${filename}?raw=true)`
       ref?.current?.insertTextAtCursorPosition(text)
     } catch (error) {
       console.log(`Could not upload image: ${error}`)

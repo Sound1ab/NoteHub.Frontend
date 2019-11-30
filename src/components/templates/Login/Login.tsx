@@ -1,5 +1,8 @@
 import React from 'react'
 import { styled } from '../../../theme'
+import { useLocalStorage } from '../../../hooks'
+import { LOCAL_STORAGE } from '../../../enums'
+import { Redirect } from 'react-router-dom'
 
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
 const REDIRECT_URL = process.env.REACT_APP_REDIRECT_URL
@@ -11,7 +14,15 @@ const Style = styled.div`
 `
 
 export function Login() {
-  return (
+  const [accessToken] = useLocalStorage(LOCAL_STORAGE.KEY)
+
+  return accessToken ? (
+    <Redirect
+      to={{
+        pathname: '/dashboard',
+      }}
+    />
+  ) : (
     <Style>
       <a
         href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&state=${STATE}&scope=${SCOPE}`}

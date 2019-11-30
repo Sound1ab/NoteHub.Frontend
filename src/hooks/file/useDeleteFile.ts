@@ -36,7 +36,7 @@ export function useDeleteFile() {
             query: ListFilesDocument,
             variables: {
               repo: currentRepoName,
-              username: user.name,
+              username: user.login,
             },
           }
         )
@@ -56,7 +56,7 @@ export function useDeleteFile() {
           query: ListFilesDocument,
           variables: {
             repo: currentRepoName,
-            username: user.name,
+            username: user.login,
           },
         })
       },

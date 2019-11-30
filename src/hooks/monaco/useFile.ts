@@ -60,7 +60,7 @@ export function useFile() {
           content: newValue,
           filename: file.filename,
           repo: currentRepoName,
-          username: user?.name,
+          username: user?.login,
         },
       },
     })

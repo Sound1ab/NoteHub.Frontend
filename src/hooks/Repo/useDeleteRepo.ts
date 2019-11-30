@@ -33,7 +33,7 @@ export function useDeleteRepo() {
           {
             query: ListReposDocument,
             variables: {
-              username: user.name,
+              username: user.login,
             },
           }
         )
@@ -50,7 +50,7 @@ export function useDeleteRepo() {
           },
           query: ListReposDocument,
           variables: {
-            username: user.name,
+            username: user.login,
           },
         })
       },
