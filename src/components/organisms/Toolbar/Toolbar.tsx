@@ -19,7 +19,15 @@ const Style = styled.div`
   grid-area: toolbar;
   position: relative;
   display: grid;
-  grid-template-columns: subgrid;
+  @supports (grid-template-columns: subgrid) {
+    grid-template-columns: subgrid;
+  }
+  @supports not (grid-template-columns: subgrid) {
+    grid-template-columns:
+      minmax(0, ${({ theme }) => theme.spacing.xl})
+      minmax(0, ${({ theme }) => theme.spacing.xxl})
+      3fr;
+  }
   grid-template-rows: auto;
   grid-template-areas: 'repoactions fileactions editoractions';
   background-color: ${({ theme }) => theme.colors.background.tertiary};
