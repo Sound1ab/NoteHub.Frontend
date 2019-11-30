@@ -1,7 +1,7 @@
 import React from 'react'
 import { styled } from '../../../theme'
 import { CardList, Sidebar, Toolbar } from '../../organisms'
-import { useCommands } from '../../../hooks'
+import { useFile } from '../../../hooks'
 import { MarkdownPreview, Monaco } from '../../atoms'
 
 const Style = styled.div`
@@ -25,33 +25,27 @@ const Style = styled.div`
 `
 
 export function Dashboard() {
-  const {
-    setValue,
-    isEdit,
-    loading,
-    Dropzone,
-    editorRef,
-    uploadImage,
-    value,
-  } = useCommands()
+  const { setValue, loading: isLoadingFile, value } = useFile()
 
   return (
     <Style>
-      <Dropzone />
       <div className="Dashboard-page">
         <Sidebar />
         <CardList />
-        <Toolbar uploadImage={uploadImage} />
-        {isEdit ? (
-          <Monaco
-            onChange={setValue}
-            value={value}
-            loading={loading}
-            ref={editorRef}
-          />
-        ) : (
-          <MarkdownPreview value={value} />
-        )}
+        <Toolbar>
+          {({ isEdit, isImageUploading, ref }) =>
+            isEdit ? (
+              <Monaco
+                onChange={setValue}
+                value={value}
+                loading={isImageUploading || isLoadingFile}
+                ref={ref}
+              />
+            ) : (
+              <MarkdownPreview value={value} />
+            )
+          }
+        </Toolbar>
       </div>
     </Style>
   )
