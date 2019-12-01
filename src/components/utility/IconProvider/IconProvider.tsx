@@ -1,5 +1,9 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faGithub, faProductHunt, faSoundcloud } from '@fortawesome/free-brands-svg-icons'
+import {
+  faGithub,
+  faProductHunt,
+  faSoundcloud,
+} from '@fortawesome/free-brands-svg-icons'
 import {
   faBook,
   faChevronDown,
@@ -19,6 +23,7 @@ import {
   faTrash,
   faUser,
   faImage,
+  faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { ReactNode } from 'react'
 
@@ -44,6 +49,7 @@ library.add(
   faEdit,
   faPen,
   faImage,
+  faSignOutAlt
 )
 
 interface IIconProvider {

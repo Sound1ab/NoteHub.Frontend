@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-testing-library'
-import { ThemeProvider } from './components/utility/ThemeProvider/ThemeProvider'
+import { ThemeProvider, IconProvider } from './components/utility'
 
 jest.mock('react', () => {
   const originalModule = jest.requireActual('react')
@@ -14,7 +14,10 @@ jest.mock('react', () => {
 })
 
 const customRender = (node: any, ...options: any[]) =>
-  render(<ThemeProvider>{() => node}</ThemeProvider>, ...options)
+  render(
+    <ThemeProvider>{() => <IconProvider>{node}</IconProvider>}</ThemeProvider>,
+    ...options
+  )
 
 // re-export everything
 export * from 'react-testing-library'

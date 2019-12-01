@@ -24,11 +24,12 @@ const Style = styled.div`
 interface IAvatar {
   image?: string | null
   className?: string
+  onClick?: () => void
 }
 
-export function Avatar({ className, image }: IAvatar) {
+export function Avatar({ className, image, onClick }: IAvatar) {
   return (
-    <Style className={className}>
+    <Style className={className} onClick={onClick}>
       {image ? (
         <img src={image} alt="avatar" />
       ) : (

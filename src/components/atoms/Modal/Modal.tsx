@@ -4,7 +4,9 @@ import { Heading, Icon, Spinner } from '..'
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 
-ReactModal.setAppElement('#root')
+if (process.env.NODE_ENV !== 'test') {
+  ReactModal.setAppElement('#root')
+}
 
 interface IModal {
   isOpen: boolean

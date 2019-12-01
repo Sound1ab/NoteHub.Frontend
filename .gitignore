@@ -143,3 +143,5 @@ api/.serverless
 api/.webpack
 
 build
+
+schema.json

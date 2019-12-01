@@ -6,8 +6,8 @@ import {
   GlobalStyle,
   Router,
   ThemeProvider,
+  IconProvider,
 } from './utility'
-import { IconProvider } from './utility/IconProvider/IconProvider'
 import { useColorModeFromLocalStorage } from '../hooks'
 import Typography from 'typography'
 

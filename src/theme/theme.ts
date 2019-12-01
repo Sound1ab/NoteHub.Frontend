@@ -23,6 +23,7 @@ export const colors = {
       secondary: '#f8f8f8',
       tertiary: '#f5f5f5',
       quaternary: '#f5f5f5',
+      quinary: '#c7c7c7',
     },
     border: '#d8d8d8',
     link: {
@@ -42,6 +43,7 @@ export const colors = {
       secondary: '#282828',
       tertiary: '#1e1e1e',
       quaternary: '#3a3a3a',
+      quinary: '#484848',
     },
     border: '#303030',
     link: {

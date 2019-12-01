@@ -38,26 +38,29 @@ const Style = styled.a<{
   }
 `
 
+export type TIcons =
+  | 'github'
+  | 'soundcloud'
+  | 'pen-square'
+  | 'moon'
+  | 'book'
+  | 'plus-circle'
+  | 'trash'
+  | 'sync'
+  | 'times'
+  | 'external-link-alt'
+  | 'chevron-right'
+  | 'chevron-down'
+  | 'ellipsis-h'
+  | 'grip-lines-vertical'
+  | 'product-hunt'
+  | 'edit'
+  | 'pen'
+  | 'image'
+  | 'sign-out-alt'
+
 interface IIcon {
-  icon:
-    | 'github'
-    | 'soundcloud'
-    | 'pen-square'
-    | 'moon'
-    | 'book'
-    | 'plus-circle'
-    | 'trash'
-    | 'sync'
-    | 'times'
-    | 'external-link-alt'
-    | 'chevron-right'
-    | 'chevron-down'
-    | 'ellipsis-h'
-    | 'grip-lines-vertical'
-    | 'product-hunt'
-    | 'edit'
-    | 'pen'
-    | 'image'
+  icon: TIcons
   color?: COLOR
   link?: string
   prefix?: 'fab' | 'fa'
@@ -66,6 +69,7 @@ interface IIcon {
   size?: 'xs' | 'sm' | 'lg'
   onClick?: () => void
   className?: string
+  title?: string
 }
 
 export function Icon({
@@ -78,12 +82,14 @@ export function Icon({
   color,
   size = 'xs',
   className,
+  title,
 }: IIcon) {
   const FontAwesomeIconComponent = React.cloneElement(
     <FontAwesomeIcon
       icon={[prefix as any, icon]}
       size={size}
       className="Icon-svg"
+      title={title}
     />
   )
   return link ? (
@@ -103,7 +109,14 @@ export function Icon({
   ) : (
     React.createElement(
       Style.withComponent('div'),
-      { className, marginRight, marginLeft, color, size, onClick },
+      {
+        className,
+        marginRight,
+        marginLeft,
+        color,
+        size,
+        onClick,
+      },
       FontAwesomeIconComponent
     )
   )
