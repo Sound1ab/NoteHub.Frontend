@@ -1,4 +1,4 @@
-import { ApolloLink, NextLink, Operation } from 'apollo-boost'
+import { ApolloLink, Operation, NextLink } from 'apollo-link'
 import { LOCAL_STORAGE } from '../../../enums'
 import { LocalStorage } from '../../LocalStorage'
 

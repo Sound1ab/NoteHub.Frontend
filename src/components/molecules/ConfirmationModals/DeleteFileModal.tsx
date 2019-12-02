@@ -6,7 +6,7 @@ import {
   useReadGithubUser,
 } from '../../../hooks'
 import { Modal } from '../../atoms'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 
 interface IDeleteFileModal {
   isOpen: boolean
@@ -15,7 +15,7 @@ interface IDeleteFileModal {
 
 export function DeleteFileModal({ isOpen, onRequestClose }: IDeleteFileModal) {
   const [loading, setLoading] = useState(false)
-  const deleteFile = useDeleteFile()
+  const [deleteFile] = useDeleteFile()
   const client = useApolloClient()
   const user = useReadGithubUser()
   const { currentRepoName } = useReadCurrentRepoName()

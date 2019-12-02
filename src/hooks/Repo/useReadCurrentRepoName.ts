@@ -1,4 +1,4 @@
-import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import {
   ReadCurrentRepoNameQuery,
   ReadCurrentRepoNameQueryVariables,

@@ -1,16 +1,28 @@
 import React, { ReactNode } from 'react'
-import { ApolloProvider as ApolloReactProvider } from 'react-apollo'
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
-import { client } from '../../../services/Apollo/clientConfig'
+import { ApolloProvider as ApolloProviderHooks } from '@apollo/react-hooks'
+import { ApolloLink } from 'apollo-link'
+import { authLink, errorLink, httpLink } from '../../../services/Apollo/links'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient } from 'apollo-client'
 
 interface IApolloProvider {
   children?: ReactNode
 }
 
 export function ApolloProvider({ children }: IApolloProvider) {
-  return (
-    <ApolloReactProvider client={client}>
-      <ApolloHooksProvider client={client}>{children}</ApolloHooksProvider>
-    </ApolloReactProvider>
-  )
+  const link = ApolloLink.from([errorLink, authLink, httpLink])
+
+  const cache = new InMemoryCache()
+
+  cache.writeData({
+    data: { currentRepoName: null, currentFileName: null },
+  })
+
+  const client = new ApolloClient({
+    cache,
+    link,
+    resolvers: {},
+  })
+
+  return <ApolloProviderHooks client={client}>{children}</ApolloProviderHooks>
 }

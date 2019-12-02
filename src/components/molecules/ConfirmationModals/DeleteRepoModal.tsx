@@ -5,7 +5,7 @@ import {
   useReadGithubUser,
 } from '../../../hooks'
 import { Heading, Modal } from '../../atoms'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 
 interface IDeleteRepoModal {
   isOpen: boolean
@@ -22,7 +22,7 @@ export function DeleteRepoModal({
   const user = useReadGithubUser()
   const [inputValue, setInputValue] = useState('')
   const [loading, setLoading] = useState(false)
-  const deleteRepo = useDeleteRepo()
+  const [deleteRepo] = useDeleteRepo()
   const client = useApolloClient()
   const { currentRepoName } = useReadCurrentRepoName()
 

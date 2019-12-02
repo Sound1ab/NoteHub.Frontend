@@ -1,5 +1,10 @@
 /* tslint:disable */
 /* eslint-disable import/first */
+import gql from 'graphql-tag'
+import * as ApolloReactCommon from '@apollo/react-common'
+import * as React from 'react'
+import * as ApolloReactComponents from '@apollo/react-components'
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 type Maybe<T> = T | null
 /** All built-in and custom scalars, mapped to their actual values */
@@ -352,15 +357,7 @@ export type ReadGithubUserAccessTokenQuery = { __typename?: 'Query' } & Pick<
   Query,
   'readGithubUserAccessToken'
 >
-
-export type ReadIsEditQueryVariables = {}
-
-export type ReadIsEditQuery = { __typename?: 'Query' } & Pick<Query, 'isEdit'>
-
-import gql from 'graphql-tag'
-import * as React from 'react'
-import * as ReactApollo from 'react-apollo'
-export const fileFragmentDoc = gql`
+export const FileFragmentDoc = gql`
   fragment file on File {
     filename
     path
@@ -372,7 +369,7 @@ export const fileFragmentDoc = gql`
     }
   }
 `
-export const repoFragmentDoc = gql`
+export const RepoFragmentDoc = gql`
   fragment repo on Repo {
     id
     node_id
@@ -382,7 +379,7 @@ export const repoFragmentDoc = gql`
     private
   }
 `
-export const githubUserFragmentDoc = gql`
+export const GithubUserFragmentDoc = gql`
   fragment githubUser on GithubUser {
     id
     login
@@ -397,96 +394,74 @@ export const CreateRepoDocument = gql`
       ...repo
     }
   }
-  ${repoFragmentDoc}
+  ${RepoFragmentDoc}
 `
-
-export class CreateRepoComponent extends React.Component<
-  Partial<
-    ReactApollo.MutationProps<CreateRepoMutation, CreateRepoMutationVariables>
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Mutation<CreateRepoMutation, CreateRepoMutationVariables>
-        mutation={CreateRepoDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type CreateRepoProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<CreateRepoMutation, CreateRepoMutationVariables>
-> &
-  TChildProps
-export type CreateRepoMutationFn = ReactApollo.MutationFn<
+export type CreateRepoMutationFn = ApolloReactCommon.MutationFunction<
   CreateRepoMutation,
   CreateRepoMutationVariables
 >
-export function withCreateRepo<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        CreateRepoMutation,
-        CreateRepoMutationVariables,
-        CreateRepoProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withMutation<
-    TProps,
+export type CreateRepoComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
     CreateRepoMutation,
-    CreateRepoMutationVariables,
-    CreateRepoProps<TChildProps>
-  >(CreateRepoDocument, operationOptions)
-}
+    CreateRepoMutationVariables
+  >,
+  'mutation'
+>
+
+export const CreateRepoComponent = (props: CreateRepoComponentProps) => (
+  <ApolloReactComponents.Mutation<
+    CreateRepoMutation,
+    CreateRepoMutationVariables
+  >
+    mutation={CreateRepoDocument}
+    {...props}
+  />
+)
+
+export type CreateRepoMutationResult = ApolloReactCommon.MutationResult<
+  CreateRepoMutation
+>
+export type CreateRepoMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateRepoMutation,
+  CreateRepoMutationVariables
+>
 export const DeleteRepoDocument = gql`
   mutation DeleteRepo($input: DeleteRepoInput!) {
     deleteRepo(input: $input) {
       ...repo
     }
   }
-  ${repoFragmentDoc}
+  ${RepoFragmentDoc}
 `
-
-export class DeleteRepoComponent extends React.Component<
-  Partial<
-    ReactApollo.MutationProps<DeleteRepoMutation, DeleteRepoMutationVariables>
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Mutation<DeleteRepoMutation, DeleteRepoMutationVariables>
-        mutation={DeleteRepoDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type DeleteRepoProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<DeleteRepoMutation, DeleteRepoMutationVariables>
-> &
-  TChildProps
-export type DeleteRepoMutationFn = ReactApollo.MutationFn<
+export type DeleteRepoMutationFn = ApolloReactCommon.MutationFunction<
   DeleteRepoMutation,
   DeleteRepoMutationVariables
 >
-export function withDeleteRepo<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        DeleteRepoMutation,
-        DeleteRepoMutationVariables,
-        DeleteRepoProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withMutation<
-    TProps,
+export type DeleteRepoComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
     DeleteRepoMutation,
-    DeleteRepoMutationVariables,
-    DeleteRepoProps<TChildProps>
-  >(DeleteRepoDocument, operationOptions)
-}
+    DeleteRepoMutationVariables
+  >,
+  'mutation'
+>
+
+export const DeleteRepoComponent = (props: DeleteRepoComponentProps) => (
+  <ApolloReactComponents.Mutation<
+    DeleteRepoMutation,
+    DeleteRepoMutationVariables
+  >
+    mutation={DeleteRepoDocument}
+    {...props}
+  />
+)
+
+export type DeleteRepoMutationResult = ApolloReactCommon.MutationResult<
+  DeleteRepoMutation
+>
+export type DeleteRepoMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  DeleteRepoMutation,
+  DeleteRepoMutationVariables
+>
 export const ListReposDocument = gql`
   query ListRepos {
     listRepos {
@@ -495,230 +470,158 @@ export const ListReposDocument = gql`
       }
     }
   }
-  ${repoFragmentDoc}
+  ${RepoFragmentDoc}
 `
-
-export class ListReposComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<ListReposQuery, ListReposQueryVariables>>
-> {
-  render() {
-    return (
-      <ReactApollo.Query<ListReposQuery, ListReposQueryVariables>
-        query={ListReposDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type ListReposProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<ListReposQuery, ListReposQueryVariables>
-> &
-  TChildProps
-export function withListRepos<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ListReposQuery,
-        ListReposQueryVariables,
-        ListReposProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
+export type ListReposComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
     ListReposQuery,
-    ListReposQueryVariables,
-    ListReposProps<TChildProps>
-  >(ListReposDocument, operationOptions)
-}
+    ListReposQueryVariables
+  >,
+  'query'
+>
+
+export const ListReposComponent = (props: ListReposComponentProps) => (
+  <ApolloReactComponents.Query<ListReposQuery, ListReposQueryVariables>
+    query={ListReposDocument}
+    {...props}
+  />
+)
+
+export type ListReposQueryResult = ApolloReactCommon.QueryResult<
+  ListReposQuery,
+  ListReposQueryVariables
+>
 export const ReadCurrentRepoNameDocument = gql`
   query ReadCurrentRepoName {
     currentRepoName @client
   }
 `
+export type ReadCurrentRepoNameComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    ReadCurrentRepoNameQuery,
+    ReadCurrentRepoNameQueryVariables
+  >,
+  'query'
+>
 
-export class ReadCurrentRepoNameComponent extends React.Component<
-  Partial<
-    ReactApollo.QueryProps<
-      ReadCurrentRepoNameQuery,
-      ReadCurrentRepoNameQueryVariables
-    >
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Query<
-        ReadCurrentRepoNameQuery,
-        ReadCurrentRepoNameQueryVariables
-      >
-        query={ReadCurrentRepoNameDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type ReadCurrentRepoNameProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<
+export const ReadCurrentRepoNameComponent = (
+  props: ReadCurrentRepoNameComponentProps
+) => (
+  <ApolloReactComponents.Query<
     ReadCurrentRepoNameQuery,
     ReadCurrentRepoNameQueryVariables
   >
-> &
-  TChildProps
-export function withReadCurrentRepoName<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ReadCurrentRepoNameQuery,
-        ReadCurrentRepoNameQueryVariables,
-        ReadCurrentRepoNameProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
-    ReadCurrentRepoNameQuery,
-    ReadCurrentRepoNameQueryVariables,
-    ReadCurrentRepoNameProps<TChildProps>
-  >(ReadCurrentRepoNameDocument, operationOptions)
-}
+    query={ReadCurrentRepoNameDocument}
+    {...props}
+  />
+)
+
+export type ReadCurrentRepoNameQueryResult = ApolloReactCommon.QueryResult<
+  ReadCurrentRepoNameQuery,
+  ReadCurrentRepoNameQueryVariables
+>
 export const ReadRepoDocument = gql`
   query ReadRepo($username: String!, $repo: String!) {
     readRepo(username: $username, repo: $repo) {
       ...repo
     }
   }
-  ${repoFragmentDoc}
+  ${RepoFragmentDoc}
 `
-
-export class ReadRepoComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<ReadRepoQuery, ReadRepoQueryVariables>>
-> {
-  render() {
-    return (
-      <ReactApollo.Query<ReadRepoQuery, ReadRepoQueryVariables>
-        query={ReadRepoDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type ReadRepoProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<ReadRepoQuery, ReadRepoQueryVariables>
-> &
-  TChildProps
-export function withReadRepo<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ReadRepoQuery,
-        ReadRepoQueryVariables,
-        ReadRepoProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
+export type ReadRepoComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
     ReadRepoQuery,
-    ReadRepoQueryVariables,
-    ReadRepoProps<TChildProps>
-  >(ReadRepoDocument, operationOptions)
-}
+    ReadRepoQueryVariables
+  >,
+  'query'
+> &
+  ({ variables: ReadRepoQueryVariables; skip?: boolean } | { skip: boolean })
+
+export const ReadRepoComponent = (props: ReadRepoComponentProps) => (
+  <ApolloReactComponents.Query<ReadRepoQuery, ReadRepoQueryVariables>
+    query={ReadRepoDocument}
+    {...props}
+  />
+)
+
+export type ReadRepoQueryResult = ApolloReactCommon.QueryResult<
+  ReadRepoQuery,
+  ReadRepoQueryVariables
+>
 export const CreateFileDocument = gql`
   mutation CreateFile($input: CreateFileInput!) {
     createFile(input: $input) {
       ...file
     }
   }
-  ${fileFragmentDoc}
+  ${FileFragmentDoc}
 `
-
-export class CreateFileComponent extends React.Component<
-  Partial<
-    ReactApollo.MutationProps<CreateFileMutation, CreateFileMutationVariables>
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Mutation<CreateFileMutation, CreateFileMutationVariables>
-        mutation={CreateFileDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type CreateFileProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<CreateFileMutation, CreateFileMutationVariables>
-> &
-  TChildProps
-export type CreateFileMutationFn = ReactApollo.MutationFn<
+export type CreateFileMutationFn = ApolloReactCommon.MutationFunction<
   CreateFileMutation,
   CreateFileMutationVariables
 >
-export function withCreateFile<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        CreateFileMutation,
-        CreateFileMutationVariables,
-        CreateFileProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withMutation<
-    TProps,
+export type CreateFileComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
     CreateFileMutation,
-    CreateFileMutationVariables,
-    CreateFileProps<TChildProps>
-  >(CreateFileDocument, operationOptions)
-}
+    CreateFileMutationVariables
+  >,
+  'mutation'
+>
+
+export const CreateFileComponent = (props: CreateFileComponentProps) => (
+  <ApolloReactComponents.Mutation<
+    CreateFileMutation,
+    CreateFileMutationVariables
+  >
+    mutation={CreateFileDocument}
+    {...props}
+  />
+)
+
+export type CreateFileMutationResult = ApolloReactCommon.MutationResult<
+  CreateFileMutation
+>
+export type CreateFileMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateFileMutation,
+  CreateFileMutationVariables
+>
 export const DeleteFileDocument = gql`
   mutation DeleteFile($input: DeleteFileInput!) {
     deleteFile(input: $input) {
       ...file
     }
   }
-  ${fileFragmentDoc}
+  ${FileFragmentDoc}
 `
-
-export class DeleteFileComponent extends React.Component<
-  Partial<
-    ReactApollo.MutationProps<DeleteFileMutation, DeleteFileMutationVariables>
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Mutation<DeleteFileMutation, DeleteFileMutationVariables>
-        mutation={DeleteFileDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type DeleteFileProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<DeleteFileMutation, DeleteFileMutationVariables>
-> &
-  TChildProps
-export type DeleteFileMutationFn = ReactApollo.MutationFn<
+export type DeleteFileMutationFn = ApolloReactCommon.MutationFunction<
   DeleteFileMutation,
   DeleteFileMutationVariables
 >
-export function withDeleteFile<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        DeleteFileMutation,
-        DeleteFileMutationVariables,
-        DeleteFileProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withMutation<
-    TProps,
+export type DeleteFileComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
     DeleteFileMutation,
-    DeleteFileMutationVariables,
-    DeleteFileProps<TChildProps>
-  >(DeleteFileDocument, operationOptions)
-}
+    DeleteFileMutationVariables
+  >,
+  'mutation'
+>
+
+export const DeleteFileComponent = (props: DeleteFileComponentProps) => (
+  <ApolloReactComponents.Mutation<
+    DeleteFileMutation,
+    DeleteFileMutationVariables
+  >
+    mutation={DeleteFileDocument}
+    {...props}
+  />
+)
+
+export type DeleteFileMutationResult = ApolloReactCommon.MutationResult<
+  DeleteFileMutation
+>
+export type DeleteFileMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  DeleteFileMutation,
+  DeleteFileMutationVariables
+>
 export const ListFilesDocument = gql`
   query ListFiles($username: String!, $repo: String!) {
     listFiles(username: $username, repo: $repo) {
@@ -727,278 +630,196 @@ export const ListFilesDocument = gql`
       }
     }
   }
-  ${fileFragmentDoc}
+  ${FileFragmentDoc}
 `
-
-export class ListFilesComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<ListFilesQuery, ListFilesQueryVariables>>
-> {
-  render() {
-    return (
-      <ReactApollo.Query<ListFilesQuery, ListFilesQueryVariables>
-        query={ListFilesDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type ListFilesProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<ListFilesQuery, ListFilesQueryVariables>
-> &
-  TChildProps
-export function withListFiles<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ListFilesQuery,
-        ListFilesQueryVariables,
-        ListFilesProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
+export type ListFilesComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
     ListFilesQuery,
-    ListFilesQueryVariables,
-    ListFilesProps<TChildProps>
-  >(ListFilesDocument, operationOptions)
-}
+    ListFilesQueryVariables
+  >,
+  'query'
+> &
+  ({ variables: ListFilesQueryVariables; skip?: boolean } | { skip: boolean })
+
+export const ListFilesComponent = (props: ListFilesComponentProps) => (
+  <ApolloReactComponents.Query<ListFilesQuery, ListFilesQueryVariables>
+    query={ListFilesDocument}
+    {...props}
+  />
+)
+
+export type ListFilesQueryResult = ApolloReactCommon.QueryResult<
+  ListFilesQuery,
+  ListFilesQueryVariables
+>
 export const ReadCurrentFileNameDocument = gql`
   query ReadCurrentFileName {
     currentFileName @client
   }
 `
+export type ReadCurrentFileNameComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    ReadCurrentFileNameQuery,
+    ReadCurrentFileNameQueryVariables
+  >,
+  'query'
+>
 
-export class ReadCurrentFileNameComponent extends React.Component<
-  Partial<
-    ReactApollo.QueryProps<
-      ReadCurrentFileNameQuery,
-      ReadCurrentFileNameQueryVariables
-    >
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Query<
-        ReadCurrentFileNameQuery,
-        ReadCurrentFileNameQueryVariables
-      >
-        query={ReadCurrentFileNameDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type ReadCurrentFileNameProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<
+export const ReadCurrentFileNameComponent = (
+  props: ReadCurrentFileNameComponentProps
+) => (
+  <ApolloReactComponents.Query<
     ReadCurrentFileNameQuery,
     ReadCurrentFileNameQueryVariables
   >
-> &
-  TChildProps
-export function withReadCurrentFileName<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ReadCurrentFileNameQuery,
-        ReadCurrentFileNameQueryVariables,
-        ReadCurrentFileNameProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
-    ReadCurrentFileNameQuery,
-    ReadCurrentFileNameQueryVariables,
-    ReadCurrentFileNameProps<TChildProps>
-  >(ReadCurrentFileNameDocument, operationOptions)
-}
+    query={ReadCurrentFileNameDocument}
+    {...props}
+  />
+)
+
+export type ReadCurrentFileNameQueryResult = ApolloReactCommon.QueryResult<
+  ReadCurrentFileNameQuery,
+  ReadCurrentFileNameQueryVariables
+>
 export const ReadFileDocument = gql`
   query ReadFile($username: String!, $repo: String!, $filename: String!) {
     readFile(username: $username, repo: $repo, filename: $filename) {
       ...file
     }
   }
-  ${fileFragmentDoc}
+  ${FileFragmentDoc}
 `
-
-export class ReadFileComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<ReadFileQuery, ReadFileQueryVariables>>
-> {
-  render() {
-    return (
-      <ReactApollo.Query<ReadFileQuery, ReadFileQueryVariables>
-        query={ReadFileDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type ReadFileProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<ReadFileQuery, ReadFileQueryVariables>
-> &
-  TChildProps
-export function withReadFile<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ReadFileQuery,
-        ReadFileQueryVariables,
-        ReadFileProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
+export type ReadFileComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
     ReadFileQuery,
-    ReadFileQueryVariables,
-    ReadFileProps<TChildProps>
-  >(ReadFileDocument, operationOptions)
-}
+    ReadFileQueryVariables
+  >,
+  'query'
+> &
+  ({ variables: ReadFileQueryVariables; skip?: boolean } | { skip: boolean })
+
+export const ReadFileComponent = (props: ReadFileComponentProps) => (
+  <ApolloReactComponents.Query<ReadFileQuery, ReadFileQueryVariables>
+    query={ReadFileDocument}
+    {...props}
+  />
+)
+
+export type ReadFileQueryResult = ApolloReactCommon.QueryResult<
+  ReadFileQuery,
+  ReadFileQueryVariables
+>
 export const UpdateFileDocument = gql`
   mutation UpdateFile($input: UpdateFileInput!) {
     updateFile(input: $input) {
       ...file
     }
   }
-  ${fileFragmentDoc}
+  ${FileFragmentDoc}
 `
-
-export class UpdateFileComponent extends React.Component<
-  Partial<
-    ReactApollo.MutationProps<UpdateFileMutation, UpdateFileMutationVariables>
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Mutation<UpdateFileMutation, UpdateFileMutationVariables>
-        mutation={UpdateFileDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type UpdateFileProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<UpdateFileMutation, UpdateFileMutationVariables>
-> &
-  TChildProps
-export type UpdateFileMutationFn = ReactApollo.MutationFn<
+export type UpdateFileMutationFn = ApolloReactCommon.MutationFunction<
   UpdateFileMutation,
   UpdateFileMutationVariables
 >
-export function withUpdateFile<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        UpdateFileMutation,
-        UpdateFileMutationVariables,
-        UpdateFileProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withMutation<
-    TProps,
+export type UpdateFileComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
     UpdateFileMutation,
-    UpdateFileMutationVariables,
-    UpdateFileProps<TChildProps>
-  >(UpdateFileDocument, operationOptions)
-}
+    UpdateFileMutationVariables
+  >,
+  'mutation'
+>
+
+export const UpdateFileComponent = (props: UpdateFileComponentProps) => (
+  <ApolloReactComponents.Mutation<
+    UpdateFileMutation,
+    UpdateFileMutationVariables
+  >
+    mutation={UpdateFileDocument}
+    {...props}
+  />
+)
+
+export type UpdateFileMutationResult = ApolloReactCommon.MutationResult<
+  UpdateFileMutation
+>
+export type UpdateFileMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  UpdateFileMutation,
+  UpdateFileMutationVariables
+>
 export const CreateImageDocument = gql`
   mutation CreateImage($input: CreateFileInput!) {
     createImage(input: $input) {
       ...file
     }
   }
-  ${fileFragmentDoc}
+  ${FileFragmentDoc}
 `
-
-export class CreateImageComponent extends React.Component<
-  Partial<
-    ReactApollo.MutationProps<CreateImageMutation, CreateImageMutationVariables>
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Mutation<CreateImageMutation, CreateImageMutationVariables>
-        mutation={CreateImageDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type CreateImageProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<CreateImageMutation, CreateImageMutationVariables>
-> &
-  TChildProps
-export type CreateImageMutationFn = ReactApollo.MutationFn<
+export type CreateImageMutationFn = ApolloReactCommon.MutationFunction<
   CreateImageMutation,
   CreateImageMutationVariables
 >
-export function withCreateImage<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        CreateImageMutation,
-        CreateImageMutationVariables,
-        CreateImageProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withMutation<
-    TProps,
+export type CreateImageComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
     CreateImageMutation,
-    CreateImageMutationVariables,
-    CreateImageProps<TChildProps>
-  >(CreateImageDocument, operationOptions)
-}
+    CreateImageMutationVariables
+  >,
+  'mutation'
+>
+
+export const CreateImageComponent = (props: CreateImageComponentProps) => (
+  <ApolloReactComponents.Mutation<
+    CreateImageMutation,
+    CreateImageMutationVariables
+  >
+    mutation={CreateImageDocument}
+    {...props}
+  />
+)
+
+export type CreateImageMutationResult = ApolloReactCommon.MutationResult<
+  CreateImageMutation
+>
+export type CreateImageMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateImageMutation,
+  CreateImageMutationVariables
+>
 export const DeleteImageDocument = gql`
   mutation DeleteImage($input: DeleteFileInput!) {
     deleteImage(input: $input) {
       ...file
     }
   }
-  ${fileFragmentDoc}
+  ${FileFragmentDoc}
 `
-
-export class DeleteImageComponent extends React.Component<
-  Partial<
-    ReactApollo.MutationProps<DeleteImageMutation, DeleteImageMutationVariables>
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Mutation<DeleteImageMutation, DeleteImageMutationVariables>
-        mutation={DeleteImageDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type DeleteImageProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<DeleteImageMutation, DeleteImageMutationVariables>
-> &
-  TChildProps
-export type DeleteImageMutationFn = ReactApollo.MutationFn<
+export type DeleteImageMutationFn = ApolloReactCommon.MutationFunction<
   DeleteImageMutation,
   DeleteImageMutationVariables
 >
-export function withDeleteImage<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        DeleteImageMutation,
-        DeleteImageMutationVariables,
-        DeleteImageProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withMutation<
-    TProps,
+export type DeleteImageComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
     DeleteImageMutation,
-    DeleteImageMutationVariables,
-    DeleteImageProps<TChildProps>
-  >(DeleteImageDocument, operationOptions)
-}
+    DeleteImageMutationVariables
+  >,
+  'mutation'
+>
+
+export const DeleteImageComponent = (props: DeleteImageComponentProps) => (
+  <ApolloReactComponents.Mutation<
+    DeleteImageMutation,
+    DeleteImageMutationVariables
+  >
+    mutation={DeleteImageDocument}
+    {...props}
+  />
+)
+
+export type DeleteImageMutationResult = ApolloReactCommon.MutationResult<
+  DeleteImageMutation
+>
+export type DeleteImageMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  DeleteImageMutation,
+  DeleteImageMutationVariables
+>
 export const ListImagesDocument = gql`
   query ListImages($username: String!, $repo: String!) {
     listImages(username: $username, repo: $repo) {
@@ -1007,265 +828,158 @@ export const ListImagesDocument = gql`
       }
     }
   }
-  ${fileFragmentDoc}
+  ${FileFragmentDoc}
 `
-
-export class ListImagesComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<ListImagesQuery, ListImagesQueryVariables>>
-> {
-  render() {
-    return (
-      <ReactApollo.Query<ListImagesQuery, ListImagesQueryVariables>
-        query={ListImagesDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type ListImagesProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<ListImagesQuery, ListImagesQueryVariables>
-> &
-  TChildProps
-export function withListImages<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ListImagesQuery,
-        ListImagesQueryVariables,
-        ListImagesProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
+export type ListImagesComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
     ListImagesQuery,
-    ListImagesQueryVariables,
-    ListImagesProps<TChildProps>
-  >(ListImagesDocument, operationOptions)
-}
+    ListImagesQueryVariables
+  >,
+  'query'
+> &
+  ({ variables: ListImagesQueryVariables; skip?: boolean } | { skip: boolean })
+
+export const ListImagesComponent = (props: ListImagesComponentProps) => (
+  <ApolloReactComponents.Query<ListImagesQuery, ListImagesQueryVariables>
+    query={ListImagesDocument}
+    {...props}
+  />
+)
+
+export type ListImagesQueryResult = ApolloReactCommon.QueryResult<
+  ListImagesQuery,
+  ListImagesQueryVariables
+>
 export const ReadImageDocument = gql`
   query ReadImage($username: String!, $repo: String!, $filename: String!) {
     readImage(username: $username, repo: $repo, filename: $filename) {
       ...file
     }
   }
-  ${fileFragmentDoc}
+  ${FileFragmentDoc}
 `
-
-export class ReadImageComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<ReadImageQuery, ReadImageQueryVariables>>
-> {
-  render() {
-    return (
-      <ReactApollo.Query<ReadImageQuery, ReadImageQueryVariables>
-        query={ReadImageDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type ReadImageProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<ReadImageQuery, ReadImageQueryVariables>
-> &
-  TChildProps
-export function withReadImage<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ReadImageQuery,
-        ReadImageQueryVariables,
-        ReadImageProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
+export type ReadImageComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
     ReadImageQuery,
-    ReadImageQueryVariables,
-    ReadImageProps<TChildProps>
-  >(ReadImageDocument, operationOptions)
-}
+    ReadImageQueryVariables
+  >,
+  'query'
+> &
+  ({ variables: ReadImageQueryVariables; skip?: boolean } | { skip: boolean })
+
+export const ReadImageComponent = (props: ReadImageComponentProps) => (
+  <ApolloReactComponents.Query<ReadImageQuery, ReadImageQueryVariables>
+    query={ReadImageDocument}
+    {...props}
+  />
+)
+
+export type ReadImageQueryResult = ApolloReactCommon.QueryResult<
+  ReadImageQuery,
+  ReadImageQueryVariables
+>
 export const UpdateImageDocument = gql`
   mutation UpdateImage($input: UpdateFileInput!) {
     updateImage(input: $input) {
       ...file
     }
   }
-  ${fileFragmentDoc}
+  ${FileFragmentDoc}
 `
-
-export class UpdateImageComponent extends React.Component<
-  Partial<
-    ReactApollo.MutationProps<UpdateImageMutation, UpdateImageMutationVariables>
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Mutation<UpdateImageMutation, UpdateImageMutationVariables>
-        mutation={UpdateImageDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type UpdateImageProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<UpdateImageMutation, UpdateImageMutationVariables>
-> &
-  TChildProps
-export type UpdateImageMutationFn = ReactApollo.MutationFn<
+export type UpdateImageMutationFn = ApolloReactCommon.MutationFunction<
   UpdateImageMutation,
   UpdateImageMutationVariables
 >
-export function withUpdateImage<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        UpdateImageMutation,
-        UpdateImageMutationVariables,
-        UpdateImageProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withMutation<
-    TProps,
+export type UpdateImageComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
     UpdateImageMutation,
-    UpdateImageMutationVariables,
-    UpdateImageProps<TChildProps>
-  >(UpdateImageDocument, operationOptions)
-}
+    UpdateImageMutationVariables
+  >,
+  'mutation'
+>
+
+export const UpdateImageComponent = (props: UpdateImageComponentProps) => (
+  <ApolloReactComponents.Mutation<
+    UpdateImageMutation,
+    UpdateImageMutationVariables
+  >
+    mutation={UpdateImageDocument}
+    {...props}
+  />
+)
+
+export type UpdateImageMutationResult = ApolloReactCommon.MutationResult<
+  UpdateImageMutation
+>
+export type UpdateImageMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  UpdateImageMutation,
+  UpdateImageMutationVariables
+>
 export const ReadGithubUserDocument = gql`
   query ReadGithubUser {
     readGithubUser {
       ...githubUser
     }
   }
-  ${githubUserFragmentDoc}
+  ${GithubUserFragmentDoc}
 `
-
-export class ReadGithubUserComponent extends React.Component<
-  Partial<
-    ReactApollo.QueryProps<ReadGithubUserQuery, ReadGithubUserQueryVariables>
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Query<ReadGithubUserQuery, ReadGithubUserQueryVariables>
-        query={ReadGithubUserDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type ReadGithubUserProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<ReadGithubUserQuery, ReadGithubUserQueryVariables>
-> &
-  TChildProps
-export function withReadGithubUser<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ReadGithubUserQuery,
-        ReadGithubUserQueryVariables,
-        ReadGithubUserProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
+export type ReadGithubUserComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
     ReadGithubUserQuery,
-    ReadGithubUserQueryVariables,
-    ReadGithubUserProps<TChildProps>
-  >(ReadGithubUserDocument, operationOptions)
-}
+    ReadGithubUserQueryVariables
+  >,
+  'query'
+>
+
+export const ReadGithubUserComponent = (
+  props: ReadGithubUserComponentProps
+) => (
+  <ApolloReactComponents.Query<
+    ReadGithubUserQuery,
+    ReadGithubUserQueryVariables
+  >
+    query={ReadGithubUserDocument}
+    {...props}
+  />
+)
+
+export type ReadGithubUserQueryResult = ApolloReactCommon.QueryResult<
+  ReadGithubUserQuery,
+  ReadGithubUserQueryVariables
+>
 export const ReadGithubUserAccessTokenDocument = gql`
   query ReadGithubUserAccessToken($code: String!, $state: String!) {
     readGithubUserAccessToken(code: $code, state: $state)
   }
 `
+export type ReadGithubUserAccessTokenComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    ReadGithubUserAccessTokenQuery,
+    ReadGithubUserAccessTokenQueryVariables
+  >,
+  'query'
+> &
+  (
+    | { variables: ReadGithubUserAccessTokenQueryVariables; skip?: boolean }
+    | { skip: boolean }
+  )
 
-export class ReadGithubUserAccessTokenComponent extends React.Component<
-  Partial<
-    ReactApollo.QueryProps<
-      ReadGithubUserAccessTokenQuery,
-      ReadGithubUserAccessTokenQueryVariables
-    >
-  >
-> {
-  render() {
-    return (
-      <ReactApollo.Query<
-        ReadGithubUserAccessTokenQuery,
-        ReadGithubUserAccessTokenQueryVariables
-      >
-        query={ReadGithubUserAccessTokenDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type ReadGithubUserAccessTokenProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<
+export const ReadGithubUserAccessTokenComponent = (
+  props: ReadGithubUserAccessTokenComponentProps
+) => (
+  <ApolloReactComponents.Query<
     ReadGithubUserAccessTokenQuery,
     ReadGithubUserAccessTokenQueryVariables
   >
-> &
-  TChildProps
-export function withReadGithubUserAccessToken<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ReadGithubUserAccessTokenQuery,
-        ReadGithubUserAccessTokenQueryVariables,
-        ReadGithubUserAccessTokenProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
-    ReadGithubUserAccessTokenQuery,
-    ReadGithubUserAccessTokenQueryVariables,
-    ReadGithubUserAccessTokenProps<TChildProps>
-  >(ReadGithubUserAccessTokenDocument, operationOptions)
-}
-export const ReadIsEditDocument = gql`
-  query ReadIsEdit {
-    isEdit @client
-  }
-`
+    query={ReadGithubUserAccessTokenDocument}
+    {...props}
+  />
+)
 
-export class ReadIsEditComponent extends React.Component<
-  Partial<ReactApollo.QueryProps<ReadIsEditQuery, ReadIsEditQueryVariables>>
-> {
-  render() {
-    return (
-      <ReactApollo.Query<ReadIsEditQuery, ReadIsEditQueryVariables>
-        query={ReadIsEditDocument}
-        {...((this as any)['props'] as any)}
-      />
-    )
-  }
-}
-export type ReadIsEditProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<ReadIsEditQuery, ReadIsEditQueryVariables>
-> &
-  TChildProps
-export function withReadIsEdit<TProps, TChildProps = {}>(
-  operationOptions:
-    | ReactApollo.OperationOption<
-        TProps,
-        ReadIsEditQuery,
-        ReadIsEditQueryVariables,
-        ReadIsEditProps<TChildProps>
-      >
-    | undefined
-) {
-  return ReactApollo.withQuery<
-    TProps,
-    ReadIsEditQuery,
-    ReadIsEditQueryVariables,
-    ReadIsEditProps<TChildProps>
-  >(ReadIsEditDocument, operationOptions)
-}
+export type ReadGithubUserAccessTokenQueryResult = ApolloReactCommon.QueryResult<
+  ReadGithubUserAccessTokenQuery,
+  ReadGithubUserAccessTokenQueryVariables
+>
 export interface IntrospectionResultData {
   __schema: {
     types: {

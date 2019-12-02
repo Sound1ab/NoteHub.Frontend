@@ -16,7 +16,7 @@ export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
   const inputEl = useRef<HTMLInputElement>(null)
   const [inputValue, setInputValue] = useState('')
   const [loading, setLoading] = useState(false)
-  const createNewFile = useCreateFile()
+  const [createNewFile] = useCreateFile()
   const user = useReadGithubUser()
   const { currentRepoName } = useReadCurrentRepoName()
   const { currentFileName } = useReadCurrentFileName()

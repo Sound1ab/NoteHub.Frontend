@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { ApolloProvider } from 'react-apollo-hooks'
+import { ApolloProvider as ApolloProviderHooks } from '@apollo/react-hooks'
 import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { SchemaLink } from 'apollo-link-schema'
@@ -9,9 +9,9 @@ import {
   IMocks,
 } from 'graphql-tools'
 import { printSchema, buildClientSchema } from 'graphql/utilities'
-import introspectionResult from '../../../../schema.json'
+import introspectionResult from '../../../schema.json'
 
-export const AutoMockedProvider: React.FunctionComponent<{
+export const MockProvider: React.FunctionComponent<{
   children: ReactNode
   mockResolvers?: IMocks
 }> = ({ children, mockResolvers }) => {
@@ -31,7 +31,8 @@ export const AutoMockedProvider: React.FunctionComponent<{
   const client = new ApolloClient({
     link: new SchemaLink({ schema }),
     cache: new InMemoryCache(),
+    resolvers: {},
   })
 
-  return <ApolloProvider client={client}>{children}</ApolloProvider>
+  return <ApolloProviderHooks client={client}>{children}</ApolloProviderHooks>
 }

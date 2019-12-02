@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { useMutation } from 'react-apollo-hooks'
+import { useMutation } from '@apollo/react-hooks'
 import {
   ReadFileDocument,
   ReadFileQuery,

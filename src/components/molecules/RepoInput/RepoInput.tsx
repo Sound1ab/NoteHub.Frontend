@@ -42,8 +42,7 @@ export function RepoInput({ setIsNewRepoOpen }: IRepoInput) {
   const [{ name, isPrivate }, setForm] = useState<{ [key: string]: any }>(
     defaultState
   )
-
-  const createNewRepo = useCreateRepo()
+  const [createNewRepo] = useCreateRepo()
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target

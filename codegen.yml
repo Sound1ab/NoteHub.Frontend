@@ -11,3 +11,5 @@ generates:
       - "typescript-operations"
       - "typescript-react-apollo"
       - "fragment-matcher"
+    config:
+      withHOC: false
