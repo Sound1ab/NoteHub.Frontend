@@ -1,27 +1,14 @@
 import React from 'react'
+import '@testing-library/jest-dom/extend-expect'
 import { render } from '@testing-library/react'
-import {
-  ThemeProvider,
-  IconProvider,
-  ApolloProvider,
-} from './components/utility'
-
-jest.mock('react', () => {
-  const originalModule = jest.requireActual('react')
-
-  return {
-    ...originalModule,
-    useContext: () => ({
-      colorMode: 'dark',
-    }),
-  }
-})
+import { IconProvider, ThemeProvider } from './components/utility'
+import { COLOR_MODE } from './enums'
 
 const customRender = (node: any, ...options: any[]) =>
   render(
-    <ApolloProvider>
-      <ThemeProvider>{() => <IconProvider>{node}</IconProvider>}</ThemeProvider>
-    </ApolloProvider>,
+    <ThemeProvider colorMode={COLOR_MODE.DARK}>
+      {() => <IconProvider>{node}</IconProvider>}
+    </ThemeProvider>,
     ...options
   )
 

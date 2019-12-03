@@ -21,6 +21,15 @@ export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
   const { currentRepoName } = useReadCurrentRepoName()
   const { currentFileName } = useReadCurrentFileName()
 
+  function handleRequestClose() {
+    setInputValue('')
+    onRequestClose()
+  }
+
+  function handleOnInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInputValue(e.target.value)
+  }
+
   async function handleCreateNewFile() {
     if (!user || !currentRepoName || !currentFileName) {
       alert('Error')
@@ -44,15 +53,6 @@ export function CreateFileModal({ isOpen, onRequestClose }: ICreateFileModal) {
     } finally {
       setLoading(false)
     }
-  }
-
-  function handleRequestClose() {
-    setInputValue('')
-    onRequestClose()
-  }
-
-  function handleOnInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setInputValue(e.target.value)
   }
 
   useEffect(() => {

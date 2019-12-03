@@ -1,15 +1,9 @@
-import React, {
-  MutableRefObject,
-  ReactNode,
-  useContext,
-  useRef,
-  useState,
-} from 'react'
+import React, { MutableRefObject, ReactNode, useRef, useState } from 'react'
 import { styled } from '../../../theme'
-import { Button, Icon, Ref } from '../../atoms'
+import { Button, Icon, IRef } from '../../atoms'
 import { CreateFileModal, DeleteFileModal, Profile } from '../../molecules'
-import { ColorModeContext } from '../../utility'
 import {
+  useColorModeFromLocalStorage,
   useDropzone,
   useReadCurrentRepoName,
   useReadGithubUser,
@@ -59,7 +53,7 @@ const Style = styled.div`
 
 interface IRenderProps {
   isEdit: boolean
-  ref: MutableRefObject<Ref | null>
+  ref: MutableRefObject<IRef | null>
   isImageUploading: boolean
 }
 
@@ -68,12 +62,12 @@ interface IToolbar {
 }
 
 export function Toolbar({ children }: IToolbar) {
-  const ref = useRef<Ref | null>(null)
+  const ref = useRef<IRef | null>(null)
   const [isEdit, setIsEdit] = useState(true)
   const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
   const [isDeleteFileModalOpen, setIsDeleteFileModalOpen] = useState(false)
   const { currentRepoName } = useReadCurrentRepoName()
-  const { toggleColorMode, isDarkMode } = useContext(ColorModeContext)
+  const { toggleColorMode, isDarkMode } = useColorModeFromLocalStorage()
   const user = useReadGithubUser()
   const {
     selectFileAndUpload,

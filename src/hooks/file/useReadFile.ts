@@ -9,7 +9,7 @@ import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
 import { useReadCurrentFileName } from './useReadCurrentFileName'
 import { useReadGithubUser } from '../user/useReadGithubUser'
 
-export const ReadFile = gql`
+export const ReadFileDocument = gql`
   ${FileFragment}
   query ReadFile($username: String!, $repo: String!, $filename: String!) {
     readFile(username: $username, repo: $repo, filename: $filename) {
@@ -24,7 +24,7 @@ export function useReadFile() {
   const user = useReadGithubUser()
 
   const { data, loading } = useQuery<ReadFileQuery, ReadFileQueryVariables>(
-    ReadFile,
+    ReadFileDocument,
     {
       skip: !user?.login || !currentRepoName || !currentFileName,
       variables: {

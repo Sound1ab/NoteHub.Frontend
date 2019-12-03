@@ -3,11 +3,11 @@ import { useMutation } from '@apollo/react-hooks'
 import {
   DeleteImageMutation,
   DeleteImageMutationVariables,
-  ListImagesDocument,
   ListImagesQuery,
   ListImagesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
+import { ListImagesDocument } from './useListImage'
 
 export const DeleteImageDocument = gql`
   ${FileFragment}

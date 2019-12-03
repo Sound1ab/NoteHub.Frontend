@@ -2,7 +2,6 @@ import React from 'react'
 import { GoogleFont, TypographyStyle } from 'react-typography'
 import {
   ApolloProvider,
-  ColorModeContext,
   GlobalStyle,
   Router,
   ThemeProvider,
@@ -12,31 +11,22 @@ import { useColorModeFromLocalStorage } from '../hooks'
 import Typography from 'typography'
 
 export function App() {
-  const {
-    colorMode,
-    toggleColorMode,
-    loading,
-    isDarkMode,
-  } = useColorModeFromLocalStorage()
+  const { colorMode, loading } = useColorModeFromLocalStorage()
 
   return (
     <ApolloProvider>
-      <ColorModeContext.Provider
-        value={{ colorMode, toggleColorMode, isDarkMode }}
-      >
-        {!loading && (
-          <ThemeProvider>
-            {(typography: Typography) => (
-              <IconProvider>
-                <GlobalStyle isDarkMode />
-                <TypographyStyle typography={typography} />
-                <GoogleFont typography={typography} />
-                <Router />
-              </IconProvider>
-            )}
-          </ThemeProvider>
-        )}
-      </ColorModeContext.Provider>
+      {!loading && (
+        <ThemeProvider colorMode={colorMode}>
+          {(typography: Typography) => (
+            <IconProvider>
+              <GlobalStyle isDarkMode />
+              <TypographyStyle typography={typography} />
+              <GoogleFont typography={typography} />
+              <Router />
+            </IconProvider>
+          )}
+        </ThemeProvider>
+      )}
     </ApolloProvider>
   )
 }

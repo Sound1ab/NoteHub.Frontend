@@ -3,13 +3,12 @@ import { useMutation } from '@apollo/react-hooks'
 import {
   DeleteFileMutation,
   DeleteFileMutationVariables,
-  ListFilesDocument,
   ListFilesQuery,
   ListFilesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
-import { useReadGithubUser } from '../user/useReadGithubUser'
-import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
+import { useReadGithubUser, useReadCurrentRepoName } from '..'
+import { ListFilesDocument } from './useListFiles'
 
 export const DeleteFileDocument = gql`
   ${FileFragment}

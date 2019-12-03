@@ -11,7 +11,7 @@ const Style = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${({theme}) => theme.colors.background.primary};
+  background-color: ${({ theme }) => theme.colors.background.primary};
 
   .lds-roller {
     display: inline-block;

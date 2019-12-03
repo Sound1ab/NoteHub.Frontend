@@ -8,7 +8,7 @@ export type TColors = typeof colors['dark']
 export interface ITheme {
   colors: TColors
   spacing: TSpacing
-  rhythm: VerticalRhythm["rhythm"]
+  rhythm: VerticalRhythm['rhythm']
 }
 
 export const styled = baseStyled as ThemedStyledInterface<ITheme>

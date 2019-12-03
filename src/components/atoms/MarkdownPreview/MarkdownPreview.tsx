@@ -28,7 +28,9 @@ const markdown: any = MarkdownIt({
           hljs.highlight(lang, str, true).value +
           '</code></pre>'
         )
-      } catch (__) {}
+      } catch (error) {
+        console.warn('markdown error', error)
+      }
     }
 
     return (

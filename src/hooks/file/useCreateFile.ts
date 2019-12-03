@@ -3,13 +3,12 @@ import { useMutation } from '@apollo/react-hooks'
 import {
   CreateFileMutation,
   CreateFileMutationVariables,
-  ListFilesDocument,
   ListFilesQuery,
   ListFilesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
-import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
-import { useReadGithubUser } from '../user/useReadGithubUser'
+import { useReadCurrentRepoName, useReadGithubUser } from '..'
+import { ListFilesDocument } from './useListFiles'
 
 export const CreateFileDocument = gql`
   ${FileFragment}

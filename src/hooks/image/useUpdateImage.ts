@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import {
-  ReadImageDocument,
   ReadImageQuery,
   ReadImageQueryVariables,
   UpdateImageMutation,
   UpdateImageMutationVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
+import { ReadImageDocument } from './useReadImage'
 
 export const UpdateImageDocument = gql`
   ${FileFragment}

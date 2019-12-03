@@ -1,14 +1,14 @@
 import monacoEditor from 'monaco-editor'
-import React, { useContext, useImperativeHandle, useRef } from 'react'
+import React, { useImperativeHandle, useRef } from 'react'
 import MonacoEditor, {
   ChangeHandler,
   EditorDidMount,
   EditorWillMount,
 } from 'react-monaco-editor'
 import { COLOR_MODE } from '../../../enums'
-import { ColorModeContext } from '../../utility'
 import { styled } from '../../../theme'
 import { Spinner } from '..'
+import { useColorModeFromLocalStorage } from '../../../hooks'
 
 const theme = {
   [COLOR_MODE.DARK]: 'monokai',
@@ -24,7 +24,7 @@ const Style = styled.div`
   overflow-x: hidden;
 `
 
-export interface Ref {
+export interface IRef {
   insertTextAtCursorPosition: (text: string) => void
 }
 
@@ -42,9 +42,10 @@ interface IMonaco {
 export const Monaco = React.forwardRef(
   ({ onChange, value, loading }: IMonaco, ref) => {
     const monacoRef = useRef<IMonacoEditor | null>(null)
-    const { colorMode } = useContext(ColorModeContext)
+    const { colorMode } = useColorModeFromLocalStorage()
 
     const editorWillMount: EditorWillMount = monaco => {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const Monokai = require('monaco-themes/themes/Monokai.json')
       monaco.editor.defineTheme('monokai', Monokai)
       monaco.editor.setTheme('monokai')
@@ -56,13 +57,6 @@ export const Monaco = React.forwardRef(
         monaco,
       }
     }
-
-    useImperativeHandle(
-      ref,
-      (): Ref => ({
-        insertTextAtCursorPosition,
-      })
-    )
 
     function insertTextAtCursorPosition(text: string) {
       try {
@@ -93,6 +87,13 @@ export const Monaco = React.forwardRef(
         console.log('ERROR:', error.message)
       }
     }
+
+    useImperativeHandle(
+      ref,
+      (): IRef => ({
+        insertTextAtCursorPosition,
+      })
+    )
 
     const handleOnChange: ChangeHandler = (newValue, event) => {
       if (event.isFlush) {

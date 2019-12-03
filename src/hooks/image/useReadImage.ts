@@ -6,7 +6,7 @@ import {
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
 
-export const ReadImage = gql`
+export const ReadImageDocument = gql`
   ${FileFragment}
   query ReadImage($username: String!, $repo: String!, $filename: String!) {
     readImage(username: $username, repo: $repo, filename: $filename) {
@@ -17,7 +17,7 @@ export const ReadImage = gql`
 
 export function useReadImage(username: string, repo: string, filename: string) {
   const { data, loading } = useQuery<ReadImageQuery, ReadImageQueryVariables>(
-    ReadImage,
+    ReadImageDocument,
     {
       skip: !username || !repo || !filename,
       variables: {

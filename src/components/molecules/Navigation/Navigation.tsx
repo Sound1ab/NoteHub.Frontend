@@ -24,7 +24,7 @@ export function Navigation({ isNewRepoOpen, setIsNewRepoOpen }: INavigation) {
     return null
   }
 
-  function handleHeadingClick(repoName: String) {
+  function handleHeadingClick(repoName: string) {
     if (currentRepoName === repoName) {
       client.writeData({ data: { currentRepoName: null } })
     } else {

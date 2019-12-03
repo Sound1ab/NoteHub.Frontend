@@ -34,29 +34,29 @@ export const createTypography = (colors: TColors) => {
         marginBottom: 0,
       },
       p: {
-        color: colors.text.primary
+        color: colors.text.primary,
       },
       li: {
-        color: colors.text.primary
+        color: colors.text.primary,
       },
       h1: {
-        color: colors.accent
+        color: colors.accent,
       },
       h2: {
-        color: colors.accent
+        color: colors.accent,
       },
       h3: {
-        color: colors.accent
+        color: colors.accent,
       },
       h4: {
-        color: colors.accent
+        color: colors.accent,
       },
       h5: {
         marginBottom: rhythm(0.25),
       },
       h6: {
         marginBottom: rhythm(0.25),
-      }
+      },
     }),
   })
 }

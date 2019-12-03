@@ -26,6 +26,15 @@ export function DeleteRepoModal({
   const client = useApolloClient()
   const { currentRepoName } = useReadCurrentRepoName()
 
+  function handleRequestClose() {
+    setInputValue('')
+    onRequestClose()
+  }
+
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInputValue(e.target.value)
+  }
+
   async function handleDeleteRepo() {
     if (!user || !currentRepoName) {
       alert('Error')
@@ -55,15 +64,6 @@ export function DeleteRepoModal({
     } finally {
       setLoading(false)
     }
-  }
-
-  function handleRequestClose() {
-    setInputValue('')
-    onRequestClose()
-  }
-
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setInputValue(e.target.value)
   }
 
   useEffect(() => {

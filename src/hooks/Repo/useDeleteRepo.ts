@@ -3,12 +3,12 @@ import { useMutation } from '@apollo/react-hooks'
 import {
   DeleteRepoMutation,
   DeleteRepoMutationVariables,
-  ListReposDocument,
   ListReposQuery,
   ListReposQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
-import { useReadGithubUser } from '../user/useReadGithubUser'
+import { useReadGithubUser } from '..'
+import { ListReposDocument } from './useListRepos'
 
 export const DeleteRepoDocument = gql`
   ${RepoFragment}

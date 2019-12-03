@@ -14,7 +14,7 @@ import introspectionResult from '../../../schema.json'
 export const MockProvider: React.FunctionComponent<{
   children: ReactNode
   mockResolvers?: IMocks
-}> = ({ children, mockResolvers }) => {
+}> = ({ children, mockResolvers }: any) => {
   const schemaSDL = printSchema(
     buildClientSchema({ __schema: introspectionResult.__schema as any })
   )

@@ -32,11 +32,7 @@ interface ICard {
 
 export function Card({ title, onClick, isSelected }: ICard) {
   return (
-    <Style
-      onClick={onClick}
-      data-testid="Card"
-      isSelected={isSelected}
-    >
+    <Style onClick={onClick} data-testid="Card" isSelected={isSelected}>
       <Heading className="Card-heading" type="h5" marginBottom>
         {title}
       </Heading>
