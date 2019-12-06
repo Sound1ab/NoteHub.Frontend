@@ -2,7 +2,7 @@
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { useBabelRc, override, useEslintRc } = require('customize-cra')
+const { override } = require('customize-cra')
 
 const useMonaco = () => config => {
   return {
@@ -17,4 +17,4 @@ const useMonaco = () => config => {
 }
 
 // eslint-disable-next-line no-undef
-module.exports = override(useBabelRc(), useMonaco(), useEslintRc())
+module.exports = override(useMonaco())

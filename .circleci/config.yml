@@ -1,42 +1,133 @@
-version: 2
-jobs:
-  build:
-    working_directory: ~/noted
+version: 2.1
+
+executors:
+  nodejs:
     docker:
       - image: circleci/node:erbium
-    environment:
-      BUCKET: noted
-      REGION: us-east-1
+
+commands:
+  restore-node-modules:
+    description: "Restore node modules from the cache"
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "5a:9d:8b:79:ee:c3:d8:ed:5f:8f:72:80:b4:50:3a:40"
-      - checkout
+      - restore_cache:
+          keys:
+            - v4-node_modules-{{ checksum "yarn.lock" }}
+  build-package:
+    description: "Build the package for deployment"
+    steps:
       - run:
-          name: Show current branch
-          command: echo ${CIRCLE_BRANCH}
-      - run:
-          name: Install local dependencies
-          command: yarn
-      - run:
-          name: Building
           command: yarn build
+  run-unit-tests:
+    description: "Run unit tests"
+    steps:
       - run:
-          name: Install pip
+          command: yarn test --ci --runInBand
+  install-pip:
+    description: "Install pip to use later"
+    steps:
+      - run:
           command: sudo apt-get install python-dev python-pip
+  install-aws-cli:
+    description: "Install aws cli to deploy to S3"
+    steps:
       - run:
-          name: Install aws cli
           command: sudo pip install awscli
+  update-signiture:
+    description: "Set Signature Version 4 for S3 Request Authentication"
+    steps:
       - run:
-          name: Setting Signature Version 4 for S3 Request Authentication
           command: aws configure set default.s3.signature_version s3v4
+  deploy-to-dev:
+    description: "Deploy to dev S3 bucket"
+    steps:
       - run:
-          name: Deploy to S3
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "staging" ]; then
-                echo "aws --region ${REGION} s3 sync build s3://${BUCKET}-staging/ --delete"
-                aws --region ${REGION} s3 sync build s3://${BUCKET}-staging/ --delete
-            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-            echo "aws --region ${REGION} s3 sync build s3://${BUCKET}-master/ --delete"
-                aws --region ${REGION} s3 sync build s3://${BUCKET}-master/ --delete
-            fi
+          command: aws --region ${REGION} s3 sync build s3://${BUCKET}-dev/ --delete
+  deploy-to-prod:
+    description: "Deploy to prod S3 bucket"
+    steps:
+      - run:
+          command: aws --region ${REGION} s3 sync build s3://${BUCKET}-master/ --delete
+
+jobs:
+  prepare:
+    executor: nodejs
+    steps:
+      - checkout
+      - restore-node-modules
+      - run: yarn install --frozen-lockfile
+      - save_cache:
+          key: v4-node_modules-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+  test:
+    executor: nodejs
+    steps:
+      - checkout
+      - restore-node-modules
+      - run-unit-tests
+  eslint:
+    executor: nodejs
+    steps:
+      - checkout
+      - restore-node-modules
+      - run: yarn lint
+  typescript:
+    executor: nodejs
+    steps:
+      - checkout
+      - restore-node-modules
+      - run: yarn ts
+  build-and-deploy-production:
+    working_directory: ~/noted
+    executor: nodejs
+    steps:
+      - checkout
+      - restore-node-modules
+      - build-package
+      - install-pip
+      - install-aws-cli
+      - update-signiture
+      - deploy-to-prod
+  build-and-deploy-development:
+    working_directory: ~/noted
+    executor: nodejs
+    steps:
+      - checkout
+      - restore-node-modules
+      - build-package
+      - install-pip
+      - install-aws-cli
+      - update-signiture
+      - deploy-to-dev
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - prepare
+      - test:
+          requires:
+            - prepare
+      - eslint:
+          requires:
+            - prepare
+      - typescript:
+          requires:
+            - prepare
+
+      - build-and-deploy-development:
+          name: deploy-to-dev
+          requires:
+            - test
+            - eslint
+            - typescript
+
+      - approve-production:
+          type: approval
+          requires:
+            - deploy-to-dev
+
+      - build-and-deploy-production:
+          name: deploy-to-production
+          requires:
+            - approve-production

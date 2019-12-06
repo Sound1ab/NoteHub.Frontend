@@ -145,3 +145,5 @@ api/.webpack
 build
 
 schema.json
+
+src/schema.json

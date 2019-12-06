@@ -1,0 +1,6 @@
+overwrite: true
+schema: "https://zwhkm1bc30.execute-api.eu-west-1.amazonaws.com/prod/graphql"
+generates:
+  src/schema.json:
+    plugins:
+      - "introspection"
