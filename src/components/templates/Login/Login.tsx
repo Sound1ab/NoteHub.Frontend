@@ -9,6 +9,8 @@ const REDIRECT_URL = process.env.REACT_APP_REDIRECT_URL
 const STATE = process.env.REACT_APP_STATE
 const SCOPE = process.env.REACT_APP_SCOPE
 
+console.log('CLIENT_ID', CLIENT_ID)
+
 const Style = styled.div`
   position: relative;
 `

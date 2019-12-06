@@ -6,99 +6,102 @@ executors:
       - image: circleci/node:erbium
 
 commands:
-  restore-node-modules:
+  install-dependencies:
+    description: "Install node module dependencies"
+    steps:
+      - run: yarn install --frozen-lockfile
+  cache-dependencies:
+    description: "Cache the node_modules"
+    steps:
+      - save_cache:
+          key: v4-node_modules-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+  restore-cached-dependencies:
     description: "Restore node modules from the cache"
     steps:
       - restore_cache:
           keys:
             - v4-node_modules-{{ checksum "yarn.lock" }}
-  build-package:
-    description: "Build the package for deployment"
-    steps:
-      - run:
-          command: yarn build
   run-unit-tests:
     description: "Run unit tests"
     steps:
-      - run:
-          command: yarn test --ci --runInBand
-  install-pip:
-    description: "Install pip to use later"
+      - run: yarn test --ci --runInBand
+  run-linter-check:
+    description: "Run linter"
     steps:
-      - run:
-          command: sudo apt-get install python-dev python-pip
-  install-aws-cli:
-    description: "Install aws cli to deploy to S3"
+      - run: yarn lint
+  run-typescript-check:
+    description: "Run typescript tests"
     steps:
-      - run:
-          command: sudo pip install awscli
-  update-signiture:
-    description: "Set Signature Version 4 for S3 Request Authentication"
+      - run: yarn ts
+  configure-aws:
+    description: "Install dependencies for AWS and Serverless"
     steps:
-      - run:
-          command: aws configure set default.s3.signature_version s3v4
-  deploy-to-dev:
-    description: "Deploy to dev S3 bucket"
+      - run: sudo apt-get install python-dev python-pip
+      - run: sudo pip install awscli
+  persist-to-workspace:
+    description: "Persist the dist file to the workspace"
     steps:
-      - run:
-          command: aws --region ${REGION} s3 sync build s3://${BUCKET}-dev/ --delete
-  deploy-to-prod:
-    description: "Deploy to prod S3 bucket"
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/build
+  attach-to-workspace:
+    description: "Attach the dist file to the workspace"
     steps:
-      - run:
-          command: aws --region ${REGION} s3 sync build s3://${BUCKET}-master/ --delete
+      - attach_workspace:
+          at: ~/
 
 jobs:
   prepare:
     executor: nodejs
     steps:
       - checkout
-      - restore-node-modules
-      - run: yarn install --frozen-lockfile
-      - save_cache:
-          key: v4-node_modules-{{ checksum "yarn.lock" }}
-          paths:
-            - ./node_modules
+      - restore-cached-dependencies
+      - install-dependencies
+      - cache-dependencies
   test:
     executor: nodejs
     steps:
       - checkout
-      - restore-node-modules
+      - restore-cached-dependencies
       - run-unit-tests
   eslint:
     executor: nodejs
     steps:
       - checkout
-      - restore-node-modules
-      - run: yarn lint
+      - restore-cached-dependencies
+      - run-linter-check
   typescript:
     executor: nodejs
     steps:
       - checkout
-      - restore-node-modules
-      - run: yarn ts
-  build-and-deploy-production:
-    working_directory: ~/noted
+      - restore-cached-dependencies
+      - run-typescript-check
+  build:
+    parameters:
+      env:
+        description: 'The name of the bucket to deploy to.'
+        type: string
     executor: nodejs
     steps:
       - checkout
-      - restore-node-modules
-      - build-package
-      - install-pip
-      - install-aws-cli
-      - update-signiture
-      - deploy-to-prod
-  build-and-deploy-development:
-    working_directory: ~/noted
+      - restore-cached-dependencies
+      - run: export REACT_APP_NODE_ENV=<< parameters.env >> && . ./.circleci/build_env.sh && yarn build
+      - persist-to-workspace
+  deploy:
+    parameters:
+      bucket:
+        description: 'The name of the environment to deploy to.'
+        type: string
     executor: nodejs
     steps:
       - checkout
-      - restore-node-modules
-      - build-package
-      - install-pip
-      - install-aws-cli
-      - update-signiture
-      - deploy-to-dev
+      - attach-to-workspace
+      - configure-aws
+      - run: aws configure set default.s3.signature_version s3v4
+      - run: aws --region us-east-1 s3 sync build s3://<< parameters.bucket >>/ --delete
 
 workflows:
   version: 2
@@ -115,19 +118,35 @@ workflows:
           requires:
             - prepare
 
-      - build-and-deploy-development:
-          name: deploy-to-dev
+      - build:
+          name: build-development
+          env: development
           requires:
             - test
             - eslint
             - typescript
+          filters:
+            branches:
+              only: master
+
+      - deploy:
+          name: deploy-development
+          bucket: noted-development
+          requires:
+            - build-development
 
       - approve-production:
           type: approval
           requires:
-            - deploy-to-dev
+            - deploy-development
 
-      - build-and-deploy-production:
-          name: deploy-to-production
+      - build:
+          name: build-production
+          env: production
           requires:
             - approve-production
+
+      - deploy:
+          bucket: noted-master
+          requires:
+            - build-production
