@@ -5,6 +5,16 @@ import { authLink, errorLink, httpLink } from '../../../services/Apollo/links'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 
+export interface LocalData {
+  currentRepoName: string | null
+  currentFileName: string | null
+}
+
+export const localData: LocalData = {
+  currentRepoName: null,
+  currentFileName: null,
+}
+
 interface IApolloProvider {
   children?: ReactNode
 }
@@ -15,7 +25,7 @@ export function ApolloProvider({ children }: IApolloProvider) {
   const cache = new InMemoryCache()
 
   cache.writeData({
-    data: { currentRepoName: null, currentFileName: null },
+    data: localData,
   })
 
   const client = new ApolloClient({

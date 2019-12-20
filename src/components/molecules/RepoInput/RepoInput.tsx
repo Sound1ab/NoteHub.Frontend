@@ -117,6 +117,7 @@ export function RepoInput({ setIsNewRepoOpen }: IRepoInput) {
         ref={inputRef}
         value={name}
         onChange={handleOnChange}
+        aria="Add a new repo"
         name="name"
       />
     </Style>

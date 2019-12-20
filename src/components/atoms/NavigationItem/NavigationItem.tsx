@@ -56,9 +56,15 @@ export function NavigationItem({
             icon="product-hunt"
             prefix="fab"
             marginRight
+            title={`${heading} is a private repo`}
           />
         )}
-        <Heading className="NavigationItem-heading" type="h5">
+        <Heading
+          className="NavigationItem-heading"
+          type="h5"
+          aria-label={isActive ? `${heading} is selected` : ''}
+          data-testid="navigation-item-heading"
+        >
           {heading}
         </Heading>
       </button>
