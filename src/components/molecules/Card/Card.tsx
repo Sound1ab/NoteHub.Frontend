@@ -1,16 +1,17 @@
 import React from 'react'
+
 import { styled } from '../../../theme'
 import { Heading } from '../../atoms'
 
-const Style = styled.div<{ isSelected?: boolean }>`
+const Style = styled.div<{ isActive?: boolean }>`
   position: relative;
   width: 100%;
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
   padding: ${({ theme }) => theme.spacing.xs};
-  background-color: ${({ theme, isSelected }) =>
-    isSelected ? theme.colors.background.quaternary : 'transparent'};
+  background-color: ${({ theme, isActive }) =>
+    isActive ? theme.colors.background.quaternary : 'transparent'};
   cursor: pointer;
   overflow: hidden;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
@@ -25,16 +26,21 @@ const Style = styled.div<{ isSelected?: boolean }>`
 `
 
 interface ICard {
-  title: string
+  heading: string
   onClick: () => void
-  isSelected?: boolean
+  isActive?: boolean
 }
 
-export function Card({ title, onClick, isSelected }: ICard) {
+export function Card({ heading, onClick, isActive }: ICard) {
   return (
-    <Style onClick={onClick} data-testid="Card" isSelected={isSelected}>
-      <Heading className="Card-heading" type="h5" marginBottom>
-        {title}
+    <Style onClick={onClick} data-testid="card" isActive={isActive}>
+      <Heading
+        className="Card-heading"
+        type="h5"
+        marginBottom
+        aria-label={isActive ? `${heading} is selected` : ''}
+      >
+        {heading}
       </Heading>
     </Style>
   )

@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { useListFiles, useReadCurrentFileName } from '../../../hooks'
 import { styled } from '../../../theme'
-import { Card } from '../../molecules'
 import { Spinner } from '../../atoms'
+import { Card } from '../../molecules'
 
 const Style = styled.div`
   grid-area: filelist;
@@ -39,8 +40,8 @@ export function CardList() {
             <Card
               key={`${file.sha}-${file.filename}`}
               onClick={handleCardClick.bind(null, file.filename)}
-              title={file.filename}
-              isSelected={currentFileName === file.filename}
+              heading={file.filename}
+              isActive={currentFileName === file.filename}
             />
           )
         })}

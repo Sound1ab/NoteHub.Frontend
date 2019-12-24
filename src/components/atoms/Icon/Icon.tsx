@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
+
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 
@@ -70,6 +71,7 @@ interface IIcon {
   onClick?: () => void
   className?: string
   title?: string
+  ariaLabel?: string
 }
 
 export function Icon({
@@ -83,6 +85,7 @@ export function Icon({
   size = 'xs',
   className,
   title,
+  ariaLabel,
 }: IIcon) {
   const FontAwesomeIconComponent = React.cloneElement(
     <FontAwesomeIcon
@@ -103,6 +106,7 @@ export function Icon({
       marginLeft={marginLeft}
       size={size}
       onClick={onClick}
+      aria-label={ariaLabel}
     >
       {FontAwesomeIconComponent}
     </Style>
@@ -116,6 +120,7 @@ export function Icon({
         color,
         size,
         onClick,
+        'aria-label': ariaLabel,
       },
       FontAwesomeIconComponent
     )

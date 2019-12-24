@@ -1,4 +1,5 @@
-import React, { forwardRef, Ref } from 'react'
+import React, { Ref, forwardRef } from 'react'
+
 import { styled } from '../../../theme'
 import { Heading, Icon, TIcons } from '..'
 
@@ -51,7 +52,7 @@ interface IDropdownMenuProps {
 export const Dropdown = forwardRef(
   ({ items }: IDropdownMenuProps, ref: Ref<HTMLUListElement>) => {
     return (
-      <Style ref={ref}>
+      <Style ref={ref} aria-label="Profile options">
         <div className="Dropdown-triangle" />
         {items.map(({ icon, label, onClick, prefix }) => (
           <button
@@ -59,6 +60,7 @@ export const Dropdown = forwardRef(
             type="button"
             onClick={onClick}
             className="Dropdown-item"
+            aria-label={label}
           >
             <li>
               <Icon

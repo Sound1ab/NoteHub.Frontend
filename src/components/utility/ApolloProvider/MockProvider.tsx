@@ -1,21 +1,22 @@
-import React, { ReactNode } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
-import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient } from 'apollo-client'
 import { SchemaLink } from 'apollo-link-schema'
 import {
-  makeExecutableSchema,
-  addMockFunctionsToSchema,
   IMocks,
+  addMockFunctionsToSchema,
+  makeExecutableSchema,
 } from 'graphql-tools'
-import { printSchema, buildClientSchema } from 'graphql/utilities'
+import { buildClientSchema, printSchema } from 'graphql/utilities'
+import React, { ReactNode } from 'react'
+
 import introspectionResult from '../../../schema.json'
-import { LocalData, localData as defaultLocalData } from './ApolloProvider'
+import { ILocalData, localData as defaultLocalData } from './ApolloProvider'
 
 export const MockProvider: React.FunctionComponent<{
   children: ReactNode
   mockResolvers?: IMocks
-  localData?: Partial<LocalData>
+  localData?: Partial<ILocalData>
 }> = ({ children, mockResolvers, localData }: any) => {
   const schemaSDL = printSchema(
     buildClientSchema({ __schema: introspectionResult.__schema as any })
@@ -36,9 +37,6 @@ export const MockProvider: React.FunctionComponent<{
       ...localData,
     },
   })
-
-  if (localData) {
-  }
 
   addMockFunctionsToSchema({ schema, mocks: mockResolvers })
 

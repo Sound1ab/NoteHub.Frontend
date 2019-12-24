@@ -1,6 +1,8 @@
-import React, { Dispatch, ReactNode, SetStateAction, useEffect } from 'react'
+import React, { Dispatch, ReactNode, SetStateAction } from 'react'
 import ReactDOM from 'react-dom'
 import { css } from 'styled-components'
+
+import { useClickOutside } from '../../../hooks'
 import { styled } from '../../../theme'
 
 const Style = styled.div<{ hasBackground: boolean }>`
@@ -34,21 +36,7 @@ export const Portal = React.forwardRef(
     { children, setOpen, domNode, hasBackground = false, className }: IPortal,
     ref?: React.Ref<HTMLElement>
   ) => {
-    useEffect(() => {
-      if (typeof ref === 'function') return
-
-      const closeMenu = (event: MouseEvent) => {
-        if (!ref || ref.current?.contains(event.target as Element)) {
-          return
-        }
-        setOpen(false)
-      }
-
-      document.addEventListener('mousedown', closeMenu)
-      return () => {
-        document.removeEventListener('mousedown', closeMenu)
-      }
-    }, [ref, setOpen])
+    useClickOutside(() => setOpen(false), ref)
 
     return ReactDOM.createPortal(
       <Style className={className} hasBackground={hasBackground}>

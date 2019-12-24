@@ -1,16 +1,17 @@
 import React, { ReactNode } from 'react'
-import { ApolloProvider as ApolloProviderHooks } from '@apollo/react-hooks'
-import { ApolloLink } from 'apollo-link'
-import { authLink, errorLink, httpLink } from '../../../services/Apollo/links'
-import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
+import { ApolloLink } from 'apollo-link'
+import { ApolloProvider as ApolloProviderHooks } from '@apollo/react-hooks'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 
-export interface LocalData {
+import { authLink, errorLink, httpLink } from '../../../services/Apollo/links'
+
+export interface ILocalData {
   currentRepoName: string | null
   currentFileName: string | null
 }
 
-export const localData: LocalData = {
+export const localData: ILocalData = {
   currentRepoName: null,
   currentFileName: null,
 }

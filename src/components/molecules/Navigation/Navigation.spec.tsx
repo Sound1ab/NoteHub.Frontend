@@ -1,9 +1,11 @@
-import { render, act, fireEvent } from '../../../test-utils'
 import '@testing-library/jest-dom/extend-expect'
-import React from 'react'
-import { Navigation } from './Navigation'
-import { MockProvider } from '../../utility'
+
 import { wait } from '@apollo/react-testing'
+import React from 'react'
+
+import { act, fireEvent, render } from '../../../test-utils'
+import { MockProvider } from '../../utility'
+import { Navigation } from './Navigation'
 
 describe('Navigation', () => {
   const setIsNewRepoOpen = jest.fn()
@@ -90,6 +92,6 @@ describe('Navigation', () => {
 
     await act(() => wait(0))
 
-    expect(getByLabelText('Add a new repo')).toBeDefined()
+    expect(getByLabelText('Repo name')).toBeDefined()
   })
 })

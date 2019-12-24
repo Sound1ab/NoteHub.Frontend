@@ -5,9 +5,10 @@ import React, {
   useRef,
   useState,
 } from 'react'
+
+import { useClickOutside, useCreateRepo } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Icon, Input } from '../../atoms'
-import { useCreateRepo } from '../../../hooks'
 
 const Style = styled.form<{ isPrivate: boolean }>`
   position: relative;
@@ -43,6 +44,7 @@ export function RepoInput({ setIsNewRepoOpen }: IRepoInput) {
     defaultState
   )
   const [createNewRepo] = useCreateRepo()
+  useClickOutside(() => setIsNewRepoOpen(false), wrapperRef)
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target
@@ -85,25 +87,12 @@ export function RepoInput({ setIsNewRepoOpen }: IRepoInput) {
     inputRef.current.ref.focus()
   }, [])
 
-  useLayoutEffect(() => {
-    const handleClick = (e: any) => {
-      if (wrapperRef?.current?.contains(e.target)) {
-        return
-      }
-      setIsNewRepoOpen(false)
-    }
-
-    document.addEventListener('mousedown', handleClick)
-    return () => {
-      document.removeEventListener('mousedown', handleClick)
-    }
-  }, [setIsNewRepoOpen])
-
   return (
     <Style
       ref={wrapperRef}
       isPrivate={isPrivate}
       onSubmit={handleCreateNewRepo}
+      aria-label={isPrivate ? 'Add a private new repo' : 'Add a new repo'}
     >
       <Icon
         onClick={handleOnClick}
@@ -112,12 +101,13 @@ export function RepoInput({ setIsNewRepoOpen }: IRepoInput) {
         icon="product-hunt"
         prefix="fab"
         marginRight
+        ariaLabel="Make this a public or private repo"
       />
       <Input
         ref={inputRef}
         value={name}
         onChange={handleOnChange}
-        aria="Add a new repo"
+        aria="Repo name"
         name="name"
       />
     </Style>

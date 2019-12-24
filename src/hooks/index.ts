@@ -1,6 +1,7 @@
 export * from './utils/useLocalStorage'
 export * from './utils/useColorModeFromLocalStorage'
 export * from './utils/useModalToggle'
+export * from './utils/useClickOutside'
 export * from './file/useCreateFile'
 export * from './file/useDeleteFile'
 export * from './file/useListFiles'
