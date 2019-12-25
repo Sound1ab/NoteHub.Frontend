@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react'
+
+import { styled } from '../../theme'
 import { useCreateImage } from './useCreateImage'
 import { useReadCurrentRepoName, useReadGithubUser } from '..'
-import { styled } from '../../theme'
 
 const Style = styled.input`
   display: none;
@@ -12,7 +13,7 @@ export function useDropzone() {
   const [loading, setLoading] = useState(false)
   const resolver = useRef<(value?: any | PromiseLike<any>) => void>(null)
   const rejecter = useRef<(value?: any | PromiseLike<any>) => void>(null)
-  const [createNewImage] = useCreateImage()
+  const [createImage] = useCreateImage()
   const { currentRepoName } = useReadCurrentRepoName()
   const user = useReadGithubUser()
 
@@ -27,7 +28,7 @@ export function useDropzone() {
     }
     setLoading(true)
     try {
-      await createNewImage({
+      await createImage({
         variables: {
           input: {
             content,

@@ -1,5 +1,6 @@
-import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
 import {
   CreateRepoMutation,
   CreateRepoMutationVariables,
@@ -7,8 +8,8 @@ import {
   ListReposQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
-import { useReadGithubUser } from '..'
 import { ListReposDocument } from './useListRepos'
+import { useReadGithubUser } from '..'
 
 export const CreateRepoDocument = gql`
   ${RepoFragment}

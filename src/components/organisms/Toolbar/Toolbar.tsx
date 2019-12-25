@@ -1,13 +1,17 @@
+import { useApolloClient } from '@apollo/react-hooks'
 import React, { MutableRefObject, ReactNode, useRef, useState } from 'react'
-import { styled } from '../../../theme'
-import { Button, Icon, IRef } from '../../atoms'
-import { CreateFileModal, DeleteFileModal, Profile } from '../../molecules'
+
 import {
   useColorModeFromLocalStorage,
+  useDeleteFile,
   useDropzone,
+  useReadCurrentFileName,
   useReadCurrentRepoName,
   useReadGithubUser,
 } from '../../../hooks'
+import { styled } from '../../../theme'
+import { Button, IRef, Icon } from '../../atoms'
+import { CreateFileModal, Profile } from '../../molecules'
 
 const Style = styled.div`
   grid-area: toolbar;
@@ -58,15 +62,17 @@ interface IRenderProps {
 }
 
 interface IToolbar {
-  children: (props: IRenderProps) => ReactNode
+  children?: (props: IRenderProps) => ReactNode
 }
 
 export function Toolbar({ children }: IToolbar) {
   const ref = useRef<IRef | null>(null)
+  const client = useApolloClient()
   const [isEdit, setIsEdit] = useState(true)
+  const [deleteFile] = useDeleteFile()
   const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
-  const [isDeleteFileModalOpen, setIsDeleteFileModalOpen] = useState(false)
   const { currentRepoName } = useReadCurrentRepoName()
+  const { currentFileName } = useReadCurrentFileName()
   const { toggleColorMode, isDarkMode } = useColorModeFromLocalStorage()
   const user = useReadGithubUser()
   const {
@@ -89,6 +95,31 @@ export function Toolbar({ children }: IToolbar) {
     setIsEdit(isEdit => !isEdit)
   }
 
+  async function handleDeleteFile() {
+    console.log('here')
+    if (!user || !currentRepoName || !currentFileName) {
+      alert('Error')
+      return
+    }
+
+    try {
+      await deleteFile({
+        variables: {
+          input: {
+            filename: currentFileName,
+            repo: currentRepoName,
+            username: user.login,
+          },
+        },
+      })
+      client.writeData({
+        data: { currentFileName: null },
+      })
+    } catch {
+      alert('There was an issue deleting your file, please try again')
+    }
+  }
+
   return (
     <>
       <Dropzone />
@@ -98,12 +129,14 @@ export function Toolbar({ children }: IToolbar) {
             isDisabled={!currentRepoName}
             className="Toolbar-button"
             onClick={setIsCreateFileModalOpen.bind(null, true)}
+            ariaLabel="Create a new file"
           >
             <Icon size="sm" icon="edit" prefix="fa" />
           </Button>
           <Button
-            isDisabled={!currentRepoName}
-            onClick={setIsDeleteFileModalOpen.bind(null, true)}
+            isDisabled={!currentRepoName || !currentFileName}
+            onClick={handleDeleteFile}
+            ariaLabel="Delete the selected file"
           >
             <Icon size="sm" icon="trash" prefix="fa" />
           </Button>
@@ -113,10 +146,17 @@ export function Toolbar({ children }: IToolbar) {
             isActive={isEdit}
             className="Toolbar-button"
             onClick={handleSetPreview}
+            ariaLabel={
+              isEdit ? 'View file in preview' : 'View file in markdown'
+            }
           >
             <Icon size="sm" icon="pen" prefix="fa" />
           </Button>
-          <Button className="Toolbar-button" onClick={uploadImage}>
+          <Button
+            className="Toolbar-button"
+            onClick={uploadImage}
+            ariaLabel="Upload an image"
+          >
             <Icon size="sm" icon="image" prefix="fa" />
           </Button>
           <Button
@@ -134,12 +174,8 @@ export function Toolbar({ children }: IToolbar) {
           isOpen={isCreateFileModalOpen}
           onRequestClose={setIsCreateFileModalOpen.bind(null, false)}
         />
-        <DeleteFileModal
-          isOpen={isDeleteFileModalOpen}
-          onRequestClose={setIsDeleteFileModalOpen.bind(null, false)}
-        />
       </Style>
-      {children({ isEdit, ref, isImageUploading })}
+      {children ? children({ isEdit, ref, isImageUploading }) : null}
     </>
   )
 }

@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+
 import { styled } from '../../../theme'
 
 const Style = styled.button<Pick<IButton, 'isActive'>>`
@@ -33,6 +34,7 @@ interface IButton {
   children?: ReactNode
   onClick: () => void
   className?: string
+  ariaLabel?: string
 }
 
 export function Button({
@@ -41,6 +43,7 @@ export function Button({
   children,
   onClick,
   className,
+  ariaLabel,
 }: IButton) {
   return (
     <Style
@@ -48,6 +51,7 @@ export function Button({
       disabled={isDisabled}
       className={className}
       onClick={onClick}
+      aria-label={ariaLabel}
     >
       {children}
     </Style>

@@ -4,6 +4,10 @@ import { wait } from '@apollo/react-testing'
 import React from 'react'
 
 import { act, cleanup, fireEvent, render } from '../../../test-utils'
+import {
+  MutationCreateRepoArgs,
+  Repo,
+} from '../../apollo/generated_components_typings'
 import { MockProvider } from '../../utility'
 import { Sidebar } from './Sidebar'
 
@@ -34,11 +38,28 @@ describe('Sidebar', () => {
         items: repos,
       }),
     }),
+    Mutation: () => ({
+      createRepo: (_: any, { input }: MutationCreateRepoArgs): Repo => ({
+        id: 3,
+        node_id: 'MOCK_NODE_ID',
+        name: input.name,
+        full_name: 'MOCK_FULL_NAME',
+        description: input.description,
+        private: input.private ?? false,
+      }),
+    }),
+    GithubUser: () => ({
+      id: 1,
+      login: 'MOCK_LOGIN',
+      avatar_url: 'MOCK_AVATAR_URL',
+      html_url: 'MOCK_HTML_URL',
+      name: 'MOCK_NAME',
+    }),
   }
 
   it('should list repos', async () => {
     const [{ name: firstRepoName }, { name: secondRepoName }] = repos
-    const { getByText, debug } = render(
+    const { getByText } = render(
       <MockProvider mockResolvers={resolvers}>
         <Sidebar />
       </MockProvider>
@@ -46,14 +67,14 @@ describe('Sidebar', () => {
 
     await act(() => wait(0))
 
-    console.log(debug())
-
     expect(getByText(firstRepoName)).toBeDefined()
     expect(getByText(secondRepoName)).toBeDefined()
   })
 
   it('should add new repos', async () => {
-    const { getByText, debug } = render(
+    const newRepoName = 'MOCK_REPO_NAME'
+
+    const { getByText, getByLabelText, queryByLabelText } = render(
       <MockProvider mockResolvers={resolvers}>
         <Sidebar />
       </MockProvider>
@@ -62,5 +83,23 @@ describe('Sidebar', () => {
     await act(() => wait(0))
 
     fireEvent.click(getByText('New Repo'))
+
+    await act(() => wait(0))
+
+    const input = getByLabelText('Repo name')
+
+    fireEvent.change(input, {
+      target: { value: newRepoName },
+    })
+
+    const form = getByLabelText('Repo name')
+
+    fireEvent.submit(form)
+
+    await act(() => wait(0))
+
+    expect(queryByLabelText('Repo name')).toBeNull()
+
+    expect(getByText(newRepoName)).toBeDefined()
   })
 })

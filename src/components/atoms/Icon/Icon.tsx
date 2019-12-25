@@ -5,11 +5,11 @@ import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 
 // eslint-disable-next-line
-const Style = styled.a<{
+const Style = styled.div<{
   marginRight: boolean
   marginLeft: boolean
   color?: COLOR
-  size: string
+  size: 'xs' | 'sm' | 'lg'
 }>`
   position: relative;
   display: inline-block !important;
@@ -63,7 +63,6 @@ export type TIcons =
 interface IIcon {
   icon: TIcons
   color?: COLOR
-  link?: string
   prefix?: 'fab' | 'fa'
   marginRight?: boolean
   marginLeft?: boolean
@@ -75,7 +74,6 @@ interface IIcon {
 }
 
 export function Icon({
-  link,
   icon,
   prefix,
   onClick,
@@ -87,42 +85,22 @@ export function Icon({
   title,
   ariaLabel,
 }: IIcon) {
-  const FontAwesomeIconComponent = React.cloneElement(
-    <FontAwesomeIcon
-      icon={[prefix as any, icon]}
-      size={size}
-      className="Icon-svg"
-      title={title}
-    />
-  )
-  return link ? (
+  return (
     <Style
       className={className}
       color={color}
-      href={link}
-      rel="noopener"
-      target="_blank"
       marginRight={marginRight}
       marginLeft={marginLeft}
       size={size}
       onClick={onClick}
       aria-label={ariaLabel}
     >
-      {FontAwesomeIconComponent}
+      <FontAwesomeIcon
+        icon={[prefix as any, icon]}
+        size={size}
+        className="Icon-svg"
+        title={title}
+      />
     </Style>
-  ) : (
-    React.createElement(
-      Style.withComponent('div'),
-      {
-        className,
-        marginRight,
-        marginLeft,
-        color,
-        size,
-        onClick,
-        'aria-label': ariaLabel,
-      },
-      FontAwesomeIconComponent
-    )
   )
 }

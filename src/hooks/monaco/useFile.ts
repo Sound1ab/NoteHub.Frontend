@@ -1,8 +1,9 @@
-import { debounce } from '../../utils'
 import { useEffect, useRef, useState } from 'react'
+
 import { File } from '../../components/apollo/generated_components_typings'
-import { useUpdateFile } from '../file/useUpdateFile'
+import { debounce } from '../../utils'
 import { useReadFile } from '../file/useReadFile'
+import { useUpdateFile } from '../file/useUpdateFile'
 import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
 import { useReadGithubUser } from '../user/useReadGithubUser'
 
@@ -11,8 +12,6 @@ let abortController: AbortController
 const debouncedSave = debounce((updateFile, options) => {
   const controller = new window.AbortController()
   abortController = controller
-
-  console.log('options', options)
 
   updateFile({
     ...options,
