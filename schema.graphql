@@ -1,110 +1,111 @@
 # This file was generated based on ".graphqlconfig". Do not edit manually.
 
 schema {
-    query: Query
-    mutation: Mutation
+  query: Query
+  mutation: Mutation
 }
 
 type File {
-    _links: Links!
-    content: String
-    excerpt: String
-    filename: String!
-    path: String!
-    sha: String!
+  _links: Links!
+  content: String
+  excerpt: String
+  filename: String!
+  path: String!
+  repo: String!
+  sha: String!
 }
 
 type GithubUser {
-    avatar_url: String!
-    html_url: String!
-    id: Int!
-    login: String!
-    name: String!
+  avatar_url: String!
+  html_url: String!
+  id: Int!
+  login: String!
+  name: String!
 }
 
 type Links {
-    html: String!
+  html: String!
 }
 
 type ModelFileConnection {
-    items: [File!]!
+  items: [File!]!
 }
 
 type ModelRepoConnection {
-    items: [Repo!]!
+  items: [Repo!]!
 }
 
 type Mutation {
-    createFile(input: CreateFileInput!): File
-    createImage(input: CreateFileInput!): File
-    createRepo(input: CreateRepoInput!): Repo
-    deleteFile(input: DeleteFileInput!): File
-    deleteImage(input: DeleteFileInput!): File
-    deleteRepo(input: DeleteRepoInput!): Repo
-    updateFile(input: UpdateFileInput!): File
-    updateImage(input: UpdateFileInput!): File
-    updateRepo(input: UpdateRepoInput!): Repo
+  createFile(input: CreateFileInput!): File
+  createImage(input: CreateFileInput!): File
+  createRepo(input: CreateRepoInput!): Repo
+  deleteFile(input: DeleteFileInput!): File
+  deleteImage(input: DeleteFileInput!): File
+  deleteRepo(input: DeleteRepoInput!): Repo
+  updateFile(input: UpdateFileInput!): File
+  updateImage(input: UpdateFileInput!): File
+  updateRepo(input: UpdateRepoInput!): Repo
 }
 
 type Query {
-    listFiles(repo: String!, username: String!): ModelFileConnection!
-    listImages(repo: String!, username: String!): ModelFileConnection!
-    listRepos: ModelRepoConnection!
-    readFile(filename: String!, repo: String!, username: String!): File
-    readGithubUser: GithubUser
-    readGithubUserAccessToken(code: String!, state: String!): String!
-    readImage(filename: String!, repo: String!, username: String!): File
-    readRepo(repo: String!, username: String!): Repo
+  listFiles(repo: String!, username: String!): ModelFileConnection!
+  listImages(repo: String!, username: String!): ModelFileConnection!
+  listRepos: ModelRepoConnection!
+  readFile(filename: String!, repo: String!, username: String!): File
+  readGithubUser: GithubUser
+  readGithubUserAccessToken(code: String!, state: String!): String!
+  readImage(filename: String!, repo: String!, username: String!): File
+  readRepo(repo: String!, username: String!): Repo
 }
 
 type Repo {
-    description: String
-    full_name: String!
-    id: Int!
-    name: String!
-    node_id: String!
-    private: Boolean!
+  description: String
+  full_name: String!
+  id: Int!
+  name: String!
+  node_id: String!
+  private: Boolean!
 }
 
 enum CacheControlScope {
-    PRIVATE
-    PUBLIC
+  PRIVATE
+  PUBLIC
 }
 
 input CreateFileInput {
-    content: String
-    filename: String!
-    repo: String!
-    username: String!
+  content: String
+  filename: String!
+  repo: String!
+  username: String!
 }
 
 input CreateRepoInput {
-    description: String
-    name: String!
-    private: Boolean
+  description: String
+  name: String!
+  private: Boolean
 }
 
 input DeleteFileInput {
-    filename: String!
-    repo: String!
-    username: String!
+  filename: String!
+  repo: String!
+  username: String!
 }
 
 input DeleteRepoInput {
-    repo: String!
-    username: String!
+  repo: String!
+  username: String!
 }
 
 input UpdateFileInput {
-    content: String
-    filename: String!
-    repo: String!
-    username: String!
+  content: String
+  filename: String!
+  repo: String!
+  username: String!
 }
 
 input UpdateRepoInput {
-    description: String
-    name: String
-    repo: String!
-    username: String!
+  description: String
+  name: String
+  repo: String!
+  username: String!
 }

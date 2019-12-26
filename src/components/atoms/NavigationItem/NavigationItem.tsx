@@ -1,6 +1,7 @@
 import React from 'react'
-import { Heading, Icon } from '..'
+
 import { styled } from '../../../theme'
+import { Heading, Icon } from '..'
 
 const Style = styled.div<{ isActive: boolean }>`
   position: relative;
@@ -61,7 +62,7 @@ export function NavigationItem({
         )}
         <Heading
           className="NavigationItem-heading"
-          type="h5"
+          type="h4"
           aria-label={isActive ? `${heading} is selected` : ''}
           data-testid="navigation-item-heading"
         >

@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { styled } from '../../../theme'
+import { MarkdownPreview } from '../../atoms'
+import { MarkdownEditor } from '../../molecules'
 import { CardList, Sidebar, Toolbar } from '../../organisms'
-import { useFile } from '../../../hooks'
-import { MarkdownPreview, Monaco } from '../../atoms'
 
 const Style = styled.div`
   display: flex;
@@ -25,8 +26,6 @@ const Style = styled.div`
 `
 
 export function Dashboard() {
-  const { setValue, loading: isLoadingFile, value } = useFile()
-
   return (
     <Style>
       <div className="Dashboard-page">
@@ -34,16 +33,7 @@ export function Dashboard() {
         <CardList />
         <Toolbar>
           {({ isEdit, isImageUploading, ref }) =>
-            isEdit ? (
-              <Monaco
-                onChange={setValue}
-                value={value}
-                loading={isImageUploading || isLoadingFile}
-                ref={ref}
-              />
-            ) : (
-              <MarkdownPreview value={value} />
-            )
+            isEdit ? <MarkdownEditor /> : <MarkdownPreview />
           }
         </Toolbar>
       </div>

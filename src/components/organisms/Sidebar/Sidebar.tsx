@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
 import { Navigation, NewRepo } from '../../molecules'
@@ -6,7 +7,7 @@ import { Navigation, NewRepo } from '../../molecules'
 const Style = styled.div`
   grid-area: sidebar;
   height: 100%;
-  background-color: ${({ theme }) => theme.colors.background.tertiary};
+  background-color: ${({ theme }) => theme.colors.background.primary};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -30,6 +31,7 @@ const Style = styled.div`
 
   .Sidebar-title-heading {
     color: ${({ theme }) => theme.colors.text.primary};
+    font-weight: bold;
   }
 `
 

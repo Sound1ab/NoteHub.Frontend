@@ -1,5 +1,6 @@
-import { COLOR_MODE } from '../enums'
 import Typography from 'typography'
+
+import { COLOR_MODE } from '../enums'
 
 export const createSpacing = (typography: Typography) => {
   return {
@@ -39,13 +40,13 @@ export const colors = {
   [COLOR_MODE.DARK]: {
     accent: '#ff00b2',
     background: {
-      primary: '#272822',
+      primary: '#2b2b2b',
       secondary: '#282828',
       tertiary: '#1e1e1e',
       quaternary: '#3a3a3a',
       quinary: '#484848',
     },
-    border: '#303030',
+    border: '#4c4c4c',
     link: {
       active: '#e8e8e8',
       hover: '#f0f0f0',

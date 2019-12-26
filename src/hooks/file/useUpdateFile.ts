@@ -1,5 +1,6 @@
-import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
 import {
   ReadFileQuery,
   ReadFileQueryVariables,
@@ -7,12 +8,8 @@ import {
   UpdateFileMutationVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
-import {
-  useReadCurrentRepoName,
-  useReadCurrentFileName,
-  useReadGithubUser,
-} from '..'
 import { ReadFileDocument } from './useReadFile'
+import { useReadGithubUser } from '..'
 
 export const UpdateFileDocument = gql`
   ${FileFragment}
@@ -24,8 +21,6 @@ export const UpdateFileDocument = gql`
 `
 
 export function useUpdateFile() {
-  const { currentRepoName } = useReadCurrentRepoName()
-  const { currentFileName } = useReadCurrentFileName()
   const user = useReadGithubUser()
 
   return useMutation<UpdateFileMutation, UpdateFileMutationVariables>(
@@ -33,10 +28,9 @@ export function useUpdateFile() {
     {
       update: (cache, { data }) => {
         const updatedFile = data && data.updateFile
-        if (!updatedFile || !currentFileName || !currentRepoName || !user)
+        if (!updatedFile || !user) {
           return
-
-        console.log(updatedFile.content)
+        }
 
         cache.writeQuery<ReadFileQuery, ReadFileQueryVariables>({
           data: {
@@ -44,8 +38,8 @@ export function useUpdateFile() {
           },
           query: ReadFileDocument,
           variables: {
-            filename: currentFileName,
-            repo: currentRepoName,
+            filename: updatedFile?.filename,
+            repo: updatedFile?.repo,
             username: user.login,
           },
         })

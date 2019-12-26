@@ -1,7 +1,7 @@
 overwrite: true
-schema: "https://zwhkm1bc30.execute-api.eu-west-1.amazonaws.com/prod/graphql"
+schema: 'http://localhost:3000/graphql'
 generates:
   src/schema.json:
-    schema: "src/schema/local.graphql"
+    schema: 'src/schema/local.graphql'
     plugins:
-      - "introspection"
+      - 'introspection'

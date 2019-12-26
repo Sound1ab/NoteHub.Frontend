@@ -19,6 +19,7 @@ describe('CardList', () => {
       content: 'MOCK_CONTENT_2',
       excerpt: 'MOCK_EXCERPT_2',
       sha: 'MOCK_SHA_2',
+      repo: 'MOCK_REPO_2',
       _links: {
         html: 'MOCK_HTML_LINK_2',
       },
@@ -29,6 +30,7 @@ describe('CardList', () => {
       content: 'MOCK_CONTENT_1',
       excerpt: 'MOCK_EXCERPT_1',
       sha: 'MOCK_SHA_1',
+      repo: 'MOCK_REPO_1',
       _links: {
         html: 'MOCK_HTML_LINK_1',
       },

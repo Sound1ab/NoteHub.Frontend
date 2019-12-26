@@ -22,6 +22,7 @@ const Style = styled.div<{ isActive?: boolean }>`
 
   .Card-heading {
     color: ${({ theme }) => theme.colors.text.primary};
+    margin-bottom: 0;
   }
 `
 
@@ -36,7 +37,7 @@ export function Card({ heading, onClick, isActive }: ICard) {
     <Style onClick={onClick} data-testid="card" isActive={isActive}>
       <Heading
         className="Card-heading"
-        type="h5"
+        type="h4"
         marginBottom
         aria-label={isActive ? `${heading} is selected` : ''}
       >

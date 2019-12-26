@@ -1,6 +1,6 @@
 /* eslint-disable */
+export type Maybe<T> = T | null
 
-type Maybe<T> = T | null
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -40,15 +40,18 @@ export type DeleteRepoInput = {
 }
 
 export type File = {
+  __typename?: 'File'
   filename: Scalars['String']
   path: Scalars['String']
   content?: Maybe<Scalars['String']>
   excerpt?: Maybe<Scalars['String']>
   sha: Scalars['String']
   _links: Links
+  repo: Scalars['String']
 }
 
 export type GithubUser = {
+  __typename?: 'GithubUser'
   id: Scalars['Int']
   login: Scalars['String']
   avatar_url: Scalars['String']
@@ -57,18 +60,22 @@ export type GithubUser = {
 }
 
 export type Links = {
+  __typename?: 'Links'
   html: Scalars['String']
 }
 
 export type ModelFileConnection = {
+  __typename?: 'ModelFileConnection'
   items: Array<File>
 }
 
 export type ModelRepoConnection = {
+  __typename?: 'ModelRepoConnection'
   items: Array<Repo>
 }
 
 export type Mutation = {
+  __typename?: 'Mutation'
   createFile?: Maybe<File>
   updateFile?: Maybe<File>
   deleteFile?: Maybe<File>
@@ -117,6 +124,7 @@ export type MutationDeleteRepoArgs = {
 }
 
 export type Query = {
+  __typename?: 'Query'
   readFile?: Maybe<File>
   listFiles: ModelFileConnection
   readImage?: Maybe<File>
@@ -163,6 +171,7 @@ export type QueryReadGithubUserAccessTokenArgs = {
 }
 
 export type Repo = {
+  __typename?: 'Repo'
   id: Scalars['Int']
   node_id: Scalars['String']
   name: Scalars['String']
@@ -187,7 +196,7 @@ export type UpdateRepoInput = {
 
 export type FileFragment = { __typename?: 'File' } & Pick<
   File,
-  'filename' | 'path' | 'content' | 'excerpt' | 'sha'
+  'filename' | 'path' | 'content' | 'excerpt' | 'sha' | 'repo'
 > & { _links: { __typename?: 'Links' } & Pick<Links, 'html'> }
 
 export type RepoFragment = { __typename?: 'Repo' } & Pick<
@@ -364,11 +373,9 @@ export interface IntrospectionResultData {
     }[]
   }
 }
-
 const result: IntrospectionResultData = {
   __schema: {
     types: [],
   },
 }
-
 export default result

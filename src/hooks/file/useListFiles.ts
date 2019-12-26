@@ -1,12 +1,12 @@
-import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
 import {
   ListFilesQuery,
   ListFilesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
-import { useReadGithubUser } from '../user/useReadGithubUser'
-import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
+import { useReadCurrentRepoName, useReadGithubUser } from '../'
 
 export const ListFilesDocument = gql`
   ${FileFragment}

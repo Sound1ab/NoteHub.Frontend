@@ -11,6 +11,7 @@ const Style = styled.div`
 
   .NewRepo-heading {
     color: ${({ theme }) => theme.colors.text.primary};
+    font-weight: bold;
   }
 
   svg {

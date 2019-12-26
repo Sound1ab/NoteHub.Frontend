@@ -10,7 +10,7 @@ import {
   useReadGithubUser,
 } from '../../../hooks'
 import { styled } from '../../../theme'
-import { Button, IRef, Icon } from '../../atoms'
+import { Button, Icon } from '../../atoms'
 import { CreateFileModal, Profile } from '../../molecules'
 
 const Style = styled.div`
@@ -57,7 +57,7 @@ const Style = styled.div`
 
 interface IRenderProps {
   isEdit: boolean
-  ref: MutableRefObject<IRef | null>
+  ref: MutableRefObject<null>
   isImageUploading: boolean
 }
 
@@ -66,7 +66,7 @@ interface IToolbar {
 }
 
 export function Toolbar({ children }: IToolbar) {
-  const ref = useRef<IRef | null>(null)
+  const ref = useRef<null>(null)
   const client = useApolloClient()
   const [isEdit, setIsEdit] = useState(true)
   const [deleteFile] = useDeleteFile()
@@ -85,7 +85,7 @@ export function Toolbar({ children }: IToolbar) {
     try {
       const filename = await selectFileAndUpload()
       const text = `![](https://github.com/${user?.login}/noted-app-notes--${currentRepoName}/blob/master/images/${filename}?raw=true)`
-      ref?.current?.insertTextAtCursorPosition(text)
+      // ref?.current?.insertTextAtCursorPosition(text)
     } catch (error) {
       console.log(`Could not upload image: ${error}`)
     }

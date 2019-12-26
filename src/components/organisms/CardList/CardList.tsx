@@ -10,7 +10,7 @@ const Style = styled.div`
   position: relative;
   flex: 0 0 auto;
   height: 100%;
-  background-color: ${({ theme }) => theme.colors.background.secondary};
+  background-color: ${({ theme }) => theme.colors.background.primary};
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   border-right: 1px solid ${({ theme }) => theme.colors.border};

@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { File } from '../../components/apollo/generated_components_typings'
 import { debounce } from '../../utils'
-import { useReadFile } from '../file/useReadFile'
-import { useUpdateFile } from '../file/useUpdateFile'
-import { useReadCurrentRepoName } from '../Repo/useReadCurrentRepoName'
-import { useReadGithubUser } from '../user/useReadGithubUser'
+import {
+  useReadCurrentFileName,
+  useReadCurrentRepoName,
+  useReadFile,
+  useReadGithubUser,
+  useUpdateFile,
+} from '..'
 
 let abortController: AbortController
 
@@ -21,34 +23,22 @@ const debouncedSave = debounce((updateFile, options) => {
 
 export function useFile() {
   const [stateValue, setStateValue] = useState('')
-  const latestFile = useRef<File | null | undefined>(null)
   const user = useReadGithubUser()
-  const updateFile = useUpdateFile()
+  const [updateFile] = useUpdateFile()
   const { file, loading } = useReadFile()
   const { currentRepoName } = useReadCurrentRepoName()
-
-  useEffect(() => {
-    latestFile.current = file
-  }, [file])
-
+  const { currentFileName } = useReadCurrentFileName()
   const path = file && `${currentRepoName}-${file.path}`
 
-  const content = file?.content
-
   useEffect(() => {
-    setStateValue(latestFile?.current?.content ?? '')
-  }, [content])
-
-  const setValue = (newValue: string) => {
-    if (
-      !file ||
-      typeof file.content !== 'string' ||
-      newValue === stateValue ||
-      latestFile?.current?.path !== file.path
-    ) {
+    // If content changes
+    if (file?.filename !== currentFileName) {
       return
     }
+    setStateValue(file?.content ?? '')
+  }, [file?.content, file?.filename])
 
+  const setValue = (newValue: string) => {
     setStateValue(newValue)
 
     abortController && abortController.abort()
@@ -57,7 +47,7 @@ export function useFile() {
       variables: {
         input: {
           content: newValue,
-          filename: file.filename,
+          filename: file?.filename ?? '',
           repo: currentRepoName,
           username: user?.login,
         },
@@ -66,7 +56,7 @@ export function useFile() {
   }
 
   return {
-    value: stateValue,
+    value: stateValue ?? '',
     setValue,
     loading,
     path,

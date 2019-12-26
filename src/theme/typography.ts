@@ -1,9 +1,10 @@
 import Typography from 'typography'
+
 import { TColors } from './index'
 
 export const createTypography = (colors: TColors) => {
   return new Typography({
-    baseFontSize: '16px',
+    baseFontSize: '14px',
     bodyFontFamily: [
       '-apple-system',
       'BlinkMacSystemFont',
@@ -28,8 +29,9 @@ export const createTypography = (colors: TColors) => {
       'Helvetica Neue',
       'sans-serif',
     ],
+    scaleRatio: 2.2,
     headerWeight: 300,
-    overrideThemeStyles: ({ rhythm }) => ({
+    overrideThemeStyles: () => ({
       form: {
         marginBottom: 0,
       },
@@ -41,21 +43,18 @@ export const createTypography = (colors: TColors) => {
       },
       h1: {
         color: colors.accent,
+        fontWeight: 'bold',
       },
       h2: {
         color: colors.accent,
+        fontWeight: 'bold',
       },
       h3: {
         color: colors.accent,
+        fontWeight: 'bold',
       },
       h4: {
         color: colors.accent,
-      },
-      h5: {
-        marginBottom: rhythm(0.25),
-      },
-      h6: {
-        marginBottom: rhythm(0.25),
       },
     }),
   })

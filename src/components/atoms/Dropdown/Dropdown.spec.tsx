@@ -1,8 +1,7 @@
 import React from 'react'
-import { cleanup, render, fireEvent } from '../../../test-utils'
-import { Dropdown } from './Dropdown'
 
-jest.mock('monaco-editor')
+import { cleanup, fireEvent, render } from '../../../test-utils'
+import { Dropdown } from './Dropdown'
 
 afterEach(cleanup)
 

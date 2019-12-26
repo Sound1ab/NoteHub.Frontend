@@ -1,8 +1,11 @@
+import 'highlight.js/styles/darkula.css'
+
+import hljs from 'highlight.js'
 import MarkdownIt from 'markdown-it'
 import React, { useMemo } from 'react'
+
+import { useFile } from '../../../hooks'
 import { styled } from '../../../theme'
-import hljs from 'highlight.js'
-import 'highlight.js/styles/darkula.css'
 
 const Style = styled.div`
   position: relative;
@@ -11,12 +14,6 @@ const Style = styled.div`
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-
-  h1,
-  h2 {
-    border-bottom: solid 1px ${({ theme }) => theme.colors.accent};
-    padding-bottom: ${({ theme }) => theme.rhythm(0.5)};
-  }
 `
 
 const markdown: any = MarkdownIt({
@@ -41,11 +38,9 @@ const markdown: any = MarkdownIt({
   },
 })
 
-interface IMarkdownPreview {
-  value: string
-}
+export function MarkdownPreview() {
+  const { value } = useFile()
 
-export function MarkdownPreview({ value }: IMarkdownPreview) {
   const html = useMemo<string>(() => markdown.render(value), [value])
 
   return (
