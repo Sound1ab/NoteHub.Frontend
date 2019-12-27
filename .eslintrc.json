@@ -24,6 +24,7 @@
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/member-delimiter-style": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
     "react/display-name": "off"
   },
   "settings": {

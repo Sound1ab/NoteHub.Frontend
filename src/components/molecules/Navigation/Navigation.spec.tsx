@@ -1,39 +1,14 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import { wait } from '@apollo/react-testing'
 import React from 'react'
 
-import { act, fireEvent, render } from '../../../test-utils'
+import { repos, resolvers } from '../../../schema/mockResolvers'
+import { fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { Navigation } from './Navigation'
 
 describe('Navigation', () => {
   const setIsNewRepoOpen = jest.fn()
-  const repos = [
-    {
-      description: 'MOCK_DESCRIPTION_2',
-      full_name: 'MOCK_FULL_NAME_2',
-      id: 2,
-      name: 'MOCK_NAME_2',
-      node_id: 'MOCK_ID_2',
-      private: false,
-    },
-    {
-      description: 'MOCK_DESCRIPTION_1',
-      full_name: 'MOCK_FULL_NAME_1',
-      id: 1,
-      name: 'MOCK_NAME_1',
-      node_id: 'MOCK_ID_1',
-      private: true,
-    },
-  ]
-  const resolvers = {
-    Query: () => ({
-      listRepos: () => ({
-        items: repos,
-      }),
-    }),
-  }
 
   it('should display navigation items in alphabetical order', async () => {
     const { getByText, getAllByTestId } = await render(
@@ -69,9 +44,7 @@ describe('Navigation', () => {
       `${activeRepoName} is selected`
     )
 
-    fireEvent.click(getByText(inactiveRepoName))
-
-    await act(() => wait(0))
+    await fireEvent.click(getByText(inactiveRepoName))
 
     expect(getByText(inactiveRepoName)).toHaveAttribute(
       'aria-label',

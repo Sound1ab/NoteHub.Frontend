@@ -19,7 +19,7 @@ describe('NavigationItem', () => {
       />
     )
 
-    fireEvent.click(getByText(heading))
+    await fireEvent.click(getByText(heading))
 
     expect(onClick).toBeCalled()
   })

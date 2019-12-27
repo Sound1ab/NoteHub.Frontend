@@ -1,9 +1,8 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import { wait } from '@apollo/react-testing'
 import React from 'react'
 
-import { act, render } from '../../../test-utils'
+import { render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { MarkdownPreview } from './MarkdownPreview'
 
@@ -23,8 +22,6 @@ describe('MarkdownPreview', () => {
         <MarkdownPreview />
       </MockProvider>
     )
-
-    await act(() => wait(0))
 
     expect(getByText('some heading')).toBeDefined()
   })

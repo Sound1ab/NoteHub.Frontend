@@ -15,7 +15,7 @@ describe('NewRepo', () => {
       <NewRepo setIsNewRepoOpen={setIsNewRepoOpen} />
     )
 
-    fireEvent.click(getByText('New Repo'))
+    await fireEvent.click(getByText('New Repo'))
 
     expect(setIsNewRepoOpen).toBeCalled()
   })

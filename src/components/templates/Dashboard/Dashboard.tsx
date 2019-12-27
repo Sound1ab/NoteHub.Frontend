@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { useCommand } from '../../../hooks'
 import { styled } from '../../../theme'
 import { MarkdownPreview } from '../../atoms'
 import { MarkdownEditor } from '../../molecules'
@@ -26,16 +27,32 @@ const Style = styled.div`
 `
 
 export function Dashboard() {
+  const {
+    isEdit,
+    handleSetEdit,
+    handleImageUpload,
+    handleDeleteFile,
+    Dropzone,
+    setMarkdownCursorPosition,
+  } = useCommand()
+
   return (
     <Style>
+      <Dropzone />
       <div className="Dashboard-page">
         <Sidebar />
         <CardList />
-        <Toolbar>
-          {({ isEdit, isImageUploading, ref }) =>
-            isEdit ? <MarkdownEditor /> : <MarkdownPreview />
-          }
-        </Toolbar>
+        <Toolbar
+          isEdit={isEdit}
+          handleDeleteFile={handleDeleteFile}
+          handleImageUpload={handleImageUpload}
+          handleSetEdit={handleSetEdit}
+        />
+        {isEdit ? (
+          <MarkdownEditor setPosition={setMarkdownCursorPosition} />
+        ) : (
+          <MarkdownPreview />
+        )}
       </div>
     </Style>
   )

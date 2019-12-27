@@ -16,7 +16,7 @@ describe('Card', () => {
 
     const heading = getByText(title)
 
-    fireEvent.click(heading)
+    await fireEvent.click(heading)
 
     expect(onClick).toBeCalled()
   })

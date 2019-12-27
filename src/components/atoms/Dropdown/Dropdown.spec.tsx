@@ -36,7 +36,7 @@ describe('Dropdown', () => {
       const itemIcon = getByTitle(`${label} icon`)
       expect(itemIcon).toBeDefined()
 
-      fireEvent.click(itemLabel)
+      await fireEvent.click(itemLabel)
 
       expect(onClick).toBeCalled()
     }

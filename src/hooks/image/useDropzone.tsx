@@ -98,6 +98,7 @@ export function useDropzone() {
         tabIndex={-1}
         type="file"
         onChange={handleDrop}
+        aria-label="Upload file"
       />
     )
   }

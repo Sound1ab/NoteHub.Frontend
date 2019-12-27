@@ -1,10 +1,9 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import { wait } from '@apollo/react-testing'
 import React from 'react'
 
 import { useCreateRepo } from '../../../hooks'
-import { act, cleanup, fireEvent, render } from '../../../test-utils'
+import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { RepoInput } from './RepoInput'
 
@@ -31,11 +30,9 @@ describe('RepoInput', () => {
       </MockProvider>
     )
 
-    await act(() => wait(0))
-
     expect(getByLabelText('Repo name')).toBeDefined()
 
-    fireEvent.click(getByLabelText('Make this a public or private repo'))
+    await fireEvent.click(getByLabelText('Make this a public or private repo'))
 
     expect(getByLabelText('Add a private new repo')).toBeDefined()
   })
@@ -52,11 +49,9 @@ describe('RepoInput', () => {
       </MockProvider>
     )
 
-    await act(() => wait(0))
-
     const input = getByLabelText('Repo name')
 
-    fireEvent.change(input, {
+    await fireEvent.change(input, {
       target: { value: newRepoName },
     })
 
@@ -64,9 +59,7 @@ describe('RepoInput', () => {
 
     const form = getByLabelText('Repo name')
 
-    fireEvent.submit(form)
-
-    await act(() => wait(0))
+    await fireEvent.submit(form)
 
     expect(createNewRepo).toBeCalledWith({
       variables: { input: { name: newRepoName, private: false } },
@@ -85,19 +78,15 @@ describe('RepoInput', () => {
       </MockProvider>
     )
 
-    await act(() => wait(0))
-
     const input = getByLabelText('Repo name')
 
-    fireEvent.change(input, {
+    await fireEvent.change(input, {
       target: { value: newRepoName },
     })
 
     const form = getByLabelText('Repo name')
 
-    fireEvent.submit(form)
-
-    await act(() => wait(0))
+    await fireEvent.submit(form)
 
     expect(alert).toBeCalledWith(
       'There was an issue creating your repo, please try again'

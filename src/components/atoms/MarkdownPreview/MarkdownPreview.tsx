@@ -44,7 +44,7 @@ export function MarkdownPreview() {
   const html = useMemo<string>(() => markdown.render(value), [value])
 
   return (
-    <Style>
+    <Style aria-label="Markdown preview">
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </Style>
   )

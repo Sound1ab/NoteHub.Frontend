@@ -31,7 +31,8 @@ export function useFile() {
   const path = file && `${currentRepoName}-${file.path}`
 
   useEffect(() => {
-    // If content changes
+    // If content updates but user selects a new file
+    // do not update state with new result from useReadFile
     if (file?.filename !== currentFileName) {
       return
     }

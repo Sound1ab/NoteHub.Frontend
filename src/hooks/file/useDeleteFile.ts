@@ -1,5 +1,6 @@
-import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
 import {
   DeleteFileMutation,
   DeleteFileMutationVariables,
@@ -7,8 +8,8 @@ import {
   ListFilesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
-import { useReadGithubUser, useReadCurrentRepoName } from '..'
 import { ListFilesDocument } from './useListFiles'
+import { useReadGithubUser } from '..'
 
 export const DeleteFileDocument = gql`
   ${FileFragment}
@@ -20,7 +21,6 @@ export const DeleteFileDocument = gql`
 `
 
 export function useDeleteFile() {
-  const { currentRepoName } = useReadCurrentRepoName()
   const user = useReadGithubUser()
 
   return useMutation<DeleteFileMutation, DeleteFileMutationVariables>(
@@ -28,13 +28,13 @@ export function useDeleteFile() {
     {
       update: (cache, { data }) => {
         const deletedFile = data && data.deleteFile
-        if (!deletedFile || !currentRepoName || !user) return
+        if (!deletedFile || !user) return
 
         const result = cache.readQuery<ListFilesQuery, ListFilesQueryVariables>(
           {
             query: ListFilesDocument,
             variables: {
-              repo: currentRepoName,
+              repo: deletedFile.repo,
               username: user.login,
             },
           }
@@ -54,7 +54,7 @@ export function useDeleteFile() {
           },
           query: ListFilesDocument,
           variables: {
-            repo: currentRepoName,
+            repo: deletedFile.repo,
             username: user.login,
           },
         })

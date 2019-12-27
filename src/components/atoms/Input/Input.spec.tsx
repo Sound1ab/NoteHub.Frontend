@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
 
+import { fireEvent, render } from '../../../test-utils'
 import { Input } from './Input'
 
 describe('Input', () => {
@@ -31,7 +31,7 @@ describe('Input', () => {
 
     const input = getByLabelText(aria)
 
-    fireEvent.change(input, {
+    await fireEvent.change(input, {
       target: { value: updatedValue },
     })
 
