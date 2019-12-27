@@ -9,8 +9,8 @@ describe('Card', () => {
   const title = 'MOCK_TITLE'
   const onClick = jest.fn()
 
-  it('should display heading and call onclick handler', () => {
-    const { getByText } = render(
+  it('should display heading and call onclick handler', async () => {
+    const { getByText } = await render(
       <Card heading={title} onClick={onClick} isActive={false} />
     )
 

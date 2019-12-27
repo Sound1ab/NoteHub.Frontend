@@ -1,9 +1,9 @@
 import { createGlobalStyle } from 'styled-components'
+
 import { ITheme } from '../../../theme'
 
 export const GlobalStyle = createGlobalStyle<{
   theme: ITheme
-  isDarkMode: boolean
 }>`
   /*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */
   

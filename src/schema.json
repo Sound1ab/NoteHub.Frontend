@@ -352,6 +352,18 @@
             "deprecationReason": null
           },
           {
+            "name": "currentTheme",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "isEdit",
             "description": "",
             "args": [],

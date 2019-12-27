@@ -87,7 +87,7 @@ describe('Toolbar', () => {
       }),
     }),
     Mutation: () => ({
-      deleteFile: (_, { input }: MutationDeleteFileArgs): Repo => ({
+      deleteFile: (_: any, { input }: MutationDeleteFileArgs): Repo => ({
         id: 3,
         node_id: 'MOCK_NODE_ID',
         name: input.filename,
@@ -102,7 +102,7 @@ describe('Toolbar', () => {
   it('should disable create file button if there is no repo selected and open file modal when create file button is clicked', async () => {
     const [{ name }] = repos
 
-    const { getByLabelText, queryByTitle, rerender } = render(
+    const { getByLabelText, queryByTitle, rerender } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: null, currentFileName: null }}
@@ -117,7 +117,7 @@ describe('Toolbar', () => {
 
     expect(queryByTitle('Create new File')).toBeNull()
 
-    rerender(
+    await rerender(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: null }}
@@ -138,7 +138,7 @@ describe('Toolbar', () => {
     const [{ filename }] = files
     const { login } = user
 
-    const { getByLabelText, rerender } = render(
+    const { getByLabelText, rerender } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: null, currentFileName: null }}
@@ -153,7 +153,7 @@ describe('Toolbar', () => {
 
     expect(deleteFile).not.toBeCalled()
 
-    rerender(
+    await rerender(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: null }}
@@ -168,7 +168,7 @@ describe('Toolbar', () => {
 
     expect(deleteFile).not.toBeCalled()
 
-    rerender(
+    await rerender(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
@@ -201,7 +201,7 @@ describe('Toolbar', () => {
     const deleteFile = () => Promise.reject()
     ;(useDeleteFile as jest.Mock).mockImplementation(() => [deleteFile])
 
-    const { getByLabelText } = render(
+    const { getByLabelText } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
@@ -226,7 +226,7 @@ describe('Toolbar', () => {
     const [{ filename }] = files
     const children = jest.fn(() => <div>children</div>)
 
-    const { getByLabelText } = render(
+    const { getByLabelText } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
@@ -257,7 +257,7 @@ describe('Toolbar', () => {
     const [{ filename }] = files
     const children = jest.fn(() => <div>children</div>)
 
-    const { getByLabelText } = render(
+    const { getByLabelText } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}

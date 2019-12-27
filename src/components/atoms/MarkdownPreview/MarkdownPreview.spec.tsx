@@ -18,7 +18,7 @@ jest.mock('markdown-it', () => {
 
 describe('MarkdownPreview', () => {
   it('should add to the dom the output of markdown-it', async () => {
-    const { getByText } = render(
+    const { getByText } = await render(
       <MockProvider>
         <MarkdownPreview />
       </MockProvider>

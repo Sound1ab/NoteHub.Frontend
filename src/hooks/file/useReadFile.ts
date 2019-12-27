@@ -6,8 +6,11 @@ import {
   ReadFileQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
-import { useReadCurrentRepoName, useReadGithubUser } from '../'
-import { useReadCurrentFileName } from './useReadCurrentFileName'
+import {
+  useReadCurrentFileName,
+  useReadCurrentRepoName,
+  useReadGithubUser,
+} from '../'
 
 export const ReadFileDocument = gql`
   ${FileFragment}

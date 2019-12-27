@@ -1,14 +1,16 @@
-import { render, fireEvent } from '../../../test-utils'
 import '@testing-library/jest-dom/extend-expect'
+
 import React from 'react'
+
+import { fireEvent, render } from '../../../test-utils'
 import { NavigationItem } from './NavigationItem'
 
 describe('NavigationItem', () => {
   const heading = 'MOCK_HEADING'
   const onClick = jest.fn()
 
-  it('should call onClick when clicked', () => {
-    const { getByText } = render(
+  it('should call onClick when clicked', async () => {
+    const { getByText } = await render(
       <NavigationItem
         heading={heading}
         isActive={false}
@@ -22,8 +24,8 @@ describe('NavigationItem', () => {
     expect(onClick).toBeCalled()
   })
 
-  it('should display private icon if item is private', () => {
-    const { getByTitle } = render(
+  it('should display private icon if item is private', async () => {
+    const { getByTitle } = await render(
       <NavigationItem
         heading={heading}
         isActive={false}
@@ -35,8 +37,8 @@ describe('NavigationItem', () => {
     expect(getByTitle(`${heading} is a private repo`)).toBeDefined()
   })
 
-  it('should display heading', () => {
-    const { getByText } = render(
+  it('should display heading', async () => {
+    const { getByText } = await render(
       <NavigationItem
         heading={heading}
         isActive={false}

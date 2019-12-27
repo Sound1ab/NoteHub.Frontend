@@ -59,7 +59,7 @@ describe('Sidebar', () => {
 
   it('should list repos', async () => {
     const [{ name: firstRepoName }, { name: secondRepoName }] = repos
-    const { getByText } = render(
+    const { getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Sidebar />
       </MockProvider>
@@ -74,7 +74,7 @@ describe('Sidebar', () => {
   it('should add new repos', async () => {
     const newRepoName = 'MOCK_REPO_NAME'
 
-    const { getByText, getByLabelText, queryByLabelText } = render(
+    const { getByText, getByLabelText, queryByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Sidebar />
       </MockProvider>

@@ -1,5 +1,6 @@
 type Query {
-    currentRepoName: String
-    currentFileName: String
-    isEdit: Boolean!
+  currentRepoName: String
+  currentFileName: String
+  currentTheme: String
+  isEdit: Boolean!
 }

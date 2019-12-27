@@ -25,7 +25,7 @@ describe('RepoInput', () => {
     const createNewRepo = jest.fn()
     ;(useCreateRepo as jest.Mock).mockImplementation(() => [createNewRepo])
 
-    const { getByLabelText } = render(
+    const { getByLabelText } = await render(
       <MockProvider>
         <RepoInput setIsNewRepoOpen={setIsNewRepoOpen} />
       </MockProvider>
@@ -46,7 +46,7 @@ describe('RepoInput', () => {
 
     const newRepoName = 'MOCK_REPO_NAME'
 
-    const { getByLabelText } = render(
+    const { getByLabelText } = await render(
       <MockProvider>
         <RepoInput setIsNewRepoOpen={setIsNewRepoOpen} />
       </MockProvider>
@@ -79,7 +79,7 @@ describe('RepoInput', () => {
 
     const newRepoName = 'MOCK_REPO_NAME'
 
-    const { getByLabelText } = render(
+    const { getByLabelText } = await render(
       <MockProvider>
         <RepoInput setIsNewRepoOpen={setIsNewRepoOpen} />
       </MockProvider>

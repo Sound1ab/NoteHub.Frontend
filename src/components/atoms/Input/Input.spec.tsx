@@ -1,6 +1,8 @@
-import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
+
+import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
+
 import { Input } from './Input'
 
 describe('Input', () => {
@@ -10,10 +12,10 @@ describe('Input', () => {
   const aria = 'MOCK_ARIA'
   const onChange = jest.fn()
 
-  it('should pass through name prop', () => {
+  it('should pass through name prop', async () => {
     const {
       container: { firstChild },
-    } = render(
+    } = await render(
       <Input value={value} name={name} onChange={onChange} aria={aria} />
     )
 
@@ -22,8 +24,8 @@ describe('Input', () => {
     expect(firstChild).toHaveAttribute('aria-label', aria)
   })
 
-  it('should call on change with inputted text', () => {
-    const { getByLabelText } = render(
+  it('should call on change with inputted text', async () => {
+    const { getByLabelText } = await render(
       <Input value={value} name={name} onChange={onChange} aria={aria} />
     )
 

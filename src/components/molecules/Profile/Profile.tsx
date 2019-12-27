@@ -1,12 +1,14 @@
 import React, { useRef } from 'react'
+
+import { LOCAL_STORAGE } from '../../../enums'
 import {
   deleteFromStorage,
+  useDarkMode,
   useModalToggle,
   useReadGithubUser,
 } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Avatar, Dropdown } from '../../atoms'
-import { LOCAL_STORAGE } from '../../../enums'
 
 const Style = styled.div<{ isPortalOpen: boolean }>`
   position: relative;
@@ -23,6 +25,7 @@ const Style = styled.div<{ isPortalOpen: boolean }>`
 `
 
 export function Profile() {
+  const { isDarkMode, toggleTheme } = useDarkMode()
   const containerRef = useRef(null)
   const user = useReadGithubUser()
   const { isOpen, Portal, ref, setOpen } = useModalToggle()
@@ -59,6 +62,12 @@ export function Profile() {
                 prefix: 'fab',
                 label: 'Github',
                 onClick: gitlink,
+              },
+              {
+                icon: 'moon',
+                prefix: 'fa',
+                label: isDarkMode ? 'Light theme' : 'Dark theme',
+                onClick: toggleTheme,
               },
             ]}
           />

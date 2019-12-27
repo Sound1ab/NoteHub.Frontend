@@ -2,7 +2,6 @@ import { useApolloClient } from '@apollo/react-hooks'
 import React, { MutableRefObject, ReactNode, useRef, useState } from 'react'
 
 import {
-  useColorModeFromLocalStorage,
   useDeleteFile,
   useDropzone,
   useReadCurrentFileName,
@@ -73,7 +72,6 @@ export function Toolbar({ children }: IToolbar) {
   const [isCreateFileModalOpen, setIsCreateFileModalOpen] = useState(false)
   const { currentRepoName } = useReadCurrentRepoName()
   const { currentFileName } = useReadCurrentFileName()
-  const { toggleColorMode, isDarkMode } = useColorModeFromLocalStorage()
   const user = useReadGithubUser()
   const {
     selectFileAndUpload,
@@ -158,13 +156,6 @@ export function Toolbar({ children }: IToolbar) {
             ariaLabel="Upload an image"
           >
             <Icon size="sm" icon="image" prefix="fa" />
-          </Button>
-          <Button
-            className="Toolbar-button"
-            isActive={isDarkMode}
-            onClick={toggleColorMode}
-          >
-            <Icon size="sm" icon="moon" prefix="fa" />
           </Button>
           <div className="Toolbar-profile">
             <Profile />

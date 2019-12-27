@@ -1,17 +1,17 @@
 import React from 'react'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 
-import { COLOR_MODE } from '../../../enums'
+import { useDarkMode } from '../../../hooks'
 import { colors, createSpacing } from '../../../theme/theme'
 import { createTypography } from '../../../theme/typography'
 
 interface IThemeProvider {
-  colorMode: COLOR_MODE
   children: any
 }
 
-export function ThemeProvider({ children, colorMode }: IThemeProvider) {
-  const themeColors = colors[colorMode]
+export function ThemeProvider({ children }: IThemeProvider) {
+  const { currentTheme } = useDarkMode()
+  const themeColors = colors[currentTheme]
   const typography = createTypography(themeColors)
   const spacing = createSpacing(typography)
 

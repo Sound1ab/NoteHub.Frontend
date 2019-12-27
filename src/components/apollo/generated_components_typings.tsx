@@ -135,6 +135,7 @@ export type Query = {
   readGithubUser?: Maybe<GithubUser>
   currentRepoName?: Maybe<Scalars['String']>
   currentFileName?: Maybe<Scalars['String']>
+  currentTheme?: Maybe<Scalars['String']>
   isEdit: Scalars['Boolean']
 }
 
@@ -233,13 +234,6 @@ export type ListReposQuery = { __typename?: 'Query' } & {
   }
 }
 
-export type ReadCurrentRepoNameQueryVariables = {}
-
-export type ReadCurrentRepoNameQuery = { __typename?: 'Query' } & Pick<
-  Query,
-  'currentRepoName'
->
-
 export type ReadRepoQueryVariables = {
   username: Scalars['String']
   repo: Scalars['String']
@@ -275,13 +269,6 @@ export type ListFilesQuery = { __typename?: 'Query' } & {
     items: Array<{ __typename?: 'File' } & FileFragment>
   }
 }
-
-export type ReadCurrentFileNameQueryVariables = {}
-
-export type ReadCurrentFileNameQuery = { __typename?: 'Query' } & Pick<
-  Query,
-  'currentFileName'
->
 
 export type ReadFileQueryVariables = {
   username: Scalars['String']
@@ -345,6 +332,27 @@ export type UpdateImageMutationVariables = {
 export type UpdateImageMutation = { __typename?: 'Mutation' } & {
   updateImage: Maybe<{ __typename?: 'File' } & FileFragment>
 }
+
+export type ReadCurrentFileNameQueryVariables = {}
+
+export type ReadCurrentFileNameQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'currentFileName'
+>
+
+export type ReadCurrentRepoNameQueryVariables = {}
+
+export type ReadCurrentRepoNameQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'currentRepoName'
+>
+
+export type ReadCurrentThemeQueryVariables = {}
+
+export type ReadCurrentThemeQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'currentTheme'
+>
 
 export type ReadGithubUserQueryVariables = {}
 

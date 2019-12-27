@@ -24,8 +24,10 @@ describe('Dropdown', () => {
     } as const,
   ]
 
-  it('should displays items and call on click handler for items', () => {
-    const { getByText, getByTitle } = render(<Dropdown items={MOCK_ITEMS} />)
+  it('should displays items and call on click handler for items', async () => {
+    const { getByText, getByTitle } = await render(
+      <Dropdown items={MOCK_ITEMS} />
+    )
 
     for (const { label, onClick } of MOCK_ITEMS) {
       const itemLabel = getByText(label)

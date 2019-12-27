@@ -36,13 +36,11 @@ describe('Navigation', () => {
   }
 
   it('should display navigation items in alphabetical order', async () => {
-    const { getByText, getAllByTestId } = render(
+    const { getByText, getAllByTestId } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Navigation isNewRepoOpen={false} setIsNewRepoOpen={setIsNewRepoOpen} />
       </MockProvider>
     )
-
-    await act(() => wait(0))
 
     repos.forEach(({ name }) => {
       expect(getByText(name)).toBeDefined()
@@ -57,7 +55,7 @@ describe('Navigation', () => {
   it('should select a navigation item', async () => {
     const [{ name: activeRepoName }, { name: inactiveRepoName }] = repos
 
-    const { getByText } = render(
+    const { getByText } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: activeRepoName }}
@@ -65,8 +63,6 @@ describe('Navigation', () => {
         <Navigation isNewRepoOpen={false} setIsNewRepoOpen={setIsNewRepoOpen} />
       </MockProvider>
     )
-
-    await act(() => wait(0))
 
     expect(getByText(activeRepoName)).toHaveAttribute(
       'aria-label',
@@ -84,13 +80,11 @@ describe('Navigation', () => {
   })
 
   it('should show input for new repo if isNewRepoOpen', async () => {
-    const { getByLabelText } = render(
+    const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Navigation isNewRepoOpen={true} setIsNewRepoOpen={setIsNewRepoOpen} />
       </MockProvider>
     )
-
-    await act(() => wait(0))
 
     expect(getByLabelText('Repo name')).toBeDefined()
   })

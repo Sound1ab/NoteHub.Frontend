@@ -8,7 +8,16 @@ import { act, cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { Profile } from './Profile'
 
-jest.mock('../../../hooks/utils/useLocalStorage')
+jest.mock('../../../hooks/utils/useLocalStorage', () => {
+  const originalModule = jest.requireActual(
+    '../../../hooks/utils/useLocalStorage'
+  )
+
+  return {
+    ...originalModule,
+    deleteFromStorage: jest.fn(),
+  }
+})
 
 afterEach(cleanup)
 
@@ -27,7 +36,7 @@ describe('Profile', () => {
   }
 
   it('should display a profile', async () => {
-    const { container } = render(
+    const { container } = await render(
       <MockProvider>
         <Profile />
       </MockProvider>
@@ -38,22 +47,8 @@ describe('Profile', () => {
     expect(container).toBeDefined()
   })
 
-  it('should show dropdown when clicked', async () => {
-    const { getByAltText, getByLabelText } = render(
-      <MockProvider mockResolvers={resolvers}>
-        <Profile />
-      </MockProvider>
-    )
-
-    await act(() => wait(0))
-
-    fireEvent.click(getByAltText('avatar'))
-
-    expect(getByLabelText('Profile options')).toBeDefined()
-  })
-
   it('should show a users avatar', async () => {
-    const { getByAltText } = render(
+    const { getByAltText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Profile />
       </MockProvider>
@@ -64,19 +59,37 @@ describe('Profile', () => {
     expect(getByAltText('avatar')).toHaveAttribute('src', user.avatar_url)
   })
 
-  it('should logout a user by deleting access token key from local storage', async () => {
-    const { getByAltText, getByLabelText } = render(
-      <MockProvider mockResolvers={resolvers}>
-        <Profile />
-      </MockProvider>
-    )
+  describe('Dropdown', function() {
+    it('should logout a user by deleting access token key from local storage', async () => {
+      const { getByAltText, getByLabelText } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <Profile />
+        </MockProvider>
+      )
 
-    await act(() => wait(0))
+      await act(() => wait(0))
 
-    fireEvent.click(getByAltText('avatar'))
+      fireEvent.click(getByAltText('avatar'))
 
-    fireEvent.click(getByLabelText('Logout'))
+      fireEvent.click(getByLabelText('Logout'))
 
-    expect(deleteFromStorage).toBeCalled()
+      expect(deleteFromStorage).toBeCalled()
+    })
+
+    it('should change color theme', async () => {
+      const { getByAltText, getByLabelText } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <Profile />
+        </MockProvider>
+      )
+
+      await act(() => wait(0))
+
+      fireEvent.click(getByAltText('avatar'))
+
+      fireEvent.click(getByLabelText('Dark theme'))
+
+      expect(getByLabelText('Light theme')).toBeDefined()
+    })
   })
 })

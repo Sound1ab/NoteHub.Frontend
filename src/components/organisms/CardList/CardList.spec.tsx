@@ -46,7 +46,7 @@ describe('CardList', () => {
   }
 
   it('should show cards in alphabetical order', async () => {
-    const { getByText, getAllByTestId } = render(
+    const { getByText, getAllByTestId } = await render(
       <MockProvider mockResolvers={resolvers} localData={{ currentRepoName }}>
         <CardList />
       </MockProvider>
@@ -67,7 +67,7 @@ describe('CardList', () => {
   it('should select a card item', async () => {
     const [{ filename: activeFilename }, { filename: inactiveFilename }] = files
 
-    const { getByText } = render(
+    const { getByText } = await render(
       <MockProvider mockResolvers={resolvers} localData={{ currentRepoName }}>
         <CardList />
       </MockProvider>
