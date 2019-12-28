@@ -9,6 +9,7 @@ const Style = styled.ul`
   border-radius: 3px;
   white-space: pre;
   margin: 0;
+  padding: ${({ theme }) => theme.spacing.xxs} 0;
 
   .Dropdown-triangle {
     position: absolute;
@@ -28,10 +29,15 @@ const Style = styled.ul`
     outline: none;
     padding: ${({ theme }) => theme.spacing.xxs}
       ${({ theme }) => theme.spacing.xs};
+    width: 100%;
 
     li {
       display: flex;
       margin-bottom: 0;
+
+      &:hover {
+        color: ${({ theme }) => theme.colors.text.secondary};
+      }
     }
   }
 

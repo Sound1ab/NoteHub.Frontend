@@ -13,6 +13,7 @@ import { Avatar, Dropdown } from '../../atoms'
 const Style = styled.div<{ isPortalOpen: boolean }>`
   position: relative;
   pointer-events: ${({ isPortalOpen }) => (isPortalOpen ? 'none' : 'all')};
+  cursor: pointer;
 
   .Profile-dropdown {
     position: absolute;
