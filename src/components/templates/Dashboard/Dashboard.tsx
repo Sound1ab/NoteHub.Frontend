@@ -2,9 +2,7 @@ import React from 'react'
 
 import { useCommand } from '../../../hooks'
 import { styled } from '../../../theme'
-import { MarkdownPreview } from '../../atoms'
-import { MarkdownEditor } from '../../molecules'
-import { CardList, Sidebar, Toolbar } from '../../organisms'
+import { CardList, Editor, Sidebar, Toolbar } from '../../organisms'
 
 const Style = styled.div`
   display: flex;
@@ -28,7 +26,6 @@ const Style = styled.div`
 
 export function Dashboard() {
   const {
-    isEdit,
     handleSetEdit,
     handleImageUpload,
     handleDeleteFile,
@@ -43,16 +40,11 @@ export function Dashboard() {
         <Sidebar />
         <CardList />
         <Toolbar
-          isEdit={isEdit}
           handleDeleteFile={handleDeleteFile}
           handleImageUpload={handleImageUpload}
           handleSetEdit={handleSetEdit}
         />
-        {isEdit ? (
-          <MarkdownEditor setPosition={setMarkdownCursorPosition} />
-        ) : (
-          <MarkdownPreview />
-        )}
+        <Editor setMarkdownCursorPosition={setMarkdownCursorPosition} />
       </div>
     </Style>
   )

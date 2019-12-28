@@ -354,6 +354,10 @@ export type ReadCurrentThemeQuery = { __typename?: 'Query' } & Pick<
   'currentTheme'
 >
 
+export type ReadIsEditQueryVariables = {}
+
+export type ReadIsEditQuery = { __typename?: 'Query' } & Pick<Query, 'isEdit'>
+
 export type ReadGithubUserQueryVariables = {}
 
 export type ReadGithubUserQuery = { __typename?: 'Query' } & {

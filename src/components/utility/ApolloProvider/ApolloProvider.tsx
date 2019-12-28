@@ -11,12 +11,14 @@ export interface ILocalData {
   currentRepoName: string | null
   currentFileName: string | null
   currentTheme: COLOR_MODE | null
+  isEdit: boolean
 }
 
 export const localData: ILocalData = {
   currentRepoName: null,
   currentFileName: null,
   currentTheme: null,
+  isEdit: true,
 }
 
 interface IApolloProvider {

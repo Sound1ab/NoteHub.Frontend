@@ -94,7 +94,12 @@ export const resolvers = {
     updateFile: (_: any, { input }: MutationUpdateFileArgs): File => {
       const findFile = ({ filename }: any) => filename === input.filename
       const fileIndex = files.findIndex(findFile)
-      const file = files.find(findFile) as File
+      const file = files.find(findFile)
+
+      if (!file) {
+        throw new Error('Mock update mutation resolver: Could not find file')
+      }
+
       files[fileIndex] = {
         ...file,
         excerpt: file.excerpt ?? '',

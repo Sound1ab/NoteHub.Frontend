@@ -8,6 +8,7 @@ import {
   useReadCurrentFileName,
   useReadCurrentRepoName,
   useReadGithubUser,
+  useReadIsEdit,
 } from '..'
 
 export interface IPosition {
@@ -18,7 +19,6 @@ export interface IPosition {
 
 export function useCommand() {
   const client = useApolloClient()
-  const [isEdit, setIsEdit] = useState(true)
   const [markdownCursorPosition, setMarkdownCursorPosition] = useState<
     IPosition
   >({
@@ -29,6 +29,7 @@ export function useCommand() {
   const [deleteFile] = useDeleteFile()
   const { currentRepoName } = useReadCurrentRepoName()
   const { currentFileName } = useReadCurrentFileName()
+  const { isEdit } = useReadIsEdit()
   const user = useReadGithubUser()
   const {
     selectFileAndUpload,
@@ -58,7 +59,7 @@ export function useCommand() {
   }
 
   function handleSetEdit() {
-    setIsEdit(isEdit => !isEdit)
+    client.writeData({ data: { isEdit: !isEdit } })
   }
 
   async function handleDeleteFile() {
@@ -91,7 +92,6 @@ export function useCommand() {
     handleSetEdit,
     Dropzone,
     loading: isImageUploading,
-    isEdit,
     setMarkdownCursorPosition,
   }
 }

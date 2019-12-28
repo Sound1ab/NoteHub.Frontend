@@ -1,6 +1,10 @@
 import React from 'react'
 
-import { useReadCurrentFileName, useReadCurrentRepoName } from '../../../hooks'
+import {
+  useReadCurrentFileName,
+  useReadCurrentRepoName,
+  useReadIsEdit,
+} from '../../../hooks'
 import { styled } from '../../../theme'
 import { Button, Icon } from '../../atoms'
 import { Profile } from '../../molecules'
@@ -51,17 +55,16 @@ interface IToolbar {
   handleDeleteFile: () => void
   handleImageUpload: () => void
   handleSetEdit: () => void
-  isEdit: boolean
 }
 
 export function Toolbar({
   handleDeleteFile,
   handleImageUpload,
   handleSetEdit,
-  isEdit,
 }: IToolbar) {
   const { currentRepoName } = useReadCurrentRepoName()
   const { currentFileName } = useReadCurrentFileName()
+  const { isEdit } = useReadIsEdit()
 
   return (
     <Style>

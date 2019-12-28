@@ -32,7 +32,6 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
-          isEdit={isEdit}
         />
       </MockProvider>
     )
@@ -50,7 +49,6 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
-          isEdit={isEdit}
         />
       </MockProvider>
     )
@@ -75,7 +73,6 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
-          isEdit={isEdit}
         />
       </MockProvider>
     )
@@ -93,7 +90,6 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
-          isEdit={isEdit}
         />
       </MockProvider>
     )
@@ -111,7 +107,6 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
-          isEdit={isEdit}
         />
       </MockProvider>
     )
@@ -134,14 +129,56 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
-          isEdit={isEdit}
         />
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('View file in markdown'))
+    await fireEvent.click(getByLabelText('View file in preview'))
 
     expect(handleSetEdit).toBeCalled()
+  })
+
+  it('should toggle set edit button state', async () => {
+    const [{ name }] = repos
+    const [{ filename }] = files
+
+    const { getByLabelText, rerender } = await render(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{
+          currentRepoName: name,
+          currentFileName: filename,
+          isEdit: true,
+        }}
+      >
+        <Toolbar
+          handleSetEdit={handleSetEdit}
+          handleImageUpload={handleImageUpload}
+          handleDeleteFile={handleDeleteFile}
+        />
+      </MockProvider>
+    )
+
+    expect(getByLabelText('View file in preview')).toBeDefined()
+
+    await rerender(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{
+          currentRepoName: name,
+          currentFileName: filename,
+          isEdit: false,
+        }}
+      >
+        <Toolbar
+          handleSetEdit={handleSetEdit}
+          handleImageUpload={handleImageUpload}
+          handleDeleteFile={handleDeleteFile}
+        />
+      </MockProvider>
+    )
+
+    expect(getByLabelText('View file in markdown')).toBeDefined()
   })
 
   it('should call handleImageUpload', async () => {
@@ -157,7 +194,6 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
-          isEdit={isEdit}
         />
       </MockProvider>
     )
