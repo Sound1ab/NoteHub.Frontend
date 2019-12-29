@@ -1,19 +1,11 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React from 'react'
 
-import { IPosition, useReadIsEdit } from '../../../hooks'
+import { useReadIsEdit } from '../../../hooks'
 import { MarkdownPreview } from '../../atoms'
 import { MarkdownEditor } from '../../molecules'
 
-interface IEditor {
-  setMarkdownCursorPosition: Dispatch<SetStateAction<IPosition>>
-}
-
-export function Editor({ setMarkdownCursorPosition }: IEditor) {
+export function Editor() {
   const { isEdit } = useReadIsEdit()
 
-  return isEdit ? (
-    <MarkdownEditor setPosition={setMarkdownCursorPosition} />
-  ) : (
-    <MarkdownPreview />
-  )
+  return isEdit ? <MarkdownEditor /> : <MarkdownPreview />
 }

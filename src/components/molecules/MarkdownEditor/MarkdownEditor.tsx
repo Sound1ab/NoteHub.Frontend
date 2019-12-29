@@ -1,14 +1,12 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React from 'react'
 import SimpleMDE from 'react-simplemde-editor'
 
-import { IPosition, useFile } from '../../../hooks'
+import { Command } from '../../../Context'
+import { useFile, useNonNullableContext } from '../../../hooks'
 import { Style } from './MarkdownEditor.styles'
 
-interface IMarkdownEditor {
-  setPosition: Dispatch<SetStateAction<IPosition>>
-}
-
-export function MarkdownEditor({ setPosition }: IMarkdownEditor) {
+export function MarkdownEditor() {
+  const { setMarkdownCursorPosition } = useNonNullableContext(Command)
   const { setValue, loading: isLoadingFile, value, path } = useFile()
 
   return (
@@ -18,7 +16,7 @@ export function MarkdownEditor({ setPosition }: IMarkdownEditor) {
         key={path ?? ''}
         onChange={setValue}
         value={value}
-        getLineAndCursor={position => setPosition(position)}
+        getLineAndCursor={setMarkdownCursorPosition}
         options={{
           toolbar: false,
           theme: 'darcula',

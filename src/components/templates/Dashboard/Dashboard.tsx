@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { CommandProvider } from '../../../Context'
 import { useCommand } from '../../../hooks'
 import { styled } from '../../../theme'
 import { CardList, Editor, Sidebar, Toolbar } from '../../organisms'
@@ -32,22 +33,29 @@ export function Dashboard() {
     handleSetIsNewFileOpen,
     Dropzone,
     setMarkdownCursorPosition,
+    loading,
   } = useCommand()
 
   return (
-    <Style>
-      <Dropzone />
-      <div className="Dashboard-page">
-        <Sidebar />
-        <CardList handleSetIsNewFileOpen={handleSetIsNewFileOpen} />
-        <Toolbar
-          handleDeleteFile={handleDeleteFile}
-          handleImageUpload={handleImageUpload}
-          handleSetEdit={handleSetEdit}
-          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
-        />
-        <Editor setMarkdownCursorPosition={setMarkdownCursorPosition} />
-      </div>
-    </Style>
+    <CommandProvider
+      value={{
+        handleDeleteFile,
+        handleImageUpload,
+        handleSetEdit,
+        handleSetIsNewFileOpen,
+        loading,
+        setMarkdownCursorPosition,
+      }}
+    >
+      <Style>
+        <Dropzone />
+        <div className="Dashboard-page">
+          <Sidebar />
+          <CardList />
+          <Toolbar />
+          <Editor />
+        </div>
+      </Style>
+    </CommandProvider>
   )
 }

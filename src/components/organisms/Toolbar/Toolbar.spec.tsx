@@ -3,6 +3,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { wait } from '@apollo/react-testing'
 import React from 'react'
 
+import { useNonNullableContext } from '../../../hooks/'
 import { files, repos, resolvers } from '../../../schema/mockResolvers'
 import { act, cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
@@ -10,16 +11,22 @@ import { Toolbar } from './Toolbar'
 
 afterEach(cleanup)
 
+jest.mock('../../../hooks/utils/useNonNullableContext')
+
 describe('Toolbar', () => {
   const handleDeleteFile = jest.fn()
   const handleImageUpload = jest.fn()
   const handleSetEdit = jest.fn()
   const handleSetIsNewFileOpen = jest.fn()
-  const alert = jest.fn()
 
   beforeEach(() => {
     jest.resetAllMocks()
-    ;(global as any).alert = alert
+    ;(useNonNullableContext as jest.Mock).mockReturnValue({
+      handleSetIsNewFileOpen,
+      handleSetEdit,
+      handleImageUpload,
+      handleDeleteFile,
+    })
   })
 
   it('should disable create file button if there is no repo selected and open file modal when create file button is clicked', async () => {
@@ -28,12 +35,7 @@ describe('Toolbar', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName: null, currentFileName: null }}
       >
-        <Toolbar
-          handleSetEdit={handleSetEdit}
-          handleImageUpload={handleImageUpload}
-          handleDeleteFile={handleDeleteFile}
-          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
-        />
+        <Toolbar />
       </MockProvider>
     )
 
@@ -46,12 +48,7 @@ describe('Toolbar', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName: null, currentFileName: null }}
       >
-        <Toolbar
-          handleSetEdit={handleSetEdit}
-          handleImageUpload={handleImageUpload}
-          handleDeleteFile={handleDeleteFile}
-          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
-        />
+        <Toolbar />
       </MockProvider>
     )
 
@@ -71,12 +68,7 @@ describe('Toolbar', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName: null, currentFileName: null }}
       >
-        <Toolbar
-          handleSetEdit={handleSetEdit}
-          handleImageUpload={handleImageUpload}
-          handleDeleteFile={handleDeleteFile}
-          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
-        />
+        <Toolbar />
       </MockProvider>
     )
 
@@ -89,12 +81,7 @@ describe('Toolbar', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: null }}
       >
-        <Toolbar
-          handleSetEdit={handleSetEdit}
-          handleImageUpload={handleImageUpload}
-          handleDeleteFile={handleDeleteFile}
-          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
-        />
+        <Toolbar />
       </MockProvider>
     )
 
@@ -107,12 +94,7 @@ describe('Toolbar', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
       >
-        <Toolbar
-          handleSetEdit={handleSetEdit}
-          handleImageUpload={handleImageUpload}
-          handleDeleteFile={handleDeleteFile}
-          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
-        />
+        <Toolbar />
       </MockProvider>
     )
 
@@ -130,12 +112,7 @@ describe('Toolbar', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
       >
-        <Toolbar
-          handleSetEdit={handleSetEdit}
-          handleImageUpload={handleImageUpload}
-          handleDeleteFile={handleDeleteFile}
-          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
-        />
+        <Toolbar />
       </MockProvider>
     )
 
@@ -157,12 +134,7 @@ describe('Toolbar', () => {
           isEdit: true,
         }}
       >
-        <Toolbar
-          handleSetEdit={handleSetEdit}
-          handleImageUpload={handleImageUpload}
-          handleDeleteFile={handleDeleteFile}
-          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
-        />
+        <Toolbar />
       </MockProvider>
     )
 
@@ -177,12 +149,7 @@ describe('Toolbar', () => {
           isEdit: false,
         }}
       >
-        <Toolbar
-          handleSetEdit={handleSetEdit}
-          handleImageUpload={handleImageUpload}
-          handleDeleteFile={handleDeleteFile}
-          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
-        />
+        <Toolbar />
       </MockProvider>
     )
 
@@ -198,12 +165,7 @@ describe('Toolbar', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
       >
-        <Toolbar
-          handleSetEdit={handleSetEdit}
-          handleImageUpload={handleImageUpload}
-          handleDeleteFile={handleDeleteFile}
-          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
-        />
+        <Toolbar />
       </MockProvider>
     )
 
@@ -221,12 +183,7 @@ describe('Toolbar', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
       >
-        <Toolbar
-          handleSetEdit={handleSetEdit}
-          handleImageUpload={handleImageUpload}
-          handleDeleteFile={handleDeleteFile}
-          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
-        />
+        <Toolbar />
       </MockProvider>
     )
 

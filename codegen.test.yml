@@ -1,5 +1,5 @@
 overwrite: true
-schema: 'http://localhost:3000/graphql'
+schema: 'https://7qux4cp2yj.execute-api.eu-west-1.amazonaws.com/dev/graphql'
 generates:
   src/schema.json:
     schema: 'src/schema/local.graphql'

@@ -24,11 +24,7 @@ const Style = styled.div`
   max-width: 50vw;
 `
 
-interface ICardList {
-  handleSetIsNewFileOpen: () => void
-}
-
-export function CardList({ handleSetIsNewFileOpen }: ICardList) {
+export function CardList() {
   const { currentFileName, client } = useReadCurrentFileName()
   const { files } = useListFiles()
   const { isNewFileOpen } = useReadIsNewFileOpen()
@@ -39,13 +35,7 @@ export function CardList({ handleSetIsNewFileOpen }: ICardList) {
 
   return (
     <Style>
-      {isNewFileOpen && (
-        <Card
-          renderInput={
-            <FileInput handleSetIsNewFileOpen={handleSetIsNewFileOpen} />
-          }
-        />
-      )}
+      {isNewFileOpen && <Card renderInput={<FileInput />} />}
       {files
         .sort((fileA, fileB) => {
           return fileA.filename.localeCompare(fileB.filename)

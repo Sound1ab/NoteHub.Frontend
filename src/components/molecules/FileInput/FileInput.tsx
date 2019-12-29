@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
 
+import { Command } from '../../../Context'
 import {
   useCreateFile,
+  useNonNullableContext,
   useReadCurrentRepoName,
   useReadGithubUser,
 } from '../../../hooks'
 import { InlineInput } from '../InlineInput/InlineInput'
 
-interface IFileInput {
-  handleSetIsNewFileOpen: () => void
-}
-
-export function FileInput({ handleSetIsNewFileOpen }: IFileInput) {
+export function FileInput() {
+  const { handleSetIsNewFileOpen } = useNonNullableContext(Command)
   const defaultState = { name: '' }
   const [{ name }, setForm] = useState<{ [key: string]: any }>(defaultState)
   const [createNewFile] = useCreateFile()

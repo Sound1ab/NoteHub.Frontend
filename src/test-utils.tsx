@@ -6,6 +6,7 @@ import { act, fireEvent, render } from '@testing-library/react'
 import React, { ReactNode } from 'react'
 
 import { IconProvider, MockProvider, ThemeProvider } from './components/utility'
+import { CommandProvider } from './Context'
 
 export type FireObject = {
   [K in EventType]: (
@@ -15,10 +16,21 @@ export type FireObject = {
 }
 ;(global as any).matchMedia = () => ({ matches: false })
 
+const mockCommandContext = {
+  handleDeleteFile: jest.fn(),
+  handleImageUpload: jest.fn(),
+  handleSetEdit: jest.fn(),
+  handleSetIsNewFileOpen: jest.fn(),
+  loading: false,
+  setMarkdownCursorPosition: jest.fn(),
+}
+
 const Context = ({ node }: { node: ReactNode }) => (
-  <MockProvider>
-    <ThemeProvider>{() => <IconProvider>{node}</IconProvider>}</ThemeProvider>
-  </MockProvider>
+  <CommandProvider value={mockCommandContext}>
+    <MockProvider>
+      <ThemeProvider>{() => <IconProvider>{node}</IconProvider>}</ThemeProvider>
+    </MockProvider>
+  </CommandProvider>
 )
 
 const customRender = async (node: ReactNode, ...options: any[]) => {

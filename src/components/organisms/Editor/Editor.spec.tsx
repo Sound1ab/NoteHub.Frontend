@@ -13,7 +13,7 @@ describe('Editor', () => {
   it('should toggle between markdown editor and preview', async () => {
     const { rerender, getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers} localData={{ isEdit: true }}>
-        <Editor setMarkdownCursorPosition={jest.fn()} />
+        <Editor />
       </MockProvider>
     )
 
@@ -21,7 +21,7 @@ describe('Editor', () => {
 
     await rerender(
       <MockProvider mockResolvers={resolvers} localData={{ isEdit: false }}>
-        <Editor setMarkdownCursorPosition={jest.fn()} />
+        <Editor />
       </MockProvider>
     )
 

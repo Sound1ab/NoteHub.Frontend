@@ -15,7 +15,7 @@ describe('CardList', () => {
   it('should show cards in alphabetical order', async () => {
     const { getByText, getAllByTestId } = await render(
       <MockProvider mockResolvers={resolvers} localData={{ currentRepoName }}>
-        <CardList handleSetIsNewFileOpen={jest.fn()} />
+        <CardList />
       </MockProvider>
     )
 
@@ -34,7 +34,7 @@ describe('CardList', () => {
 
     const { getByText } = await render(
       <MockProvider mockResolvers={resolvers} localData={{ currentRepoName }}>
-        <CardList handleSetIsNewFileOpen={jest.fn()} />
+        <CardList />
       </MockProvider>
     )
 
@@ -59,7 +59,7 @@ describe('CardList', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName, isNewFileOpen: true }}
       >
-        <CardList handleSetIsNewFileOpen={jest.fn()} />
+        <CardList />
       </MockProvider>
     )
 
@@ -70,7 +70,7 @@ describe('CardList', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName, isNewFileOpen: false }}
       >
-        <CardList handleSetIsNewFileOpen={jest.fn()} />
+        <CardList />
       </MockProvider>
     )
 

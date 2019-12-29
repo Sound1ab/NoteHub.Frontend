@@ -13,7 +13,6 @@ jest.mock('../../../hooks/file/useCreateFile')
 afterEach(cleanup)
 
 describe('FileInput', () => {
-  const handleSetIsNewFileOpen = jest.fn()
   const alert = jest.fn()
 
   beforeEach(() => {
@@ -36,7 +35,7 @@ describe('FileInput', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
       >
-        <FileInput handleSetIsNewFileOpen={handleSetIsNewFileOpen} />
+        <FileInput />
       </MockProvider>
     )
 
@@ -78,7 +77,7 @@ describe('FileInput', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
       >
-        <FileInput handleSetIsNewFileOpen={handleSetIsNewFileOpen} />
+        <FileInput />
       </MockProvider>
     )
 

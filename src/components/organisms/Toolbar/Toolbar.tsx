@@ -1,6 +1,8 @@
 import React from 'react'
 
+import { Command } from '../../../Context'
 import {
+  useNonNullableContext,
   useReadCurrentFileName,
   useReadCurrentRepoName,
   useReadIsEdit,
@@ -53,19 +55,13 @@ const Style = styled.div<{ isNewFileOpen: boolean }>`
   }
 `
 
-interface IToolbar {
-  handleDeleteFile: () => void
-  handleImageUpload: () => void
-  handleSetEdit: () => void
-  handleSetIsNewFileOpen: (value?: boolean) => void
-}
-
-export function Toolbar({
-  handleDeleteFile,
-  handleImageUpload,
-  handleSetEdit,
-  handleSetIsNewFileOpen,
-}: IToolbar) {
+export function Toolbar() {
+  const {
+    handleSetIsNewFileOpen,
+    handleSetEdit,
+    handleImageUpload,
+    handleDeleteFile,
+  } = useNonNullableContext(Command)
   const { currentRepoName } = useReadCurrentRepoName()
   const { currentFileName } = useReadCurrentFileName()
   const { isEdit } = useReadIsEdit()
