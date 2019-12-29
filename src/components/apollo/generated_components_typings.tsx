@@ -137,6 +137,7 @@ export type Query = {
   currentFileName?: Maybe<Scalars['String']>
   currentTheme?: Maybe<Scalars['String']>
   isEdit: Scalars['Boolean']
+  isNewFileOpen: Scalars['Boolean']
 }
 
 export type QueryReadFileArgs = {
@@ -357,6 +358,13 @@ export type ReadCurrentThemeQuery = { __typename?: 'Query' } & Pick<
 export type ReadIsEditQueryVariables = {}
 
 export type ReadIsEditQuery = { __typename?: 'Query' } & Pick<Query, 'isEdit'>
+
+export type ReadIsNewFileOpenQueryVariables = {}
+
+export type ReadIsNewFileOpenQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'isNewFileOpen'
+>
 
 export type ReadGithubUserQueryVariables = {}
 

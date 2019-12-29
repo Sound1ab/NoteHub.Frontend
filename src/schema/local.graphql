@@ -3,4 +3,5 @@ type Query {
   currentFileName: String
   currentTheme: String
   isEdit: Boolean!
+  isNewFileOpen: Boolean!
 }

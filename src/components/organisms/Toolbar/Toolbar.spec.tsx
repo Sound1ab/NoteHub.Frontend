@@ -14,7 +14,7 @@ describe('Toolbar', () => {
   const handleDeleteFile = jest.fn()
   const handleImageUpload = jest.fn()
   const handleSetEdit = jest.fn()
-  const isEdit = false
+  const handleSetIsNewFileOpen = jest.fn()
   const alert = jest.fn()
 
   beforeEach(() => {
@@ -32,6 +32,7 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
+          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
         />
       </MockProvider>
     )
@@ -49,6 +50,7 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
+          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
         />
       </MockProvider>
     )
@@ -73,6 +75,7 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
+          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
         />
       </MockProvider>
     )
@@ -90,6 +93,7 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
+          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
         />
       </MockProvider>
     )
@@ -107,6 +111,7 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
+          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
         />
       </MockProvider>
     )
@@ -129,6 +134,7 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
+          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
         />
       </MockProvider>
     )
@@ -155,6 +161,7 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
+          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
         />
       </MockProvider>
     )
@@ -174,6 +181,7 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
+          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
         />
       </MockProvider>
     )
@@ -194,6 +202,7 @@ describe('Toolbar', () => {
           handleSetEdit={handleSetEdit}
           handleImageUpload={handleImageUpload}
           handleDeleteFile={handleDeleteFile}
+          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
         />
       </MockProvider>
     )
@@ -201,5 +210,28 @@ describe('Toolbar', () => {
     await fireEvent.click(getByLabelText('Upload an image'))
 
     expect(handleImageUpload).toBeCalled()
+  })
+
+  it('should call handleSetIsNewFileOpen when Create a new file button is clicked', async () => {
+    const [{ name }] = repos
+    const [{ filename }] = files
+
+    const { getByLabelText } = await render(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{ currentRepoName: name, currentFileName: filename }}
+      >
+        <Toolbar
+          handleSetEdit={handleSetEdit}
+          handleImageUpload={handleImageUpload}
+          handleDeleteFile={handleDeleteFile}
+          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
+        />
+      </MockProvider>
+    )
+
+    await fireEvent.click(getByLabelText('Create a new file'))
+
+    expect(handleSetIsNewFileOpen).toBeCalled()
   })
 })

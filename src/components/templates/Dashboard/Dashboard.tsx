@@ -29,6 +29,7 @@ export function Dashboard() {
     handleSetEdit,
     handleImageUpload,
     handleDeleteFile,
+    handleSetIsNewFileOpen,
     Dropzone,
     setMarkdownCursorPosition,
   } = useCommand()
@@ -38,11 +39,12 @@ export function Dashboard() {
       <Dropzone />
       <div className="Dashboard-page">
         <Sidebar />
-        <CardList />
+        <CardList handleSetIsNewFileOpen={handleSetIsNewFileOpen} />
         <Toolbar
           handleDeleteFile={handleDeleteFile}
           handleImageUpload={handleImageUpload}
           handleSetEdit={handleSetEdit}
+          handleSetIsNewFileOpen={handleSetIsNewFileOpen}
         />
         <Editor setMarkdownCursorPosition={setMarkdownCursorPosition} />
       </div>

@@ -12,6 +12,7 @@ export interface ILocalData {
   currentFileName: string | null
   currentTheme: COLOR_MODE | null
   isEdit: boolean
+  isNewFileOpen: boolean
 }
 
 export const localData: ILocalData = {
@@ -19,6 +20,7 @@ export const localData: ILocalData = {
   currentFileName: null,
   currentTheme: null,
   isEdit: true,
+  isNewFileOpen: false,
 }
 
 interface IApolloProvider {

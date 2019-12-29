@@ -1,9 +1,13 @@
 import React from 'react'
 
-import { useListFiles, useReadCurrentFileName } from '../../../hooks'
+import {
+  useListFiles,
+  useReadCurrentFileName,
+  useReadIsNewFileOpen,
+} from '../../../hooks'
 import { styled } from '../../../theme'
-import { Spinner } from '../../atoms'
 import { Card } from '../../molecules'
+import { FileInput } from '../../molecules/FileInput/FileInput'
 
 const Style = styled.div`
   grid-area: filelist;
@@ -20,9 +24,14 @@ const Style = styled.div`
   max-width: 50vw;
 `
 
-export function CardList() {
+interface ICardList {
+  handleSetIsNewFileOpen: () => void
+}
+
+export function CardList({ handleSetIsNewFileOpen }: ICardList) {
   const { currentFileName, client } = useReadCurrentFileName()
-  const { files, loading } = useListFiles()
+  const { files } = useListFiles()
+  const { isNewFileOpen } = useReadIsNewFileOpen()
 
   function handleCardClick(filename: string) {
     client.writeData({ data: { currentFileName: filename } })
@@ -30,7 +39,13 @@ export function CardList() {
 
   return (
     <Style>
-      {loading && <Spinner />}
+      {isNewFileOpen && (
+        <Card
+          renderInput={
+            <FileInput handleSetIsNewFileOpen={handleSetIsNewFileOpen} />
+          }
+        />
+      )}
       {files
         .sort((fileA, fileB) => {
           return fileA.filename.localeCompare(fileB.filename)

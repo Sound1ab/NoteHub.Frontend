@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { styled } from '../../../theme'
 import { Heading } from '../../atoms'
@@ -27,22 +27,27 @@ const Style = styled.div<{ isActive?: boolean }>`
 `
 
 interface ICard {
-  heading: string
-  onClick: () => void
+  onClick?: () => void
+  heading?: string
   isActive?: boolean
+  renderInput?: ReactNode
 }
 
-export function Card({ heading, onClick, isActive }: ICard) {
+export function Card({ heading, onClick, isActive, renderInput }: ICard) {
   return (
     <Style onClick={onClick} data-testid="card" isActive={isActive}>
-      <Heading
-        className="Card-heading"
-        type="h4"
-        marginBottom
-        aria-label={isActive ? `${heading} is selected` : ''}
-      >
-        {heading}
-      </Heading>
+      {renderInput ? (
+        renderInput
+      ) : (
+        <Heading
+          className="Card-heading"
+          type="h4"
+          marginBottom
+          aria-label={isActive ? `${heading} is selected` : ''}
+        >
+          {heading}
+        </Heading>
+      )}
     </Style>
   )
 }

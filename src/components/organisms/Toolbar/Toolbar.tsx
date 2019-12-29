@@ -4,12 +4,13 @@ import {
   useReadCurrentFileName,
   useReadCurrentRepoName,
   useReadIsEdit,
+  useReadIsNewFileOpen,
 } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Button, Icon } from '../../atoms'
 import { Profile } from '../../molecules'
 
-const Style = styled.div`
+const Style = styled.div<{ isNewFileOpen: boolean }>`
   grid-area: toolbar;
   position: relative;
   display: grid;
@@ -33,6 +34,7 @@ const Style = styled.div`
 
   .Toolbar-button {
     margin-right: ${({ theme }) => theme.spacing.xxs};
+    pointer-events: ${({ isNewFileOpen }) => (isNewFileOpen ? 'none' : 'all')};
   }
 
   .Toolbar-actions {
@@ -55,24 +57,28 @@ interface IToolbar {
   handleDeleteFile: () => void
   handleImageUpload: () => void
   handleSetEdit: () => void
+  handleSetIsNewFileOpen: (value?: boolean) => void
 }
 
 export function Toolbar({
   handleDeleteFile,
   handleImageUpload,
   handleSetEdit,
+  handleSetIsNewFileOpen,
 }: IToolbar) {
   const { currentRepoName } = useReadCurrentRepoName()
   const { currentFileName } = useReadCurrentFileName()
   const { isEdit } = useReadIsEdit()
+  const { isNewFileOpen } = useReadIsNewFileOpen()
 
   return (
-    <Style>
+    <Style isNewFileOpen={isNewFileOpen}>
       <div className="Toolbar-actions Toolbar-file-actions">
         <Button
+          isActive={isNewFileOpen}
           isDisabled={!currentRepoName}
           className="Toolbar-button"
-          onClick={() => console.log('upload image')}
+          onClick={handleSetIsNewFileOpen}
           ariaLabel="Create a new file"
         >
           <Icon size="sm" icon="edit" prefix="fa" />

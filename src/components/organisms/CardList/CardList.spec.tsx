@@ -15,7 +15,7 @@ describe('CardList', () => {
   it('should show cards in alphabetical order', async () => {
     const { getByText, getAllByTestId } = await render(
       <MockProvider mockResolvers={resolvers} localData={{ currentRepoName }}>
-        <CardList />
+        <CardList handleSetIsNewFileOpen={jest.fn()} />
       </MockProvider>
     )
 
@@ -34,7 +34,7 @@ describe('CardList', () => {
 
     const { getByText } = await render(
       <MockProvider mockResolvers={resolvers} localData={{ currentRepoName }}>
-        <CardList />
+        <CardList handleSetIsNewFileOpen={jest.fn()} />
       </MockProvider>
     )
 
@@ -51,5 +51,29 @@ describe('CardList', () => {
       'aria-label',
       `${inactiveFilename} is selected`
     )
+  })
+
+  it('should render input Card if isNewFileOpen is true', async () => {
+    const { getByLabelText, queryByLabelText, rerender } = await render(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{ currentRepoName, isNewFileOpen: true }}
+      >
+        <CardList handleSetIsNewFileOpen={jest.fn()} />
+      </MockProvider>
+    )
+
+    expect(getByLabelText('Input file name')).toBeDefined()
+
+    await rerender(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{ currentRepoName, isNewFileOpen: false }}
+      >
+        <CardList handleSetIsNewFileOpen={jest.fn()} />
+      </MockProvider>
+    )
+
+    expect(queryByLabelText('Input file name')).toBeNull()
   })
 })
