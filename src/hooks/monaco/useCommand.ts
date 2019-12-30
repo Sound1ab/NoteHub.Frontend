@@ -38,7 +38,7 @@ export function useCommand() {
     Dropzone,
     loading: isImageUploading,
   } = useDropzone()
-  const { setValue, value } = useFile()
+  const { setValue, value, path } = useFile()
 
   function insertFilenameIntoString(filename: string) {
     const text = `![](https://github.com/${user?.login}/noted-app-notes--${currentRepoName}/blob/master/images/${filename}?raw=true)`
@@ -92,11 +92,18 @@ export function useCommand() {
     client.writeData({ data: { isNewFileOpen: !isNewFileOpen } })
   }
 
+  function handleSetFileContent(newValue: string) {
+    setValue(newValue, markdownCursorPosition)
+  }
+
   return {
     handleDeleteFile,
     handleImageUpload,
     handleSetEdit,
     handleSetIsNewFileOpen,
+    handleSetFileContent,
+    fileContent: value,
+    filePath: path,
     Dropzone,
     loading: isImageUploading,
     setMarkdownCursorPosition,

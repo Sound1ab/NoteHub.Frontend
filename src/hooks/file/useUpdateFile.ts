@@ -2,6 +2,8 @@ import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
 import {
+  ListFilesQuery,
+  ListFilesQueryVariables,
   ReadFileQuery,
   ReadFileQueryVariables,
   UpdateFileMutation,
@@ -9,7 +11,7 @@ import {
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
 import { ReadFileDocument } from './useReadFile'
-import { useReadGithubUser } from '..'
+import { ListFilesDocument, useReadGithubUser } from '..'
 
 export const UpdateFileDocument = gql`
   ${FileFragment}
@@ -38,11 +40,50 @@ export function useUpdateFile() {
           },
           query: ReadFileDocument,
           variables: {
-            filename: updatedFile?.filename,
-            repo: updatedFile?.repo,
+            filename: updatedFile.filename,
+            repo: updatedFile.repo,
             username: user.login,
           },
         })
+
+        if (updatedFile.oldFilename) {
+          const result = cache.readQuery<
+            ListFilesQuery,
+            ListFilesQueryVariables
+          >({
+            query: ListFilesDocument,
+            variables: {
+              repo: updatedFile.repo,
+              username: user.login,
+            },
+          })
+
+          const previousFiles = result?.listFiles.items || []
+
+          cache.writeQuery<ListFilesQuery, ListFilesQueryVariables>({
+            data: {
+              ...result,
+              listFiles: {
+                ...result?.listFiles,
+                items: previousFiles.map(file => {
+                  if (file.filename === updatedFile.oldFilename) {
+                    return {
+                      ...file,
+                      filename: updatedFile.filename,
+                    }
+                  } else {
+                    return file
+                  }
+                }),
+              },
+            },
+            query: ListFilesDocument,
+            variables: {
+              repo: updatedFile.repo,
+              username: user.login,
+            },
+          })
+        }
       },
     }
   )

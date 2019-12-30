@@ -42,6 +42,7 @@ export type DeleteRepoInput = {
 export type File = {
   __typename?: 'File'
   filename: Scalars['String']
+  oldFilename?: Maybe<Scalars['String']>
   path: Scalars['String']
   content?: Maybe<Scalars['String']>
   excerpt?: Maybe<Scalars['String']>
@@ -186,6 +187,7 @@ export type UpdateFileInput = {
   username: Scalars['String']
   repo: Scalars['String']
   filename: Scalars['String']
+  updatedFilename?: Maybe<Scalars['String']>
   content?: Maybe<Scalars['String']>
 }
 
@@ -198,7 +200,7 @@ export type UpdateRepoInput = {
 
 export type FileFragment = { __typename?: 'File' } & Pick<
   File,
-  'filename' | 'path' | 'content' | 'excerpt' | 'sha' | 'repo'
+  'filename' | 'path' | 'content' | 'excerpt' | 'sha' | 'repo' | 'oldFilename'
 > & { _links: { __typename?: 'Links' } & Pick<Links, 'html'> }
 
 export type RepoFragment = { __typename?: 'Repo' } & Pick<

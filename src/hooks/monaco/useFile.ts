@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { debounce } from '../../utils'
 import {
+  IPosition,
   useReadCurrentFileName,
   useReadCurrentRepoName,
   useReadFile,
@@ -39,21 +40,35 @@ export function useFile() {
     setStateValue(file?.content ?? '')
   }, [file?.content, file?.filename])
 
-  const setValue = (newValue: string) => {
+  const setValue = (newValue: string, markdownCursorPosition?: IPosition) => {
     setStateValue(newValue)
 
     abortController && abortController.abort()
 
-    debouncedSave(updateFile, {
-      variables: {
-        input: {
-          content: newValue,
-          filename: file?.filename ?? '',
-          repo: currentRepoName,
-          username: user?.login,
+    if (markdownCursorPosition?.line === 0) {
+      debouncedSave(updateFile, {
+        variables: {
+          input: {
+            content: newValue,
+            filename: file?.filename ?? '',
+            updatedFilename: `${newValue.replace(/# /, '').trim()}.md`,
+            repo: currentRepoName,
+            username: user?.login,
+          },
         },
-      },
-    })
+      })
+    } else {
+      debouncedSave(updateFile, {
+        variables: {
+          input: {
+            content: newValue,
+            filename: file?.filename ?? '',
+            repo: currentRepoName,
+            username: user?.login,
+          },
+        },
+      })
+    }
   }
 
   return {

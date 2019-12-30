@@ -31,9 +31,12 @@ export function Dashboard() {
     handleImageUpload,
     handleDeleteFile,
     handleSetIsNewFileOpen,
+    handleSetFileContent,
     Dropzone,
     setMarkdownCursorPosition,
     loading,
+    fileContent,
+    filePath,
   } = useCommand()
 
   return (
@@ -45,6 +48,9 @@ export function Dashboard() {
         handleSetIsNewFileOpen,
         loading,
         setMarkdownCursorPosition,
+        handleSetFileContent,
+        fileContent,
+        filePath,
       }}
     >
       <Style>

@@ -9,6 +9,9 @@ export interface ICommandContext {
   handleSetIsNewFileOpen: () => void
   loading: boolean
   setMarkdownCursorPosition: Dispatch<SetStateAction<IPosition>>
+  handleSetFileContent: (newValue: string) => void
+  fileContent: string
+  filePath?: string | null
 }
 
 export const Command = createContext<ICommandContext | null>(null)

@@ -23,6 +23,9 @@ const mockCommandContext = {
   handleSetIsNewFileOpen: jest.fn(),
   loading: false,
   setMarkdownCursorPosition: jest.fn(),
+  handleSetFileContent: jest.fn(),
+  fileContent: 'MOCK_CONTENT',
+  filePath: 'MOCK_PATH',
 }
 
 const Context = ({ node }: { node: ReactNode }) => (
