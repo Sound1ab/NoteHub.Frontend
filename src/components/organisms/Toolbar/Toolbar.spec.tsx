@@ -3,29 +3,31 @@ import '@testing-library/jest-dom/extend-expect'
 import { wait } from '@apollo/react-testing'
 import React from 'react'
 
-import { useNonNullableContext } from '../../../hooks/'
+import { useCommand } from '../../../hooks'
 import { files, repos, resolvers } from '../../../schema/mockResolvers'
 import { act, cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { Toolbar } from './Toolbar'
 
+jest.mock('../../../hooks/monaco/useCommand')
+
 afterEach(cleanup)
 
-jest.mock('../../../hooks/utils/useNonNullableContext')
-
 describe('Toolbar', () => {
-  const handleDeleteFile = jest.fn()
-  const handleImageUpload = jest.fn()
   const handleSetEdit = jest.fn()
+  const handleImageUpload = jest.fn()
+  const handleDeleteFile = jest.fn()
   const handleSetIsNewFileOpen = jest.fn()
+  const Dropzone = () => <div>MOCK_DROPZONE</div>
 
   beforeEach(() => {
     jest.resetAllMocks()
-    ;(useNonNullableContext as jest.Mock).mockReturnValue({
-      handleSetIsNewFileOpen,
+    ;(useCommand as jest.Mock).mockReturnValue({
       handleSetEdit,
       handleImageUpload,
       handleDeleteFile,
+      handleSetIsNewFileOpen,
+      Dropzone,
     })
   })
 

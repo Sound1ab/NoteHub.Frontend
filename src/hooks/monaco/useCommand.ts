@@ -1,5 +1,4 @@
 import { useApolloClient } from '@apollo/react-hooks'
-import { useState } from 'react'
 
 import {
   useDeleteFile,
@@ -7,6 +6,7 @@ import {
   useFile,
   useReadCurrentFileName,
   useReadCurrentRepoName,
+  useReadCursorPosition,
   useReadGithubUser,
   useReadIsEdit,
   useReadIsNewFileOpen,
@@ -16,22 +16,17 @@ export interface IPosition {
   ch: number
   line: number
   sticky?: string
+  __typename?: 'Position'
 }
 
 export function useCommand() {
   const client = useApolloClient()
-  const [markdownCursorPosition, setMarkdownCursorPosition] = useState<
-    IPosition
-  >({
-    line: 0,
-    ch: 0,
-    sticky: undefined,
-  })
   const [deleteFile] = useDeleteFile()
   const { currentRepoName } = useReadCurrentRepoName()
   const { currentFileName } = useReadCurrentFileName()
   const { isEdit } = useReadIsEdit()
   const { isNewFileOpen } = useReadIsNewFileOpen()
+  const { cursorPosition } = useReadCursorPosition()
   const user = useReadGithubUser()
   const {
     selectFileAndUpload,
@@ -42,7 +37,7 @@ export function useCommand() {
 
   function insertFilenameIntoString(filename: string) {
     const text = `![](https://github.com/${user?.login}/noted-app-notes--${currentRepoName}/blob/master/images/${filename}?raw=true)`
-    const { ch, line } = markdownCursorPosition
+    const { ch, line } = cursorPosition
     const lines = value.split('\n')
     const characters = [...lines[line]]
     characters.splice(ch, 0, text)
@@ -93,7 +88,13 @@ export function useCommand() {
   }
 
   function handleSetFileContent(newValue: string) {
-    setValue(newValue, markdownCursorPosition)
+    setValue(newValue)
+  }
+
+  function handleSetMarkdownCursorPosition(cursorPosition: IPosition) {
+    client.writeData({
+      data: { cursorPosition: { ...cursorPosition, __typename: 'Position' } },
+    })
   }
 
   return {
@@ -102,10 +103,10 @@ export function useCommand() {
     handleSetEdit,
     handleSetIsNewFileOpen,
     handleSetFileContent,
+    handleSetMarkdownCursorPosition,
     fileContent: value,
     filePath: path,
     Dropzone,
     loading: isImageUploading,
-    setMarkdownCursorPosition,
   }
 }

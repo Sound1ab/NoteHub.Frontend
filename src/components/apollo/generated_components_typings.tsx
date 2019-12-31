@@ -42,7 +42,6 @@ export type DeleteRepoInput = {
 export type File = {
   __typename?: 'File'
   filename: Scalars['String']
-  oldFilename?: Maybe<Scalars['String']>
   path: Scalars['String']
   content?: Maybe<Scalars['String']>
   excerpt?: Maybe<Scalars['String']>
@@ -124,6 +123,12 @@ export type MutationDeleteRepoArgs = {
   input: DeleteRepoInput
 }
 
+export type Position = {
+  __typename?: 'Position'
+  ch: Scalars['Int']
+  line: Scalars['Int']
+}
+
 export type Query = {
   __typename?: 'Query'
   readFile?: Maybe<File>
@@ -139,6 +144,7 @@ export type Query = {
   currentTheme?: Maybe<Scalars['String']>
   isEdit: Scalars['Boolean']
   isNewFileOpen: Scalars['Boolean']
+  cursorPosition: Position
 }
 
 export type QueryReadFileArgs = {
@@ -187,7 +193,6 @@ export type UpdateFileInput = {
   username: Scalars['String']
   repo: Scalars['String']
   filename: Scalars['String']
-  updatedFilename?: Maybe<Scalars['String']>
   content?: Maybe<Scalars['String']>
 }
 
@@ -200,7 +205,7 @@ export type UpdateRepoInput = {
 
 export type FileFragment = { __typename?: 'File' } & Pick<
   File,
-  'filename' | 'path' | 'content' | 'excerpt' | 'sha' | 'repo' | 'oldFilename'
+  'filename' | 'path' | 'content' | 'excerpt' | 'sha' | 'repo'
 > & { _links: { __typename?: 'Links' } & Pick<Links, 'html'> }
 
 export type RepoFragment = { __typename?: 'Repo' } & Pick<
@@ -356,6 +361,12 @@ export type ReadCurrentThemeQuery = { __typename?: 'Query' } & Pick<
   Query,
   'currentTheme'
 >
+
+export type ReadCursorPositionQueryVariables = {}
+
+export type ReadCursorPositionQuery = { __typename?: 'Query' } & {
+  cursorPosition: { __typename?: 'Position' } & Pick<Position, 'ch' | 'line'>
+}
 
 export type ReadIsEditQueryVariables = {}
 

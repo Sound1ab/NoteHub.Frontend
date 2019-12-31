@@ -1,8 +1,7 @@
 import React from 'react'
 
-import { Command } from '../../../Context'
 import {
-  useNonNullableContext,
+  useCommand,
   useReadCurrentFileName,
   useReadCurrentRepoName,
   useReadIsEdit,
@@ -57,56 +56,62 @@ const Style = styled.div<{ isNewFileOpen: boolean }>`
 
 export function Toolbar() {
   const {
-    handleSetIsNewFileOpen,
     handleSetEdit,
     handleImageUpload,
     handleDeleteFile,
-  } = useNonNullableContext(Command)
+    handleSetIsNewFileOpen,
+    Dropzone,
+  } = useCommand()
   const { currentRepoName } = useReadCurrentRepoName()
   const { currentFileName } = useReadCurrentFileName()
   const { isEdit } = useReadIsEdit()
   const { isNewFileOpen } = useReadIsNewFileOpen()
 
   return (
-    <Style isNewFileOpen={isNewFileOpen}>
-      <div className="Toolbar-actions Toolbar-file-actions">
-        <Button
-          isActive={isNewFileOpen}
-          isDisabled={!currentRepoName}
-          className="Toolbar-button"
-          onClick={handleSetIsNewFileOpen}
-          ariaLabel="Create a new file"
-        >
-          <Icon size="sm" icon="edit" prefix="fa" />
-        </Button>
-        <Button
-          isDisabled={!currentRepoName || !currentFileName}
-          onClick={handleDeleteFile}
-          ariaLabel="Delete the selected file"
-        >
-          <Icon size="sm" icon="trash" prefix="fa" />
-        </Button>
-      </div>
-      <div className="Toolbar-actions Toolbar-editor-actions">
-        <Button
-          isActive={isEdit}
-          className="Toolbar-button"
-          onClick={handleSetEdit}
-          ariaLabel={isEdit ? 'View file in preview' : 'View file in markdown'}
-        >
-          <Icon size="sm" icon="pen" prefix="fa" />
-        </Button>
-        <Button
-          className="Toolbar-button"
-          onClick={handleImageUpload}
-          ariaLabel="Upload an image"
-        >
-          <Icon size="sm" icon="image" prefix="fa" />
-        </Button>
-        <div className="Toolbar-profile">
-          <Profile />
+    <>
+      <Dropzone />
+      <Style isNewFileOpen={isNewFileOpen}>
+        <div className="Toolbar-actions Toolbar-file-actions">
+          <Button
+            isActive={isNewFileOpen}
+            isDisabled={!currentRepoName}
+            className="Toolbar-button"
+            onClick={handleSetIsNewFileOpen}
+            ariaLabel="Create a new file"
+          >
+            <Icon size="sm" icon="edit" prefix="fa" />
+          </Button>
+          <Button
+            isDisabled={!currentRepoName || !currentFileName}
+            onClick={handleDeleteFile}
+            ariaLabel="Delete the selected file"
+          >
+            <Icon size="sm" icon="trash" prefix="fa" />
+          </Button>
         </div>
-      </div>
-    </Style>
+        <div className="Toolbar-actions Toolbar-editor-actions">
+          <Button
+            isActive={isEdit}
+            className="Toolbar-button"
+            onClick={handleSetEdit}
+            ariaLabel={
+              isEdit ? 'View file in preview' : 'View file in markdown'
+            }
+          >
+            <Icon size="sm" icon="pen" prefix="fa" />
+          </Button>
+          <Button
+            className="Toolbar-button"
+            onClick={handleImageUpload}
+            ariaLabel="Upload an image"
+          >
+            <Icon size="sm" icon="image" prefix="fa" />
+          </Button>
+          <div className="Toolbar-profile">
+            <Profile />
+          </div>
+        </div>
+      </Style>
+    </>
   )
 }

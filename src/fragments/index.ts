@@ -8,7 +8,6 @@ export const FileFragment = gql`
     excerpt
     sha
     repo
-    oldFilename
     _links {
       html
     }

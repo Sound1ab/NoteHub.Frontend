@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { CommandProvider } from '../../../Context'
-import { useCommand } from '../../../hooks'
 import { styled } from '../../../theme'
 import { CardList, Editor, Sidebar, Toolbar } from '../../organisms'
 
@@ -26,42 +24,14 @@ const Style = styled.div`
 `
 
 export function Dashboard() {
-  const {
-    handleSetEdit,
-    handleImageUpload,
-    handleDeleteFile,
-    handleSetIsNewFileOpen,
-    handleSetFileContent,
-    Dropzone,
-    setMarkdownCursorPosition,
-    loading,
-    fileContent,
-    filePath,
-  } = useCommand()
-
   return (
-    <CommandProvider
-      value={{
-        handleDeleteFile,
-        handleImageUpload,
-        handleSetEdit,
-        handleSetIsNewFileOpen,
-        loading,
-        setMarkdownCursorPosition,
-        handleSetFileContent,
-        fileContent,
-        filePath,
-      }}
-    >
-      <Style>
-        <Dropzone />
-        <div className="Dashboard-page">
-          <Sidebar />
-          <CardList />
-          <Toolbar />
-          <Editor />
-        </div>
-      </Style>
-    </CommandProvider>
+    <Style>
+      <div className="Dashboard-page">
+        <Sidebar />
+        <CardList />
+        <Toolbar />
+        <Editor />
+      </div>
+    </Style>
   )
 }

@@ -4,4 +4,10 @@ type Query {
   currentTheme: String
   isEdit: Boolean!
   isNewFileOpen: Boolean!
+  cursorPosition: Position!
+}
+
+type Position {
+  ch: Int!
+  line: Int!
 }

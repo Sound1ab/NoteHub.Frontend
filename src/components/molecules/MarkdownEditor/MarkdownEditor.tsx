@@ -1,17 +1,16 @@
 import React from 'react'
 import SimpleMDE from 'react-simplemde-editor'
 
-import { Command } from '../../../Context'
-import { useNonNullableContext } from '../../../hooks'
+import { useCommand } from '../../../hooks'
 import { Style } from './MarkdownEditor.styles'
 
 export function MarkdownEditor() {
   const {
-    setMarkdownCursorPosition,
-    filePath,
+    handleSetMarkdownCursorPosition,
     handleSetFileContent,
     fileContent,
-  } = useNonNullableContext(Command)
+    filePath,
+  } = useCommand()
 
   return (
     <Style aria-label="Markdown editor">
@@ -20,7 +19,7 @@ export function MarkdownEditor() {
         key={filePath ?? ''}
         onChange={handleSetFileContent}
         value={fileContent}
-        getLineAndCursor={setMarkdownCursorPosition}
+        getLineAndCursor={handleSetMarkdownCursorPosition}
         options={{
           toolbar: false,
           theme: 'darcula',
