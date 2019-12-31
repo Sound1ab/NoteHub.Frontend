@@ -1,5 +1,6 @@
 import {
   File,
+  MutationCreateFileArgs,
   MutationCreateRepoArgs,
   MutationDeleteFileArgs,
   MutationUpdateFileArgs,
@@ -81,6 +82,17 @@ export const resolvers = {
       private: input.private ?? false,
     }),
     deleteFile: (_: any, { input }: MutationDeleteFileArgs): File => ({
+      filename: input.filename,
+      path: 'MOCK_PATH_2',
+      content: 'MOCK_CONTENT_2',
+      excerpt: 'MOCK_EXCERPT_2',
+      sha: 'MOCK_SHA_2',
+      _links: {
+        html: 'MOCK_HTML_LINK_2',
+      },
+      repo: input.repo,
+    }),
+    createFile: (_: any, { input }: MutationCreateFileArgs): File => ({
       filename: input.filename,
       path: 'MOCK_PATH_2',
       content: 'MOCK_CONTENT_2',

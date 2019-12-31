@@ -45,7 +45,7 @@ export function CardList() {
             <Card
               key={`${file.sha}-${file.filename}`}
               onClick={handleCardClick.bind(null, file.filename)}
-              heading={file.filename}
+              heading={file.filename.replace(/.md/, '')}
               isActive={currentFileName === file.filename}
             />
           )

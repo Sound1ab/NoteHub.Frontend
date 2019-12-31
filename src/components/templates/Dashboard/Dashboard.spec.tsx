@@ -53,10 +53,11 @@ describe('Dashboard', () => {
     expect(getByText(newRepoName)).toBeDefined()
   })
 
-  it.skip('should add file if repo is selected', async () => {
+  it('should add file if repo is selected', async () => {
     const [{ name }] = repos
+    const newFileName = 'MOCK_FILE_NAME'
 
-    const { getByText, getByLabelText } = await render(
+    const { getByText, getByLabelText, queryByLabelText } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: null, currentFileName: null }}
@@ -65,15 +66,19 @@ describe('Dashboard', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('Create a new file'))
-
-    expect(getByLabelText('Add new file name')).not.toBeDefined()
+    expect(queryByLabelText('Input file name')).toBeNull()
 
     await fireEvent.click(getByText(name))
 
     await fireEvent.click(getByLabelText('Create a new file'))
 
-    expect(getByLabelText('Add new file name')).toBeDefined()
+    await fireEvent.change(getByLabelText('Input file name'), {
+      target: { value: newFileName },
+    })
+
+    await fireEvent.submit(getByLabelText('File name form'))
+
+    expect(getByText(newFileName)).toBeDefined()
   })
 
   it('should delete file if repo and file is selected', async () => {
