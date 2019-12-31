@@ -14,6 +14,7 @@ export interface ILocalData {
   currentTheme: COLOR_MODE | null
   isEdit: boolean
   isNewFileOpen: boolean
+  isNewRepoOpen: boolean
   cursorPosition: IPosition
 }
 
@@ -23,6 +24,7 @@ export const localData: ILocalData = {
   currentTheme: null,
   isEdit: true,
   isNewFileOpen: false,
+  isNewRepoOpen: false,
   cursorPosition: {
     ch: 0,
     line: 0,

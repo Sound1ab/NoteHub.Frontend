@@ -1,5 +1,6 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React from 'react'
 
+import { useCommand } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
 
@@ -19,17 +20,11 @@ const Style = styled.div`
   }
 `
 
-interface INewRepo {
-  setIsNewRepoOpen: Dispatch<SetStateAction<boolean>>
-}
-
-export function NewRepo({ setIsNewRepoOpen }: INewRepo) {
-  function handleOnClick() {
-    setIsNewRepoOpen(isNewRepoOpen => !isNewRepoOpen)
-  }
+export function NewRepo() {
+  const { handleSetIsNewRepoOpen } = useCommand()
 
   return (
-    <Style onClick={handleOnClick}>
+    <Style onClick={() => handleSetIsNewRepoOpen()}>
       <Icon size="sm" icon="plus-circle" prefix="fa" marginRight />
       <Heading className="NewRepo-heading" type="h4">
         New Repo

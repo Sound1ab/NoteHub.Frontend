@@ -1,6 +1,6 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { useState } from 'react'
 
-import { useCreateRepo } from '../../../hooks'
+import { useCommand, useCreateRepo } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Icon } from '../../atoms'
 import { InlineInput } from '../InlineInput/InlineInput'
@@ -10,16 +10,13 @@ const StyleIcon = styled(Icon)<{ isPrivate: boolean }>`
     isPrivate ? theme.colors.accent : theme.colors.text.secondary};
 `
 
-interface IRepoInput {
-  setIsNewRepoOpen: Dispatch<SetStateAction<boolean>>
-}
-
-export function RepoInput({ setIsNewRepoOpen }: IRepoInput) {
+export function RepoInput() {
   const defaultState = { name: '', isPrivate: false }
   const [{ name, isPrivate }, setForm] = useState<{ [key: string]: any }>(
     defaultState
   )
   const [createNewRepo] = useCreateRepo()
+  const { handleSetIsNewRepoOpen } = useCommand()
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target
@@ -51,14 +48,14 @@ export function RepoInput({ setIsNewRepoOpen }: IRepoInput) {
       alert('There was an issue creating your repo, please try again')
     } finally {
       setForm(defaultState)
-      setIsNewRepoOpen(false)
+      handleSetIsNewRepoOpen(false)
     }
   }
 
   return (
     <InlineInput
       value={name}
-      clickOutsideCallback={() => setIsNewRepoOpen(false)}
+      clickOutsideCallback={() => handleSetIsNewRepoOpen(false)}
       handleOnChange={handleOnChange}
       onSubmit={handleCreateNewRepo}
       formAriaLabel={isPrivate ? 'Add a private new repo' : 'Add a new repo'}

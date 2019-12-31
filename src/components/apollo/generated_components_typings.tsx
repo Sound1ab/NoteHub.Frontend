@@ -144,6 +144,7 @@ export type Query = {
   currentTheme?: Maybe<Scalars['String']>
   isEdit: Scalars['Boolean']
   isNewFileOpen: Scalars['Boolean']
+  isNewRepoOpen: Scalars['Boolean']
   cursorPosition: Position
 }
 
@@ -377,6 +378,13 @@ export type ReadIsNewFileOpenQueryVariables = {}
 export type ReadIsNewFileOpenQuery = { __typename?: 'Query' } & Pick<
   Query,
   'isNewFileOpen'
+>
+
+export type ReadIsNewRepoOpenQueryVariables = {}
+
+export type ReadIsNewRepoOpenQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'isNewRepoOpen'
 >
 
 export type ReadGithubUserQueryVariables = {}

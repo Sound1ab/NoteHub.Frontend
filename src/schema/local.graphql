@@ -4,6 +4,7 @@ type Query {
   currentTheme: String
   isEdit: Boolean!
   isNewFileOpen: Boolean!
+  isNewRepoOpen: Boolean!
   cursorPosition: Position!
 }
 

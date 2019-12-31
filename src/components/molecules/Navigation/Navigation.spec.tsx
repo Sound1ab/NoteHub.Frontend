@@ -2,18 +2,29 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
+import { useReadIsNewRepoOpen } from '../../../hooks'
 import { repos, resolvers } from '../../../schema/mockResolvers'
-import { fireEvent, render } from '../../../test-utils'
+import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { Navigation } from './Navigation'
 
+jest.mock('../../../hooks/localState/useReadIsNewRepoOpen')
+
+afterEach(cleanup)
+
 describe('Navigation', () => {
-  const setIsNewRepoOpen = jest.fn()
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
 
   it('should display navigation items in alphabetical order', async () => {
+    ;(useReadIsNewRepoOpen as jest.Mock).mockReturnValue({
+      isNewRepoOpen: false,
+    })
+
     const { getByText, getAllByTestId } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <Navigation isNewRepoOpen={false} setIsNewRepoOpen={setIsNewRepoOpen} />
+        <Navigation />
       </MockProvider>
     )
 
@@ -28,6 +39,10 @@ describe('Navigation', () => {
   })
 
   it('should select a navigation item', async () => {
+    ;(useReadIsNewRepoOpen as jest.Mock).mockReturnValue({
+      isNewRepoOpen: false,
+    })
+
     const [{ name: activeRepoName }, { name: inactiveRepoName }] = repos
 
     const { getByText } = await render(
@@ -35,7 +50,7 @@ describe('Navigation', () => {
         mockResolvers={resolvers}
         localData={{ currentRepoName: activeRepoName }}
       >
-        <Navigation isNewRepoOpen={false} setIsNewRepoOpen={setIsNewRepoOpen} />
+        <Navigation />
       </MockProvider>
     )
 
@@ -53,9 +68,13 @@ describe('Navigation', () => {
   })
 
   it('should show input for new repo if isNewRepoOpen', async () => {
+    ;(useReadIsNewRepoOpen as jest.Mock).mockReturnValue({
+      isNewRepoOpen: true,
+    })
+
     const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <Navigation isNewRepoOpen={true} setIsNewRepoOpen={setIsNewRepoOpen} />
+        <Navigation />
       </MockProvider>
     )
 

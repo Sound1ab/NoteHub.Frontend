@@ -2,21 +2,29 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
+import { useCommand } from '../../../hooks'
 import { cleanup, fireEvent, render } from '../../../test-utils'
 import { NewRepo } from './NewRepo'
+
+jest.mock('../../../hooks/monaco/useCommand')
 
 afterEach(cleanup)
 
 describe('NewRepo', () => {
-  it('should call setIsNewRepoOpen when clicked', async () => {
-    const setIsNewRepoOpen = jest.fn()
+  const handleSetIsNewRepoOpen = jest.fn()
 
-    const { getByText } = await render(
-      <NewRepo setIsNewRepoOpen={setIsNewRepoOpen} />
-    )
+  beforeEach(() => {
+    jest.resetAllMocks()
+    ;(useCommand as jest.Mock).mockReturnValue({
+      handleSetIsNewRepoOpen,
+    })
+  })
+
+  it('should call handleSetIsNewRepoOpen when clicked', async () => {
+    const { getByText } = await render(<NewRepo />)
 
     await fireEvent.click(getByText('New Repo'))
 
-    expect(setIsNewRepoOpen).toBeCalled()
+    expect(handleSetIsNewRepoOpen).toBeCalled()
   })
 })

@@ -10,6 +10,7 @@ import {
   useReadGithubUser,
   useReadIsEdit,
   useReadIsNewFileOpen,
+  useReadIsNewRepoOpen,
 } from '..'
 
 export interface IPosition {
@@ -26,6 +27,7 @@ export function useCommand() {
   const { currentFileName } = useReadCurrentFileName()
   const { isEdit } = useReadIsEdit()
   const { isNewFileOpen } = useReadIsNewFileOpen()
+  const { isNewRepoOpen } = useReadIsNewRepoOpen()
   const { cursorPosition } = useReadCursorPosition()
   const user = useReadGithubUser()
   const {
@@ -87,6 +89,10 @@ export function useCommand() {
     client.writeData({ data: { isNewFileOpen: !isNewFileOpen } })
   }
 
+  function handleSetIsNewRepoOpen(value = !isNewRepoOpen) {
+    client.writeData({ data: { isNewRepoOpen: value } })
+  }
+
   function handleSetFileContent(newValue: string) {
     setValue(newValue)
   }
@@ -104,6 +110,7 @@ export function useCommand() {
     handleSetIsNewFileOpen,
     handleSetFileContent,
     handleSetMarkdownCursorPosition,
+    handleSetIsNewRepoOpen,
     fileContent: value,
     filePath: path,
     Dropzone,

@@ -36,8 +36,6 @@ const Style = styled.div`
 `
 
 export function Sidebar() {
-  const [isNewRepoOpen, setIsNewRepoOpen] = useState(false)
-
   return (
     <Style>
       <div className="Sidebar-title-wrapper">
@@ -55,11 +53,8 @@ export function Sidebar() {
           Repos
         </Heading>
       </div>
-      <Navigation
-        isNewRepoOpen={isNewRepoOpen}
-        setIsNewRepoOpen={setIsNewRepoOpen}
-      />
-      <NewRepo setIsNewRepoOpen={setIsNewRepoOpen} />
+      <Navigation />
+      <NewRepo />
     </Style>
   )
 }

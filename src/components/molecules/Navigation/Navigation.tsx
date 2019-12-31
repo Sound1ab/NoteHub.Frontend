@@ -1,15 +1,14 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React from 'react'
 import { BulletList } from 'react-content-loader'
 
-import { useListRepos, useReadCurrentRepoName } from '../../../hooks'
+import {
+  useListRepos,
+  useReadCurrentRepoName,
+  useReadIsNewRepoOpen,
+} from '../../../hooks'
 import { styled } from '../../../theme'
 import { NavigationItem } from '../../atoms'
 import { RepoInput } from '../RepoInput/RepoInput'
-
-interface INavigation {
-  isNewRepoOpen: boolean
-  setIsNewRepoOpen: Dispatch<SetStateAction<boolean>>
-}
 
 const Style = styled.nav`
   position: relative;
@@ -17,9 +16,10 @@ const Style = styled.nav`
   overflow-y: auto;
 `
 
-export function Navigation({ isNewRepoOpen, setIsNewRepoOpen }: INavigation) {
+export function Navigation() {
   const { currentRepoName, client } = useReadCurrentRepoName()
   const { repos, loading } = useListRepos()
+  const { isNewRepoOpen } = useReadIsNewRepoOpen()
 
   if (!repos) {
     return null
@@ -56,7 +56,7 @@ export function Navigation({ isNewRepoOpen, setIsNewRepoOpen }: INavigation) {
             )
           })
       )}
-      {isNewRepoOpen && <RepoInput setIsNewRepoOpen={setIsNewRepoOpen} />}
+      {isNewRepoOpen && <RepoInput />}
     </Style>
   )
 }
