@@ -12,7 +12,6 @@ jest.mock('../../../hooks/Repo/useCreateRepo')
 afterEach(cleanup)
 
 describe('RepoInput', () => {
-  const setIsNewRepoOpen = jest.fn()
   const alert = jest.fn()
 
   beforeEach(() => {
@@ -26,7 +25,7 @@ describe('RepoInput', () => {
 
     const { getByLabelText } = await render(
       <MockProvider>
-        <RepoInput setIsNewRepoOpen={setIsNewRepoOpen} />
+        <RepoInput />
       </MockProvider>
     )
 
@@ -45,7 +44,7 @@ describe('RepoInput', () => {
 
     const { getByLabelText } = await render(
       <MockProvider>
-        <RepoInput setIsNewRepoOpen={setIsNewRepoOpen} />
+        <RepoInput />
       </MockProvider>
     )
 
@@ -74,7 +73,7 @@ describe('RepoInput', () => {
 
     const { getByLabelText } = await render(
       <MockProvider>
-        <RepoInput setIsNewRepoOpen={setIsNewRepoOpen} />
+        <RepoInput />
       </MockProvider>
     )
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
@@ -12,7 +12,8 @@ const Style = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   padding: ${({ theme }) => theme.spacing.xs};
-  border-right: 1px solid ${({ theme }) => theme.colors.border};
+  border-right: ${({ theme }) => theme.spacing.xxxs} solid
+    ${({ theme }) => theme.colors.border};
   overflow: auto;
   resize: horizontal;
   min-width: ${({ theme }) => theme.spacing.xl};

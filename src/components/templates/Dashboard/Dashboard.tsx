@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { styled } from '../../../theme'
+import { LoadingBar } from '../../atoms'
 import { CardList, Editor, Sidebar, Toolbar } from '../../organisms'
 
 const Style = styled.div`
@@ -14,9 +15,10 @@ const Style = styled.div`
       min-content
       min-content
       3fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto 1fr;
     grid-template-areas:
       'toolbar toolbar toolbar'
+      'loadingBar loadingBar loadingBar'
       'sidebar filelist editor';
     height: 100%;
     width: 100%;
@@ -28,6 +30,7 @@ export function Dashboard() {
     <Style>
       <div className="Dashboard-page">
         <Sidebar />
+        <LoadingBar />
         <CardList />
         <Toolbar />
         <Editor />

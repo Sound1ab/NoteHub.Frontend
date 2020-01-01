@@ -35,7 +35,7 @@ export function useCommand() {
     Dropzone,
     loading: isImageUploading,
   } = useDropzone()
-  const { setValue, value, path } = useFile()
+  const { setValue, value, path, loading: isFileLoading } = useFile()
 
   function insertFilenameIntoString(filename: string) {
     const text = `![](https://github.com/${user?.login}/noted-app-notes--${currentRepoName}/blob/master/images/${filename}?raw=true)`
@@ -114,6 +114,6 @@ export function useCommand() {
     fileContent: value,
     filePath: path,
     Dropzone,
-    loading: isImageUploading,
+    loading: isImageUploading || isFileLoading,
   }
 }

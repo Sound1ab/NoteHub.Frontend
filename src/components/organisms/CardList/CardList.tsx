@@ -17,7 +17,8 @@ const Style = styled.div`
   background-color: ${({ theme }) => theme.colors.background.primary};
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  border-right: 1px solid ${({ theme }) => theme.colors.border};
+  border-right: ${({ theme }) => theme.spacing.xxxs} solid
+    ${({ theme }) => theme.colors.border};
   overflow: auto;
   resize: horizontal;
   min-width: ${({ theme }) => theme.spacing.xxl};

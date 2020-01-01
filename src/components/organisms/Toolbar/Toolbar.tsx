@@ -27,7 +27,6 @@ const Style = styled.div<{ isNewFileOpen: boolean }>`
   grid-template-rows: auto;
   grid-template-areas: 'repoactions fileactions editoractions';
   background-color: ${({ theme }) => theme.colors.background.tertiary};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 
   .Toolbar-profile {
     margin-left: auto;
