@@ -37,6 +37,15 @@ interface IButton {
   ariaLabel?: string
 }
 
+interface IButtonLink {
+  isActive?: boolean
+  isDisabled?: boolean
+  children?: ReactNode
+  className?: string
+  ariaLabel?: string
+  href: string
+}
+
 export function Button({
   isActive = false,
   isDisabled = false,
@@ -52,6 +61,27 @@ export function Button({
       className={className}
       onClick={onClick}
       aria-label={ariaLabel}
+      as="button"
+    >
+      {children}
+    </Style>
+  )
+}
+
+export function ButtonLink({
+  isActive = false,
+  children,
+  className,
+  ariaLabel,
+  href,
+}: IButtonLink) {
+  return (
+    <Style
+      isActive={isActive}
+      className={className}
+      aria-label={ariaLabel}
+      as="a"
+      href={href}
     >
       {children}
     </Style>

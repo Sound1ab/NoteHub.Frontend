@@ -36,6 +36,9 @@ export const colors = {
       secondary: '#e1e1e1',
       tertiary: '#e6e6e6',
     },
+    company: {
+      github: '#04AA51',
+    },
   },
   [COLOR_MODE.DARK]: {
     accent: '#ff00b2',
@@ -55,6 +58,9 @@ export const colors = {
       primary: '#e9e9e9',
       secondary: '#a2a2a2',
       tertiary: '#8a8a8a',
+    },
+    company: {
+      github: '#04AA51',
     },
   },
 }

@@ -1,14 +1,8 @@
 import { History, Location } from 'history'
-import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { LOCAL_STORAGE } from '../../../enums'
-import { writeStorage } from '../../../hooks'
-import { useReadGithubUserAccessToken } from '../../../hooks/user/useReadGithubUserAccessToken'
-import { styled } from '../../../theme'
 
-const Style = styled.div`
-  position: relative;
-`
+import { LOCAL_STORAGE } from '../../../enums'
+import { useReadGithubUserAccessToken, writeStorage } from '../../../hooks'
 
 interface ICallback {
   location: Location
@@ -27,5 +21,5 @@ export const Callback = withRouter(({ location, history }: ICallback) => {
     history.push('/dashboard')
   }
 
-  return <Style>Redirecting</Style>
+  return null
 })
