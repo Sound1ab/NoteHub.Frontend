@@ -1,8 +1,9 @@
 import React from 'react'
 
+import { useReadIsNewRepoOpen } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
-import { Navigation, NewRepo } from '../../molecules'
+import { Navigation, NewRepo, RepoInput } from '../../molecules'
 
 const Style = styled.div`
   grid-area: sidebar;
@@ -37,6 +38,8 @@ const Style = styled.div`
 `
 
 export function Sidebar() {
+  const { isNewRepoOpen } = useReadIsNewRepoOpen()
+
   return (
     <Style>
       <div className="Sidebar-title-wrapper">
@@ -54,6 +57,7 @@ export function Sidebar() {
           Repos
         </Heading>
       </div>
+      {isNewRepoOpen && <RepoInput />}
       <Navigation />
       <NewRepo />
     </Style>

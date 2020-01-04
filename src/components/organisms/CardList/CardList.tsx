@@ -6,8 +6,7 @@ import {
   useReadIsNewFileOpen,
 } from '../../../hooks'
 import { styled } from '../../../theme'
-import { Card } from '../../molecules'
-import { FileInput } from '../../molecules/FileInput/FileInput'
+import { Card, CardSkeleton, FileInput } from '../../molecules'
 
 const Style = styled.div`
   grid-area: filelist;
@@ -27,7 +26,7 @@ const Style = styled.div`
 
 export function CardList() {
   const { currentFileName, client } = useReadCurrentFileName()
-  const { files } = useListFiles()
+  const { files, loading } = useListFiles()
   const { isNewFileOpen } = useReadIsNewFileOpen()
 
   function handleCardClick(filename: string) {
@@ -37,20 +36,24 @@ export function CardList() {
   return (
     <Style>
       {isNewFileOpen && <Card renderInput={<FileInput />} />}
-      {files
-        .sort((fileA, fileB) => {
-          return fileA.filename.localeCompare(fileB.filename)
-        })
-        .map(file => {
-          return (
-            <Card
-              key={`${file.sha}-${file.filename}`}
-              onClick={handleCardClick.bind(null, file.filename)}
-              heading={file.filename.replace(/.md/, '')}
-              isActive={currentFileName === file.filename}
-            />
-          )
-        })}
+      {loading ? (
+        <CardSkeleton />
+      ) : (
+        files
+          .sort((fileA, fileB) => {
+            return fileA.filename.localeCompare(fileB.filename)
+          })
+          .map(file => {
+            return (
+              <Card
+                key={`${file.sha}-${file.filename}`}
+                onClick={handleCardClick.bind(null, file.filename)}
+                heading={file.filename.replace(/.md/, '')}
+                isActive={currentFileName === file.filename}
+              />
+            )
+          })
+      )}
     </Style>
   )
 }

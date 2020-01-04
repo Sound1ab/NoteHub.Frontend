@@ -3,12 +3,18 @@ import ContentLoader from 'react-content-loader'
 
 import { styled } from '../../../theme'
 
-const Style = styled(ContentLoader)`
-  width: 100%;
-  height: 200px;
-  background-color: transparent;
+const Style = styled.div`
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
 
-  .rect {
+  .NavigationItemSkeleton-content {
+    width: 100%;
+    height: 200px;
+    background-color: transparent;
+  }
+
+  .NavigationItemSkeleton-rect {
     --rect-height: 8px;
     width: 100%;
     height: var(--rect-height);
@@ -33,9 +39,11 @@ const Style = styled(ContentLoader)`
 export function NavigationItemSkeleton() {
   return (
     <Style>
-      <rect className="rect" />
-      <rect className="rect" />
-      <rect className="rect" />
+      <ContentLoader className="NavigationItemSkeleton-content">
+        <rect className="NavigationItemSkeleton-rect" />
+        <rect className="NavigationItemSkeleton-rect" />
+        <rect className="NavigationItemSkeleton-rect" />
+      </ContentLoader>
     </Style>
   )
 }
