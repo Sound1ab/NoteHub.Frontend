@@ -68,6 +68,9 @@ export function useCommand() {
     }
 
     try {
+      client.writeData({
+        data: { currentFileName: null },
+      })
       await deleteFile({
         variables: {
           input: {
@@ -76,9 +79,22 @@ export function useCommand() {
             username: user.login,
           },
         },
-      })
-      client.writeData({
-        data: { currentFileName: null },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          deleteFile: {
+            __typename: 'File',
+            filename: currentFileName,
+            path: '',
+            content: '',
+            excerpt: null,
+            sha: 'optimistic',
+            _links: {
+              __typename: 'Links',
+              html: '',
+            },
+            repo: currentRepoName,
+          },
+        },
       })
     } catch {
       alert('There was an issue deleting your file, please try again')

@@ -44,7 +44,7 @@ export function FileInput() {
           __typename: 'Mutation',
           createFile: {
             __typename: 'File',
-            filename: `${name}.md`!,
+            filename: `${name}.md`,
             path: '',
             content: `# ${name}`,
             excerpt: null,

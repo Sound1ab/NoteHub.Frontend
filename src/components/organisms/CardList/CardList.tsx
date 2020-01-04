@@ -47,7 +47,7 @@ export function CardList() {
             return (
               <Card
                 key={`${file.sha}-${file.filename}`}
-                onClick={handleCardClick.bind(null, file.filename)}
+                onClick={() => handleCardClick(file.filename)}
                 heading={file.filename.replace(/.md/, '')}
                 isActive={currentFileName === file.filename}
                 isDisabled={file.sha === 'optimistic'}
