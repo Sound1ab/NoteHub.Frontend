@@ -47,6 +47,7 @@ export function Navigation() {
 
             return (
               <NavigationItem
+                isDisabled={repo.id < 0}
                 isActive={isActive}
                 key={repo.id.toString()}
                 onClick={handleHeadingClick.bind(null, repo.name)}

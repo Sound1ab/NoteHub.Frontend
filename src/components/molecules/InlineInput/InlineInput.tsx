@@ -13,7 +13,7 @@ const Style = styled.form`
     flex: 1;
     font-size: ${({ theme }) => theme.rhythm(0.6)};
     background-color: transparent;
-    color: white;
+    color: ${({ theme }) => theme.colors.text.primary};
     border: 1px solid ${({ theme }) => theme.colors.accent};
     min-width: 20px;
     padding: 0 ${({ theme }) => theme.spacing.xxs};

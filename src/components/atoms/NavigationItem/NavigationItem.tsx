@@ -3,7 +3,7 @@ import React from 'react'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '..'
 
-const Style = styled.div<{ isActive: boolean }>`
+const Style = styled.div<Pick<INavigationItem, 'isActive' | 'isDisabled'>>`
   position: relative;
   display: flex;
   justify-content: flex-start;
@@ -26,8 +26,12 @@ const Style = styled.div<{ isActive: boolean }>`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: ${({ theme, isActive }) =>
-      isActive ? theme.colors.accent : theme.colors.text.primary};
+    color: ${({ theme, isActive, isDisabled }) =>
+      isDisabled
+        ? theme.colors.text.tertiary
+        : isActive
+        ? theme.colors.accent
+        : theme.colors.text.primary};
     &:hover {
       opacity: 0.5;
     }
@@ -36,6 +40,7 @@ const Style = styled.div<{ isActive: boolean }>`
 
 interface INavigationItem {
   isActive: boolean
+  isDisabled: boolean
   onClick: () => void
   heading: string
   isPrivate: boolean
@@ -43,12 +48,13 @@ interface INavigationItem {
 
 export function NavigationItem({
   isActive,
+  isDisabled,
   heading,
   isPrivate,
   onClick,
 }: INavigationItem) {
   return (
-    <Style isActive={isActive}>
+    <Style isActive={isActive} isDisabled={isDisabled}>
       <button className="NavigationItem-button" onClick={onClick}>
         {isPrivate && (
           <Icon

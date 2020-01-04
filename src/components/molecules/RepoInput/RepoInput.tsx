@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { useCommand, useCreateRepo } from '../../../hooks'
+import { useCommand, useCreateRepo, useReadGithubUser } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Icon } from '../../atoms'
 import { InlineInput } from '../InlineInput/InlineInput'
@@ -17,6 +17,7 @@ export function RepoInput() {
   )
   const [createNewRepo] = useCreateRepo()
   const { handleSetIsNewRepoOpen } = useCommand()
+  const user = useReadGithubUser()
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target
@@ -40,6 +41,18 @@ export function RepoInput() {
         variables: {
           input: {
             name,
+            private: isPrivate,
+          },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          createRepo: {
+            __typename: 'Repo',
+            full_name: `${user}/Soft.${name}`,
+            id: Math.round(Math.random() * -1000000),
+            name,
+            node_id: '',
+            description: null,
             private: isPrivate,
           },
         },
