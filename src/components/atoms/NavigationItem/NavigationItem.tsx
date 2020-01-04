@@ -9,6 +9,7 @@ const Style = styled.div<Pick<INavigationItem, 'isActive' | 'isDisabled'>>`
   justify-content: flex-start;
   align-items: center;
   margin-bottom: ${({ theme }) => theme.spacing.xxs};
+  pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'all')};
 
   .NavigationItem-button {
     background-color: transparent;

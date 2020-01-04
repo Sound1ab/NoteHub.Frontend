@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react'
 import { styled } from '../../../theme'
 import { Heading } from '../../atoms'
 
-const Style = styled.div<{ isActive?: boolean }>`
+const Style = styled.div<Pick<ICard, 'isActive' | 'isDisabled'>>`
   position: relative;
   width: 100%;
   display: flex;
@@ -15,13 +15,15 @@ const Style = styled.div<{ isActive?: boolean }>`
   cursor: pointer;
   overflow: hidden;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'all')};
 
   &:hover {
     opacity: 0.8;
   }
 
   .Card-heading {
-    color: ${({ theme }) => theme.colors.text.primary};
+    color: ${({ theme, isDisabled }) =>
+      isDisabled ? theme.colors.text.tertiary : theme.colors.text.primary};
     margin-bottom: 0;
   }
 `
@@ -30,12 +32,24 @@ interface ICard {
   onClick?: () => void
   heading?: string
   isActive?: boolean
+  isDisabled?: boolean
   renderInput?: ReactNode
 }
 
-export function Card({ heading, onClick, isActive, renderInput }: ICard) {
+export function Card({
+  heading,
+  onClick,
+  isActive,
+  isDisabled,
+  renderInput,
+}: ICard) {
   return (
-    <Style onClick={onClick} data-testid="card" isActive={isActive}>
+    <Style
+      onClick={onClick}
+      data-testid="card"
+      isActive={isActive}
+      isDisabled={isDisabled}
+    >
       {renderInput ? (
         renderInput
       ) : (

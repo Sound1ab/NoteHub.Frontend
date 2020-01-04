@@ -50,6 +50,7 @@ export function CardList() {
                 onClick={handleCardClick.bind(null, file.filename)}
                 heading={file.filename.replace(/.md/, '')}
                 isActive={currentFileName === file.filename}
+                isDisabled={file.sha === 'optimistic'}
               />
             )
           })

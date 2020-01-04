@@ -12,7 +12,7 @@ export function FileInput() {
   const { handleSetIsNewFileOpen } = useCommand()
   const defaultState = { name: '' }
   const [{ name }, setForm] = useState<{ [key: string]: any }>(defaultState)
-  const [createNewFile] = useCreateFile()
+  const [createNewFile, { loading }] = useCreateFile()
   const user = useReadGithubUser()
   const { currentRepoName } = useReadCurrentRepoName()
 
@@ -40,6 +40,22 @@ export function FileInput() {
             username: user.login,
           },
         },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          createFile: {
+            __typename: 'File',
+            filename: `${name}.md`!,
+            path: '',
+            content: `# ${name}`,
+            excerpt: null,
+            sha: 'optimistic',
+            _links: {
+              __typename: 'Links',
+              html: '',
+            },
+            repo: '',
+          },
+        },
       })
     } catch {
       alert('There was an issue creating your file, please try again')
@@ -51,6 +67,7 @@ export function FileInput() {
 
   return (
     <InlineInput
+      isDisabled={loading}
       value={name}
       clickOutsideCallback={handleSetIsNewFileOpen}
       handleOnChange={handleOnChange}

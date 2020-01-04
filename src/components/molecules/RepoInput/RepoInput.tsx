@@ -15,7 +15,7 @@ export function RepoInput() {
   const [{ name, isPrivate }, setForm] = useState<{ [key: string]: any }>(
     defaultState
   )
-  const [createNewRepo] = useCreateRepo()
+  const [createNewRepo, { loading }] = useCreateRepo()
   const { handleSetIsNewRepoOpen } = useCommand()
   const user = useReadGithubUser()
 
@@ -67,6 +67,7 @@ export function RepoInput() {
 
   return (
     <InlineInput
+      isDisabled={loading}
       value={name}
       clickOutsideCallback={() => handleSetIsNewRepoOpen(false)}
       handleOnChange={handleOnChange}

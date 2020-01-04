@@ -24,7 +24,10 @@ describe('RepoInput', () => {
 
   it('should be able to be a private or public repo', async () => {
     const createNewRepo = jest.fn()
-    ;(useCreateRepo as jest.Mock).mockImplementation(() => [createNewRepo])
+    ;(useCreateRepo as jest.Mock).mockImplementation(() => [
+      createNewRepo,
+      { loading: false },
+    ])
 
     const { getByLabelText } = await render(
       <MockProvider>
@@ -42,7 +45,10 @@ describe('RepoInput', () => {
   it('should create a new repo when user submits form', async () => {
     const { login } = user
     const createNewRepo = jest.fn()
-    ;(useCreateRepo as jest.Mock).mockImplementation(() => [createNewRepo])
+    ;(useCreateRepo as jest.Mock).mockImplementation(() => [
+      createNewRepo,
+      { loading: false },
+    ])
 
     const newRepoName = 'MOCK_REPO_NAME'
 
@@ -83,7 +89,10 @@ describe('RepoInput', () => {
 
   it('should display an error message and close the input if there was a problem', async () => {
     const createNewRepo = () => Promise.reject()
-    ;(useCreateRepo as jest.Mock).mockImplementation(() => [createNewRepo])
+    ;(useCreateRepo as jest.Mock).mockImplementation(() => [
+      createNewRepo,
+      { loading: false },
+    ])
 
     const newRepoName = 'MOCK_REPO_NAME'
 

@@ -20,13 +20,14 @@ const Style = styled.form`
   }
 `
 
-interface IRepoInput {
+interface IInlineInput {
   value: string
   clickOutsideCallback: () => void
   handleOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void
   inputAriaLabel: string
   formAriaLabel?: string
+  isDisabled?: boolean
   icon?: ReactNode
 }
 
@@ -38,7 +39,8 @@ export function InlineInput({
   formAriaLabel,
   inputAriaLabel,
   icon,
-}: IRepoInput) {
+  isDisabled,
+}: IInlineInput) {
   const inputRef = useRef<{ ref: HTMLInputElement } | null>(null)
   const wrapperRef = useRef<HTMLFormElement | null>(null)
   useClickOutside(clickOutsideCallback, wrapperRef)
@@ -54,6 +56,7 @@ export function InlineInput({
     <Style ref={wrapperRef} onSubmit={onSubmit} aria-label={formAriaLabel}>
       {icon}
       <Input
+        disabled={isDisabled}
         ref={inputRef}
         value={value}
         onChange={handleOnChange}

@@ -26,7 +26,10 @@ describe('FileInput', () => {
     const { login } = user
 
     const createNewFile = jest.fn()
-    ;(useCreateFile as jest.Mock).mockImplementation(() => [createNewFile])
+    ;(useCreateFile as jest.Mock).mockImplementation(() => [
+      createNewFile,
+      { loading: false },
+    ])
 
     const newFileName = 'MOCK_FILE_NAME'
 
@@ -60,6 +63,22 @@ describe('FileInput', () => {
           username: login,
         },
       },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        createFile: {
+          __typename: 'File',
+          filename: `${newFileName}.md`!,
+          path: '',
+          content: `# ${newFileName}`,
+          excerpt: null,
+          sha: 'optimistic',
+          _links: {
+            __typename: 'Links',
+            html: '',
+          },
+          repo: '',
+        },
+      },
     })
   })
 
@@ -68,7 +87,10 @@ describe('FileInput', () => {
     const [{ filename }] = files
 
     const createNewFile = () => Promise.reject()
-    ;(useCreateFile as jest.Mock).mockImplementation(() => [createNewFile])
+    ;(useCreateFile as jest.Mock).mockImplementation(() => [
+      createNewFile,
+      { loading: false },
+    ])
 
     const newFileName = 'MOCK_FILE_NAME'
 
