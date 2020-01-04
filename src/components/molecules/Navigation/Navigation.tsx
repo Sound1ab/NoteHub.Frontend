@@ -1,5 +1,4 @@
 import React from 'react'
-import { BulletList } from 'react-content-loader'
 
 import {
   useListRepos,
@@ -8,6 +7,7 @@ import {
 } from '../../../hooks'
 import { styled } from '../../../theme'
 import { NavigationItem } from '../../atoms'
+import { NavigationItemSkeleton } from '../../atoms/NavigationItem/NavigationItemSkeleton'
 import { RepoInput } from '../RepoInput/RepoInput'
 
 const Style = styled.nav`
@@ -21,10 +21,6 @@ export function Navigation() {
   const { repos, loading } = useListRepos()
   const { isNewRepoOpen } = useReadIsNewRepoOpen()
 
-  if (!repos) {
-    return null
-  }
-
   function handleHeadingClick(repoName: string) {
     if (currentRepoName === repoName) {
       client.writeData({ data: { currentRepoName: null } })
@@ -36,10 +32,10 @@ export function Navigation() {
   return (
     <Style>
       {loading ? (
-        <BulletList />
+        <NavigationItemSkeleton />
       ) : (
         repos
-          .sort((repoA, repoB) => {
+          ?.sort((repoA, repoB) => {
             return repoA.name.localeCompare(repoB.name)
           })
           .map(repo => {
@@ -49,7 +45,7 @@ export function Navigation() {
               <NavigationItem
                 isDisabled={repo.id < 0}
                 isActive={isActive}
-                key={repo.id.toString()}
+                key={repo.full_name}
                 onClick={handleHeadingClick.bind(null, repo.name)}
                 heading={repo && repo.name}
                 isPrivate={repo.private}
