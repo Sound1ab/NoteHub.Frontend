@@ -38,7 +38,7 @@ const Style = styled.div`
 
 export function NavigationItemSkeleton() {
   return (
-    <Style>
+    <Style aria-label="Loading repos">
       <ContentLoader className="NavigationItemSkeleton-content">
         <rect className="NavigationItemSkeleton-rect" />
         <rect className="NavigationItemSkeleton-rect" />

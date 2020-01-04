@@ -21,10 +21,15 @@ const Context = ({ node }: { node: ReactNode }) => (
   </MockProvider>
 )
 
-const customRender = async (node: ReactNode, ...options: any[]) => {
-  const { rerender, ...rest } = render(<Context node={node} />, ...options)
+const customRender = async (
+  node: ReactNode,
+  { waitForLoad = true, ...options } = {}
+) => {
+  const { rerender, ...rest } = render(<Context node={node} />, options)
 
-  await act(() => wait(0))
+  if (waitForLoad) {
+    await act(() => wait(0))
+  }
 
   return {
     ...rest,

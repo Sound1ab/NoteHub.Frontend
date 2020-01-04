@@ -2,26 +2,21 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
-import { useReadIsNewRepoOpen } from '../../../hooks'
 import { repos, resolvers } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { Navigation } from './Navigation'
 
-jest.mock('../../../hooks/localState/useReadIsNewRepoOpen')
-
 afterEach(cleanup)
 
 describe('Navigation', () => {
-  beforeEach(() => {
-    jest.resetAllMocks()
+  it.skip('should show loading skeleton', async () => {
+    const { getByLabelText } = await render(<Navigation />)
+
+    expect(getByLabelText('Loading repos')).toBeDefined()
   })
 
   it('should display navigation items in alphabetical order', async () => {
-    ;(useReadIsNewRepoOpen as jest.Mock).mockReturnValue({
-      isNewRepoOpen: false,
-    })
-
     const { getByText, getAllByTestId } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Navigation />
@@ -39,10 +34,6 @@ describe('Navigation', () => {
   })
 
   it('should select a navigation item', async () => {
-    ;(useReadIsNewRepoOpen as jest.Mock).mockReturnValue({
-      isNewRepoOpen: false,
-    })
-
     const [{ name: activeRepoName }, { name: inactiveRepoName }] = repos
 
     const { getByText } = await render(
@@ -65,19 +56,5 @@ describe('Navigation', () => {
       'aria-label',
       `${inactiveRepoName} is selected`
     )
-  })
-
-  it('should show input for new repo if isNewRepoOpen', async () => {
-    ;(useReadIsNewRepoOpen as jest.Mock).mockReturnValue({
-      isNewRepoOpen: true,
-    })
-
-    const { getByLabelText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <Navigation />
-      </MockProvider>
-    )
-
-    expect(getByLabelText('Repo name')).toBeDefined()
   })
 })

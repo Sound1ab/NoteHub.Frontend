@@ -3,6 +3,7 @@ import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 
 import { useCreateRepo } from '../../../hooks'
+import { resolvers, user } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { RepoInput } from './RepoInput'
@@ -13,10 +14,12 @@ afterEach(cleanup)
 
 describe('RepoInput', () => {
   const alert = jest.fn()
+  const id = -1
 
   beforeEach(() => {
     jest.resetAllMocks()
     ;(global as any).alert = alert
+    ;(global as any).Math.round = () => id
   })
 
   it('should be able to be a private or public repo', async () => {
@@ -37,13 +40,14 @@ describe('RepoInput', () => {
   })
 
   it('should create a new repo when user submits form', async () => {
+    const { login } = user
     const createNewRepo = jest.fn()
     ;(useCreateRepo as jest.Mock).mockImplementation(() => [createNewRepo])
 
     const newRepoName = 'MOCK_REPO_NAME'
 
     const { getByLabelText } = await render(
-      <MockProvider>
+      <MockProvider mockResolvers={resolvers}>
         <RepoInput />
       </MockProvider>
     )
@@ -62,6 +66,18 @@ describe('RepoInput', () => {
 
     expect(createNewRepo).toBeCalledWith({
       variables: { input: { name: newRepoName, private: false } },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        createRepo: {
+          __typename: 'Repo',
+          full_name: `${login}/Soft.${newRepoName}`,
+          id,
+          name: newRepoName,
+          node_id: '',
+          description: null,
+          private: false,
+        },
+      },
     })
   })
 

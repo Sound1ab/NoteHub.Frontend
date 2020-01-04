@@ -48,7 +48,7 @@ export function RepoInput() {
           __typename: 'Mutation',
           createRepo: {
             __typename: 'Repo',
-            full_name: `${user}/Soft.${name}`,
+            full_name: `${user?.login}/Soft.${name}`,
             id: Math.round(Math.random() * -1000000),
             name,
             node_id: '',
