@@ -1,5 +1,6 @@
 import React, { Dispatch, ReactNode, SetStateAction } from 'react'
 import ReactDOM from 'react-dom'
+import FocusLock from 'react-focus-lock'
 import { css } from 'styled-components'
 
 import { useClickOutside } from '../../../hooks'
@@ -40,7 +41,7 @@ export const Portal = React.forwardRef(
 
     return ReactDOM.createPortal(
       <Style className={className} hasBackground={hasBackground}>
-        {children}
+        <FocusLock>{children}</FocusLock>
       </Style>,
       domNode ?? document.body
     )

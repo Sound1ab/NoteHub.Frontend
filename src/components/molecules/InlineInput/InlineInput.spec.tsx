@@ -43,6 +43,31 @@ describe('InlineInput', () => {
     expect(clickOutsideCallback).toBeCalled()
   })
 
+  it('should fire callback when user presses escape', async () => {
+    const { getByLabelText } = await render(
+      <MockProvider>
+        <InlineInput
+          value={value}
+          clickOutsideCallback={clickOutsideCallback}
+          handleOnChange={handleOnChange}
+          inputAriaLabel={inputAriaLabel}
+          onSubmit={onSubmit}
+          formAriaLabel={formAriaLabel}
+          icon={icon}
+        />
+      </MockProvider>
+    )
+
+    await fireEvent.keyDown(getByLabelText(inputAriaLabel), {
+      key: 'Escape',
+      code: 'Escape',
+      keyCode: 27,
+      charCode: 27,
+    })
+
+    expect(clickOutsideCallback).toBeCalled()
+  })
+
   it('should focus the input when first rendered', async () => {
     const { getByLabelText } = await render(
       <MockProvider>

@@ -57,6 +57,7 @@
     "react-app-rewired": "^2.1.5",
     "react-content-loader": "^4.2.1",
     "react-dom": "^16.8.4",
+    "react-focus-lock": "^2.2.1",
     "react-route-hook": "^1.2.1",
     "react-router-dom": "^5.0.0",
     "react-simplemde-editor": "^4.1.0",

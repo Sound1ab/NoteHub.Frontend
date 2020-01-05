@@ -14,9 +14,17 @@ export function useClickOutside(
       callback()
     }
 
+    const handleKeyPressed = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        callback()
+      }
+    }
+
     document.addEventListener('mouseup', closeMenu)
+    document.addEventListener('keydown', handleKeyPressed)
     return () => {
       document.removeEventListener('mouseup', closeMenu)
+      document.removeEventListener('keydown', handleKeyPressed)
     }
   }, [ref, callback])
 }

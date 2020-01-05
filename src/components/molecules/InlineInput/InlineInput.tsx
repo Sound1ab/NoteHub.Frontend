@@ -1,4 +1,5 @@
-import React, { ReactNode, useLayoutEffect, useRef } from 'react'
+import React, { ReactNode, useRef } from 'react'
+import FocusLock from 'react-focus-lock'
 
 import { useClickOutside } from '../../../hooks'
 import { styled } from '../../../theme'
@@ -41,28 +42,21 @@ export function InlineInput({
   icon,
   isDisabled,
 }: IInlineInput) {
-  const inputRef = useRef<{ ref: HTMLInputElement } | null>(null)
   const wrapperRef = useRef<HTMLFormElement | null>(null)
   useClickOutside(clickOutsideCallback, wrapperRef)
-
-  useLayoutEffect(() => {
-    if (!inputRef.current) {
-      return
-    }
-    inputRef.current.ref.focus()
-  }, [])
 
   return (
     <Style ref={wrapperRef} onSubmit={onSubmit} aria-label={formAriaLabel}>
       {icon}
-      <Input
-        disabled={isDisabled}
-        ref={inputRef}
-        value={value}
-        onChange={handleOnChange}
-        aria={inputAriaLabel}
-        name="name"
-      />
+      <FocusLock>
+        <Input
+          disabled={isDisabled}
+          value={value}
+          onChange={handleOnChange}
+          aria={inputAriaLabel}
+          name="name"
+        />
+      </FocusLock>
     </Style>
   )
 }
