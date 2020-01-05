@@ -56,6 +56,12 @@ export const createTypography = (colors: TColors) => {
       h4: {
         color: colors.accent,
       },
+      h5: {
+        color: colors.accent,
+      },
+      h6: {
+        color: colors.accent,
+      },
     }),
   })
 }
