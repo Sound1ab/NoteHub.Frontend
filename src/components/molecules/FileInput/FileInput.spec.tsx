@@ -31,7 +31,8 @@ describe('FileInput', () => {
       { loading: false },
     ])
 
-    const newFileName = 'MOCK_FILE_NAME'
+    const newFileName = 'Mock file Name'
+    const validatedFileName = 'mock-file-name'
 
     const { getByLabelText } = await render(
       <MockProvider
@@ -58,7 +59,7 @@ describe('FileInput', () => {
       variables: {
         input: {
           content: `# ${newFileName}`,
-          filename: `${newFileName}.md`,
+          filename: `${validatedFileName}.md`,
           repo: name,
           username: login,
         },
@@ -67,7 +68,7 @@ describe('FileInput', () => {
         __typename: 'Mutation',
         createFile: {
           __typename: 'File',
-          filename: `${newFileName}.md`!,
+          filename: `${validatedFileName}.md`!,
           path: '',
           content: `# ${newFileName}`,
           excerpt: null,

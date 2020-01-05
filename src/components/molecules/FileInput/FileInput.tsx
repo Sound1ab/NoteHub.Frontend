@@ -26,16 +26,20 @@ export function FileInput() {
 
   async function handleCreateNewFile(e: React.ChangeEvent<HTMLFormElement>) {
     e.preventDefault()
+
     if (!user || !currentRepoName) {
       alert('Error')
       return
     }
+
+    const filename = name.toLowerCase().replace(/ /gi, '-')
+
     try {
       await createNewFile({
         variables: {
           input: {
             content: `# ${name}`,
-            filename: `${name}.md`,
+            filename: `${filename}.md`,
             repo: currentRepoName,
             username: user.login,
           },
@@ -44,7 +48,7 @@ export function FileInput() {
           __typename: 'Mutation',
           createFile: {
             __typename: 'File',
-            filename: `${name}.md`,
+            filename: `${filename}.md`,
             path: '',
             content: `# ${name}`,
             excerpt: null,
@@ -61,6 +65,7 @@ export function FileInput() {
       alert('There was an issue creating your file, please try again')
     } finally {
       setForm(defaultState)
+
       handleSetIsNewFileOpen()
     }
   }

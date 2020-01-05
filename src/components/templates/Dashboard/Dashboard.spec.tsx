@@ -55,7 +55,8 @@ describe('Dashboard', () => {
 
   it('should add file if repo is selected', async () => {
     const [{ name }] = repos
-    const newFileName = 'MOCK_FILE_NAME'
+    const newFileName = 'mock File name'
+    const validatedFileName = 'mock-file-name'
 
     const {
       getByText,
@@ -83,7 +84,7 @@ describe('Dashboard', () => {
 
     await fireEvent.submit(getByLabelText('File name form'))
 
-    expect(getByText(newFileName)).toBeDefined()
+    expect(getByText(validatedFileName)).toBeDefined()
   })
 
   it('should delete file if repo and file is selected', async () => {
