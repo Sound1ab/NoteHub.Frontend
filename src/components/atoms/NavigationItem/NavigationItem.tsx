@@ -5,8 +5,6 @@ import { COLOR } from '../../../enums'
 import {
   useDeleteRepo,
   useModalToggle,
-  useReadCurrentFileName,
-  useReadCurrentRepoName,
   useReadGithubUser,
 } from '../../../hooks'
 import { styled } from '../../../theme'
@@ -145,7 +143,7 @@ export function NavigationItem({
       <button
         className="NavigationItem-button"
         onClick={onClick}
-        disabled={isOpen}
+        disabled={isDisabled || isOpen}
       >
         {isPrivate && (
           <Icon
@@ -171,6 +169,7 @@ export function NavigationItem({
         icon="chevron-down"
         onClick={handleToggleMenu}
         isDisabled={isOpen}
+        ariaLabel="Repo dropdown"
         color={COLOR.LIGHT}
       />
       {isOpen && (
