@@ -31,7 +31,7 @@ describe('FileInput', () => {
       { loading: false },
     ])
 
-    const newFileName = 'Mock file Name'
+    const newFileName = 'Mock file Na/me'
     const validatedFileName = 'mock-file-name'
 
     const { getByLabelText } = await render(

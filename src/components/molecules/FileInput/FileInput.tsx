@@ -32,7 +32,10 @@ export function FileInput() {
       return
     }
 
-    const filename = name.toLowerCase().replace(/ /gi, '-')
+    const filename = name
+      .toLowerCase()
+      .replace(/ /gi, '-')
+      .replace(/\//gi, '')
 
     try {
       await createNewFile({
