@@ -76,14 +76,14 @@ export function Toolbar() {
             isDisabled={!currentRepoName}
             className="Toolbar-button"
             onClick={handleSetIsNewFileOpen}
-            ariaLabel="Create a new file"
+            title="Create a new file"
           >
             <Icon size="sm" icon="edit" prefix="fa" />
           </Button>
           <Button
             isDisabled={!currentRepoName || !currentFileName}
             onClick={handleDeleteFile}
-            ariaLabel="Delete the selected file"
+            title="Delete the selected file"
           >
             <Icon size="sm" icon="trash" prefix="fa" />
           </Button>
@@ -93,16 +93,14 @@ export function Toolbar() {
             isActive={isEdit}
             className="Toolbar-button"
             onClick={handleSetEdit}
-            ariaLabel={
-              isEdit ? 'View file in preview' : 'View file in markdown'
-            }
+            title={isEdit ? 'View file in preview' : 'View file in markdown'}
           >
             <Icon size="sm" icon="pen" prefix="fa" />
           </Button>
           <Button
             className="Toolbar-button"
             onClick={handleImageUpload}
-            ariaLabel="Upload an image"
+            title="Upload an image"
           >
             <Icon size="sm" icon="image" prefix="fa" />
           </Button>

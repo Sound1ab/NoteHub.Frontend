@@ -32,7 +32,7 @@ describe('Toolbar', () => {
   })
 
   it('should disable create file button if there is no repo selected and open file modal when create file button is clicked', async () => {
-    const { getByLabelText, queryByTitle, rerender } = await render(
+    const { getByTitle, queryByTitle, rerender } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: null, currentFileName: null }}
@@ -41,7 +41,7 @@ describe('Toolbar', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('Create a new file'))
+    await fireEvent.click(getByTitle('Create a new file'))
 
     expect(queryByTitle('Create new File')).toBeNull()
 
@@ -54,9 +54,7 @@ describe('Toolbar', () => {
       </MockProvider>
     )
 
-    await act(() => wait(0))
-
-    await fireEvent.click(getByLabelText('Create a new file'))
+    await fireEvent.click(getByTitle('Create a new file'))
 
     expect(queryByTitle('Create new File')).toBeDefined()
   })
@@ -65,7 +63,7 @@ describe('Toolbar', () => {
     const [{ name }] = repos
     const [{ filename }] = files
 
-    const { getByLabelText, rerender } = await render(
+    const { getByTitle, rerender } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: null, currentFileName: null }}
@@ -74,7 +72,7 @@ describe('Toolbar', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('Delete the selected file'))
+    await fireEvent.click(getByTitle('Delete the selected file'))
 
     expect(handleDeleteFile).not.toBeCalled()
 
@@ -87,7 +85,7 @@ describe('Toolbar', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('Delete the selected file'))
+    await fireEvent.click(getByTitle('Delete the selected file'))
 
     expect(handleDeleteFile).not.toBeCalled()
 
@@ -100,7 +98,7 @@ describe('Toolbar', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('Delete the selected file'))
+    await fireEvent.click(getByTitle('Delete the selected file'))
 
     expect(handleDeleteFile).toBeCalled()
   })
@@ -109,7 +107,7 @@ describe('Toolbar', () => {
     const [{ name }] = repos
     const [{ filename }] = files
 
-    const { getByLabelText } = await render(
+    const { getByTitle } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
@@ -118,7 +116,7 @@ describe('Toolbar', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('View file in preview'))
+    await fireEvent.click(getByTitle('View file in preview'))
 
     expect(handleSetEdit).toBeCalled()
   })
@@ -127,7 +125,7 @@ describe('Toolbar', () => {
     const [{ name }] = repos
     const [{ filename }] = files
 
-    const { getByLabelText, rerender } = await render(
+    const { getByTitle, rerender } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{
@@ -140,7 +138,7 @@ describe('Toolbar', () => {
       </MockProvider>
     )
 
-    expect(getByLabelText('View file in preview')).toBeDefined()
+    expect(getByTitle('View file in preview')).toBeDefined()
 
     await rerender(
       <MockProvider
@@ -155,14 +153,14 @@ describe('Toolbar', () => {
       </MockProvider>
     )
 
-    expect(getByLabelText('View file in markdown')).toBeDefined()
+    expect(getByTitle('View file in markdown')).toBeDefined()
   })
 
   it('should call handleImageUpload', async () => {
     const [{ name }] = repos
     const [{ filename }] = files
 
-    const { getByLabelText } = await render(
+    const { getByTitle } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
@@ -171,7 +169,7 @@ describe('Toolbar', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('Upload an image'))
+    await fireEvent.click(getByTitle('Upload an image'))
 
     expect(handleImageUpload).toBeCalled()
   })
@@ -180,7 +178,7 @@ describe('Toolbar', () => {
     const [{ name }] = repos
     const [{ filename }] = files
 
-    const { getByLabelText } = await render(
+    const { getByTitle } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
@@ -189,7 +187,7 @@ describe('Toolbar', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('Create a new file'))
+    await fireEvent.click(getByTitle('Create a new file'))
 
     expect(handleSetIsNewFileOpen).toBeCalled()
   })

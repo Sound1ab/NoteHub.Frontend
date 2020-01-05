@@ -12,6 +12,10 @@ const Style = styled.button<Pick<IButton, 'isActive'>>`
   border-radius: 5px;
   box-shadow: inset 0px 0px 1px 1px ${({ theme }) => theme.colors.border};
 
+  &[disabled] {
+    cursor: not-allowed;
+  }
+
   > * {
     color: ${({ theme, isActive }) =>
       isActive ? theme.colors.accent : theme.colors.text.primary};
@@ -35,6 +39,7 @@ interface IButton {
   onClick: () => void
   className?: string
   ariaLabel?: string
+  title?: string
 }
 
 interface IButtonLink {
@@ -53,6 +58,7 @@ export function Button({
   onClick,
   className,
   ariaLabel,
+  title,
 }: IButton) {
   return (
     <Style
@@ -61,6 +67,7 @@ export function Button({
       className={className}
       onClick={onClick}
       aria-label={ariaLabel}
+      title={title}
       as="button"
     >
       {children}

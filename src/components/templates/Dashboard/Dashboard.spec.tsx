@@ -57,7 +57,12 @@ describe('Dashboard', () => {
     const [{ name }] = repos
     const newFileName = 'MOCK_FILE_NAME'
 
-    const { getByText, getByLabelText, queryByLabelText } = await render(
+    const {
+      getByText,
+      getByLabelText,
+      queryByLabelText,
+      getByTitle,
+    } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: null, currentFileName: null }}
@@ -70,7 +75,7 @@ describe('Dashboard', () => {
 
     await fireEvent.click(getByText(name))
 
-    await fireEvent.click(getByLabelText('Create a new file'))
+    await fireEvent.click(getByTitle('Create a new file'))
 
     await fireEvent.change(getByLabelText('Input file name'), {
       target: { value: newFileName },
@@ -85,7 +90,7 @@ describe('Dashboard', () => {
     const [{ name }] = repos
     const [{ filename }] = files
 
-    const { getByText, getByLabelText, queryByText } = await render(
+    const { getByText, queryByText, getByTitle } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: null, currentFileName: null }}
@@ -98,7 +103,7 @@ describe('Dashboard', () => {
 
     await fireEvent.click(getByText(filename))
 
-    await fireEvent.click(getByLabelText('Delete the selected file'))
+    await fireEvent.click(getByTitle('Delete the selected file'))
 
     expect(queryByText(filename)).toBeNull()
   })
@@ -107,7 +112,7 @@ describe('Dashboard', () => {
     const [{ name }] = repos
     const [{ filename }] = files
 
-    const { getByLabelText } = await render(
+    const { getByLabelText, getByTitle } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
@@ -118,7 +123,7 @@ describe('Dashboard', () => {
 
     expect(getByLabelText('Markdown editor')).toBeDefined()
 
-    await fireEvent.click(getByLabelText('View file in preview'))
+    await fireEvent.click(getByTitle('View file in preview'))
 
     expect(getByLabelText('Markdown preview')).toBeDefined()
   })
@@ -128,7 +133,7 @@ describe('Dashboard', () => {
     const [{ name }] = repos
     const [{ filename, content }] = files
 
-    const { getByLabelText, getByText } = await render(
+    const { getByLabelText, getByText, getByTitle } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{ currentRepoName: name, currentFileName: filename }}
@@ -137,7 +142,7 @@ describe('Dashboard', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('Upload an image'))
+    await fireEvent.click(getByTitle('Upload an image'))
 
     const imageFilename = 'chucknorris.png'
 
