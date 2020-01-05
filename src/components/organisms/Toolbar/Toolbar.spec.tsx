@@ -174,6 +174,21 @@ describe('Toolbar', () => {
     expect(handleImageUpload).toBeCalled()
   })
 
+  it('should disabled image upload if no repo and file are selected', async () => {
+    const { getByTitle } = await render(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{ currentRepoName: null, currentFileName: null }}
+      >
+        <Toolbar />
+      </MockProvider>
+    )
+
+    await fireEvent.click(getByTitle('Upload an image'))
+
+    expect(handleImageUpload).not.toBeCalled()
+  })
+
   it('should call handleSetIsNewFileOpen when Create a new file button is clicked', async () => {
     const [{ name }] = repos
     const [{ filename }] = files

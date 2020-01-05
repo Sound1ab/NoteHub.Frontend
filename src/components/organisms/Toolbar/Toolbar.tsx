@@ -99,6 +99,7 @@ export function Toolbar() {
           </Button>
           <Button
             className="Toolbar-button"
+            isDisabled={!currentRepoName || !currentFileName}
             onClick={handleImageUpload}
             title="Upload an image"
           >
