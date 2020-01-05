@@ -36,6 +36,8 @@ export function Navigation() {
               isDisabled={repo.id < 0}
               isActive={isActive}
               key={repo.full_name}
+              id={repo.id}
+              nodeId={repo.node_id}
               onClick={handleHeadingClick.bind(null, repo.name)}
               heading={repo && repo.name}
               isPrivate={repo.private}

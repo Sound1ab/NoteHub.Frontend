@@ -4,19 +4,16 @@ import React from 'react'
 import { COLOR } from '../../../enums'
 import { styled } from '../../../theme'
 
-// eslint-disable-next-line
-const Style = styled.div<{
-  marginRight: boolean
-  marginLeft: boolean
-  color?: COLOR
-  size: 'xs' | 'sm' | 'lg'
-}>`
+const Style = styled.div<
+  Pick<IIcon, 'marginLeft' | 'marginRight' | 'size' | 'isDisabled'>
+>`
   position: relative;
   display: inline-block !important;
   margin-right: ${({ theme, marginRight }) =>
     marginRight ? theme.spacing.xxs : 0};
   margin-left: ${({ theme, marginLeft }) =>
     marginLeft ? theme.spacing.xxs : 0};
+  pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'all')};
 
   padding: ${({ size }) => {
     switch (size) {
@@ -71,6 +68,7 @@ interface IIcon {
   className?: string
   title?: string
   ariaLabel?: string
+  isDisabled?: boolean
 }
 
 export function Icon({
@@ -84,6 +82,7 @@ export function Icon({
   className,
   title,
   ariaLabel,
+  isDisabled,
 }: IIcon) {
   return (
     <Style
@@ -94,6 +93,7 @@ export function Icon({
       size={size}
       onClick={onClick}
       aria-label={ariaLabel}
+      isDisabled={isDisabled}
     >
       <FontAwesomeIcon
         icon={[prefix as any, icon]}

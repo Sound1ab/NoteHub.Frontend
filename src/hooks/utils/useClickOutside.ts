@@ -14,9 +14,9 @@ export function useClickOutside(
       callback()
     }
 
-    document.addEventListener('mousedown', closeMenu)
+    document.addEventListener('mouseup', closeMenu)
     return () => {
-      document.removeEventListener('mousedown', closeMenu)
+      document.removeEventListener('mouseup', closeMenu)
     }
   }, [ref, callback])
 }

@@ -25,6 +25,9 @@ const Style = styled.div<Pick<ICard, 'isActive' | 'isDisabled'>>`
     color: ${({ theme, isDisabled }) =>
       isDisabled ? theme.colors.text.tertiary : theme.colors.text.primary};
     margin-bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `
 
