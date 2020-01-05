@@ -13,8 +13,7 @@ const Style = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   padding: ${({ theme }) => theme.spacing.xs};
-  border-right: ${({ theme }) => theme.spacing.xxxs} solid
-    ${({ theme }) => theme.colors.border};
+  border-right: 1px solid ${({ theme }) => theme.colors.border};
   overflow: auto;
   resize: horizontal;
   min-width: ${({ theme }) => theme.spacing.xl};

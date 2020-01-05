@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { styled } from '../../../theme'
-import { LoadingBar } from '../../atoms'
 import { CardList, Editor, Sidebar, Toolbar } from '../../organisms'
 
 const Style = styled.div`
@@ -30,7 +29,6 @@ export function Dashboard() {
     <Style>
       <div className="Dashboard-page">
         <Sidebar />
-        <LoadingBar />
         <CardList />
         <Toolbar />
         <Editor />
