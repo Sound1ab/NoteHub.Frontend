@@ -22,6 +22,7 @@ export function MarkdownEditor() {
         getLineAndCursor={handleSetMarkdownCursorPosition}
         options={{
           toolbar: false,
+          status: false,
           theme: 'darcula',
         }}
       />
