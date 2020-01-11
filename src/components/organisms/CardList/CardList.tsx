@@ -9,7 +9,7 @@ import { styled } from '../../../theme'
 import { Card, CardSkeleton, FileInput } from '../../molecules'
 
 const Style = styled.div`
-  grid-area: filelist;
+  grid-area: cardlist;
   position: relative;
   flex: 0 0 auto;
   height: 100%;
