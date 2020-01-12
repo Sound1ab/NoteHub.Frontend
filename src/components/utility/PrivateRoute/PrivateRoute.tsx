@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
-import { Route, Redirect } from 'react-router-dom'
-import { useLocalStorage } from '../../../hooks'
-import { LOCAL_STORAGE } from '../../../enums'
+import { Redirect, Route } from 'react-router-dom'
+
+import { useReadIsAuthorised } from '../../../hooks'
 
 interface IPrivateRoute {
   children: ReactNode
@@ -10,14 +10,14 @@ interface IPrivateRoute {
 }
 
 export function PrivateRoute({ children, exact, path }: IPrivateRoute) {
-  const [accessToken] = useLocalStorage(LOCAL_STORAGE.KEY)
+  const { isAuthorised } = useReadIsAuthorised()
 
   return (
     <Route
       exact={exact}
       path={path}
       render={({ location }) =>
-        accessToken ? (
+        isAuthorised ? (
           children
         ) : (
           <Redirect

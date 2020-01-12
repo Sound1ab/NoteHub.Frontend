@@ -5,6 +5,7 @@ type Query {
   isEdit: Boolean!
   isNewFileOpen: Boolean!
   isNewRepoOpen: Boolean!
+  isAuthorised: Boolean!
   cursorPosition: Position!
 }
 

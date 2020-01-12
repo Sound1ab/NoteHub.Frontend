@@ -8,7 +8,6 @@ export enum COLOR {
 }
 
 export enum LOCAL_STORAGE {
-  KEY = 'noted::access_token',
   COLOR_MODE = 'noted::color_mode',
 }
 

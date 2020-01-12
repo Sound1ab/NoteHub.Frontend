@@ -139,12 +139,14 @@ export type Query = {
   listRepos: ModelRepoConnection
   readGithubUserAccessToken: Scalars['String']
   readGithubUser?: Maybe<GithubUser>
+  logout: Scalars['String']
   currentRepoName?: Maybe<Scalars['String']>
   currentFileName?: Maybe<Scalars['String']>
   currentTheme?: Maybe<Scalars['String']>
   isEdit: Scalars['Boolean']
   isNewFileOpen: Scalars['Boolean']
   isNewRepoOpen: Scalars['Boolean']
+  isAuthorised: Scalars['Boolean']
   cursorPosition: Position
 }
 
@@ -369,6 +371,13 @@ export type ReadCursorPositionQuery = { __typename?: 'Query' } & {
   cursorPosition: { __typename?: 'Position' } & Pick<Position, 'ch' | 'line'>
 }
 
+export type ReadIsAuthorisedQueryVariables = {}
+
+export type ReadIsAuthorisedQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'isAuthorised'
+>
+
 export type ReadIsEditQueryVariables = {}
 
 export type ReadIsEditQuery = { __typename?: 'Query' } & Pick<Query, 'isEdit'>
@@ -386,6 +395,10 @@ export type ReadIsNewRepoOpenQuery = { __typename?: 'Query' } & Pick<
   Query,
   'isNewRepoOpen'
 >
+
+export type LogoutQueryVariables = {}
+
+export type LogoutQuery = { __typename?: 'Query' } & Pick<Query, 'logout'>
 
 export type ReadGithubUserQueryVariables = {}
 

@@ -1,8 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 
-import { LOCAL_STORAGE } from '../../../enums'
-import { useLocalStorage } from '../../../hooks'
+import { useReadIsAuthorised } from '../../../hooks'
 import { styled } from '../../../theme'
 import { ButtonLink, Icon } from '../../atoms'
 
@@ -28,9 +27,9 @@ const Style = styled.div`
 `
 
 export function Login() {
-  const [accessToken] = useLocalStorage(LOCAL_STORAGE.KEY)
+  const { isAuthorised } = useReadIsAuthorised()
 
-  return accessToken ? (
+  return isAuthorised ? (
     <Redirect
       to={{
         pathname: '/dashboard',

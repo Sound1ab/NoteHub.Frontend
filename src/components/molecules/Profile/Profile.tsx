@@ -1,9 +1,9 @@
+import { useApolloClient } from '@apollo/react-hooks'
 import React, { useRef } from 'react'
 
-import { LOCAL_STORAGE } from '../../../enums'
 import {
-  deleteFromStorage,
   useDarkMode,
+  useLogout,
   useModalToggle,
   useReadGithubUser,
 } from '../../../hooks'
@@ -26,18 +26,20 @@ const Style = styled.div<{ isPortalOpen: boolean }>`
 `
 
 export function Profile() {
+  const client = useApolloClient()
   const { isDarkMode, toggleTheme } = useDarkMode()
   const containerRef = useRef(null)
   const user = useReadGithubUser()
+  const [logout, { called, data }] = useLogout()
   const { isOpen, Portal, ref, setOpen } = useModalToggle()
+
+  if (called && data?.logout === 'ok') {
+    client.clearStore()
+    client.writeData({ data: { isAuthorised: false } })
+  }
 
   function handleOpen() {
     setOpen(true)
-  }
-
-  function logout() {
-    deleteFromStorage(LOCAL_STORAGE.KEY)
-    setOpen(false)
   }
 
   function gitlink() {
