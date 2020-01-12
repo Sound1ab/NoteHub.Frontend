@@ -71,6 +71,7 @@ export const resolvers = {
     readGithubUser: () => user,
     readFile: (_: any, input: QueryReadFileArgs) =>
       files.find(({ filename }) => filename === input.filename),
+    logout: () => 'ok',
   }),
   Mutation: () => ({
     createRepo: (_: any, { input }: MutationCreateRepoArgs): Repo => ({

@@ -1,27 +1,36 @@
 import '@testing-library/jest-dom/extend-expect'
 
+import { useApolloClient } from '@apollo/react-hooks'
 import React from 'react'
 
-import { deleteFromStorage } from '../../../hooks/'
 import { resolvers, user } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { Profile } from './Profile'
 
-jest.mock('../../../hooks/utils/useLocalStorage', () => {
-  const originalModule = jest.requireActual(
-    '../../../hooks/utils/useLocalStorage'
-  )
+jest.mock('@apollo/react-hooks', () => {
+  const originalModule = jest.requireActual('@apollo/react-hooks')
 
   return {
     ...originalModule,
-    deleteFromStorage: jest.fn(),
+    useApolloClient: jest.fn(),
   }
 })
 
 afterEach(cleanup)
 
 describe('Profile', () => {
+  const clearStore = jest.fn()
+  const writeData = jest.fn()
+
+  beforeEach(() => {
+    jest.restoreAllMocks()
+    const originalModule = jest.requireActual('@apollo/react-hooks')
+    ;(useApolloClient as jest.Mock).mockImplementation(
+      originalModule.useApolloClient
+    )
+  })
+
   it('should display a profile', async () => {
     const { container } = await render(
       <MockProvider>
@@ -43,7 +52,12 @@ describe('Profile', () => {
   })
 
   describe('Dropdown', function() {
-    it('should logout a user by deleting access token key from local storage', async () => {
+    it('should clear apollo store and deauth use when they logout', async () => {
+      ;(useApolloClient as jest.Mock).mockReturnValue({
+        clearStore,
+        writeData,
+      })
+
       const { getByAltText, getByLabelText } = await render(
         <MockProvider mockResolvers={resolvers}>
           <Profile />
@@ -54,7 +68,8 @@ describe('Profile', () => {
 
       await fireEvent.click(getByLabelText('Logout'))
 
-      expect(deleteFromStorage).toBeCalled()
+      expect(clearStore).toBeCalled()
+      expect(writeData).toBeCalled()
     })
 
     it('should change color theme', async () => {
