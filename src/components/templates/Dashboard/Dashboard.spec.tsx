@@ -15,9 +15,10 @@ jest.mock('react-simplemde-editor', function() {
     },
   }
 })
-jest.mock('../../../utils', () => ({
+jest.mock('../../../utils/debounce', () => ({
   debounce: (fn: any) => (...args: any) => fn(...args),
 }))
+jest.mock('../../../utils/scrollIntoView')
 
 afterEach(cleanup)
 

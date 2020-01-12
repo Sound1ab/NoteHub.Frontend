@@ -9,6 +9,8 @@ import { Sidebar } from './Sidebar'
 
 afterEach(cleanup)
 
+jest.mock('../../../utils/scrollIntoView')
+
 describe('Sidebar', () => {
   it('should list repos', async () => {
     const [{ name: firstRepoName }, { name: secondRepoName }] = repos

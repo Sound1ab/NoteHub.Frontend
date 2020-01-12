@@ -1,26 +1,31 @@
 import React from 'react'
 
+import { CONTAINER_ID } from '../../../enums'
 import {
   useListFiles,
   useReadCurrentFileName,
   useReadIsNewFileOpen,
 } from '../../../hooks'
 import { styled } from '../../../theme'
+import { scrollIntoView } from '../../../utils'
 import { Card, CardSkeleton, FileInput } from '../../molecules'
 
 const Style = styled.div`
-  grid-area: cardlist;
+  flex: 0 0 100%;
   position: relative;
-  flex: 0 0 auto;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.primary};
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   border-right: 1px solid ${({ theme }) => theme.colors.border};
-  overflow: auto;
-  resize: horizontal;
-  min-width: ${({ theme }) => theme.spacing.xxl};
-  max-width: 50vw;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    grid-area: cardlist;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overflow: auto;
+    resize: horizontal;
+    min-width: ${({ theme }) => theme.spacing.xxl};
+    max-width: 50vw;
+  }
 `
 
 export function CardList() {
@@ -30,10 +35,11 @@ export function CardList() {
 
   function handleCardClick(filename: string) {
     client.writeData({ data: { currentFileName: filename } })
+    scrollIntoView(CONTAINER_ID.EDITOR)
   }
 
   return (
-    <Style>
+    <Style id={CONTAINER_ID.CARDLIST}>
       {isNewFileOpen && <Card renderInput={<FileInput />} />}
       {loading ? (
         <CardSkeleton />

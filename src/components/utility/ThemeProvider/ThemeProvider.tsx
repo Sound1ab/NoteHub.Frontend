@@ -2,7 +2,7 @@ import React from 'react'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 
 import { useDarkMode } from '../../../hooks'
-import { colors, createSpacing } from '../../../theme/theme'
+import { breakpoints, colors, createSpacing } from '../../../theme/theme'
 import { createTypography } from '../../../theme/typography'
 
 interface IThemeProvider {
@@ -22,6 +22,7 @@ export function ThemeProvider({ children }: IThemeProvider) {
       theme={{
         spacing,
         colors: themeColors,
+        breakpoints,
         rhythm: typography.rhythm,
         typographyStyles: {
           h1,

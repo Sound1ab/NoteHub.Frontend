@@ -1,7 +1,7 @@
 import baseStyled, { ThemedStyledInterface } from 'styled-components'
 import { VerticalRhythm } from 'typography'
 
-import { colors, createSpacing } from './theme'
+import { breakpoints, colors, createSpacing } from './theme'
 
 type TSpacing = ReturnType<typeof createSpacing>
 export type TColors = typeof colors['dark']
@@ -14,6 +14,7 @@ interface IHeading {
 
 export interface ITheme {
   colors: TColors
+  breakpoints: typeof breakpoints
   spacing: TSpacing
   rhythm: VerticalRhythm['rhythm']
   typographyStyles: {

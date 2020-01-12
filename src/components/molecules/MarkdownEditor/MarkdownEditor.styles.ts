@@ -2,10 +2,7 @@ import { styled } from '../../../theme'
 
 export const Style = styled.div`
   position: relative;
-  grid-area: editor;
   height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
 
   .MarkdownEditor-wrapper {
     height: 100%;

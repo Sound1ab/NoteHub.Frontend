@@ -7,6 +7,8 @@ import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { Navigation } from './Navigation'
 
+jest.mock('../../../utils/scrollIntoView')
+
 afterEach(cleanup)
 
 describe('Navigation', () => {

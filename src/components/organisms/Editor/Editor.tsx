@@ -1,21 +1,36 @@
 import React from 'react'
 
-import { useFile, useReadCurrentFileName, useReadIsEdit } from '../../../hooks'
+import { CONTAINER_ID } from '../../../enums'
+import { useFile, useReadIsEdit } from '../../../hooks'
+import { styled } from '../../../theme'
 import { MarkdownPreview } from '../../atoms'
 import { MarkdownEditor, MarkdownEditorSkeleton } from '../../molecules'
+
+const Style = styled.div`
+  flex: 0 0 100%;
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    grid-area: editor;
+  }
+`
 
 export function Editor() {
   const { isEdit } = useReadIsEdit()
   const { loading } = useFile()
-  const { currentFileName } = useReadCurrentFileName()
 
-  if (!currentFileName) {
-    return null
-  }
-
-  if (loading) {
-    return <MarkdownEditorSkeleton />
-  }
-
-  return isEdit ? <MarkdownEditor /> : <MarkdownPreview />
+  return (
+    <Style id={CONTAINER_ID.EDITOR}>
+      {loading ? (
+        <MarkdownEditorSkeleton />
+      ) : isEdit ? (
+        <MarkdownEditor />
+      ) : (
+        <MarkdownPreview />
+      )}
+    </Style>
+  )
 }

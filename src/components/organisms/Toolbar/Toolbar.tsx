@@ -12,22 +12,26 @@ import { Button, Icon } from '../../atoms'
 import { Profile } from '../../molecules'
 
 const Style = styled.div<{ isNewFileOpen: boolean }>`
-  grid-area: toolbar;
-  position: relative;
-  display: grid;
-  @supports (grid-template-columns: subgrid) {
-    grid-template-columns: subgrid;
+  display: none;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    position: relative;
+    background-color: ${({ theme }) => theme.colors.background.tertiary};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+    grid-area: toolbar;
+    display: grid;
+    @supports (grid-template-columns: subgrid) {
+      grid-template-columns: subgrid;
+    }
+    @supports not (grid-template-columns: subgrid) {
+      grid-template-columns:
+        minmax(0, ${({ theme }) => theme.spacing.xl})
+        minmax(0, ${({ theme }) => theme.spacing.xxl})
+        3fr;
+    }
+    grid-template-rows: auto;
+    grid-template-areas: 'repoactions fileactions editoractions';
   }
-  @supports not (grid-template-columns: subgrid) {
-    grid-template-columns:
-      minmax(0, ${({ theme }) => theme.spacing.xl})
-      minmax(0, ${({ theme }) => theme.spacing.xxl})
-      3fr;
-  }
-  grid-template-rows: auto;
-  grid-template-areas: 'repoactions fileactions editoractions';
-  background-color: ${({ theme }) => theme.colors.background.tertiary};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 
   .Toolbar-profile {
     margin-left: auto;

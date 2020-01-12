@@ -1,23 +1,28 @@
 import React from 'react'
 
+import { CONTAINER_ID } from '../../../enums'
 import { useReadIsNewRepoOpen } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
 import { Navigation, NewRepo, RepoInput } from '../../molecules'
 
 const Style = styled.div`
-  grid-area: sidebar;
+  flex: 0 0 100%;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.primary};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding: ${({ theme }) => theme.spacing.xs};
-  border-right: 1px solid ${({ theme }) => theme.colors.border};
   overflow: auto;
-  resize: horizontal;
-  min-width: ${({ theme }) => theme.spacing.xl};
-  max-width: 50vw;
+  border-right: 1px solid ${({ theme }) => theme.colors.border};
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    grid-area: sidebar;
+    resize: horizontal;
+    min-width: ${({ theme }) => theme.spacing.xl};
+    max-width: 50vw;
+  }
 
   .Sidebar-title-wrapper {
     display: flex;
@@ -40,7 +45,7 @@ export function Sidebar() {
   const { isNewRepoOpen } = useReadIsNewRepoOpen()
 
   return (
-    <Style>
+    <Style id={CONTAINER_ID.SIDEBAR}>
       <div className="Sidebar-title-wrapper">
         <Icon
           className="Sidebar-title-icon"

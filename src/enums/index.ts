@@ -19,3 +19,9 @@ export enum COLOR_MODE {
   LIGHT = 'light',
   DARK = 'dark',
 }
+
+export enum CONTAINER_ID {
+  SIDEBAR = 'sidebar',
+  CARDLIST = 'cardlist',
+  EDITOR = 'editor',
+}

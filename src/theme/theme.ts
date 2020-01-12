@@ -16,6 +16,12 @@ export const createSpacing = (typography: Typography) => {
   }
 }
 
+export const breakpoints = {
+  tablet: '768px',
+  mDPIDesktop: '1280px',
+  HiDPIDesktop: '1440px',
+}
+
 export const colors = {
   [COLOR_MODE.LIGHT]: {
     accent: '#ff00b2',

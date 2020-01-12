@@ -9,6 +9,8 @@ import { CardList } from './CardList'
 
 afterEach(cleanup)
 
+jest.mock('../../../utils/scrollIntoView')
+
 describe('CardList', () => {
   const currentRepoName = 'MOCK_REPO_NAME'
 

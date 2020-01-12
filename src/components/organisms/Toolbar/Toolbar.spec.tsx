@@ -1,11 +1,10 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import { wait } from '@apollo/react-testing'
 import React from 'react'
 
 import { useCommand } from '../../../hooks'
 import { files, repos, resolvers } from '../../../schema/mockResolvers'
-import { act, cleanup, fireEvent, render } from '../../../test-utils'
+import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { Toolbar } from './Toolbar'
 

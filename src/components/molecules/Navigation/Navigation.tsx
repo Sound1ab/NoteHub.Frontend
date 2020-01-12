@@ -1,7 +1,9 @@
 import React from 'react'
 
+import { CONTAINER_ID } from '../../../enums'
 import { useListRepos, useReadCurrentRepoName } from '../../../hooks'
 import { styled } from '../../../theme'
+import { scrollIntoView } from '../../../utils'
 import { NavigationItem, NavigationItemSkeleton } from '../../atoms'
 
 const Style = styled.nav`
@@ -16,6 +18,7 @@ export function Navigation() {
   function handleHeadingClick(repoName: string) {
     client.writeData({ data: { currentFileName: null } })
     client.writeData({ data: { currentRepoName: repoName } })
+    scrollIntoView(CONTAINER_ID.CARDLIST)
   }
 
   if (loading) {

@@ -9,11 +9,8 @@ import { styled } from '../../../theme'
 
 const Style = styled.div`
   position: relative;
-  grid-area: editor;
   padding: ${({ theme }) => theme.spacing.xs};
   height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
 `
 
 const markdown: any = MarkdownIt({

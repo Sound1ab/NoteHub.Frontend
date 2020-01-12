@@ -89,6 +89,7 @@ export function ButtonLink({
       aria-label={ariaLabel}
       as="a"
       href={href}
+      target="_self"
     >
       {children}
     </Style>
