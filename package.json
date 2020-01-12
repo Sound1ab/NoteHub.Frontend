@@ -74,7 +74,8 @@
     "eject": "react-scripts eject",
     "codegen": "graphql-codegen --config codegen.yml",
     "lint": "eslint './src/**/*.{ts,tsx}'",
-    "ts": "tsc --noEmit --pretty --noUnusedParameters --noUnusedLocals"
+    "ts": "tsc --noEmit --pretty --noUnusedParameters --noUnusedLocals",
+    "codechecks": "yarn ts && yarn lint && yarn test"
   },
   "browserslist": [
     ">0.2%",
