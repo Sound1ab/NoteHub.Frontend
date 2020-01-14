@@ -1,14 +1,12 @@
 import React, { ReactNode } from 'react'
 
 import { styled } from '../../../theme'
-import { Heading } from '../../atoms'
 
 const Style = styled.div<Pick<ICard, 'isActive' | 'isDisabled'>>`
   position: relative;
   width: 100%;
   display: flex;
   justify-content: flex-start;
-  flex-direction: column;
   padding: ${({ theme }) => theme.spacing.xs};
   background-color: ${({ theme, isActive }) =>
     isActive ? theme.colors.background.quaternary : 'transparent'};
@@ -56,14 +54,12 @@ export function Card({
       {renderInput ? (
         renderInput
       ) : (
-        <Heading
+        <span
           className="Card-heading"
-          type="h4"
-          marginBottom
           aria-label={isActive ? `${heading} is selected` : ''}
         >
           {heading}
-        </Heading>
+        </span>
       )}
     </Style>
   )

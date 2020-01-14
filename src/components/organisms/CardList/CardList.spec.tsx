@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
-import { files, resolvers } from '../../../schema/mockResolvers'
+import { files, repos, resolvers } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { CardList } from './CardList'
@@ -29,6 +29,19 @@ describe('CardList', () => {
 
     expect(headings[0].textContent).toBe(files[1].filename)
     expect(headings[1].textContent).toBe(files[0].filename)
+  })
+
+  it('should display private bar if repo is private', async () => {
+    const { getByText } = await render(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{ currentRepoName: repos[1].name }}
+      >
+        <CardList />
+      </MockProvider>
+    )
+
+    expect(getByText('Private repo')).toBeDefined()
   })
 
   it('should select a card item', async () => {

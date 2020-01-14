@@ -22,26 +22,6 @@ describe('RepoInput', () => {
     ;(global as any).Math.round = () => id
   })
 
-  it('should be able to be a private or public repo', async () => {
-    const createNewRepo = jest.fn()
-    ;(useCreateRepo as jest.Mock).mockImplementation(() => [
-      createNewRepo,
-      { loading: false },
-    ])
-
-    const { getByLabelText } = await render(
-      <MockProvider>
-        <RepoInput />
-      </MockProvider>
-    )
-
-    expect(getByLabelText('Repo name')).toBeDefined()
-
-    await fireEvent.click(getByLabelText('Make this a public or private repo'))
-
-    expect(getByLabelText('Add a private new repo')).toBeDefined()
-  })
-
   it('should create a new repo when user submits form', async () => {
     const { login } = user
     const createNewRepo = jest.fn()

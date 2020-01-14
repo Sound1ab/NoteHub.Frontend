@@ -1,10 +1,12 @@
-import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
 import {
   ReadRepoQuery,
   ReadRepoQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
+import { useReadCurrentRepoName, useReadGithubUser } from '..'
 
 export const ReadRepoDocument = gql`
   ${RepoFragment}
@@ -15,16 +17,20 @@ export const ReadRepoDocument = gql`
   }
 `
 
-export function useReadRepo(username: string, repo: string) {
-  const { data } = useQuery<ReadRepoQuery, ReadRepoQueryVariables>(
+export function useReadRepo() {
+  const user = useReadGithubUser()
+  const { currentRepoName } = useReadCurrentRepoName()
+
+  const { data, loading } = useQuery<ReadRepoQuery, ReadRepoQueryVariables>(
     ReadRepoDocument,
     {
+      skip: !currentRepoName || !user?.login,
       variables: {
-        repo,
-        username,
+        repo: currentRepoName ?? '',
+        username: user?.login ?? '',
       },
     }
   )
 
-  return data && data.readRepo
+  return { repo: data?.readRepo, loading }
 }

@@ -10,8 +10,12 @@ const Style = styled.form`
   display: flex;
   width: 100%;
 
+  .InlineInput-focus {
+    width: 100%;
+  }
+
   input {
-    flex: 1;
+    flex: 1 1 100%;
     font-size: ${({ theme }) => theme.rhythm(0.6)};
     background-color: transparent;
     color: ${({ theme }) => theme.colors.text.primary};
@@ -48,7 +52,7 @@ export function InlineInput({
   return (
     <Style ref={wrapperRef} onSubmit={onSubmit} aria-label={formAriaLabel}>
       {icon}
-      <FocusLock>
+      <FocusLock className="InlineInput-focus">
         <Input
           disabled={isDisabled}
           value={value}

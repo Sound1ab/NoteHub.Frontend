@@ -1,7 +1,7 @@
 import React, { Ref, forwardRef } from 'react'
 
 import { styled } from '../../../theme'
-import { Heading, Icon, TIcons } from '..'
+import { Icon, TIcons } from '..'
 
 const Style = styled.ul`
   background-color: ${({ theme }) => theme.colors.background.quinary};
@@ -76,7 +76,7 @@ export const Dropdown = forwardRef(
                 marginRight
                 title={`${label} icon`}
               />
-              <Heading type="h5">{label}</Heading>
+              {label}
             </li>
           </button>
         ))}

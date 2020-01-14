@@ -1,20 +1,11 @@
 import React, { useState } from 'react'
 
 import { useCommand, useCreateRepo, useReadGithubUser } from '../../../hooks'
-import { styled } from '../../../theme'
-import { Icon } from '../../atoms'
 import { InlineInput } from '../InlineInput/InlineInput'
 
-const StyleIcon = styled(Icon)<{ isPrivate: boolean }>`
-  color: ${({ theme, isPrivate }) =>
-    isPrivate ? theme.colors.accent : theme.colors.text.secondary};
-`
-
 export function RepoInput() {
-  const defaultState = { name: '', isPrivate: false }
-  const [{ name, isPrivate }, setForm] = useState<{ [key: string]: any }>(
-    defaultState
-  )
+  const defaultState = { name: '' }
+  const [{ name }, setForm] = useState<{ [key: string]: any }>(defaultState)
   const [createNewRepo, { loading }] = useCreateRepo()
   const { handleSetIsNewRepoOpen } = useCommand()
   const user = useReadGithubUser()
@@ -27,13 +18,6 @@ export function RepoInput() {
     }))
   }
 
-  function handleOnClick() {
-    setForm(prevState => ({
-      ...prevState,
-      isPrivate: !prevState.isPrivate,
-    }))
-  }
-
   async function handleCreateNewRepo(e: React.ChangeEvent<HTMLFormElement>) {
     e.preventDefault()
     try {
@@ -41,7 +25,7 @@ export function RepoInput() {
         variables: {
           input: {
             name,
-            private: isPrivate,
+            private: false,
           },
         },
         optimisticResponse: {
@@ -53,7 +37,7 @@ export function RepoInput() {
             name,
             node_id: '',
             description: null,
-            private: isPrivate,
+            private: false,
           },
         },
       })
@@ -72,20 +56,8 @@ export function RepoInput() {
       clickOutsideCallback={() => handleSetIsNewRepoOpen(false)}
       handleOnChange={handleOnChange}
       onSubmit={handleCreateNewRepo}
-      formAriaLabel={isPrivate ? 'Add a private new repo' : 'Add a new repo'}
+      formAriaLabel="Add a new repo"
       inputAriaLabel="Repo name"
-      icon={
-        <StyleIcon
-          onClick={handleOnClick}
-          className="RepoInput-icon"
-          size="xs"
-          icon="product-hunt"
-          prefix="fab"
-          marginRight
-          ariaLabel="Make this a public or private repo"
-          isPrivate={isPrivate}
-        />
-      }
     />
   )
 }

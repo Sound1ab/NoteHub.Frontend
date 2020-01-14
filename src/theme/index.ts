@@ -10,6 +10,7 @@ interface IHeading {
   fontSize: string
   lineHeight: string
   marginBottom: string
+  fontWeight: string
 }
 
 export interface ITheme {

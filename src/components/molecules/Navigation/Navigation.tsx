@@ -6,7 +6,7 @@ import { styled } from '../../../theme'
 import { scrollIntoView } from '../../../utils'
 import { NavigationItem, NavigationItemSkeleton } from '../../atoms'
 
-const Style = styled.nav`
+const Style = styled.ul`
   position: relative;
   height: 100%;
 `
@@ -41,8 +41,8 @@ export function Navigation() {
               key={repo.full_name}
               id={repo.id}
               nodeId={repo.node_id}
-              onClick={handleHeadingClick.bind(null, repo.name)}
-              heading={repo && repo.name}
+              onClick={() => handleHeadingClick(repo.name)}
+              heading={repo.name}
               isPrivate={repo.private}
             />
           )

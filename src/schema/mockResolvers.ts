@@ -5,6 +5,7 @@ import {
   MutationDeleteFileArgs,
   MutationUpdateFileArgs,
   QueryReadFileArgs,
+  QueryReadRepoArgs,
   Repo,
 } from '../components/apollo/generated_components_typings'
 
@@ -71,6 +72,8 @@ export const resolvers = {
     readGithubUser: () => user,
     readFile: (_: any, input: QueryReadFileArgs) =>
       files.find(({ filename }) => filename === input.filename),
+    readRepo: (_: any, input: QueryReadRepoArgs) =>
+      repos.find(({ name }) => name === input.repo),
     logout: () => 'ok',
   }),
   Mutation: () => ({

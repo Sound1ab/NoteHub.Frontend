@@ -415,36 +415,42 @@ export const Style = styled.div`
 
   .cm-header-1 {
     font-size: ${({ theme }) => theme.typographyStyles.h1.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h1.fontWeight};
     line-height: ${({ theme }) => theme.typographyStyles.h1.lineHeight};
     margin-bottom: ${({ theme }) => theme.typographyStyles.h1.marginBottom};
     color: ${({ theme }) => theme.colors.accent};
   }
   .cm-header-2 {
     font-size: ${({ theme }) => theme.typographyStyles.h2.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h2.fontWeight};
     line-height: ${({ theme }) => theme.typographyStyles.h2.lineHeight};
     margin-bottom: ${({ theme }) => theme.typographyStyles.h2.marginBottom};
     color: ${({ theme }) => theme.colors.accent};
   }
   .cm-header-3 {
     font-size: ${({ theme }) => theme.typographyStyles.h3.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h3.fontWeight};
     line-height: ${({ theme }) => theme.typographyStyles.h3.lineHeight};
     margin-bottom: ${({ theme }) => theme.typographyStyles.h3.marginBottom};
     color: ${({ theme }) => theme.colors.accent};
   }
   .cm-header-4 {
     font-size: ${({ theme }) => theme.typographyStyles.h4.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h4.fontWeight};
     line-height: ${({ theme }) => theme.typographyStyles.h4.lineHeight};
     margin-bottom: ${({ theme }) => theme.typographyStyles.h4.marginBottom};
     color: ${({ theme }) => theme.colors.accent};
   }
   .cm-header-5 {
     font-size: ${({ theme }) => theme.typographyStyles.h5.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h5.fontWeight};
     line-height: ${({ theme }) => theme.typographyStyles.h5.lineHeight};
     margin-bottom: ${({ theme }) => theme.typographyStyles.h5.marginBottom};
     color: ${({ theme }) => theme.colors.accent};
   }
   .cm-header-6 {
     font-size: ${({ theme }) => theme.typographyStyles.h6.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h6.fontWeight};
     line-height: ${({ theme }) => theme.typographyStyles.h6.lineHeight};
     margin-bottom: ${({ theme }) => theme.typographyStyles.h6.marginBottom};
     color: ${({ theme }) => theme.colors.accent};

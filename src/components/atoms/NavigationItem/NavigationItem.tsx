@@ -6,19 +6,23 @@ import {
   useDeleteRepo,
   useModalToggle,
   useReadGithubUser,
+  useUpdateRepo,
 } from '../../../hooks'
 import { styled } from '../../../theme'
-import { Dropdown, Heading, Icon } from '..'
+import { Dropdown, Icon } from '..'
 
-const Style = styled.div<
+const Style = styled.li<
   Pick<INavigationItem, 'isActive' | 'isDisabled'> & { isOpen: boolean }
 >`
   position: relative;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: ${({ theme }) => theme.spacing.xxs};
   pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'all')};
+  padding: ${({ theme }) => theme.spacing.xxs}
+    ${({ theme }) => theme.spacing.xs};
+  background-color: ${({ theme, isActive }) =>
+    isActive ? theme.colors.accent : 'transparent'};
 
   .NavigationItem-button {
     background-color: transparent;
@@ -37,12 +41,8 @@ const Style = styled.div<
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: ${({ theme, isActive, isDisabled }) =>
-      isDisabled
-        ? theme.colors.text.tertiary
-        : isActive
-        ? theme.colors.accent
-        : theme.colors.text.primary};
+    color: ${({ theme, isDisabled }) =>
+      isDisabled ? theme.colors.text.tertiary : theme.colors.text.primary};
     &:hover {
       opacity: 0.5;
     }
@@ -51,7 +51,7 @@ const Style = styled.div<
   .NavigationItem-dropdown {
     position: absolute;
     bottom: 0;
-    right: -${({ theme }) => theme.spacing.xs};
+    right: 0;
     z-index: 100;
     transform: translateY(100%);
   }
@@ -91,6 +91,8 @@ export function NavigationItem({
   const containerRef = useRef(null)
   const client = useApolloClient()
   const [deleteRepo] = useDeleteRepo()
+  const [updateRepo] = useUpdateRepo()
+
   const user = useReadGithubUser()
   const { isOpen, Portal, ref, setOpen } = useModalToggle()
 
@@ -103,6 +105,8 @@ export function NavigationItem({
       alert('Error')
       return
     }
+
+    setOpen(false)
 
     try {
       client.writeData({
@@ -133,6 +137,41 @@ export function NavigationItem({
     }
   }
 
+  async function handleUpdatePrivateRepo() {
+    if (!user || !heading) {
+      alert('Error')
+      return
+    }
+
+    setOpen(false)
+
+    try {
+      await updateRepo({
+        variables: {
+          input: {
+            repo: heading,
+            username: user.login,
+            private: !isPrivate,
+          },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateRepo: {
+            __typename: 'Repo',
+            full_name: `${user?.login}/Soft.${heading}`,
+            id,
+            name: heading,
+            node_id: nodeId,
+            description: null,
+            private: !isPrivate,
+          },
+        },
+      })
+    } catch {
+      alert('There was an issue update your repo, please try again')
+    }
+  }
+
   return (
     <Style
       isActive={isActive}
@@ -145,24 +184,13 @@ export function NavigationItem({
         onClick={onClick}
         disabled={isDisabled || isOpen}
       >
-        {isPrivate && (
-          <Icon
-            className="NavigationItem-icon"
-            size="xs"
-            icon="product-hunt"
-            prefix="fab"
-            marginRight
-            title={`${heading} is a private repo`}
-          />
-        )}
-        <Heading
+        <span
           className="NavigationItem-heading"
-          type="h4"
           aria-label={isActive ? `${heading} is selected` : ''}
           data-testid="navigation-item-heading"
         >
           {heading}
-        </Heading>
+        </span>
       </button>
       <Icon
         className="NavigationItem-icon-chevron"
@@ -185,6 +213,12 @@ export function NavigationItem({
                 prefix: 'fa',
                 label: 'Delete repo',
                 onClick: handleDeleteRepo,
+              },
+              {
+                icon: 'product-hunt',
+                prefix: 'fab',
+                label: isPrivate ? 'Make public' : 'Make private',
+                onClick: handleUpdatePrivateRepo,
               },
             ]}
           />

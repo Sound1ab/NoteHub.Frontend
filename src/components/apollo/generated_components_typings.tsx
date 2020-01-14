@@ -204,6 +204,7 @@ export type UpdateRepoInput = {
   repo: Scalars['String']
   name?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
+  private?: Maybe<Scalars['Boolean']>
 }
 
 export type FileFragment = { __typename?: 'File' } & Pick<
@@ -252,6 +253,14 @@ export type ReadRepoQueryVariables = {
 
 export type ReadRepoQuery = { __typename?: 'Query' } & {
   readRepo: Maybe<{ __typename?: 'Repo' } & RepoFragment>
+}
+
+export type UpdateRepoMutationVariables = {
+  input: UpdateRepoInput
+}
+
+export type UpdateRepoMutation = { __typename?: 'Mutation' } & {
+  updateRepo: Maybe<{ __typename?: 'Repo' } & RepoFragment>
 }
 
 export type CreateFileMutationVariables = {

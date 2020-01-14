@@ -7,6 +7,7 @@ const Style = styled.div`
   position: relative;
   height: 100%;
   overflow-y: auto;
+  padding: ${({ theme }) => theme.spacing.xs};
 
   .NavigationItemSkeleton-content {
     width: 100%;

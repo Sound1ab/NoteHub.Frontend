@@ -9,6 +9,7 @@ const Style = styled.div`
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.xs};
 
   .NewRepo-heading {
     color: ${({ theme }) => theme.colors.text.primary};

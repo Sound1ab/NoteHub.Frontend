@@ -13,7 +13,6 @@ const Style = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: ${({ theme }) => theme.spacing.xs};
   overflow: auto;
   border-right: 1px solid ${({ theme }) => theme.colors.border};
 
@@ -28,7 +27,7 @@ const Style = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-bottom: ${({ theme }) => theme.spacing.xs};
+    padding: ${({ theme }) => theme.spacing.xs};
   }
 
   .Sidebar-title-icon {
@@ -38,6 +37,11 @@ const Style = styled.div`
   .Sidebar-title-heading {
     color: ${({ theme }) => theme.colors.text.primary};
     font-weight: bold;
+  }
+
+  .Sidebar-input {
+    padding: ${({ theme }) => theme.spacing.xxs}
+      ${({ theme }) => theme.spacing.xs};
   }
 `
 
@@ -61,7 +65,11 @@ export function Sidebar() {
           Repos
         </Heading>
       </div>
-      {isNewRepoOpen && <RepoInput />}
+      {isNewRepoOpen && (
+        <div className="Sidebar-input">
+          <RepoInput />
+        </div>
+      )}
       <Navigation />
       <NewRepo />
     </Style>

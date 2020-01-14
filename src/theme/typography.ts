@@ -6,10 +6,6 @@ export const createTypography = (colors: TColors) => {
   return new Typography({
     baseFontSize: '14px',
     bodyFontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      'Segoe UI',
-      'Oxygen',
       'Roboto',
       'Ubuntu',
       'Cantarell',
@@ -18,10 +14,6 @@ export const createTypography = (colors: TColors) => {
       'sans-serif',
     ],
     headerFontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      'Segoe UI',
-      'Oxygen',
       'Roboto',
       'Ubuntu',
       'Cantarell',
@@ -29,8 +21,6 @@ export const createTypography = (colors: TColors) => {
       'Helvetica Neue',
       'sans-serif',
     ],
-    scaleRatio: 2.2,
-    headerWeight: 300,
     overrideThemeStyles: () => ({
       form: {
         marginBottom: 0,
@@ -38,8 +28,12 @@ export const createTypography = (colors: TColors) => {
       p: {
         color: colors.text.primary,
       },
+      ul: {
+        margin: 0,
+      },
       li: {
         color: colors.text.primary,
+        margin: 0,
       },
       h1: {
         color: colors.accent,
