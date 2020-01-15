@@ -6,7 +6,7 @@ import { styled } from '../../../theme'
 import { scrollIntoView } from '../../../utils'
 import { NavigationItem, NavigationItemSkeleton } from '../../atoms'
 
-const Style = styled.ul`
+const Style = styled.div`
   position: relative;
   height: 100%;
 `

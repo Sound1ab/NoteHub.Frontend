@@ -11,7 +11,7 @@ import {
 import { styled } from '../../../theme'
 import { Dropdown, Icon } from '..'
 
-const Style = styled.li<
+const Style = styled.div<
   Pick<INavigationItem, 'isActive' | 'isDisabled'> & { isOpen: boolean }
 >`
   position: relative;

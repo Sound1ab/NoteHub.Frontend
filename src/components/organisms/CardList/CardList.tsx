@@ -64,11 +64,11 @@ export function CardList() {
       ) : (
         <>
           {repo?.private && (
-            <li className="Cardlist-header">
+            <div className="Cardlist-header">
               <Heading className="Cardlist-header-heading" type="h4">
                 Private repo
               </Heading>
-            </li>
+            </div>
           )}
           {isNewFileOpen && <Card renderInput={<FileInput />} />}
           {files

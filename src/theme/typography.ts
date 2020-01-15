@@ -4,7 +4,7 @@ import { TColors } from './index'
 
 export const createTypography = (colors: TColors) => {
   return new Typography({
-    baseFontSize: '14px',
+    baseFontSize: '16px',
     bodyFontFamily: [
       'Roboto',
       'Ubuntu',
@@ -28,12 +28,8 @@ export const createTypography = (colors: TColors) => {
       p: {
         color: colors.text.primary,
       },
-      ul: {
-        margin: 0,
-      },
       li: {
         color: colors.text.primary,
-        margin: 0,
       },
       h1: {
         color: colors.accent,
