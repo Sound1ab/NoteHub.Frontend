@@ -19,7 +19,7 @@ const Style = styled.div`
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     grid-area: sidebar;
     resize: horizontal;
-    min-width: ${({ theme }) => theme.spacing.xl};
+    min-width: ${({ theme }) => theme.spacing.xxl};
     max-width: 50vw;
   }
 

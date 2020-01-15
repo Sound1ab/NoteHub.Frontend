@@ -9,14 +9,17 @@ const Style = styled.div<Pick<ICard, 'isActive' | 'isDisabled'>>`
   justify-content: flex-start;
   padding: ${({ theme }) => theme.spacing.xs};
   background-color: ${({ theme, isActive }) =>
-    isActive ? theme.colors.background.quaternary : 'transparent'};
+    isActive ? theme.colors.background.quinary : 'transparent'};
   cursor: pointer;
   overflow: hidden;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'all')};
 
   &:hover {
-    opacity: 0.8;
+    background-color: ${({ theme, isActive }) =>
+      isActive
+        ? theme.colors.background.quinary
+        : theme.colors.background.quaternary};
   }
 
   .Card-heading {

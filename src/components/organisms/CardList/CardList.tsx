@@ -25,7 +25,7 @@ const Style = styled.div`
     -webkit-overflow-scrolling: touch;
     overflow: auto;
     resize: horizontal;
-    min-width: ${({ theme }) => theme.spacing.xxl};
+    min-width: ${({ theme }) => theme.spacing.xxxl};
     max-width: 50vw;
   }
 

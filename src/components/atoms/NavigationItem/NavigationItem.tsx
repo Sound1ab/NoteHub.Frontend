@@ -24,6 +24,11 @@ const Style = styled.div<
   background-color: ${({ theme, isActive }) =>
     isActive ? theme.colors.accent : 'transparent'};
 
+  &:hover {
+    background-color: ${({ theme, isActive }) =>
+      isActive ? theme.colors.accent : theme.colors.background.quaternary};
+  }
+
   .NavigationItem-button {
     background-color: transparent;
     display: flex;
@@ -43,9 +48,6 @@ const Style = styled.div<
     text-overflow: ellipsis;
     color: ${({ theme, isDisabled }) =>
       isDisabled ? theme.colors.text.tertiary : theme.colors.text.primary};
-    &:hover {
-      opacity: 0.5;
-    }
   }
 
   .NavigationItem-dropdown {
@@ -58,14 +60,9 @@ const Style = styled.div<
 
   .NavigationItem-icon-chevron {
     color: ${({ theme }) => theme.colors.text.primary};
-    opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
     cursor: pointer;
     margin-left: ${({ theme }) => theme.spacing.xs};
     flex: 0 0 auto;
-  }
-
-  &:hover .NavigationItem-icon-chevron {
-    opacity: 1;
   }
 `
 
@@ -194,7 +191,7 @@ export function NavigationItem({
       </button>
       <Icon
         className="NavigationItem-icon-chevron"
-        icon="chevron-down"
+        icon="ellipsis-h"
         onClick={handleToggleMenu}
         isDisabled={isOpen}
         ariaLabel="Repo dropdown"
