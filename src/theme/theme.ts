@@ -5,6 +5,7 @@ import { COLOR_MODE } from '../enums'
 export const createSpacing = (typography: Typography) => {
   return {
     l: typography.rhythm(3),
+    ml: typography.rhythm(2.5),
     m: typography.rhythm(1.5),
     s: typography.rhythm(1),
     xl: typography.rhythm(7),

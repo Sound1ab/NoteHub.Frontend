@@ -9,12 +9,14 @@ const Style = styled.div`
   display: flex;
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
+  padding-top: ${({ theme }) => theme.spacing.ml};
 
   > div {
     scroll-snap-align: start;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    padding-top: 0;
     display: grid;
     grid-template-columns:
       min-content
