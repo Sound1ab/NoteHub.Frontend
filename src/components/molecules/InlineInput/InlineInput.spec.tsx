@@ -34,6 +34,7 @@ describe('InlineInput', () => {
           onSubmit={onSubmit}
           formAriaLabel={formAriaLabel}
           icon={icon}
+          type="text"
         />
       </MockProvider>
     )
@@ -54,6 +55,7 @@ describe('InlineInput', () => {
           onSubmit={onSubmit}
           formAriaLabel={formAriaLabel}
           icon={icon}
+          type="text"
         />
       </MockProvider>
     )
@@ -79,6 +81,7 @@ describe('InlineInput', () => {
           onSubmit={onSubmit}
           formAriaLabel={formAriaLabel}
           icon={icon}
+          type="text"
         />
       </MockProvider>
     )
@@ -97,6 +100,7 @@ describe('InlineInput', () => {
           onSubmit={onSubmit}
           formAriaLabel={formAriaLabel}
           icon={icon}
+          type="text"
         />
       </MockProvider>
     )

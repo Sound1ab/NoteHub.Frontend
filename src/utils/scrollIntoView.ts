@@ -4,7 +4,7 @@ export function scrollIntoView(id: CONTAINER_ID) {
   const element = document.getElementById(id)
   element!.scrollIntoView({
     behavior: 'auto',
-    inline: 'start',
-    block: 'start',
+    inline: 'nearest',
+    block: 'nearest',
   })
 }

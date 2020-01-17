@@ -82,6 +82,7 @@ export function FileInput() {
       onSubmit={handleCreateNewFile}
       inputAriaLabel="Input file name"
       formAriaLabel="File name form"
+      type="text"
     />
   )
 }

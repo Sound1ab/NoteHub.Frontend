@@ -58,6 +58,7 @@ export function RepoInput() {
       onSubmit={handleCreateNewRepo}
       formAriaLabel="Add a new repo"
       inputAriaLabel="Repo name"
+      type="text"
     />
   )
 }

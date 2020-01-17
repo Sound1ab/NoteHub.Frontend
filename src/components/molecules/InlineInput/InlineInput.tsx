@@ -3,7 +3,6 @@ import FocusLock from 'react-focus-lock'
 
 import { useClickOutside } from '../../../hooks'
 import { styled } from '../../../theme'
-import { Input } from '../../atoms'
 
 const Style = styled.form`
   position: relative;
@@ -14,14 +13,20 @@ const Style = styled.form`
     width: 100%;
   }
 
-  input {
+  .InlineInput-input {
     flex: 1 1 100%;
-    font-size: ${({ theme }) => theme.rhythm(0.6)};
     background-color: transparent;
     color: ${({ theme }) => theme.colors.text.primary};
     border: 1px solid ${({ theme }) => theme.colors.accent};
     min-width: 20px;
     padding: 0 ${({ theme }) => theme.spacing.xxs};
+  }
+
+  .InlineInput-submit {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
   }
 `
 
@@ -34,6 +39,9 @@ interface IInlineInput {
   formAriaLabel?: string
   isDisabled?: boolean
   icon?: ReactNode
+  type: 'text' | 'number' | 'submit'
+  autocorrect?: 'on' | 'off'
+  autocapitalize?: 'on' | 'off'
 }
 
 export function InlineInput({
@@ -45,6 +53,9 @@ export function InlineInput({
   inputAriaLabel,
   icon,
   isDisabled,
+  type = 'text',
+  autocorrect = 'off',
+  autocapitalize = 'off',
 }: IInlineInput) {
   const wrapperRef = useRef<HTMLFormElement | null>(null)
   useClickOutside(clickOutsideCallback, wrapperRef)
@@ -53,14 +64,19 @@ export function InlineInput({
     <Style ref={wrapperRef} onSubmit={onSubmit} aria-label={formAriaLabel}>
       {icon}
       <FocusLock className="InlineInput-focus">
-        <Input
+        <input
+          className="InlineInput-input"
           disabled={isDisabled}
+          type={type}
           value={value}
           onChange={handleOnChange}
-          aria={inputAriaLabel}
           name="name"
+          aria-label={inputAriaLabel}
+          autoCorrect={autocorrect}
+          autoCapitalize={autocapitalize}
         />
       </FocusLock>
+      <input className="InlineInput-submit" type="submit" />
     </Style>
   )
 }
