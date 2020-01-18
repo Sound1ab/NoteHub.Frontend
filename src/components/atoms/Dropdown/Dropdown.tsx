@@ -40,10 +40,6 @@ const Style = styled.ul`
       }
     }
   }
-
-  .Dropdown-icon {
-    transform: none;
-  }
 `
 
 interface IDropdownMenuProps {

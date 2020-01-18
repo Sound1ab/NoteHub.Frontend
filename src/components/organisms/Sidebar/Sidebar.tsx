@@ -13,7 +13,6 @@ const Style = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  overflow: auto;
   border-right: 1px solid ${({ theme }) => theme.colors.border};
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
@@ -24,6 +23,7 @@ const Style = styled.div`
   }
 
   .Sidebar-title-wrapper {
+    flex: 0;
     display: flex;
     justify-content: flex-start;
     align-items: center;

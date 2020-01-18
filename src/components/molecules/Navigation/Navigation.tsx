@@ -7,8 +7,10 @@ import { scrollIntoView } from '../../../utils'
 import { NavigationItem, NavigationItemSkeleton } from '../../atoms'
 
 const Style = styled.div`
+  flex: 1;
   position: relative;
   height: 100%;
+  overflow: auto;
 `
 
 export function Navigation() {

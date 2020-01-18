@@ -5,6 +5,7 @@ import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
 
 const Style = styled.div`
+  flex: 0;
   display: flex;
   justify-content: flex-start;
   align-items: center;
