@@ -1,7 +1,8 @@
+import { useApolloClient } from '@apollo/react-hooks'
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 
-import { useReadIsAuthorised } from '../../../hooks'
+import { useLogin } from '../../../hooks'
 import { styled } from '../../../theme'
 import { ButtonLink, Icon } from '../../atoms'
 
@@ -27,9 +28,18 @@ const Style = styled.div`
 `
 
 export function Login() {
-  const { isAuthorised } = useReadIsAuthorised()
+  const client = useApolloClient()
+  const { jwt, loading } = useLogin()
 
-  return isAuthorised ? (
+  if (loading) {
+    return null
+  }
+
+  if (jwt) {
+    client.writeData({ data: { jwt } })
+  }
+
+  return jwt ? (
     <Redirect
       to={{
         pathname: '/dashboard',

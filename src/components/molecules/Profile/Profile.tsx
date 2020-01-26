@@ -35,7 +35,7 @@ export function Profile() {
 
   if (called && data?.logout === 'ok') {
     client.clearStore()
-    client.writeData({ data: { isAuthorised: false } })
+    client.writeData({ data: { jwt: null } })
   }
 
   function handleOpen() {

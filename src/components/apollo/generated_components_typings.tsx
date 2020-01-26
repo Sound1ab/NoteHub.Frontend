@@ -139,15 +139,17 @@ export type Query = {
   listRepos: ModelRepoConnection
   readGithubUserAccessToken: Scalars['String']
   readGithubUser?: Maybe<GithubUser>
+  login: Scalars['String']
   logout: Scalars['String']
+  refresh?: Maybe<Scalars['String']>
   currentRepoName?: Maybe<Scalars['String']>
   currentFileName?: Maybe<Scalars['String']>
   currentTheme?: Maybe<Scalars['String']>
   isEdit: Scalars['Boolean']
   isNewFileOpen: Scalars['Boolean']
   isNewRepoOpen: Scalars['Boolean']
-  isAuthorised: Scalars['Boolean']
   cursorPosition: Position
+  jwt?: Maybe<Scalars['String']>
 }
 
 export type QueryReadFileArgs = {
@@ -262,6 +264,18 @@ export type UpdateRepoMutationVariables = {
 export type UpdateRepoMutation = { __typename?: 'Mutation' } & {
   updateRepo: Maybe<{ __typename?: 'Repo' } & RepoFragment>
 }
+
+export type LoginQueryVariables = {}
+
+export type LoginQuery = { __typename?: 'Query' } & Pick<Query, 'login'>
+
+export type LogoutQueryVariables = {}
+
+export type LogoutQuery = { __typename?: 'Query' } & Pick<Query, 'logout'>
+
+export type RefreshQueryVariables = {}
+
+export type RefreshQuery = { __typename?: 'Query' } & Pick<Query, 'refresh'>
 
 export type CreateFileMutationVariables = {
   input: CreateFileInput
@@ -380,13 +394,6 @@ export type ReadCursorPositionQuery = { __typename?: 'Query' } & {
   cursorPosition: { __typename?: 'Position' } & Pick<Position, 'ch' | 'line'>
 }
 
-export type ReadIsAuthorisedQueryVariables = {}
-
-export type ReadIsAuthorisedQuery = { __typename?: 'Query' } & Pick<
-  Query,
-  'isAuthorised'
->
-
 export type ReadIsEditQueryVariables = {}
 
 export type ReadIsEditQuery = { __typename?: 'Query' } & Pick<Query, 'isEdit'>
@@ -405,9 +412,9 @@ export type ReadIsNewRepoOpenQuery = { __typename?: 'Query' } & Pick<
   'isNewRepoOpen'
 >
 
-export type LogoutQueryVariables = {}
+export type ReadJwtQueryVariables = {}
 
-export type LogoutQuery = { __typename?: 'Query' } & Pick<Query, 'logout'>
+export type ReadJwtQuery = { __typename?: 'Query' } & Pick<Query, 'jwt'>
 
 export type ReadGithubUserQueryVariables = {}
 

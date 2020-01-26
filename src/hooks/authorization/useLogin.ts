@@ -1,0 +1,21 @@
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
+import {
+  LoginQuery,
+  LoginQueryVariables,
+} from '../../components/apollo/generated_components_typings'
+
+export const LoginDocument = gql`
+  query Login {
+    login
+  }
+`
+
+export function useLogin() {
+  const { data, loading } = useQuery<LoginQuery, LoginQueryVariables>(
+    LoginDocument
+  )
+
+  return { jwt: data?.login, loading }
+}
