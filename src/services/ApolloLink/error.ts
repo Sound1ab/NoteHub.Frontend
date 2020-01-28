@@ -55,12 +55,20 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
         case APOLLO_ERRORS.JWT_EXPIRED: {
           return new Observable(observer => {
             refetchToken()
-              .then(() => {
+              .then(jwt => {
                 const subscriber = {
                   next: observer.next.bind(observer),
                   error: observer.error.bind(observer),
                   complete: observer.complete.bind(observer),
                 }
+
+                const oldHeaders = operation.getContext().headers
+                operation.setContext({
+                  headers: {
+                    ...oldHeaders,
+                    Authorization: `Bearer ${jwt}`,
+                  },
+                })
 
                 forward(operation).subscribe(subscriber)
               })

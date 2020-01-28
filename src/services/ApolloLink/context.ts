@@ -10,13 +10,13 @@ import { ReadJwtDocument } from '../../hooks'
 
 export const context = (client: ApolloClient<NormalizedCacheObject>) =>
   setContext((_, { headers }) => {
-    const data: any = client.readQuery<ReadJwtQuery, ReadJwtQueryVariables>({
+    const data = client.readQuery<ReadJwtQuery, ReadJwtQueryVariables>({
       query: ReadJwtDocument,
     })
     return {
       headers: {
         ...headers,
-        Authorization: data.jwt ? `Bearer ${data.jwt}` : '',
+        Authorization: data?.jwt ? `Bearer ${data.jwt}` : '',
       },
     }
   })
