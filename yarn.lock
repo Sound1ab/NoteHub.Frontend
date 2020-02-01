@@ -993,12 +993,12 @@
   dependencies:
     prop-types "^15.5.10"
 
-"@graphql-codegen/add@^1.0.7":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-1.9.1.tgz#7ac4cfcfdf4c018a406e19a4edf7553b06cdd3c5"
-  integrity sha512-ics82tmc22zRS2b9M6EufmQx9yUVTtDhAKrS8ZjN4tRMyRBdE0c28AUznMYEFP2KVseo2ZdAjnALpy9FQZ9+ZQ==
+"@graphql-codegen/add@^1.12.1":
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-1.12.1.tgz#0b051da65d836bdd25c2a607ecdbd6e6f855ec2a"
+  integrity sha512-i6+Al5+Z8WH4eIF4Nzsu2imXN1hLNPt+91v0Bm4n4XIOi3mbLtbEo8IxK354mOpriie1PCpUJq7Y9dofPONObA==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "1.9.1"
+    "@graphql-codegen/plugin-helpers" "1.12.1"
     tslib "1.10.0"
 
 "@graphql-codegen/cli@^1.0.7":
