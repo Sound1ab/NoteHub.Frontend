@@ -52,7 +52,7 @@
     "apollo-link-error": "^1.1.10",
     "apollo-link-http": "^1.5.16",
     "graphql-tag": "^2.10.1",
-    "highlight.js": "^9.15.10",
+    "highlight.js": "^9.18.0",
     "markdown-it": "^10.0.0",
     "react": "^16.8.4",
     "react-app-rewired": "^2.1.5",
