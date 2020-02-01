@@ -1,6 +1,6 @@
 {
-  "name": "Softnote",
-  "short_name": "Softnote",
+  "name": "NoteHub",
+  "short_name": "NoteHub",
   "theme_color": "#ff00b2",
   "background_color": "#000000",
   "display": "minimal-ui",

@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
 
-import { useCommand, useCreateRepo, useReadGithubUser } from '../../../hooks'
+import {
+  REPO_NAMESPACE,
+  useCommand,
+  useCreateRepo,
+  useReadGithubUser,
+} from '../../../hooks'
 import { InlineInput } from '../InlineInput/InlineInput'
 
 export function RepoInput() {
@@ -32,7 +37,7 @@ export function RepoInput() {
           __typename: 'Mutation',
           createRepo: {
             __typename: 'Repo',
-            full_name: `${user?.login}/Soft.${name}`,
+            full_name: `${user?.login}/${REPO_NAMESPACE}.${name}`,
             id: Math.round(Math.random() * -1000000),
             name,
             node_id: '',

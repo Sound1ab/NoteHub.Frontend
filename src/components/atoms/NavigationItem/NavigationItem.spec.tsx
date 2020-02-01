@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
-import { useDeleteRepo, useUpdateRepo } from '../../../hooks'
+import { REPO_NAMESPACE, useDeleteRepo, useUpdateRepo } from '../../../hooks'
 import { repos, resolvers, user } from '../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
@@ -137,7 +137,7 @@ describe('NavigationItem', () => {
         __typename: 'Mutation',
         deleteRepo: {
           __typename: 'Repo',
-          full_name: `${login}/Soft.${heading}`,
+          full_name: `${login}/${REPO_NAMESPACE}.${heading}`,
           id,
           name: heading,
           node_id: nodeId,
@@ -182,7 +182,7 @@ describe('NavigationItem', () => {
         __typename: 'Mutation',
         updateRepo: {
           __typename: 'Repo',
-          full_name: `${login}/Soft.${heading}`,
+          full_name: `${login}/${REPO_NAMESPACE}.${heading}`,
           id,
           name: heading,
           node_id: nodeId,

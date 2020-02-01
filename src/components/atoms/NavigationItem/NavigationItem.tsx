@@ -3,6 +3,7 @@ import React, { useRef } from 'react'
 
 import { COLOR } from '../../../enums'
 import {
+  REPO_NAMESPACE,
   useDeleteRepo,
   useModalToggle,
   useReadGithubUser,
@@ -120,7 +121,7 @@ export function NavigationItem({
           __typename: 'Mutation',
           deleteRepo: {
             __typename: 'Repo',
-            full_name: `${user?.login}/Soft.${heading}`,
+            full_name: `${user?.login}/${REPO_NAMESPACE}.${heading}`,
             id,
             name: heading,
             node_id: nodeId,
@@ -155,7 +156,7 @@ export function NavigationItem({
           __typename: 'Mutation',
           updateRepo: {
             __typename: 'Repo',
-            full_name: `${user?.login}/Soft.${heading}`,
+            full_name: `${user?.login}/${REPO_NAMESPACE}.${heading}`,
             id,
             name: heading,
             node_id: nodeId,
