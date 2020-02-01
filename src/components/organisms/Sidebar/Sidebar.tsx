@@ -20,6 +20,7 @@ const Style = styled.div`
     resize: horizontal;
     min-width: ${({ theme }) => theme.spacing.xxl};
     max-width: 50vw;
+    overflow-x: auto;
   }
 
   .Sidebar-title-wrapper {

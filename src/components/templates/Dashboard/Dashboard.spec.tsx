@@ -2,6 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
+import { REPO_NAMESPACE } from '../../../hooks'
 import { files, repos, resolvers, user } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
@@ -156,7 +157,7 @@ describe('Dashboard', () => {
       target: { files: [file] },
     })
 
-    const image = `![](https://github.com/${login}/noted-app-notes--${name}/blob/master/images/${imageFilename}?raw=true)${content}`
+    const image = `![](https://github.com/${login}/${REPO_NAMESPACE}.${name}/blob/master/images/${imageFilename}?raw=true)${content}`
 
     expect(getByText(image)).toBeDefined()
   })

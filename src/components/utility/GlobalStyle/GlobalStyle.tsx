@@ -20,6 +20,7 @@ export const GlobalStyle = createGlobalStyle<{
   
   html {
     box-sizing: border-box;
+    min-height: 100%;
     height: 100%;
     width: 100%;
     overflow: hidden!important;
@@ -57,9 +58,14 @@ export const GlobalStyle = createGlobalStyle<{
    */
   
   body {
+    height: 100%;
     margin: 0;
     background-color: ${({ theme }: { theme: any }) =>
       theme.colors.background.primary};
+  }
+  
+  #root {
+    height: 100%;
   }
   
   img {

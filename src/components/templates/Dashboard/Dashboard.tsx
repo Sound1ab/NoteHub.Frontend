@@ -4,7 +4,7 @@ import { styled } from '../../../theme'
 import { CardList, Editor, Sidebar, Toolbar } from '../../organisms'
 
 const Style = styled.div`
-  height: 100vh;
+  height: 100%;
   width: 100%;
   display: flex;
   overflow-x: scroll;

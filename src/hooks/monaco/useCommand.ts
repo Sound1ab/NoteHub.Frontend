@@ -20,6 +20,8 @@ export interface IPosition {
   __typename?: 'Position'
 }
 
+export const REPO_NAMESPACE = 'NH'
+
 export function useCommand() {
   const client = useApolloClient()
   const [deleteFile] = useDeleteFile()
@@ -38,7 +40,7 @@ export function useCommand() {
   const { setValue, value, path, loading: loadingFile } = useFile()
 
   function insertFilenameIntoString(filename: string) {
-    const text = `![](https://github.com/${user?.login}/noted-app-notes--${currentRepoName}/blob/master/images/${filename}?raw=true)`
+    const text = `![](https://github.com/${user?.login}/${REPO_NAMESPACE}.${currentRepoName}/blob/master/images/${filename}?raw=true)`
     const { ch, line } = cursorPosition
     const lines = value.split('\n')
     const characters = [...lines[line]]
