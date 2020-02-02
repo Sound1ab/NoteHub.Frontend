@@ -7,48 +7,48 @@ executors:
 
 commands:
   install-dependencies:
-    description: "Install node module dependencies"
+    description: 'Install node module dependencies'
     steps:
       - run: yarn install --frozen-lockfile
   cache-dependencies:
-    description: "Cache the node_modules"
+    description: 'Cache the node_modules'
     steps:
       - save_cache:
           key: v4-node_modules-{{ checksum "yarn.lock" }}
           paths:
             - ./node_modules
   restore-cached-dependencies:
-    description: "Restore node modules from the cache"
+    description: 'Restore node modules from the cache'
     steps:
       - restore_cache:
           keys:
             - v4-node_modules-{{ checksum "yarn.lock" }}
   run-unit-tests:
-    description: "Run unit tests"
+    description: 'Run unit tests'
     steps:
       - run: yarn test --ci --runInBand
   run-linter-check:
-    description: "Run linter"
+    description: 'Run linter'
     steps:
       - run: yarn lint
   run-typescript-check:
-    description: "Run typescript tests"
+    description: 'Run typescript tests'
     steps:
       - run: yarn ts
   configure-aws:
-    description: "Install dependencies for AWS and Serverless"
+    description: 'Install dependencies for AWS and Serverless'
     steps:
       - run: sudo apt-get install python-dev python-pip
       - run: sudo pip install awscli
   persist-to-workspace:
-    description: "Persist the dist file to the workspace"
+    description: 'Persist the dist file to the workspace'
     steps:
       - persist_to_workspace:
           root: ~/
           paths:
             - project/build
   attach-to-workspace:
-    description: "Attach the dist file to the workspace"
+    description: 'Attach the dist file to the workspace'
     steps:
       - attach_workspace:
           at: ~/
@@ -147,6 +147,6 @@ workflows:
             - approve-production
 
       - deploy:
-          bucket: noted-master
+          bucket: notehub.xyz
           requires:
             - build-production
