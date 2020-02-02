@@ -20,7 +20,7 @@ export interface IPosition {
   __typename?: 'Position'
 }
 
-export const REPO_NAMESPACE = 'NH'
+export const REPO_NAMESPACE = 'NoteHub'
 
 export function useCommand() {
   const client = useApolloClient()
