@@ -40,6 +40,12 @@ commands:
     steps:
       - run: sudo apt-get install python-dev python-pip
       - run: sudo pip install awscli
+  invalidate-cache:
+    description: 'Invalidate Cloudfront cache'
+    steps:
+      - run: aws configure set preview.cloudfront true # Turn on cloudfront in AWS CLI
+      - run: aws configure set preview.create-invalidation true
+      - run: aws cloudfront create-invalidation --distribution-id ${DISTRIBUTION_ID} --paths /\*
   persist-to-workspace:
     description: 'Persist the dist file to the workspace'
     steps:
@@ -102,6 +108,7 @@ jobs:
       - configure-aws
       - run: aws configure set default.s3.signature_version s3v4
       - run: aws --region us-east-1 s3 sync build s3://<< parameters.bucket >>/ --delete
+      - invalidate-cache
 
 workflows:
   version: 2
