@@ -29,7 +29,7 @@ export const colors = {
     background: {
       primary: '#ffffff',
       secondary: '#f8f8f8',
-      tertiary: '#f5f5f5',
+      tertiary: '#ffffff',
       quaternary: '#f5f5f5',
       quinary: '#c7c7c7',
     },
@@ -50,13 +50,13 @@ export const colors = {
   [COLOR_MODE.DARK]: {
     accent: '#ff00b2',
     background: {
-      primary: '#2b2b2b',
+      primary: '#1e1e1e',
       secondary: '#282828',
       tertiary: '#1e1e1e',
       quaternary: '#3a3a3a',
       quinary: '#484848',
     },
-    border: '#4c4c4c',
+    border: '#141414',
     link: {
       active: '#e8e8e8',
       hover: '#f0f0f0',
