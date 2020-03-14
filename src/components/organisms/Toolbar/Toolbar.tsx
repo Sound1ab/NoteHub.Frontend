@@ -12,13 +12,11 @@ import { Button, Icon } from '../../atoms'
 import { Profile } from '../../molecules'
 
 const Style = styled.div<{ isNewFileOpen: boolean }>`
-  position: absolute;
+  position: relative;
   width: 100%;
   display: flex;
-  top: 0;
   background-color: ${({ theme }) => theme.colors.background.tertiary};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  z-index: 10;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     position: relative;

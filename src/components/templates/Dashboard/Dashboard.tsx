@@ -7,16 +7,9 @@ const Style = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
-  overflow-x: scroll;
-  scroll-snap-type: x mandatory;
-  padding-top: ${({ theme }) => theme.spacing.ml};
-
-  > div {
-    scroll-snap-align: start;
-  }
+  flex-direction: column;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    padding-top: 0;
     display: grid;
     grid-template-columns:
       min-content
@@ -27,15 +20,32 @@ const Style = styled.div`
       'toolbar toolbar toolbar'
       'sidebar cardlist editor';
   }
+
+  .Dashboard-content {
+    flex: 1;
+    display: flex;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+
+    > div {
+      scroll-snap-align: start;
+    }
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+      display: contents;
+    }
+  }
 `
 
 export function Dashboard() {
   return (
     <Style>
       <Toolbar />
-      <Sidebar />
-      <CardList />
-      <Editor />
+      <div className="Dashboard-content">
+        <Sidebar />
+        <CardList />
+        <Editor />
+      </div>
     </Style>
   )
 }

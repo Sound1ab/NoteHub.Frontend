@@ -20,12 +20,10 @@ const Style = styled.div<
   justify-content: flex-start;
   align-items: center;
   pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'all')};
-  padding: ${({ theme }) => theme.spacing.xxs}
-    ${({ theme }) => theme.spacing.xs};
   background-color: ${({ theme, isActive }) =>
     isActive ? theme.colors.accent : 'transparent'};
 
-  &:hover {
+  @media (hover: hover) and (pointer: fine) {
     background-color: ${({ theme, isActive }) =>
       isActive ? theme.colors.accent : theme.colors.background.quaternary};
   }
@@ -37,6 +35,8 @@ const Style = styled.div<
     align-items: center;
     flex: 1 1 auto;
     overflow: hidden;
+    padding: ${({ theme }) => theme.spacing.xxs} 0
+      ${({ theme }) => theme.spacing.xxs} ${({ theme }) => theme.spacing.xs};
   }
 
   .NavigationItem-icon {
@@ -62,7 +62,7 @@ const Style = styled.div<
   .NavigationItem-icon-chevron {
     color: ${({ theme }) => theme.colors.text.primary};
     cursor: pointer;
-    margin-left: ${({ theme }) => theme.spacing.xs};
+    margin: 0 ${({ theme }) => theme.spacing.xs};
     flex: 0 0 auto;
   }
 `
