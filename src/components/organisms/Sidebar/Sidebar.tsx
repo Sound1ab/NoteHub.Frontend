@@ -4,7 +4,7 @@ import { CONTAINER_ID } from '../../../enums'
 import { useReadIsNewRepoOpen } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Heading, Icon } from '../../atoms'
-import { Navigation, NewRepo, RepoInput } from '../../molecules'
+import { NewRepo, RepoInput, Repos } from '../../molecules'
 
 const Style = styled.div`
   flex: 0 0 100%;
@@ -29,6 +29,7 @@ const Style = styled.div`
     justify-content: flex-start;
     align-items: center;
     padding: ${({ theme }) => theme.spacing.xs};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   }
 
   .Sidebar-title-icon {
@@ -71,7 +72,7 @@ export function Sidebar() {
           <RepoInput />
         </div>
       )}
-      <Navigation />
+      <Repos />
       <NewRepo />
     </Style>
   )

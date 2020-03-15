@@ -25,7 +25,7 @@ describe('CardList', () => {
       expect(getByText(filename)).toBeDefined()
     })
 
-    const headings = getAllByTestId('card')
+    const headings = getAllByTestId('list-item-heading')
 
     expect(headings[0].textContent).toBe(files[1].filename)
     expect(headings[1].textContent).toBe(files[0].filename)

@@ -24,8 +24,10 @@ const Style = styled.div<
     isActive ? theme.colors.accent : 'transparent'};
 
   @media (hover: hover) and (pointer: fine) {
-    background-color: ${({ theme, isActive }) =>
-      isActive ? theme.colors.accent : theme.colors.background.quaternary};
+    &:hover {
+      background-color: ${({ theme, isActive }) =>
+        isActive ? theme.colors.accent : theme.colors.background.quaternary};
+    }
   }
 
   .NavigationItem-button {
