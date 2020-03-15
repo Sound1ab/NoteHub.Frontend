@@ -35,20 +35,24 @@ const Style = styled.ul`
       display: flex;
       margin-bottom: 0;
 
-      &:hover {
-        color: ${({ theme }) => theme.colors.text.secondary};
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          color: ${({ theme }) => theme.colors.text.secondary};
+        }
       }
     }
   }
 `
 
+export interface IDropdownItem {
+  icon: TIcons
+  label: string
+  onClick: () => void
+  prefix: 'fa' | 'fab'
+}
+
 interface IDropdownMenuProps {
-  items: {
-    icon: TIcons
-    label: string
-    onClick: () => void
-    prefix: 'fa' | 'fab'
-  }[]
+  items: IDropdownItem[]
 }
 
 export const Dropdown = forwardRef(

@@ -88,9 +88,11 @@ export const GlobalStyle = createGlobalStyle<{
   a:visited {
     color: ${({ theme }) => theme.colors.text.primary};
   }
-
-  a:hover {
-    color: ${({ theme }) => theme.colors.accent};
+  
+  @media (hover: hover) and (pointer: fine) {
+    a:hover {
+      color: ${({ theme }) => theme.colors.accent};
+    }
   }
 
   a:active {

@@ -27,8 +27,10 @@ const Style = styled.button<Pick<IButton, 'isActive'>>`
     }
   }
 
-  &:hover:not(:disabled) {
-    opacity: 0.6;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      opacity: 0.6;
+    }
   }
 `
 

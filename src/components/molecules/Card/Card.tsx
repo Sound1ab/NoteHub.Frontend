@@ -15,11 +15,13 @@ const Style = styled.div<Pick<ICard, 'isActive' | 'isDisabled'>>`
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'all')};
 
-  &:hover {
-    background-color: ${({ theme, isActive }) =>
-      isActive
-        ? theme.colors.background.quinary
-        : theme.colors.background.quaternary};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme, isActive }) =>
+        isActive
+          ? theme.colors.background.quinary
+          : theme.colors.background.quaternary};
+    }
   }
 
   .Card-heading {
