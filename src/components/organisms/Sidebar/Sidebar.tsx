@@ -40,11 +40,6 @@ const Style = styled.div`
     color: ${({ theme }) => theme.colors.text.primary};
     font-weight: bold;
   }
-
-  .Sidebar-input {
-    padding: ${({ theme }) => theme.spacing.xxs}
-      ${({ theme }) => theme.spacing.xs};
-  }
 `
 
 export function Sidebar() {
@@ -67,11 +62,7 @@ export function Sidebar() {
           Repos
         </Heading>
       </div>
-      {isNewRepoOpen && (
-        <div className="Sidebar-input">
-          <RepoInput />
-        </div>
-      )}
+      {isNewRepoOpen && <RepoInput />}
       <Repos />
       <NewRepo />
     </Style>

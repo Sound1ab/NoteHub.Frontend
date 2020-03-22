@@ -98,13 +98,13 @@ export function ListItem({
         onClick={onClick}
         disabled={isDisabled || isOpen}
       >
-        <h4
+        <h5
           className="ListItem-heading"
           aria-label={isActive ? `${heading} is selected` : ''}
           data-testid="list-item-heading"
         >
           {heading}
-        </h4>
+        </h5>
       </button>
       {dropdownItems && (
         <Icon
