@@ -44,6 +44,19 @@ describe('CardList', () => {
     expect(getByText('Private repo')).toBeDefined()
   })
 
+  it('should display public bar if repo is public', async () => {
+    const { getByText } = await render(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{ currentRepoName: repos[0].name }}
+      >
+        <CardList />
+      </MockProvider>
+    )
+
+    expect(getByText('Public repo')).toBeDefined()
+  })
+
   it('should select a card item', async () => {
     const [{ filename: activeFilename }, { filename: inactiveFilename }] = files
 

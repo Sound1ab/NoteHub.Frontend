@@ -46,10 +46,10 @@ export function CardList() {
 
   return (
     <Style id={CONTAINER_ID.CARDLIST}>
-      {repo?.private && (
+      {repo && (
         <div className="Cardlist-header">
           <Heading className="Cardlist-header-heading" type="h4">
-            Private repo
+            {repo?.private ? 'Private repo' : 'Public repo'}
           </Heading>
         </div>
       )}

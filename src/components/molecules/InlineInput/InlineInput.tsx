@@ -19,7 +19,10 @@ const Style = styled.form`
     color: ${({ theme }) => theme.colors.text.primary};
     border: 1px solid ${({ theme }) => theme.colors.accent};
     min-width: 20px;
-    padding: 0 ${({ theme }) => theme.spacing.xxs};
+    padding: ${({ theme }) => theme.spacing.xxs}
+      ${({ theme }) => theme.spacing.xs};
+    font-size: ${({ theme }) => theme.typographyStyles.h5.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h5.fontWeight};
   }
 
   .InlineInput-submit {

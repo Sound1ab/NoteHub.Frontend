@@ -120,33 +120,29 @@ export function Repos() {
   return (
     <Style>
       <List items={repos}>
-        {repo => {
-          const isActive = repo.name === currentRepoName
-
-          return (
-            <ListItem
-              isDisabled={repo.id < 0}
-              isActive={isActive}
-              key={repo.full_name}
-              onClick={() => handleHeadingClick(repo.name)}
-              heading={repo.name}
-              dropdownItems={[
-                {
-                  icon: 'trash',
-                  prefix: 'fa',
-                  label: 'Delete repo',
-                  onClick: () => handleDeleteRepo(repo),
-                },
-                {
-                  icon: 'product-hunt',
-                  prefix: 'fab',
-                  label: repo.private ? 'Make public' : 'Make private',
-                  onClick: () => handleUpdatePrivateRepo(repo),
-                },
-              ]}
-            />
-          )
-        }}
+        {repo => (
+          <ListItem
+            isDisabled={repo.id < 0}
+            isActive={repo.name === currentRepoName}
+            key={repo.full_name}
+            onClick={() => handleHeadingClick(repo.name)}
+            heading={repo.name}
+            dropdownItems={[
+              {
+                icon: 'trash',
+                prefix: 'fa',
+                label: 'Delete repo',
+                onClick: () => handleDeleteRepo(repo),
+              },
+              {
+                icon: 'product-hunt',
+                prefix: 'fab',
+                label: repo.private ? 'Make public' : 'Make private',
+                onClick: () => handleUpdatePrivateRepo(repo),
+              },
+            ]}
+          />
+        )}
       </List>
     </Style>
   )
