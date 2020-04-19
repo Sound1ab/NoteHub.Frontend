@@ -8,6 +8,7 @@ import {
   useReadGithubUser,
 } from '../../../hooks'
 import { styled } from '../../../theme'
+import { Fade } from '../../animation'
 import { Avatar, Dropdown } from '../../atoms'
 
 const Style = styled.div<{ isPortalOpen: boolean }>`
@@ -49,7 +50,7 @@ export function Profile() {
   return (
     <Style ref={containerRef} isPortalOpen={isOpen}>
       <Avatar image={user?.avatar_url} onClick={handleOpen} />
-      {isOpen && (
+      <Fade show={isOpen}>
         <Portal domNode={containerRef.current} className="Profile-dropdown">
           <Dropdown
             ref={ref}
@@ -75,7 +76,7 @@ export function Profile() {
             ]}
           />
         </Portal>
-      )}
+      </Fade>
     </Style>
   )
 }

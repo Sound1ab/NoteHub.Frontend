@@ -3,6 +3,7 @@ import React, { useRef } from 'react'
 import { COLOR } from '../../../enums'
 import { useModalToggle } from '../../../hooks'
 import { styled } from '../../../theme'
+import { Fade } from '../../animation'
 import { Dropdown, IDropdownItem, Icon } from '../../atoms'
 
 const Style = styled.div<
@@ -116,11 +117,11 @@ export function ListItem({
           color={COLOR.LIGHT}
         />
       )}
-      {isOpen && dropdownItems && (
+      <Fade show={isOpen && !!dropdownItems}>
         <Portal domNode={containerRef.current} className="ListItem-dropdown">
-          <Dropdown ref={ref} items={dropdownItems} />
+          <Dropdown ref={ref} items={dropdownItems!} />
         </Portal>
-      )}
+      </Fade>
     </Style>
   )
 }
