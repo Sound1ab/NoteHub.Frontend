@@ -1,5 +1,7 @@
 import { useApolloClient } from '@apollo/react-hooks'
 
+import { CONTAINER_ID } from '../../enums'
+import { scrollIntoView } from '../../utils'
 import {
   useDeleteFile,
   useDropzone,
@@ -105,6 +107,7 @@ export function useCommand() {
 
   function handleSetIsNewFileOpen() {
     client.writeData({ data: { isNewFileOpen: !isNewFileOpen } })
+    scrollIntoView(CONTAINER_ID.CARDLIST)
   }
 
   function handleSetIsNewRepoOpen(value = !isNewRepoOpen) {

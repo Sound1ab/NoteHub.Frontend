@@ -8,7 +8,7 @@ export function scrollIntoView(id: CONTAINER_ID) {
   }
 
   element.scrollIntoView({
-    behavior: 'auto',
+    behavior: 'smooth',
     inline: 'center',
     block: 'center',
   })
