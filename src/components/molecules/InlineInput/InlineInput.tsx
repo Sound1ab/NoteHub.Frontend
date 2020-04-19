@@ -21,7 +21,7 @@ const Style = styled.form`
     min-width: 20px;
     padding: ${({ theme }) => theme.spacing.xxs}
       ${({ theme }) => theme.spacing.xs};
-    font-size: ${({ theme }) => theme.typographyStyles.h5.fontSize};
+    font-size: 16px; // Note: Has to be 16px to stop ios zoom
     font-weight: ${({ theme }) => theme.typographyStyles.h5.fontWeight};
   }
 

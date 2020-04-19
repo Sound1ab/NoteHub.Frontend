@@ -24,7 +24,7 @@ const Style = styled.div`
   }
 
   .Sidebar-title-wrapper {
-    flex: 0;
+    flex: 0 1 auto;
     display: flex;
     justify-content: flex-start;
     align-items: center;
