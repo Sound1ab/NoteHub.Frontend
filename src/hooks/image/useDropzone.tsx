@@ -17,7 +17,7 @@ export function useDropzone() {
   const { currentRepoName } = useReadCurrentRepoName()
   const user = useReadGithubUser()
 
-  async function handleCreateNewImage(filename: string, content: any) {
+  async function handleCreateNewImage(path: string, content: any) {
     if (!content) {
       alert('no content')
       return
@@ -32,9 +32,7 @@ export function useDropzone() {
         variables: {
           input: {
             content,
-            filename,
-            repo: currentRepoName,
-            username: user.login,
+            path,
           },
         },
       })

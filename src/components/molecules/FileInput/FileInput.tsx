@@ -42,9 +42,7 @@ export function FileInput() {
         variables: {
           input: {
             content: `# ${name}`,
-            filename: `${filename}.md`,
-            repo: currentRepoName,
-            username: user.login,
+            path: `${filename}.md`,
           },
         },
         optimisticResponse: {

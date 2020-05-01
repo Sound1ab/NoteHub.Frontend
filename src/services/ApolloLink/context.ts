@@ -8,15 +8,29 @@ import {
 } from '../../components/apollo/generated_components_typings'
 import { ReadJwtDocument } from '../../hooks'
 
+const parseJwt = (token: string) => {
+  try {
+    return JSON.parse(atob(token.split('.')[1]))
+  } catch (e) {
+    return null
+  }
+}
+
 export const context = (client: ApolloClient<NormalizedCacheObject>) =>
   setContext((_, { headers }) => {
-    const data = client.readQuery<ReadJwtQuery, ReadJwtQueryVariables>({
+    const jwtData = client.readQuery<ReadJwtQuery, ReadJwtQueryVariables>({
       query: ReadJwtDocument,
     })
+
+    const decodedJwt = parseJwt(jwtData?.jwt ?? '')
+
+    const owner = decodedJwt?.login ?? ''
+
     return {
       headers: {
         ...headers,
-        Authorization: data?.jwt ? `Bearer ${data.jwt}` : '',
+        Authorization: jwtData?.jwt ? `Bearer ${jwtData.jwt}` : '',
+        Owner: owner,
       },
     }
   })

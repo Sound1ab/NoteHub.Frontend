@@ -47,9 +47,7 @@ export function useFile() {
       },
       query: ReadFileDocument,
       variables: {
-        filename: file.filename,
-        repo: file.repo,
-        username: user.login,
+        path: file.path,
       },
     })
 
@@ -59,9 +57,7 @@ export function useFile() {
       variables: {
         input: {
           content: newValue,
-          filename: file.filename,
-          repo: currentRepoName,
-          username: user.login,
+          path: file.path,
         },
       },
     })

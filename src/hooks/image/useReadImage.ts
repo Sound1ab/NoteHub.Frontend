@@ -1,5 +1,6 @@
-import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
 import {
   ReadImageQuery,
   ReadImageQueryVariables,
@@ -8,22 +9,20 @@ import { FileFragment } from '../../fragments'
 
 export const ReadImageDocument = gql`
   ${FileFragment}
-  query ReadImage($username: String!, $repo: String!, $filename: String!) {
-    readImage(username: $username, repo: $repo, filename: $filename) {
+  query ReadImage($path: String!) {
+    readImage(path: $path) {
       ...file
     }
   }
 `
 
-export function useReadImage(username: string, repo: string, filename: string) {
+export function useReadImage(path: string) {
   const { data, loading } = useQuery<ReadImageQuery, ReadImageQueryVariables>(
     ReadImageDocument,
     {
-      skip: !username || !repo || !filename,
+      skip: !path,
       variables: {
-        filename,
-        repo,
-        username,
+        path,
       },
     }
   )

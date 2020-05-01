@@ -6,30 +6,19 @@ import {
   ReadRepoQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
-import { useReadCurrentRepoName, useReadGithubUser } from '..'
 
 export const ReadRepoDocument = gql`
   ${RepoFragment}
-  query ReadRepo($username: String!, $repo: String!) {
-    readRepo(username: $username, repo: $repo) {
+  query ReadRepo {
+    readRepo {
       ...repo
     }
   }
 `
 
 export function useReadRepo() {
-  const user = useReadGithubUser()
-  const { currentRepoName } = useReadCurrentRepoName()
-
   const { data, loading } = useQuery<ReadRepoQuery, ReadRepoQueryVariables>(
-    ReadRepoDocument,
-    {
-      skip: !currentRepoName || !user?.login,
-      variables: {
-        repo: currentRepoName ?? '',
-        username: user?.login ?? '',
-      },
-    }
+    ReadRepoDocument
   )
 
   return { repo: data?.readRepo, loading }

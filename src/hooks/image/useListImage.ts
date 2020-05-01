@@ -1,5 +1,6 @@
-import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
 import {
   ListImagesQuery,
   ListImagesQueryVariables,
@@ -8,8 +9,8 @@ import { FileFragment } from '../../fragments'
 
 export const ListImagesDocument = gql`
   ${FileFragment}
-  query ListImages($username: String!, $repo: String!) {
-    listImages(username: $username, repo: $repo) {
+  query ListImages {
+    listImages {
       items {
         ...file
       }

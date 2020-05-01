@@ -1,14 +1,12 @@
-import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
 import {
   CreateFileMutation,
   CreateFileMutationVariables,
-  ListFilesQuery,
-  ListFilesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
 import { useReadCurrentRepoName, useReadGithubUser } from '..'
-import { ListFilesDocument } from './useListFiles'
 
 export const CreateFileDocument = gql`
   ${FileFragment}
@@ -30,33 +28,33 @@ export function useCreateFile() {
         const newFile = data && data.createFile
         if (!newFile || !user || !currentRepoName) return
 
-        const result = cache.readQuery<ListFilesQuery, ListFilesQueryVariables>(
-          {
-            query: ListFilesDocument,
-            variables: {
-              repo: currentRepoName,
-              username: user.login,
-            },
-          }
-        )
-
-        if (!result?.listFiles.items) {
-          return
-        }
-
-        cache.writeQuery<ListFilesQuery, ListFilesQueryVariables>({
-          data: {
-            listFiles: {
-              ...result.listFiles,
-              items: [newFile, ...result.listFiles.items],
-            },
-          },
-          query: ListFilesDocument,
-          variables: {
-            repo: currentRepoName,
-            username: user.login,
-          },
-        })
+        // const result = cache.readQuery<ListFilesQuery, ListFilesQueryVariables>(
+        //   {
+        //     query: ListFilesDocument,
+        //     variables: {
+        //       repo: currentRepoName,
+        //       username: user.login,
+        //     },
+        //   }
+        // )
+        //
+        // if (!result?.listFiles.items) {
+        //   return
+        // }
+        //
+        // cache.writeQuery<ListFilesQuery, ListFilesQueryVariables>({
+        //   data: {
+        //     listFiles: {
+        //       ...result.listFiles,
+        //       items: [newFile, ...result.listFiles.items],
+        //     },
+        //   },
+        //   query: ListFilesDocument,
+        //   variables: {
+        //     repo: currentRepoName,
+        //     username: user.login,
+        //   },
+        // })
       },
     }
   )

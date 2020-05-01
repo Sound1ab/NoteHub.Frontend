@@ -1,12 +1,9 @@
 import {
   File,
   MutationCreateFileArgs,
-  MutationCreateRepoArgs,
-  MutationDeleteFileArgs,
   MutationUpdateFileArgs,
   QueryReadFileArgs,
   QueryReadGithubUserAccessTokenArgs,
-  QueryReadRepoArgs,
   Repo,
 } from '../components/apollo/generated_components_typings'
 
@@ -76,22 +73,20 @@ export const resolvers = {
       { code, state }: QueryReadGithubUserAccessTokenArgs
     ) => (code && state ? 'MOCK_JWT' : null),
     readFile: (_: any, input: QueryReadFileArgs) =>
-      files.find(({ filename }) => filename === input.filename),
-    readRepo: (_: any, input: QueryReadRepoArgs) =>
-      repos.find(({ name }) => name === input.repo),
+      files.find(({ filename }) => filename === input.path),
     logout: () => 'ok',
   }),
   Mutation: () => ({
-    createRepo: (_: any, { input }: MutationCreateRepoArgs): Repo => ({
+    createRepo: (): Repo => ({
       id: 3,
       node_id: 'MOCK_NODE_ID',
-      name: input.name,
+      name: 'MOCK_NAME',
       full_name: 'MOCK_FULL_NAME',
-      description: input.description,
-      private: input.private ?? false,
+      description: 'MOCK_DESCRIPTION',
+      private: false,
     }),
-    deleteFile: (_: any, { input }: MutationDeleteFileArgs): File => ({
-      filename: input.filename,
+    deleteFile: (): File => ({
+      filename: 'MOCK_FILENAME',
       path: 'MOCK_PATH_2',
       content: 'MOCK_CONTENT_2',
       excerpt: 'MOCK_EXCERPT_2',
@@ -99,10 +94,10 @@ export const resolvers = {
       _links: {
         html: 'MOCK_HTML_LINK_2',
       },
-      repo: input.repo,
+      repo: 'MOCK_REPO',
     }),
     createFile: (_: any, { input }: MutationCreateFileArgs): File => ({
-      filename: input.filename,
+      filename: 'MOCK_FILENAME',
       path: 'MOCK_PATH_2',
       content: 'MOCK_CONTENT_2',
       excerpt: 'MOCK_EXCERPT_2',
@@ -110,10 +105,10 @@ export const resolvers = {
       _links: {
         html: 'MOCK_HTML_LINK_2',
       },
-      repo: input.repo,
+      repo: 'MOCK_REPO',
     }),
     updateFile: (_: any, { input }: MutationUpdateFileArgs): File => {
-      const findFile = ({ filename }: any) => filename === input.filename
+      const findFile = ({ filename }: any) => filename === input.path
       const fileIndex = files.findIndex(findFile)
       const file = files.find(findFile)
 
@@ -125,8 +120,8 @@ export const resolvers = {
         ...file,
         excerpt: file.excerpt ?? '',
         content: input.content ?? '',
-        repo: input.repo,
-        filename: input.filename,
+        repo: 'MOCK_REPO',
+        filename: 'MOCK_FILENAME',
       }
       return files[fileIndex]
     },

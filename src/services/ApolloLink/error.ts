@@ -21,7 +21,7 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
       const { data } = await makePromise<FetchResult<RefreshQuery>>(
         execute(new HttpLink({ uri: GRAPHQL, credentials: 'include' }), {
           query: gql`
-            query Refresh {
+            {
               refresh
             }
           `,

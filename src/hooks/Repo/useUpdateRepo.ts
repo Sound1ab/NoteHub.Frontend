@@ -9,7 +9,6 @@ import {
 } from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
 import { ReadRepoDocument } from './useReadRepo'
-import { useReadCurrentRepoName, useReadGithubUser } from '..'
 
 export const UpdateRepoDocument = gql`
   ${RepoFragment}
@@ -21,21 +20,14 @@ export const UpdateRepoDocument = gql`
 `
 
 export function useUpdateRepo() {
-  const user = useReadGithubUser()
-  const { currentRepoName } = useReadCurrentRepoName()
-
   return useMutation<UpdateRepoMutation, UpdateRepoMutationVariables>(
     UpdateRepoDocument,
     {
       update: (cache, { data }) => {
         const updatedRepo = data && data.updateRepo
-        if (!updatedRepo || !user || !currentRepoName) return
+        if (!updatedRepo) return
         const result = cache.readQuery<ReadRepoQuery, ReadRepoQueryVariables>({
           query: ReadRepoDocument,
-          variables: {
-            username: user.login,
-            repo: currentRepoName,
-          },
         })
 
         const repo = result?.readRepo
@@ -52,10 +44,6 @@ export function useUpdateRepo() {
             },
           },
           query: ReadRepoDocument,
-          variables: {
-            username: user.login,
-            repo: currentRepoName,
-          },
         })
       },
     }

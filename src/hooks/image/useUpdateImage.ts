@@ -1,5 +1,6 @@
-import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
 import {
   ReadImageQuery,
   ReadImageQueryVariables,
@@ -18,11 +19,7 @@ export const UpdateImageDocument = gql`
   }
 `
 
-export function useUpdateImage(
-  username: string,
-  repo: string,
-  filename: string
-) {
+export function useUpdateImage(path: string) {
   return useMutation<UpdateImageMutation, UpdateImageMutationVariables>(
     UpdateImageDocument,
     {
@@ -36,9 +33,7 @@ export function useUpdateImage(
           },
           query: ReadImageDocument,
           variables: {
-            filename,
-            repo,
-            username,
+            path,
           },
         })
       },

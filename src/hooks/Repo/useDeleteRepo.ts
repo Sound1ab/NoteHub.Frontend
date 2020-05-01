@@ -4,17 +4,14 @@ import gql from 'graphql-tag'
 import {
   DeleteRepoMutation,
   DeleteRepoMutationVariables,
-  ListReposQuery,
-  ListReposQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
-import { ListReposDocument } from './useListRepos'
 import { useReadGithubUser } from '..'
 
 export const DeleteRepoDocument = gql`
   ${RepoFragment}
-  mutation DeleteRepo($input: DeleteRepoInput!) {
-    deleteRepo(input: $input) {
+  mutation DeleteRepo {
+    deleteRepo {
       ...repo
     }
   }
@@ -30,30 +27,30 @@ export function useDeleteRepo() {
         const deletedRepo = data && data.deleteRepo
         if (!deletedRepo || !user) return
 
-        const result = cache.readQuery<ListReposQuery, ListReposQueryVariables>(
-          {
-            query: ListReposDocument,
-            variables: {
-              username: user.login,
-            },
-          }
-        )
-
-        const repos = result?.listRepos.items ?? []
-        const listRepos = result?.listRepos ?? {}
-
-        cache.writeQuery<ListReposQuery, ListReposQueryVariables>({
-          data: {
-            listRepos: {
-              ...listRepos,
-              items: repos.filter(repo => repo.id !== deletedRepo.id),
-            },
-          },
-          query: ListReposDocument,
-          variables: {
-            username: user.login,
-          },
-        })
+        // const result = cache.readQuery<ListReposQuery, ListReposQueryVariables>(
+        //   {
+        //     query: ListReposDocument,
+        //     variables: {
+        //       username: user.login,
+        //     },
+        //   }
+        // )
+        //
+        // const repos = result?.listRepos.items ?? []
+        // const listRepos = result?.listRepos ?? {}
+        //
+        // cache.writeQuery<ListReposQuery, ListReposQueryVariables>({
+        //   data: {
+        //     listRepos: {
+        //       ...listRepos,
+        //       items: repos.filter(repo => repo.id !== deletedRepo.id),
+        //     },
+        //   },
+        //   query: ListReposDocument,
+        //   variables: {
+        //     username: user.login,
+        //   },
+        // })
 
         function deleteFileKeysFromCache() {
           if (!deletedRepo || !user) return

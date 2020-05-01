@@ -38,9 +38,7 @@ export function useUpdateFile() {
           },
           query: ReadFileDocument,
           variables: {
-            filename: updatedFile.filename,
-            repo: updatedFile.repo,
-            username: user.login,
+            path: updatedFile.path,
           },
         })
       },
