@@ -56,6 +56,8 @@ export type TIcons =
   | 'pen'
   | 'image'
   | 'sign-out-alt'
+  | 'file'
+  | 'folder'
 
 interface IIcon {
   icon: TIcons

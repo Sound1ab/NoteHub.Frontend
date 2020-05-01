@@ -13,17 +13,19 @@ import {
   faEllipsisH,
   faEnvelope,
   faExternalLinkAlt,
+  faFile,
+  faFolder,
   faGripLinesVertical,
+  faImage,
   faMoon,
   faPen,
   faPenSquare,
   faPlusCircle,
+  faSignOutAlt,
   faSync,
   faTimes,
   faTrash,
   faUser,
-  faImage,
-  faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { ReactNode } from 'react'
 
@@ -49,7 +51,9 @@ library.add(
   faEdit,
   faPen,
   faImage,
-  faSignOutAlt
+  faSignOutAlt,
+  faFile,
+  faFolder
 )
 
 interface IIconProvider {

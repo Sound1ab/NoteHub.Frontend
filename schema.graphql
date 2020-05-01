@@ -15,6 +15,15 @@ type File {
   sha: String!
 }
 
+type GitNode {
+  mode: String!
+  path: String!
+  sha: String!
+  size: Int
+  type: String!
+  url: String!
+}
+
 type GithubUser {
   avatar_url: String!
   html_url: String!
@@ -31,6 +40,10 @@ type ModelFileConnection {
   items: [File!]!
 }
 
+type ModelNodeConnection {
+  nodes: [GitNode!]!
+}
+
 type ModelRepoConnection {
   items: [Repo!]!
 }
@@ -38,24 +51,26 @@ type ModelRepoConnection {
 type Mutation {
   createFile(input: CreateFileInput!): File
   createImage(input: CreateFileInput!): File
-  createRepo(input: CreateRepoInput!): Repo
+  createRepo: Repo
   deleteFile(input: DeleteFileInput!): File
   deleteImage(input: DeleteFileInput!): File
-  deleteRepo(input: DeleteRepoInput!): Repo
+  deleteRepo: Repo
   updateFile(input: UpdateFileInput!): File
   updateImage(input: UpdateFileInput!): File
   updateRepo(input: UpdateRepoInput!): Repo
 }
 
 type Query {
-  listFiles(repo: String!, username: String!): ModelFileConnection!
-  listImages(repo: String!, username: String!): ModelFileConnection!
-  listRepos: ModelRepoConnection!
-  readFile(filename: String!, repo: String!, username: String!): File
+  listImages: ModelFileConnection!
+  login: String!
+  logout: String!
+  readFile(path: String!): File
   readGithubUser: GithubUser
   readGithubUserAccessToken(code: String!, state: String!): String!
-  readImage(filename: String!, repo: String!, username: String!): File
-  readRepo(repo: String!, username: String!): Repo
+  readImage(path: String!): File
+  readNodes: ModelNodeConnection!
+  readRepo: Repo
+  refresh: String
 }
 
 type Repo {
@@ -74,38 +89,19 @@ enum CacheControlScope {
 
 input CreateFileInput {
   content: String
-  filename: String!
-  repo: String!
-  username: String!
-}
-
-input CreateRepoInput {
-  description: String
-  name: String!
-  private: Boolean
+  path: String!
 }
 
 input DeleteFileInput {
-  filename: String!
-  repo: String!
-  username: String!
-}
-
-input DeleteRepoInput {
-  repo: String!
-  username: String!
+  path: String!
 }
 
 input UpdateFileInput {
   content: String
-  filename: String!
-  repo: String!
-  username: String!
+  path: String!
 }
 
 input UpdateRepoInput {
   description: String
-  name: String
-  repo: String!
-  username: String!
+  private: Boolean
 }

@@ -91,7 +91,7 @@ export function Toolbar() {
           </Button>
           <Button
             isDisabled={!currentRepoName || !currentFileName}
-            onClick={handleDeleteFile}
+            onClick={() => handleDeleteFile(currentFileName)}
             title="Delete the selected file"
           >
             <Icon size="sm" icon="trash" prefix="fa" />
