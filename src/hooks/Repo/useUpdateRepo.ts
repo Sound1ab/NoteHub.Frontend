@@ -1,3 +1,5 @@
+import { MutationResult } from '@apollo/react-common'
+import { ExecutionResult } from '@apollo/react-common/lib/types/types'
 import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
@@ -19,33 +21,64 @@ export const UpdateRepoDocument = gql`
   }
 `
 
-export function useUpdateRepo() {
-  return useMutation<UpdateRepoMutation, UpdateRepoMutationVariables>(
-    UpdateRepoDocument,
-    {
-      update: (cache, { data }) => {
-        const updatedRepo = data && data.updateRepo
-        if (!updatedRepo) return
-        const result = cache.readQuery<ReadRepoQuery, ReadRepoQueryVariables>({
-          query: ReadRepoDocument,
-        })
+export function useUpdateRepo(): [
+  (
+    name: string,
+    description: string,
+    isPrivate: boolean
+  ) => Promise<ExecutionResult<UpdateRepoMutation>>,
+  MutationResult<UpdateRepoMutation>
+] {
+  const [mutation, rest] = useMutation<
+    UpdateRepoMutation,
+    UpdateRepoMutationVariables
+  >(UpdateRepoDocument, {
+    update: (cache, { data }) => {
+      const updatedRepo = data && data.updateRepo
+      if (!updatedRepo) return
+      const result = cache.readQuery<ReadRepoQuery, ReadRepoQueryVariables>({
+        query: ReadRepoDocument,
+      })
 
-        const repo = result?.readRepo
+      const repo = result?.readRepo
 
-        if (!repo) {
-          throw new Error('Can not update repo that does not exist')
-        }
+      if (!repo) {
+        throw new Error('Can not update repo that does not exist')
+      }
 
-        cache.writeQuery<ReadRepoQuery, ReadRepoQueryVariables>({
-          data: {
-            readRepo: {
-              ...repo,
-              ...updatedRepo,
-            },
+      cache.writeQuery<ReadRepoQuery, ReadRepoQueryVariables>({
+        data: {
+          readRepo: {
+            ...repo,
+            ...updatedRepo,
           },
-          query: ReadRepoDocument,
-        })
-      },
+        },
+        query: ReadRepoDocument,
+      })
+    },
+  })
+
+  async function updateRepo(
+    name: string,
+    description: string,
+    isPrivate: boolean
+  ) {
+    try {
+      return mutation({
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateRepo: {
+            __typename: 'Repo',
+            name,
+            description,
+            private: isPrivate,
+          },
+        },
+      })
+    } catch {
+      throw new Error('There was an issue update your repo, please try again')
     }
-  )
+  }
+
+  return [updateRepo, rest]
 }

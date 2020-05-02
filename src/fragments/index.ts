@@ -14,10 +14,7 @@ export const FileFragment = gql`
 
 export const RepoFragment = gql`
   fragment repo on Repo {
-    id
-    node_id
     name
-    full_name
     description
     private
   }

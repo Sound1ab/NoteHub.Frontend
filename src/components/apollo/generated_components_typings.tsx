@@ -181,7 +181,7 @@ export type FileFragment = { __typename?: 'File' } & Pick<
 
 export type RepoFragment = { __typename?: 'Repo' } & Pick<
   Repo,
-  'id' | 'node_id' | 'name' | 'full_name' | 'description' | 'private'
+  'name' | 'description' | 'private'
 >
 
 export type GithubUserFragment = { __typename?: 'GithubUser' } & Pick<

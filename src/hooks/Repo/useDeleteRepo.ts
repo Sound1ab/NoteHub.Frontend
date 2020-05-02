@@ -1,12 +1,16 @@
-import { useMutation } from '@apollo/react-hooks'
+import { MutationResult } from '@apollo/react-common'
+import { ExecutionResult } from '@apollo/react-common/lib/types/types'
+import { useApolloClient, useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
 import {
   DeleteRepoMutation,
   DeleteRepoMutationVariables,
+  ReadRepoQuery,
+  ReadRepoQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
-import { useReadGithubUser } from '..'
+import { ReadRepoDocument } from '..'
 
 export const DeleteRepoDocument = gql`
   ${RepoFragment}
@@ -17,64 +21,46 @@ export const DeleteRepoDocument = gql`
   }
 `
 
-export function useDeleteRepo() {
-  const user = useReadGithubUser()
+export function useDeleteRepo(): [
+  (path: string) => Promise<ExecutionResult<DeleteRepoMutation>>,
+  MutationResult<DeleteRepoMutation>
+] {
+  const client = useApolloClient()
 
-  return useMutation<DeleteRepoMutation, DeleteRepoMutationVariables>(
-    DeleteRepoDocument,
-    {
-      update: (cache, { data }) => {
-        const deletedRepo = data && data.deleteRepo
-        if (!deletedRepo || !user) return
+  const [mutation, rest] = useMutation<
+    DeleteRepoMutation,
+    DeleteRepoMutationVariables
+  >(DeleteRepoDocument, {
+    update: cache => {
+      cache.writeQuery<ReadRepoQuery, ReadRepoQueryVariables>({
+        data: {
+          readRepo: null,
+        },
+        query: ReadRepoDocument,
+      })
+    },
+  })
 
-        // const result = cache.readQuery<ListReposQuery, ListReposQueryVariables>(
-        //   {
-        //     query: ListReposDocument,
-        //     variables: {
-        //       username: user.login,
-        //     },
-        //   }
-        // )
-        //
-        // const repos = result?.listRepos.items ?? []
-        // const listRepos = result?.listRepos ?? {}
-        //
-        // cache.writeQuery<ListReposQuery, ListReposQueryVariables>({
-        //   data: {
-        //     listRepos: {
-        //       ...listRepos,
-        //       items: repos.filter(repo => repo.id !== deletedRepo.id),
-        //     },
-        //   },
-        //   query: ListReposDocument,
-        //   variables: {
-        //     username: user.login,
-        //   },
-        // })
-
-        function deleteFileKeysFromCache() {
-          if (!deletedRepo || !user) return
-
-          const listFilesVariables = {
-            repo: deletedRepo.name,
-            username: user.login,
-          }
-
-          const key = `\\$ROOT_QUERY.listFiles\\(${JSON.stringify(
-            listFilesVariables
-          )}\\)`
-
-          const regex = new RegExp(key, 'gi')
-
-          Object.keys((cache as any).data.data).forEach(key => {
-            if (key.match(regex)) {
-              ;(cache as any).data.delete(key)
-            }
-          })
-        }
-
-        deleteFileKeysFromCache()
-      },
+  async function deleteRepo() {
+    try {
+      client.writeData({
+        data: { currentRepoName: null },
+      })
+      return await mutation({
+        optimisticResponse: {
+          __typename: 'Mutation',
+          deleteRepo: {
+            __typename: 'Repo',
+            name: 'optimistic',
+            description: 'optimistic',
+            private: false,
+          },
+        },
+      })
+    } catch {
+      throw new Error('There was an issue deleting your file, please try again')
     }
-  )
+  }
+
+  return [deleteRepo, rest]
 }
