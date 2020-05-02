@@ -36,19 +36,18 @@ export function Tree() {
     return null
   }
 
-  function onFileClick(node: ITreeNode) {
-    client.writeData({
-      data: { currentFileName: node.path },
-    })
-    scrollIntoView(CONTAINER_ID.EDITOR)
-  }
-
-  function onFolderClick(node: ITreeNode) {
+  function onClick(node: ITreeNode) {
     if (node.children) {
       node.toggled = !node.toggled
+    } else {
+      client.writeData({
+        data: { currentFileName: node.name },
+      })
     }
 
     setData([...data])
+
+    scrollIntoView(CONTAINER_ID.EDITOR)
   }
 
   function renderNodes(tree: ITreeNode[]) {
@@ -64,8 +63,7 @@ export function Tree() {
           toggled={toggled}
           node={node}
           renderNodes={renderNodes}
-          onFolderClick={node => onFolderClick(node)}
-          onFileClick={node => onFileClick(node)}
+          onClick={node => onClick(node)}
           type={type}
           key={name}
         />

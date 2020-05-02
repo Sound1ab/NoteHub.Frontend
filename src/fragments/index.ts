@@ -7,10 +7,8 @@ export const FileFragment = gql`
     content
     excerpt
     sha
-    repo
-    _links {
-      html
-    }
+    type
+    url
   }
 `
 
@@ -32,5 +30,14 @@ export const GithubUserFragment = gql`
     avatar_url
     html_url
     name
+  }
+`
+
+export const GitNodeFragment = gql`
+  fragment gitNode on GitNode {
+    path
+    type
+    sha
+    url
   }
 `

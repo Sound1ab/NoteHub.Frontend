@@ -16,27 +16,12 @@ export enum CacheControlScope {
 }
 
 export type CreateFileInput = {
-  username: Scalars['String']
-  repo: Scalars['String']
-  filename: Scalars['String']
+  path: Scalars['String']
   content?: Maybe<Scalars['String']>
 }
 
-export type CreateRepoInput = {
-  name: Scalars['String']
-  description?: Maybe<Scalars['String']>
-  private?: Maybe<Scalars['Boolean']>
-}
-
 export type DeleteFileInput = {
-  username: Scalars['String']
-  repo: Scalars['String']
-  filename: Scalars['String']
-}
-
-export type DeleteRepoInput = {
-  username: Scalars['String']
-  repo: Scalars['String']
+  path: Scalars['String']
 }
 
 export type File = {
@@ -46,8 +31,8 @@ export type File = {
   content?: Maybe<Scalars['String']>
   excerpt?: Maybe<Scalars['String']>
   sha: Scalars['String']
-  _links: Links
-  repo: Scalars['String']
+  type: Scalars['String']
+  url: Scalars['String']
 }
 
 export type GithubUser = {
@@ -59,6 +44,14 @@ export type GithubUser = {
   name: Scalars['String']
 }
 
+export type GitNode = {
+  __typename?: 'GitNode'
+  path: Scalars['String']
+  type: Scalars['String']
+  sha: Scalars['String']
+  url: Scalars['String']
+}
+
 export type Links = {
   __typename?: 'Links'
   html: Scalars['String']
@@ -67,6 +60,11 @@ export type Links = {
 export type ModelFileConnection = {
   __typename?: 'ModelFileConnection'
   items: Array<File>
+}
+
+export type ModelNodeConnection = {
+  __typename?: 'ModelNodeConnection'
+  nodes: Array<GitNode>
 }
 
 export type ModelRepoConnection = {
@@ -111,16 +109,8 @@ export type MutationDeleteImageArgs = {
   input: DeleteFileInput
 }
 
-export type MutationCreateRepoArgs = {
-  input: CreateRepoInput
-}
-
 export type MutationUpdateRepoArgs = {
   input: UpdateRepoInput
-}
-
-export type MutationDeleteRepoArgs = {
-  input: DeleteRepoInput
 }
 
 export type Position = {
@@ -132,11 +122,10 @@ export type Position = {
 export type Query = {
   __typename?: 'Query'
   readFile?: Maybe<File>
-  listFiles: ModelFileConnection
+  readNodes: ModelNodeConnection
   readImage?: Maybe<File>
   listImages: ModelFileConnection
   readRepo?: Maybe<Repo>
-  listRepos: ModelRepoConnection
   readGithubUserAccessToken: Scalars['String']
   readGithubUser?: Maybe<GithubUser>
   login: Scalars['String']
@@ -153,30 +142,11 @@ export type Query = {
 }
 
 export type QueryReadFileArgs = {
-  username: Scalars['String']
-  repo: Scalars['String']
-  filename: Scalars['String']
-}
-
-export type QueryListFilesArgs = {
-  username: Scalars['String']
-  repo: Scalars['String']
+  path: Scalars['String']
 }
 
 export type QueryReadImageArgs = {
-  username: Scalars['String']
-  repo: Scalars['String']
-  filename: Scalars['String']
-}
-
-export type QueryListImagesArgs = {
-  username: Scalars['String']
-  repo: Scalars['String']
-}
-
-export type QueryReadRepoArgs = {
-  username: Scalars['String']
-  repo: Scalars['String']
+  path: Scalars['String']
 }
 
 export type QueryReadGithubUserAccessTokenArgs = {
@@ -195,24 +165,19 @@ export type Repo = {
 }
 
 export type UpdateFileInput = {
-  username: Scalars['String']
-  repo: Scalars['String']
-  filename: Scalars['String']
+  path: Scalars['String']
   content?: Maybe<Scalars['String']>
 }
 
 export type UpdateRepoInput = {
-  username: Scalars['String']
-  repo: Scalars['String']
-  name?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
   private?: Maybe<Scalars['Boolean']>
 }
 
 export type FileFragment = { __typename?: 'File' } & Pick<
   File,
-  'filename' | 'path' | 'content' | 'excerpt' | 'sha' | 'repo'
-> & { _links: { __typename?: 'Links' } & Pick<Links, 'html'> }
+  'filename' | 'path' | 'content' | 'excerpt' | 'sha' | 'type' | 'url'
+>
 
 export type RepoFragment = { __typename?: 'Repo' } & Pick<
   Repo,
@@ -224,34 +189,18 @@ export type GithubUserFragment = { __typename?: 'GithubUser' } & Pick<
   'id' | 'login' | 'avatar_url' | 'html_url' | 'name'
 >
 
-export type CreateRepoMutationVariables = {
-  input: CreateRepoInput
-}
+export type GitNodeFragment = { __typename?: 'GitNode' } & Pick<
+  GitNode,
+  'path' | 'type' | 'sha' | 'url'
+>
 
-export type CreateRepoMutation = { __typename?: 'Mutation' } & {
-  createRepo: Maybe<{ __typename?: 'Repo' } & RepoFragment>
-}
-
-export type DeleteRepoMutationVariables = {
-  input: DeleteRepoInput
-}
+export type DeleteRepoMutationVariables = {}
 
 export type DeleteRepoMutation = { __typename?: 'Mutation' } & {
   deleteRepo: Maybe<{ __typename?: 'Repo' } & RepoFragment>
 }
 
-export type ListReposQueryVariables = {}
-
-export type ListReposQuery = { __typename?: 'Query' } & {
-  listRepos: { __typename?: 'ModelRepoConnection' } & {
-    items: Array<{ __typename?: 'Repo' } & RepoFragment>
-  }
-}
-
-export type ReadRepoQueryVariables = {
-  username: Scalars['String']
-  repo: Scalars['String']
-}
+export type ReadRepoQueryVariables = {}
 
 export type ReadRepoQuery = { __typename?: 'Query' } & {
   readRepo: Maybe<{ __typename?: 'Repo' } & RepoFragment>
@@ -293,25 +242,20 @@ export type DeleteFileMutation = { __typename?: 'Mutation' } & {
   deleteFile: Maybe<{ __typename?: 'File' } & FileFragment>
 }
 
-export type ListFilesQueryVariables = {
-  username: Scalars['String']
-  repo: Scalars['String']
-}
-
-export type ListFilesQuery = { __typename?: 'Query' } & {
-  listFiles: { __typename?: 'ModelFileConnection' } & {
-    items: Array<{ __typename?: 'File' } & FileFragment>
-  }
-}
-
 export type ReadFileQueryVariables = {
-  username: Scalars['String']
-  repo: Scalars['String']
-  filename: Scalars['String']
+  path: Scalars['String']
 }
 
 export type ReadFileQuery = { __typename?: 'Query' } & {
   readFile: Maybe<{ __typename?: 'File' } & FileFragment>
+}
+
+export type ReadNodesQueryVariables = {}
+
+export type ReadNodesQuery = { __typename?: 'Query' } & {
+  readNodes: { __typename?: 'ModelNodeConnection' } & {
+    nodes: Array<{ __typename?: 'GitNode' } & GitNodeFragment>
+  }
 }
 
 export type UpdateFileMutationVariables = {
@@ -338,10 +282,7 @@ export type DeleteImageMutation = { __typename?: 'Mutation' } & {
   deleteImage: Maybe<{ __typename?: 'File' } & FileFragment>
 }
 
-export type ListImagesQueryVariables = {
-  username: Scalars['String']
-  repo: Scalars['String']
-}
+export type ListImagesQueryVariables = {}
 
 export type ListImagesQuery = { __typename?: 'Query' } & {
   listImages: { __typename?: 'ModelFileConnection' } & {
@@ -350,9 +291,7 @@ export type ListImagesQuery = { __typename?: 'Query' } & {
 }
 
 export type ReadImageQueryVariables = {
-  username: Scalars['String']
-  repo: Scalars['String']
-  filename: Scalars['String']
+  path: Scalars['String']
 }
 
 export type ReadImageQuery = { __typename?: 'Query' } & {
@@ -431,6 +370,10 @@ export type ReadGithubUserAccessTokenQuery = { __typename?: 'Query' } & Pick<
   Query,
   'readGithubUserAccessToken'
 >
+
+export type Unnamed_1_QueryVariables = {}
+
+export type Unnamed_1_Query = { __typename?: 'Query' } & Pick<Query, 'refresh'>
 
 export interface IntrospectionResultData {
   __schema: {

@@ -40,8 +40,7 @@ interface INode {
   name: string
   childNodes: any
   toggled: boolean
-  onFolderClick: (node: ITreeNode) => void
-  onFileClick: (node: ITreeNode) => void
+  onClick: (node: ITreeNode) => void
   node: any
   type: string
   renderNodes: (tree: ITreeNode[]) => void
@@ -51,19 +50,14 @@ export function Node({
   name,
   childNodes,
   toggled,
-  onFolderClick,
   node,
   renderNodes,
-  onFileClick,
+  onClick,
   type,
 }: INode) {
   return (
     <Style>
-      <Item
-        onClick={() =>
-          type === 'tree' ? onFolderClick(node) : onFileClick(node)
-        }
-      >
+      <Item onClick={() => onClick(node)}>
         {type === 'tree' && (
           <Chevron
             toggled={toggled}

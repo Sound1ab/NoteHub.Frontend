@@ -1,10 +1,8 @@
 import React from 'react'
 
 import { CONTAINER_ID } from '../../../enums'
-import { useReadIsNewRepoOpen } from '../../../hooks'
 import { styled } from '../../../theme'
-import { Heading, Icon } from '../../atoms'
-import { NewRepo, RepoInput, Repos } from '../../molecules'
+import { NewRepo, Tree } from '../../molecules'
 
 const Style = styled.div`
   flex: 0 0 100%;
@@ -43,27 +41,9 @@ const Style = styled.div`
 `
 
 export function Sidebar() {
-  const { isNewRepoOpen } = useReadIsNewRepoOpen()
-
   return (
     <Style id={CONTAINER_ID.SIDEBAR}>
-      <div className="Sidebar-title-wrapper">
-        <Icon
-          className="Sidebar-title-icon"
-          icon="book"
-          prefix="fa"
-          marginRight
-        />
-        <Heading
-          className="Sidebar-title-heading"
-          type="h4"
-          textTransform="uppercase"
-        >
-          Repos
-        </Heading>
-      </div>
-      {isNewRepoOpen && <RepoInput />}
-      <Repos />
+      <Tree />
       <NewRepo />
     </Style>
   )
