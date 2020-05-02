@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { styled } from '../../../theme'
-import { CardList, Editor, Sidebar, Toolbar } from '../../organisms'
+import { Editor, Sidebar, Toolbar } from '../../organisms'
 
 const Style = styled.div`
   height: 100%;
@@ -43,7 +43,6 @@ export function Dashboard() {
       <Toolbar />
       <div className="Dashboard-content">
         <Sidebar />
-        <CardList />
         <Editor />
       </div>
     </Style>
