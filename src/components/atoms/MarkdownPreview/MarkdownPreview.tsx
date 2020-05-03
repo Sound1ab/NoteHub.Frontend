@@ -4,7 +4,7 @@ import hljs from 'highlight.js'
 import MarkdownIt from 'markdown-it'
 import React, { useMemo } from 'react'
 
-import { useFile } from '../../../hooks'
+import { useReadFile } from '../../../hooks'
 import { styled } from '../../../theme'
 
 const Style = styled.div`
@@ -36,9 +36,11 @@ const markdown: any = MarkdownIt({
 })
 
 export function MarkdownPreview() {
-  const { value } = useFile()
+  const { file } = useReadFile()
 
-  const html = useMemo<string>(() => markdown.render(value), [value])
+  const html = useMemo<string>(() => markdown.render(file?.content ?? ''), [
+    file?.content,
+  ])
 
   return (
     <Style aria-label="Markdown preview">

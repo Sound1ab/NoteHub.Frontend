@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import {
   CreateFileMutation,
   CreateFileMutationVariables,
+  Node_Type,
   ReadNodesQuery,
   ReadNodesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
@@ -87,7 +88,7 @@ export function useCreateFile(): [
             content: `# ${name}`,
             excerpt: null,
             sha: 'optimistic',
-            type: 'file',
+            type: Node_Type.File,
             url: 'optimistic',
           },
         },

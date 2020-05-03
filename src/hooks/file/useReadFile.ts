@@ -6,7 +6,7 @@ import {
   ReadFileQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
-import { useReadCurrentFileName } from '../'
+import { useReadCurrentPath } from '../'
 
 export const ReadFileDocument = gql`
   ${FileFragment}
@@ -18,17 +18,17 @@ export const ReadFileDocument = gql`
 `
 
 export function useReadFile() {
-  const { currentFileName } = useReadCurrentFileName()
+  const { currentPath } = useReadCurrentPath()
 
   const { data, loading } = useQuery<ReadFileQuery, ReadFileQueryVariables>(
     ReadFileDocument,
     {
-      skip: !currentFileName,
+      skip: !currentPath,
       variables: {
-        path: currentFileName ?? '',
+        path: currentPath ?? '',
       },
     }
   )
 
-  return { file: data && data.readFile, loading }
+  return { file: data?.readFile, loading }
 }

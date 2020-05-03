@@ -1,26 +1,14 @@
-import { useApolloClient } from '@apollo/react-hooks'
 import React, { useEffect, useState } from 'react'
 
-import { CONTAINER_ID } from '../../../enums'
 import { useReadNodes } from '../../../hooks'
-import { styled } from '../../../theme'
-import { scrollIntoView } from '../../../utils'
+import { ITreeNode } from '../../../types'
 import { createNodes } from '../../../utils/createNodes'
 import { Node } from './Node'
-import { ITreeNode } from './types'
-
-const Style = styled.div`
-  flex: 1;
-  position: relative;
-  height: 100%;
-  overflow: auto;
-`
 
 export function Tree() {
-  const client = useApolloClient()
   const { gitNodes, loading } = useReadNodes()
 
-  const [data, setData] = useState<ITreeNode[]>([])
+  const [data, setData] = useState<ITreeNode | null>(null)
 
   useEffect(() => {
     if (!gitNodes) {
@@ -36,42 +24,19 @@ export function Tree() {
     return null
   }
 
-  function onClick(node: ITreeNode) {
-    if (node.children) {
-      node.toggled = !node.toggled
-    } else {
-      client.writeData({
-        data: { currentFileName: node.name },
-      })
-    }
-
-    setData([...data])
-
-    scrollIntoView(CONTAINER_ID.EDITOR)
+  if (!data) {
+    return null
   }
 
-  function renderNodes(tree: ITreeNode[]) {
-    const nodes = []
-
-    for (const node of tree) {
-      const { name, children, toggled, type } = node
-
-      nodes.push(
-        <Node
-          name={name}
-          childNodes={children}
-          toggled={toggled}
-          node={node}
-          renderNodes={renderNodes}
-          onClick={node => onClick(node)}
-          type={type}
-          key={name}
-        />
-      )
+  function onToggle(node: ITreeNode) {
+    if (!data) {
+      return
     }
 
-    return nodes
+    node.toggled = !node.toggled
+
+    setData({ ...data })
   }
 
-  return <Style>{renderNodes(data)}</Style>
+  return <Node node={data} onToggle={onToggle} />
 }

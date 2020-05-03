@@ -1,9 +1,12 @@
+import { MutationResult } from '@apollo/react-common'
+import { ExecutionResult } from '@apollo/react-common/lib/types/types'
 import { useApolloClient, useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
 import {
   DeleteFileMutation,
   DeleteFileMutationVariables,
+  Node_Type,
   ReadNodesQuery,
   ReadNodesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
@@ -20,10 +23,13 @@ export const DeleteFileDocument = gql`
   }
 `
 
-export function useDeleteFile() {
+export function useDeleteFile(): [
+  (path?: string) => Promise<ExecutionResult<DeleteFileMutation>>,
+  MutationResult<DeleteFileMutation>
+] {
   const client = useApolloClient()
 
-  const [mutation, ...rest] = useMutation<
+  const [mutation, mutationResult] = useMutation<
     DeleteFileMutation,
     DeleteFileMutationVariables
   >(DeleteFileDocument, {
@@ -56,19 +62,18 @@ export function useDeleteFile() {
     },
   })
 
-  async function deleteFile(path?: string | null) {
+  async function deleteFile(path?: string) {
     if (!path) {
-      alert('Delete file: no path provided')
-      return
+      throw new Error('Delete file: no path provided')
     }
 
     const filename = extractFilename(path)
 
     try {
       client.writeData({
-        data: { currentFileName: null },
+        data: { currentPath: null },
       })
-      await mutation({
+      return mutation({
         variables: {
           input: {
             path,
@@ -83,15 +88,15 @@ export function useDeleteFile() {
             content: '',
             excerpt: null,
             sha: 'optimistic',
-            type: 'file',
+            type: Node_Type.File,
             url: 'optimistic',
           },
         },
       })
     } catch {
-      alert('There was an issue deleting your file, please try again')
+      throw new Error('There was an issue deleting your file, please try again')
     }
   }
 
-  return [deleteFile, ...rest]
+  return [deleteFile, mutationResult]
 }

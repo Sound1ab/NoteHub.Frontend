@@ -11,7 +11,7 @@ export const createSpacing = (typography: Typography) => {
     xl: typography.rhythm(7),
     xs: typography.rhythm(0.5),
     xxl: typography.rhythm(10),
-    xxs: typography.rhythm(0.25),
+    xxs: typography.rhythm(0.3),
     xxxl: typography.rhythm(14),
     xxxs: typography.rhythm(0.1),
   }

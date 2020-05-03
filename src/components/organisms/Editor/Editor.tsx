@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { CONTAINER_ID } from '../../../enums'
-import { useFile, useReadIsEdit } from '../../../hooks'
+import { useReadFile, useReadIsEdit } from '../../../hooks'
 import { styled } from '../../../theme'
 import { MarkdownPreview } from '../../atoms'
 import { MarkdownEditor, MarkdownEditorSkeleton } from '../../molecules'
@@ -20,7 +20,7 @@ const Style = styled.div`
 
 export function Editor() {
   const { isEdit } = useReadIsEdit()
-  const { loading } = useFile()
+  const { loading } = useReadFile()
 
   return (
     <Style id={CONTAINER_ID.EDITOR}>

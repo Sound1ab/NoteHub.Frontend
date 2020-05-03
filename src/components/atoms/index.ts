@@ -1,7 +1,5 @@
-export * from './Heading/Heading'
 export * from './Icon/Icon'
 export * from './Avatar/Avatar'
-export * from './Spinner/Spinner'
 export * from './MarkdownPreview/MarkdownPreview'
 export * from './Button/Button'
 export * from './Dropdown/Dropdown'

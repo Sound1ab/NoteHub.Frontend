@@ -5,28 +5,26 @@ import { ApolloLink } from 'apollo-link'
 import React, { ReactNode } from 'react'
 
 import { COLOR_MODE } from '../../../enums'
-import { IPosition } from '../../../hooks'
 import { context, error, httpLink, lazy } from '../../../services/ApolloLink'
+import { IPosition } from '../../../types'
 
 export interface ILocalData {
   currentRepoName: string | null
   currentFileName: string | null
+  currentPath: string | null
   jwt: string | null
   currentTheme: COLOR_MODE | null
   isEdit: boolean
-  isNewFileOpen: boolean
-  isNewRepoOpen: boolean
   isAuthorised: boolean
   cursorPosition: IPosition
 }
 
 export const localData: ILocalData = {
-  currentRepoName: null,
+  currentRepoName: 'NoteHub.Notes',
   currentFileName: null,
+  currentPath: null,
   currentTheme: null,
   isEdit: true,
-  isNewFileOpen: false,
-  isNewRepoOpen: false,
   isAuthorised: false,
   jwt: null,
   cursorPosition: {

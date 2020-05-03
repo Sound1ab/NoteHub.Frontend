@@ -1,5 +1,8 @@
-import { GitNode } from '../components/apollo/generated_components_typings'
-import { ITreeNode } from '../components/molecules/Tree/types'
+import {
+  GitNode,
+  Node_Type,
+} from '../components/apollo/generated_components_typings'
+import { ITreeNode } from '../types'
 
 export function createFolderNode(
   name: string,
@@ -38,13 +41,11 @@ export function createNode(
 
     const children = currentNode?.children ? currentNode.children : []
 
-    const isFolder = type === 'tree' || type === 'folder'
+    const isFile = type === Node_Type.File
 
     currentNode.children = [
       ...children,
-      isFolder
-        ? createFolderNode(name, gitNode)
-        : createFileNode(name, gitNode),
+      isFile ? createFileNode(name, gitNode) : createFolderNode(name, gitNode),
     ]
     return
   }
@@ -61,7 +62,7 @@ export function createNode(
     currentNode.children = [
       ...currentNode.children,
       createFolderNode(currentName, {
-        type: 'tree',
+        type: Node_Type.Folder,
         path: `${currentPath}/${currentName}`,
       }),
     ]
@@ -81,10 +82,10 @@ export function createNode(
 export function createNodes(gitNodes: GitNode[]) {
   const treeBeard: ITreeNode = {
     children: [],
-    name: 'root',
-    path: '/',
+    name: 'Notes',
+    path: '',
     toggled: true,
-    type: 'tree',
+    type: Node_Type.Folder,
   }
 
   for (const gitNode of gitNodes) {
@@ -93,5 +94,5 @@ export function createNodes(gitNodes: GitNode[]) {
     createNode(path.split('/'), type, treeBeard, gitNode)
   }
 
-  return treeBeard?.children ?? []
+  return treeBeard
 }

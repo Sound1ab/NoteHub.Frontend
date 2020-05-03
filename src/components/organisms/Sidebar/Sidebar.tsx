@@ -2,7 +2,7 @@ import React from 'react'
 
 import { CONTAINER_ID } from '../../../enums'
 import { styled } from '../../../theme'
-import { NewRepo, Tree } from '../../molecules'
+import { Tree } from '../../molecules'
 
 const Style = styled.div`
   flex: 0 0 100%;
@@ -12,6 +12,7 @@ const Style = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   border-right: 1px solid ${({ theme }) => theme.colors.border};
+  overflow: auto;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     grid-area: sidebar;
@@ -44,7 +45,6 @@ export function Sidebar() {
   return (
     <Style id={CONTAINER_ID.SIDEBAR}>
       <Tree />
-      <NewRepo />
     </Style>
   )
 }

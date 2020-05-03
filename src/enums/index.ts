@@ -7,10 +7,6 @@ export enum COLOR {
   INHERIT = 'inherit',
 }
 
-export enum LOCAL_STORAGE {
-  COLOR_MODE = 'noted::color_mode',
-}
-
 export enum APOLLO_ERRORS {
   UNAUTHENTICATED = 'UNAUTHENTICATED',
   JWT_EXPIRED = 'JWT_EXPIRED',
@@ -26,6 +22,5 @@ export enum COLOR_MODE {
 
 export enum CONTAINER_ID {
   SIDEBAR = 'sidebar',
-  CARDLIST = 'cardlist',
   EDITOR = 'editor',
 }

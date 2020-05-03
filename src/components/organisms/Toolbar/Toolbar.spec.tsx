@@ -16,7 +16,6 @@ describe('Toolbar', () => {
   const handleSetEdit = jest.fn()
   const handleImageUpload = jest.fn()
   const handleDeleteFile = jest.fn()
-  const handleSetIsNewFileOpen = jest.fn()
   const Dropzone = () => <div>MOCK_DROPZONE</div>
 
   beforeEach(() => {
@@ -25,7 +24,6 @@ describe('Toolbar', () => {
       handleSetEdit,
       handleImageUpload,
       handleDeleteFile,
-      handleSetIsNewFileOpen,
       Dropzone,
     })
   })
@@ -188,21 +186,21 @@ describe('Toolbar', () => {
     expect(handleImageUpload).not.toBeCalled()
   })
 
-  it('should call handleSetIsNewFileOpen when Create a new file button is clicked', async () => {
-    const [{ name }] = repos
-    const [{ filename }] = files
-
-    const { getByTitle } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{ currentRepoName: name, currentFileName: filename }}
-      >
-        <Toolbar />
-      </MockProvider>
-    )
-
-    await fireEvent.click(getByTitle('Create a new file'))
-
-    expect(handleSetIsNewFileOpen).toBeCalled()
-  })
+  // it('should call handleSetIsNewFileOpen when Create a new file button is clicked', async () => {
+  //   const [{ name }] = repos
+  //   const [{ filename }] = files
+  //
+  //   const { getByTitle } = await render(
+  //     <MockProvider
+  //       mockResolvers={resolvers}
+  //       localData={{ currentRepoName: name, currentFileName: filename }}
+  //     >
+  //       <Toolbar />
+  //     </MockProvider>
+  //   )
+  //
+  //   await fireEvent.click(getByTitle('Create a new file'))
+  //
+  //   expect(handleSetIsNewFileOpen).toBeCalled()
+  // })
 })

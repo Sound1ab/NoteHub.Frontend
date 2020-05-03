@@ -31,7 +31,7 @@ export type File = {
   content?: Maybe<Scalars['String']>
   excerpt?: Maybe<Scalars['String']>
   sha: Scalars['String']
-  type: Scalars['String']
+  type: Node_Type
   url: Scalars['String']
 }
 
@@ -47,7 +47,7 @@ export type GithubUser = {
 export type GitNode = {
   __typename?: 'GitNode'
   path: Scalars['String']
-  type: Scalars['String']
+  type: Node_Type
   sha: Scalars['String']
   url: Scalars['String']
 }
@@ -113,6 +113,11 @@ export type MutationUpdateRepoArgs = {
   input: UpdateRepoInput
 }
 
+export enum Node_Type {
+  File = 'FILE',
+  Folder = 'FOLDER',
+}
+
 export type Position = {
   __typename?: 'Position'
   ch: Scalars['Int']
@@ -133,6 +138,7 @@ export type Query = {
   refresh?: Maybe<Scalars['String']>
   currentRepoName?: Maybe<Scalars['String']>
   currentFileName?: Maybe<Scalars['String']>
+  currentPath?: Maybe<Scalars['String']>
   currentTheme?: Maybe<Scalars['String']>
   isEdit: Scalars['Boolean']
   isNewFileOpen: Scalars['Boolean']
@@ -311,6 +317,13 @@ export type ReadCurrentFileNameQueryVariables = {}
 export type ReadCurrentFileNameQuery = { __typename?: 'Query' } & Pick<
   Query,
   'currentFileName'
+>
+
+export type ReadCurrentPathQueryVariables = {}
+
+export type ReadCurrentPathQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'currentPath'
 >
 
 export type ReadCurrentRepoNameQueryVariables = {}

@@ -2,6 +2,7 @@ import {
   File,
   MutationCreateFileArgs,
   MutationUpdateFileArgs,
+  Node_Type,
   QueryReadFileArgs,
   QueryReadGithubUserAccessTokenArgs,
   Repo,
@@ -33,10 +34,8 @@ export const files = [
     content: 'MOCK_CONTENT_2',
     excerpt: 'MOCK_EXCERPT_2',
     sha: 'MOCK_SHA_2',
-    _links: {
-      html: 'MOCK_HTML_LINK_2',
-    },
-    repo: 'MOCK_FULL_NAME_2',
+    type: 'file',
+    url: 'MOCK_URL',
   },
   {
     filename: 'MOCK_FILENAME_1',
@@ -44,10 +43,8 @@ export const files = [
     content: 'MOCK_CONTENT_1',
     excerpt: 'MOCK_EXCERPT_1',
     sha: 'MOCK_SHA_1',
-    _links: {
-      html: 'MOCK_HTML_LINK_1',
-    },
-    repo: 'MOCK_FULL_NAME_2',
+    type: 'file',
+    url: 'MOCK_URL',
   },
 ]
 
@@ -91,10 +88,8 @@ export const resolvers = {
       content: 'MOCK_CONTENT_2',
       excerpt: 'MOCK_EXCERPT_2',
       sha: 'MOCK_SHA_2',
-      _links: {
-        html: 'MOCK_HTML_LINK_2',
-      },
-      repo: 'MOCK_REPO',
+      type: Node_Type.File,
+      url: 'MOCK_URL',
     }),
     createFile: (_: any, { input }: MutationCreateFileArgs): File => ({
       filename: 'MOCK_FILENAME',
@@ -102,12 +97,21 @@ export const resolvers = {
       content: 'MOCK_CONTENT_2',
       excerpt: 'MOCK_EXCERPT_2',
       sha: 'MOCK_SHA_2',
-      _links: {
-        html: 'MOCK_HTML_LINK_2',
-      },
-      repo: 'MOCK_REPO',
+      type: Node_Type.File,
+      url: 'MOCK_URL',
     }),
-    updateFile: (_: any, { input }: MutationUpdateFileArgs): File => {
+    updateFile: (
+      _: any,
+      { input }: MutationUpdateFileArgs
+    ): {
+      path: string
+      filename: string
+      excerpt: string
+      type: string
+      sha: string
+      content: string
+      url: string
+    } => {
       const findFile = ({ filename }: any) => filename === input.path
       const fileIndex = files.findIndex(findFile)
       const file = files.find(findFile)
@@ -120,8 +124,9 @@ export const resolvers = {
         ...file,
         excerpt: file.excerpt ?? '',
         content: input.content ?? '',
-        repo: 'MOCK_REPO',
         filename: 'MOCK_FILENAME',
+        type: Node_Type.File,
+        url: 'MOCK_URL',
       }
       return files[fileIndex]
     },

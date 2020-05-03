@@ -1,3 +1,4 @@
+import { MutationResult } from '@apollo/react-common'
 import { useApolloClient, useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
@@ -32,11 +33,14 @@ export const UpdateFileDocument = gql`
   }
 `
 
-export function useUpdateFile() {
+export function useUpdateFile(): [
+  (path?: string | null, content?: string) => void,
+  MutationResult<UpdateFileMutation>
+] {
   const { file } = useReadFile()
   const client = useApolloClient()
 
-  const [mutation, ...rest] = useMutation<
+  const [mutation, mutationResult] = useMutation<
     UpdateFileMutation,
     UpdateFileMutationVariables
   >(UpdateFileDocument, {
@@ -59,7 +63,7 @@ export function useUpdateFile() {
     },
   })
 
-  function updateFile(path?: string | null, content?: string | null) {
+  function updateFile(path?: string | null, content?: string) {
     if (!path || !content || !file) {
       alert('Missing some details needed to update file')
       return
@@ -90,5 +94,5 @@ export function useUpdateFile() {
     })
   }
 
-  return [updateFile, ...rest]
+  return [updateFile, mutationResult]
 }

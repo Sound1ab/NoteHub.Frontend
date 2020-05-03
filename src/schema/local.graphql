@@ -1,10 +1,9 @@
 type Query {
   currentRepoName: String
   currentFileName: String
+  currentPath: String
   currentTheme: String
   isEdit: Boolean!
-  isNewFileOpen: Boolean!
-  isNewRepoOpen: Boolean!
   cursorPosition: Position!
   jwt: String
 }

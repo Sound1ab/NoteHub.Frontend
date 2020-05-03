@@ -13,12 +13,11 @@ const Style = styled.div`
     display: grid;
     grid-template-columns:
       min-content
-      min-content
       3fr;
     grid-template-rows: auto 1fr;
     grid-template-areas:
-      'toolbar toolbar toolbar'
-      'sidebar cardlist editor';
+      'toolbar toolbar'
+      'sidebar editor';
   }
 
   .Dashboard-content {
