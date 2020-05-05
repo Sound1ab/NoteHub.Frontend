@@ -28,12 +28,12 @@ export function Tree() {
     return null
   }
 
-  function onToggle(node: ITreeNode) {
+  function onToggle(node: ITreeNode, toggled: boolean) {
     if (!data) {
       return
     }
 
-    node.toggled = !node.toggled
+    node.toggled = toggled
 
     setData({ ...data })
   }

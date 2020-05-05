@@ -10,7 +10,6 @@ import { IPosition } from '../../../types'
 
 export interface ILocalData {
   currentRepoName: string | null
-  currentFileName: string | null
   currentPath: string | null
   jwt: string | null
   currentTheme: COLOR_MODE | null
@@ -20,8 +19,7 @@ export interface ILocalData {
 }
 
 export const localData: ILocalData = {
-  currentRepoName: 'NoteHub.Notes',
-  currentFileName: null,
+  currentRepoName: 'NoteHub.Notebook',
   currentPath: null,
   currentTheme: null,
   isEdit: true,

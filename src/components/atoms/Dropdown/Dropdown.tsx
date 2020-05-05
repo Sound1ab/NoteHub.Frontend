@@ -14,7 +14,7 @@ const Style = styled.ul`
   .Dropdown-triangle {
     position: absolute;
     top: 0;
-    right: ${({ theme }) => theme.spacing.xs};
+    right: ${({ theme }) => theme.spacing.xxs};
     transform: translateY(-100%);
     width: 0;
     height: 0;

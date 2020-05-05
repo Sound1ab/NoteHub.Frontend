@@ -9,11 +9,11 @@ export const createSpacing = (typography: Typography) => {
     m: typography.rhythm(1.5),
     s: typography.rhythm(1),
     xl: typography.rhythm(7),
-    xs: typography.rhythm(0.5),
+    xs: typography.rhythm(0.7),
     xxl: typography.rhythm(10),
-    xxs: typography.rhythm(0.3),
+    xxs: typography.rhythm(0.4),
     xxxl: typography.rhythm(14),
-    xxxs: typography.rhythm(0.1),
+    xxxs: typography.rhythm(0.2),
   }
 }
 
@@ -52,7 +52,7 @@ export const colors = {
     background: {
       primary: '#1e1e1e',
       secondary: '#282828',
-      tertiary: '#1e1e1e',
+      tertiary: '#2b2b2b',
       quaternary: '#3a3a3a',
       quinary: '#484848',
     },

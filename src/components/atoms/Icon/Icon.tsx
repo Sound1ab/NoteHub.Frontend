@@ -66,7 +66,7 @@ interface IIcon {
   marginRight?: boolean
   marginLeft?: boolean
   size?: 'xs' | 'sm' | 'lg'
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   className?: string
   title?: string
   ariaLabel?: string

@@ -23,7 +23,7 @@ export function useReadFile() {
   const { data, loading } = useQuery<ReadFileQuery, ReadFileQueryVariables>(
     ReadFileDocument,
     {
-      skip: !currentPath,
+      skip: !currentPath || !currentPath.endsWith('.md'),
       variables: {
         path: currentPath ?? '',
       },

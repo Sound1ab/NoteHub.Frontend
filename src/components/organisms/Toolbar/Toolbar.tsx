@@ -3,7 +3,6 @@ import React from 'react'
 
 import {
   useDropzone,
-  useReadCurrentFileName,
   useReadCurrentRepoName,
   useReadCursorPosition,
   useReadFile,
@@ -18,7 +17,7 @@ const Style = styled.div`
   position: relative;
   width: 100%;
   display: flex;
-  background-color: ${({ theme }) => theme.colors.background.tertiary};
+  background-color: ${({ theme }) => theme.colors.background.primary};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
@@ -44,14 +43,14 @@ const Style = styled.div`
   }
 
   .Toolbar-button {
-    margin-right: ${({ theme }) => theme.spacing.xxs};
+    margin-right: ${({ theme }) => theme.spacing.xxxs};
   }
 
   .Toolbar-actions {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: ${({ theme }) => theme.spacing.xs};
+    padding: ${({ theme }) => theme.spacing.xxs};
   }
 
   .Toolbar-editor-actions {
@@ -63,7 +62,6 @@ const Style = styled.div`
 export function Toolbar() {
   const client = useApolloClient()
   const { currentRepoName } = useReadCurrentRepoName()
-  const { currentFileName } = useReadCurrentFileName()
   const { isEdit } = useReadIsEdit()
   const { selectFileAndUpload, Dropzone } = useDropzone()
   const { cursorPosition } = useReadCursorPosition()
@@ -109,7 +107,6 @@ export function Toolbar() {
           </Button>
           <Button
             className="Toolbar-button"
-            isDisabled={!currentFileName}
             onClick={handleImageUpload}
             title="Upload an image"
           >

@@ -22,6 +22,19 @@ const Style = styled.div<{ hasBackground: boolean }>`
       justify-content: center;
       align-items: center;
     `};
+
+  .Portal-focus-lock {
+    position: relative;
+    z-index: 1;
+  }
+
+  .Portal-click-layer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+  }
 `
 
 export interface IPortal {
@@ -41,7 +54,8 @@ export const Portal = React.forwardRef(
 
     return ReactDOM.createPortal(
       <Style className={className} hasBackground={hasBackground}>
-        <FocusLock>{children}</FocusLock>
+        <div className="Portal-click-layer" />
+        <FocusLock className="Portal-focus-lock">{children}</FocusLock>
       </Style>,
       domNode ?? document.body
     )

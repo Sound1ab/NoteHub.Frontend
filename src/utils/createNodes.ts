@@ -32,51 +32,47 @@ export function createFileNode(
 export function createNode(
   path: string[],
   type: string,
-  currentNode: ITreeNode,
+  parentNode: ITreeNode,
   gitNode: GitNode,
   currentPath = ''
 ): void {
   if (path.length === 1) {
-    const [name] = path
+    const [slug] = path
 
-    const children = currentNode?.children ? currentNode.children : []
+    const children = parentNode?.children ? parentNode.children : []
 
     const isFile = type === Node_Type.File
 
-    currentNode.children = [
+    parentNode.children = [
       ...children,
-      isFile ? createFileNode(name, gitNode) : createFolderNode(name, gitNode),
+      isFile ? createFileNode(slug, gitNode) : createFolderNode(slug, gitNode),
     ]
     return
   }
 
-  if (!currentNode.children) {
+  if (!parentNode.children) {
     throw new Error('CurrentNode has no children')
   }
 
-  const [currentName, ...rest] = path
+  const [slug, ...rest] = path
 
-  const nextNode = currentNode.children.find(node => node.name === currentName)
+  const nextNode = parentNode.children.find(node => node.name === slug)
+
+  const nextPath = currentPath ? `${currentPath}/${slug}` : slug
 
   if (!nextNode) {
-    currentNode.children = [
-      ...currentNode.children,
-      createFolderNode(currentName, {
+    parentNode.children = [
+      ...parentNode.children,
+      createFolderNode(slug, {
         type: Node_Type.Folder,
-        path: `${currentPath}/${currentName}`,
+        path: nextPath,
       }),
     ]
 
-    return createNode(path, type, currentNode, gitNode, currentPath)
+    return createNode(path, type, parentNode, gitNode, currentPath)
   }
 
-  return createNode(
-    rest,
-    type,
-    nextNode,
-    gitNode,
-    `${currentPath}/${currentName}`
-  )
+  return createNode(rest, type, nextNode, gitNode, nextPath)
 }
 
 export function createNodes(gitNodes: GitNode[]) {
