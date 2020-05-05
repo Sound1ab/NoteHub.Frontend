@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { CONTAINER_ID } from '../../../enums'
+import { useReadNodes } from '../../../hooks'
 import { styled } from '../../../theme'
-import { Tree } from '../../molecules'
+import { ITreeNode } from '../../../types'
+import { createNodes } from '../../../utils'
+import { Node } from '../../molecules'
 
 const Style = styled.div`
   flex: 0 0 100%;
@@ -21,30 +24,44 @@ const Style = styled.div`
     max-width: 50vw;
     overflow-x: auto;
   }
-
-  .Sidebar-title-wrapper {
-    flex: 0 1 auto;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: ${({ theme }) => theme.spacing.xs};
-    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  }
-
-  .Sidebar-title-icon {
-    color: ${({ theme }) => theme.colors.accent};
-  }
-
-  .Sidebar-title-heading {
-    color: ${({ theme }) => theme.colors.text.primary};
-    font-weight: bold;
-  }
 `
 
 export function Sidebar() {
+  const { gitNodes, loading } = useReadNodes()
+
+  const [data, setData] = useState<ITreeNode | null>(null)
+
+  useEffect(() => {
+    if (!gitNodes) {
+      return
+    }
+
+    const tree = createNodes(gitNodes)
+
+    setData(tree)
+  }, [gitNodes])
+
+  if (!gitNodes || loading) {
+    return null
+  }
+
+  if (!data) {
+    return null
+  }
+
+  function onToggle(node: ITreeNode, toggled: boolean) {
+    if (!data) {
+      return
+    }
+
+    node.toggled = toggled
+
+    setData({ ...data })
+  }
+
   return (
     <Style id={CONTAINER_ID.SIDEBAR}>
-      <Tree />
+      <Node node={data} onToggle={onToggle} />
     </Style>
   )
 }

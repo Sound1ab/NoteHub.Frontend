@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/react-hooks'
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { css } from 'styled-components'
 
 import { CONTAINER_ID } from '../../../enums'
@@ -12,24 +12,9 @@ import { styled } from '../../../theme'
 import { ITreeNode } from '../../../types'
 import { scrollIntoView } from '../../../utils'
 import { Node_Type } from '../../apollo/generated_components_typings'
-import { Dropdown, Icon } from '../../atoms'
-import { FileInput } from '..'
+import { Dropdown, Icon } from '..'
 
-const Style = styled.ul`
-  position: relative;
-  margin: 0;
-  list-style: none;
-
-  .Node-heading {
-    margin-bottom: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: ${({ theme }) => theme.colors.text.primary};
-  }
-`
-
-const Item = styled.li<{ isActive: boolean; level: number }>`
+const Style = styled.li<{ isActive: boolean; level: number }>`
   position: relative;
   margin: 0;
   cursor: pointer;
@@ -96,24 +81,24 @@ const Chevron = styled(Icon)<{ toggled: boolean }>`
   transform: ${({ toggled }) => (toggled ? 'rotate(0.25turn)' : 'rotate(0)')};
 `
 
-interface INode {
+interface INodeItem {
   node: ITreeNode
   onToggle: (tree: ITreeNode, toggled: boolean) => void
-  level?: number
+  level: number
+  openFileInput: () => void
 }
 
-export function Node({ node, onToggle, level = 1 }: INode) {
+export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
+  const containerRef = useRef(null)
   const client = useApolloClient()
   const [deleteFile] = useDeleteFile()
-  const containerRef = useRef(null)
   const { isOpen, Portal, ref, setOpen } = useModalToggle()
-  const [isNewFileOpen, setIsNewFileOpen] = useState(false)
-  const { type, toggled, name, children, path } = node
   const { currentPath } = useReadCurrentPath()
   const isActive = currentPath === node.path
+  const { toggled, name, type } = node
 
   function handleSetIsNewFileOpen() {
-    setIsNewFileOpen(true)
+    openFileInput()
     setOpen(false)
   }
 
@@ -161,52 +146,37 @@ export function Node({ node, onToggle, level = 1 }: INode) {
         ]
 
   return (
-    <Style>
-      <Item level={level} isActive={isActive} ref={containerRef}>
-        <div className="Node-button" onClick={() => onClick(node)}>
-          {type === Node_Type.Folder && (
-            <div className="Node-icon-wrapper">
-              <Chevron
-                toggled={toggled}
-                size="xs"
-                icon="chevron-right"
-                prefix="fa"
-                marginRight
-              />
-            </div>
-          )}
-          {type === Node_Type.Folder ? (
-            <div className="Node-icon-wrapper">
-              <Icon size="xs" icon="folder" prefix="fa" marginRight />
-            </div>
-          ) : (
-            <div className="Node-icon-wrapper">
-              <Icon size="xs" icon="file" prefix="fa" marginRight />
-            </div>
-          )}
-          <h5 className="Node-heading">{name}</h5>
-        </div>
-        <div className="Node-menu-wrapper" onClick={handleToggleMenu}>
-          <Icon icon="ellipsis-h" isDisabled={isOpen} ariaLabel="dropdown" />
-        </div>
-        {isOpen && (
-          <Portal domNode={containerRef.current} className="Node-dropdown">
-            <Dropdown ref={ref} items={dropdownItems} />
-          </Portal>
+    <Style level={level} isActive={isActive} ref={containerRef}>
+      <div className="Node-button" onClick={() => onClick(node)}>
+        {type === Node_Type.Folder && (
+          <div className="Node-icon-wrapper">
+            <Chevron
+              toggled={toggled}
+              size="xs"
+              icon="chevron-right"
+              prefix="fa"
+              marginRight
+            />
+          </div>
         )}
-      </Item>
-      {toggled &&
-        children &&
-        children.map(node => (
-          <Node
-            node={node}
-            onToggle={onToggle}
-            key={`${node.path}/${node.name}`}
-            level={level + 1}
-          />
-        ))}
-      {isNewFileOpen && (
-        <FileInput path={path} onClickOutside={() => setIsNewFileOpen(false)} />
+        {type === Node_Type.Folder ? (
+          <div className="Node-icon-wrapper">
+            <Icon size="xs" icon="folder" prefix="fa" marginRight />
+          </div>
+        ) : (
+          <div className="Node-icon-wrapper">
+            <Icon size="xs" icon="file" prefix="fa" marginRight />
+          </div>
+        )}
+        <h5 className="Node-heading">{name}</h5>
+      </div>
+      <div className="Node-menu-wrapper" onClick={handleToggleMenu}>
+        <Icon icon="ellipsis-h" isDisabled={isOpen} ariaLabel="dropdown" />
+      </div>
+      {isOpen && (
+        <Portal domNode={containerRef.current} className="Node-dropdown">
+          <Dropdown ref={ref} items={dropdownItems} />
+        </Portal>
       )}
     </Style>
   )
