@@ -1,12 +1,44 @@
 import {
   File,
+  GitNode,
   MutationCreateFileArgs,
+  MutationDeleteFileArgs,
   MutationUpdateFileArgs,
   Node_Type,
   QueryReadFileArgs,
   QueryReadGithubUserAccessTokenArgs,
-  Repo,
 } from '../components/apollo/generated_components_typings'
+import { ITreeNode } from '../types'
+
+export const folderNode: ITreeNode = {
+  type: Node_Type.Folder,
+  name: 'MOCK_FOLDER',
+  toggled: false,
+  path: 'MOCK_FOLDER_PATH',
+  children: [],
+}
+
+export const fileNode: ITreeNode = {
+  type: Node_Type.File,
+  name: 'MOCK_FILE',
+  toggled: false,
+  path: 'MOCK_FILE_PATH',
+  children: [],
+}
+
+const folderGitNode: GitNode = {
+  type: Node_Type.Folder,
+  path: 'MOCK_FOLDER_PATH',
+  sha: 'MOCK_SHA',
+  url: 'MOCK_URL',
+}
+
+const fileGitNode: GitNode = {
+  type: Node_Type.File,
+  path: 'MOCK_FOLDER_PATH/MOCK_FILE_PATH',
+  sha: 'MOCK_SHA',
+  url: 'MOCK_URL',
+}
 
 export const repos = [
   {
@@ -58,12 +90,6 @@ export const user = {
 
 export const resolvers = {
   Query: () => ({
-    listRepos: () => ({
-      items: repos,
-    }),
-    listFiles: () => ({
-      items: files,
-    }),
     readGithubUser: () => user,
     readGithubUserAccessToken: (
       _: any,
@@ -71,20 +97,15 @@ export const resolvers = {
     ) => (code && state ? 'MOCK_JWT' : null),
     readFile: (_: any, input: QueryReadFileArgs) =>
       files.find(({ filename }) => filename === input.path),
+    readNodes: () => ({
+      nodes: [folderGitNode, fileGitNode],
+    }),
     logout: () => 'ok',
   }),
   Mutation: () => ({
-    createRepo: (): Repo => ({
-      id: 3,
-      node_id: 'MOCK_NODE_ID',
-      name: 'MOCK_NAME',
-      full_name: 'MOCK_FULL_NAME',
-      description: 'MOCK_DESCRIPTION',
-      private: false,
-    }),
-    deleteFile: (): File => ({
+    deleteFile: (_: any, { input }: MutationDeleteFileArgs): File => ({
       filename: 'MOCK_FILENAME',
-      path: 'MOCK_PATH_2',
+      path: input.path,
       content: 'MOCK_CONTENT_2',
       excerpt: 'MOCK_EXCERPT_2',
       sha: 'MOCK_SHA_2',
@@ -93,7 +114,7 @@ export const resolvers = {
     }),
     createFile: (_: any, { input }: MutationCreateFileArgs): File => ({
       filename: 'MOCK_FILENAME',
-      path: 'MOCK_PATH_2',
+      path: input.path,
       content: 'MOCK_CONTENT_2',
       excerpt: 'MOCK_EXCERPT_2',
       sha: 'MOCK_SHA_2',

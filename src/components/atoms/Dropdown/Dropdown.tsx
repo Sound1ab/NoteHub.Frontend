@@ -58,7 +58,7 @@ interface IDropdownMenuProps {
 export const Dropdown = forwardRef(
   ({ items }: IDropdownMenuProps, ref: Ref<HTMLUListElement>) => {
     return (
-      <Style ref={ref} aria-label="Profile options">
+      <Style ref={ref} aria-label="dropdown">
         <div className="Dropdown-triangle" />
         {items.map(({ icon, label, onClick, prefix }) => (
           <button

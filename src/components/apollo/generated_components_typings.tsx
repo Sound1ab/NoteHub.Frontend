@@ -137,12 +137,9 @@ export type Query = {
   logout: Scalars['String']
   refresh?: Maybe<Scalars['String']>
   currentRepoName?: Maybe<Scalars['String']>
-  currentFileName?: Maybe<Scalars['String']>
   currentPath?: Maybe<Scalars['String']>
   currentTheme?: Maybe<Scalars['String']>
   isEdit: Scalars['Boolean']
-  isNewFileOpen: Scalars['Boolean']
-  isNewRepoOpen: Scalars['Boolean']
   cursorPosition: Position
   jwt?: Maybe<Scalars['String']>
 }
@@ -228,10 +225,6 @@ export type LogoutQueryVariables = {}
 
 export type LogoutQuery = { __typename?: 'Query' } & Pick<Query, 'logout'>
 
-export type RefreshQueryVariables = {}
-
-export type RefreshQuery = { __typename?: 'Query' } & Pick<Query, 'refresh'>
-
 export type CreateFileMutationVariables = {
   input: CreateFileInput
 }
@@ -312,13 +305,6 @@ export type UpdateImageMutation = { __typename?: 'Mutation' } & {
   updateImage: Maybe<{ __typename?: 'File' } & FileFragment>
 }
 
-export type ReadCurrentFileNameQueryVariables = {}
-
-export type ReadCurrentFileNameQuery = { __typename?: 'Query' } & Pick<
-  Query,
-  'currentFileName'
->
-
 export type ReadCurrentPathQueryVariables = {}
 
 export type ReadCurrentPathQuery = { __typename?: 'Query' } & Pick<
@@ -349,20 +335,6 @@ export type ReadCursorPositionQuery = { __typename?: 'Query' } & {
 export type ReadIsEditQueryVariables = {}
 
 export type ReadIsEditQuery = { __typename?: 'Query' } & Pick<Query, 'isEdit'>
-
-export type ReadIsNewFileOpenQueryVariables = {}
-
-export type ReadIsNewFileOpenQuery = { __typename?: 'Query' } & Pick<
-  Query,
-  'isNewFileOpen'
->
-
-export type ReadIsNewRepoOpenQueryVariables = {}
-
-export type ReadIsNewRepoOpenQuery = { __typename?: 'Query' } & Pick<
-  Query,
-  'isNewRepoOpen'
->
 
 export type ReadJwtQueryVariables = {}
 

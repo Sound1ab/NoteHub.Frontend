@@ -147,7 +147,11 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
 
   return (
     <Style level={level} isActive={isActive} ref={containerRef}>
-      <div className="Node-button" onClick={() => onClick(node)}>
+      <div
+        aria-label={node.type === Node_Type.File ? 'file' : 'folder'}
+        className="Node-button"
+        onClick={() => onClick(node)}
+      >
         {type === Node_Type.Folder && (
           <div className="Node-icon-wrapper">
             <Chevron
@@ -171,7 +175,7 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
         <h5 className="Node-heading">{name}</h5>
       </div>
       <div className="Node-menu-wrapper" onClick={handleToggleMenu}>
-        <Icon icon="ellipsis-h" isDisabled={isOpen} ariaLabel="dropdown" />
+        <Icon icon="ellipsis-h" isDisabled={isOpen} ariaLabel="item menu" />
       </div>
       {isOpen && (
         <Portal domNode={containerRef.current} className="Node-dropdown">
