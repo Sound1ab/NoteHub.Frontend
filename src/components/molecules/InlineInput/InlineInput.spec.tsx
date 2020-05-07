@@ -6,8 +6,6 @@ import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { InlineInput } from './InlineInput'
 
-jest.mock('../../../hooks/Repo/useCreateRepo')
-
 afterEach(cleanup)
 
 describe('InlineInput', () => {

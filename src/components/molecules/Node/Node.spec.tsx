@@ -1,6 +1,10 @@
 import React from 'react'
 
-import { fileNode, folderNode, resolvers } from '../../../schema/mockResolvers'
+import {
+  fileNodeOne,
+  folderNode,
+  resolvers,
+} from '../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { Node } from './Node'
@@ -12,21 +16,21 @@ describe('Node', () => {
     const { getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Node
-          node={{ ...folderNode, toggled: true, children: [fileNode] }}
+          node={{ ...folderNode, toggled: true, children: [fileNodeOne] }}
           onToggle={onToggle}
           level={1}
         />
       </MockProvider>
     )
 
-    expect(getByText(fileNode.name)).toBeInTheDocument()
+    expect(getByText(fileNodeOne.name)).toBeInTheDocument()
   })
 
   it('should open file input when create new file is selected from dropdown', async () => {
     const { getAllByLabelText, getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Node
-          node={{ ...folderNode, toggled: true, children: [fileNode] }}
+          node={{ ...folderNode, toggled: true, children: [fileNodeOne] }}
           onToggle={onToggle}
           level={1}
         />

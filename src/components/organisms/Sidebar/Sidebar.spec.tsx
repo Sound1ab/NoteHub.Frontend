@@ -21,15 +21,15 @@ describe('Sidebar', () => {
 
     await fireEvent.click(getAllByLabelText('folder')[1])
 
-    expect(getByText('MOCK_FILE_PATH')).toBeInTheDocument()
+    expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
 
     await fireEvent.click(getAllByLabelText('folder')[1])
 
-    expect(queryByText('MOCK_FILE_PATH')).not.toBeInTheDocument()
+    expect(queryByText('MOCK_FILE_PATH_2.md')).not.toBeInTheDocument()
 
     await fireEvent.click(getAllByLabelText('folder')[1])
 
-    expect(getByText('MOCK_FILE_PATH')).toBeInTheDocument()
+    expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
   })
 
   it('should create a new file', async () => {
@@ -68,12 +68,12 @@ describe('Sidebar', () => {
       </MockProvider>
     )
 
-    expect(getByText('MOCK_FILE_PATH')).toBeInTheDocument()
+    expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
 
     await fireEvent.click(getAllByLabelText('item menu')[2])
 
     await fireEvent.click(getByLabelText('Delete file'))
 
-    expect(queryByText('MOCK_FILE_PATH')).not.toBeInTheDocument()
+    expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
   })
 })

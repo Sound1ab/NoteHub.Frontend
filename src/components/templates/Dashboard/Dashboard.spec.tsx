@@ -2,9 +2,15 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
-import { REPO_NAMESPACE } from '../../../hooks'
-import { files, repos, resolvers, user } from '../../../schema/mockResolvers'
+import { useCreateFile } from '../../../hooks'
+import {
+  fileGitNodeOne,
+  fileGitNodeTwo,
+  folderNode,
+  resolvers,
+} from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
+import { FileInput } from '../../molecules'
 import { MockProvider } from '../../utility'
 import { Dashboard } from './Dashboard'
 
@@ -28,98 +34,68 @@ describe('Dashboard', () => {
     jest.resetAllMocks()
   })
 
-  it('should add repos', async () => {
-    const newRepoName = 'MOCK_REPO_NAME'
-
-    const { getByText, getByLabelText } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{ currentRepoName: null, currentFileName: null }}
-      >
+  it('should add folder and file', async () => {
+    const { getByText, getByLabelText, getAllByLabelText } = await render(
+      <MockProvider mockResolvers={resolvers}>
         <Dashboard />
       </MockProvider>
     )
 
-    await fireEvent.click(getByText('New Repo'))
+    await fireEvent.click(getAllByLabelText('item menu')[1])
 
-    const input = getByLabelText('Repo name')
+    await fireEvent.click(getByLabelText('Create file'))
+
+    const input = getByLabelText('Input file name')
 
     await fireEvent.change(input, {
-      target: { value: newRepoName },
+      target: { value: 'NEW_MOCK_FILE_NAME' },
     })
 
-    const form = getByLabelText('Repo name')
+    const form = getByLabelText('File name form')
 
     await fireEvent.submit(form)
 
-    expect(getByText(newRepoName)).toBeDefined()
+    expect(getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
   })
 
-  it('should add file if repo is selected', async () => {
-    const [{ name }] = repos
-    const newFileName = 'mock File name'
-    const validatedFileName = 'mock-file-name'
+  it.skip('should display an error message and close the file input if there was a problem', async () => {
+    const createNewFile = () => Promise.reject()
+    ;(useCreateFile as jest.Mock).mockImplementation(() => [
+      createNewFile,
+      { loading: false },
+    ])
 
-    const {
-      getByText,
-      getByLabelText,
-      queryByLabelText,
-      getByTitle,
-    } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{ currentRepoName: null, currentFileName: null }}
-      >
-        <Dashboard />
+    const newFileName = 'MOCK_FILE_NAME'
+    const path = folderNode.path
+
+    const { getByLabelText } = await render(
+      <MockProvider mockResolvers={resolvers}>
+        <FileInput path={path} onClickOutside={jest.fn()} />
       </MockProvider>
     )
 
-    expect(queryByLabelText('Input file name')).toBeNull()
+    const input = getByLabelText('Input file name')
 
-    await fireEvent.click(getByText(name))
-
-    await fireEvent.click(getByTitle('Create a new file'))
-
-    await fireEvent.change(getByLabelText('Input file name'), {
+    await fireEvent.change(input, {
       target: { value: newFileName },
     })
 
-    await fireEvent.submit(getByLabelText('File name form'))
+    const form = getByLabelText('File name form')
 
-    expect(getByText(validatedFileName)).toBeDefined()
-  })
+    await fireEvent.submit(form)
 
-  it('should delete file if repo and file is selected', async () => {
-    const [{ name }] = repos
-    const [{ filename }] = files
-
-    const { getByText, queryByText, getByTitle } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{ currentRepoName: null, currentFileName: null }}
-      >
-        <Dashboard />
-      </MockProvider>
+    expect(alert).toBeCalledWith(
+      'There was an issue creating your file, please try again'
     )
-
-    await fireEvent.click(getByText(name))
-
-    await fireEvent.click(getByText(filename))
-
-    await fireEvent.click(getByTitle('Delete the selected file'))
-
-    expect(queryByText(filename)).toBeNull()
   })
+
+  it.skip('should delete file if repo and file is selected', async () => {})
 
   it('should toggle between edit and preview mode', async () => {
-    const [{ name }] = repos
-    const [{ filename }] = files
+    const { path } = fileGitNodeOne
 
     const { getByLabelText, getByTitle } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{ currentRepoName: name, currentFileName: filename }}
-      >
+      <MockProvider mockResolvers={resolvers} localData={{ currentPath: path }}>
         <Dashboard />
       </MockProvider>
     )
@@ -131,16 +107,11 @@ describe('Dashboard', () => {
     expect(getByLabelText('Markdown preview')).toBeDefined()
   })
 
-  it('should insert uploaded image at cursor position', async () => {
-    const { login } = user
-    const [{ name }] = repos
-    const [{ filename, content }] = files
+  it.skip('should insert uploaded image at cursor position', async () => {
+    const { path } = fileGitNodeTwo
 
     const { getByLabelText, getByText, getByTitle } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{ currentRepoName: name, currentFileName: filename }}
-      >
+      <MockProvider mockResolvers={resolvers} localData={{ currentPath: path }}>
         <Dashboard />
       </MockProvider>
     )
@@ -157,8 +128,8 @@ describe('Dashboard', () => {
       target: { files: [file] },
     })
 
-    const image = `![](https://github.com/${login}/${REPO_NAMESPACE}.${name}/blob/master/images/${imageFilename}?raw=true)${content}`
+    const image = `![](https://github.com/Sound1ab/NoteHub.Notebook.${name}/blob/master/images/${imageFilename}?raw=true)`
 
-    expect(getByText(image)).toBeDefined()
+    expect(getByText(image)).toBeInTheDocument()
   })
 })

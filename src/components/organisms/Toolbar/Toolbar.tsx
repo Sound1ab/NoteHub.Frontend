@@ -3,6 +3,7 @@ import React from 'react'
 
 import {
   useDropzone,
+  useReadCurrentPath,
   useReadCurrentRepoName,
   useReadCursorPosition,
   useReadFile,
@@ -67,9 +68,10 @@ export function Toolbar() {
   const { cursorPosition } = useReadCursorPosition()
   const [updateFile] = useUpdateFile()
   const { file } = useReadFile()
+  const { currentPath } = useReadCurrentPath()
 
-  function insertFilenameIntoString(filename: string) {
-    const text = `![](https://github.com/Sound1ab/${currentRepoName}/blob/master/images/${filename}?raw=true)`
+  function insertPathIntoString(filename: string) {
+    const text = `![](https://github.com/Sound1ab/${currentRepoName}/blob/master/${filename}?raw=true)`
     const { ch, line } = cursorPosition
     const lines = file?.content ? file.content.split('\n') : []
     const characters = [...lines[line]]
@@ -80,9 +82,10 @@ export function Toolbar() {
 
   async function handleImageUpload() {
     try {
-      const filename = await selectFileAndUpload()
-      const newValue = insertFilenameIntoString(filename)
-      updateFile(newValue)
+      const path = await selectFileAndUpload()
+      const content = insertPathIntoString(path)
+
+      updateFile(currentPath, content)
     } catch (error) {
       console.log(`Could not upload image: ${error}`)
     }

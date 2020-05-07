@@ -1,8 +1,7 @@
 import React, { useRef, useState } from 'react'
 
 import { styled } from '../../theme'
-import { useCreateImage } from './useCreateImage'
-import { useReadCurrentRepoName, useReadGithubUser } from '..'
+import { useCreateFile } from '..'
 
 const Style = styled.input`
   display: none;
@@ -13,29 +12,16 @@ export function useDropzone() {
   const [loading, setLoading] = useState(false)
   const resolver = useRef<(value?: any | PromiseLike<any>) => void>(null)
   const rejecter = useRef<(value?: any | PromiseLike<any>) => void>(null)
-  const [createImage] = useCreateImage()
-  const { currentRepoName } = useReadCurrentRepoName()
-  const user = useReadGithubUser()
+  const [createFile] = useCreateFile()
 
   async function handleCreateNewImage(path: string, content: any) {
     if (!content) {
       alert('no content')
       return
     }
-    if (!currentRepoName || !user?.login) {
-      alert('Error')
-      return
-    }
     setLoading(true)
     try {
-      await createImage({
-        variables: {
-          input: {
-            content,
-            path,
-          },
-        },
-      })
+      await createFile(path, content)
     } catch (e) {
       alert(`There was an issue saving your image, please try again: ${e}`)
     } finally {
@@ -63,9 +49,10 @@ export function useDropzone() {
     reader.onload = async () => {
       const { name } = file
       const validatedName = removeWhiteSpace(name)
-      await handleCreateNewImage(validatedName, reader.result)
+      const path = `images/${validatedName}`
+      await handleCreateNewImage(path, reader.result)
       if (resolver && resolver.current) {
-        resolver.current(validatedName)
+        resolver.current(path)
       }
     }
 

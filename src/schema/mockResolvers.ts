@@ -10,72 +10,68 @@ import {
 } from '../components/apollo/generated_components_typings'
 import { ITreeNode } from '../types'
 
-export const folderNode: ITreeNode = {
+export const folderGitNode: GitNode = {
   type: Node_Type.Folder,
+  path: 'MOCK_FOLDER_PATH',
+  sha: 'MOCK_SHA',
+  url: 'MOCK_URL',
+}
+
+export const fileGitNodeOne: GitNode = {
+  type: Node_Type.File,
+  path: 'MOCK_FOLDER_PATH/MOCK_FILE_PATH_1.md',
+  sha: 'MOCK_SHA',
+  url: 'MOCK_URL',
+}
+
+export const fileGitNodeTwo: GitNode = {
+  type: Node_Type.File,
+  path: 'MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md',
+  sha: 'MOCK_SHA',
+  url: 'MOCK_URL',
+}
+
+export const folderNode: ITreeNode = {
+  type: folderGitNode.type,
   name: 'MOCK_FOLDER',
   toggled: false,
-  path: 'MOCK_FOLDER_PATH',
+  path: folderGitNode.path,
   children: [],
 }
 
-export const fileNode: ITreeNode = {
-  type: Node_Type.File,
-  name: 'MOCK_FILE',
+export const fileNodeOne: ITreeNode = {
+  type: fileGitNodeOne.type,
+  name: 'MOCK_FILE_PATH_1.md',
   toggled: false,
-  path: 'MOCK_FILE_PATH',
+  path: fileGitNodeOne.path,
   children: [],
 }
 
-const folderGitNode: GitNode = {
-  type: Node_Type.Folder,
-  path: 'MOCK_FOLDER_PATH',
-  sha: 'MOCK_SHA',
-  url: 'MOCK_URL',
+export const fileNodeTwo: ITreeNode = {
+  type: fileGitNodeTwo.type,
+  name: 'MOCK_FILE_PATH_2.md',
+  toggled: false,
+  path: fileGitNodeTwo.path,
+  children: [],
 }
-
-const fileGitNode: GitNode = {
-  type: Node_Type.File,
-  path: 'MOCK_FOLDER_PATH/MOCK_FILE_PATH',
-  sha: 'MOCK_SHA',
-  url: 'MOCK_URL',
-}
-
-export const repos = [
-  {
-    description: 'MOCK_DESCRIPTION_2',
-    full_name: 'MOCK_FULL_NAME_2',
-    id: 2,
-    name: 'MOCK_NAME_2',
-    node_id: 'MOCK_ID_2',
-    private: false,
-  },
-  {
-    description: 'MOCK_DESCRIPTION_1',
-    full_name: 'MOCK_FULL_NAME_1',
-    id: 1,
-    name: 'MOCK_NAME_1',
-    node_id: 'MOCK_ID_1',
-    private: true,
-  },
-]
 
 export const files = [
   {
-    filename: 'MOCK_FILENAME_2',
-    path: 'MOCK_PATH_2',
+    filename: 'MOCK_FILE_PATH_2.md',
+    path: fileGitNodeTwo.path,
     content: 'MOCK_CONTENT_2',
     excerpt: 'MOCK_EXCERPT_2',
     sha: 'MOCK_SHA_2',
-    type: 'file',
+    type: Node_Type.File,
     url: 'MOCK_URL',
   },
   {
-    filename: 'MOCK_FILENAME_1',
-    path: 'MOCK_PATH_1',
+    filename: 'MOCK_FILE_PATH_1.md',
+    path: fileGitNodeOne.path,
     content: 'MOCK_CONTENT_1',
     excerpt: 'MOCK_EXCERPT_1',
     sha: 'MOCK_SHA_1',
-    type: 'file',
+    type: Node_Type.File,
     url: 'MOCK_URL',
   },
 ]
@@ -96,9 +92,9 @@ export const resolvers = {
       { code, state }: QueryReadGithubUserAccessTokenArgs
     ) => (code && state ? 'MOCK_JWT' : null),
     readFile: (_: any, input: QueryReadFileArgs) =>
-      files.find(({ filename }) => filename === input.path),
+      files.find(({ path }) => path === input.path),
     readNodes: () => ({
-      nodes: [folderGitNode, fileGitNode],
+      nodes: [folderGitNode, fileGitNodeOne, fileGitNodeTwo],
     }),
     logout: () => 'ok',
   }),
@@ -143,7 +139,6 @@ export const resolvers = {
 
       files[fileIndex] = {
         ...file,
-        excerpt: file.excerpt ?? '',
         content: input.content ?? '',
         filename: 'MOCK_FILENAME',
         type: Node_Type.File,

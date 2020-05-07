@@ -11,7 +11,7 @@ import {
   ReadNodesQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
-import { extractFilename } from '../../utils/extractFilename'
+import { extractFilename } from '../../utils'
 import { ReadNodesDocument } from './useReadNodes'
 
 export const CreateFileDocument = gql`
@@ -24,7 +24,10 @@ export const CreateFileDocument = gql`
 `
 
 export function useCreateFile(): [
-  (path: string) => Promise<ExecutionResult<CreateFileMutation>>,
+  (
+    path: string,
+    content?: string
+  ) => Promise<ExecutionResult<CreateFileMutation>>,
   MutationResult<CreateFileMutation>
 ] {
   const [mutation, rest] = useMutation<
@@ -61,7 +64,7 @@ export function useCreateFile(): [
     },
   })
 
-  async function createFile(path: string) {
+  async function createFile(path: string, content?: string) {
     if (!path) {
       throw new Error('Create file: missing path')
     }
@@ -75,7 +78,7 @@ export function useCreateFile(): [
       return mutation({
         variables: {
           input: {
-            content: `# ${name}`,
+            content: content ? content : `# ${name}`,
             path,
           },
         },

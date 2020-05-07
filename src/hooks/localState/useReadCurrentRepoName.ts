@@ -1,9 +1,10 @@
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
 import {
   ReadCurrentRepoNameQuery,
   ReadCurrentRepoNameQueryVariables,
 } from '../../components/apollo/generated_components_typings'
-import gql from 'graphql-tag'
 
 const ReadCurrentRepoNameDocument = gql`
   query ReadCurrentRepoName {

@@ -1,11 +1,10 @@
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
-import { FetchResult, Observable, execute, makePromise } from 'apollo-link'
+import { Observable, execute, makePromise } from 'apollo-link'
 import { onError } from 'apollo-link-error'
 import { HttpLink } from 'apollo-link-http'
 import gql from 'graphql-tag'
 
-import { RefreshQuery } from '../../components/apollo/generated_components_typings'
 import { APOLLO_ERRORS } from '../../enums'
 
 const GRAPHQL = process.env.REACT_APP_GRAPHQL
@@ -18,7 +17,7 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
 
   async function refetchToken() {
     try {
-      const { data } = await makePromise<FetchResult<RefreshQuery>>(
+      const { data } = await makePromise(
         execute(new HttpLink({ uri: GRAPHQL, credentials: 'include' }), {
           query: gql`
             {

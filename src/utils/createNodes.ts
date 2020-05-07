@@ -12,7 +12,7 @@ export function createFolderNode(
     children: [],
     name,
     path,
-    toggled: true,
+    toggled: false,
     type,
   }
 }
@@ -24,7 +24,7 @@ export function createFileNode(
   return {
     name,
     path,
-    toggled: true,
+    toggled: false,
     type,
   }
 }
@@ -47,6 +47,7 @@ export function createNode(
       ...children,
       isFile ? createFileNode(slug, gitNode) : createFolderNode(slug, gitNode),
     ]
+
     return
   }
 

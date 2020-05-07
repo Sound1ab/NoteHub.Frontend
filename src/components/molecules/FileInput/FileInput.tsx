@@ -25,6 +25,7 @@ export function FileInput({ onClickOutside, path }: IFileInput) {
     e.preventDefault()
 
     onClickOutside()
+
     await createFile(path ? `${path}/${name}.md` : `${name}.md`)
   }
 

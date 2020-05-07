@@ -1,7 +1,11 @@
 import React from 'react'
 
 import { useDeleteFile } from '../../../hooks'
-import { fileNode, folderNode, resolvers } from '../../../schema/mockResolvers'
+import {
+  fileNodeOne,
+  folderNode,
+  resolvers,
+} from '../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { NodeItem } from './NodeItem'
@@ -100,7 +104,7 @@ describe('NodeItem', () => {
       const { getByLabelText, getByText } = await render(
         <MockProvider mockResolvers={resolvers}>
           <NodeItem
-            node={fileNode}
+            node={fileNodeOne}
             onToggle={onToggle}
             openFileInput={openFileInput}
             level={1}
@@ -117,7 +121,7 @@ describe('NodeItem', () => {
       const { getByLabelText } = await render(
         <MockProvider mockResolvers={resolvers}>
           <NodeItem
-            node={fileNode}
+            node={fileNodeOne}
             onToggle={onToggle}
             openFileInput={openFileInput}
             level={1}
