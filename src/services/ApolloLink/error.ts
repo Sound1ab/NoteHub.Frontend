@@ -51,6 +51,10 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
         return
       }
       switch (err.extensions.code) {
+        case APOLLO_ERRORS.INTERNAL_SERVER_ERROR: {
+          alert(err.message)
+          break
+        }
         case APOLLO_ERRORS.JWT_EXPIRED: {
           return new Observable(observer => {
             refetchToken()

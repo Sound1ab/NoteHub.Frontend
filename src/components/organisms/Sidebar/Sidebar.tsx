@@ -36,7 +36,7 @@ export function Sidebar() {
       return
     }
 
-    const tree = createNodes(gitNodes)
+    const tree = createNodes(gitNodes, data)
 
     setData(tree)
   }, [gitNodes])
