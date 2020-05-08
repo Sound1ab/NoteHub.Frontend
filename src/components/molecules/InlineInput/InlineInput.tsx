@@ -45,6 +45,7 @@ interface IInlineInput {
   type: 'text' | 'number' | 'submit'
   autocorrect?: 'on' | 'off'
   autocapitalize?: 'on' | 'off'
+  className?: string
 }
 
 export function InlineInput({
@@ -59,6 +60,7 @@ export function InlineInput({
   type = 'text',
   autocorrect = 'off',
   autocapitalize = 'off',
+  className,
 }: IInlineInput) {
   const wrapperRef = useRef<HTMLFormElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -76,7 +78,7 @@ export function InlineInput({
       <FocusLock className="InlineInput-focus">
         <input
           ref={inputRef}
-          className="InlineInput-input"
+          className={`InlineInput-input ${className}`}
           disabled={isDisabled}
           type={type}
           value={value}

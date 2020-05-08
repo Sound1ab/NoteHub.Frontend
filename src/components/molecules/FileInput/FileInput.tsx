@@ -1,7 +1,24 @@
 import React, { useState } from 'react'
 
 import { useCreateFile } from '../../../hooks'
+import { styled } from '../../../theme'
 import { InlineInput } from '../InlineInput/InlineInput'
+
+const Style = styled.div`
+  position: relative;
+  &:after {
+    content: '.md';
+    color: ${({ theme }) => theme.colors.text.secondary};
+    position: absolute;
+    top: 50%;
+    right: ${({ theme }) => theme.spacing.xs};
+    transform: translateY(-50%);
+  }
+
+  .FileInput-input {
+    padding-right: ${({ theme }) => theme.spacing.ml};
+  }
+`
 
 interface IFileInput {
   path: string
@@ -15,6 +32,7 @@ export function FileInput({ onClickOutside, path }: IFileInput) {
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target
+
     setForm(prevState => ({
       ...prevState,
       name: value,
@@ -30,15 +48,18 @@ export function FileInput({ onClickOutside, path }: IFileInput) {
   }
 
   return (
-    <InlineInput
-      isDisabled={loading}
-      value={name}
-      clickOutsideCallback={onClickOutside}
-      handleOnChange={handleOnChange}
-      onSubmit={handleCreateNewFile}
-      inputAriaLabel="Input file name"
-      formAriaLabel="File name form"
-      type="text"
-    />
+    <Style>
+      <InlineInput
+        isDisabled={loading}
+        value={name}
+        clickOutsideCallback={onClickOutside}
+        handleOnChange={handleOnChange}
+        onSubmit={handleCreateNewFile}
+        inputAriaLabel="Input file name"
+        formAriaLabel="File name form"
+        type="text"
+        className="FileInput-input"
+      />
+    </Style>
   )
 }
