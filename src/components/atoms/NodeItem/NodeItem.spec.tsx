@@ -39,7 +39,7 @@ describe('NodeItem', () => {
 
       await fireEvent.click(getByLabelText('folder'))
 
-      expect(onToggle).toBeCalledWith(folderNode, true)
+      expect(onToggle).toBeCalledWith(folderNode.path, true)
     })
 
     it('should call onToggle with false if node is already selected', async () => {
@@ -59,7 +59,7 @@ describe('NodeItem', () => {
 
       await fireEvent.click(getByLabelText('folder'))
 
-      expect(onToggle).toBeCalledWith({ ...folderNode, toggled: true }, false)
+      expect(onToggle).toBeCalledWith(folderNode.path, false)
     })
 
     it('should open folder dropdown menu', async () => {

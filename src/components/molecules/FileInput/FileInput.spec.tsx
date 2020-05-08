@@ -32,7 +32,11 @@ describe('FileInput', () => {
 
     const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <FileInput path={path} onClickOutside={jest.fn()} />
+        <FileInput
+          path={path}
+          onClickOutside={jest.fn()}
+          onToggle={jest.fn()}
+        />
       </MockProvider>
     )
 

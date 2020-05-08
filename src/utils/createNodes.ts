@@ -4,69 +4,56 @@ import {
 } from '../components/apollo/generated_components_typings'
 import { ITreeNode } from '../types'
 
-export function createFolderNode(
-  name: string,
-  { path, type }: Pick<GitNode, 'path' | 'type'>
-) {
+export function createFolderNode(name: string, path: string, toggled: boolean) {
   return {
     children: [],
     name,
     path,
-    toggled: false,
-    type,
+    toggled,
+    type: Node_Type.Folder,
   }
 }
 
-export function createFileNode(
-  name: string,
-  { path, type }: Pick<GitNode, 'path' | 'type'>
-) {
+export function createFileNode(name: string, path: string) {
   return {
     name,
     path,
     toggled: false,
-    type,
+    type: Node_Type.File,
   }
 }
 
 interface ICreateNode {
   path: string[]
-  type: string
   parentNode: ITreeNode
   gitNode: GitNode
-  isUpdate: boolean
   currentPath?: string
+  listOfToggledPaths: string[]
 }
 
 export function createNode({
-  currentPath = '',
-  gitNode,
-  parentNode,
   path,
-  type,
-  isUpdate,
+  parentNode,
+  gitNode,
+  currentPath = '',
+  listOfToggledPaths,
 }: ICreateNode): void {
   if (path.length === 1) {
     const [slug] = path
 
     const children = parentNode?.children ? parentNode.children : []
 
-    const isFile = type === Node_Type.File
+    const isFile = gitNode.type === Node_Type.File
 
-    // If next node exists keep it so toggled state persists
-    const nextNode = children.find(node => node.name === slug)
+    const node = isFile
+      ? createFileNode(slug, gitNode.path)
+      : createFolderNode(
+          slug,
+          gitNode.path,
+          listOfToggledPaths.includes(gitNode.path)
+        )
 
-    if (nextNode) {
-      return
-    }
-
-    // Only toggle folder open if new node is being added
-    parentNode.toggled = isUpdate
-
-    parentNode.children = [
-      ...children,
-      isFile ? createFileNode(slug, gitNode) : createFolderNode(slug, gitNode),
-    ]
+    parentNode.children = [...children, node]
 
     return
   }
@@ -86,52 +73,44 @@ export function createNode({
   if (!nextNode) {
     parentNode.children = [
       ...parentNode.children,
-      createFolderNode(slug, {
-        type: Node_Type.Folder,
-        path: nextPath,
-      }),
+      createFolderNode(slug, nextPath, listOfToggledPaths.includes(nextPath)),
     ]
 
     return createNode({
       path,
-      type,
       parentNode,
       gitNode,
       currentPath,
-      isUpdate,
+      listOfToggledPaths,
     })
   }
 
   return createNode({
     path: rest,
-    type,
     parentNode: nextNode,
     gitNode,
     currentPath: nextPath,
-    isUpdate,
+    listOfToggledPaths,
   })
 }
 
-export function createNodes(gitNodes: GitNode[], tree?: ITreeNode | null) {
-  const treeBeard: ITreeNode = tree
-    ? { ...tree }
-    : {
-        children: [],
-        name: 'Notes',
-        path: '',
-        toggled: true,
-        type: Node_Type.Folder,
-      }
+export function createNodes(gitNodes: GitNode[], listOfToggledPaths: string[]) {
+  const treeBeard: ITreeNode = {
+    children: [],
+    name: 'Notes',
+    path: '',
+    toggled: true,
+    type: Node_Type.Folder,
+  }
 
   for (const gitNode of gitNodes) {
-    const { path, type } = gitNode
+    const { path } = gitNode
 
     createNode({
       path: path.split('/'),
-      type,
       parentNode: treeBeard,
       gitNode,
-      isUpdate: !!tree,
+      listOfToggledPaths,
     })
   }
 

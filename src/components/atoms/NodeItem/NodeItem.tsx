@@ -78,7 +78,7 @@ const Chevron = styled(Icon)<{ toggled: boolean }>`
 
 interface INodeItem {
   node: ITreeNode
-  onToggle: (tree: ITreeNode, toggled: boolean) => void
+  onToggle: (path: string, toggled: boolean) => void
   level: number
   openFileInput: () => void
 }
@@ -95,7 +95,7 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
   function handleSetIsNewFileOpen() {
     openFileInput()
     setOpen(false)
-    onToggle(node, true)
+    onToggle(node.path, true)
   }
 
   function handleToggleMenu(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -111,9 +111,9 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
 
     if (node.type === Node_Type.Folder) {
       if (isActive) {
-        onToggle(node, !node.toggled)
+        onToggle(node.path, !node.toggled)
       } else {
-        onToggle(node, true)
+        onToggle(node.path, true)
       }
     }
 

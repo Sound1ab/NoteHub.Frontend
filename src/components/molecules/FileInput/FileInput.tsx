@@ -23,9 +23,10 @@ const Style = styled.div`
 interface IFileInput {
   path: string
   onClickOutside: () => void
+  onToggle: (path: string, toggled: boolean) => void
 }
 
-export function FileInput({ onClickOutside, path }: IFileInput) {
+export function FileInput({ onClickOutside, path, onToggle }: IFileInput) {
   const defaultState = { name: '' }
   const [{ name }, setForm] = useState<{ [key: string]: any }>(defaultState)
   const [createFile, { loading }] = useCreateFile()
@@ -44,7 +45,15 @@ export function FileInput({ onClickOutside, path }: IFileInput) {
 
     onClickOutside()
 
-    await createFile(path ? `${path}/${name}.md` : `${name}.md`)
+    const nodePath = path ? `${path}/${name}.md` : `${name}.md`
+
+    const nodePathArray = nodePath.split('/')
+
+    nodePathArray.pop()
+
+    onToggle(nodePathArray.join('/'), true)
+
+    await createFile(nodePath)
   }
 
   return (

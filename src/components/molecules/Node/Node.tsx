@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import { styled } from '../../../theme'
 import { ITreeNode } from '../../../types'
+import { Node_Type } from '../../apollo/generated_components_typings'
 import { NodeItem } from '../../atoms'
 import { FileInput } from '../'
 
@@ -21,13 +22,17 @@ const Style = styled.ul`
 
 interface INode {
   node: ITreeNode
-  onToggle: (tree: ITreeNode, toggled: boolean) => void
+  onToggle: (path: string, toggled: boolean) => void
   level?: number
 }
 
 export function Node({ node, onToggle, level = 1 }: INode) {
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
-  const { toggled, children, path } = node
+  const { toggled, children, path, type } = node
+
+  if (type === Node_Type.Folder && children?.length === 0 && path !== '') {
+    return null
+  }
 
   return (
     <Style>
@@ -48,7 +53,11 @@ export function Node({ node, onToggle, level = 1 }: INode) {
           />
         ))}
       {isNewFileOpen && (
-        <FileInput path={path} onClickOutside={() => setIsNewFileOpen(false)} />
+        <FileInput
+          path={path}
+          onClickOutside={() => setIsNewFileOpen(false)}
+          onToggle={onToggle}
+        />
       )}
     </Style>
   )

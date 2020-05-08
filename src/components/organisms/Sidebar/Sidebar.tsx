@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { CONTAINER_ID } from '../../../enums'
 import { useReadNodes } from '../../../hooks'
 import { styled } from '../../../theme'
-import { ITreeNode } from '../../../types'
 import { createNodes } from '../../../utils'
 import { Node } from '../../molecules'
 
@@ -28,40 +27,26 @@ const Style = styled.div`
 
 export function Sidebar() {
   const { gitNodes, loading } = useReadNodes()
-
-  const [data, setData] = useState<ITreeNode | null>(null)
-
-  useEffect(() => {
-    if (!gitNodes) {
-      return
-    }
-
-    const tree = createNodes(gitNodes, data)
-
-    setData(tree)
-  }, [gitNodes])
+  const [listOfToggledPaths, setListOfToggledPaths] = useState<string[]>([])
 
   if (!gitNodes || loading) {
     return null
   }
 
-  if (!data) {
-    return null
-  }
-
-  function onToggle(node: ITreeNode, toggled: boolean) {
-    if (!data) {
-      return
+  function onToggle(path: string, toggled: boolean) {
+    if (toggled) {
+      setListOfToggledPaths(prev => [...prev, path])
+    } else {
+      setListOfToggledPaths(prev => prev.filter(prevPath => prevPath !== path))
     }
-
-    node.toggled = toggled
-
-    setData({ ...data })
   }
 
   return (
     <Style id={CONTAINER_ID.SIDEBAR}>
-      <Node node={data} onToggle={onToggle} />
+      <Node
+        node={createNodes(gitNodes, listOfToggledPaths)}
+        onToggle={onToggle}
+      />
     </Style>
   )
 }

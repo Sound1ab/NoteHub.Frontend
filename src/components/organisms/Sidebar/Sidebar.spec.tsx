@@ -32,48 +32,148 @@ describe('Sidebar', () => {
     expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
   })
 
-  it('should create a new file', async () => {
-    const { getAllByLabelText, getByText, getByLabelText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <Sidebar />
-      </MockProvider>
-    )
+  describe('when creating a file', () => {
+    it('should toggle folder open if placed inside a closed folder', async () => {
+      const { getAllByLabelText, getByText, getByLabelText } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <Sidebar />
+        </MockProvider>
+      )
 
-    await fireEvent.click(getAllByLabelText('item menu')[1])
+      const folderMenuIcon = getAllByLabelText('item menu')[0]
 
-    await fireEvent.click(getByLabelText('Create file'))
+      // open dropdown
+      await fireEvent.click(folderMenuIcon)
 
-    const input = getByLabelText('Input file name')
+      // open new file
+      await fireEvent.click(getByLabelText('Create file'))
 
-    await fireEvent.change(input, {
-      target: { value: 'NEW_MOCK_FILE_NAME' },
+      const input = getByLabelText('Input file name')
+
+      await fireEvent.change(input, {
+        target: { value: 'MOCK_FOLDER_PATH/NEW_MOCK_FILE_NAME' },
+      })
+
+      const form = getByLabelText('File name form')
+
+      await fireEvent.submit(form)
+
+      expect(getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
     })
 
-    const form = getByLabelText('File name form')
+    it('should be possible to toggle newly created folder', async () => {
+      const {
+        getAllByLabelText,
+        getByText,
+        getByLabelText,
+        queryByText,
+      } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <Sidebar />
+        </MockProvider>
+      )
 
-    await fireEvent.submit(form)
+      // Root level icon
+      const folderMenuIcon = getAllByLabelText('item menu')[0]
 
-    expect(getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
+      // open dropdown
+      await fireEvent.click(folderMenuIcon)
+
+      // open new file input
+      await fireEvent.click(getByLabelText('Create file'))
+
+      const input = getByLabelText('Input file name')
+
+      await fireEvent.change(input, {
+        target: { value: 'MOCK_FOLDER_PATH_OTHER/NEW_MOCK_FILE_NAME' },
+      })
+
+      const form = getByLabelText('File name form')
+
+      await fireEvent.submit(form)
+
+      expect(getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
+
+      // click new folder
+      await fireEvent.click(getByText('MOCK_FOLDER_PATH_OTHER'))
+
+      expect(getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
+
+      // click new folder
+      await fireEvent.click(getByText('MOCK_FOLDER_PATH_OTHER'))
+
+      expect(queryByText('NEW_MOCK_FILE_NAME.md')).not.toBeInTheDocument()
+    })
   })
 
-  it('should delete a file', async () => {
-    const {
-      getAllByLabelText,
-      getByText,
-      getByLabelText,
-      queryByText,
-    } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <Sidebar />
-      </MockProvider>
-    )
+  describe('when deleting a file', () => {
+    it('should remove file but keep folder open if other files exist', async () => {
+      const {
+        getAllByLabelText,
+        getByText,
+        getByLabelText,
+        queryByText,
+      } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <Sidebar />
+        </MockProvider>
+      )
 
-    expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
+      const folder = getAllByLabelText('folder')[1]
 
-    await fireEvent.click(getAllByLabelText('item menu')[2])
+      // open folder
+      await fireEvent.click(folder)
 
-    await fireEvent.click(getByLabelText('Delete file'))
+      expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
 
-    expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
+      // open file menu
+      await fireEvent.click(getAllByLabelText('item menu')[2])
+
+      await fireEvent.click(getByLabelText('Delete file'))
+
+      expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
+
+      expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
+    })
+
+    it('should remove folder if no other files exist', async () => {
+      const {
+        getAllByLabelText,
+        getByText,
+        getByLabelText,
+        queryByText,
+      } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <Sidebar />
+        </MockProvider>
+      )
+
+      const folder = getAllByLabelText('folder')[1]
+
+      // open folder
+      await fireEvent.click(folder)
+
+      expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
+
+      // open file menu
+      await fireEvent.click(getAllByLabelText('item menu')[2])
+
+      await fireEvent.click(getByLabelText('Delete file'))
+
+      expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
+
+      // open folder
+      await fireEvent.click(folder)
+
+      expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
+
+      await fireEvent.click(getAllByLabelText('item menu')[2])
+
+      await fireEvent.click(getByLabelText('Delete file'))
+
+      expect(queryByText('MOCK_FILE_PATH_2.md')).not.toBeInTheDocument()
+
+      expect(queryByText('MOCK_FOLDER_PATH')).not.toBeInTheDocument()
+    })
   })
 })

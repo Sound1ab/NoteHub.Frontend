@@ -58,36 +58,7 @@ describe('Dashboard', () => {
     expect(getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
   })
 
-  it.skip('should display an error message and close the file input if there was a problem', async () => {
-    const createNewFile = () => Promise.reject()
-    ;(useCreateFile as jest.Mock).mockImplementation(() => [
-      createNewFile,
-      { loading: false },
-    ])
-
-    const newFileName = 'MOCK_FILE_NAME'
-    const path = folderNode.path
-
-    const { getByLabelText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <FileInput path={path} onClickOutside={jest.fn()} />
-      </MockProvider>
-    )
-
-    const input = getByLabelText('Input file name')
-
-    await fireEvent.change(input, {
-      target: { value: newFileName },
-    })
-
-    const form = getByLabelText('File name form')
-
-    await fireEvent.submit(form)
-
-    expect(alert).toBeCalledWith(
-      'There was an issue creating your file, please try again'
-    )
-  })
+  it.skip('should display an error message and close the file input if there was a problem', async () => {})
 
   it.skip('should delete file if repo and file is selected', async () => {})
 
