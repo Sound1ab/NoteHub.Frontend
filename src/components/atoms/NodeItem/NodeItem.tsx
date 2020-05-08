@@ -37,15 +37,10 @@ const Style = styled.li<{ isActive: boolean; level: number }>`
     justify-content: flex-start;
     align-items: center;
     overflow: hidden;
-    padding-top: ${({ theme }) => theme.spacing.xxs};
-    padding-bottom: ${({ theme }) => theme.spacing.xxs};
+    padding-top: ${({ theme }) => theme.spacing.xs};
+    padding-bottom: ${({ theme }) => theme.spacing.xs};
     padding-left: ${({ theme, level }) =>
       css`calc(${level} * ${theme.spacing.xs})`};
-  }
-
-  .Node-icon-wrapper {
-    display: flex;
-    width: ${({ theme }) => theme.spacing.xs};
   }
 
   .Node-menu-wrapper {
@@ -53,8 +48,7 @@ const Style = styled.li<{ isActive: boolean; level: number }>`
     display: flex;
     width: ${({ theme }) => theme.spacing.xs};
     align-self: stretch;
-    padding: ${({ theme }) => theme.spacing.xxs}
-      ${({ theme }) => theme.spacing.xxs};
+    padding: ${({ theme }) => theme.spacing.xs};
 
     @media (hover: hover) and (pointer: fine) {
       &:hover:not(:disabled) {
@@ -66,12 +60,13 @@ const Style = styled.li<{ isActive: boolean; level: number }>`
   .Node-heading {
     flex: 1;
     align-self: center;
+    padding-left: ${({ theme }) => theme.spacing.xxs};
   }
 
   .Node-dropdown {
     position: absolute;
     top: 100%;
-    right: 0;
+    right: ${({ theme }) => theme.spacing.xxs};
     z-index: 100;
   }
 `
@@ -100,6 +95,7 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
   function handleSetIsNewFileOpen() {
     openFileInput()
     setOpen(false)
+    onToggle(node, true)
   }
 
   function handleToggleMenu(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -153,24 +149,18 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
         onClick={() => onClick(node)}
       >
         {type === Node_Type.Folder && (
-          <div className="Node-icon-wrapper">
-            <Chevron
-              toggled={toggled}
-              size="xs"
-              icon="chevron-right"
-              prefix="fa"
-              marginRight
-            />
-          </div>
+          <Chevron
+            toggled={toggled}
+            size="sm"
+            icon="chevron-right"
+            prefix="fa"
+            marginRight
+          />
         )}
         {type === Node_Type.Folder ? (
-          <div className="Node-icon-wrapper">
-            <Icon size="xs" icon="folder" prefix="fa" marginRight />
-          </div>
+          <Icon size="sm" icon="folder" prefix="fa" />
         ) : (
-          <div className="Node-icon-wrapper">
-            <Icon size="xs" icon="file" prefix="fa" marginRight />
-          </div>
+          <Icon size="sm" icon="file" prefix="fa" marginLeft />
         )}
         <h5 className="Node-heading">{name}</h5>
       </div>
