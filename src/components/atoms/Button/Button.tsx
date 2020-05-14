@@ -4,7 +4,7 @@ import { styled } from '../../../theme'
 
 const Style = styled.button<Pick<IButton, 'isActive'>>`
   position: relative;
-  padding: ${({ theme }) => theme.spacing.xxs};
+  padding: ${({ theme }) => theme.spacing.xs};
   background-color: ${({ theme, isActive }) =>
     isActive
       ? theme.colors.background.tertiary

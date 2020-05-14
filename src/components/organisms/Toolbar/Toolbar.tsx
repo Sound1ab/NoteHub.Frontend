@@ -44,7 +44,7 @@ const Style = styled.div`
   }
 
   .Toolbar-button {
-    margin-right: ${({ theme }) => theme.spacing.xxxs};
+    margin-right: ${({ theme }) => theme.spacing.xxs};
   }
 
   .Toolbar-actions {
