@@ -2,15 +2,12 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
-import { useCreateFile } from '../../../hooks'
 import {
   fileGitNodeOne,
   fileGitNodeTwo,
-  folderNode,
   resolvers,
 } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
-import { FileInput } from '../../molecules'
 import { MockProvider } from '../../utility'
 import { Dashboard } from './Dashboard'
 
@@ -58,9 +55,9 @@ describe('Dashboard', () => {
     expect(getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
   })
 
-  it.skip('should display an error message and close the file input if there was a problem', async () => {})
+  // it.skip('should display an error message and close the file input if there was a problem', async () => {})
 
-  it.skip('should delete file if repo and file is selected', async () => {})
+  // it.skip('should delete file if repo and file is selected', async () => {})
 
   it('should toggle between edit and preview mode', async () => {
     const { path } = fileGitNodeOne

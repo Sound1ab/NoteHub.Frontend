@@ -51,7 +51,7 @@ const Style = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: ${({ theme }) => theme.spacing.xxs};
+    padding: ${({ theme }) => theme.spacing.xs};
   }
 
   .Toolbar-editor-actions {

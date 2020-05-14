@@ -22,7 +22,6 @@ export function MarkdownEditor() {
     <Style aria-label="Markdown editor">
       <SimpleMDE
         className="MarkdownEditor-wrapper"
-        key={file?.sha}
         onChange={value => updateFile(currentPath, value)}
         value={file?.content ?? ''}
         getLineAndCursor={handleSetMarkdownCursorPosition}

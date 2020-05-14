@@ -11,6 +11,7 @@ import {
 import { styled } from '../../../theme'
 import { ITreeNode } from '../../../types'
 import { scrollIntoView } from '../../../utils'
+import { Fade } from '../../animation'
 import { Node_Type } from '../../apollo/generated_components_typings'
 import { Dropdown, Icon } from '..'
 
@@ -167,11 +168,11 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
       <div className="Node-menu-wrapper" onClick={handleToggleMenu}>
         <Icon icon="ellipsis-h" isDisabled={isOpen} ariaLabel="item menu" />
       </div>
-      {isOpen && (
+      <Fade show={isOpen}>
         <Portal domNode={containerRef.current} className="Node-dropdown">
           <Dropdown ref={ref} items={dropdownItems} />
         </Portal>
-      )}
+      </Fade>
     </Style>
   )
 }

@@ -19,10 +19,9 @@ const Style = styled.div<{ isPortalOpen: boolean }>`
   .Profile-dropdown {
     position: absolute;
     pointer-events: ${({ isPortalOpen }) => (isPortalOpen ? 'all' : 'non')};
-    bottom: -${({ theme }) => theme.spacing.xs};
+    top: calc(100% + ${({ theme }) => theme.spacing.xs});
     right: 0;
     z-index: 100;
-    transform: translateY(100%);
   }
 `
 

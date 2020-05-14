@@ -7,7 +7,7 @@ import {
   ReadJwtQueryVariables,
 } from '../../components/apollo/generated_components_typings'
 import { ReadJwtDocument } from '../../hooks'
-import { parseJwt } from '../../utils/parseJwt'
+import { parseJwt } from '../../utils'
 
 export const context = (client: ApolloClient<NormalizedCacheObject>) =>
   setContext((_, { headers }) => {
