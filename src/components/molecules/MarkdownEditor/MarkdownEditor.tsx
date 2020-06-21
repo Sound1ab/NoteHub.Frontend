@@ -18,6 +18,10 @@ export function MarkdownEditor() {
     })
   }
 
+  if (!currentPath?.endsWith('.md')) {
+    return null
+  }
+
   return (
     <Style aria-label="Markdown editor">
       <SimpleMDE
