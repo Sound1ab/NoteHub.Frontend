@@ -21,6 +21,7 @@ export function MarkdownEditor() {
   return (
     <Style aria-label="Markdown editor">
       <SimpleMDE
+        key={file?.path}
         className="MarkdownEditor-wrapper"
         onChange={value => updateFile(currentPath, value)}
         value={file?.content ?? ''}
