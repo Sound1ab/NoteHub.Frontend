@@ -129,7 +129,7 @@ export const resolvers = {
       content: string
       url: string
     } => {
-      const findFile = ({ filename }: any) => filename === input.path
+      const findFile = ({ path }: any) => path === input.path
       const fileIndex = files.findIndex(findFile)
       const file = files.find(findFile)
 

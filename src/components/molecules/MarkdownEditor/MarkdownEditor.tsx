@@ -5,6 +5,7 @@ import SimpleMDE from 'react-simplemde-editor'
 import { useReadCurrentPath, useReadFile, useUpdateFile } from '../../../hooks'
 import { IPosition } from '../../../types'
 import { Style } from './MarkdownEditor.styles'
+import { isFile } from '../../../utils'
 
 export function MarkdownEditor() {
   const client = useApolloClient()
@@ -18,7 +19,7 @@ export function MarkdownEditor() {
     })
   }
 
-  if (!currentPath?.endsWith('.md')) {
+  if (!isFile(currentPath)) {
     return null
   }
 

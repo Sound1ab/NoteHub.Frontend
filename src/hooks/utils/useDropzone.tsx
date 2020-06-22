@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react'
 
 import { styled } from '../../theme'
-import { useCreateFile } from '..'
+import { getGithubImagePath } from '../../utils'
+import { useCreateImage, useReadCurrentPath } from '..'
 
 const Style = styled.input`
   display: none;
@@ -12,7 +13,8 @@ export function useDropzone() {
   const [loading, setLoading] = useState(false)
   const resolver = useRef<(value?: any | PromiseLike<any>) => void>(null)
   const rejecter = useRef<(value?: any | PromiseLike<any>) => void>(null)
-  const [createFile] = useCreateFile()
+  const [createImage] = useCreateImage()
+  const { currentPath } = useReadCurrentPath()
 
   async function handleCreateNewImage(path: string, content: any) {
     if (!content) {
@@ -21,7 +23,7 @@ export function useDropzone() {
     }
     setLoading(true)
     try {
-      await createFile(path, content)
+      await createImage(path, content)
     } catch (e) {
       alert(`There was an issue saving your image, please try again: ${e}`)
     } finally {
@@ -49,7 +51,7 @@ export function useDropzone() {
     reader.onload = async () => {
       const { name } = file
       const validatedName = removeWhiteSpace(name)
-      const path = `images/${validatedName}`
+      const path = getGithubImagePath(validatedName, currentPath)
       await handleCreateNewImage(path, reader.result)
       if (resolver && resolver.current) {
         resolver.current(path)

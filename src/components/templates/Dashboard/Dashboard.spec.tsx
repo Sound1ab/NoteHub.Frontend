@@ -75,7 +75,7 @@ describe('Dashboard', () => {
     expect(getByLabelText('Markdown preview')).toBeDefined()
   })
 
-  it.skip('should insert uploaded image at cursor position', async () => {
+  it('should insert uploaded image at cursor position', async () => {
     const { path } = fileGitNodeTwo
 
     const { getByLabelText, getByText, getByTitle } = await render(
@@ -96,7 +96,7 @@ describe('Dashboard', () => {
       target: { files: [file] },
     })
 
-    const image = `![](https://github.com/Sound1ab/NoteHub.Notebook.${name}/blob/master/images/${imageFilename}?raw=true)`
+    const image = `![](https://github.com/Sound1ab/NoteHub.Notebook/blob/master/MOCK_FOLDER_PATH/images/${imageFilename}?raw=true)MOCK_CONTENT_2`
 
     expect(getByText(image)).toBeInTheDocument()
   })
