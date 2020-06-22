@@ -18,14 +18,14 @@ export function useDropzone() {
 
   async function handleCreateNewImage(path: string, content: any) {
     if (!content) {
-      alert('no content')
+      rejecter?.current?.('No content')
       return
     }
     setLoading(true)
     try {
       await createImage(path, content)
     } catch (e) {
-      alert(`There was an issue saving your image, please try again: ${e}`)
+      rejecter?.current?.(e)
     } finally {
       setLoading(false)
     }
@@ -75,6 +75,13 @@ export function useDropzone() {
     })
   }
 
+  const onInputClick = (
+    event: React.MouseEvent<HTMLInputElement, MouseEvent>
+  ) => {
+    const element = event.target as HTMLInputElement
+    element.value = ''
+  }
+
   const inputElement = () => {
     return (
       <Style
@@ -85,6 +92,7 @@ export function useDropzone() {
         tabIndex={-1}
         type="file"
         onChange={handleDrop}
+        onClick={onInputClick}
         aria-label="Upload file"
       />
     )

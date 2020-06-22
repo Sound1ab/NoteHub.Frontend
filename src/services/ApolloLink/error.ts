@@ -52,7 +52,7 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
       }
       switch (err.extensions.code) {
         case APOLLO_ERRORS.INTERNAL_SERVER_ERROR: {
-          alert(err.message)
+          console.warn('Apollo link internal server error: ', err.message)
           break
         }
         case APOLLO_ERRORS.JWT_EXPIRED: {

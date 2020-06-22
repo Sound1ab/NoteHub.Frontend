@@ -87,7 +87,7 @@ export function Toolbar() {
 
       updateFile(currentPath, content)
     } catch (error) {
-      console.log(`Could not upload image: ${error}`)
+      alert(error)
     }
   }
 
