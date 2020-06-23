@@ -64,7 +64,7 @@ export function Toolbar() {
   const client = useApolloClient()
   const { currentRepoName } = useReadCurrentRepoName()
   const { isEdit } = useReadIsEdit()
-  const { selectFileAndUpload, Dropzone } = useDropzone()
+  const { selectFileAndUpload, Dropzone, loading } = useDropzone()
   const { cursorPosition } = useReadCursorPosition()
   const [updateFile] = useUpdateFile()
   const { file } = useReadFile()
@@ -112,6 +112,7 @@ export function Toolbar() {
             className="Toolbar-button"
             onClick={handleImageUpload}
             title="Upload an image"
+            isLoading={loading}
           >
             <Icon size="sm" icon="image" prefix="fa" />
           </Button>

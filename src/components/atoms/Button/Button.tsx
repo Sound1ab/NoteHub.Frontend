@@ -1,8 +1,10 @@
 import React, { ReactNode } from 'react'
+import { css } from 'styled-components'
 
 import { styled } from '../../../theme'
+import { Icon } from '..'
 
-const Style = styled.button<Pick<IButton, 'isActive'>>`
+const Style = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
   position: relative;
   padding: ${({ theme }) => theme.spacing.xs};
   background-color: ${({ theme, isActive }) =>
@@ -19,6 +21,12 @@ const Style = styled.button<Pick<IButton, 'isActive'>>`
   > * {
     color: ${({ theme, isActive }) =>
       isActive ? theme.colors.accent : theme.colors.text.primary};
+    ${({ isLoading }) =>
+      isLoading
+        ? css`
+            animation: spin 2s ease-in-out infinite;
+          `
+        : ''}
   }
 
   &:disabled {
@@ -32,11 +40,18 @@ const Style = styled.button<Pick<IButton, 'isActive'>>`
       opacity: 0.6;
     }
   }
+
+  @keyframes spin {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `
 
 interface IButton {
   isActive?: boolean
   isDisabled?: boolean
+  isLoading?: boolean
   children?: ReactNode
   onClick: () => void
   className?: string
@@ -61,10 +76,12 @@ export function Button({
   className,
   ariaLabel,
   title,
+  isLoading = false,
 }: IButton) {
   return (
     <Style
       isActive={isActive}
+      isLoading={isLoading}
       disabled={isDisabled}
       className={className}
       onClick={onClick}
@@ -72,7 +89,7 @@ export function Button({
       title={title}
       as="button"
     >
-      {children}
+      {isLoading ? <Icon size="sm" icon="spinner" prefix="fa" /> : children}
     </Style>
   )
 }

@@ -22,6 +22,7 @@ import {
   faPenSquare,
   faPlusCircle,
   faSignOutAlt,
+  faSpinner,
   faSync,
   faTimes,
   faTrash,
@@ -53,7 +54,8 @@ library.add(
   faImage,
   faSignOutAlt,
   faFile,
-  faFolder
+  faFolder,
+  faSpinner
 )
 
 interface IIconProvider {

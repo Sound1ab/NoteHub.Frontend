@@ -58,6 +58,7 @@ export type TIcons =
   | 'sign-out-alt'
   | 'file'
   | 'folder'
+  | 'spinner'
 
 interface IIcon {
   icon: TIcons
