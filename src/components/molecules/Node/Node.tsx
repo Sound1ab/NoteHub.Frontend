@@ -26,7 +26,7 @@ interface INode {
   level?: number
 }
 
-export function Node({ node, onToggle, level = 1 }: INode) {
+export function Node({ node, onToggle, level = 0 }: INode) {
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
   const { toggled, children, path, type } = node
 

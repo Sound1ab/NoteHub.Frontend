@@ -40,8 +40,12 @@ const Style = styled.li<{ isActive: boolean; level: number }>`
     overflow: hidden;
     padding-top: ${({ theme }) => theme.spacing.xs};
     padding-bottom: ${({ theme }) => theme.spacing.xs};
-    padding-left: ${({ theme, level }) =>
-      css`calc(${level} * ${theme.spacing.xs})`};
+    padding-left: ${({ theme, level }) => {
+      if (level === 0) {
+        return theme.spacing.xs
+      }
+      return css`calc(${level} * ${theme.spacing.s})`
+    }};
   }
 
   .Node-menu-wrapper {
