@@ -102,8 +102,8 @@ export const treeBeard = {
     },
   ],
   name: 'Notes',
-  path: '',
-  toggled: true,
+  path: 'Notes',
+  toggled: false,
   type: Node_Type.Folder,
 }
 
@@ -139,7 +139,7 @@ export const createNextNode = {
 
 describe('tree', () => {
   it('should create a flattened object of nodes with children', async () => {
-    const treeObject = createNodes(githubTreeData, [])
+    const treeObject = createNodes(githubTreeData, new Set())
 
     expect(treeObject).toEqual(treeBeard)
   })
@@ -159,7 +159,7 @@ describe('createNode', () => {
         path: ['MOCK_FOLDER', 'MOCK_FILE.md'],
         parentNode: node,
         gitNode: rootFile,
-        listOfToggledPaths: [],
+        listOfToggledPaths: new Set(),
       })
     ).toThrow('CurrentNode has no children')
   })
@@ -195,7 +195,7 @@ describe('createNode', () => {
       path: ['MOCK_FOLDER', 'MOCK_FILE.md'],
       parentNode: node,
       gitNode: rootFile,
-      listOfToggledPaths: [],
+      listOfToggledPaths: new Set(),
     })
 
     expect(node).toEqual(createNextNode)

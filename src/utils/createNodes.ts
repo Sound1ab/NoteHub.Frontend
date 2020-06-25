@@ -28,7 +28,7 @@ interface ICreateNode {
   parentNode: ITreeNode
   gitNode: GitNode
   currentPath?: string
-  listOfToggledPaths: string[]
+  listOfToggledPaths: Set<string>
 }
 
 export function createNode({
@@ -50,7 +50,7 @@ export function createNode({
       : createFolderNode(
           slug,
           gitNode.path,
-          listOfToggledPaths.includes(gitNode.path)
+          listOfToggledPaths.has(gitNode.path)
         )
 
     parentNode.children = [...children, node]
@@ -73,7 +73,7 @@ export function createNode({
   if (!nextNode) {
     parentNode.children = [
       ...parentNode.children,
-      createFolderNode(slug, nextPath, listOfToggledPaths.includes(nextPath)),
+      createFolderNode(slug, nextPath, listOfToggledPaths.has(nextPath)),
     ]
 
     return createNode({
@@ -94,12 +94,15 @@ export function createNode({
   })
 }
 
-export function createNodes(gitNodes: GitNode[], listOfToggledPaths: string[]) {
+export function createNodes(
+  gitNodes: GitNode[],
+  listOfToggledPaths: Set<string>
+) {
   const treeBeard: ITreeNode = {
     children: [],
     name: 'Notes',
-    path: '',
-    toggled: true,
+    path: 'Notes',
+    toggled: listOfToggledPaths.has('Notes'),
     type: Node_Type.Folder,
   }
 

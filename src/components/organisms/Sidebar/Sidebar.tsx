@@ -27,7 +27,9 @@ const Style = styled.div`
 
 export function Sidebar() {
   const { gitNodes, loading } = useReadNodes()
-  const [listOfToggledPaths, setListOfToggledPaths] = useState<string[]>([])
+  const [listOfToggledPaths, setListOfToggledPaths] = useState<Set<string>>(
+    new Set(['Notes'])
+  )
 
   if (!gitNodes || loading) {
     return null
@@ -35,10 +37,11 @@ export function Sidebar() {
 
   function onToggle(path: string, toggled: boolean) {
     if (toggled) {
-      setListOfToggledPaths(prev => [...prev, path])
+      listOfToggledPaths.add(path)
     } else {
-      setListOfToggledPaths(prev => prev.filter(prevPath => prevPath !== path))
+      listOfToggledPaths.delete(path)
     }
+    setListOfToggledPaths(new Set(listOfToggledPaths))
   }
 
   return (

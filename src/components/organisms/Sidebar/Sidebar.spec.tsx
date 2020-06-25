@@ -32,6 +32,23 @@ describe('Sidebar', () => {
     expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
   })
 
+  it('should toggle top level folder', async () => {
+    const { queryByText, getByText } = await render(
+      <MockProvider mockResolvers={resolvers}>
+        <Sidebar />
+      </MockProvider>
+    )
+
+    await fireEvent.click(getByText('Notes'))
+    await fireEvent.click(getByText('Notes'))
+
+    expect(queryByText('MOCK_FOLDER_PATH')).not.toBeInTheDocument()
+
+    await fireEvent.click(getByText('Notes'))
+
+    expect(getByText('MOCK_FOLDER_PATH')).toBeInTheDocument()
+  })
+
   describe('when creating a file', () => {
     it('should toggle folder open if placed inside a closed folder', async () => {
       const { getAllByLabelText, getByText, getByLabelText } = await render(
