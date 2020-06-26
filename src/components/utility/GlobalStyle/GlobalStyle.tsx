@@ -78,7 +78,7 @@ export const GlobalStyle = createGlobalStyle<{
   /* unvisited link */
 
   a {
-    text-decoration: none;
+    text-decoration: underline;
   }
 
   a:link {
@@ -110,6 +110,7 @@ export const GlobalStyle = createGlobalStyle<{
   
   hr {
     height: 0;
+    background: ${({ theme }) => theme.colors.accent}!important;
   }
   
   /* Text-level semantics
@@ -324,5 +325,16 @@ export const GlobalStyle = createGlobalStyle<{
   
   summary {
     display: list-item;
+  }
+  
+  /* Table
+     ========================================================================== */
+  
+  table {
+    color: ${({ theme }) => theme.colors.text.primary};
+  }
+  
+  td, th {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.accent}!important;
   }
 `
