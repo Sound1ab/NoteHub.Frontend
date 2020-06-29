@@ -63,6 +63,7 @@ export function ColorPicker() {
 
     client.writeData({ data: { accentColor: backgroundColor } })
   }
+
   return (
     <Style ref={containerRef}>
       <Button
@@ -78,19 +79,23 @@ export function ColorPicker() {
             ref={ref}
             items={[
               {
+                label: 'Swatches',
                 custom: (
                   <li className="ColorPicker-list">
                     <svg
                       onClick={handleSwatchClick}
                       className="ColorPicker-swatch ColorPicker-swatch-1"
+                      aria-label="primary swatch"
                     />
                     <svg
                       onClick={handleSwatchClick}
                       className="ColorPicker-swatch ColorPicker-swatch-2"
+                      aria-label="secondary swatch"
                     />
                     <svg
                       onClick={handleSwatchClick}
                       className="ColorPicker-swatch ColorPicker-swatch-3"
+                      aria-label="tertiary swatch"
                     />
                   </li>
                 ),
