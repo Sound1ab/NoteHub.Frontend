@@ -1,7 +1,7 @@
 import React from 'react'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 
-import { useDarkMode } from '../../../hooks'
+import { useDarkMode, useReadAccentColor } from '../../../hooks'
 import { breakpoints, colors, createSpacing } from '../../../theme/theme'
 import { createTypography } from '../../../theme/typography'
 
@@ -10,8 +10,11 @@ interface IThemeProvider {
 }
 
 export function ThemeProvider({ children }: IThemeProvider) {
+  const { accentColor } = useReadAccentColor()
+
   const { currentTheme } = useDarkMode()
-  const themeColors = colors[currentTheme]
+  const { accent, ...rest } = colors[currentTheme]
+  const themeColors = { ...rest, accent: accentColor || accent }
   const typography = createTypography(themeColors)
   const spacing = createSpacing(typography)
 

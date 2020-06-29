@@ -12,7 +12,7 @@ import {
 } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Button, Icon } from '../../atoms'
-import { Profile } from '../../molecules'
+import { ColorPicker, Profile } from '../../molecules'
 
 const Style = styled.div`
   position: relative;
@@ -116,6 +116,7 @@ export function Toolbar() {
           >
             <Icon size="sm" icon="image" prefix="fa" />
           </Button>
+          <ColorPicker />
           <div className="Toolbar-profile">
             <Profile />
           </div>

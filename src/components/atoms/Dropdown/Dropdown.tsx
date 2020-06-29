@@ -1,4 +1,4 @@
-import React, { Ref, forwardRef } from 'react'
+import React, { ReactNode, Ref, forwardRef } from 'react'
 
 import { styled } from '../../../theme'
 import { Icon, TIcons } from '..'
@@ -45,10 +45,11 @@ const Style = styled.ul`
 `
 
 export interface IDropdownItem {
-  icon: TIcons
-  label: string
-  onClick: () => void
-  prefix: 'fa' | 'fab'
+  icon?: TIcons
+  label?: string
+  onClick?: () => void
+  prefix?: 'fa' | 'fab'
+  custom?: ReactNode
 }
 
 interface IDropdownMenuProps {
@@ -60,7 +61,7 @@ export const Dropdown = forwardRef(
     return (
       <Style ref={ref} aria-label="dropdown">
         <div className="Dropdown-triangle" />
-        {items.map(({ icon, label, onClick, prefix }) => (
+        {items.map(({ custom, icon, label, onClick, prefix }) => (
           <button
             key={label}
             type="button"
@@ -68,16 +69,22 @@ export const Dropdown = forwardRef(
             className="Dropdown-item"
             aria-label={label}
           >
-            <li>
-              <Icon
-                size="sm"
-                icon={icon}
-                prefix={prefix}
-                marginRight
-                title={`${label} icon`}
-              />
-              {label}
-            </li>
+            {custom ? (
+              custom
+            ) : (
+              <li>
+                {icon && prefix && (
+                  <Icon
+                    size="sm"
+                    icon={icon}
+                    prefix={prefix}
+                    marginRight
+                    title={`${label} icon`}
+                  />
+                )}
+                {label}
+              </li>
+            )}
           </button>
         ))}
       </Style>

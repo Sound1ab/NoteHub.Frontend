@@ -11,16 +11,14 @@ import { styled } from '../../../theme'
 import { Fade } from '../../animation'
 import { Avatar, Dropdown } from '../../atoms'
 
-const Style = styled.div<{ isPortalOpen: boolean }>`
+const Style = styled.div`
   position: relative;
-  pointer-events: ${({ isPortalOpen }) => (isPortalOpen ? 'none' : 'all')};
   cursor: pointer;
 
   .Profile-dropdown {
     position: absolute;
-    pointer-events: ${({ isPortalOpen }) => (isPortalOpen ? 'all' : 'non')};
     top: calc(100% + ${({ theme }) => theme.spacing.xs});
-    right: 0;
+    right: ${({ theme }) => theme.spacing.xxs};
     z-index: 100;
   }
 `
@@ -47,7 +45,7 @@ export function Profile() {
   }
 
   return (
-    <Style ref={containerRef} isPortalOpen={isOpen}>
+    <Style ref={containerRef}>
       <Avatar image={user?.avatar_url} onClick={handleOpen} />
       <Fade show={isOpen}>
         <Portal domNode={containerRef.current} className="Profile-dropdown">

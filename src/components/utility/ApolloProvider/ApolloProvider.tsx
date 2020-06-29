@@ -16,6 +16,7 @@ export interface ILocalData {
   isEdit: boolean
   isAuthorised: boolean
   cursorPosition: IPosition
+  accentColor: string | null
 }
 
 export const localData: ILocalData = {
@@ -30,6 +31,7 @@ export const localData: ILocalData = {
     line: 0,
     __typename: 'Position',
   },
+  accentColor: null,
 }
 
 interface IApolloProvider {

@@ -5,6 +5,7 @@ type Query {
   isEdit: Boolean!
   cursorPosition: Position!
   jwt: String
+  accentColor: String
 }
 
 type Position {

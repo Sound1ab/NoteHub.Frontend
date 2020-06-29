@@ -59,6 +59,7 @@ export type TIcons =
   | 'file'
   | 'folder'
   | 'spinner'
+  | 'eye-dropper'
 
 interface IIcon {
   icon: TIcons

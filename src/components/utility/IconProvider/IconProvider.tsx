@@ -13,6 +13,7 @@ import {
   faEllipsisH,
   faEnvelope,
   faExternalLinkAlt,
+  faEyeDropper,
   faFile,
   faFolder,
   faGripLinesVertical,
@@ -55,7 +56,8 @@ library.add(
   faSignOutAlt,
   faFile,
   faFolder,
-  faSpinner
+  faSpinner,
+  faEyeDropper
 )
 
 interface IIconProvider {
