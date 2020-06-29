@@ -109,6 +109,14 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
     setOpen(isOpen => !isOpen)
   }
 
+  function onChevronClick(
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    node: ITreeNode
+  ) {
+    e.stopPropagation()
+    onToggle(node.path, !node.toggled)
+  }
+
   function onClick(node: ITreeNode) {
     if (node.type === Node_Type.File) {
       scrollIntoView(CONTAINER_ID.EDITOR)
@@ -160,6 +168,10 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
             icon="chevron-right"
             prefix="fa"
             marginRight
+            ariaLabel="chevron"
+            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+              onChevronClick(e, node)
+            }
           />
         )}
         {type === Node_Type.Folder ? (

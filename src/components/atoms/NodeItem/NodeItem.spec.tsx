@@ -62,6 +62,26 @@ describe('NodeItem', () => {
       expect(onToggle).toBeCalledWith(folderNode.path, false)
     })
 
+    it('should call onToggle with false if chevron is clicked and node is not selected', async () => {
+      const { getByLabelText } = await render(
+        <MockProvider
+          mockResolvers={resolvers}
+          localData={{ currentPath: folderNode.path }}
+        >
+          <NodeItem
+            node={{ ...folderNode, toggled: true }}
+            onToggle={onToggle}
+            openFileInput={openFileInput}
+            level={1}
+          />
+        </MockProvider>
+      )
+
+      await fireEvent.click(getByLabelText('chevron'))
+
+      expect(onToggle).toBeCalledWith(folderNode.path, false)
+    })
+
     it('should open folder dropdown menu', async () => {
       const { getByLabelText, getByText } = await render(
         <MockProvider mockResolvers={resolvers}>
