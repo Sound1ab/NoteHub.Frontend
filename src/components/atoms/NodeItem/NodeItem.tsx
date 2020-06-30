@@ -179,7 +179,7 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
         ) : (
           <Icon size="sm" icon="file" prefix="fa" marginLeft />
         )}
-        <h5 className="Node-heading">{name}</h5>
+        <h4 className="Node-heading">{name}</h4>
       </div>
       <div className="Node-menu-wrapper" onClick={handleToggleMenu}>
         <Icon icon="ellipsis-h" isDisabled={isOpen} ariaLabel="item menu" />

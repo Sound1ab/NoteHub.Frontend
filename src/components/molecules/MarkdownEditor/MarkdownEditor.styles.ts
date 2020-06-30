@@ -292,7 +292,7 @@ export const Style = styled.div`
     border-width: 0;
     background: 0 0;
     font-family: inherit;
-    font-size: 85%;
+    font-size: 14px;
     margin: 0;
     white-space: pre;
     word-wrap: normal;

@@ -150,6 +150,7 @@ export type Query = {
   cursorPosition: Position,
   jwt?: Maybe<Scalars['String']>,
   accentColor?: Maybe<Scalars['String']>,
+  easyMDE?: Maybe<Scalars['String']>,
 };
 
 
@@ -338,19 +339,6 @@ export type CreateImageMutation = (
   )> }
 );
 
-export type DeleteImageMutationVariables = {
-  input: DeleteFileInput
-};
-
-
-export type DeleteImageMutation = (
-  { __typename?: 'Mutation' }
-  & { deleteImage: Maybe<(
-    { __typename?: 'File' }
-    & FileFragment
-  )> }
-);
-
 export type ReadImageQueryVariables = {
   path: Scalars['String']
 };
@@ -418,6 +406,14 @@ export type ReadCursorPositionQuery = (
     { __typename?: 'Position' }
     & Pick<Position, 'ch' | 'line'>
   ) }
+);
+
+export type ReadEasyMdeQueryVariables = {};
+
+
+export type ReadEasyMdeQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'easyMDE'>
 );
 
 export type ReadIsEditQueryVariables = {};

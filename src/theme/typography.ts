@@ -4,9 +4,9 @@ import { TColors } from './index'
 
 export const createTypography = (colors: TColors) => {
   return new Typography({
-    baseFontSize: '16px',
+    baseFontSize: '14px',
     bodyFontFamily: [
-      'Roboto',
+      '-apple-system',
       'Ubuntu',
       'Cantarell',
       'Open Sans',
@@ -14,13 +14,14 @@ export const createTypography = (colors: TColors) => {
       'sans-serif',
     ],
     headerFontFamily: [
-      'Roboto',
+      '-apple-system',
       'Ubuntu',
       'Cantarell',
       'Open Sans',
       'Helvetica Neue',
       'sans-serif',
     ],
+    scaleRatio: 2.9,
     overrideThemeStyles: () => ({
       form: {
         marginBottom: 0,
