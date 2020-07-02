@@ -2,11 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
-import {
-  fileGitNodeOne,
-  fileGitNodeTwo,
-  resolvers,
-} from '../../../schema/mockResolvers'
+import { fileGitNodeTwo, resolvers } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { Dashboard } from './Dashboard'

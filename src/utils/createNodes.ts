@@ -101,7 +101,7 @@ export function createNodes(
   const treeBeard: ITreeNode = {
     children: [],
     name: 'Notes',
-    path: 'Notes',
+    path: '',
     toggled: listOfToggledPaths.has('Notes'),
     type: Node_Type.Folder,
   }
