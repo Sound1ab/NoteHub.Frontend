@@ -55,7 +55,7 @@
     "apollo-link-context": "^1.0.19",
     "apollo-link-error": "^1.1.10",
     "apollo-link-http": "^1.5.16",
-    "graphql-tag": "^2.10.1",
+    "graphql-tag": "^2.10.3",
     "js-base64": "^2.5.2",
     "react": "^16.8.4",
     "react-app-rewired": "^2.1.5",
