@@ -5,9 +5,12 @@ import {
   faSoundcloud,
 } from '@fortawesome/free-brands-svg-icons'
 import {
+  faBold,
   faBook,
   faChevronDown,
   faChevronRight,
+  faCode,
+  faColumns,
   faComment,
   faEdit,
   faEllipsisH,
@@ -18,10 +21,15 @@ import {
   faFolder,
   faGripLinesVertical,
   faImage,
+  faItalic,
+  faList,
+  faListOl,
+  faMinus,
   faMoon,
   faPen,
   faPenSquare,
   faPlusCircle,
+  faQuoteRight,
   faSignOutAlt,
   faSpinner,
   faSync,
@@ -57,7 +65,15 @@ library.add(
   faFile,
   faFolder,
   faSpinner,
-  faEyeDropper
+  faEyeDropper,
+  faListOl,
+  faCode,
+  faList,
+  faItalic,
+  faBold,
+  faMinus,
+  faQuoteRight,
+  faColumns
 )
 
 interface IIconProvider {

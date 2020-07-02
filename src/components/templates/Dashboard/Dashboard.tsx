@@ -2,6 +2,7 @@ import React from 'react'
 
 import { styled } from '../../../theme'
 import { Editor, Sidebar, Toolbar } from '../../organisms'
+import { EasyMDEProvider } from '../../utility'
 
 const Style = styled.div`
   height: 100%;
@@ -39,11 +40,13 @@ const Style = styled.div`
 export function Dashboard() {
   return (
     <Style>
-      <Toolbar />
-      <div className="Dashboard-content">
-        <Sidebar />
-        <Editor />
-      </div>
+      <EasyMDEProvider>
+        <Toolbar />
+        <div className="Dashboard-content">
+          <Sidebar />
+          <Editor />
+        </div>
+      </EasyMDEProvider>
     </Style>
   )
 }

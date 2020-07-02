@@ -4,17 +4,26 @@ export const Style = styled.div`
   position: relative;
   height: 100%;
 
-  .MarkdownEditor-wrapper {
-    height: 100%;
+  .editor-preview-side {
+    display: none;
   }
 
-  .CodeMirror-lines {
-    padding: 4px 0;
+  .editor-preview-active-side {
+    flex: 0 0 50%;
+    overflow: hidden;
+    padding: ${({ theme }) => theme.spacing.xs};
+    display: block;
   }
-  .CodeMirror pre.CodeMirror-line,
-  .CodeMirror pre.CodeMirror-line-like {
-    padding: 0 4px;
+
+  .CodeMirror-sided {
+    flex: 0 0 50%;
   }
+
+  .MarkdownEditor-wrapper {
+    height: 100%;
+    display: flex;
+  }
+
   .CodeMirror-gutter-filler,
   .CodeMirror-scrollbar-filler {
     background-color: #fff;
@@ -404,10 +413,11 @@ export const Style = styled.div`
   .CodeMirror {
     font-family: monospace;
     height: 100%;
+    width: 100%;
     color: #000;
     direction: ltr;
     box-sizing: border-box;
-    padding: ${({ theme }) => theme.spacing.xxs};
+    padding: ${({ theme }) => theme.spacing.xs};
     font: inherit;
     z-index: 1;
     word-wrap: break-word;

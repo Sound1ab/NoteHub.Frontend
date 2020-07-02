@@ -3,6 +3,7 @@ import React from 'react'
 
 import {
   useDropzone,
+  useEasyMDE,
   useReadCurrentPath,
   useReadCurrentRepoName,
   useReadCursorPosition,
@@ -69,6 +70,16 @@ export function Toolbar() {
   const [updateFile] = useUpdateFile()
   const { file } = useReadFile()
   const { currentPath } = useReadCurrentPath()
+  const {
+    toggleOrderedList,
+    toggleCodeBlock,
+    toggleUnorderedList,
+    toggleItalic,
+    toggleBold,
+    drawHorizontalRule,
+    toggleSideBySide,
+    toggleBlockquote,
+  } = useEasyMDE()
 
   function insertPathIntoString(filename: string) {
     const text = `![](https://github.com/Sound1ab/${currentRepoName}/blob/master/${filename}?raw=true)`
@@ -107,6 +118,62 @@ export function Toolbar() {
             title={isEdit ? 'View file in preview' : 'View file in markdown'}
           >
             <Icon size="sm" icon="pen" prefix="fa" />
+          </Button>
+          <Button
+            className="Toolbar-button"
+            onClick={toggleItalic}
+            title="Add italic"
+          >
+            <Icon size="sm" icon="italic" prefix="fa" />
+          </Button>
+          <Button
+            className="Toolbar-button"
+            onClick={toggleBold}
+            title="Add bold"
+          >
+            <Icon size="sm" icon="bold" prefix="fa" />
+          </Button>
+          <Button
+            className="Toolbar-button"
+            onClick={toggleBlockquote}
+            title="Add quote"
+          >
+            <Icon size="sm" icon="quote-right" prefix="fa" />
+          </Button>
+          <Button
+            className="Toolbar-button"
+            onClick={toggleOrderedList}
+            title="Add ordered list"
+          >
+            <Icon size="sm" icon="list-ol" prefix="fa" />
+          </Button>
+          <Button
+            className="Toolbar-button"
+            onClick={toggleUnorderedList}
+            title="Add unordered list"
+          >
+            <Icon size="sm" icon="list" prefix="fa" />
+          </Button>
+          <Button
+            className="Toolbar-button"
+            onClick={toggleCodeBlock}
+            title="Add code block"
+          >
+            <Icon size="sm" icon="code" prefix="fa" />
+          </Button>
+          <Button
+            className="Toolbar-button"
+            onClick={drawHorizontalRule}
+            title="Add horizontal line"
+          >
+            <Icon size="sm" icon="minus" prefix="fa" />
+          </Button>
+          <Button
+            className="Toolbar-button"
+            onClick={toggleSideBySide}
+            title="Toggle side by side"
+          >
+            <Icon size="sm" icon="columns" prefix="fa" />
           </Button>
           <Button
             className="Toolbar-button"

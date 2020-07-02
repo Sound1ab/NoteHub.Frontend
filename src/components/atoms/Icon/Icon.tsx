@@ -60,6 +60,14 @@ export type TIcons =
   | 'folder'
   | 'spinner'
   | 'eye-dropper'
+  | 'list-ol'
+  | 'code'
+  | 'list'
+  | 'italic'
+  | 'bold'
+  | 'minus'
+  | 'quote-right'
+  | 'columns'
 
 interface IIcon {
   icon: TIcons
