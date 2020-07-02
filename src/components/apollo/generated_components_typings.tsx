@@ -146,11 +146,9 @@ export type Query = {
   currentRepoName?: Maybe<Scalars['String']>,
   currentPath?: Maybe<Scalars['String']>,
   currentTheme?: Maybe<Scalars['String']>,
-  isEdit: Scalars['Boolean'],
   cursorPosition: Position,
   jwt?: Maybe<Scalars['String']>,
   accentColor?: Maybe<Scalars['String']>,
-  easyMDE?: Maybe<Scalars['String']>,
 };
 
 
@@ -406,22 +404,6 @@ export type ReadCursorPositionQuery = (
     { __typename?: 'Position' }
     & Pick<Position, 'ch' | 'line'>
   ) }
-);
-
-export type ReadEasyMdeQueryVariables = {};
-
-
-export type ReadEasyMdeQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'easyMDE'>
-);
-
-export type ReadIsEditQueryVariables = {};
-
-
-export type ReadIsEditQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'isEdit'>
 );
 
 export type ReadJwtQueryVariables = {};

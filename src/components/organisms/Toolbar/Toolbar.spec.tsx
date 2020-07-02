@@ -24,18 +24,6 @@ describe('Toolbar', () => {
     }))
   })
 
-  it('should toggle edit mode', async () => {
-    const { getByTitle } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <Toolbar />
-      </MockProvider>
-    )
-
-    await fireEvent.click(getByTitle('View file in preview'))
-
-    expect(getByTitle('View file in markdown')).toBeInTheDocument()
-  })
-
   it('should call selectFileAndUpload', async () => {
     const { getByTitle } = await render(
       <MockProvider mockResolvers={resolvers}>

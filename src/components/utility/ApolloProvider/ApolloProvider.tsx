@@ -13,7 +13,6 @@ export interface ILocalData {
   currentPath: string | null
   jwt: string | null
   currentTheme: COLOR_MODE | null
-  isEdit: boolean
   isAuthorised: boolean
   cursorPosition: IPosition
   accentColor: string | null
@@ -23,7 +22,6 @@ export const localData: ILocalData = {
   currentRepoName: 'NoteHub.Notebook',
   currentPath: null,
   currentTheme: null,
-  isEdit: true,
   isAuthorised: false,
   jwt: null,
   cursorPosition: {

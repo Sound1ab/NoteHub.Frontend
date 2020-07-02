@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/react-hooks'
 import React from 'react'
 
 import {
@@ -8,7 +7,6 @@ import {
   useReadCurrentRepoName,
   useReadCursorPosition,
   useReadFile,
-  useReadIsEdit,
   useUpdateFile,
 } from '../../../hooks'
 import { styled } from '../../../theme'
@@ -62,9 +60,7 @@ const Style = styled.div`
 `
 
 export function Toolbar() {
-  const client = useApolloClient()
   const { currentRepoName } = useReadCurrentRepoName()
-  const { isEdit } = useReadIsEdit()
   const { selectFileAndUpload, Dropzone, loading } = useDropzone()
   const { cursorPosition } = useReadCursorPosition()
   const [updateFile] = useUpdateFile()
@@ -102,23 +98,11 @@ export function Toolbar() {
     }
   }
 
-  function handleSetEdit() {
-    client.writeData({ data: { isEdit: !isEdit } })
-  }
-
   return (
     <>
       <Dropzone />
       <Style>
         <div className="Toolbar-actions Toolbar-editor-actions">
-          <Button
-            isActive={isEdit}
-            className="Toolbar-button"
-            onClick={handleSetEdit}
-            title={isEdit ? 'View file in preview' : 'View file in markdown'}
-          >
-            <Icon size="sm" icon="pen" prefix="fa" />
-          </Button>
           <Button
             className="Toolbar-button"
             onClick={toggleItalic}

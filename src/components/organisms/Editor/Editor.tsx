@@ -1,9 +1,8 @@
 import React from 'react'
 
 import { CONTAINER_ID } from '../../../enums'
-import { useReadFile, useReadIsEdit } from '../../../hooks'
+import { useReadFile } from '../../../hooks'
 import { styled } from '../../../theme'
-import { MarkdownPreview } from '../../atoms'
 import { MarkdownEditor, MarkdownEditorSkeleton } from '../../molecules'
 
 const Style = styled.div`
@@ -19,18 +18,11 @@ const Style = styled.div`
 `
 
 export function Editor() {
-  const { isEdit } = useReadIsEdit()
   const { loading } = useReadFile()
 
   return (
     <Style id={CONTAINER_ID.EDITOR}>
-      {loading ? (
-        <MarkdownEditorSkeleton />
-      ) : isEdit ? (
-        <MarkdownEditor />
-      ) : (
-        <MarkdownPreview />
-      )}
+      {loading ? <MarkdownEditorSkeleton /> : <MarkdownEditor />}
     </Style>
   )
 }

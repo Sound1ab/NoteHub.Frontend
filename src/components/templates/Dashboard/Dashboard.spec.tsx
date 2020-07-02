@@ -59,22 +59,6 @@ describe('Dashboard', () => {
 
   // it.skip('should delete file if repo and file is selected', async () => {})
 
-  it('should toggle between edit and preview mode', async () => {
-    const { path } = fileGitNodeOne
-
-    const { getByLabelText, getByTitle } = await render(
-      <MockProvider mockResolvers={resolvers} localData={{ currentPath: path }}>
-        <Dashboard />
-      </MockProvider>
-    )
-
-    expect(getByLabelText('Markdown editor')).toBeDefined()
-
-    await fireEvent.click(getByTitle('View file in preview'))
-
-    expect(getByLabelText('Markdown preview')).toBeDefined()
-  })
-
   it('should insert uploaded image at cursor position', async () => {
     const { path } = fileGitNodeTwo
 

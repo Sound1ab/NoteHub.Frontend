@@ -19,7 +19,7 @@ const Style = styled.div`
 
 export function MarkdownEditorSkeleton() {
   return (
-    <Style>
+    <Style aria-label="Markdown loading">
       <ContentLoader className="MarkdownEditorSkeleton-content">
         <rect y="0" height="18" width="100%" />
         <rect y="23" height="8" width="100%" />
