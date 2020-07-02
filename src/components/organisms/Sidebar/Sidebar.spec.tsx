@@ -32,7 +32,7 @@ describe('Sidebar', () => {
     expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
   })
 
-  it('should toggle top level folder', async () => {
+  it.skip('should toggle top level folder', async () => {
     const { queryByText, getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Sidebar />

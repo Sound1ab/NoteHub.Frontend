@@ -10,6 +10,7 @@ import {
   useUpdateFile,
 } from '../../../hooks'
 import { styled } from '../../../theme'
+import { isFile } from '../../../utils'
 import { Button, Icon } from '../../atoms'
 import { ColorPicker, Profile } from '../../molecules'
 
@@ -76,6 +77,7 @@ export function Toolbar() {
     toggleSideBySide,
     toggleBlockquote,
   } = useEasyMDE()
+  const isMarkdownEditorActive = isFile(currentPath)
 
   function insertPathIntoString(filename: string) {
     const text = `![](https://github.com/Sound1ab/${currentRepoName}/blob/master/${filename}?raw=true)`
@@ -107,6 +109,7 @@ export function Toolbar() {
             className="Toolbar-button"
             onClick={toggleItalic}
             title="Add italic"
+            isDisabled={!isMarkdownEditorActive}
           >
             <Icon size="sm" icon="italic" prefix="fa" />
           </Button>
@@ -114,6 +117,7 @@ export function Toolbar() {
             className="Toolbar-button"
             onClick={toggleBold}
             title="Add bold"
+            isDisabled={!isMarkdownEditorActive}
           >
             <Icon size="sm" icon="bold" prefix="fa" />
           </Button>
@@ -121,6 +125,7 @@ export function Toolbar() {
             className="Toolbar-button"
             onClick={toggleBlockquote}
             title="Add quote"
+            isDisabled={!isMarkdownEditorActive}
           >
             <Icon size="sm" icon="quote-right" prefix="fa" />
           </Button>
@@ -128,6 +133,7 @@ export function Toolbar() {
             className="Toolbar-button"
             onClick={toggleOrderedList}
             title="Add ordered list"
+            isDisabled={!isMarkdownEditorActive}
           >
             <Icon size="sm" icon="list-ol" prefix="fa" />
           </Button>
@@ -135,6 +141,7 @@ export function Toolbar() {
             className="Toolbar-button"
             onClick={toggleUnorderedList}
             title="Add unordered list"
+            isDisabled={!isMarkdownEditorActive}
           >
             <Icon size="sm" icon="list" prefix="fa" />
           </Button>
@@ -142,6 +149,7 @@ export function Toolbar() {
             className="Toolbar-button"
             onClick={toggleCodeBlock}
             title="Add code block"
+            isDisabled={!isMarkdownEditorActive}
           >
             <Icon size="sm" icon="code" prefix="fa" />
           </Button>
@@ -149,6 +157,7 @@ export function Toolbar() {
             className="Toolbar-button"
             onClick={drawHorizontalRule}
             title="Add horizontal line"
+            isDisabled={!isMarkdownEditorActive}
           >
             <Icon size="sm" icon="minus" prefix="fa" />
           </Button>
@@ -156,6 +165,7 @@ export function Toolbar() {
             className="Toolbar-button"
             onClick={toggleSideBySide}
             title="Toggle side by side"
+            isDisabled={!isMarkdownEditorActive}
           >
             <Icon size="sm" icon="columns" prefix="fa" />
           </Button>
@@ -164,6 +174,7 @@ export function Toolbar() {
             onClick={handleImageUpload}
             title="Upload an image"
             isLoading={loading}
+            isDisabled={!isMarkdownEditorActive}
           >
             <Icon size="sm" icon="image" prefix="fa" />
           </Button>

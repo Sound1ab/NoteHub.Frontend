@@ -26,7 +26,10 @@ describe('Toolbar', () => {
 
   it('should call selectFileAndUpload', async () => {
     const { getByTitle } = await render(
-      <MockProvider mockResolvers={resolvers}>
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{ currentPath: 'MOCK_FILE_PATH_1.md' }}
+      >
         <Toolbar />
       </MockProvider>
     )

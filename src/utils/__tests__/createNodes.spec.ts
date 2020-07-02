@@ -102,7 +102,7 @@ export const treeBeard = {
     },
   ],
   name: 'Notes',
-  path: 'Notes',
+  path: '',
   toggled: false,
   type: Node_Type.Folder,
 }
