@@ -1,5 +1,6 @@
 import { Node_Type } from '../../components/apollo/generated_components_typings'
 import {
+  ROOT_PATH,
   createFileNode,
   createFolderNode,
   createNode,
@@ -68,7 +69,7 @@ export const treeBeard = {
   children: [
     {
       name: 'README.md',
-      path: 'README.md',
+      path: `${ROOT_PATH}/README.md`,
       toggled: false,
       type: Node_Type.File,
     },
@@ -76,7 +77,7 @@ export const treeBeard = {
       children: [
         {
           name: 'file.md',
-          path: 'folder/file.md',
+          path: `${ROOT_PATH}/folder/file.md`,
           toggled: false,
           type: Node_Type.File,
         },
@@ -84,25 +85,25 @@ export const treeBeard = {
           children: [
             {
               name: 'file2.md',
-              path: 'folder/folder2/file2.md',
+              path: `${ROOT_PATH}/folder/folder2/file2.md`,
               toggled: false,
               type: Node_Type.File,
             },
           ],
           name: 'folder2',
-          path: 'folder/folder2',
+          path: `${ROOT_PATH}/folder/folder2`,
           toggled: false,
           type: Node_Type.Folder,
         },
       ],
       name: 'folder',
-      path: 'folder',
+      path: `${ROOT_PATH}/folder`,
       toggled: false,
       type: Node_Type.Folder,
     },
   ],
   name: 'Notes',
-  path: '',
+  path: ROOT_PATH,
   toggled: false,
   type: Node_Type.Folder,
 }
@@ -112,7 +113,7 @@ export const createNextNode = {
     {
       children: [],
       name: 'OTHER_MOCK_FOLDER',
-      path: 'OTHER_MOCK_FOLDER',
+      path: `${ROOT_PATH}/OTHER_MOCK_FOLDER`,
       toggled: false,
       type: Node_Type.Folder,
     },
@@ -120,19 +121,19 @@ export const createNextNode = {
       children: [
         {
           name: 'MOCK_FILE.md',
-          path: 'MOCK_FOLDER/MOCK_FILE.md',
+          path: `${ROOT_PATH}/MOCK_FOLDER/MOCK_FILE.md`,
           toggled: false,
           type: Node_Type.File,
         },
       ],
       name: 'MOCK_FOLDER',
-      path: 'MOCK_FOLDER',
+      path: `${ROOT_PATH}/MOCK_FOLDER`,
       toggled: false,
       type: Node_Type.Folder,
     },
   ],
   name: 'Notes',
-  path: '',
+  path: ROOT_PATH,
   toggled: true,
   type: Node_Type.Folder,
 }
@@ -180,13 +181,13 @@ describe('createNode', () => {
         {
           children: [],
           name: 'OTHER_MOCK_FOLDER',
-          path: 'OTHER_MOCK_FOLDER',
+          path: `${ROOT_PATH}/OTHER_MOCK_FOLDER`,
           toggled: false,
           type: Node_Type.Folder,
         },
       ],
       name: 'Notes',
-      path: '',
+      path: ROOT_PATH,
       toggled: true,
       type: Node_Type.Folder,
     }

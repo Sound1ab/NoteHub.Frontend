@@ -43,8 +43,7 @@ export function Node({ node, onToggle, level = 0 }: INode) {
         openFileInput={() => setIsNewFileOpen(true)}
       />
       {toggled &&
-        children &&
-        children.map(node => (
+        children?.map(node => (
           <Node
             node={node}
             onToggle={onToggle}

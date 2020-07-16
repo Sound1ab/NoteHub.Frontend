@@ -4,6 +4,8 @@ import {
 } from '../components/apollo/generated_components_typings'
 import { ITreeNode } from '../types'
 
+export const ROOT_PATH = 'Notes'
+
 export function createFolderNode(name: string, path: string, toggled: boolean) {
   return {
     children: [],
@@ -45,12 +47,17 @@ export function createNode({
 
     const isFile = gitNode.type === Node_Type.File
 
+    // Add the treebeard root path to enable toggling of folders. This will
+    // be removed when we create the file on Github as it doesn't have any
+    // knowledge of this root path.
+    const pathWithRoot = `${ROOT_PATH}/${gitNode.path}`
+
     const node = isFile
-      ? createFileNode(slug, gitNode.path)
+      ? createFileNode(slug, pathWithRoot)
       : createFolderNode(
           slug,
-          gitNode.path,
-          listOfToggledPaths.has(gitNode.path)
+          pathWithRoot,
+          listOfToggledPaths.has(pathWithRoot)
         )
 
     parentNode.children = [...children, node]
@@ -68,12 +75,16 @@ export function createNode({
 
   const nextPath = currentPath ? `${currentPath}/${slug}` : slug
 
-  // If no next node the gitNode array may be out of order (happens with optimistic
-  // updates). Create the node and try again
+  // If no next node the optimistic update has run and generate a file without
+  // a parent gitNode. Create one and retry
   if (!nextNode) {
     parentNode.children = [
       ...parentNode.children,
-      createFolderNode(slug, nextPath, listOfToggledPaths.has(nextPath)),
+      createFolderNode(
+        slug,
+        `${ROOT_PATH}/${nextPath}`,
+        listOfToggledPaths.has(`${ROOT_PATH}/${nextPath}`)
+      ),
     ]
 
     return createNode({
@@ -100,8 +111,8 @@ export function createNodes(
 ) {
   const treeBeard: ITreeNode = {
     children: [],
-    name: 'Notes',
-    path: '',
+    name: ROOT_PATH,
+    path: ROOT_PATH,
     toggled: listOfToggledPaths.has('Notes'),
     type: Node_Type.Folder,
   }

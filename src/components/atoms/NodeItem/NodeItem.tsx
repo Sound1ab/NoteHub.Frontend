@@ -10,7 +10,7 @@ import {
 } from '../../../hooks'
 import { styled } from '../../../theme'
 import { ITreeNode } from '../../../types'
-import { scrollIntoView } from '../../../utils'
+import { removeRootPath, scrollIntoView } from '../../../utils'
 import { Fade } from '../../animation'
 import { Node_Type } from '../../apollo/generated_components_typings'
 import { Dropdown, Icon } from '..'
@@ -109,6 +109,14 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
     setOpen(isOpen => !isOpen)
   }
 
+  async function handleDeleteFile() {
+    const nodePathArray = node.path.split('/')
+
+    const removedRoot = removeRootPath(nodePathArray)
+
+    await deleteFile(removedRoot.join('/'))
+  }
+
   function onChevronClick(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     node: ITreeNode
@@ -142,7 +150,7 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
             icon: 'trash' as const,
             prefix: 'fa' as const,
             label: 'Delete file',
-            onClick: () => deleteFile(node.path),
+            onClick: handleDeleteFile,
           },
         ]
       : [
