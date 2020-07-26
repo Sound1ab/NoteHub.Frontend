@@ -47,7 +47,7 @@ const Style = styled.ul`
 export interface IDropdownItem {
   icon?: TIcons
   label?: string
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
   prefix?: 'fa' | 'fab'
   custom?: ReactNode
 }

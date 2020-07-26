@@ -20,7 +20,7 @@ const Style = styled.div<
       case 'xs':
         return '5px'
       case 'sm':
-        return '6px'
+        return '5px'
       case 'lg':
         return '10px'
       default:

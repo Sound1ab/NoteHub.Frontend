@@ -4,7 +4,8 @@ import { CONTAINER_ID } from '../../../enums'
 import { useReadNodes } from '../../../hooks'
 import { styled } from '../../../theme'
 import { createNodes } from '../../../utils'
-import { Node } from '../../molecules'
+import { List } from '../../atoms'
+import { Tree } from '../../molecules'
 
 const Style = styled.div`
   flex: 0 0 100%;
@@ -46,10 +47,12 @@ export function Sidebar() {
 
   return (
     <Style id={CONTAINER_ID.SIDEBAR}>
-      <Node
-        node={createNodes(gitNodes, listOfToggledPaths)}
-        onToggle={onToggle}
-      />
+      <List>
+        <Tree
+          nodes={createNodes(gitNodes, listOfToggledPaths)}
+          onToggle={onToggle}
+        />
+      </List>
     </Style>
   )
 }

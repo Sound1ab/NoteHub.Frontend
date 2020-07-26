@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/react-hooks'
-import React, { useRef } from 'react'
+import React, { ReactNode, useRef } from 'react'
 import { css } from 'styled-components'
 
 import { CONTAINER_ID } from '../../../enums'
@@ -15,80 +15,21 @@ import { Fade } from '../../animation'
 import { Node_Type } from '../../apollo/generated_components_typings'
 import { Dropdown, Icon } from '..'
 
-const Style = styled.li<{ isActive: boolean; level: number }>`
-  position: relative;
-  margin: 0;
-  cursor: pointer;
-  user-select: none;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: ${({ theme, isActive }) =>
-    isActive ? theme.colors.background.secondary : 'transparent'};
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover:not(:disabled) {
-      background-color: ${({ theme }) => theme.colors.background.tertiary};
-    }
-  }
-
-  .Node-button {
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    overflow: hidden;
-    padding-top: ${({ theme }) => theme.spacing.xs};
-    padding-bottom: ${({ theme }) => theme.spacing.xs};
-    padding-left: ${({ theme, level }) => {
-      if (level === 0) {
-        return theme.spacing.xs
-      }
-      return css`calc(${level} * ${theme.spacing.s})`
-    }};
-  }
-
-  .Node-menu-wrapper {
-    flex: 0;
-    display: flex;
-    width: ${({ theme }) => theme.spacing.xs};
-    align-self: stretch;
-    padding: ${({ theme }) => theme.spacing.xs};
-
-    @media (hover: hover) and (pointer: fine) {
-      &:hover:not(:disabled) {
-        background-color: ${({ theme }) => theme.colors.background.quaternary};
-      }
-    }
-  }
-
-  .Node-heading {
-    flex: 1;
-    align-self: center;
-    padding-left: ${({ theme }) => theme.spacing.xxs};
-  }
-
-  .Node-dropdown {
-    position: absolute;
-    top: 100%;
-    right: ${({ theme }) => theme.spacing.xxs};
-    z-index: 100;
-  }
-`
-
-const Chevron = styled(Icon)<{ toggled: boolean }>`
-  color: ${({ theme }) => theme.colors.text.primary};
-  transform: ${({ toggled }) => (toggled ? 'rotate(0.25turn)' : 'rotate(0)')};
-`
-
 interface INodeItem {
   node: ITreeNode
   onToggle: (path: string, toggled: boolean) => void
   level: number
   openFileInput: () => void
+  children?: ReactNode
 }
 
-export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
+export function NodeItem({
+  level,
+  node,
+  onToggle,
+  openFileInput,
+  children,
+}: INodeItem) {
   const containerRef = useRef(null)
   const client = useApolloClient()
   const [deleteFile] = useDeleteFile()
@@ -97,13 +38,18 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
   const isActive = currentPath === node.path
   const { toggled, name, type } = node
 
-  function handleSetIsNewFileOpen() {
+  function handleSetIsNewFileOpen(
+    e: React.MouseEvent<HTMLElement, MouseEvent>
+  ) {
+    e.stopPropagation()
     openFileInput()
     setOpen(false)
     onToggle(node.path, true)
   }
 
-  function handleToggleMenu(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  function handleToggleMenu(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
     e.stopPropagation()
 
     setOpen(isOpen => !isOpen)
@@ -163,40 +109,111 @@ export function NodeItem({ level, node, onToggle, openFileInput }: INodeItem) {
         ]
 
   return (
-    <Style level={level} isActive={isActive} ref={containerRef}>
-      <div
-        aria-label={node.type === Node_Type.File ? 'file' : 'folder'}
-        className="Node-button"
+    <StyledListItem>
+      <Wrapper
+        level={level}
         onClick={() => onClick(node)}
+        ref={containerRef}
+        type={type}
+        aria-label={node.type === Node_Type.File ? 'file' : 'folder'}
       >
-        {type === Node_Type.Folder && (
-          <Chevron
-            toggled={toggled}
-            size="sm"
-            icon="chevron-right"
-            prefix="fa"
-            marginRight
-            ariaLabel="chevron"
-            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-              onChevronClick(e, node)
-            }
-          />
-        )}
-        {type === Node_Type.Folder ? (
-          <Icon size="sm" icon="folder" prefix="fa" />
-        ) : (
-          <Icon size="sm" icon="file" prefix="fa" marginLeft />
-        )}
-        <h4 className="Node-heading">{name}</h4>
-      </div>
-      <div className="Node-menu-wrapper" onClick={handleToggleMenu}>
-        <Icon icon="ellipsis-h" isDisabled={isOpen} ariaLabel="item menu" />
-      </div>
+        <Details>
+          {type === Node_Type.Folder && (
+            <Chevron
+              toggled={toggled}
+              size="sm"
+              icon="chevron-right"
+              prefix="fa"
+              ariaLabel="chevron"
+              onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                onChevronClick(e, node)
+              }
+            />
+          )}
+          {type === Node_Type.Folder ? (
+            <Icon size="sm" icon="folder" prefix="fa" />
+          ) : (
+            <Icon size="sm" icon="file" prefix="fa" />
+          )}
+          <Heading className="Node-heading">{name}</Heading>
+        </Details>
+        <Actions onClick={handleToggleMenu}>
+          <Icon icon="ellipsis-h" isDisabled={isOpen} ariaLabel="item menu" />
+        </Actions>
+      </Wrapper>
       <Fade show={isOpen}>
-        <Portal domNode={containerRef.current} className="Node-dropdown">
+        <Portal
+          domNode={containerRef.current}
+          placementAroundContainer="bottom"
+        >
           <Dropdown ref={ref} items={dropdownItems} />
         </Portal>
       </Fade>
-    </Style>
+      {children}
+    </StyledListItem>
   )
 }
+
+const StyledListItem = styled.li`
+  margin: 0;
+`
+
+const Wrapper = styled.div<Pick<INodeItem, 'level'> & { type: string }>`
+  position: relative;
+  display: flex;
+  padding-left: ${({ theme, level, type }) => {
+    if (level === 0) {
+      return 0
+    }
+    const additionalPadding = type === Node_Type.File ? theme.spacing.s : '0px'
+    return css`calc(calc(${level} * ${theme.spacing.s}) + ${additionalPadding})`
+  }};
+  cursor: pointer;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      background-color: ${({ theme }) => theme.colors.background.tertiary};
+    }
+  }
+`
+
+const Details = styled.div`
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  padding: ${({ theme }) => theme.spacing.xs};
+  overflow: hidden;
+
+  * + * {
+    margin-left: ${({ theme }) => theme.spacing.xs};
+  }
+`
+
+const Heading = styled.h4`
+  color: ${({ theme }) => theme.colors.text.primary};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
+const Actions = styled.button`
+  flex: 0;
+  position: relative;
+  display: flex;
+  width: ${({ theme }) => theme.spacing.xs};
+  align-self: stretch;
+  padding: ${({ theme }) => theme.spacing.xs};
+  color: ${({ theme }) => theme.colors.text.primary};
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      background-color: ${({ theme }) => theme.colors.background.quaternary};
+    }
+  }
+`
+
+const Chevron = styled(Icon)<{ toggled: boolean }>`
+  color: ${({ theme }) => theme.colors.text.primary};
+  transform: ${({ toggled }) => (toggled ? 'rotate(0.25turn)' : 'rotate(0)')};
+`

@@ -6,7 +6,9 @@ import { css } from 'styled-components'
 import { useClickOutside } from '../../../hooks'
 import { styled } from '../../../theme'
 
-const Style = styled.div<{ hasBackground: boolean }>`
+const Style = styled.div<
+  Pick<IPortal, 'hasBackground' | 'placementAroundContainer'>
+>`
   position: relative;
   ${({ hasBackground }) =>
     hasBackground &&
@@ -22,6 +24,17 @@ const Style = styled.div<{ hasBackground: boolean }>`
       justify-content: center;
       align-items: center;
     `};
+  ${({ placementAroundContainer }) => {
+    switch (placementAroundContainer) {
+      case 'bottom':
+        return css`
+          position: absolute;
+          top: 100%;
+          right: ${({ theme }) => theme.spacing.xxs};
+          z-index: 100;
+        `
+    }
+  }};
 
   .Portal-focus-lock {
     position: relative;
@@ -43,17 +56,29 @@ export interface IPortal {
   domNode?: HTMLElement | null
   hasBackground?: boolean
   className?: string
+  placementAroundContainer?: 'bottom'
 }
 
 export const Portal = React.forwardRef(
   (
-    { children, setOpen, domNode, hasBackground = false, className }: IPortal,
+    {
+      children,
+      setOpen,
+      domNode,
+      hasBackground = false,
+      className,
+      placementAroundContainer,
+    }: IPortal,
     ref?: React.Ref<HTMLElement>
   ) => {
     useClickOutside(() => setOpen(false), ref)
 
     return ReactDOM.createPortal(
-      <Style className={className} hasBackground={hasBackground}>
+      <Style
+        className={className}
+        hasBackground={hasBackground}
+        placementAroundContainer={placementAroundContainer}
+      >
         <div className="Portal-click-layer" />
         <FocusLock className="Portal-focus-lock">{children}</FocusLock>
       </Style>,

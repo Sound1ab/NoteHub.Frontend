@@ -53,20 +53,20 @@ export function Profile() {
             ref={ref}
             items={[
               {
-                icon: 'sign-out-alt',
-                prefix: 'fa',
+                icon: 'sign-out-alt' as const,
+                prefix: 'fa' as const,
                 label: 'Logout',
-                onClick: logout,
+                onClick: () => logout(),
               },
               {
-                icon: 'github',
-                prefix: 'fab',
+                icon: 'github' as const,
+                prefix: 'fab' as const,
                 label: 'Github',
                 onClick: gitlink,
               },
               {
-                icon: 'moon',
-                prefix: 'fa',
+                icon: 'moon' as const,
+                prefix: 'fa' as const,
                 label: isDarkMode ? 'Light theme' : 'Dark theme',
                 onClick: toggleTheme,
               },
