@@ -23,6 +23,9 @@ export const createTypography = (colors: TColors) => {
     ],
     scaleRatio: 2.9,
     overrideThemeStyles: () => ({
+      body: {
+        fontSizeAdjust: '0.5',
+      },
       form: {
         marginBottom: 0,
       },
