@@ -28,13 +28,13 @@ describe('Dashboard', () => {
   })
 
   it('should add folder and file', async () => {
-    const { getByText, getByLabelText, getAllByLabelText } = await render(
+    const { getByText, getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Dashboard />
       </MockProvider>
     )
 
-    await fireEvent.click(getAllByLabelText('item menu')[1])
+    await fireEvent.click(getByLabelText('MOCK_FOLDER_PATH actions'))
 
     await fireEvent.click(getByLabelText('Create file'))
 

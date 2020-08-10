@@ -4,8 +4,6 @@ import {
 } from '../components/apollo/generated_components_typings'
 import { ITreeNode } from '../types'
 
-export const ROOT_PATH = 'Notes'
-
 export function createFolderNode(name: string, path: string, toggled: boolean) {
   return {
     children: [],
@@ -25,7 +23,24 @@ export function createFileNode(name: string, path: string) {
   }
 }
 
-interface ICreateNode {
+function getNode(nodes: ITreeNode[], slug: string) {
+  return nodes.find(node => node.name === slug)
+}
+
+function createNode(
+  type: Node_Type,
+  slug: string,
+  path: string,
+  listOfToggledPaths: Set<string>
+) {
+  const isFile = type === Node_Type.File
+
+  return isFile
+    ? createFileNode(slug, path)
+    : createFolderNode(slug, path, listOfToggledPaths.has(path))
+}
+
+interface IInsertNodes {
   path: string[]
   parentNode: ITreeNode
   gitNode: GitNode
@@ -33,32 +48,24 @@ interface ICreateNode {
   listOfToggledPaths: Set<string>
 }
 
-export function createNode({
+export function insertNodeIntoParentNode({
   path,
   parentNode,
   gitNode,
   currentPath = '',
   listOfToggledPaths,
-}: ICreateNode): void {
+}: IInsertNodes): void {
   if (path.length === 1) {
     const [slug] = path
 
     const children = parentNode?.children ? parentNode.children : []
 
-    const isFile = gitNode.type === Node_Type.File
-
-    // Add the treebeard root path to enable toggling of folders. This will
-    // be removed when we create the file on Github as it doesn't have any
-    // knowledge of this root path.
-    const pathWithRoot = `${ROOT_PATH}/${gitNode.path}`
-
-    const node = isFile
-      ? createFileNode(slug, pathWithRoot)
-      : createFolderNode(
-          slug,
-          pathWithRoot,
-          listOfToggledPaths.has(pathWithRoot)
-        )
+    const node = createNode(
+      gitNode.type,
+      slug,
+      gitNode.path,
+      listOfToggledPaths
+    )
 
     parentNode.children = [...children, node]
 
@@ -71,23 +78,23 @@ export function createNode({
 
   const [slug, ...rest] = path
 
-  const nextNode = parentNode.children.find(node => node.name === slug)
+  const nextNode = getNode(parentNode.children, slug)
 
   const nextPath = currentPath ? `${currentPath}/${slug}` : slug
 
-  // If no next node the optimistic update has run and generate a file without
-  // a parent gitNode. Create one and retry
+  // If no next node the optimistic update has run and generated a file without
+  // a parent gitNode. Create one and retry.
   if (!nextNode) {
+    const parentPath = parentNode.path
+      ? `${parentNode.path}/${nextPath}`
+      : nextPath
+
     parentNode.children = [
       ...parentNode.children,
-      createFolderNode(
-        slug,
-        `${ROOT_PATH}/${nextPath}`,
-        listOfToggledPaths.has(`${ROOT_PATH}/${nextPath}`)
-      ),
+      createFolderNode(slug, parentPath, listOfToggledPaths.has(parentPath)),
     ]
 
-    return createNode({
+    return insertNodeIntoParentNode({
       path,
       parentNode,
       gitNode,
@@ -96,7 +103,7 @@ export function createNode({
     })
   }
 
-  return createNode({
+  return insertNodeIntoParentNode({
     path: rest,
     parentNode: nextNode,
     gitNode,
@@ -109,24 +116,30 @@ export function createNodes(
   gitNodes: GitNode[],
   listOfToggledPaths: Set<string>
 ) {
-  const treeBeard: ITreeNode = {
-    children: [],
-    name: ROOT_PATH,
-    path: ROOT_PATH,
-    toggled: listOfToggledPaths.has('Notes'),
-    type: Node_Type.Folder,
-  }
-
-  for (const gitNode of gitNodes) {
+  return gitNodes.reduce<ITreeNode[]>((acc, gitNode) => {
     const { path } = gitNode
 
-    createNode({
-      path: path.split('/'),
-      parentNode: treeBeard,
-      gitNode,
-      listOfToggledPaths,
-    })
-  }
+    const [rootSlug] = path.split('/')
 
-  return treeBeard
+    const parentNode = getNode(acc, rootSlug)
+
+    if (!parentNode) {
+      return [
+        ...acc,
+        createNode(gitNode.type, rootSlug, path, listOfToggledPaths),
+      ]
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const [_, ...restOfPath] = path.split('/')
+
+      insertNodeIntoParentNode({
+        path: restOfPath,
+        parentNode,
+        gitNode,
+        listOfToggledPaths,
+      })
+
+      return acc
+    }
+  }, [])
 }

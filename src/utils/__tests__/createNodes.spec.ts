@@ -1,10 +1,9 @@
 import { Node_Type } from '../../components/apollo/generated_components_typings'
 import {
-  ROOT_PATH,
   createFileNode,
   createFolderNode,
-  createNode,
   createNodes,
+  insertNodeIntoParentNode,
 } from '../createNodes'
 
 export const rootFile = {
@@ -65,55 +64,49 @@ export const githubTreeData = [
   fileDepthTwo,
 ]
 
-export const treeBeard = {
-  children: [
-    {
-      name: 'README.md',
-      path: `${ROOT_PATH}/README.md`,
-      toggled: false,
-      type: Node_Type.File,
-    },
-    {
-      children: [
-        {
-          name: 'file.md',
-          path: `${ROOT_PATH}/folder/file.md`,
-          toggled: false,
-          type: Node_Type.File,
-        },
-        {
-          children: [
-            {
-              name: 'file2.md',
-              path: `${ROOT_PATH}/folder/folder2/file2.md`,
-              toggled: false,
-              type: Node_Type.File,
-            },
-          ],
-          name: 'folder2',
-          path: `${ROOT_PATH}/folder/folder2`,
-          toggled: false,
-          type: Node_Type.Folder,
-        },
-      ],
-      name: 'folder',
-      path: `${ROOT_PATH}/folder`,
-      toggled: false,
-      type: Node_Type.Folder,
-    },
-  ],
-  name: 'Notes',
-  path: ROOT_PATH,
-  toggled: false,
-  type: Node_Type.Folder,
-}
+export const treeBeard = [
+  {
+    name: 'README.md',
+    path: `README.md`,
+    toggled: false,
+    type: Node_Type.File,
+  },
+  {
+    children: [
+      {
+        name: 'file.md',
+        path: `folder/file.md`,
+        toggled: false,
+        type: Node_Type.File,
+      },
+      {
+        children: [
+          {
+            name: 'file2.md',
+            path: `folder/folder2/file2.md`,
+            toggled: false,
+            type: Node_Type.File,
+          },
+        ],
+        name: 'folder2',
+        path: `folder/folder2`,
+        toggled: false,
+        type: Node_Type.Folder,
+      },
+    ],
+    name: 'folder',
+    path: `folder`,
+    toggled: false,
+    type: Node_Type.Folder,
+  },
+]
 
 export const createNextNode = {
   children: [
     {
       children: [],
       name: 'OTHER_MOCK_FOLDER',
-      path: `${ROOT_PATH}/OTHER_MOCK_FOLDER`,
+      path: `OTHER_MOCK_FOLDER`,
       toggled: false,
       type: Node_Type.Folder,
     },
@@ -121,19 +114,19 @@ export const createNextNode = {
       children: [
         {
           name: 'MOCK_FILE.md',
-          path: `${ROOT_PATH}/MOCK_FOLDER/MOCK_FILE.md`,
+          path: `MOCK_FOLDER/MOCK_FILE.md`,
           toggled: false,
           type: Node_Type.File,
         },
       ],
       name: 'MOCK_FOLDER',
-      path: `${ROOT_PATH}/MOCK_FOLDER`,
+      path: `MOCK_FOLDER`,
       toggled: false,
       type: Node_Type.Folder,
     },
   ],
   name: 'Notes',
-  path: ROOT_PATH,
+  path: '',
   toggled: true,
   type: Node_Type.Folder,
 }
@@ -146,7 +139,7 @@ describe('tree', () => {
   })
 })
 
-describe('createNode', () => {
+describe('insertNodeIntoParentNode', () => {
   it('should throw an error if next node does not have children', async () => {
     const node = {
       name: 'root',
@@ -156,7 +149,7 @@ describe('createNode', () => {
     }
 
     expect(() =>
-      createNode({
+      insertNodeIntoParentNode({
         path: ['MOCK_FOLDER', 'MOCK_FILE.md'],
         parentNode: node,
         gitNode: rootFile,
@@ -181,18 +174,18 @@ describe('createNode', () => {
         {
           children: [],
           name: 'OTHER_MOCK_FOLDER',
-          path: `${ROOT_PATH}/OTHER_MOCK_FOLDER`,
+          path: `OTHER_MOCK_FOLDER`,
           toggled: false,
           type: Node_Type.Folder,
         },
       ],
       name: 'Notes',
-      path: ROOT_PATH,
+      path: '',
       toggled: true,
       type: Node_Type.Folder,
     }
 
-    createNode({
+    insertNodeIntoParentNode({
       path: ['MOCK_FOLDER', 'MOCK_FILE.md'],
       parentNode: node,
       gitNode: rootFile,

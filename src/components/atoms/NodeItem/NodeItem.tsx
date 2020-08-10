@@ -10,7 +10,7 @@ import {
 } from '../../../hooks'
 import { styled } from '../../../theme'
 import { ITreeNode } from '../../../types'
-import { removeRootPath, scrollIntoView } from '../../../utils'
+import { scrollIntoView } from '../../../utils'
 import { Fade } from '../../animation'
 import { Node_Type } from '../../apollo/generated_components_typings'
 import { Dropdown, Icon } from '..'
@@ -56,11 +56,7 @@ export function NodeItem({
   }
 
   async function handleDeleteFile() {
-    const nodePathArray = node.path.split('/')
-
-    const removedRoot = removeRootPath(nodePathArray)
-
-    await deleteFile(removedRoot.join('/'))
+    await deleteFile(node.path)
   }
 
   function onChevronClick(
@@ -138,7 +134,11 @@ export function NodeItem({
           <Heading className="Node-heading">{name}</Heading>
         </Details>
         <Actions onClick={handleToggleMenu}>
-          <Icon icon="ellipsis-h" isDisabled={isOpen} ariaLabel="item menu" />
+          <Icon
+            icon="ellipsis-h"
+            isDisabled={isOpen}
+            ariaLabel={`${name} actions`}
+          />
         </Actions>
       </Wrapper>
       <Fade show={isOpen}>

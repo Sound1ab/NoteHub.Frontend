@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 
 import { useCreateFile } from '../../../hooks'
 import { styled } from '../../../theme'
-import { removeRootPath } from '../../../utils'
 import { InlineInput } from '../InlineInput/InlineInput'
 
 const Style = styled.div`
@@ -51,16 +50,14 @@ export function FileInput({ onClickOutside, path, onToggle }: IFileInput) {
     // Split path into parts
     const nodePathArray = nodePath.split('/')
 
-    const removedRoot = removeRootPath(nodePathArray)
-
     // Pop off the file so that we have the path of the folder
     nodePathArray.pop()
 
     // Toggle the folder open so we can see the new file
     onToggle(nodePathArray.join('/'), true)
 
-    // Create the file at the full path (without ROOT_PATH)
-    await createFile(removedRoot.join('/'))
+    // Create the file at the full path
+    await createFile(nodePath)
   }
 
   return (

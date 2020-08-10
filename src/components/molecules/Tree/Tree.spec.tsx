@@ -16,7 +16,7 @@ describe('Tree', () => {
     const { getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Tree
-          nodes={{ ...folderNode, toggled: true, children: [fileNodeOne] }}
+          node={{ ...folderNode, toggled: true, children: [fileNodeOne] }}
           onToggle={onToggle}
           level={1}
         />
@@ -30,14 +30,14 @@ describe('Tree', () => {
     const { getAllByLabelText, getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Tree
-          nodes={{ ...folderNode, toggled: true, children: [fileNodeOne] }}
+          node={{ ...folderNode, toggled: true, children: [fileNodeOne] }}
           onToggle={onToggle}
           level={1}
         />
       </MockProvider>
     )
 
-    const [folderDropdown] = getAllByLabelText('item menu')
+    const [folderDropdown] = getAllByLabelText('MOCK_FOLDER actions')
 
     await fireEvent.click(folderDropdown)
 

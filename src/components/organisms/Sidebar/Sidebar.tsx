@@ -29,7 +29,7 @@ const Style = styled.div`
 export function Sidebar() {
   const { gitNodes, loading } = useReadNodes()
   const [listOfToggledPaths, setListOfToggledPaths] = useState<Set<string>>(
-    new Set(['Notes'])
+    new Set([])
   )
 
   if (!gitNodes || loading) {
@@ -47,12 +47,11 @@ export function Sidebar() {
 
   return (
     <Style id={CONTAINER_ID.SIDEBAR}>
-      <List>
-        <Tree
-          nodes={createNodes(gitNodes, listOfToggledPaths)}
-          onToggle={onToggle}
-        />
-      </List>
+      {createNodes(gitNodes, listOfToggledPaths).map(node => (
+        <List key={node.name}>
+          <Tree key={node.name} node={node} onToggle={onToggle} />
+        </List>
+      ))}
     </Style>
   )
 }

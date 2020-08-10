@@ -94,7 +94,7 @@ describe('NodeItem', () => {
         </MockProvider>
       )
 
-      await fireEvent.click(getByLabelText('item menu'))
+      await fireEvent.click(getByLabelText('MOCK_FOLDER actions'))
 
       expect(getByText('Create file')).toBeInTheDocument()
     })
@@ -111,7 +111,7 @@ describe('NodeItem', () => {
         </MockProvider>
       )
 
-      await fireEvent.click(getByLabelText('item menu'))
+      await fireEvent.click(getByLabelText('MOCK_FOLDER actions'))
 
       await fireEvent.click(getByLabelText('Create file'))
 
@@ -132,7 +132,7 @@ describe('NodeItem', () => {
         </MockProvider>
       )
 
-      await fireEvent.click(getByLabelText('item menu'))
+      await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
 
       expect(getByText('Delete file')).toBeInTheDocument()
     })
@@ -149,7 +149,7 @@ describe('NodeItem', () => {
         </MockProvider>
       )
 
-      await fireEvent.click(getByLabelText('item menu'))
+      await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
 
       await fireEvent.click(getByLabelText('Delete file'))
 

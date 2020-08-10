@@ -6,14 +6,14 @@ import { List, NodeItem } from '../../atoms'
 import { FileInput } from '../'
 
 interface INode {
-  nodes: ITreeNode
+  node: ITreeNode
   onToggle: (path: string, toggled: boolean) => void
   level?: number
 }
 
-export function Tree({ nodes, onToggle, level = 0 }: INode) {
+export function Tree({ node, onToggle, level = 0 }: INode) {
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
-  const { toggled, children, path, type } = nodes
+  const { toggled, children, path, type } = node
 
   if (type === Node_Type.Folder && children?.length === 0 && path !== '') {
     return null
@@ -22,18 +22,18 @@ export function Tree({ nodes, onToggle, level = 0 }: INode) {
   return (
     <>
       <NodeItem
-        node={nodes}
+        node={node}
         onToggle={onToggle}
         level={level}
         openFileInput={() => setIsNewFileOpen(true)}
       >
         {toggled && children && children?.length > 0 && (
           <List>
-            {children.map(childNodes => (
+            {children.map(childNode => (
               <Tree
-                nodes={childNodes}
+                node={childNode}
                 onToggle={onToggle}
-                key={`${childNodes.path}/${childNodes.name}`}
+                key={`${childNode.path}/${childNode.name}`}
                 level={level + 1}
               />
             ))}
