@@ -21,15 +21,15 @@ export const ReadFileDocument = gql`
 export function useReadFile() {
   const { currentPath } = useReadCurrentPath()
 
-  const { data, loading } = useQuery<ReadFileQuery, ReadFileQueryVariables>(
-    ReadFileDocument,
-    {
-      skip: !isFile(currentPath),
-      variables: {
-        path: currentPath ?? '',
-      },
-    }
-  )
+  const { data, loading, error } = useQuery<
+    ReadFileQuery,
+    ReadFileQueryVariables
+  >(ReadFileDocument, {
+    skip: !isFile(currentPath),
+    variables: {
+      path: currentPath ?? '',
+    },
+  })
 
-  return { file: data?.readFile, loading }
+  return { file: data?.readFile, loading, error }
 }

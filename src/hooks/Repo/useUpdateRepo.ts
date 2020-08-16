@@ -63,21 +63,17 @@ export function useUpdateRepo(): [
     description: string,
     isPrivate: boolean
   ) {
-    try {
-      return mutation({
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateRepo: {
-            __typename: 'Repo',
-            name,
-            description,
-            private: isPrivate,
-          },
+    return mutation({
+      optimisticResponse: {
+        __typename: 'Mutation',
+        updateRepo: {
+          __typename: 'Repo',
+          name,
+          description,
+          private: isPrivate,
         },
-      })
-    } catch {
-      throw new Error('There was an issue update your repo, please try again')
-    }
+      },
+    })
   }
 
   return [updateRepo, rest]

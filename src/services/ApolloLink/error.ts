@@ -16,31 +16,30 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
   }
 
   async function refetchToken() {
-    try {
-      const { data } = await makePromise(
-        execute(new HttpLink({ uri: GRAPHQL, credentials: 'include' }), {
-          query: gql`
-            {
-              refresh
-            }
-          `,
-        })
-      )
+    const { data } = await makePromise(
+      execute(new HttpLink({ uri: GRAPHQL, credentials: 'include' }), {
+        query: gql`
+          {
+            refresh
+          }
+        `,
+      })
+    )
 
-      if (!data?.refresh) {
-        throw new Error('No refresh token')
-      }
-
-      client.writeData({ data: { jwt: data.refresh } })
-
-      return data.refresh
-    } catch (error) {
-      console.log('error', error)
+    if (!data?.refresh) {
+      throw new Error('No refresh token')
     }
+
+    client.writeData({ data: { jwt: data.refresh } })
+
+    return data.refresh
   }
 
   return onError(({ graphQLErrors, networkError, forward, operation }) => {
-    if (networkError) console.log(`[Network error]: ${networkError}`)
+    if (networkError) {
+      console.log(`[Network error]: ${networkError}`)
+      return
+    }
 
     if (!graphQLErrors) {
       return

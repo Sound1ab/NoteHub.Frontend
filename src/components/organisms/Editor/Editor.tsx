@@ -6,7 +6,6 @@ import { styled } from '../../../theme'
 import { MarkdownEditor, MarkdownEditorSkeleton } from '../../molecules'
 
 const Style = styled.div`
-  flex: 0 0 100%;
   position: relative;
   height: 100%;
   overflow-y: auto;

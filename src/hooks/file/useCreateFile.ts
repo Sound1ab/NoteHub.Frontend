@@ -30,15 +30,16 @@ export function useCreateFile(): [
   ) => Promise<ExecutionResult<CreateFileMutation>>,
   MutationResult<CreateFileMutation>
 ] {
-  const [mutation, rest] = useMutation<
+  const [mutation, mutationResult] = useMutation<
     CreateFileMutation,
     CreateFileMutationVariables
   >(CreateFileDocument, {
+    errorPolicy: 'all',
     update: (cache, { data }) => {
       const file = data && data.createFile
 
       if (!file) {
-        return
+        throw new Error('Create file: No file returned')
       }
 
       const result = cache.readQuery<ReadNodesQuery, ReadNodesQueryVariables>({
@@ -46,7 +47,7 @@ export function useCreateFile(): [
       })
 
       if (!result?.readNodes.nodes) {
-        return
+        throw new Error('Create file: No nodes found in cache result')
       }
 
       cache.writeQuery<ReadNodesQuery, ReadNodesQueryVariables>({
@@ -66,7 +67,7 @@ export function useCreateFile(): [
 
   async function createFile(path: string, content?: string) {
     if (!path) {
-      throw new Error('Create file: missing path')
+      throw new Error('Create file: Missing path')
     }
 
     const filename = extractFilename(path)
@@ -74,32 +75,28 @@ export function useCreateFile(): [
       .replace(/ /gi, '-')
       .replace(/\//gi, '')
 
-    try {
-      return mutation({
-        variables: {
-          input: {
-            content: content ? content : `# ${name}`,
-            path,
-          },
+    return mutation({
+      variables: {
+        input: {
+          content: content ? content : `# ${name}`,
+          path,
         },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          createFile: {
-            __typename: 'File',
-            filename: `${filename}.md`,
-            path,
-            content: `# ${name}`,
-            excerpt: null,
-            sha: 'optimistic',
-            type: Node_Type.File,
-            url: 'optimistic',
-          },
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        createFile: {
+          __typename: 'File',
+          filename: `${filename}.md`,
+          path,
+          content: `# ${name}`,
+          excerpt: null,
+          sha: 'optimistic',
+          type: Node_Type.File,
+          url: 'optimistic',
         },
-      })
-    } catch {
-      throw new Error('Could not update file')
-    }
+      },
+    })
   }
 
-  return [createFile, rest]
+  return [createFile, mutationResult]
 }

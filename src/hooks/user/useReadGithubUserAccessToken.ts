@@ -1,5 +1,6 @@
-import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
 import {
   ReadGithubUserAccessTokenQuery,
   ReadGithubUserAccessTokenQueryVariables,
@@ -15,7 +16,7 @@ export function useReadGithubUserAccessToken(
   code: string | null,
   state: string | null
 ) {
-  const { data } = useQuery<
+  const { data, error } = useQuery<
     ReadGithubUserAccessTokenQuery,
     ReadGithubUserAccessTokenQueryVariables
   >(ReadGithubUserAccessTokenDocument, {
@@ -25,5 +26,5 @@ export function useReadGithubUserAccessToken(
     },
   })
 
-  return data && data.readGithubUserAccessToken
+  return { jwt: data && data.readGithubUserAccessToken, error }
 }

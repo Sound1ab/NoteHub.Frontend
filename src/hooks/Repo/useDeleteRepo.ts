@@ -42,24 +42,20 @@ export function useDeleteRepo(): [
   })
 
   async function deleteRepo() {
-    try {
-      client.writeData({
-        data: { currentRepoName: null },
-      })
-      return await mutation({
-        optimisticResponse: {
-          __typename: 'Mutation',
-          deleteRepo: {
-            __typename: 'Repo',
-            name: 'optimistic',
-            description: 'optimistic',
-            private: false,
-          },
+    client.writeData({
+      data: { currentRepoName: null },
+    })
+    return await mutation({
+      optimisticResponse: {
+        __typename: 'Mutation',
+        deleteRepo: {
+          __typename: 'Repo',
+          name: 'optimistic',
+          description: 'optimistic',
+          private: false,
         },
-      })
-    } catch {
-      throw new Error('There was an issue deleting your file, please try again')
-    }
+      },
+    })
   }
 
   return [deleteRepo, rest]

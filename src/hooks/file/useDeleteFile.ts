@@ -87,33 +87,29 @@ export function useDeleteFile(): [
 
     const filename = extractFilename(path)
 
-    try {
-      client.writeData({
-        data: { currentPath: null },
-      })
-      return mutation({
-        variables: {
-          input: {
-            path,
-          },
+    client.writeData({
+      data: { currentPath: null },
+    })
+    return mutation({
+      variables: {
+        input: {
+          path,
         },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          deleteFile: {
-            __typename: 'File',
-            filename,
-            path,
-            content: '',
-            excerpt: null,
-            sha: 'optimistic',
-            type: Node_Type.File,
-            url: 'optimistic',
-          },
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        deleteFile: {
+          __typename: 'File',
+          filename,
+          path,
+          content: '',
+          excerpt: null,
+          sha: 'optimistic',
+          type: Node_Type.File,
+          url: 'optimistic',
         },
-      })
-    } catch {
-      throw new Error('There was an issue deleting your file, please try again')
-    }
+      },
+    })
   }
 
   return [deleteFile, mutationResult]

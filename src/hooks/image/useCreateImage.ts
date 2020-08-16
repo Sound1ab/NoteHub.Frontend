@@ -35,18 +35,14 @@ export function useCreateImage(): [
       throw new Error('Create file: missing path')
     }
 
-    try {
-      return mutation({
-        variables: {
-          input: {
-            content: content ? content : `# ${name}`,
-            path,
-          },
+    return mutation({
+      variables: {
+        input: {
+          content: content ? content : `# ${name}`,
+          path,
         },
-      })
-    } catch {
-      throw new Error('Could not update file')
-    }
+      },
+    })
   }
 
   return [createImage, rest]

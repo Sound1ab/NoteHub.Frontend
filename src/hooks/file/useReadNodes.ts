@@ -19,9 +19,10 @@ export const ReadNodesDocument = gql`
 `
 
 export function useReadNodes() {
-  const { data, loading } = useQuery<ReadNodesQuery, ReadNodesQueryVariables>(
-    ReadNodesDocument
-  )
+  const { data, loading, error } = useQuery<
+    ReadNodesQuery,
+    ReadNodesQueryVariables
+  >(ReadNodesDocument)
 
-  return { gitNodes: data?.readNodes.nodes, loading }
+  return { gitNodes: data?.readNodes.nodes, loading, error }
 }
