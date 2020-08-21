@@ -80,4 +80,39 @@ describe('Dashboard', () => {
 
     expect(getByText(image)).toBeInTheDocument()
   })
+
+  it('should show alert if deleting a file errors', async () => {
+    const { path } = fileGitNodeTwo
+
+    const alert = jest.fn()
+    ;(global as any).alert = alert
+
+    const { getByLabelText, getByText } = await render(
+      <MockProvider
+        localData={{ currentPath: path }}
+        mockResolvers={{
+          ...resolvers,
+          Mutation: () => ({
+            ...resolvers.Mutation(),
+            deleteFile: (): File => {
+              throw new Error()
+            },
+          }),
+        }}
+      >
+        <Dashboard />
+      </MockProvider>
+    )
+
+    // Open folder
+    await fireEvent.click(getByText('MOCK_FOLDER_PATH'))
+
+    // Open dropdown
+    await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+
+    // Delete file
+    await fireEvent.click(getByLabelText('Delete file'))
+
+    expect(alert).toBeCalledWith('Could not delete file. Please try again.')
+  })
 })

@@ -21,7 +21,10 @@ describe('NodeItem', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
-    ;(useDeleteFile as jest.Mock).mockImplementation(() => [deleteFile])
+    ;(useDeleteFile as jest.Mock).mockImplementation(() => [
+      deleteFile,
+      { error: undefined },
+    ])
   })
 
   describe('when a folder', () => {
@@ -154,6 +157,32 @@ describe('NodeItem', () => {
       await fireEvent.click(getByLabelText('Delete file'))
 
       expect(deleteFile).toBeCalled()
+    })
+
+    it('should show alert if deleteFile returns an error', async () => {
+      ;(useDeleteFile as jest.Mock).mockImplementation(() => [
+        async () => Promise.reject(),
+      ])
+
+      const alert = jest.fn()
+      ;(global as any).alert = alert
+
+      const { getByLabelText } = await render(
+        <MockProvider>
+          <NodeItem
+            node={fileNodeOne}
+            onToggle={onToggle}
+            openFileInput={openFileInput}
+            level={1}
+          />
+        </MockProvider>
+      )
+
+      await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+
+      await fireEvent.click(getByLabelText('Delete file'))
+
+      expect(alert).toBeCalledWith('Could not delete file. Please try again.')
     })
   })
 })

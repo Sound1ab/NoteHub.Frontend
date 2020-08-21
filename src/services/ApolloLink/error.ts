@@ -37,57 +37,56 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
 
   return onError(({ graphQLErrors, networkError, forward, operation }) => {
     if (networkError) {
-      console.log(`[Network error]: ${networkError}`)
+      // redirect to 404 page
       return
     }
 
-    if (!graphQLErrors) {
-      return
-    }
-
-    for (const err of graphQLErrors) {
-      if (!err || !err.extensions) {
-        return
-      }
-      switch (err.extensions.code) {
-        case APOLLO_ERRORS.INTERNAL_SERVER_ERROR: {
-          console.warn('Apollo link internal server error: ', err.message)
-          break
-        }
-        case APOLLO_ERRORS.JWT_EXPIRED: {
-          return new Observable(observer => {
-            refetchToken()
-              .then(jwt => {
-                const subscriber = {
-                  next: observer.next.bind(observer),
-                  error: observer.error.bind(observer),
-                  complete: observer.complete.bind(observer),
-                }
-
-                const oldHeaders = operation.getContext().headers
-                operation.setContext({
-                  headers: {
-                    ...oldHeaders,
-                    Authorization: `Bearer ${jwt}`,
-                  },
-                })
-
-                forward(operation).subscribe(subscriber)
-              })
-              .catch(error => {
-                resetStore()
-                observer.error(error)
-              })
-          })
-        }
-        case APOLLO_ERRORS.JWT_SIGNATURE_MISMATCH:
-        case APOLLO_ERRORS.REFRESH_TOKEN_EXPIRED:
-        case APOLLO_ERRORS.REFRESH_TOKEN_NOT_VALID:
-        case APOLLO_ERRORS.UNAUTHENTICATED:
-          resetStore()
-          break
-        default:
+    if (graphQLErrors) {
+      for (const err of graphQLErrors) {
+        if (!err || !err.extensions) {
           return
+        }
+        switch (err.extensions.code) {
+          case APOLLO_ERRORS.INTERNAL_SERVER_ERROR: {
+            // Handle error in component
+            break
+          }
+          case APOLLO_ERRORS.JWT_EXPIRED: {
+            return new Observable(observer => {
+              refetchToken()
+                .then(jwt => {
+                  const subscriber = {
+                    next: observer.next.bind(observer),
+                    error: observer.error.bind(observer),
+                    complete: observer.complete.bind(observer),
+                  }
+
+                  const oldHeaders = operation.getContext().headers
+                  operation.setContext({
+                    headers: {
+                      ...oldHeaders,
+                      Authorization: `Bearer ${jwt}`,
+                    },
+                  })
+
+                  forward(operation).subscribe(subscriber)
+                })
+                .catch(error => {
+                  resetStore()
+                  observer.error(error)
+                })
+            })
+          }
+          case APOLLO_ERRORS.JWT_SIGNATURE_MISMATCH:
+          case APOLLO_ERRORS.REFRESH_TOKEN_EXPIRED:
+          case APOLLO_ERRORS.REFRESH_TOKEN_NOT_VALID:
+          case APOLLO_ERRORS.UNAUTHENTICATED:
+            resetStore()
+            break
+          default:
+            // Handle error in component
+            return
+        }
       }
     }
   })

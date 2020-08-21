@@ -18,9 +18,17 @@ import { CodeRenderer } from '..'
 export function MarkdownEditor() {
   const client = useApolloClient()
   const { currentPath } = useReadCurrentPath()
-  const [updateFile] = useUpdateFile()
-  const { file } = useReadFile()
+  const { file, error: readError } = useReadFile()
+  const [updateFile, { error: updateError }] = useUpdateFile()
   const { setEasyMDE } = useEasyMDE()
+
+  if (readError) {
+    alert('Could not read file. Please try again.')
+  }
+
+  if (updateError) {
+    alert('Could not update file. Please try again.')
+  }
 
   function handleSetMarkdownCursorPosition(cursorPosition: IPosition) {
     client.writeData({

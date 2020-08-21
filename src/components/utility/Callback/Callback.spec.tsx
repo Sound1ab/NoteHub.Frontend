@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React, { FunctionComponent } from 'react'
 
-import { useReadGithubUserAccessToken } from '../../../hooks'
+import { useDeleteFile, useReadGithubUserAccessToken } from '../../../hooks'
 import { cleanup, render } from '../../../test-utils'
 import { Callback } from './Callback'
 
@@ -25,6 +25,10 @@ afterEach(cleanup)
 describe('Callback', () => {
   beforeEach(() => {
     jest.restoreAllMocks()
+    ;(useReadGithubUserAccessToken as jest.Mock).mockReturnValue({
+      jwt: 'MOCK_JWT',
+      error: undefined,
+    })
   })
 
   it('should parse query parameters and pass code and state to query', async () => {
@@ -34,18 +38,21 @@ describe('Callback', () => {
   })
 
   it('should redirect dashboard if a jwt if received', async () => {
-    ;(useReadGithubUserAccessToken as jest.Mock).mockReturnValue('MOCK_JWT')
     const { getByText } = await render(<Callback />)
 
     expect(getByText('redirect')).toBeDefined()
   })
 
-  it('should return null if no jwt is received', async () => {
-    ;(useReadGithubUserAccessToken as jest.Mock).mockReturnValue(null)
+  it('should call alert and redirect to login', async () => {
+    const alert = jest.fn()
+    ;(global as any).alert = alert
+    ;(useReadGithubUserAccessToken as jest.Mock).mockReturnValue({ jwt: null })
+
     const {
       container: { firstChild },
     } = await render(<Callback />)
 
-    expect(firstChild).toBeNull()
+    expect(alert).toBeCalled()
+    expect(firstChild).toContainHTML('<div>redirect</div>')
   })
 })

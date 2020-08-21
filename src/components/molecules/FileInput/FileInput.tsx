@@ -42,7 +42,6 @@ export function FileInput({ onClickOutside, path, onToggle }: IFileInput) {
 
   async function handleCreateNewFile(e: React.ChangeEvent<HTMLFormElement>) {
     e.preventDefault()
-
     onClickOutside()
 
     const nodePath = path ? `${path}/${name}.md` : `${name}.md`
@@ -57,7 +56,11 @@ export function FileInput({ onClickOutside, path, onToggle }: IFileInput) {
     onToggle(nodePathArray.join('/'), true)
 
     // Create the file at the full path
-    await createFile(nodePath)
+    try {
+      await createFile(nodePath)
+    } catch {
+      alert('Could not create file. Please try again.')
+    }
   }
 
   return (

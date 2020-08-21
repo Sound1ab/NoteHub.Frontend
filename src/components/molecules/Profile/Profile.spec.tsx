@@ -85,5 +85,37 @@ describe('Profile', () => {
 
       expect(getByLabelText('Light theme')).toBeDefined()
     })
+
+    it('should display message if logout errors', async () => {
+      ;(useApolloClient as jest.Mock).mockReturnValue({
+        clearStore,
+        writeData,
+      })
+
+      const alert = jest.fn()
+      ;(global as any).alert = alert
+
+      const { getByAltText, getByLabelText } = await render(
+        <MockProvider
+          mockResolvers={{
+            ...resolvers,
+            Query: () => ({
+              ...resolvers.Query(),
+              logout: () => {
+                throw new Error()
+              },
+            }),
+          }}
+        >
+          <Profile />
+        </MockProvider>
+      )
+
+      await fireEvent.click(getByAltText('avatar'))
+
+      await fireEvent.click(getByLabelText('Logout'))
+
+      expect(alert).toBeCalledWith('Could not logout. Please try again.')
+    })
   })
 })

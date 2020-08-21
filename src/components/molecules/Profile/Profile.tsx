@@ -28,8 +28,12 @@ export function Profile() {
   const { isDarkMode, toggleTheme } = useDarkMode()
   const containerRef = useRef(null)
   const user = useReadGithubUser()
-  const [logout, { called, data }] = useLogout()
+  const [logout, { called, data, error }] = useLogout()
   const { isOpen, Portal, ref, setOpen } = useModalToggle()
+
+  if (error) {
+    alert('Could not logout. Please try again.')
+  }
 
   if (called && data?.logout === 'ok') {
     client.clearStore()
@@ -44,6 +48,10 @@ export function Profile() {
     window.open(user?.html_url)
   }
 
+  async function handleLogout() {
+    await logout()
+  }
+
   return (
     <Style ref={containerRef}>
       <Avatar image={user?.avatar_url} onClick={handleOpen} />
@@ -56,7 +64,7 @@ export function Profile() {
                 icon: 'sign-out-alt' as const,
                 prefix: 'fa' as const,
                 label: 'Logout',
-                onClick: () => logout(),
+                onClick: handleLogout,
               },
               {
                 icon: 'github' as const,

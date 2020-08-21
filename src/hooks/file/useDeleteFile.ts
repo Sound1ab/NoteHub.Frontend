@@ -78,6 +78,7 @@ export function useDeleteFile(): [
       removeNode(cache, data)
       removeFile(cache, data)
     },
+    errorPolicy: 'all',
   })
 
   async function deleteFile(path?: string) {

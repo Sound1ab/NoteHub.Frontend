@@ -51,12 +51,15 @@ export function NodeItem({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) {
     e.stopPropagation()
-
     setOpen(isOpen => !isOpen)
   }
 
   async function handleDeleteFile() {
-    await deleteFile(node.path)
+    try {
+      await deleteFile(node.path)
+    } catch {
+      alert('Could not delete file. Please try again.')
+    }
   }
 
   function onChevronClick(

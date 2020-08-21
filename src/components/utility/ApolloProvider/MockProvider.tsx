@@ -1,6 +1,7 @@
 import { ApolloProvider } from '@apollo/react-hooks'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
+import { ApolloLink } from 'apollo-link'
 import { SchemaLink } from 'apollo-link-schema'
 import {
   IMocks,
@@ -11,7 +12,16 @@ import { buildClientSchema, printSchema } from 'graphql/utilities'
 import React, { ReactNode } from 'react'
 
 import introspectionResult from '../../../schema.json'
+import { context, error, httpLink, lazy } from '../../../services/ApolloLink'
 import { ILocalData, localData as defaultLocalData } from './ApolloProvider'
+
+async function link(client: ApolloClient<NormalizedCacheObject>, schema: any) {
+  return ApolloLink.from([
+    context(client),
+    error(client),
+    new SchemaLink({ schema }),
+  ])
+}
 
 export const MockProvider: React.FunctionComponent<{
   children: ReactNode
@@ -40,8 +50,8 @@ export const MockProvider: React.FunctionComponent<{
 
   addMockFunctionsToSchema({ schema, mocks: mockResolvers })
 
-  const client = new ApolloClient({
-    link: new SchemaLink({ schema }),
+  const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+    link: lazy(() => link(client, schema)),
     cache: cache,
     resolvers: {},
   })

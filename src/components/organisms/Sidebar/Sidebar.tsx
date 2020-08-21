@@ -27,14 +27,10 @@ const Style = styled.div`
 `
 
 export function Sidebar() {
-  const { gitNodes, loading } = useReadNodes()
+  const { gitNodes } = useReadNodes()
   const [listOfToggledPaths, setListOfToggledPaths] = useState<Set<string>>(
     new Set([])
   )
-
-  if (!gitNodes || loading) {
-    return null
-  }
 
   function onToggle(path: string, toggled: boolean) {
     if (toggled) {
@@ -47,11 +43,12 @@ export function Sidebar() {
 
   return (
     <Style id={CONTAINER_ID.SIDEBAR}>
-      {createNodes(gitNodes, listOfToggledPaths).map(node => (
-        <List key={node.name}>
-          <Tree key={node.name} node={node} onToggle={onToggle} />
-        </List>
-      ))}
+      {gitNodes &&
+        createNodes(gitNodes, listOfToggledPaths).map(node => (
+          <List key={node.name}>
+            <Tree key={node.name} node={node} onToggle={onToggle} />
+          </List>
+        ))}
     </Style>
   )
 }

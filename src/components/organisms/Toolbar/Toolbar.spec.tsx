@@ -2,7 +2,12 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
-import { useDropzone, useEasyMDE } from '../../../hooks/'
+import {
+  useDropzone,
+  useEasyMDE,
+  useReadFile,
+  useUpdateFile,
+} from '../../../hooks/'
 import { resolvers } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
@@ -10,12 +15,13 @@ import { Toolbar } from './Toolbar'
 
 jest.mock('../../../hooks/utils/useDropzone')
 jest.mock('../../../hooks/utils/useEasyMDE')
+jest.mock('../../../hooks/file/useUpdateFile')
+jest.mock('../../../hooks/file/useReadFile')
 
 afterEach(cleanup)
 
 describe('Toolbar', () => {
-  const selectFileAndUpload = jest.fn()
-  selectFileAndUpload.mockReturnValue(Promise.resolve('MOCK_PATH'))
+  const selectFileAndUpload = jest.fn(() => Promise.resolve('MOCK_PATH'))
 
   const toggleOrderedList = jest.fn()
   const toggleCodeBlock = jest.fn()
@@ -26,8 +32,10 @@ describe('Toolbar', () => {
   const toggleSideBySide = jest.fn()
   const toggleBlockquote = jest.fn()
 
+  const updateFile = jest.fn()
+
   beforeEach(() => {
-    jest.resetAllMocks()
+    jest.clearAllMocks()
     ;(useDropzone as jest.Mock).mockImplementation(() => ({
       Dropzone: () => <div>Dropzone</div>,
       selectFileAndUpload,
@@ -41,6 +49,12 @@ describe('Toolbar', () => {
       drawHorizontalRule,
       toggleSideBySide,
       toggleBlockquote,
+    })
+    ;(useUpdateFile as jest.Mock).mockImplementation(() => [updateFile])
+    ;(useReadFile as jest.Mock).mockReturnValue({
+      file: {
+        content: 'MOCK FILE CONTENTS',
+      },
     })
   })
 
@@ -68,6 +82,48 @@ describe('Toolbar', () => {
       await fireEvent.click(getByTitle(title))
 
       expect(fn).toBeCalled()
+    })
+
+    describe('When uploading an image', () => {
+      it('should call updateFile with the currentPath and content if successfully uploaded', async () => {
+        const { getByTitle } = await render(
+          <MockProvider
+            mockResolvers={resolvers}
+            localData={{ currentPath: 'MOCK_FILE_PATH_1.md' }}
+          >
+            <Toolbar />
+          </MockProvider>
+        )
+
+        await fireEvent.click(getByTitle('Upload an image'))
+
+        expect(updateFile).toBeCalledWith(
+          'MOCK_FILE_PATH_1.md',
+          '![](https://github.com/Sound1ab/NoteHub.Notebook/blob/master/MOCK_PATH?raw=true)MOCK FILE CONTENTS'
+        )
+      })
+
+      it('should display alert if uploading an image errors', async () => {
+        ;(useUpdateFile as jest.Mock).mockImplementation(() => [
+          async () => Promise.reject(),
+        ])
+
+        const alert = jest.fn()
+        ;(global as any).alert = alert
+
+        const { getByTitle } = await render(
+          <MockProvider
+            mockResolvers={resolvers}
+            localData={{ currentPath: 'MOCK_FILE_PATH_1.md' }}
+          >
+            <Toolbar />
+          </MockProvider>
+        )
+
+        await fireEvent.click(getByTitle('Upload an image'))
+
+        expect(alert).toBeCalled()
+      })
     })
   })
 

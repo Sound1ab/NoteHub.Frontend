@@ -94,9 +94,9 @@ export function Toolbar() {
       const path = await selectFileAndUpload()
       const content = insertPathIntoString(path)
 
-      updateFile(currentPath, content)
+      await updateFile(currentPath, content)
     } catch (error) {
-      alert(error)
+      alert('There was an issue uploading your image. Please try again.')
     }
   }
 
