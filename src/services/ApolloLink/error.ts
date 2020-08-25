@@ -1,13 +1,18 @@
 import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
-import { Observable, execute, makePromise } from 'apollo-link'
+import { FetchResult, Observable, execute, makePromise } from 'apollo-link'
 import { onError } from 'apollo-link-error'
 import { HttpLink } from 'apollo-link-http'
+import { ServerError } from 'apollo-link-http-common'
 import gql from 'graphql-tag'
 
 import { APOLLO_ERRORS } from '../../enums'
 
 const GRAPHQL = process.env.REACT_APP_GRAPHQL
+
+function isServerError(error: any): error is ServerError {
+  return error !== null && error !== undefined && error.result
+}
 
 export function error(client: ApolloClient<NormalizedCacheObject>) {
   function resetStore() {
@@ -36,13 +41,18 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
   }
 
   return onError(({ graphQLErrors, networkError, forward, operation }) => {
-    if (networkError) {
-      // redirect to 404 page
-      return
-    }
-
-    if (graphQLErrors) {
-      for (const err of graphQLErrors) {
+    function errorSwitch(
+      errors: ReadonlyArray<{
+        extensions: { [key: string]: any } | undefined
+      }>
+    ): void | Observable<
+      FetchResult<
+        { [key: string]: any },
+        Record<string, any>,
+        Record<string, any>
+      >
+    > {
+      for (const err of errors) {
         if (!err || !err.extensions) {
           return
         }
@@ -88,6 +98,22 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
             return
         }
       }
+    }
+
+    if (networkError) {
+      if (isServerError(networkError)) {
+        // Apollo server does not return graphQL errors for errors thrown
+        // outside a resolver. As we're checking jwt when configuring the
+        // datasources on the server a network error is thrown for expired
+        // jwts. This checks the error extensions as if it were a graphQL error
+        return errorSwitch(networkError.result.errors)
+      }
+      // redirect to 404 page
+      return
+    }
+
+    if (graphQLErrors) {
+      return errorSwitch(graphQLErrors)
     }
   })
 }
