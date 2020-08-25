@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React, { FunctionComponent } from 'react'
 
-import { useDeleteFile, useReadGithubUserAccessToken } from '../../../hooks'
+import { useReadGithubUserAccessToken } from '../../../hooks'
 import { cleanup, render } from '../../../test-utils'
 import { Callback } from './Callback'
 

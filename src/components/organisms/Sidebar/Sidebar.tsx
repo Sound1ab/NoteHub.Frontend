@@ -4,10 +4,52 @@ import { CONTAINER_ID } from '../../../enums'
 import { useReadNodes } from '../../../hooks'
 import { styled } from '../../../theme'
 import { createNodes } from '../../../utils'
-import { List } from '../../atoms'
-import { Tree } from '../../molecules'
+import { Icon, List } from '../../atoms'
+import { FileInput, Tree } from '../../molecules'
 
-const Style = styled.div`
+export function Sidebar() {
+  const [isNewFileOpen, setIsNewFileOpen] = useState(false)
+  const { gitNodes } = useReadNodes()
+  const [listOfToggledPaths, setListOfToggledPaths] = useState<Set<string>>(
+    new Set([])
+  )
+
+  function onToggle(path: string, toggled: boolean) {
+    if (toggled) {
+      listOfToggledPaths.add(path)
+    } else {
+      listOfToggledPaths.delete(path)
+    }
+    setListOfToggledPaths(new Set(listOfToggledPaths))
+  }
+
+  return (
+    <StyledSidebar id={CONTAINER_ID.SIDEBAR}>
+      <GrowWrapper>
+        {gitNodes &&
+          createNodes(gitNodes, listOfToggledPaths).map(node => (
+            <List key={node.name}>
+              <Tree key={node.name} node={node} onToggle={onToggle} />
+            </List>
+          ))}
+        {isNewFileOpen && (
+          <FileInput
+            onClickOutside={() => setIsNewFileOpen(false)}
+            onToggle={onToggle}
+          />
+        )}
+      </GrowWrapper>
+      <FixedWrapper>
+        <NewRepoButton onClick={() => setIsNewFileOpen(true)}>
+          <PlusIcon size="lg" icon={'plus-circle'} />
+          <NewRepoHeading>New folder</NewRepoHeading>
+        </NewRepoButton>
+      </FixedWrapper>
+    </StyledSidebar>
+  )
+}
+
+const StyledSidebar = styled.div`
   flex: 0 0 100%;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.background.primary};
@@ -26,29 +68,31 @@ const Style = styled.div`
   }
 `
 
-export function Sidebar() {
-  const { gitNodes } = useReadNodes()
-  const [listOfToggledPaths, setListOfToggledPaths] = useState<Set<string>>(
-    new Set([])
-  )
+const GrowWrapper = styled.div`
+  flex: 1;
+  overflow-y: auto;
+`
 
-  function onToggle(path: string, toggled: boolean) {
-    if (toggled) {
-      listOfToggledPaths.add(path)
-    } else {
-      listOfToggledPaths.delete(path)
-    }
-    setListOfToggledPaths(new Set(listOfToggledPaths))
+const FixedWrapper = styled.div`
+  flex: 0;
+  padding: ${({ theme }) => theme.spacing.xs};
+`
+
+const NewRepoButton = styled.button`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+`
+
+const NewRepoHeading = styled.h4`
+  margin-bottom: 0;
+`
+
+const PlusIcon = styled(Icon)`
+  margin-right: ${({ theme }) => theme.spacing.xs};
+
+  svg {
+    color: ${({ theme }) => theme.colors.text.primary};
   }
-
-  return (
-    <Style id={CONTAINER_ID.SIDEBAR}>
-      {gitNodes &&
-        createNodes(gitNodes, listOfToggledPaths).map(node => (
-          <List key={node.name}>
-            <Tree key={node.name} node={node} onToggle={onToggle} />
-          </List>
-        ))}
-    </Style>
-  )
-}
+`

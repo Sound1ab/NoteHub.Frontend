@@ -21,7 +21,7 @@ const Style = styled.div`
 `
 
 interface IFileInput {
-  path: string
+  path?: string
   onClickOutside: () => void
   onToggle: (path: string, toggled: boolean) => void
 }

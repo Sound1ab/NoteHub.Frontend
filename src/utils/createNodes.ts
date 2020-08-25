@@ -3,6 +3,7 @@ import {
   Node_Type,
 } from '../components/apollo/generated_components_typings'
 import { ITreeNode } from '../types'
+import { isFile } from './isFile'
 
 export function createFolderNode(name: string, path: string, toggled: boolean) {
   return {
@@ -119,19 +120,11 @@ export function createNodes(
   return gitNodes.reduce<ITreeNode[]>((acc, gitNode) => {
     const { path } = gitNode
 
-    const [rootSlug] = path.split('/')
+    const [rootSlug, ...restOfPath] = path.split('/')
 
     const parentNode = getNode(acc, rootSlug)
 
-    if (!parentNode) {
-      return [
-        ...acc,
-        createNode(gitNode.type, rootSlug, path, listOfToggledPaths),
-      ]
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const [_, ...restOfPath] = path.split('/')
-
+    if (parentNode) {
       insertNodeIntoParentNode({
         path: restOfPath,
         parentNode,
@@ -140,6 +133,34 @@ export function createNodes(
       })
 
       return acc
+    }
+
+    if (isFile(path) && restOfPath.length > 0) {
+      // If no parentNode and its a file inside a folder, the optimistic update has
+      // run and generated a file without a parent gitNode. Create a parent node
+      // and insert file node. Any other missing parent nodes further along the path
+      // will be created inside insertNodeIntoParentNode.
+      const newParentNode = createNode(
+        Node_Type.Folder,
+        rootSlug,
+        rootSlug,
+        listOfToggledPaths
+      )
+
+      insertNodeIntoParentNode({
+        path: restOfPath,
+        parentNode: newParentNode,
+        gitNode,
+        listOfToggledPaths,
+      })
+
+      return [...acc, newParentNode]
+    } else {
+      // Else we just have a top level file/folder that we need to create.
+      return [
+        ...acc,
+        createNode(gitNode.type, rootSlug, path, listOfToggledPaths),
+      ]
     }
   }, [])
 }

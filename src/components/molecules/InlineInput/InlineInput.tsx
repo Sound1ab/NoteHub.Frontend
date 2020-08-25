@@ -67,9 +67,7 @@ export function InlineInput({
   useClickOutside(clickOutsideCallback, wrapperRef)
 
   useLayoutEffect(() => {
-    inputRef.current?.focus({
-      preventScroll: true,
-    })
+    inputRef.current?.focus()
   }, [])
 
   return (

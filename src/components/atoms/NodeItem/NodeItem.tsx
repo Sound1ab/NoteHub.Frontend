@@ -165,7 +165,9 @@ const Wrapper = styled.div<Pick<INodeItem, 'level'> & { type: string }>`
   position: relative;
   display: flex;
   padding-left: ${({ theme, level, type }) => {
-    if (level === 0) {
+    if (level === 0 && type === Node_Type.File) {
+      return theme.spacing.s
+    } else if (level === 0 && type === Node_Type.Folder) {
       return 0
     }
     const additionalPadding = type === Node_Type.File ? theme.spacing.s : '0px'

@@ -12,7 +12,7 @@ import { buildClientSchema, printSchema } from 'graphql/utilities'
 import React, { ReactNode } from 'react'
 
 import introspectionResult from '../../../schema.json'
-import { context, error, httpLink, lazy } from '../../../services/ApolloLink'
+import { context, error, lazy } from '../../../services/ApolloLink'
 import { ILocalData, localData as defaultLocalData } from './ApolloProvider'
 
 async function link(client: ApolloClient<NormalizedCacheObject>, schema: any) {
