@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 
 import { wait } from '@apollo/react-testing'
-import { EventType } from '@testing-library/dom/events'
+import { EventType } from '@testing-library/dom/types/events'
 import { act, fireEvent, render } from '@testing-library/react'
 import React, { ReactNode } from 'react'
 
