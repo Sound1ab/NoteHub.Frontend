@@ -16,27 +16,18 @@ export const Callback = withRouter(({ location }: ICallback) => {
   const code = params.get('code')
   const state = params.get('state')
 
-  const { jwt } = useReadGithubUserAccessToken(code, state)
+  const jwt = useReadGithubUserAccessToken(code, state)
 
-  if (!jwt) {
-    alert('There was a problem logging in, please try again')
-
+  if (jwt) {
+    client.writeData({ data: { jwt } })
     return (
       <Redirect
         to={{
-          pathname: '/',
+          pathname: '/dashboard',
         }}
       />
     )
   }
 
-  client.writeData({ data: { jwt } })
-
-  return (
-    <Redirect
-      to={{
-        pathname: '/dashboard',
-      }}
-    />
-  )
+  return null
 })
