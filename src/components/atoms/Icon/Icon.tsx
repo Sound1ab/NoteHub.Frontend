@@ -68,6 +68,8 @@ export type TIcons =
   | 'minus'
   | 'quote-right'
   | 'columns'
+  | 'link'
+  | 'table'
 
 interface IIcon {
   icon: TIcons

@@ -73,9 +73,11 @@ export function Toolbar() {
     toggleUnorderedList,
     toggleItalic,
     toggleBold,
-    drawHorizontalRule,
     toggleSideBySide,
     toggleBlockquote,
+    drawHorizontalRule,
+    drawLink,
+    drawTable,
   } = useEasyMDE()
   const isMarkdownEditorActive = isFile(currentPath)
 
@@ -137,6 +139,7 @@ export function Toolbar() {
           >
             <Icon size="sm" icon="list-ol" prefix="fa" />
           </Button>
+          <Separator>┃</Separator>
           <Button
             className="Toolbar-button"
             onClick={toggleUnorderedList}
@@ -160,6 +163,23 @@ export function Toolbar() {
             isDisabled={!isMarkdownEditorActive}
           >
             <Icon size="sm" icon="minus" prefix="fa" />
+          </Button>
+          <Button
+            className="Toolbar-button"
+            onClick={drawLink}
+            title="Add link"
+            isDisabled={!isMarkdownEditorActive}
+          >
+            <Icon size="sm" icon="link" prefix="fa" />
+          </Button>
+          <Separator>┃</Separator>
+          <Button
+            className="Toolbar-button"
+            onClick={drawTable}
+            title="Add table"
+            isDisabled={!isMarkdownEditorActive}
+          >
+            <Icon size="sm" icon="table" prefix="fa" />
           </Button>
           <Button
             className="Toolbar-button"
@@ -187,3 +207,8 @@ export function Toolbar() {
     </>
   )
 }
+
+const Separator = styled.span`
+  color: ${({ theme }) => theme.colors.text.secondary};
+  margin-right: ${({ theme }) => theme.spacing.xxs};
+`

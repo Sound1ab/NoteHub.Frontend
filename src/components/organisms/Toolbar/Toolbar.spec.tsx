@@ -28,9 +28,11 @@ describe('Toolbar', () => {
   const toggleUnorderedList = jest.fn()
   const toggleItalic = jest.fn()
   const toggleBold = jest.fn()
-  const drawHorizontalRule = jest.fn()
   const toggleSideBySide = jest.fn()
   const toggleBlockquote = jest.fn()
+  const drawHorizontalRule = jest.fn()
+  const drawLink = jest.fn()
+  const drawTable = jest.fn()
 
   const updateFile = jest.fn()
 
@@ -46,9 +48,11 @@ describe('Toolbar', () => {
       toggleUnorderedList,
       toggleItalic,
       toggleBold,
-      drawHorizontalRule,
       toggleSideBySide,
       toggleBlockquote,
+      drawHorizontalRule,
+      drawLink,
+      drawTable,
     })
     ;(useUpdateFile as jest.Mock).mockImplementation(() => [updateFile])
     ;(useReadFile as jest.Mock).mockReturnValue({
@@ -67,6 +71,8 @@ describe('Toolbar', () => {
       [toggleUnorderedList, 'Add unordered list'],
       [toggleCodeBlock, 'Add code block'],
       [drawHorizontalRule, 'Add horizontal line'],
+      [drawLink, 'Add link'],
+      [drawTable, 'Add table'],
       [toggleSideBySide, 'Toggle side by side'],
       [selectFileAndUpload, 'Upload an image'],
     ])('should call easyMDE using buttons', async (fn, title) => {
@@ -136,6 +142,8 @@ describe('Toolbar', () => {
       [toggleUnorderedList, 'Add unordered list'],
       [toggleCodeBlock, 'Add code block'],
       [drawHorizontalRule, 'Add horizontal line'],
+      [drawLink, 'Add link'],
+      [drawTable, 'Add table'],
       [toggleSideBySide, 'Toggle side by side'],
       [selectFileAndUpload, 'Upload an image'],
     ])('should call easyMDE using buttons', async (fn, title) => {
