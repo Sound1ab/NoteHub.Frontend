@@ -76,7 +76,7 @@ describe('Dashboard', () => {
       target: { files: [file] },
     })
 
-    const image = `![](https://github.com/Sound1ab/NoteHub.Notebook/blob/master/MOCK_FOLDER_PATH/images/${imageFilename}?raw=true)MOCK_CONTENT_2`
+    const image = `![](https://github.com/Sound1ab/NoteHub.Notebook/blob/master/__notehub__images__/${imageFilename}?raw=true)MOCK_CONTENT_2`
 
     expect(getByText(image)).toBeInTheDocument()
   })

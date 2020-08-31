@@ -57,8 +57,8 @@ export function MarkdownEditor() {
               <ReactMarkdown
                 source={text}
                 renderers={{
-                  code: CodeRenderer,
-                  inlineCode: CodeRenderer,
+                  code: props => CodeRenderer({ ...props, inline: false }),
+                  inlineCode: props => CodeRenderer({ ...props, inline: true }),
                 }}
               />
             )

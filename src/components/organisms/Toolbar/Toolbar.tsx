@@ -139,7 +139,6 @@ export function Toolbar() {
           >
             <Icon size="sm" icon="list-ol" prefix="fa" />
           </Button>
-          <Separator>┃</Separator>
           <Button
             className="Toolbar-button"
             onClick={toggleUnorderedList}
@@ -166,28 +165,20 @@ export function Toolbar() {
           </Button>
           <Button
             className="Toolbar-button"
-            onClick={drawLink}
-            title="Add link"
-            isDisabled={!isMarkdownEditorActive}
-          >
-            <Icon size="sm" icon="link" prefix="fa" />
-          </Button>
-          <Separator>┃</Separator>
-          <Button
-            className="Toolbar-button"
             onClick={drawTable}
             title="Add table"
             isDisabled={!isMarkdownEditorActive}
           >
             <Icon size="sm" icon="table" prefix="fa" />
           </Button>
+          <Separator>┃</Separator>
           <Button
             className="Toolbar-button"
-            onClick={toggleSideBySide}
-            title="Toggle side by side"
+            onClick={drawLink}
+            title="Add link"
             isDisabled={!isMarkdownEditorActive}
           >
-            <Icon size="sm" icon="columns" prefix="fa" />
+            <Icon size="sm" icon="link" prefix="fa" />
           </Button>
           <Button
             className="Toolbar-button"
@@ -197,6 +188,15 @@ export function Toolbar() {
             isDisabled={!isMarkdownEditorActive}
           >
             <Icon size="sm" icon="image" prefix="fa" />
+          </Button>
+          <Separator>┃</Separator>
+          <Button
+            className="Toolbar-button"
+            onClick={toggleSideBySide}
+            title="Toggle side by side"
+            isDisabled={!isMarkdownEditorActive}
+          >
+            <Icon size="sm" icon="columns" prefix="fa" />
           </Button>
           <ColorPicker />
           <div className="Toolbar-profile">

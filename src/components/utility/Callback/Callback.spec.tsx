@@ -26,6 +26,7 @@ describe('Callback', () => {
   beforeEach(() => {
     jest.restoreAllMocks()
     ;(useReadGithubUserAccessToken as jest.Mock).mockReturnValue({
+      __typename: 'MOCK_TYPENAME',
       jwt: 'MOCK_JWT',
       error: undefined,
     })
@@ -41,18 +42,5 @@ describe('Callback', () => {
     const { getByText } = await render(<Callback />)
 
     expect(getByText('redirect')).toBeDefined()
-  })
-
-  it('should call alert and redirect to login', async () => {
-    const alert = jest.fn()
-    ;(global as any).alert = alert
-    ;(useReadGithubUserAccessToken as jest.Mock).mockReturnValue({ jwt: null })
-
-    const {
-      container: { firstChild },
-    } = await render(<Callback />)
-
-    expect(alert).toBeCalled()
-    expect(firstChild).toContainHTML('<div>redirect</div>')
   })
 })

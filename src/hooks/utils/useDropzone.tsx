@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 
 import { styled } from '../../theme'
-import { useCreateImage, useReadCurrentPath } from '..'
+import { useCreateImage } from '..'
 
 const Style = styled.input`
   display: none;
@@ -13,7 +13,6 @@ export function useDropzone() {
   const resolver = useRef<(value?: any | PromiseLike<any>) => void>(null)
   const rejecter = useRef<(value?: any | PromiseLike<any>) => void>(null)
   const [createImage] = useCreateImage()
-  const { currentPath } = useReadCurrentPath()
 
   async function handleCreateNewImage(path: string, content: any) {
     if (!content) {
