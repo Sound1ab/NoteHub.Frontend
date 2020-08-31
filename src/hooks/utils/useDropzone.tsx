@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 
 import { styled } from '../../theme'
-import { getGithubImagePath } from '../../utils'
 import { useCreateImage, useReadCurrentPath } from '..'
 
 const Style = styled.input`
@@ -51,7 +50,7 @@ export function useDropzone() {
     reader.onload = async () => {
       const { name } = file
       const validatedName = removeWhiteSpace(name)
-      const path = getGithubImagePath(validatedName, currentPath)
+      const path = `__notehub__images__/${validatedName}`
       await handleCreateNewImage(path, reader.result)
       if (resolver && resolver.current) {
         resolver.current(path)
