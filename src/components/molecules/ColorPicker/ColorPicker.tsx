@@ -17,6 +17,8 @@ const Style = styled.div`
   }
 
   .ColorPicker-list {
+    margin-bottom: 0;
+    line-height: 0;
     svg + svg {
       margin-left: ${({ theme }) => theme.spacing.xxs};
     }
