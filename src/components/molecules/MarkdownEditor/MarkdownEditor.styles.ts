@@ -10,7 +10,7 @@ export const Style = styled.div`
 
   .editor-preview-active-side {
     flex: 0 0 50%;
-    overflow: hidden;
+    overflow: auto;
     padding: ${({ theme }) => theme.spacing.xs};
     display: block;
   }
@@ -19,14 +19,19 @@ export const Style = styled.div`
     flex: 0 0 50%;
   }
 
+  .EasyMDEContainer {
+    height: 100%;
+    width: 100%;
+    display: flex;
+  }
+
   .MarkdownEditor-wrapper {
     height: 100%;
-    display: flex;
   }
 
   .CodeMirror-gutter-filler,
   .CodeMirror-scrollbar-filler {
-    background-color: #fff;
+    background-color: #d20707;
   }
   .CodeMirror-gutters {
     background-color: #f7f7f7;
@@ -428,48 +433,47 @@ export const Style = styled.div`
     font-weight: ${({ theme }) => theme.typographyStyles.h1.fontWeight};
     line-height: ${({ theme }) => theme.typographyStyles.h1.lineHeight};
     margin-bottom: ${({ theme }) => theme.typographyStyles.h1.marginBottom};
-    color: ${({ theme }) => theme.colors.accent};
+    color: ${({ theme }) => theme.typographyStyles.h1.color};
   }
   .cm-header-2 {
     font-size: ${({ theme }) => theme.typographyStyles.h2.fontSize};
     font-weight: ${({ theme }) => theme.typographyStyles.h2.fontWeight};
     line-height: ${({ theme }) => theme.typographyStyles.h2.lineHeight};
     margin-bottom: ${({ theme }) => theme.typographyStyles.h2.marginBottom};
-    color: ${({ theme }) => theme.colors.accent};
+    color: ${({ theme }) => theme.typographyStyles.h2.color};
   }
   .cm-header-3 {
     font-size: ${({ theme }) => theme.typographyStyles.h3.fontSize};
     font-weight: ${({ theme }) => theme.typographyStyles.h3.fontWeight};
     line-height: ${({ theme }) => theme.typographyStyles.h3.lineHeight};
     margin-bottom: ${({ theme }) => theme.typographyStyles.h3.marginBottom};
-    color: ${({ theme }) => theme.colors.accent};
+    color: ${({ theme }) => theme.typographyStyles.h3.color};
   }
   .cm-header-4 {
     font-size: ${({ theme }) => theme.typographyStyles.h4.fontSize};
     font-weight: ${({ theme }) => theme.typographyStyles.h4.fontWeight};
     line-height: ${({ theme }) => theme.typographyStyles.h4.lineHeight};
     margin-bottom: ${({ theme }) => theme.typographyStyles.h4.marginBottom};
-    color: ${({ theme }) => theme.colors.accent};
+    color: ${({ theme }) => theme.typographyStyles.h4.color};
   }
   .cm-header-5 {
     font-size: ${({ theme }) => theme.typographyStyles.h5.fontSize};
     font-weight: ${({ theme }) => theme.typographyStyles.h5.fontWeight};
     line-height: ${({ theme }) => theme.typographyStyles.h5.lineHeight};
     margin-bottom: ${({ theme }) => theme.typographyStyles.h5.marginBottom};
-    color: ${({ theme }) => theme.colors.accent};
+    color: ${({ theme }) => theme.typographyStyles.h5.color};
   }
   .cm-header-6 {
     font-size: ${({ theme }) => theme.typographyStyles.h6.fontSize};
     font-weight: ${({ theme }) => theme.typographyStyles.h6.fontWeight};
     line-height: ${({ theme }) => theme.typographyStyles.h6.lineHeight};
     margin-bottom: ${({ theme }) => theme.typographyStyles.h6.marginBottom};
-    color: ${({ theme }) => theme.colors.accent};
+    color: ${({ theme }) => theme.typographyStyles.h6.color};
   }
 
   .cm-s-darcula {
-    font-family: Consolas, Menlo, Monaco, 'Lucida Console', 'Liberation Mono',
-      'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace,
-      serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   }
   .cm-s-darcula.CodeMirror {
     background: ${({ theme }) => theme.colors.background.primary};

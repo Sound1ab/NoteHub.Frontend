@@ -7,22 +7,26 @@ export const createTypography = (colors: TColors) => {
     baseFontSize: '14px',
     bodyFontFamily: [
       '-apple-system',
+      'Blink,acSystemFont',
+      'Segoe UI',
+      'Roboto',
+      'Oxygen-Sans',
       'Ubuntu',
-      'Cantarell',
-      'Open Sans',
       'Helvetica Neue',
       'sans-serif',
     ],
     headerFontFamily: [
       '-apple-system',
+      'Blink,acSystemFont',
+      'Segoe UI',
+      'Roboto',
+      'Oxygen-Sans',
       'Ubuntu',
-      'Cantarell',
-      'Open Sans',
       'Helvetica Neue',
       'sans-serif',
     ],
     scaleRatio: 2.9,
-    overrideThemeStyles: () => ({
+    overrideThemeStyles: ({ rhythm }) => ({
       body: {
         fontSizeAdjust: '0.5',
       },
@@ -36,25 +40,31 @@ export const createTypography = (colors: TColors) => {
         color: colors.text.primary,
       },
       h1: {
-        color: colors.accent,
+        color: colors.text.primary,
         fontWeight: 'bold',
+        marginBottom: rhythm(1),
       },
       h2: {
-        color: colors.accent,
+        color: colors.text.primary,
         fontWeight: 'bold',
+        marginBottom: rhythm(1),
       },
       h3: {
-        color: colors.accent,
+        color: colors.text.primary,
         fontWeight: 'bold',
+        marginBottom: rhythm(0.8),
       },
       h4: {
-        color: colors.accent,
+        color: colors.text.primary,
+        marginBottom: rhythm(0.6),
       },
       h5: {
-        color: colors.accent,
+        color: colors.text.primary,
+        marginBottom: rhythm(0.4),
       },
       h6: {
-        color: colors.accent,
+        color: colors.text.primary,
+        marginBottom: rhythm(0.2),
       },
     }),
   })

@@ -7,10 +7,7 @@ import { Icon } from '..'
 const Style = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
   position: relative;
   padding: ${({ theme }) => theme.spacing.xs};
-  background-color: ${({ theme, isActive }) =>
-    isActive
-      ? theme.colors.background.tertiary
-      : theme.colors.background.secondary};
+  background-color: ${({ theme }) => theme.colors.background.secondary};
   border-radius: 5px;
   box-shadow: inset 0px 0px 1px 1px ${({ theme }) => theme.colors.border};
 
@@ -19,8 +16,7 @@ const Style = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
   }
 
   > * {
-    color: ${({ theme, isActive }) =>
-      isActive ? theme.colors.accent : theme.colors.text.primary};
+    color: ${({ theme }) => theme.colors.text.secondary};
     ${({ isLoading }) =>
       isLoading
         ? css`
@@ -29,15 +25,13 @@ const Style = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
         : ''}
   }
 
-  &:disabled {
-    > * {
-      color: ${({ theme }) => theme.colors.text.secondary};
-    }
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.background.tertiary};
   }
 
-  @media (hover: hover) and (pointer: fine) {
-    &:hover:not(:disabled) {
-      opacity: 0.6;
+  &:disabled {
+    > * {
+      color: ${({ theme }) => theme.colors.text.tertiary};
     }
   }
 

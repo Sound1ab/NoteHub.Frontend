@@ -130,14 +130,14 @@ export function NodeItem({
             />
           )}
           {type === Node_Type.Folder ? (
-            <Icon size="sm" icon="folder" prefix="fa" />
+            <StyledIcon size="sm" icon="folder" prefix="fa" />
           ) : (
-            <Icon size="sm" icon="file" prefix="fa" />
+            <StyledIcon size="sm" icon="file" prefix="fa" />
           )}
           <Heading className="Node-heading">{name}</Heading>
         </Details>
         <Actions onClick={handleToggleMenu}>
-          <Icon
+          <StyledIcon
             icon="ellipsis-h"
             isDisabled={isOpen}
             ariaLabel={`${name} actions`}
@@ -218,7 +218,10 @@ const Actions = styled.button`
   }
 `
 
-const Chevron = styled(Icon)<{ toggled: boolean }>`
-  color: ${({ theme }) => theme.colors.text.primary};
+const StyledIcon = styled(Icon)`
+  color: ${({ theme }) => theme.colors.text.secondary};
+`
+
+const Chevron = styled(StyledIcon)<{ toggled: boolean }>`
   transform: ${({ toggled }) => (toggled ? 'rotate(0.25turn)' : 'rotate(0)')};
 `

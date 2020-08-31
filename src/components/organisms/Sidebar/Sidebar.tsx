@@ -93,6 +93,6 @@ const PlusIcon = styled(Icon)`
   margin-right: ${({ theme }) => theme.spacing.xs};
 
   svg {
-    color: ${({ theme }) => theme.colors.text.primary};
+    color: ${({ theme }) => theme.colors.accent};
   }
 `

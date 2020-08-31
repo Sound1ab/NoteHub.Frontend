@@ -25,11 +25,11 @@ export const breakpoints = {
 
 export const colors = {
   [COLOR_MODE.LIGHT]: {
-    accent: '#383a3e',
+    accent: '#70dda5',
     accentChoices: {
-      primary: '#383a3e',
-      secondary: '#342fc1',
-      tertiary: '#2fc142',
+      primary: '#70dda5',
+      secondary: '#7072dd',
+      tertiary: '#dd7089',
       quaternary: '#bcc12f',
       quinary: '#c1622f',
     },
@@ -47,19 +47,19 @@ export const colors = {
     },
     text: {
       primary: '#2b2b2b',
-      secondary: '#e1e1e1',
-      tertiary: '#e6e6e6',
+      secondary: '#787878',
+      tertiary: '#a9a9a9',
     },
     company: {
       github: '#04AA51',
     },
   },
   [COLOR_MODE.DARK]: {
-    accent: '#e2e4f7',
+    accent: '#70dda5',
     accentChoices: {
-      primary: '#e2e4f7',
-      secondary: '#342fc1',
-      tertiary: '#2fc142',
+      primary: '#70dda5',
+      secondary: '#7072dd',
+      tertiary: '#dd7089',
       quaternary: '#bcc12f',
       quinary: '#c1622f',
     },
@@ -76,9 +76,9 @@ export const colors = {
       hover: '#f0f0f0',
     },
     text: {
-      primary: '#e9e9e9',
-      secondary: '#a2a2a2',
-      tertiary: '#8a8a8a',
+      primary: '#d6d4d4',
+      secondary: '#a9a9a9',
+      tertiary: '#787878',
     },
     company: {
       github: '#04AA51',

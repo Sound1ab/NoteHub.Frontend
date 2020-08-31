@@ -11,6 +11,7 @@ interface IHeading {
   lineHeight: string
   marginBottom: string
   fontWeight: string
+  color: string
 }
 
 export interface ITheme {
