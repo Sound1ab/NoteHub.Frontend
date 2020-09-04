@@ -16,7 +16,7 @@ export const Callback = withRouter(({ location }: ICallback) => {
   const code = params.get('code')
   const state = params.get('state')
 
-  const jwt = useReadGithubUserAccessToken(code, state)
+  const { jwt } = useReadGithubUserAccessToken(code, state)
 
   if (jwt) {
     client.writeData({ data: { jwt } })
