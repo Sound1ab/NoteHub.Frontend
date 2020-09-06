@@ -1,13 +1,14 @@
 overwrite: true
-schema: "http://localhost:3000/graphql"
-documents: "src/**/*.{ts,tsx}"
+schema: 'http://localhost:3000/graphql'
+documents: 'src/**/*.{ts,tsx}'
 generates:
   src/components/apollo/generated_components_typings.tsx:
-    schema: "src/schema/local.graphql"
+    schema: 'src/schema/local.graphql'
     plugins:
-      - add: '/* eslint-disable */'
-      - "typescript"
-      - "typescript-operations"
-      - "fragment-matcher"
+      - add:
+          content: '/* eslint-disable */'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'fragment-matcher'
     config:
       withHOC: false
