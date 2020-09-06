@@ -45,6 +45,7 @@ export function Tree({ node, onToggle, level = 0 }: INode) {
           path={path}
           onClickOutside={() => setIsNewFileOpen(false)}
           onToggle={onToggle}
+          action="create"
         />
       )}
     </>

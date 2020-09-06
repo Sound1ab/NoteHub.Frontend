@@ -36,6 +36,7 @@ export function Sidebar() {
           <FileInput
             onClickOutside={() => setIsNewFileOpen(false)}
             onToggle={onToggle}
+            action="create"
           />
         )}
       </GrowWrapper>
