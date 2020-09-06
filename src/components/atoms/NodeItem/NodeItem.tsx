@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/react-hooks'
-import React, { ReactNode, useRef } from 'react'
+import React, { ReactNode, useRef, useState } from 'react'
 import { css } from 'styled-components'
 
 import { CONTAINER_ID } from '../../../enums'
@@ -13,6 +13,7 @@ import { ITreeNode } from '../../../types'
 import { scrollIntoView } from '../../../utils'
 import { Fade } from '../../animation'
 import { Node_Type } from '../../apollo/generated_components_typings'
+import { FileInput } from '../../molecules'
 import { Dropdown, Icon } from '..'
 
 interface INodeItem {
@@ -37,6 +38,7 @@ export function NodeItem({
   const { currentPath } = useReadCurrentPath()
   const isActive = currentPath === node.path
   const { toggled, name, type } = node
+  const [isRenaming, setIsRenaming] = useState(false)
 
   function handleSetIsNewFileOpen(
     e: React.MouseEvent<HTMLElement, MouseEvent>
@@ -45,6 +47,14 @@ export function NodeItem({
     openFileInput()
     setOpen(false)
     onToggle(node.path, true)
+  }
+
+  function handleSetIsRenamingOpen(
+    e: React.MouseEvent<HTMLElement, MouseEvent>
+  ) {
+    e.stopPropagation()
+    setOpen(false)
+    setIsRenaming(true)
   }
 
   function handleToggleMenu(
@@ -88,24 +98,27 @@ export function NodeItem({
     })
   }
 
-  const dropdownItems =
+  const dropdownItems = [
     node.type === Node_Type.File
-      ? [
-          {
-            icon: 'trash' as const,
-            prefix: 'fa' as const,
-            label: 'Delete file',
-            onClick: handleDeleteFile,
-          },
-        ]
-      : [
-          {
-            icon: 'edit' as const,
-            prefix: 'fa' as const,
-            label: 'Create file',
-            onClick: handleSetIsNewFileOpen,
-          },
-        ]
+      ? {
+          icon: 'trash' as const,
+          prefix: 'fa' as const,
+          label: 'Delete file',
+          onClick: handleDeleteFile,
+        }
+      : {
+          icon: 'edit' as const,
+          prefix: 'fa' as const,
+          label: 'Create file',
+          onClick: handleSetIsNewFileOpen,
+        },
+    {
+      icon: 'pen' as const,
+      prefix: 'fa' as const,
+      label: 'Rename',
+      onClick: handleSetIsRenamingOpen,
+    },
+  ]
 
   return (
     <StyledListItem>
@@ -116,33 +129,44 @@ export function NodeItem({
         type={type}
         aria-label={node.type === Node_Type.File ? 'file' : 'folder'}
       >
-        <Details>
-          {type === Node_Type.Folder && (
-            <Chevron
-              toggled={toggled}
-              size="sm"
-              icon="chevron-right"
-              prefix="fa"
-              ariaLabel="chevron"
-              onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-                onChevronClick(e, node)
-              }
-            />
-          )}
-          {type === Node_Type.Folder ? (
-            <StyledIcon size="sm" icon="folder" prefix="fa" />
-          ) : (
-            <StyledIcon size="sm" icon="file" prefix="fa" />
-          )}
-          <Heading className="Node-heading">{name}</Heading>
-        </Details>
-        <Actions onClick={handleToggleMenu}>
-          <StyledIcon
-            icon="ellipsis-h"
-            isDisabled={isOpen}
-            ariaLabel={`${name} actions`}
+        {isRenaming ? (
+          <FileInput
+            path={currentPath}
+            onClickOutside={() => setIsRenaming(false)}
+            onToggle={onToggle}
+            action="rename"
           />
-        </Actions>
+        ) : (
+          <>
+            <Details>
+              {type === Node_Type.Folder && (
+                <Chevron
+                  toggled={toggled}
+                  size="sm"
+                  icon="chevron-right"
+                  prefix="fa"
+                  ariaLabel="chevron"
+                  onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                    onChevronClick(e, node)
+                  }
+                />
+              )}
+              {type === Node_Type.Folder ? (
+                <StyledIcon size="sm" icon="folder" prefix="fa" />
+              ) : (
+                <StyledIcon size="sm" icon="file" prefix="fa" />
+              )}
+              <Heading className="Node-heading">{name}</Heading>
+            </Details>
+            <Actions onClick={handleToggleMenu}>
+              <StyledIcon
+                icon="ellipsis-h"
+                isDisabled={isOpen}
+                ariaLabel={`${name} actions`}
+              />
+            </Actions>
+          </>
+        )}
       </Wrapper>
       <Fade show={isOpen}>
         <Portal

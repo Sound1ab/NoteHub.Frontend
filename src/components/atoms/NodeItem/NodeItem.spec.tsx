@@ -27,6 +27,27 @@ describe('NodeItem', () => {
     ])
   })
 
+  it('should show and hide inline file input when renaming file or folder', async () => {
+    const { getByLabelText } = await render(
+      <MockProvider mockResolvers={resolvers}>
+        <div aria-label="outside">
+          <NodeItem
+            node={fileNodeOne}
+            onToggle={onToggle}
+            openFileInput={openFileInput}
+            level={1}
+          />
+        </div>
+      </MockProvider>
+    )
+
+    await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+
+    await fireEvent.click(getByLabelText('Rename'))
+
+    expect(getByLabelText('Input file name')).toBeInTheDocument()
+  })
+
   describe('when a folder', () => {
     it('should call onToggle with true if node is not already selected', async () => {
       const { getByLabelText } = await render(
