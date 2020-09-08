@@ -56,36 +56,6 @@ const fileDepthTwo = {
     'https://api.github.com/repos/Sound1ab/NoteHub.Test/git/blobs/1385f264afb75a56a5bec74243be9b367ba4ca08',
 }
 
-export const createNextNode = {
-  children: [
-    {
-      children: [],
-      name: 'OTHER_MOCK_FOLDER',
-      path: `OTHER_MOCK_FOLDER`,
-      toggled: false,
-      type: Node_Type.Folder,
-    },
-    {
-      children: [
-        {
-          name: 'MOCK_FILE.md',
-          path: `MOCK_FOLDER/MOCK_FILE.md`,
-          toggled: false,
-          type: Node_Type.File,
-        },
-      ],
-      name: 'MOCK_FOLDER',
-      path: `MOCK_FOLDER`,
-      toggled: false,
-      type: Node_Type.Folder,
-    },
-  ],
-  name: 'Notes',
-  path: '',
-  toggled: true,
-  type: Node_Type.Folder,
-}
-
 describe('createNodes', () => {
   it('should create a flattened object of nodes with children', async () => {
     const githubTreeData = [
@@ -100,6 +70,7 @@ describe('createNodes', () => {
 
     expect(treeObject).toEqual([
       {
+        isOptimistic: false,
         name: 'README.md',
         path: `README.md`,
         toggled: false,
@@ -108,6 +79,7 @@ describe('createNodes', () => {
       {
         children: [
           {
+            isOptimistic: false,
             name: 'file.md',
             path: `folder/file.md`,
             toggled: false,
@@ -116,18 +88,21 @@ describe('createNodes', () => {
           {
             children: [
               {
+                isOptimistic: false,
                 name: 'file2.md',
                 path: `folder/folder2/file2.md`,
                 toggled: false,
                 type: Node_Type.File,
               },
             ],
+            isOptimistic: false,
             name: 'folder2',
             path: `folder/folder2`,
             toggled: false,
             type: Node_Type.Folder,
           },
         ],
+        isOptimistic: false,
         name: 'folder',
         path: `folder`,
         toggled: false,
@@ -143,6 +118,7 @@ describe('createNodes', () => {
 
     expect(treeObject).toEqual([
       {
+        isOptimistic: false,
         name: 'README.md',
         path: `README.md`,
         toggled: false,
@@ -151,6 +127,7 @@ describe('createNodes', () => {
       {
         children: [
           {
+            isOptimistic: false,
             name: 'file.md',
             path: `folder/file.md`,
             toggled: false,
@@ -159,18 +136,21 @@ describe('createNodes', () => {
           {
             children: [
               {
+                isOptimistic: false,
                 name: 'file2.md',
                 path: `folder/folder2/file2.md`,
                 toggled: false,
                 type: Node_Type.File,
               },
             ],
+            isOptimistic: false,
             name: 'folder2',
             path: `folder/folder2`,
             toggled: false,
             type: Node_Type.Folder,
           },
         ],
+        isOptimistic: false,
         name: 'folder',
         path: `folder`,
         toggled: false,
@@ -187,6 +167,7 @@ describe('insertNodeIntoParentNode', () => {
       path: 'MOCK_PATH',
       toggled: true,
       type: 'MOCK_TYPE',
+      isOptimistic: false,
     }
 
     expect(() =>
@@ -218,12 +199,14 @@ describe('insertNodeIntoParentNode', () => {
           path: `OTHER_MOCK_FOLDER`,
           toggled: false,
           type: Node_Type.Folder,
+          isOptimistic: false,
         },
       ],
       name: 'Notes',
       path: '',
       toggled: true,
       type: Node_Type.Folder,
+      isOptimistic: false,
     }
 
     insertNodeIntoParentNode({
@@ -233,13 +216,50 @@ describe('insertNodeIntoParentNode', () => {
       listOfToggledPaths: new Set(),
     })
 
-    expect(node).toEqual(createNextNode)
+    expect(node).toEqual({
+      children: [
+        {
+          children: [],
+          name: 'OTHER_MOCK_FOLDER',
+          path: `OTHER_MOCK_FOLDER`,
+          toggled: false,
+          type: Node_Type.Folder,
+          isOptimistic: false,
+        },
+        {
+          children: [
+            {
+              name: 'MOCK_FILE.md',
+              path: `MOCK_FOLDER/MOCK_FILE.md`,
+              toggled: false,
+              type: Node_Type.File,
+              isOptimistic: false,
+            },
+          ],
+          name: 'MOCK_FOLDER',
+          path: `MOCK_FOLDER`,
+          toggled: false,
+          type: Node_Type.Folder,
+          isOptimistic: false,
+        },
+      ],
+      name: 'Notes',
+      path: '',
+      toggled: true,
+      type: Node_Type.Folder,
+      isOptimistic: false,
+    })
   })
 })
 
 describe('createFolderNode', () => {
   it('should create a folder node', async () => {
-    const folderNode = createFolderNode('MOCK_FOLDER', rootFolder.path, false)
+    const folderNode = createFolderNode(
+      'MOCK_FOLDER',
+      rootFolder.path,
+      false,
+      false
+    )
 
     expect(folderNode).toEqual({
       children: [],
@@ -247,19 +267,21 @@ describe('createFolderNode', () => {
       path: 'folder',
       toggled: false,
       type: Node_Type.Folder,
+      isOptimistic: false,
     })
   })
 })
 
 describe('createFileNode', () => {
   it('should create a file node', async () => {
-    const folderNode = createFileNode('MOCK_FILE.md', rootFile.path)
+    const folderNode = createFileNode('MOCK_FILE.md', rootFile.path, false)
 
     expect(folderNode).toEqual({
       name: 'MOCK_FILE.md',
       path: 'README.md',
       toggled: false,
       type: Node_Type.File,
+      isOptimistic: false,
     })
   })
 })

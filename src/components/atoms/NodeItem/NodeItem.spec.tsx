@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/react-hooks'
 import React from 'react'
 
 import { useDeleteFile } from '../../../hooks'
@@ -11,6 +12,14 @@ import { MockProvider } from '../../utility'
 import { NodeItem } from './NodeItem'
 
 jest.mock('../../../hooks/file/useDeleteFile')
+jest.mock('@apollo/react-hooks', () => {
+  const originalModule = jest.requireActual('@apollo/react-hooks')
+
+  return {
+    ...originalModule,
+    useApolloClient: jest.fn(),
+  }
+})
 
 describe('NodeItem', () => {
   const onToggle = jest.fn()
@@ -19,12 +28,17 @@ describe('NodeItem', () => {
 
   const deleteFile = jest.fn()
 
+  const writeData = jest.fn()
+
   beforeEach(() => {
     jest.resetAllMocks()
     ;(useDeleteFile as jest.Mock).mockImplementation(() => [
       deleteFile,
       { error: undefined },
     ])
+    ;(useApolloClient as jest.Mock).mockReturnValue({
+      writeData,
+    })
   })
 
   it('should show and hide inline file input when renaming file or folder', async () => {
@@ -46,6 +60,48 @@ describe('NodeItem', () => {
     await fireEvent.click(getByLabelText('Rename'))
 
     expect(getByLabelText('Input file name')).toBeInTheDocument()
+  })
+
+  it('should update the currentPath with clicked node path', async () => {
+    const { getByText } = await render(
+      <MockProvider mockResolvers={resolvers}>
+        <div aria-label="outside">
+          <NodeItem
+            node={fileNodeOne}
+            onToggle={onToggle}
+            openFileInput={openFileInput}
+            level={1}
+          />
+        </div>
+      </MockProvider>
+    )
+
+    await fireEvent.click(getByText('MOCK_FILE_PATH_1.md'))
+
+    expect(writeData).toBeCalledWith({
+      data: { currentPath: fileNodeOne.path },
+    })
+  })
+
+  it('should disable clicks if optimistically updated', async () => {
+    const { getByText } = await render(
+      <MockProvider mockResolvers={resolvers}>
+        <div aria-label="outside">
+          <NodeItem
+            node={{ ...fileNodeOne, isOptimistic: true }}
+            onToggle={onToggle}
+            openFileInput={openFileInput}
+            level={1}
+          />
+        </div>
+      </MockProvider>
+    )
+
+    await fireEvent.click(getByText('MOCK_FILE_PATH_1.md'))
+
+    expect(writeData).not.toBeCalledWith({
+      data: { currentPath: fileNodeOne.path },
+    })
   })
 
   describe('when a folder', () => {

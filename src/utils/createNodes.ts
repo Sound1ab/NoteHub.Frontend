@@ -5,22 +5,33 @@ import {
 import { ITreeNode } from '../types'
 import { isFile } from './isFile'
 
-export function createFolderNode(name: string, path: string, toggled: boolean) {
+export function createFolderNode(
+  name: string,
+  path: string,
+  toggled: boolean,
+  isOptimistic: boolean
+) {
   return {
     children: [],
     name,
     path,
     toggled,
     type: Node_Type.Folder,
+    isOptimistic,
   }
 }
 
-export function createFileNode(name: string, path: string) {
+export function createFileNode(
+  name: string,
+  path: string,
+  isOptimistic: boolean
+) {
   return {
     name,
     path,
     toggled: false,
     type: Node_Type.File,
+    isOptimistic,
   }
 }
 
@@ -32,13 +43,14 @@ function createNode(
   type: Node_Type,
   slug: string,
   path: string,
-  listOfToggledPaths: Set<string>
+  listOfToggledPaths: Set<string>,
+  isOptimistic = false
 ) {
   const isFile = type === Node_Type.File
 
   return isFile
-    ? createFileNode(slug, path)
-    : createFolderNode(slug, path, listOfToggledPaths.has(path))
+    ? createFileNode(slug, path, isOptimistic)
+    : createFolderNode(slug, path, listOfToggledPaths.has(path), isOptimistic)
 }
 
 interface IInsertNodes {
@@ -61,11 +73,15 @@ export function insertNodeIntoParentNode({
 
     const children = parentNode?.children ? parentNode.children : []
 
+    // Setting the sha value to optimistic during moveFile update function
+    // optimistic update. This allows us to determine if the change is in flight
+    // in NodeItem
     const node = createNode(
       gitNode.type,
       slug,
       gitNode.path,
-      listOfToggledPaths
+      listOfToggledPaths,
+      gitNode.sha === 'optimistic'
     )
 
     parentNode.children = [...children, node]
@@ -84,7 +100,7 @@ export function insertNodeIntoParentNode({
   const nextPath = currentPath ? `${currentPath}/${slug}` : slug
 
   // If no next node the optimistic update has run and generated a file without
-  // a parent gitNode. Create one and retry.
+  // a parent gitNode. Create parent node and retry.
   if (!nextNode) {
     const parentPath = parentNode.path
       ? `${parentNode.path}/${nextPath}`
@@ -92,7 +108,12 @@ export function insertNodeIntoParentNode({
 
     parentNode.children = [
       ...parentNode.children,
-      createFolderNode(slug, parentPath, listOfToggledPaths.has(parentPath)),
+      createFolderNode(
+        slug,
+        parentPath,
+        listOfToggledPaths.has(parentPath),
+        false // Child is optimistic not this node
+      ),
     ]
 
     return insertNodeIntoParentNode({

@@ -3,12 +3,14 @@ import {
   GitNode,
   MutationCreateFileArgs,
   MutationDeleteFileArgs,
+  MutationMoveFileArgs,
   MutationUpdateFileArgs,
   Node_Type,
   QueryReadFileArgs,
   QueryReadGithubUserAccessTokenArgs,
 } from '../components/apollo/generated_components_typings'
 import { ITreeNode } from '../types'
+import { extractFilename } from '../utils'
 
 export const folderGitNode: GitNode = {
   type: Node_Type.Folder,
@@ -37,6 +39,7 @@ export const folderNode: ITreeNode = {
   toggled: false,
   path: folderGitNode.path,
   children: [],
+  isOptimistic: false,
 }
 
 export const fileNodeOne: ITreeNode = {
@@ -45,6 +48,7 @@ export const fileNodeOne: ITreeNode = {
   toggled: false,
   path: fileGitNodeOne.path,
   children: [],
+  isOptimistic: false,
 }
 
 export const fileNodeTwo: ITreeNode = {
@@ -53,6 +57,7 @@ export const fileNodeTwo: ITreeNode = {
   toggled: false,
   path: fileGitNodeTwo.path,
   children: [],
+  isOptimistic: false,
 }
 
 export const files = [
@@ -145,6 +150,19 @@ export const resolvers = {
         url: 'MOCK_URL',
       }
       return files[fileIndex]
+    },
+    moveFile: (_: any, { input }: MutationMoveFileArgs) => {
+      const filename = extractFilename(input.newPath)
+
+      return {
+        filename,
+        path: input.newPath,
+        content: 'MOCK_CONTENT_2',
+        excerpt: 'MOCK_EXCERPT_2',
+        sha: 'MOCK_SHA_2',
+        type: Node_Type.File,
+        url: 'MOCK_URL',
+      }
     },
   }),
 }

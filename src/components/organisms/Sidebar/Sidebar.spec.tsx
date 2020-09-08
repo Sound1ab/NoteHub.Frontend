@@ -154,4 +154,41 @@ describe('Sidebar', () => {
       expect(queryByText('MOCK_FOLDER_PATH')).not.toBeInTheDocument()
     })
   })
+
+  describe('when renaming a file or folder', () => {
+    it('should move the file or folder to a new name', async () => {
+      const { getByText, getByLabelText, queryByText } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <Sidebar />
+        </MockProvider>
+      )
+
+      // open folder
+      await fireEvent.click(getByText('MOCK_FOLDER_PATH'))
+
+      expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
+
+      // open file menu
+      await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+
+      await fireEvent.click(getByLabelText('Rename'))
+
+      // Insert file name into input and submit
+      const input = getByLabelText('Input file name')
+
+      await fireEvent.change(input, {
+        target: { value: 'NEW_MOCK_FILE_PATH' },
+      })
+
+      expect(input).toHaveAttribute('value', 'NEW_MOCK_FILE_PATH')
+
+      const form = getByLabelText('File name form')
+
+      await fireEvent.submit(form)
+
+      expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
+
+      expect(getByText('NEW_MOCK_FILE_PATH.md')).toBeInTheDocument()
+    })
+  })
 })

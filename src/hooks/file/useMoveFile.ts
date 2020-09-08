@@ -1,6 +1,6 @@
 import { MutationResult } from '@apollo/react-common'
 import { ExecutionResult } from '@apollo/react-common/lib/types/types'
-import { useMutation } from '@apollo/react-hooks'
+import { useApolloClient, useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
 import {
@@ -12,7 +12,7 @@ import {
 } from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
 import { extractFilename } from '../../utils'
-import { ReadNodesDocument, useReadFile } from '..'
+import { ReadNodesDocument, useReadCurrentPath } from '..'
 
 export const MoveFileDocument = gql`
   ${FileFragment}
@@ -30,7 +30,9 @@ export function useMoveFile(): [
   ) => Promise<ExecutionResult<MoveFileMutation>>,
   MutationResult<MoveFileMutation>
 ] {
-  const { file } = useReadFile()
+  let oldPath: string
+  const { currentPath } = useReadCurrentPath()
+  const client = useApolloClient()
 
   const [mutation, mutationResult] = useMutation<
     MoveFileMutation,
@@ -56,14 +58,26 @@ export function useMoveFile(): [
           readNodes: {
             ...result.readNodes,
             nodes: result.readNodes.nodes.map(node => {
-              return node.path === file?.path
-                ? { ...movedFile, __typename: 'GitNode' }
+              return node.path === oldPath
+                ? {
+                    ...movedFile,
+                    __typename: 'GitNode',
+                  }
                 : node
             }),
           },
         },
         query: ReadNodesDocument,
       })
+
+      // If the file is currently selected, make sure to update the cache
+      // to the new file name after server change so the item stays activated
+      // in list
+      if (oldPath === currentPath && movedFile.sha !== 'optimistic') {
+        client.writeData({
+          data: { currentPath: movedFile.path },
+        })
+      }
     },
     errorPolicy: 'all',
   })
@@ -73,11 +87,11 @@ export function useMoveFile(): [
       throw new Error('Move file: no path provided')
     }
 
+    // Needed to update the cache in update function
+    oldPath = path
+
     const filename = extractFilename(newPath)
 
-    // client.writeData({
-    //   data: { currentPath: null },
-    // })
     return mutation({
       variables: {
         input: {

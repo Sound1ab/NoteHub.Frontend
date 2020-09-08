@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/react-hooks'
-import React, { ReactNode, useRef, useState } from 'react'
+import React, { ReactNode, SyntheticEvent, useRef, useState } from 'react'
 import { css } from 'styled-components'
 
 import { CONTAINER_ID } from '../../../enums'
@@ -80,7 +80,19 @@ export function NodeItem({
     onToggle(node.path, !node.toggled)
   }
 
-  function onClick(node: ITreeNode) {
+  function onClick(e: SyntheticEvent, node: ITreeNode) {
+    // Enter event from form submission when renaming file propogates down
+    // to this click event. We don't want to call this if the event came from
+    // the rename form.
+    if ((e.target as any).form) {
+      return
+    }
+
+    // Don't allow any clicks on the item while request is still in flight
+    if (node.isOptimistic) {
+      return
+    }
+
     if (node.type === Node_Type.File) {
       scrollIntoView(CONTAINER_ID.EDITOR)
     }
@@ -123,15 +135,17 @@ export function NodeItem({
   return (
     <StyledListItem>
       <Wrapper
+        isDisabled={node.isOptimistic}
+        isActive={isActive}
         level={level}
-        onClick={() => onClick(node)}
+        onClick={e => onClick(e, node)}
         ref={containerRef}
         type={type}
         aria-label={node.type === Node_Type.File ? 'file' : 'folder'}
       >
         {isRenaming ? (
           <FileInput
-            path={currentPath}
+            path={node.path}
             onClickOutside={() => setIsRenaming(false)}
             onToggle={onToggle}
             action="rename"
@@ -156,7 +170,9 @@ export function NodeItem({
               ) : (
                 <StyledIcon size="sm" icon="file" prefix="fa" />
               )}
-              <Heading className="Node-heading">{name}</Heading>
+              <Heading isDisabled={node.isOptimistic} className="Node-heading">
+                {name}
+              </Heading>
             </Details>
             <Actions onClick={handleToggleMenu}>
               <StyledIcon
@@ -185,7 +201,13 @@ const StyledListItem = styled.li`
   margin: 0;
 `
 
-const Wrapper = styled.div<Pick<INodeItem, 'level'> & { type: string }>`
+const Wrapper = styled.div<
+  Pick<INodeItem, 'level'> & {
+    type: string
+    isActive: boolean
+    isDisabled: boolean
+  }
+>`
   position: relative;
   display: flex;
   padding-left: ${({ theme, level, type }) => {
@@ -197,7 +219,9 @@ const Wrapper = styled.div<Pick<INodeItem, 'level'> & { type: string }>`
     const additionalPadding = type === Node_Type.File ? theme.spacing.s : '0px'
     return css`calc(calc(${level} * ${theme.spacing.s}) + ${additionalPadding})`
   }};
-  cursor: pointer;
+  cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
+  background-color: ${({ theme, isActive }) =>
+    isActive ? theme.colors.background.secondary : 'transparent'};
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
@@ -219,8 +243,11 @@ const Details = styled.div`
   }
 `
 
-const Heading = styled.h4`
-  color: ${({ theme }) => theme.colors.text.primary};
+const Heading = styled.h4<{
+  isDisabled: boolean
+}>`
+  color: ${({ theme, isDisabled }) =>
+    isDisabled ? theme.colors.text.secondary : theme.colors.text.primary};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

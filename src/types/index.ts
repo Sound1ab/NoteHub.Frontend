@@ -11,4 +11,5 @@ export interface ITreeNode {
   path: string
   type: string
   children?: ITreeNode[]
+  isOptimistic: boolean
 }
