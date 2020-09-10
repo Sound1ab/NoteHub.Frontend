@@ -41,7 +41,7 @@ describe('NodeItem', () => {
     })
   })
 
-  it('should show and hide inline file input when renaming file or folder', async () => {
+  it('should show and hide inline file input when renaming file', async () => {
     const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <div aria-label="outside">

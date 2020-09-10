@@ -111,25 +111,29 @@ export function NodeItem({
   }
 
   const dropdownItems = [
-    node.type === Node_Type.File
-      ? {
-          icon: 'trash' as const,
-          prefix: 'fa' as const,
-          label: 'Delete file',
-          onClick: handleDeleteFile,
-        }
-      : {
-          icon: 'edit' as const,
-          prefix: 'fa' as const,
-          label: 'Create file',
-          onClick: handleSetIsNewFileOpen,
-        },
-    {
-      icon: 'pen' as const,
-      prefix: 'fa' as const,
-      label: 'Rename',
-      onClick: handleSetIsRenamingOpen,
-    },
+    ...(node.type === Node_Type.File
+      ? [
+          {
+            icon: 'trash' as const,
+            prefix: 'fa' as const,
+            label: 'Delete file',
+            onClick: handleDeleteFile,
+          },
+          {
+            icon: 'pen' as const,
+            prefix: 'fa' as const,
+            label: 'Rename',
+            onClick: handleSetIsRenamingOpen,
+          },
+        ]
+      : [
+          {
+            icon: 'edit' as const,
+            prefix: 'fa' as const,
+            label: 'Create file',
+            onClick: handleSetIsNewFileOpen,
+          },
+        ]),
   ]
 
   return (
