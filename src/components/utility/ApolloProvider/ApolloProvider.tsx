@@ -11,10 +11,9 @@ import { IPosition } from '../../../types'
 export interface ILocalData {
   currentRepoName: string | null
   currentPath: string | null
-  jwt: string | null
   currentTheme: COLOR_MODE | null
-  isAuthorised: boolean
   cursorPosition: IPosition
+  jwt: string | null
   accentColor: string | null
 }
 
@@ -22,13 +21,12 @@ export const localData: ILocalData = {
   currentRepoName: 'NoteHub.Notebook',
   currentPath: null,
   currentTheme: null,
-  isAuthorised: false,
-  jwt: null,
   cursorPosition: {
     ch: 0,
     line: 0,
     __typename: 'Position',
   },
+  jwt: null,
   accentColor: null,
 }
 
