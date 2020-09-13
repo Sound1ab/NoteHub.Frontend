@@ -24,6 +24,10 @@ const Style = styled.div`
     align-items: center;
     background-color: ${({ theme }) => theme.colors.company.github};
     color: ${({ theme }) => theme.colors.link.active};
+
+    * svg {
+      color: ${({ theme }) => theme.colors.text.primary};
+    }
   }
 `
 

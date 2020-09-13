@@ -1,5 +1,6 @@
 import { useApolloClient } from '@apollo/react-hooks'
 import React, { useRef } from 'react'
+import { Redirect } from 'react-router-dom'
 
 import {
   useDarkMode,
@@ -38,6 +39,13 @@ export function Profile() {
   if (called && data?.logout === 'ok') {
     client.clearStore()
     client.writeData({ data: { jwt: null } })
+    return (
+      <Redirect
+        to={{
+          pathname: '/',
+        }}
+      />
+    )
   }
 
   function handleOpen() {
