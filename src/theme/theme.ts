@@ -1,3 +1,4 @@
+import { darken, lighten } from 'polished'
 import Typography from 'typography'
 
 import { COLOR_MODE } from '../enums'
@@ -23,6 +24,9 @@ export const breakpoints = {
   HiDPIDesktop: '1440px',
 }
 
+const darkPrimary = '#1e1e1e'
+const lightPrimary = '#e2e2e2'
+
 export const colors = {
   [COLOR_MODE.LIGHT]: {
     accent: '#70dda5',
@@ -34,21 +38,17 @@ export const colors = {
       quinary: '#c1622f',
     },
     background: {
-      primary: '#ffffff',
-      secondary: '#f8f8f8',
-      tertiary: '#ffffff',
-      quaternary: '#f5f5f5',
-      quinary: '#c7c7c7',
+      primary: lightPrimary,
+      secondary: darken(0.05, lightPrimary),
+      tertiary: darken(0.07, lightPrimary),
+      quaternary: darken(0.09, lightPrimary),
+      quinary: darken(0.1, lightPrimary),
     },
-    border: '#d8d8d8',
-    link: {
-      active: '#e8e8e8',
-      hover: '#f0f0f0',
-    },
+    border: lighten(0.03, lightPrimary),
     text: {
-      primary: '#2b2b2b',
-      secondary: '#787878',
-      tertiary: '#a9a9a9',
+      primary: lighten(0.1, darkPrimary),
+      secondary: lighten(0.3, darkPrimary),
+      tertiary: lighten(0.5, darkPrimary),
     },
     company: {
       github: '#04AA51',
@@ -64,21 +64,17 @@ export const colors = {
       quinary: '#c1622f',
     },
     background: {
-      primary: '#1e1e1e',
-      secondary: '#282828',
-      tertiary: '#2b2b2b',
-      quaternary: '#3a3a3a',
-      quinary: '#484848',
+      primary: darkPrimary,
+      secondary: lighten(0.05, darkPrimary),
+      tertiary: lighten(0.07, darkPrimary),
+      quaternary: lighten(0.09, darkPrimary),
+      quinary: lighten(0.1, darkPrimary),
     },
-    border: '#141414',
-    link: {
-      active: '#e8e8e8',
-      hover: '#f0f0f0',
-    },
+    border: darken(0.03, darkPrimary),
     text: {
-      primary: '#d6d4d4',
-      secondary: '#a9a9a9',
-      tertiary: '#787878',
+      primary: darken(0.1, lightPrimary),
+      secondary: darken(0.3, lightPrimary),
+      tertiary: darken(0.5, lightPrimary),
     },
     company: {
       github: '#04AA51',

@@ -23,7 +23,7 @@ const Style = styled.div`
     justify-content: flex-start;
     align-items: center;
     background-color: ${({ theme }) => theme.colors.company.github};
-    color: ${({ theme }) => theme.colors.link.active};
+    color: #fff;
 
     * svg {
       color: ${({ theme }) => theme.colors.text.primary};
