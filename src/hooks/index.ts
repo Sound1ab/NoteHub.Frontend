@@ -1,4 +1,3 @@
-export * from './utils/useLocalStorage'
 export * from './utils/useModalToggle'
 export * from './utils/useClickOutside'
 export * from './utils/useDarkMode'
