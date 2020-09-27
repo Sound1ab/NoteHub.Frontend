@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/react-hooks'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import { useLogin } from '../../../hooks'
@@ -35,12 +35,16 @@ export function Login() {
   const client = useApolloClient()
   const { jwt, loading } = useLogin()
 
+  useEffect(() => {
+    if (!jwt) {
+      return
+    }
+
+    client.writeData({ data: { jwt } })
+  }, [jwt])
+
   if (loading) {
     return null
-  }
-
-  if (jwt) {
-    client.writeData({ data: { jwt } })
   }
 
   return jwt ? (
