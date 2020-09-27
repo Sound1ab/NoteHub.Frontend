@@ -44,7 +44,7 @@ function removeNode(cache: DataProxy, data?: DeleteFileMutation | null) {
       readNodes: {
         ...result.readNodes,
         nodes: result.readNodes.nodes.filter(
-          gitNode => gitNode.path !== file.path
+          (gitNode) => gitNode.path !== file.path
         ),
       },
     },
@@ -60,7 +60,7 @@ function removeFile(cache: any, data?: DeleteFileMutation | null) {
   }
 
   Object.keys(cache.data.data).forEach(
-    key => key.match(/^\$ROOT_QUERY.readFile/) && cache.data.delete(key)
+    (key) => key.match(/^\$ROOT_QUERY.readFile/) && cache.data.delete(key)
   )
 }
 

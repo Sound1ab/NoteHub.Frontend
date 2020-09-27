@@ -7,7 +7,7 @@ import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { Dashboard } from './Dashboard'
 
-jest.mock('react-simplemde-editor', function() {
+jest.mock('react-simplemde-editor', function () {
   return {
     __esModule: true,
     default({ value }: any) {

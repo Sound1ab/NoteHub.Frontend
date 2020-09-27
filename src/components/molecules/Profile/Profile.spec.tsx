@@ -53,7 +53,7 @@ describe('Profile', () => {
     expect(getByAltText('avatar')).toHaveAttribute('src', user.avatar_url)
   })
 
-  describe('Dropdown', function() {
+  describe('Dropdown', function () {
     it('should clear apollo store and deauth use when they logout', async () => {
       ;(useApolloClient as jest.Mock).mockReturnValue({
         clearStore,

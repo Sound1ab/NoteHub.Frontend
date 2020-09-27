@@ -45,7 +45,7 @@ export function MarkdownEditor() {
       <SimpleMDE
         key={file?.path}
         className="MarkdownEditor-wrapper"
-        onChange={value => updateFile(currentPath, value)}
+        onChange={(value) => updateFile(currentPath, value)}
         value={file?.content ?? ''}
         getLineAndCursor={handleSetMarkdownCursorPosition}
         options={{
@@ -57,8 +57,9 @@ export function MarkdownEditor() {
               <ReactMarkdown
                 source={text}
                 renderers={{
-                  code: props => CodeRenderer({ ...props, inline: false }),
-                  inlineCode: props => CodeRenderer({ ...props, inline: true }),
+                  code: (props) => CodeRenderer({ ...props, inline: false }),
+                  inlineCode: (props) =>
+                    CodeRenderer({ ...props, inline: true }),
                 }}
               />
             )

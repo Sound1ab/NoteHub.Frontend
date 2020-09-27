@@ -31,7 +31,7 @@ export function useDeleteRepo(): [
     DeleteRepoMutation,
     DeleteRepoMutationVariables
   >(DeleteRepoDocument, {
-    update: cache => {
+    update: (cache) => {
       cache.writeQuery<ReadRepoQuery, ReadRepoQueryVariables>({
         data: {
           readRepo: null,

@@ -12,7 +12,7 @@ jest.mock('../../../hooks/file/useReadFile')
 
 afterEach(cleanup)
 
-jest.mock('react-simplemde-editor', function() {
+jest.mock('react-simplemde-editor', function () {
   return {
     __esModule: true,
     default({ value }: any) {

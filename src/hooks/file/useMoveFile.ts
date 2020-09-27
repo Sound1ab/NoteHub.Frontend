@@ -57,7 +57,7 @@ export function useMoveFile(): [
         data: {
           readNodes: {
             ...result.readNodes,
-            nodes: result.readNodes.nodes.map(node => {
+            nodes: result.readNodes.nodes.map((node) => {
               return node.path === oldPath
                 ? {
                     ...movedFile,

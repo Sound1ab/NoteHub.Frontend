@@ -27,7 +27,7 @@ export function Sidebar() {
     <StyledSidebar id={CONTAINER_ID.SIDEBAR}>
       <GrowWrapper>
         {gitNodes &&
-          createNodes(gitNodes, listOfToggledPaths).map(node => (
+          createNodes(gitNodes, listOfToggledPaths).map((node) => (
             <List key={node.name}>
               <Tree key={node.name} node={node} onToggle={onToggle} />
             </List>

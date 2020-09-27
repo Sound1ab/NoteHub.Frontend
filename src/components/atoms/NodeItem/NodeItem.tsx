@@ -61,7 +61,7 @@ export function NodeItem({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) {
     e.stopPropagation()
-    setOpen(isOpen => !isOpen)
+    setOpen((isOpen) => !isOpen)
   }
 
   async function handleDeleteFile() {
@@ -142,7 +142,7 @@ export function NodeItem({
         isDisabled={node.isOptimistic}
         isActive={isActive}
         level={level}
-        onClick={e => onClick(e, node)}
+        onClick={(e) => onClick(e, node)}
         ref={containerRef}
         type={type}
         aria-label={node.type === Node_Type.File ? 'file' : 'folder'}

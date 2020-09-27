@@ -24,7 +24,7 @@ Remove images: `docker rmi $(docker ps -q)`
 
 ## Production
 
-AWS [Lambda](https://aws.amazon.com/lambda/) and [APIGateway](https://aws.amazon.com/api-gateway/) are used with [serverless](https://serverless.com/) to host the API in production. 
+AWS [Lambda](https://aws.amazon.com/lambda/) and [APIGateway](https://aws.amazon.com/api-gateway/) are used with [serverless](https://serverless.com/) to host the API in production.
 
 ## CircleCI
 

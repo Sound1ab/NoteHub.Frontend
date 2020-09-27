@@ -29,7 +29,7 @@ export function Tree({ node, onToggle, level = 0 }: INode) {
       >
         {toggled && children && children?.length > 0 && (
           <List>
-            {children.map(childNode => (
+            {children.map((childNode) => (
               <Tree
                 node={childNode}
                 onToggle={onToggle}

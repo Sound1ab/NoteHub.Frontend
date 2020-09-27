@@ -42,7 +42,7 @@ export function FileInput({
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target
 
-    setForm(prevState => ({
+    setForm((prevState) => ({
       ...prevState,
       name: value,
     }))

@@ -36,7 +36,7 @@ export function createFileNode(
 }
 
 function getNode(nodes: ITreeNode[], slug: string) {
-  return nodes.find(node => node.name === slug)
+  return nodes.find((node) => node.name === slug)
 }
 
 function createNode(
