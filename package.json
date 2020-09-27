@@ -48,7 +48,7 @@
     "apollo-link-http": "^1.5.16",
     "graphql-tag": "^2.10.1",
     "react": "^16.8.4",
-    "react-content-loader": "^4.2.1",
+    "react-content-loader": "^5.1.2",
     "react-dom": "^16.8.4",
     "react-focus-lock": "^2.2.1",
     "react-markdown": "^4.3.1",
