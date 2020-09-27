@@ -1,7 +1,9 @@
 import '@testing-library/jest-dom/extend-expect'
 
 import { useApolloClient } from '@apollo/react-hooks'
+import { createMemoryHistory } from 'history'
 import React from 'react'
+import { Router } from 'react-router-dom'
 
 import { resolvers, user } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
@@ -58,9 +60,13 @@ describe('Profile', () => {
         writeData,
       })
 
+      const history = createMemoryHistory()
+
       const { getByAltText, getByLabelText } = await render(
         <MockProvider mockResolvers={resolvers}>
-          <Profile />
+          <Router history={history}>
+            <Profile />
+          </Router>
         </MockProvider>
       )
 

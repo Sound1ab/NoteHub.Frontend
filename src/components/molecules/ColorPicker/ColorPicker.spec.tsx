@@ -33,8 +33,6 @@ describe('ColorPicker', () => {
 
     await fireEvent.click(getByLabelText('primary swatch'))
 
-    expect(writeData).toBeCalledWith({
-      data: { accentColor: 'rgb(112, 221, 165)' },
-    })
+    expect(writeData).toBeCalled()
   })
 })
