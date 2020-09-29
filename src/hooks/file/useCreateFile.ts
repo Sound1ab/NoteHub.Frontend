@@ -78,7 +78,7 @@ export function useCreateFile(): [
     return mutation({
       variables: {
         input: {
-          content: content ? content : `# ${name}`,
+          content: content ? content : `# ${filename}`,
           path,
         },
       },
@@ -86,9 +86,9 @@ export function useCreateFile(): [
         __typename: 'Mutation',
         createFile: {
           __typename: 'File',
-          filename: `${filename}.md`,
+          filename,
           path,
-          content: `# ${name}`,
+          content: `# ${filename}`,
           excerpt: null,
           sha: 'optimistic',
           type: Node_Type.File,

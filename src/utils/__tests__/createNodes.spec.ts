@@ -158,6 +158,54 @@ describe('createNodes', () => {
       },
     ])
   })
+
+  it('should handle duplicate filenames at the top level', async () => {
+    const githubTreeData = [rootFile, rootFile, fileDepthOne, fileDepthTwo]
+
+    const treeObject = createNodes(githubTreeData, new Set())
+
+    expect(treeObject).toEqual([
+      {
+        isOptimistic: false,
+        name: 'README.md',
+        path: `README.md`,
+        toggled: false,
+        type: Node_Type.File,
+      },
+      {
+        children: [
+          {
+            isOptimistic: false,
+            name: 'file.md',
+            path: `folder/file.md`,
+            toggled: false,
+            type: Node_Type.File,
+          },
+          {
+            children: [
+              {
+                isOptimistic: false,
+                name: 'file2.md',
+                path: `folder/folder2/file2.md`,
+                toggled: false,
+                type: Node_Type.File,
+              },
+            ],
+            isOptimistic: false,
+            name: 'folder2',
+            path: `folder/folder2`,
+            toggled: false,
+            type: Node_Type.Folder,
+          },
+        ],
+        isOptimistic: false,
+        name: 'folder',
+        path: `folder`,
+        toggled: false,
+        type: Node_Type.Folder,
+      },
+    ])
+  })
 })
 
 describe('insertNodeIntoParentNode', () => {

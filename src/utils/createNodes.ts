@@ -145,6 +145,12 @@ export function createNodes(
 
     const parentNode = getNode(acc, rootSlug)
 
+    // Oops we've create two files with the same name at the top level
+    // lets just ignore that and let the graphql error show
+    if (isFile(parentNode?.path)) {
+      return acc
+    }
+
     if (parentNode) {
       insertNodeIntoParentNode({
         path: restOfPath,
