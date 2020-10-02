@@ -5,11 +5,11 @@ import { useReadNodes } from '../../../hooks'
 import { styled } from '../../../theme'
 import { createNodes } from '../../../utils'
 import { Icon, List } from '../../atoms'
-import { FileInput, Tree } from '../../molecules'
+import { FileInput, Tree, TreeSkeleton } from '../../molecules'
 
 export function Sidebar() {
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
-  const { gitNodes } = useReadNodes()
+  const { gitNodes, loading } = useReadNodes()
   const [listOfToggledPaths, setListOfToggledPaths] = useState<Set<string>>(
     new Set([])
   )
@@ -25,21 +25,25 @@ export function Sidebar() {
 
   return (
     <StyledSidebar id={CONTAINER_ID.SIDEBAR}>
-      <GrowWrapper>
-        {gitNodes &&
-          createNodes(gitNodes, listOfToggledPaths).map((node) => (
-            <List key={node.name}>
-              <Tree key={node.name} node={node} onToggle={onToggle} />
-            </List>
-          ))}
-        {isNewFileOpen && (
-          <FileInput
-            onClickOutside={() => setIsNewFileOpen(false)}
-            onToggle={onToggle}
-            action="create"
-          />
-        )}
-      </GrowWrapper>
+      {loading ? (
+        <TreeSkeleton />
+      ) : (
+        <GrowWrapper>
+          {gitNodes &&
+            createNodes(gitNodes, listOfToggledPaths).map((node) => (
+              <List key={node.name}>
+                <Tree key={node.name} node={node} onToggle={onToggle} />
+              </List>
+            ))}
+          {isNewFileOpen && (
+            <FileInput
+              onClickOutside={() => setIsNewFileOpen(false)}
+              onToggle={onToggle}
+              action="create"
+            />
+          )}
+        </GrowWrapper>
+      )}
       <FixedWrapper>
         <NewRepoButton onClick={() => setIsNewFileOpen(true)}>
           <PlusIcon size="lg" icon={'plus-circle'} />

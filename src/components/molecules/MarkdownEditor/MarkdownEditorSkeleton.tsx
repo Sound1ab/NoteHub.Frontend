@@ -14,7 +14,7 @@ const Style = styled.div`
 
   .MarkdownEditorSkeleton-content {
     width: 100%;
-    height: 300px;
+    height: 100%;
     background-color: transparent;
   }
 `
@@ -29,13 +29,19 @@ export function MarkdownEditorSkeleton() {
         backgroundColor={colors[currentTheme].background.secondary}
         foregroundColor={colors[currentTheme].background.tertiary}
       >
-        <rect y="0" height="18" width="100%" />
-        <rect y="23" height="8" width="100%" />
-        <rect y="36" height="8" width="50%" />
-        <rect y="54" height="12" width="100%" />
-        <rect y="71" height="8" width="100%" />
-        <rect y="84" height="8" width="80%" />
-        <rect y="102" height="100" width="100%" />
+        <rect y="0" height="30" width="20%" />
+        <rect y="40" height="15" width="60%" />
+        <rect y="65" height="15" width="50%" />
+        <rect y="90" height="15" width="55%" />
+        <rect y="125" height="30" width="30%" />
+        <rect y="165" height="15" width="40%" />
+        <rect y="190" height="15" width="50%" />
+        <rect y="215" height="15" width="60%" />
+        <rect y="250" height="200" width="60%" />
+        <rect y="470" height="30" width="10%" />
+        <rect y="510" height="15" width="55%" />
+        <rect y="535" height="15" width="20%" />
+        <rect y="560" height="15" width="40%" />
       </ContentLoader>
     </Style>
   )

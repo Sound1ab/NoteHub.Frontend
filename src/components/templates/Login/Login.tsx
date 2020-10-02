@@ -26,7 +26,7 @@ const Style = styled.div`
     color: #fff;
 
     * svg {
-      color: ${({ theme }) => theme.colors.text.primary};
+      color: #fff;
     }
   }
 `
