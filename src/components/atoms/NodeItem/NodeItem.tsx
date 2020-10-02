@@ -191,7 +191,7 @@ export function NodeItem({
       <Fade show={isOpen}>
         <Portal
           domNode={containerRef.current}
-          placementAroundContainer="bottom"
+          placementAroundContainer="bottom-left"
         >
           <Dropdown ref={ref} items={dropdownItems} />
         </Portal>

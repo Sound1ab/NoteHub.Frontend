@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, Ref, forwardRef } from 'react'
 import { css } from 'styled-components'
 
 import { styled } from '../../../theme'
@@ -15,31 +15,37 @@ interface IButton {
   title?: string
 }
 
-export function Button({
-  isActive = false,
-  isDisabled = false,
-  children,
-  onClick,
-  className,
-  ariaLabel,
-  title,
-  isLoading = false,
-}: IButton) {
-  return (
-    <StyledButton
-      isActive={isActive}
-      isLoading={isLoading}
-      disabled={isDisabled}
-      className={className}
-      onClick={onClick}
-      aria-label={ariaLabel}
-      title={title}
-      as="button"
-    >
-      {isLoading ? <Icon size="sm" icon="spinner" prefix="fa" /> : children}
-    </StyledButton>
-  )
-}
+export const Button = forwardRef(
+  (
+    {
+      isActive = false,
+      isDisabled = false,
+      children,
+      onClick,
+      className,
+      ariaLabel,
+      title,
+      isLoading = false,
+    }: IButton,
+    ref: Ref<HTMLButtonElement>
+  ) => {
+    return (
+      <StyledButton
+        ref={ref}
+        isActive={isActive}
+        isLoading={isLoading}
+        disabled={isDisabled}
+        className={className}
+        onClick={onClick}
+        aria-label={ariaLabel}
+        title={title}
+        as="button"
+      >
+        {isLoading ? <Icon size="sm" icon="spinner" prefix="fa" /> : children}
+      </StyledButton>
+    )
+  }
+)
 
 interface IButtonLink {
   isActive?: boolean

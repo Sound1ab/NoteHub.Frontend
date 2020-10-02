@@ -8,6 +8,11 @@ import { Button, Dropdown, Icon } from '../../atoms'
 
 const Style = styled.div`
   position: relative;
+  display: none;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    display: inline-block;
+  }
 
   .ColorPicker-dropdown {
     position: absolute;

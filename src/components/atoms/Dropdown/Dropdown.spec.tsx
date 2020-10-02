@@ -8,6 +8,7 @@ afterEach(cleanup)
 describe('Dropdown', () => {
   const mockItemOneOnClick = jest.fn()
   const mockItemTwoOnClick = jest.fn()
+  const mockItemThreeOnClick = jest.fn()
 
   const MOCK_ITEMS = [
     {
@@ -23,6 +24,14 @@ describe('Dropdown', () => {
       onClick: mockItemTwoOnClick,
     } as const,
   ]
+
+  const MOCK_DISABLED_ITEM = {
+    icon: 'github',
+    prefix: 'fab',
+    label: 'label 3',
+    onClick: mockItemThreeOnClick,
+    isDisabled: true,
+  } as const
 
   it('should displays items and call on click handler for items', async () => {
     const { getByText, getByTitle } = await render(
@@ -40,5 +49,21 @@ describe('Dropdown', () => {
 
       expect(onClick).toBeCalled()
     }
+  })
+
+  it('should disable clicks if item is disabled', async () => {
+    const { getByText, getByTitle } = await render(
+      <Dropdown items={[...MOCK_ITEMS, MOCK_DISABLED_ITEM]} />
+    )
+
+    const itemLabel = getByText(MOCK_DISABLED_ITEM.label)
+    expect(itemLabel).toBeDefined()
+
+    const itemIcon = getByTitle(`${MOCK_DISABLED_ITEM.label} icon`)
+    expect(itemIcon).toBeDefined()
+
+    await fireEvent.click(itemLabel)
+
+    expect(MOCK_DISABLED_ITEM.onClick).not.toBeCalled()
   })
 })

@@ -26,11 +26,18 @@ const Style = styled.div<
     `};
   ${({ placementAroundContainer }) => {
     switch (placementAroundContainer) {
-      case 'bottom':
+      case 'bottom-left':
         return css`
           position: absolute;
-          top: 100%;
-          right: ${({ theme }) => theme.spacing.xxs};
+          top: calc(100% + ${({ theme }) => theme.spacing.xs});
+          right: ${({ theme }) => theme.spacing.xs};
+          z-index: 100;
+        `
+      case 'bottom-right':
+        return css`
+          position: absolute;
+          top: calc(100% + ${({ theme }) => theme.spacing.xs});
+          left: ${({ theme }) => theme.spacing.xs};
           z-index: 100;
         `
     }
@@ -56,7 +63,7 @@ export interface IPortal {
   domNode?: HTMLElement | null
   hasBackground?: boolean
   className?: string
-  placementAroundContainer?: 'bottom'
+  placementAroundContainer?: 'bottom-left' | 'bottom-right'
 }
 
 export const Portal = React.forwardRef(

@@ -5,6 +5,7 @@ import {
   faSoundcloud,
 } from '@fortawesome/free-brands-svg-icons'
 import {
+  faBars,
   faBold,
   faBook,
   faChevronDown,
@@ -22,6 +23,7 @@ import {
   faGripLinesVertical,
   faImage,
   faItalic,
+  faLink,
   faList,
   faListOl,
   faMinus,
@@ -33,11 +35,10 @@ import {
   faSignOutAlt,
   faSpinner,
   faSync,
+  faTable,
   faTimes,
   faTrash,
   faUser,
-  faLink,
-  faTable,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { ReactNode } from 'react'
 
@@ -77,7 +78,8 @@ library.add(
   faQuoteRight,
   faColumns,
   faLink,
-  faTable
+  faTable,
+  faBars
 )
 
 interface IIconProvider {

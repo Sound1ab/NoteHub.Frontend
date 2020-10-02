@@ -70,6 +70,7 @@ export type TIcons =
   | 'columns'
   | 'link'
   | 'table'
+  | 'bars'
 
 interface IIcon {
   icon: TIcons

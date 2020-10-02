@@ -1,4 +1,5 @@
 import React, { ReactNode, Ref, forwardRef } from 'react'
+import { css } from 'styled-components'
 
 import { styled } from '../../../theme'
 import { Icon, TIcons } from '..'
@@ -9,38 +10,51 @@ export interface IDropdownItem {
   onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
   prefix?: 'fa' | 'fab'
   custom?: ReactNode
+  isDisabled?: boolean
 }
 
 interface IDropdownMenuProps {
   items: IDropdownItem[]
+  trianglePosition?: 'left' | 'right'
+  onClose?: () => void
 }
 
 export const Dropdown = forwardRef(
-  ({ items }: IDropdownMenuProps, ref: Ref<HTMLUListElement>) => {
+  (
+    { items, trianglePosition = 'right', onClose }: IDropdownMenuProps,
+    ref: Ref<HTMLUListElement>
+  ) => {
     return (
       <StyledDropdown ref={ref} aria-label="dropdown">
-        <Triangle className="Dropdown-triangle" />
-        {items.map(({ custom, icon, label, onClick, prefix }) => (
+        <Triangle
+          trianglePosition={trianglePosition}
+          className="Dropdown-triangle"
+        />
+        {items.map((item) => (
           <Button
-            key={label}
+            key={item.label}
             type="button"
-            onClick={onClick}
+            onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+              onClose && onClose()
+              item.onClick?.(e)
+            }}
             className="Dropdown-item"
-            aria-label={label}
+            aria-label={item.label}
+            disabled={item.isDisabled}
           >
-            {custom ? (
-              custom
+            {item.custom ? (
+              item.custom
             ) : (
               <Item>
-                {icon && prefix && (
+                {item.icon && item.prefix && (
                   <StyledIcon
                     size="sm"
-                    icon={icon}
-                    prefix={prefix}
-                    title={`${label} icon`}
+                    icon={item.icon}
+                    prefix={item.prefix}
+                    title={`${item.label} icon`}
                   />
                 )}
-                {label}
+                {item.label}
               </Item>
             )}
           </Button>
@@ -59,7 +73,7 @@ const StyledDropdown = styled.ul`
   padding: ${({ theme }) => theme.spacing.xxs} 0;
 `
 
-const Triangle = styled.div`
+const Triangle = styled.div<Pick<IDropdownMenuProps, 'trianglePosition'>>`
   position: absolute;
   top: 0;
   right: ${({ theme }) => theme.spacing.xxs};
@@ -70,6 +84,18 @@ const Triangle = styled.div`
   border-right: ${({ theme }) => theme.spacing.xxs} solid transparent;
   border-bottom: ${({ theme }) => theme.spacing.xxs} solid
     ${({ theme }) => theme.colors.background.secondary};
+  ${({ trianglePosition }) => {
+    switch (trianglePosition) {
+      case 'left':
+        return css`
+          left: ${({ theme }) => theme.spacing.xxs};
+        `
+      case 'right':
+        return css`
+          right: ${({ theme }) => theme.spacing.xxs};
+        `
+    }
+  }};
 `
 
 const Button = styled.button`
@@ -82,6 +108,14 @@ const Button = styled.button`
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       background-color: ${({ theme }) => theme.colors.background.quinary};
+    }
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+
+    > * {
+      color: ${({ theme }) => theme.colors.text.tertiary};
     }
   }
 `
