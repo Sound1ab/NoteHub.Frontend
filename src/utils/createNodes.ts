@@ -68,6 +68,7 @@ export function insertNodeIntoParentNode({
   currentPath = '',
   listOfToggledPaths,
 }: IInsertNodes): void {
+  // We've got to the leaf node of the path
   if (path.length === 1) {
     const [slug] = path
 
@@ -162,7 +163,9 @@ export function createNodes(
       return acc
     }
 
-    if (isFile(path) && restOfPath.length > 0) {
+    const isNestedFiled = isFile(path) && restOfPath.length > 0
+
+    if (isNestedFiled) {
       // If no parentNode and its a file inside a folder, the optimistic update has
       // run and generated a file without a parent gitNode. Create a parent node
       // and insert file node. Any other missing parent nodes further along the path
