@@ -4,7 +4,21 @@ import { styled } from '../../../theme'
 import { Editor, Sidebar, Toolbar } from '../../organisms'
 import { EasyMDEProvider } from '../../utility'
 
-const Style = styled.div`
+export function Dashboard() {
+  return (
+    <Grid>
+      <EasyMDEProvider>
+        <Toolbar />
+        <MobileScroll>
+          <Sidebar />
+          <Editor />
+        </MobileScroll>
+      </EasyMDEProvider>
+    </Grid>
+  )
+}
+
+const Grid = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
@@ -20,33 +34,19 @@ const Style = styled.div`
       'toolbar toolbar'
       'sidebar editor';
   }
-
-  .Dashboard-content {
-    flex: 1;
-    display: flex;
-    overflow-x: scroll;
-    scroll-snap-type: x mandatory;
-
-    > div {
-      scroll-snap-align: start;
-    }
-
-    @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-      display: contents;
-    }
-  }
 `
 
-export function Dashboard() {
-  return (
-    <Style>
-      <EasyMDEProvider>
-        <Toolbar />
-        <div className="Dashboard-content">
-          <Sidebar />
-          <Editor />
-        </div>
-      </EasyMDEProvider>
-    </Style>
-  )
-}
+const MobileScroll = styled.div`
+  flex: 1;
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+
+  > div {
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    display: contents;
+  }
+`

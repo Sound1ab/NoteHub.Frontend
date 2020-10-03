@@ -174,9 +174,7 @@ export function NodeItem({
               ) : (
                 <StyledIcon size="sm" icon="file" prefix="fa" />
               )}
-              <Heading isDisabled={node.isOptimistic} className="Node-heading">
-                {name}
-              </Heading>
+              <Heading isDisabled={node.isOptimistic}>{name}</Heading>
             </Details>
             <Actions onClick={handleToggleMenu}>
               <StyledIcon

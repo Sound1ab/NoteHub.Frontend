@@ -2,7 +2,7 @@ import React, { ReactNode, Ref, forwardRef } from 'react'
 import { css } from 'styled-components'
 
 import { styled } from '../../../theme'
-import { Icon, TIcons } from '..'
+import { DropDownButton, Icon, TIcons } from '..'
 
 export interface IDropdownItem {
   icon?: TIcons
@@ -26,39 +26,36 @@ export const Dropdown = forwardRef(
   ) => {
     return (
       <StyledDropdown ref={ref} aria-label="dropdown">
-        <Triangle
-          trianglePosition={trianglePosition}
-          className="Dropdown-triangle"
-        />
-        {items.map((item) => (
-          <Button
-            key={item.label}
-            type="button"
-            onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-              onClose && onClose()
-              item.onClick?.(e)
-            }}
-            className="Dropdown-item"
-            aria-label={item.label}
-            disabled={item.isDisabled}
-          >
-            {item.custom ? (
-              item.custom
-            ) : (
-              <Item>
-                {item.icon && item.prefix && (
-                  <StyledIcon
-                    size="sm"
-                    icon={item.icon}
-                    prefix={item.prefix}
-                    title={`${item.label} icon`}
-                  />
-                )}
-                {item.label}
-              </Item>
-            )}
-          </Button>
-        ))}
+        <Triangle trianglePosition={trianglePosition} />
+        {items.map(
+          ({ isDisabled = false, onClick, icon, prefix, custom, label }) => (
+            <DropDownButton
+              key={label}
+              onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                onClose && onClose()
+                onClick?.(e)
+              }}
+              aria-label={label}
+              isDisabled={isDisabled}
+            >
+              {custom ? (
+                custom
+              ) : (
+                <Item>
+                  {icon && prefix && (
+                    <StyledIcon
+                      size="sm"
+                      icon={icon}
+                      prefix={prefix}
+                      title={`${label} icon`}
+                    />
+                  )}
+                  {label}
+                </Item>
+              )}
+            </DropDownButton>
+          )
+        )}
       </StyledDropdown>
     )
   }
@@ -96,28 +93,6 @@ const Triangle = styled.div<Pick<IDropdownMenuProps, 'trianglePosition'>>`
         `
     }
   }};
-`
-
-const Button = styled.button`
-  user-select: none;
-  outline: none;
-  padding: ${({ theme }) => theme.spacing.xxs}
-    ${({ theme }) => theme.spacing.xs};
-  width: 100%;
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.background.quinary};
-    }
-  }
-
-  &[disabled] {
-    cursor: not-allowed;
-
-    > * {
-      color: ${({ theme }) => theme.colors.text.tertiary};
-    }
-  }
 `
 
 const Item = styled.li`

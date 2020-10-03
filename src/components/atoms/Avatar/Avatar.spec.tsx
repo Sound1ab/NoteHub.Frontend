@@ -23,14 +23,4 @@ describe('Avatar', () => {
 
     expect(image).toHaveAttribute('src', MOCK_IMAGE)
   })
-
-  it('should apply className prop to style container', async () => {
-    const MOCK_CLASSNAME = 'MOCK_CLASSNAME'
-
-    const {
-      container: { firstChild },
-    } = await render(<Avatar className={MOCK_CLASSNAME} />)
-
-    expect(firstChild).toHaveClass(MOCK_CLASSNAME)
-  })
 })

@@ -4,35 +4,6 @@ import FocusLock from 'react-focus-lock'
 import { useClickOutside } from '../../../hooks'
 import { styled } from '../../../theme'
 
-const Style = styled.form`
-  position: relative;
-  display: flex;
-  width: 100%;
-
-  .InlineInput-focus {
-    width: 100%;
-  }
-
-  .InlineInput-input {
-    flex: 1 1 100%;
-    background-color: transparent;
-    color: ${({ theme }) => theme.colors.text.primary};
-    border: 1px solid ${({ theme }) => theme.colors.accent};
-    min-width: 20px;
-    padding: ${({ theme }) => theme.spacing.xxs}
-      ${({ theme }) => theme.spacing.xs};
-    font-size: 16px; // Note: Has to be 16px to stop ios zoom
-    font-weight: ${({ theme }) => theme.typographyStyles.h5.fontWeight};
-  }
-
-  .InlineInput-submit {
-    position: absolute;
-    left: -9999px;
-    width: 1px;
-    height: 1px;
-  }
-`
-
 interface IInlineInput {
   value: string
   clickOutsideCallback: () => void
@@ -45,7 +16,6 @@ interface IInlineInput {
   type: 'text' | 'number' | 'submit'
   autocorrect?: 'on' | 'off'
   autocapitalize?: 'on' | 'off'
-  className?: string
 }
 
 export function InlineInput({
@@ -60,7 +30,6 @@ export function InlineInput({
   type = 'text',
   autocorrect = 'off',
   autocapitalize = 'off',
-  className,
 }: IInlineInput) {
   const wrapperRef = useRef<HTMLFormElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -71,12 +40,11 @@ export function InlineInput({
   }, [])
 
   return (
-    <Style ref={wrapperRef} onSubmit={onSubmit} aria-label={formAriaLabel}>
+    <Form ref={wrapperRef} onSubmit={onSubmit} aria-label={formAriaLabel}>
       {icon}
-      <FocusLock className="InlineInput-focus">
-        <input
+      <StyledFocusLock>
+        <Input
           ref={inputRef}
-          className={`InlineInput-input ${className}`}
           disabled={isDisabled}
           type={type}
           value={value}
@@ -86,8 +54,36 @@ export function InlineInput({
           autoCorrect={autocorrect}
           autoCapitalize={autocapitalize}
         />
-      </FocusLock>
-      <input className="InlineInput-submit" type="submit" />
-    </Style>
+      </StyledFocusLock>
+      <HiddenSubmit type="submit" />
+    </Form>
   )
 }
+
+const Form = styled.form`
+  position: relative;
+  display: flex;
+  width: 100%;
+`
+
+const StyledFocusLock = styled(FocusLock)`
+  width: 100%;
+`
+
+const Input = styled.input`
+  flex: 1 1 100%;
+  background-color: transparent;
+  color: ${({ theme }) => theme.colors.text.primary};
+  min-width: 20px;
+  padding: ${({ theme }) => theme.spacing.xxs}
+    ${({ theme }) => theme.spacing.xs};
+  font-size: 16px; // Note: Has to be 16px to stop ios zoom
+  font-weight: ${({ theme }) => theme.typographyStyles.h5.fontWeight};
+`
+
+const HiddenSubmit = styled.input`
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+`

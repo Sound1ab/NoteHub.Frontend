@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/react-hooks'
-import React, { useRef } from 'react'
+import React, { ReactNode, useRef } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import {
@@ -12,19 +12,11 @@ import { styled } from '../../../theme'
 import { Fade } from '../../animation'
 import { Avatar, Dropdown } from '../../atoms'
 
-const Style = styled.div`
-  position: relative;
-  cursor: pointer;
+interface IProfile {
+  children?: ReactNode
+}
 
-  .Profile-dropdown {
-    position: absolute;
-    top: calc(100% + ${({ theme }) => theme.spacing.xs});
-    right: ${({ theme }) => theme.spacing.xxs};
-    z-index: 100;
-  }
-`
-
-export function Profile() {
+export function Profile(props: IProfile) {
   const client = useApolloClient()
   const { isDarkMode, toggleTheme } = useDarkMode()
   const containerRef = useRef(null)
@@ -61,10 +53,13 @@ export function Profile() {
   }
 
   return (
-    <Style ref={containerRef}>
+    <Wrapper {...props} ref={containerRef}>
       <Avatar image={user?.avatar_url} onClick={handleOpen} />
       <Fade show={isOpen}>
-        <Portal domNode={containerRef.current} className="Profile-dropdown">
+        <Portal
+          domNode={containerRef.current}
+          placementAroundContainer="bottom-left"
+        >
           <Dropdown
             ref={ref}
             items={[
@@ -90,6 +85,11 @@ export function Profile() {
           />
         </Portal>
       </Fade>
-    </Style>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  position: relative;
+  cursor: pointer;
+`

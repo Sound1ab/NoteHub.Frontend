@@ -1,6 +1,6 @@
 import { styled } from '../../../theme'
 
-export const Style = styled.div`
+export const Style = styled.article`
   position: relative;
   height: 100%;
 

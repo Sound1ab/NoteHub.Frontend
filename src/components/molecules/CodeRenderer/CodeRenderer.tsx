@@ -21,13 +21,3 @@ export function CodeRenderer({ inline, language, value }: ICodeRenderer) {
     </SyntaxHighlighter>
   )
 }
-//
-// interface IPre {
-//   inline: boolean
-//   value: string
-// }
-//
-// function Pre({ inline, realClassName, children }) {
-//   const Component = inline ? 'span' : 'pre'
-//   return <Component className={realClassName}>{children}</Component>
-// }

@@ -1,60 +1,11 @@
 import { useApolloClient } from '@apollo/react-hooks'
 import React, { useRef } from 'react'
+import { css } from 'styled-components'
 
 import { useModalToggle } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Fade } from '../../animation'
-import { Button, Dropdown, Icon } from '../../atoms'
-
-const Style = styled.div`
-  position: relative;
-  display: none;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    display: inline-block;
-  }
-
-  .ColorPicker-dropdown {
-    position: absolute;
-    top: calc(100% + ${({ theme }) => theme.spacing.xs});
-    right: ${({ theme }) => theme.spacing.xs};
-    z-index: 100;
-  }
-
-  .ColorPicker-list {
-    margin-bottom: 0;
-    line-height: 0;
-    svg + svg {
-      margin-left: ${({ theme }) => theme.spacing.xxs};
-    }
-  }
-
-  .ColorPicker-swatch {
-    background-color: ${({ theme }) => theme.colors.accent};
-    width: ${({ theme }) => theme.spacing.s};
-    height: ${({ theme }) => theme.spacing.s};
-  }
-
-  .ColorPicker-swatch-1 {
-    background-color: ${({ theme }) => theme.colors.accentChoices.primary};
-  }
-
-  .ColorPicker-swatch-2 {
-    background-color: ${({ theme }) => theme.colors.accentChoices.secondary};
-  }
-
-  .ColorPicker-swatch-3 {
-    background-color: ${({ theme }) => theme.colors.accentChoices.tertiary};
-  }
-
-  .ColorPicker-swatch-4 {
-    background-color: ${({ theme }) => theme.colors.accentChoices.quaternary};
-  }
-
-  .ColorPicker-swatch-5 {
-    background-color: ${({ theme }) => theme.colors.accentChoices.quinary};
-  }
-`
+import { Dropdown, Icon, ToolbarButton } from '../../atoms'
 
 export function ColorPicker() {
   const client = useApolloClient()
@@ -72,45 +23,81 @@ export function ColorPicker() {
   }
 
   return (
-    <Style ref={containerRef}>
-      <Button
-        className="Toolbar-button"
+    <>
+      <ToolbarButton
+        ref={containerRef}
         onClick={handleButtonClick}
         title="Set accent color"
       >
         <Icon size="sm" icon="eye-dropper" prefix="fa" />
-      </Button>
+      </ToolbarButton>
       <Fade show={isOpen}>
-        <Portal domNode={containerRef.current} className="ColorPicker-dropdown">
+        <Portal
+          domNode={containerRef.current}
+          placementAroundContainer="bottom-left"
+        >
           <Dropdown
             ref={ref}
             items={[
               {
                 label: 'Swatches',
                 custom: (
-                  <li className="ColorPicker-list">
-                    <svg
+                  <List>
+                    <Swatch
                       onClick={handleSwatchClick}
-                      className="ColorPicker-swatch ColorPicker-swatch-1"
                       aria-label="primary swatch"
+                      color="primary"
                     />
-                    <svg
+                    <Swatch
                       onClick={handleSwatchClick}
-                      className="ColorPicker-swatch ColorPicker-swatch-2"
                       aria-label="secondary swatch"
+                      color="secondary"
                     />
-                    <svg
+                    <Swatch
                       onClick={handleSwatchClick}
-                      className="ColorPicker-swatch ColorPicker-swatch-3"
                       aria-label="tertiary swatch"
+                      color="tertiary"
                     />
-                  </li>
+                  </List>
                 ),
               },
             ]}
           />
         </Portal>
       </Fade>
-    </Style>
+    </>
   )
 }
+
+const List = styled.li`
+  margin-bottom: 0;
+  line-height: 0;
+  svg + svg {
+    margin-left: ${({ theme }) => theme.spacing.xxs};
+  }
+`
+
+const Swatch = styled.svg<{ color: 'primary' | 'secondary' | 'tertiary' }>`
+  width: ${({ theme }) => theme.spacing.s};
+  height: ${({ theme }) => theme.spacing.s};
+
+  ${({ color }) => {
+    switch (color) {
+      case 'primary':
+        return css`
+          background-color: ${({ theme }) =>
+            theme.colors.accentChoices.primary};
+        `
+      case 'secondary':
+        return css`
+          background-color: ${({ theme }) =>
+            theme.colors.accentChoices.secondary};
+        `
+      case 'tertiary':
+        return css`
+          background-color: ${({ theme }) =>
+            theme.colors.accentChoices.tertiary};
+        `
+    }
+  }};
+`

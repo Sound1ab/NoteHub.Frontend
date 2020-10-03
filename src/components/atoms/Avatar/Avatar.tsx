@@ -1,40 +1,36 @@
 import React from 'react'
+
 import { styled } from '../../../theme'
-
-const Style = styled.div`
-  position: relative;
-  height: ${({ theme }) => theme.spacing.m};
-  width: ${({ theme }) => theme.spacing.m};
-
-  img {
-    object-fit: cover;
-    border-radius: 50%;
-    height: 100%;
-    width: 100%;
-  }
-
-  .Avatar-placeholder {
-    border-radius: 50%;
-    height: 100%;
-    width: 100%;
-    background-color: ${({ theme }) => theme.colors.accent};
-  }
-`
 
 interface IAvatar {
   image?: string | null
-  className?: string
   onClick?: () => void
 }
 
-export function Avatar({ className, image, onClick }: IAvatar) {
+export function Avatar({ image, onClick }: IAvatar) {
   return (
-    <Style className={className} onClick={onClick}>
-      {image ? (
-        <img src={image} alt="avatar" />
-      ) : (
-        <div className="Avatar-placeholder" />
-      )}
-    </Style>
+    <StyledAvatar onClick={onClick}>
+      {image ? <Image src={image} alt="avatar" /> : <Placeholder />}
+    </StyledAvatar>
   )
 }
+
+const StyledAvatar = styled.div`
+  position: relative;
+  height: ${({ theme }) => theme.spacing.m};
+  width: ${({ theme }) => theme.spacing.m};
+`
+
+const Image = styled.img`
+  object-fit: cover;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+`
+
+const Placeholder = styled.div`
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.accent};
+`

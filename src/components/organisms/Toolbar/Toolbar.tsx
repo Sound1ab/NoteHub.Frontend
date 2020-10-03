@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, Fragment } from 'react'
 
 import {
   useDropzone,
@@ -13,7 +13,7 @@ import {
 import { styled } from '../../../theme'
 import { isFile } from '../../../utils'
 import { Fade } from '../../animation'
-import { Button, Dropdown, Icon } from '../../atoms'
+import { Dropdown, Icon, ToolbarButton } from '../../atoms'
 import { ColorPicker, Profile } from '../../molecules'
 
 export function Toolbar() {
@@ -150,24 +150,21 @@ export function Toolbar() {
       <StyledToolbar>
         <Actions>
           {actions.map((action) => (
-            <>
-              {action.separator && (
-                <Separator key={`${action.title}-separator`}>|</Separator>
-              )}
+            <Fragment key={action.title}>
+              {action.separator && <Separator>|</Separator>}
               <ToolbarButton
-                key={`${action.title}-button`}
                 onClick={action.onClick}
                 title={action.title}
                 isDisabled={action.isDisabled}
               >
                 <Icon size="sm" icon={action.icon} prefix="fa" />
               </ToolbarButton>
-            </>
+            </Fragment>
           ))}
           <ColorPicker />
-          <DropdownButton ref={containerRef} onClick={handleButtonClick}>
+          <MobileMenuButton ref={containerRef} onClick={handleButtonClick}>
             <Icon size="sm" icon="bars" prefix="fa" />
-          </DropdownButton>
+          </MobileMenuButton>
           <Fade show={isOpen}>
             <Portal
               domNode={containerRef.current}
@@ -187,16 +184,14 @@ export function Toolbar() {
               />
             </Portal>
           </Fade>
-          <ProfileWrapper>
-            <Profile />
-          </ProfileWrapper>
+          <StyledProfile />
         </Actions>
       </StyledToolbar>
     </>
   )
 }
 
-const StyledToolbar = styled.div`
+const StyledToolbar = styled.header`
   position: relative;
   width: 100%;
   display: flex;
@@ -231,20 +226,11 @@ const Actions = styled.div`
   width: 100%;
 `
 
-const ToolbarButton = styled(Button)`
-  display: none;
-  margin-right: ${({ theme }) => theme.spacing.xxs};
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    display: inline-flex;
-  }
-`
-
-const ProfileWrapper = styled.div`
+const StyledProfile = styled(Profile)`
   margin-left: auto;
 `
 
-const DropdownButton = styled(Button)`
+const MobileMenuButton = styled(ToolbarButton)`
   position: relative;
   display: inline-flex;
 

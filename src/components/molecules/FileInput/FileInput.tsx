@@ -5,22 +5,6 @@ import { useMoveFile } from '../../../hooks/file/useMoveFile'
 import { styled } from '../../../theme'
 import { InlineInput } from '../InlineInput/InlineInput'
 
-const Style = styled.div`
-  position: relative;
-  &:after {
-    content: '.md';
-    color: ${({ theme }) => theme.colors.text.secondary};
-    position: absolute;
-    top: 50%;
-    right: ${({ theme }) => theme.spacing.xs};
-    transform: translateY(-50%);
-  }
-
-  .FileInput-input {
-    padding-right: ${({ theme }) => theme.spacing.ml};
-  }
-`
-
 interface IFileInput {
   path?: string | null
   onClickOutside: () => void
@@ -112,8 +96,8 @@ export function FileInput({
   }
 
   return (
-    <Style>
-      <InlineInput
+    <Wrapper>
+      <StyledFileInput
         isDisabled={loading}
         value={name}
         clickOutsideCallback={onClickOutside}
@@ -122,8 +106,24 @@ export function FileInput({
         inputAriaLabel="Input file name"
         formAriaLabel="File name form"
         type="text"
-        className="FileInput-input"
       />
-    </Style>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  position: relative;
+
+  &:after {
+    content: '.md';
+    color: ${({ theme }) => theme.colors.text.secondary};
+    position: absolute;
+    top: 50%;
+    right: ${({ theme }) => theme.spacing.xs};
+    transform: translateY(-50%);
+  }
+`
+
+const StyledFileInput = styled(InlineInput)`
+  padding-right: ${({ theme }) => theme.spacing.ml};
+`

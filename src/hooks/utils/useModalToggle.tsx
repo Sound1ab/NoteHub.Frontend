@@ -10,22 +10,16 @@ export function useModalToggle() {
     children,
     domNode,
     hasBackground,
-    className,
     placementAroundContainer,
   }: Pick<
     IPortal,
-    | 'children'
-    | 'domNode'
-    | 'hasBackground'
-    | 'className'
-    | 'placementAroundContainer'
+    'children' | 'domNode' | 'hasBackground' | 'placementAroundContainer'
   >) => (
     <Portal
       ref={ref}
       setOpen={setOpen}
       domNode={domNode}
       hasBackground={hasBackground}
-      className={className}
       placementAroundContainer={placementAroundContainer}
     >
       {children}

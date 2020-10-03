@@ -28,7 +28,7 @@ export function Sidebar() {
       {loading ? (
         <TreeSkeleton />
       ) : (
-        <GrowWrapper>
+        <Navigation>
           {gitNodes &&
             createNodes(gitNodes, listOfToggledPaths).map((node) => (
               <List key={node.name}>
@@ -42,14 +42,14 @@ export function Sidebar() {
               action="create"
             />
           )}
-        </GrowWrapper>
+        </Navigation>
       )}
-      <FixedWrapper>
-        <NewRepoButton onClick={() => setIsNewFileOpen(true)}>
+      <NewNode>
+        <Button onClick={() => setIsNewFileOpen(true)}>
           <PlusIcon size="lg" icon={'plus-circle'} />
-          <NewRepoHeading>New folder</NewRepoHeading>
-        </NewRepoButton>
-      </FixedWrapper>
+          <Add>New folder</Add>
+        </Button>
+      </NewNode>
     </StyledSidebar>
   )
 }
@@ -73,24 +73,24 @@ const StyledSidebar = styled.div`
   }
 `
 
-const GrowWrapper = styled.div`
+const Navigation = styled.nav`
   flex: 1;
   overflow-y: auto;
 `
 
-const FixedWrapper = styled.div`
+const NewNode = styled.div`
   flex: 0;
   padding: ${({ theme }) => theme.spacing.xs};
 `
 
-const NewRepoButton = styled.button`
+const Button = styled.button`
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
 `
 
-const NewRepoHeading = styled.h4`
+const Add = styled.h4`
   margin-bottom: 0;
 `
 

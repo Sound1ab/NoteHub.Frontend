@@ -6,7 +6,41 @@ import { css } from 'styled-components'
 import { useClickOutside } from '../../../hooks'
 import { styled } from '../../../theme'
 
-const Style = styled.div<
+export interface IPortal {
+  children?: ReactNode
+  setOpen: Dispatch<SetStateAction<boolean>>
+  domNode?: HTMLElement | null
+  hasBackground?: boolean
+  placementAroundContainer?: 'bottom-left' | 'bottom-right'
+}
+
+export const Portal = React.forwardRef(
+  (
+    {
+      children,
+      setOpen,
+      domNode,
+      hasBackground = false,
+      placementAroundContainer,
+    }: IPortal,
+    ref?: React.Ref<HTMLElement>
+  ) => {
+    useClickOutside(() => setOpen(false), ref)
+
+    return ReactDOM.createPortal(
+      <Wrapper
+        hasBackground={hasBackground}
+        placementAroundContainer={placementAroundContainer}
+      >
+        <ClickLayer />
+        <StyledFocusLock>{children}</StyledFocusLock>
+      </Wrapper>,
+      domNode ?? document.body
+    )
+  }
+)
+
+const Wrapper = styled.div<
   Pick<IPortal, 'hasBackground' | 'placementAroundContainer'>
 >`
   position: relative;
@@ -42,54 +76,17 @@ const Style = styled.div<
         `
     }
   }};
-
-  .Portal-focus-lock {
-    position: relative;
-    z-index: 1;
-  }
-
-  .Portal-click-layer {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-  }
 `
 
-export interface IPortal {
-  children?: ReactNode
-  setOpen: Dispatch<SetStateAction<boolean>>
-  domNode?: HTMLElement | null
-  hasBackground?: boolean
-  className?: string
-  placementAroundContainer?: 'bottom-left' | 'bottom-right'
-}
+const StyledFocusLock = styled(FocusLock)`
+  position: relative;
+  z-index: 1;
+`
 
-export const Portal = React.forwardRef(
-  (
-    {
-      children,
-      setOpen,
-      domNode,
-      hasBackground = false,
-      className,
-      placementAroundContainer,
-    }: IPortal,
-    ref?: React.Ref<HTMLElement>
-  ) => {
-    useClickOutside(() => setOpen(false), ref)
-
-    return ReactDOM.createPortal(
-      <Style
-        className={className}
-        hasBackground={hasBackground}
-        placementAroundContainer={placementAroundContainer}
-      >
-        <div className="Portal-click-layer" />
-        <FocusLock className="Portal-focus-lock">{children}</FocusLock>
-      </Style>,
-      domNode ?? document.body
-    )
-  }
-)
+const ClickLayer = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+`

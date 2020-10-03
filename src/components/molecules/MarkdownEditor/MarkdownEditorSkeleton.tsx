@@ -5,26 +5,12 @@ import { useReadCurrentTheme } from '../../../hooks'
 import { styled } from '../../../theme'
 import { colors } from '../../../theme/theme'
 
-const Style = styled.div`
-  position: relative;
-  grid-area: editor;
-  height: 100%;
-  padding: ${({ theme }) => theme.spacing.xs};
-  overflow-x: hidden;
-
-  .MarkdownEditorSkeleton-content {
-    width: 100%;
-    height: 100%;
-    background-color: transparent;
-  }
-`
-
 export function MarkdownEditorSkeleton() {
   const { currentTheme } = useReadCurrentTheme()
 
   return (
-    <Style aria-label="Markdown loading">
-      <ContentLoader
+    <Wrapper aria-label="Markdown loading">
+      <StyledContentLoader
         className="MarkdownEditorSkeleton-content"
         backgroundColor={colors[currentTheme].background.secondary}
         foregroundColor={colors[currentTheme].background.tertiary}
@@ -42,7 +28,21 @@ export function MarkdownEditorSkeleton() {
         <rect y="510" height="15" width="55%" />
         <rect y="535" height="15" width="20%" />
         <rect y="560" height="15" width="40%" />
-      </ContentLoader>
-    </Style>
+      </StyledContentLoader>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  position: relative;
+  grid-area: editor;
+  height: 100%;
+  padding: ${({ theme }) => theme.spacing.xs};
+  overflow-x: hidden;
+`
+
+const StyledContentLoader = styled(ContentLoader)`
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+`

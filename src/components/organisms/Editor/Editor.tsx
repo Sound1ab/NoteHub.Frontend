@@ -5,7 +5,17 @@ import { useReadFile } from '../../../hooks'
 import { styled } from '../../../theme'
 import { MarkdownEditor, MarkdownEditorSkeleton } from '../../molecules'
 
-const Style = styled.div`
+export function Editor() {
+  const { loading } = useReadFile()
+
+  return (
+    <Wrapper id={CONTAINER_ID.EDITOR}>
+      {loading ? <MarkdownEditorSkeleton /> : <MarkdownEditor />}
+    </Wrapper>
+  )
+}
+
+const Wrapper = styled.div`
   flex: 0 0 100%; // Needed for scroll snap
   position: relative;
   height: 100%;
@@ -16,13 +26,3 @@ const Style = styled.div`
     grid-area: editor;
   }
 `
-
-export function Editor() {
-  const { loading } = useReadFile()
-
-  return (
-    <Style id={CONTAINER_ID.EDITOR}>
-      {loading ? <MarkdownEditorSkeleton /> : <MarkdownEditor />}
-    </Style>
-  )
-}

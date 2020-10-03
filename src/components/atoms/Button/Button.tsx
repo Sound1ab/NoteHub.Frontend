@@ -9,83 +9,103 @@ interface IButton {
   isDisabled?: boolean
   isLoading?: boolean
   children?: ReactNode
-  onClick: () => void
-  className?: string
+  onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
   ariaLabel?: string
   title?: string
 }
 
-export const Button = forwardRef(
-  (
-    {
-      isActive = false,
-      isDisabled = false,
-      children,
-      onClick,
-      className,
-      ariaLabel,
-      title,
-      isLoading = false,
-    }: IButton,
-    ref: Ref<HTMLButtonElement>
-  ) => {
+export const BaseButton = forwardRef(
+  (props: IButton, ref: Ref<HTMLButtonElement>) => {
     return (
-      <StyledButton
-        ref={ref}
-        isActive={isActive}
-        isLoading={isLoading}
-        disabled={isDisabled}
-        className={className}
-        onClick={onClick}
-        aria-label={ariaLabel}
-        title={title}
-        as="button"
-      >
-        {isLoading ? <Icon size="sm" icon="spinner" prefix="fa" /> : children}
-      </StyledButton>
+      <StyledBaseButton ref={ref} {...props} disabled={props.isDisabled}>
+        {props.isLoading ? (
+          <Icon size="sm" icon="spinner" prefix="fa" />
+        ) : (
+          props.children
+        )}
+      </StyledBaseButton>
     )
   }
 )
 
-interface IButtonLink {
-  isActive?: boolean
-  isDisabled?: boolean
-  children?: ReactNode
-  className?: string
-  ariaLabel?: string
-  href: string
-}
+type IButtonLink = Pick<
+  IButton,
+  'isActive' | 'isDisabled' | 'children' | 'ariaLabel'
+> & { href: string }
 
 export function ButtonLink({
   isActive = false,
   children,
-  className,
   ariaLabel,
   href,
 }: IButtonLink) {
   return (
-    <StyledButton
+    <StyledBaseButton
       isActive={isActive}
-      className={className}
       aria-label={ariaLabel}
       as="a"
       href={href}
       target="_self"
     >
       {children}
-    </StyledButton>
+    </StyledBaseButton>
   )
 }
 
-const StyledButton = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
-  position: relative;
+export const ToolbarButton = styled(BaseButton)`
   padding: ${({ theme }) => theme.spacing.xs};
   background-color: ${({ theme }) => theme.colors.background.secondary};
   border-radius: 5px;
   box-shadow: inset 0px 0px 1px 1px ${({ theme }) => theme.colors.border};
 
+  display: none;
+  margin-right: ${({ theme }) => theme.spacing.xxs};
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    display: inline-flex;
+  }
+`
+
+export const DropDownButton = styled(BaseButton)`
+  user-select: none;
+  outline: none;
+  padding: ${({ theme }) => theme.spacing.xxs}
+    ${({ theme }) => theme.spacing.xs};
+  width: 100%;
+`
+
+export const Button = styled(BaseButton)`
+  padding: ${({ theme }) => theme.spacing.xs};
+  border-radius: 5px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: ${({ theme }) => theme.colors.company.github};
+  color: #fff;
+  text-decoration: none;
+
+  &:visited {
+    color: #fff;
+  }
+
+  * svg {
+    color: #fff;
+  }
+`
+
+const StyledBaseButton = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
+  position: relative;
+
   &[disabled] {
     cursor: not-allowed;
+
+    > * {
+      color: ${({ theme }) => theme.colors.text.tertiary};
+    }
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.background.tertiary};
   }
 
   > * {
@@ -96,16 +116,6 @@ const StyledButton = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
             animation: spin 2s ease-in-out infinite;
           `
         : ''}
-  }
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.background.tertiary};
-  }
-
-  &:disabled {
-    > * {
-      color: ${({ theme }) => theme.colors.text.tertiary};
-    }
   }
 
   @keyframes spin {
