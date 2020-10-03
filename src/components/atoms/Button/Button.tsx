@@ -10,7 +10,6 @@ interface IButton {
   isLoading?: boolean
   children?: ReactNode
   onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
-  ariaLabel?: string
   title?: string
 }
 
@@ -27,30 +26,6 @@ export const BaseButton = forwardRef(
     )
   }
 )
-
-type IButtonLink = Pick<
-  IButton,
-  'isActive' | 'isDisabled' | 'children' | 'ariaLabel'
-> & { href: string }
-
-export function ButtonLink({
-  isActive = false,
-  children,
-  ariaLabel,
-  href,
-}: IButtonLink) {
-  return (
-    <StyledBaseButton
-      isActive={isActive}
-      aria-label={ariaLabel}
-      as="a"
-      href={href}
-      target="_self"
-    >
-      {children}
-    </StyledBaseButton>
-  )
-}
 
 export const ToolbarButton = styled(BaseButton)`
   padding: ${({ theme }) => theme.spacing.xs};

@@ -1,17 +1,11 @@
 import { useApolloClient } from '@apollo/react-hooks'
 import React from 'react'
 
-import { useDeleteFile } from '../../../hooks'
-import {
-  fileNodeOne,
-  folderNode,
-  resolvers,
-} from '../../../schema/mockResolvers'
+import { fileNodeOne, resolvers } from '../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../utility'
 import { NodeItem } from './NodeItem'
 
-jest.mock('../../../hooks/file/useDeleteFile')
 jest.mock('@apollo/react-hooks', () => {
   const originalModule = jest.requireActual('@apollo/react-hooks')
 
@@ -22,57 +16,35 @@ jest.mock('@apollo/react-hooks', () => {
 })
 
 describe('NodeItem', () => {
-  const onToggle = jest.fn()
-
-  const openFileInput = jest.fn()
-
-  const deleteFile = jest.fn()
-
   const writeData = jest.fn()
+
+  const dropdownItems = [
+    {
+      icon: 'edit' as const,
+      prefix: 'fa' as const,
+      label: 'Create file',
+      onClick: jest.fn(),
+    },
+  ]
+
+  const onClick = jest.fn()
 
   beforeEach(() => {
     jest.resetAllMocks()
-    ;(useDeleteFile as jest.Mock).mockImplementation(() => [
-      deleteFile,
-      { error: undefined },
-    ])
     ;(useApolloClient as jest.Mock).mockReturnValue({
       writeData,
     })
   })
 
-  it('should show and hide inline file input when renaming file', async () => {
-    const { getByLabelText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <div aria-label="outside">
-          <NodeItem
-            node={fileNodeOne}
-            onToggle={onToggle}
-            openFileInput={openFileInput}
-            level={1}
-          />
-        </div>
-      </MockProvider>
-    )
-
-    await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
-
-    await fireEvent.click(getByLabelText('Rename'))
-
-    expect(getByLabelText('Input file name')).toBeInTheDocument()
-  })
-
   it('should update the currentPath with clicked node path', async () => {
     const { getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <div aria-label="outside">
-          <NodeItem
-            node={fileNodeOne}
-            onToggle={onToggle}
-            openFileInput={openFileInput}
-            level={1}
-          />
-        </div>
+        <NodeItem
+          node={fileNodeOne}
+          level={1}
+          dropdownItems={dropdownItems}
+          onClick={onClick}
+        />
       </MockProvider>
     )
 
@@ -86,14 +58,12 @@ describe('NodeItem', () => {
   it('should disable clicks if optimistically updated', async () => {
     const { getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <div aria-label="outside">
-          <NodeItem
-            node={{ ...fileNodeOne, isOptimistic: true }}
-            onToggle={onToggle}
-            openFileInput={openFileInput}
-            level={1}
-          />
-        </div>
+        <NodeItem
+          node={{ ...fileNodeOne, isOptimistic: true }}
+          level={1}
+          dropdownItems={dropdownItems}
+          onClick={onClick}
+        />
       </MockProvider>
     )
 
@@ -104,162 +74,37 @@ describe('NodeItem', () => {
     })
   })
 
-  describe('when a folder', () => {
-    it('should call onToggle with true if node is not already selected', async () => {
-      const { getByLabelText } = await render(
-        <MockProvider mockResolvers={resolvers}>
-          <NodeItem
-            node={folderNode}
-            onToggle={onToggle}
-            openFileInput={openFileInput}
-            level={1}
-          />
-        </MockProvider>
-      )
+  it('should call onClick callback', async () => {
+    const { getByText } = await render(
+      <MockProvider mockResolvers={resolvers}>
+        <NodeItem
+          node={fileNodeOne}
+          level={1}
+          dropdownItems={dropdownItems}
+          onClick={onClick}
+        />
+      </MockProvider>
+    )
 
-      await fireEvent.click(getByLabelText('folder'))
+    await fireEvent.click(getByText('MOCK_FILE_PATH_1.md'))
 
-      expect(onToggle).toBeCalledWith(folderNode.path, true)
-    })
-
-    it('should call onToggle with false if node is already selected', async () => {
-      const { getByLabelText } = await render(
-        <MockProvider
-          mockResolvers={resolvers}
-          localData={{ currentPath: folderNode.path }}
-        >
-          <NodeItem
-            node={{ ...folderNode, toggled: true }}
-            onToggle={onToggle}
-            openFileInput={openFileInput}
-            level={1}
-          />
-        </MockProvider>
-      )
-
-      await fireEvent.click(getByLabelText('folder'))
-
-      expect(onToggle).toBeCalledWith(folderNode.path, false)
-    })
-
-    it('should call onToggle with false if chevron is clicked and node is not selected', async () => {
-      const { getByLabelText } = await render(
-        <MockProvider
-          mockResolvers={resolvers}
-          localData={{ currentPath: folderNode.path }}
-        >
-          <NodeItem
-            node={{ ...folderNode, toggled: true }}
-            onToggle={onToggle}
-            openFileInput={openFileInput}
-            level={1}
-          />
-        </MockProvider>
-      )
-
-      await fireEvent.click(getByLabelText('chevron'))
-
-      expect(onToggle).toBeCalledWith(folderNode.path, false)
-    })
-
-    it('should open folder dropdown menu', async () => {
-      const { getByLabelText, getByText } = await render(
-        <MockProvider mockResolvers={resolvers}>
-          <NodeItem
-            node={folderNode}
-            onToggle={onToggle}
-            openFileInput={openFileInput}
-            level={1}
-          />
-        </MockProvider>
-      )
-
-      await fireEvent.click(getByLabelText('MOCK_FOLDER actions'))
-
-      expect(getByText('Create file')).toBeInTheDocument()
-    })
-
-    it('should call openFileInput when create new file is selected from folder dropdown', async () => {
-      const { getByLabelText } = await render(
-        <MockProvider mockResolvers={resolvers}>
-          <NodeItem
-            node={folderNode}
-            onToggle={onToggle}
-            openFileInput={openFileInput}
-            level={1}
-          />
-        </MockProvider>
-      )
-
-      await fireEvent.click(getByLabelText('MOCK_FOLDER actions'))
-
-      await fireEvent.click(getByLabelText('Create file'))
-
-      expect(openFileInput).toBeCalled()
-    })
+    expect(onClick).toBeCalled()
   })
 
-  describe('when a file', () => {
-    it('should open file dropdown menu', async () => {
-      const { getByLabelText, getByText } = await render(
-        <MockProvider mockResolvers={resolvers}>
-          <NodeItem
-            node={fileNodeOne}
-            onToggle={onToggle}
-            openFileInput={openFileInput}
-            level={1}
-          />
-        </MockProvider>
-      )
+  it('should open dropdown', async () => {
+    const { getByLabelText } = await render(
+      <MockProvider mockResolvers={resolvers}>
+        <NodeItem
+          node={fileNodeOne}
+          level={1}
+          dropdownItems={dropdownItems}
+          onClick={onClick}
+        />
+      </MockProvider>
+    )
 
-      await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+    await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
 
-      expect(getByText('Delete file')).toBeInTheDocument()
-    })
-
-    it('should call deleteFile when selected from file dropdown', async () => {
-      const { getByLabelText } = await render(
-        <MockProvider mockResolvers={resolvers}>
-          <NodeItem
-            node={fileNodeOne}
-            onToggle={onToggle}
-            openFileInput={openFileInput}
-            level={1}
-          />
-        </MockProvider>
-      )
-
-      await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
-
-      await fireEvent.click(getByLabelText('Delete file'))
-
-      expect(deleteFile).toBeCalled()
-    })
-
-    it('should show alert if deleteFile returns an error', async () => {
-      ;(useDeleteFile as jest.Mock).mockImplementation(() => [
-        async () => Promise.reject(),
-      ])
-
-      const alert = jest.fn()
-      ;(global as any).alert = alert
-
-      const { getByLabelText } = await render(
-        <MockProvider>
-          <NodeItem
-            node={fileNodeOne}
-            onToggle={onToggle}
-            openFileInput={openFileInput}
-            level={1}
-          />
-        </MockProvider>
-      )
-
-      await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
-
-      await fireEvent.click(getByLabelText('Delete file'))
-
-      expect(alert).toBeCalledWith('Could not delete file. Please try again.')
-    })
+    expect(getByLabelText('Create file')).toBeInTheDocument()
   })
 })

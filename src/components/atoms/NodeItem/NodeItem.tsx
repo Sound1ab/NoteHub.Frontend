@@ -1,61 +1,38 @@
 import { useApolloClient } from '@apollo/react-hooks'
-import React, { ReactNode, SyntheticEvent, useRef, useState } from 'react'
+import React, { ReactNode, SyntheticEvent, useRef } from 'react'
 import { css } from 'styled-components'
 
-import { CONTAINER_ID } from '../../../enums'
-import {
-  useDeleteFile,
-  useModalToggle,
-  useReadCurrentPath,
-} from '../../../hooks'
+import { useModalToggle, useReadCurrentPath } from '../../../hooks'
 import { styled } from '../../../theme'
 import { ITreeNode } from '../../../types'
-import { scrollIntoView } from '../../../utils'
 import { Fade } from '../../animation'
 import { Node_Type } from '../../apollo/generated_components_typings'
-import { FileInput } from '../../molecules'
-import { Dropdown, Icon } from '..'
+import { Dropdown, IDropdownItem, Icon } from '..'
 
 interface INodeItem {
   node: ITreeNode
-  onToggle: (path: string, toggled: boolean) => void
   level: number
-  openFileInput: () => void
   children?: ReactNode
+  childNodes?: ReactNode
+  dropdownItems: IDropdownItem[]
+  onClick: () => void
 }
 
 export function NodeItem({
   level,
   node,
-  onToggle,
-  openFileInput,
   children,
+  childNodes,
+  dropdownItems,
+  onClick,
 }: INodeItem) {
   const containerRef = useRef(null)
   const client = useApolloClient()
-  const [deleteFile] = useDeleteFile()
+
   const { isOpen, Portal, ref, setOpen } = useModalToggle()
   const { currentPath } = useReadCurrentPath()
   const isActive = currentPath === node.path
-  const { toggled, name, type } = node
-  const [isRenaming, setIsRenaming] = useState(false)
-
-  function handleSetIsNewFileOpen(
-    e: React.MouseEvent<HTMLElement, MouseEvent>
-  ) {
-    e.stopPropagation()
-    openFileInput()
-    setOpen(false)
-    onToggle(node.path, true)
-  }
-
-  function handleSetIsRenamingOpen(
-    e: React.MouseEvent<HTMLElement, MouseEvent>
-  ) {
-    e.stopPropagation()
-    setOpen(false)
-    setIsRenaming(true)
-  }
+  const { type, name } = node
 
   function handleToggleMenu(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -64,23 +41,7 @@ export function NodeItem({
     setOpen((isOpen) => !isOpen)
   }
 
-  async function handleDeleteFile() {
-    try {
-      await deleteFile(node.path)
-    } catch {
-      alert('Could not delete file. Please try again.')
-    }
-  }
-
-  function onChevronClick(
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    node: ITreeNode
-  ) {
-    e.stopPropagation()
-    onToggle(node.path, !node.toggled)
-  }
-
-  function onClick(e: SyntheticEvent, node: ITreeNode) {
+  function handleOnClick(e: SyntheticEvent) {
     // Enter event from form submission when renaming file propogates down
     // to this click event. We don't want to call this if the event came from
     // the rename form.
@@ -93,48 +54,12 @@ export function NodeItem({
       return
     }
 
-    if (node.type === Node_Type.File) {
-      scrollIntoView(CONTAINER_ID.EDITOR)
-    }
-
-    if (node.type === Node_Type.Folder) {
-      if (isActive) {
-        onToggle(node.path, !node.toggled)
-      } else {
-        onToggle(node.path, true)
-      }
-    }
+    onClick()
 
     client.writeData({
       data: { currentPath: node.path },
     })
   }
-
-  const dropdownItems = [
-    ...(node.type === Node_Type.File
-      ? [
-          {
-            icon: 'trash' as const,
-            prefix: 'fa' as const,
-            label: 'Delete file',
-            onClick: handleDeleteFile,
-          },
-          {
-            icon: 'pen' as const,
-            prefix: 'fa' as const,
-            label: 'Rename',
-            onClick: handleSetIsRenamingOpen,
-          },
-        ]
-      : [
-          {
-            icon: 'edit' as const,
-            prefix: 'fa' as const,
-            label: 'Create file',
-            onClick: handleSetIsNewFileOpen,
-          },
-        ]),
-  ]
 
   return (
     <StyledListItem>
@@ -142,59 +67,36 @@ export function NodeItem({
         isDisabled={node.isOptimistic}
         isActive={isActive}
         level={level}
-        onClick={(e) => onClick(e, node)}
+        onClick={handleOnClick}
         ref={containerRef}
         type={type}
         aria-label={node.type === Node_Type.File ? 'file' : 'folder'}
       >
-        {isRenaming ? (
-          <FileInput
-            path={node.path}
-            onClickOutside={() => setIsRenaming(false)}
-            onToggle={onToggle}
-            action="rename"
+        <Details>
+          {children}
+          <Heading isDisabled={node.isOptimistic}>{name}</Heading>
+        </Details>
+        <Actions onClick={handleToggleMenu}>
+          <StyledIcon
+            icon="ellipsis-h"
+            isDisabled={isOpen}
+            aria-label={`${name} actions`}
           />
-        ) : (
-          <>
-            <Details>
-              {type === Node_Type.Folder && (
-                <Chevron
-                  toggled={toggled}
-                  size="sm"
-                  icon="chevron-right"
-                  prefix="fa"
-                  ariaLabel="chevron"
-                  onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-                    onChevronClick(e, node)
-                  }
-                />
-              )}
-              {type === Node_Type.Folder ? (
-                <StyledIcon size="sm" icon="folder" prefix="fa" />
-              ) : (
-                <StyledIcon size="sm" icon="file" prefix="fa" />
-              )}
-              <Heading isDisabled={node.isOptimistic}>{name}</Heading>
-            </Details>
-            <Actions onClick={handleToggleMenu}>
-              <StyledIcon
-                icon="ellipsis-h"
-                isDisabled={isOpen}
-                ariaLabel={`${name} actions`}
-              />
-            </Actions>
-          </>
-        )}
+        </Actions>
       </Wrapper>
       <Fade show={isOpen}>
         <Portal
           domNode={containerRef.current}
           placementAroundContainer="bottom-left"
         >
-          <Dropdown ref={ref} items={dropdownItems} />
+          <Dropdown
+            ref={ref}
+            items={dropdownItems}
+            onClose={() => setOpen(false)}
+          />
         </Portal>
       </Fade>
-      {children}
+      {childNodes}
     </StyledListItem>
   )
 }
@@ -273,8 +175,4 @@ const Actions = styled.button`
 
 const StyledIcon = styled(Icon)`
   color: ${({ theme }) => theme.colors.text.secondary};
-`
-
-const Chevron = styled(StyledIcon)<{ toggled: boolean }>`
-  transform: ${({ toggled }) => (toggled ? 'rotate(0.25turn)' : 'rotate(0)')};
 `
