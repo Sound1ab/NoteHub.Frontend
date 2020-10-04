@@ -80,6 +80,7 @@ describe('InlineInput', () => {
           formAriaLabel={formAriaLabel}
           icon={icon}
           type="text"
+          autoFocus
         />
       </MockProvider>
     )

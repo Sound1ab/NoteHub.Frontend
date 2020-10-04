@@ -1,5 +1,4 @@
-import React, { ReactNode, useLayoutEffect, useRef } from 'react'
-import FocusLock from 'react-focus-lock'
+import React, { ReactNode, useRef } from 'react'
 
 import { useClickOutside } from '../../../hooks'
 import { styled } from '../../../theme'
