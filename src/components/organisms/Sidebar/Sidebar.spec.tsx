@@ -12,6 +12,9 @@ afterEach(cleanup)
 jest.mock('../../../utils/scrollIntoView')
 
 describe('Sidebar', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
   it('should toggle folders', async () => {
     const { getByText, queryByText } = await render(
       <MockProvider mockResolvers={resolvers}>
@@ -189,6 +192,24 @@ describe('Sidebar', () => {
       expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
 
       expect(getByText('NEW_MOCK_FILE_PATH.md')).toBeInTheDocument()
+    })
+  })
+
+  describe('when searching', () => {
+    it('should display search results instead of tree', async () => {
+      const { getByText, getByLabelText } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <Sidebar />
+        </MockProvider>
+      )
+
+      const input = getByLabelText('Search files')
+
+      await fireEvent.change(input, {
+        target: { value: 'MOCK_FILE' },
+      })
+
+      expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
     })
   })
 })

@@ -22,7 +22,7 @@ export function SearchInput() {
         clickOutsideCallback={noop}
         handleOnChange={handleOnChange}
         onSubmit={noop}
-        inputAriaLabel="Search input"
+        inputAriaLabel="Search files"
         type="text"
       />
     </Wrapper>

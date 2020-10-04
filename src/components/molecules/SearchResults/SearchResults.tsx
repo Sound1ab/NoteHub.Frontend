@@ -7,12 +7,8 @@ import { Node_Type } from '../../apollo/generated_components_typings'
 import { File } from '../../atoms/NodeItem/File'
 
 export function SearchResults() {
-  const { gitNodes, loading } = useReadNodes()
+  const { gitNodes } = useReadNodes()
   const { search } = useReadSearch()
-
-  if (loading) {
-    return null
-  }
 
   if (!gitNodes) {
     return null
