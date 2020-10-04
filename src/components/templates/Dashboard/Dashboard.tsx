@@ -31,7 +31,7 @@ const Grid = styled.div`
       3fr;
     grid-template-rows: auto 1fr;
     grid-template-areas:
-      'toolbar toolbar'
+      'sidebar toolbar'
       'sidebar editor';
   }
 `

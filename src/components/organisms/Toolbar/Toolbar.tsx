@@ -1,4 +1,4 @@
-import React, { useRef, Fragment } from 'react'
+import React, { Fragment, useRef } from 'react'
 
 import {
   useDropzone,
@@ -196,7 +196,6 @@ const StyledToolbar = styled.header`
   width: 100%;
   display: flex;
   background-color: ${({ theme }) => theme.colors.background.primary};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     position: relative;

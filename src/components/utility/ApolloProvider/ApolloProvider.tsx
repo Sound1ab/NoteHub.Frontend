@@ -15,6 +15,7 @@ export interface ILocalData {
   cursorPosition: IPosition
   jwt: string | null
   accentColor: string | null
+  search: string
 }
 
 export const localData: ILocalData = {
@@ -28,6 +29,7 @@ export const localData: ILocalData = {
   },
   jwt: null,
   accentColor: null,
+  search: '',
 }
 
 interface IApolloProvider {

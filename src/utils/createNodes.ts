@@ -39,7 +39,7 @@ function getNode(nodes: ITreeNode[], slug: string) {
   return nodes.find((node) => node.name === slug)
 }
 
-function createNode(
+export function createNode(
   type: Node_Type,
   slug: string,
   path: string,

@@ -115,7 +115,9 @@ const Wrapper = styled.div<
   position: relative;
   display: flex;
   padding-left: ${({ theme, level, type }) => {
-    if (level === 0 && type === Node_Type.File) {
+    if (level === -1) {
+      return 0
+    } else if (level === 0 && type === Node_Type.File) {
       return theme.spacing.s
     } else if (level === 0 && type === Node_Type.Folder) {
       return 0

@@ -106,6 +106,7 @@ export function FileInput({
         inputAriaLabel="Input file name"
         formAriaLabel="File name form"
         type="text"
+        autoFocus
       />
     </Wrapper>
   )

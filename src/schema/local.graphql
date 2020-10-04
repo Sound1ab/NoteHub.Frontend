@@ -5,6 +5,7 @@ type Query {
   cursorPosition: Position!
   jwt: String
   accentColor: String
+  search: String!
 }
 
 type Position {

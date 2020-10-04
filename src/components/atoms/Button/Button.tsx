@@ -30,14 +30,17 @@ export const BaseButton = forwardRef(
 export const ToolbarButton = styled(BaseButton)`
   padding: ${({ theme }) => theme.spacing.xs};
   background-color: ${({ theme }) => theme.colors.background.secondary};
-  border-radius: 5px;
-  box-shadow: inset 0px 0px 1px 1px ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.spacing.xxs};
 
   display: none;
   margin-right: ${({ theme }) => theme.spacing.xxs};
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     display: inline-flex;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.background.tertiary};
   }
 `
 
@@ -51,16 +54,14 @@ export const DropDownButton = styled(BaseButton)`
 
 export const Button = styled(BaseButton)`
   padding: ${({ theme }) => theme.spacing.xs};
-  border-radius: 5px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.company.github};
-  color: #fff;
+  color: ${({ theme }) => theme.colors.text.primary};
   text-decoration: none;
 
   &:visited {
-    color: #fff;
+    color: ${({ theme }) => theme.colors.text.primary};
   }
 
   * svg {
@@ -77,10 +78,6 @@ const StyledBaseButton = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
     > * {
       color: ${({ theme }) => theme.colors.text.tertiary};
     }
-  }
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.background.tertiary};
   }
 
   > * {

@@ -16,6 +16,7 @@ interface IInlineInput {
   type: 'text' | 'number' | 'submit'
   autocorrect?: 'on' | 'off'
   autocapitalize?: 'on' | 'off'
+  autoFocus?: boolean
 }
 
 export function InlineInput({
@@ -30,12 +31,17 @@ export function InlineInput({
   type = 'text',
   autocorrect = 'off',
   autocapitalize = 'off',
+  autoFocus,
+  ...rest
 }: IInlineInput) {
   const wrapperRef = useRef<HTMLFormElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
   useClickOutside(clickOutsideCallback, wrapperRef)
 
   useLayoutEffect(() => {
+    if (!autoFocus) {
+      return
+    }
     inputRef.current?.focus()
   }, [])
 
@@ -44,6 +50,7 @@ export function InlineInput({
       {icon}
       <StyledFocusLock>
         <Input
+          {...rest}
           ref={inputRef}
           disabled={isDisabled}
           type={type}
@@ -72,13 +79,15 @@ const StyledFocusLock = styled(FocusLock)`
 
 const Input = styled.input`
   flex: 1 1 100%;
-  background-color: transparent;
+  background-color: ${({ theme }) => theme.colors.background.secondary};
   color: ${({ theme }) => theme.colors.text.primary};
   min-width: 20px;
   padding: ${({ theme }) => theme.spacing.xxs}
     ${({ theme }) => theme.spacing.xs};
   font-size: 16px; // Note: Has to be 16px to stop ios zoom
   font-weight: ${({ theme }) => theme.typographyStyles.h5.fontWeight};
+  border: none;
+  border-radius: ${({ theme }) => theme.spacing.xxs};
 `
 
 const HiddenSubmit = styled.input`

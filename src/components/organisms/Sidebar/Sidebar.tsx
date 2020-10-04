@@ -1,11 +1,17 @@
 import React, { useState } from 'react'
 
 import { CONTAINER_ID } from '../../../enums'
-import { useReadNodes } from '../../../hooks'
+import { useReadNodes, useReadSearch } from '../../../hooks'
 import { styled } from '../../../theme'
 import { createNodes } from '../../../utils'
-import { Icon, List } from '../../atoms'
-import { FileInput, Tree, TreeSkeleton } from '../../molecules'
+import { Button, Icon, List } from '../../atoms'
+import {
+  FileInput,
+  SearchInput,
+  SearchResults,
+  Tree,
+  TreeSkeleton,
+} from '../../molecules'
 
 export function Sidebar() {
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
@@ -13,6 +19,7 @@ export function Sidebar() {
   const [listOfToggledPaths, setListOfToggledPaths] = useState<Set<string>>(
     new Set([])
   )
+  const { search } = useReadSearch()
 
   function onToggle(path: string, toggled: boolean) {
     if (toggled) {
@@ -28,28 +35,38 @@ export function Sidebar() {
       {loading ? (
         <TreeSkeleton />
       ) : (
-        <Navigation>
-          {gitNodes &&
-            createNodes(gitNodes, listOfToggledPaths).map((node) => (
-              <List key={node.name}>
-                <Tree key={node.name} node={node} onToggle={onToggle} />
-              </List>
-            ))}
-          {isNewFileOpen && (
-            <FileInput
-              onClickOutside={() => setIsNewFileOpen(false)}
-              onToggle={onToggle}
-              action="create"
-            />
-          )}
-        </Navigation>
+        <>
+          <SearchInput />
+          <Navigation>
+            {search ? (
+              <SearchResults />
+            ) : (
+              <>
+                {gitNodes &&
+                  createNodes(gitNodes, listOfToggledPaths).map((node) => (
+                    <List key={node.name}>
+                      <Tree key={node.name} node={node} onToggle={onToggle} />
+                    </List>
+                  ))}
+                {isNewFileOpen && (
+                  <FileInput
+                    onClickOutside={() => setIsNewFileOpen(false)}
+                    onToggle={onToggle}
+                    action="create"
+                  />
+                )}
+              </>
+            )}
+          </Navigation>
+        </>
       )}
-      <NewNode>
-        <Button onClick={() => setIsNewFileOpen(true)}>
-          <PlusIcon size="lg" icon={'plus-circle'} />
-          <Add>New folder</Add>
-        </Button>
-      </NewNode>
+      <StyledButton
+        onClick={() => setIsNewFileOpen(true)}
+        isDisabled={Boolean(search)}
+      >
+        <PlusIcon size="lg" icon={'plus-circle'} />
+        <Add>New folder</Add>
+      </StyledButton>
     </StyledSidebar>
   )
 }
@@ -78,16 +95,10 @@ const Navigation = styled.nav`
   overflow-y: auto;
 `
 
-const NewNode = styled.div`
+const StyledButton = styled(Button)`
   flex: 0;
-  padding: ${({ theme }) => theme.spacing.xs};
-`
-
-const Button = styled.button`
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
 `
 
 const Add = styled.h4`
