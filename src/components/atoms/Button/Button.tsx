@@ -28,7 +28,7 @@ export const BaseButton = forwardRef(
 )
 
 export const ToolbarButton = styled(BaseButton)`
-  padding: ${({ theme }) => theme.spacing.xs};
+  padding: 0.785rem;
   background-color: ${({ theme }) => theme.colors.background.secondary};
   border-radius: ${({ theme }) => theme.spacing.xxs};
 

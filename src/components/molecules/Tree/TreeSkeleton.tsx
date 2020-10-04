@@ -14,39 +14,41 @@ export function TreeSkeleton() {
         backgroundColor={colors[currentTheme].background.secondary}
         foregroundColor={colors[currentTheme].background.tertiary}
       >
-        <rect y="0" height="30" width="75%" />
-        <rect y="0" x="80%" height="30" width="20%" />
-        <rect y="40" x="20%" height="30" width="55%" />
-        <rect y="40" x="80%" height="30" width="20%" />
-        <rect y="80" x="20%" height="30" width="55%" />
-        <rect y="80" x="80%" height="30" width="20%" />
+        <rect y="0" height="35" width="100%" />
 
-        <rect y="120" height="30" width="75%" />
-        <rect y="120" x="80%" height="30" width="20%" />
-        <rect y="160" x="20%" height="30" width="55%" />
-        <rect y="160" x="80%" height="30" width="20%" />
-        <rect y="200" x="40%" height="30" width="35%" />
-        <rect y="200" x="80%" height="30" width="20%" />
-        <rect y="240" x="40%" height="30" width="35%" />
-        <rect y="240" x="80%" height="30" width="20%" />
-        <rect y="280" x="20%" height="30" width="55%" />
-        <rect y="280" x="80%" height="30" width="20%" />
+        <rect y="50" height="30" width="75%" />
+        <rect y="50" x="80%" height="30" width="20%" />
+        <rect y="90" x="20%" height="30" width="55%" />
+        <rect y="90" x="80%" height="30" width="20%" />
+        <rect y="130" x="20%" height="30" width="55%" />
+        <rect y="130" x="80%" height="30" width="20%" />
 
-        <rect y="320" height="30" width="75%" />
-        <rect y="320" x="80%" height="30" width="20%" />
-        <rect y="360" x="20%" height="30" width="55%" />
-        <rect y="360" x="80%" height="30" width="20%" />
-        <rect y="400" x="20%" height="30" width="55%" />
-        <rect y="400" x="80%" height="30" width="20%" />
-        <rect y="440" x="40%" height="30" width="35%" />
-        <rect y="440" x="80%" height="30" width="20%" />
-        <rect y="480" x="40%" height="30" width="35%" />
-        <rect y="480" x="80%" height="30" width="20%" />
+        <rect y="170" height="30" width="75%" />
+        <rect y="170" x="80%" height="30" width="20%" />
+        <rect y="210" x="20%" height="30" width="55%" />
+        <rect y="210" x="80%" height="30" width="20%" />
+        <rect y="250" x="40%" height="30" width="35%" />
+        <rect y="250" x="80%" height="30" width="20%" />
+        <rect y="290" x="40%" height="30" width="35%" />
+        <rect y="290" x="80%" height="30" width="20%" />
+        <rect y="330" x="20%" height="30" width="55%" />
+        <rect y="330" x="80%" height="30" width="20%" />
 
-        <rect y="520" height="30" width="75%" />
-        <rect y="520" x="80%" height="30" width="20%" />
-        <rect y="560" x="20%" height="30" width="55%" />
-        <rect y="560" x="80%" height="30" width="20%" />
+        <rect y="370" height="30" width="75%" />
+        <rect y="370" x="80%" height="30" width="20%" />
+        <rect y="410" x="20%" height="30" width="55%" />
+        <rect y="410" x="80%" height="30" width="20%" />
+        <rect y="450" x="20%" height="30" width="55%" />
+        <rect y="450" x="80%" height="30" width="20%" />
+        <rect y="490" x="40%" height="30" width="35%" />
+        <rect y="490" x="80%" height="30" width="20%" />
+        <rect y="530" x="40%" height="30" width="35%" />
+        <rect y="530" x="80%" height="30" width="20%" />
+
+        <rect y="570" height="30" width="75%" />
+        <rect y="570" x="80%" height="30" width="20%" />
+        <rect y="610" x="20%" height="30" width="55%" />
+        <rect y="610" x="80%" height="30" width="20%" />
       </StyledContentLoader>
     </Wrapper>
   )

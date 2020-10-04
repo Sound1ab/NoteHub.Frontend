@@ -75,6 +75,7 @@ const Input = styled.input`
   font-size: 16px; // Note: Has to be 16px to stop ios zoom
   font-weight: ${({ theme }) => theme.typographyStyles.h5.fontWeight};
   border: none;
+  border-radius: ${({ theme }) => theme.spacing.xxs};
 
   &:focus {
     outline: ${({ theme }) => theme.spacing.xxxs} solid

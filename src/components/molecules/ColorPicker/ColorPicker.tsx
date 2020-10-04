@@ -29,7 +29,7 @@ export function ColorPicker() {
         onClick={handleButtonClick}
         title="Set accent color"
       >
-        <Icon size="sm" icon="eye-dropper" prefix="fa" />
+        <Icon size="1x" icon="eye-dropper" prefix="fa" />
       </ToolbarButton>
       <Fade show={isOpen}>
         <Portal

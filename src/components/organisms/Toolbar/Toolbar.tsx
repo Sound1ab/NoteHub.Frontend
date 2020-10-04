@@ -157,7 +157,7 @@ export function Toolbar() {
                 title={action.title}
                 isDisabled={action.isDisabled}
               >
-                <Icon size="sm" icon={action.icon} prefix="fa" />
+                <Icon size="1x" icon={action.icon} prefix="fa" />
               </ToolbarButton>
             </Fragment>
           ))}

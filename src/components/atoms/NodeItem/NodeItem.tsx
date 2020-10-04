@@ -159,6 +159,7 @@ const Heading = styled.h4<{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  user-select: none;
 `
 
 const Actions = styled.button`
