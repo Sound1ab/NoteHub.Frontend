@@ -126,6 +126,8 @@ const Wrapper = styled.div<
   cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
   background-color: ${({ theme, isActive }) =>
     isActive ? theme.colors.background.secondary : 'transparent'};
+  box-shadow: inset ${({ theme }) => theme.spacing.xxxs} 0px 0px 0px
+    ${({ theme, isActive }) => (isActive ? theme.colors.accent : 'transparent')};
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {

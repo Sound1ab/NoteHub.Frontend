@@ -85,11 +85,11 @@ const Triangle = styled.div<Pick<IDropdownMenuProps, 'trianglePosition'>>`
     switch (trianglePosition) {
       case 'left':
         return css`
-          left: ${({ theme }) => theme.spacing.xxs};
+          left: ${({ theme }) => theme.spacing.xxxs};
         `
       case 'right':
         return css`
-          right: ${({ theme }) => theme.spacing.xxs};
+          right: ${({ theme }) => theme.spacing.xxxs};
         `
     }
   }};
