@@ -113,6 +113,7 @@ export function FileInput({
 }
 
 const Wrapper = styled.div`
+  padding: ${({ theme }) => theme.spacing.xs};
   position: relative;
 
   &:after {
@@ -120,7 +121,7 @@ const Wrapper = styled.div`
     color: ${({ theme }) => theme.colors.text.secondary};
     position: absolute;
     top: 50%;
-    right: ${({ theme }) => theme.spacing.xs};
+    right: ${({ theme }) => theme.spacing.s};
     transform: translateY(-50%);
   }
 `

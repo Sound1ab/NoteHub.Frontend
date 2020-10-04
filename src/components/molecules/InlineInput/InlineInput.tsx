@@ -31,37 +31,29 @@ export function InlineInput({
   type = 'text',
   autocorrect = 'off',
   autocapitalize = 'off',
-  autoFocus,
+  autoFocus = false,
   ...rest
 }: IInlineInput) {
   const wrapperRef = useRef<HTMLFormElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
   useClickOutside(clickOutsideCallback, wrapperRef)
 
-  useLayoutEffect(() => {
-    if (!autoFocus) {
-      return
-    }
-    inputRef.current?.focus()
-  }, [])
-
   return (
     <Form ref={wrapperRef} onSubmit={onSubmit} aria-label={formAriaLabel}>
       {icon}
-      <StyledFocusLock>
-        <Input
-          {...rest}
-          ref={inputRef}
-          disabled={isDisabled}
-          type={type}
-          value={value}
-          onChange={handleOnChange}
-          name="name"
-          aria-label={inputAriaLabel}
-          autoCorrect={autocorrect}
-          autoCapitalize={autocapitalize}
-        />
-      </StyledFocusLock>
+      <Input
+        {...rest}
+        ref={inputRef}
+        disabled={isDisabled}
+        type={type}
+        value={value}
+        onChange={handleOnChange}
+        name="name"
+        aria-label={inputAriaLabel}
+        autoCorrect={autocorrect}
+        autoCapitalize={autocapitalize}
+        autoFocus={autoFocus}
+      />
       <HiddenSubmit type="submit" />
     </Form>
   )
@@ -70,10 +62,6 @@ export function InlineInput({
 const Form = styled.form`
   position: relative;
   display: flex;
-  width: 100%;
-`
-
-const StyledFocusLock = styled(FocusLock)`
   width: 100%;
 `
 

@@ -50,6 +50,10 @@ export const DropDownButton = styled(BaseButton)`
   padding: ${({ theme }) => theme.spacing.xxs}
     ${({ theme }) => theme.spacing.xs};
   width: 100%;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.background.tertiary};
+  }
 `
 
 export const Button = styled(BaseButton)`

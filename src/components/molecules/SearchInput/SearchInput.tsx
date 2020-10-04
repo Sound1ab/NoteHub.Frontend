@@ -1,8 +1,8 @@
 import React from 'react'
 
+import { useReadSearch } from '../../../hooks'
 import { styled } from '../../../theme'
 import { InlineInput } from '../InlineInput/InlineInput'
-import { useReadSearch } from '../../../hooks'
 
 export function SearchInput() {
   const { search, client } = useReadSearch()
@@ -13,15 +13,17 @@ export function SearchInput() {
     client.writeData({ data: { search: value } })
   }
 
-  const noop = () => null
+  function onSubmit(e: React.ChangeEvent<HTMLFormElement>) {
+    e.preventDefault()
+  }
 
   return (
     <Wrapper>
       <InlineInput
         value={search}
-        clickOutsideCallback={noop}
+        clickOutsideCallback={() => null}
         handleOnChange={handleOnChange}
-        onSubmit={noop}
+        onSubmit={onSubmit}
         inputAriaLabel="Search files"
         type="text"
       />
