@@ -21,7 +21,7 @@ export function Login() {
     }
 
     client.writeData({ data: { jwt } })
-  }, [jwt])
+  }, [client, jwt])
 
   if (loading) {
     return null

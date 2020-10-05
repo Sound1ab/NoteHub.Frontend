@@ -12,7 +12,7 @@ export function useDarkMode() {
     } else {
       client.writeData({ data: { currentTheme: COLOR_MODE.LIGHT } })
     }
-  }, [])
+  }, [client])
 
   const isDarkMode = currentTheme === COLOR_MODE.DARK
 
