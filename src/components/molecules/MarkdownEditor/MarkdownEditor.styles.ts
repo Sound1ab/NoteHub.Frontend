@@ -11,7 +11,7 @@ export const Style = styled.article`
   .editor-preview-active-side {
     flex: 0 0 50%;
     overflow: auto;
-    padding: ${({ theme }) => theme.spacing.xs};
+    padding: 0 ${({ theme }) => theme.spacing.xs};
     display: block;
   }
 
@@ -422,7 +422,7 @@ export const Style = styled.article`
     color: #000;
     direction: ltr;
     box-sizing: border-box;
-    padding: ${({ theme }) => theme.spacing.xs};
+    padding: 0 ${({ theme }) => theme.spacing.xs};
     font: inherit;
     z-index: 1;
     word-wrap: break-word;

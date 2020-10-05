@@ -31,9 +31,9 @@ export const ToolbarButton = styled(BaseButton)`
   padding: 0.785rem;
   background-color: ${({ theme }) => theme.colors.background.secondary};
   border-radius: ${({ theme }) => theme.spacing.xxs};
-
   display: none;
   margin-right: ${({ theme }) => theme.spacing.xxs};
+  color: ${({ theme }) => theme.colors.text.primary};
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     display: inline-flex;
@@ -50,6 +50,7 @@ export const DropDownButton = styled(BaseButton)`
   padding: ${({ theme }) => theme.spacing.xxs}
     ${({ theme }) => theme.spacing.xs};
   width: 100%;
+  color: ${({ theme }) => theme.colors.text.primary};
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.background.tertiary};
@@ -85,7 +86,6 @@ const StyledBaseButton = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
   }
 
   > * {
-    color: ${({ theme }) => theme.colors.text.secondary};
     ${({ isLoading }) =>
       isLoading
         ? css`
