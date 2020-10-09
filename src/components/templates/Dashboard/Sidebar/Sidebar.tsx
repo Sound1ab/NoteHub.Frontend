@@ -1,61 +1,25 @@
 import React, { useState } from 'react'
 
 import { CONTAINER_ID } from '../../../../enums'
-import { useReadNodes, useReadSearch } from '../../../../hooks'
+import { useReadSearch } from '../../../../hooks'
 import { styled } from '../../../../theme'
-import { createNodes } from '../../../../utils'
-import { Button, Icon, List } from '../../../atoms'
-import { FileInput } from './FileInput/FileInput'
-import { SearchResults, Tree, TreeSkeleton } from './FileTree'
+import { Button, Icon } from '../../../atoms'
+import { FileTree } from './FileTree/FileTree'
 import { SearchInput } from './SearchInput/SearchInput'
 
 export function Sidebar() {
-  const [isNewFileOpen, setIsNewFileOpen] = useState(false)
-  const { gitNodes, loading } = useReadNodes()
-  const [listOfToggledPaths, setListOfToggledPaths] = useState<Set<string>>(
-    new Set([])
-  )
   const { search } = useReadSearch()
-
-  function onToggle(path: string, toggled: boolean) {
-    if (toggled) {
-      listOfToggledPaths.add(path)
-    } else {
-      listOfToggledPaths.delete(path)
-    }
-    setListOfToggledPaths(new Set(listOfToggledPaths))
-  }
+  const [isNewFileOpen, setIsNewFileOpen] = useState(false)
 
   return (
     <StyledSidebar id={CONTAINER_ID.SIDEBAR}>
-      {loading ? (
-        <TreeSkeleton />
-      ) : (
-        <>
-          <SearchInput />
-          <Navigation>
-            {search ? (
-              <SearchResults />
-            ) : (
-              <>
-                {gitNodes &&
-                  createNodes(gitNodes, listOfToggledPaths).map((node) => (
-                    <List key={node.name}>
-                      <Tree key={node.name} node={node} onToggle={onToggle} />
-                    </List>
-                  ))}
-                {isNewFileOpen && (
-                  <FileInput
-                    onClickOutside={() => setIsNewFileOpen(false)}
-                    onToggle={onToggle}
-                    action="create"
-                  />
-                )}
-              </>
-            )}
-          </Navigation>
-        </>
-      )}
+      <SearchInput />
+      <Navigation>
+        <FileTree
+          isNewFileOpen={isNewFileOpen}
+          closeNewFile={() => setIsNewFileOpen(false)}
+        />
+      </Navigation>
       <StyledButton
         onClick={() => setIsNewFileOpen(true)}
         isDisabled={Boolean(search)}
