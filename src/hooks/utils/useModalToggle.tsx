@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 
-import { IPortal, Portal } from '../../components/utility'
+import { IPortal, Portal } from '../../components/atoms'
 
 export function useModalToggle() {
   const [isOpen, setOpen] = useState(false)

@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import {
   ReadCurrentThemeQuery,
   ReadCurrentThemeQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 import { COLOR_MODE } from '../../enums'
 
 const ReadCurrentThemeDocument = gql`

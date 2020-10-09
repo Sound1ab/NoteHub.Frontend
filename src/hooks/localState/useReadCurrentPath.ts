@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import {
   ReadCurrentPathQuery,
   ReadCurrentPathQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 
 const ReadCurrentPathDocument = gql`
   query ReadCurrentPath {

@@ -7,7 +7,7 @@ import {
   ReadFileQueryVariables,
   UpdateFileMutation,
   UpdateFileMutationVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 import { FileFragment } from '../../fragments'
 import { debounce } from '../../utils'
 import { ReadFileDocument, useReadFile } from './useReadFile'

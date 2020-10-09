@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import {
   ReadGithubUserAccessTokenQuery,
   ReadGithubUserAccessTokenQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 
 export const ReadGithubUserAccessTokenDocument = gql`
   query ReadGithubUserAccessToken($code: String!, $state: String!) {

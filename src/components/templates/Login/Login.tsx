@@ -4,7 +4,8 @@ import { Redirect } from 'react-router-dom'
 
 import { useLogin } from '../../../hooks'
 import { styled } from '../../../theme'
-import { Button, Icon } from '../../atoms'
+import { Icon } from '../../atoms'
+import { LoginButton } from './LoginButton/LoginButton'
 
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
 const REDIRECT_URL = process.env.REACT_APP_REDIRECT_URL
@@ -35,14 +36,14 @@ export function Login() {
     />
   ) : (
     <Wrapper>
-      <Button
+      <LoginButton
         as="a"
         href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&state=${STATE}&scope=${SCOPE}`}
         target="_self"
       >
         <Icon icon="github" prefix="fab" size="lg" marginRight />
         Log in with Github
-      </Button>
+      </LoginButton>
     </Wrapper>
   )
 }

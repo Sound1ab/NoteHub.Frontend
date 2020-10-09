@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import {
   ReadCursorPositionQuery,
   ReadCursorPositionQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 
 const ReadCursorPositionDocument = gql`
   query ReadCursorPosition {

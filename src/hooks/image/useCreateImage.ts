@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import {
   CreateImageMutation,
   CreateImageMutationVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 import { FileFragment } from '../../fragments'
 
 export const CreateImageDocument = gql`

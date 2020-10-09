@@ -4,7 +4,7 @@ import React from 'react'
 
 import { fileGitNodeTwo, resolvers } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
-import { MockProvider } from '../../utility'
+import { MockProvider } from '../../providers'
 import { Dashboard } from './Dashboard'
 
 jest.mock('react-simplemde-editor', function () {

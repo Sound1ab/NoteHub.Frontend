@@ -2,13 +2,8 @@ import React from 'react'
 import { GoogleFont, TypographyStyle } from 'react-typography'
 import Typography from 'typography'
 
-import {
-  ApolloProvider,
-  GlobalStyle,
-  IconProvider,
-  Router,
-  ThemeProvider,
-} from './utility'
+import { ApolloProvider, IconProvider, ThemeProvider } from './providers'
+import { GlobalStyle, Router } from './utility'
 
 export function App() {
   return (

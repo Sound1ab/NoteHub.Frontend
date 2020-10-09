@@ -1,7 +1,4 @@
-import {
-  GitNode,
-  Node_Type,
-} from '../components/apollo/generated_components_typings'
+import { GitNode, Node_Type } from '../components/apollo'
 import { ITreeNode } from '../types'
 import { isFile } from './isFile'
 

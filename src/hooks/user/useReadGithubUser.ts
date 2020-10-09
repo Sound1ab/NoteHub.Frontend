@@ -1,9 +1,10 @@
-import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
 import {
   ReadGithubUserQuery,
   ReadGithubUserQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 import { GithubUserFragment } from '../../fragments'
 
 export const ReadGithubUserDocument = gql`

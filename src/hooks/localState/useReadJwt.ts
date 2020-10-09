@@ -1,10 +1,7 @@
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
-import {
-  ReadJwtQuery,
-  ReadJwtQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+import { ReadJwtQuery, ReadJwtQueryVariables } from '../../components/apollo'
 
 export const ReadJwtDocument = gql`
   query ReadJwt {

@@ -1,8 +1,10 @@
 import React from 'react'
 
 import { styled } from '../../../theme'
-import { Editor, Sidebar, Toolbar } from '../../organisms'
-import { EasyMDEProvider } from '../../utility'
+import { EasyMDEProvider } from '../../providers'
+import { Editor } from './Editor/Editor'
+import { Sidebar } from './Sidebar/Sidebar'
+import { Toolbar } from './Toolbar/Toolbar'
 
 export function Dashboard() {
   return (

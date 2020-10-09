@@ -2,7 +2,8 @@ import React, { ReactNode, Ref, forwardRef } from 'react'
 import { css } from 'styled-components'
 
 import { styled } from '../../../theme'
-import { DropDownButton, Icon, TIcons } from '..'
+import { Icon, TIcons } from '../Icon/Icon'
+import { DropdownButton } from './DropdownButton'
 
 export interface IDropdownItem {
   icon?: TIcons
@@ -29,7 +30,7 @@ export const Dropdown = forwardRef(
         <Triangle trianglePosition={trianglePosition} />
         {items.map(
           ({ isDisabled = false, onClick, icon, prefix, custom, label }) => (
-            <DropDownButton
+            <DropdownButton
               key={label}
               onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
                 onClose && onClose()
@@ -53,7 +54,7 @@ export const Dropdown = forwardRef(
                   {label}
                 </Item>
               )}
-            </DropDownButton>
+            </DropdownButton>
           )
         )}
       </StyledDropdown>

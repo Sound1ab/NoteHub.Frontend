@@ -6,7 +6,7 @@ import {
   ReadImageQueryVariables,
   UpdateImageMutation,
   UpdateImageMutationVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 import { FileFragment } from '../../fragments'
 import { ReadImageDocument } from './useReadImage'
 

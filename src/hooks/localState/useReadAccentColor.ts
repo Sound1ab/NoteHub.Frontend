@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import {
   ReadAccentColorQuery,
   ReadAccentColorQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 
 const ReadAccentColorDocument = gql`
   query ReadAccentColor {

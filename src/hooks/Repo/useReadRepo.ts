@@ -1,10 +1,7 @@
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
-import {
-  ReadRepoQuery,
-  ReadRepoQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+import { ReadRepoQuery, ReadRepoQueryVariables } from '../../components/apollo'
 import { RepoFragment } from '../../fragments'
 
 export const ReadRepoDocument = gql`

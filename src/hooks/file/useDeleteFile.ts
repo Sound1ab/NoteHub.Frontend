@@ -10,7 +10,7 @@ import {
   Node_Type,
   ReadNodesQuery,
   ReadNodesQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 import { FileFragment } from '../../fragments'
 import { extractFilename } from '../../utils'
 import { ReadNodesDocument } from '..'

@@ -1,7 +1,7 @@
 import EasyMDE from 'easymde'
 import { useContext } from 'react'
 
-import { EasyMDEContext } from '../../components/utility'
+import { EasyMDEContext } from '../../components/providers'
 
 export function useEasyMDE() {
   const context = useContext(EasyMDEContext)

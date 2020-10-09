@@ -1,10 +1,7 @@
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
-import {
-  LoginQuery,
-  LoginQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+import { LoginQuery, LoginQueryVariables } from '../../components/apollo'
 
 export const LoginDocument = gql`
   query Login {

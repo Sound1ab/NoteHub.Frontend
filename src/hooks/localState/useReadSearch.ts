@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import {
   ReadSearchQuery,
   ReadSearchQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 
 export const ReadSearchDocument = gql`
   query ReadSearch {

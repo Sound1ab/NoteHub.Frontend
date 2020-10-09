@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import {
   ReadImageQuery,
   ReadImageQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 import { FileFragment } from '../../fragments'
 
 export const ReadImageDocument = gql`

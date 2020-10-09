@@ -8,7 +8,7 @@ import {
   DeleteRepoMutationVariables,
   ReadRepoQuery,
   ReadRepoQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+} from '../../components/apollo'
 import { RepoFragment } from '../../fragments'
 import { ReadRepoDocument } from '..'
 

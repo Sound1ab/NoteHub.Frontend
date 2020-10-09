@@ -5,7 +5,11 @@ import { EventType } from '@testing-library/dom/types/events'
 import { act, fireEvent, render } from '@testing-library/react'
 import React, { ReactNode } from 'react'
 
-import { IconProvider, MockProvider, ThemeProvider } from './components/utility'
+import {
+  IconProvider,
+  MockProvider,
+  ThemeProvider,
+} from './components/providers'
 
 export type FireObject = {
   [K in EventType]: (

@@ -13,68 +13,21 @@ interface IButton {
   title?: string
 }
 
-export const BaseButton = forwardRef(
+export const Button = forwardRef(
   (props: IButton, ref: Ref<HTMLButtonElement>) => {
     return (
-      <StyledBaseButton ref={ref} {...props} disabled={props.isDisabled}>
+      <StyledButton ref={ref} {...props} disabled={props.isDisabled}>
         {props.isLoading ? (
           <Icon size="sm" icon="spinner" prefix="fa" />
         ) : (
           props.children
         )}
-      </StyledBaseButton>
+      </StyledButton>
     )
   }
 )
 
-export const ToolbarButton = styled(BaseButton)`
-  padding: 0.785rem;
-  background-color: ${({ theme }) => theme.colors.background.secondary};
-  border-radius: ${({ theme }) => theme.spacing.xxs};
-  display: none;
-  margin-right: ${({ theme }) => theme.spacing.xxs};
-  color: ${({ theme }) => theme.colors.text.primary};
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    display: inline-flex;
-  }
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.background.tertiary};
-  }
-`
-
-export const DropDownButton = styled(BaseButton)`
-  user-select: none;
-  outline: none;
-  padding: ${({ theme }) => theme.spacing.xxs}
-    ${({ theme }) => theme.spacing.xs};
-  width: 100%;
-  color: ${({ theme }) => theme.colors.text.primary};
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.background.tertiary};
-  }
-`
-
-export const Button = styled(BaseButton)`
-  padding: ${({ theme }) => theme.spacing.xs};
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  color: ${({ theme }) => theme.colors.text.primary};
-  text-decoration: none;
-
-  &:visited {
-    color: ${({ theme }) => theme.colors.text.primary};
-  }
-
-  * svg {
-    color: #fff;
-  }
-`
-
-const StyledBaseButton = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
+const StyledButton = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
   position: relative;
 
   &[disabled] {

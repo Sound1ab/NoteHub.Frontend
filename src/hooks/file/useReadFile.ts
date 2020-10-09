@@ -1,10 +1,7 @@
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
-import {
-  ReadFileQuery,
-  ReadFileQueryVariables,
-} from '../../components/apollo/generated_components_typings'
+import { ReadFileQuery, ReadFileQueryVariables } from '../../components/apollo'
 import { FileFragment } from '../../fragments'
 import { isFile } from '../../utils'
 import { useReadCurrentPath } from '../'
