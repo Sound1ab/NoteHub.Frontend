@@ -3,7 +3,7 @@ import React from 'react'
 import { resolvers } from '../../../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../../../test-utils'
 import { MockProvider } from '../../../../providers'
-import { Sidebar } from '../Sidebar'
+import { FileTree } from './FileTree'
 
 afterEach(cleanup)
 
@@ -17,7 +17,7 @@ describe('FileTree', () => {
   it('should toggle folders', async () => {
     const { getByText, queryByText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <Sidebar />
+        <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
       </MockProvider>
     )
 
@@ -34,11 +34,37 @@ describe('FileTree', () => {
     expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
   })
 
+  describe('file input', () => {
+    it('should show file input if passed prop', async () => {
+      const { getByLabelText } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <FileTree isNewFileOpen={true} closeNewFile={jest.fn()} />
+        </MockProvider>
+      )
+
+      expect(getByLabelText('Input file name')).toBeInTheDocument()
+    })
+
+    it('should call closeNewFile if deselected ', async () => {
+      const closeNewFile = jest.fn()
+
+      const { container } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <FileTree isNewFileOpen={true} closeNewFile={closeNewFile} />
+        </MockProvider>
+      )
+
+      await fireEvent.mouseUp(container)
+
+      expect(closeNewFile).toBeCalled()
+    })
+  })
+
   describe('when creating a file', () => {
     it('should toggle folder open if placed inside a closed folder', async () => {
       const { getByText, getByLabelText } = await render(
         <MockProvider mockResolvers={resolvers}>
-          <Sidebar />
+          <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
         </MockProvider>
       )
 
@@ -64,7 +90,7 @@ describe('FileTree', () => {
     it('should be possible to toggle newly created folder', async () => {
       const { getByText, getByLabelText, queryByText } = await render(
         <MockProvider mockResolvers={resolvers}>
-          <Sidebar />
+          <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
         </MockProvider>
       )
 
@@ -102,7 +128,7 @@ describe('FileTree', () => {
     it('should remove file but keep folder open if other files exist', async () => {
       const { getByText, getByLabelText, queryByText } = await render(
         <MockProvider mockResolvers={resolvers}>
-          <Sidebar />
+          <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
         </MockProvider>
       )
 
@@ -126,7 +152,7 @@ describe('FileTree', () => {
     it('should remove folder if no other files exist', async () => {
       const { getByText, getByLabelText, queryByText } = await render(
         <MockProvider mockResolvers={resolvers}>
-          <Sidebar />
+          <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
         </MockProvider>
       )
 
@@ -135,15 +161,14 @@ describe('FileTree', () => {
 
       expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
 
+      expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
+
       // open file menu
       await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
 
       await fireEvent.click(getByLabelText('Delete file'))
 
       expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
-
-      // open folder
-      await fireEvent.click(getByText('MOCK_FOLDER_PATH'))
 
       expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
 
@@ -161,7 +186,7 @@ describe('FileTree', () => {
     it('should move the file or folder to a new name', async () => {
       const { getByText, getByLabelText, queryByText } = await render(
         <MockProvider mockResolvers={resolvers}>
-          <Sidebar />
+          <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
         </MockProvider>
       )
 

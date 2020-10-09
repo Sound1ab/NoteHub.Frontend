@@ -19,12 +19,13 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const [listOfToggledPaths, setListOfToggledPaths] = useState<Set<string>>(
     new Set([])
   )
+  const [activePath, setActivePath] = useState('')
 
   if (loading) {
     return <TreeSkeleton />
   }
 
-  function onToggle(path: string, toggled: boolean) {
+  function handleOnToggle(path: string, toggled: boolean) {
     if (toggled) {
       listOfToggledPaths.add(path)
     } else {
@@ -33,20 +34,30 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
     setListOfToggledPaths(new Set(listOfToggledPaths))
   }
 
+  function handleOnClick(path: string) {
+    setActivePath(path)
+  }
+
   return search ? (
-    <SearchResults />
+    <SearchResults onClick={handleOnClick} activePath={activePath} />
   ) : (
     <>
       {gitNodes &&
         createNodes(gitNodes, listOfToggledPaths).map((node) => (
           <List key={node.name}>
-            <Tree key={node.name} node={node} onToggle={onToggle} />
+            <Tree
+              key={node.name}
+              node={node}
+              onToggle={handleOnToggle}
+              onClick={handleOnClick}
+              activePath={activePath}
+            />
           </List>
         ))}
       {isNewFileOpen && (
         <FileInput
           onClickOutside={closeNewFile}
-          onToggle={onToggle}
+          onToggle={handleOnToggle}
           action="create"
         />
       )}

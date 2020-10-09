@@ -8,7 +8,7 @@ import {
   Node_Type,
   QueryReadFileArgs,
   QueryReadGithubUserAccessTokenArgs,
-} from '../components/apollo/generated_components_typings'
+} from '../components/apollo'
 import { ITreeNode } from '../types'
 import { extractFilename } from '../utils'
 

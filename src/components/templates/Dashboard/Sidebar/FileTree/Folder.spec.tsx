@@ -8,6 +8,10 @@ import { Folder } from './Folder'
 describe('Folder', () => {
   const onToggle = jest.fn()
 
+  const onClick = jest.fn()
+
+  const activePath = 'MOCK_PATH'
+
   const childNodes = <div>MOCK CHILDREN</div>
 
   beforeEach(() => {
@@ -20,6 +24,8 @@ describe('Folder', () => {
         <Folder
           node={folderNode}
           onToggle={onToggle}
+          onClick={onClick}
+          activePath={activePath}
           level={1}
           childNodes={childNodes}
         />
@@ -40,6 +46,8 @@ describe('Folder', () => {
         <Folder
           node={{ ...folderNode, toggled: true }}
           onToggle={onToggle}
+          onClick={onClick}
+          activePath={folderNode.path}
           level={1}
           childNodes={childNodes}
         />
@@ -60,6 +68,8 @@ describe('Folder', () => {
         <Folder
           node={{ ...folderNode, toggled: true }}
           onToggle={onToggle}
+          onClick={onClick}
+          activePath={activePath}
           level={1}
           childNodes={childNodes}
         />
@@ -77,6 +87,8 @@ describe('Folder', () => {
         <Folder
           node={folderNode}
           onToggle={onToggle}
+          onClick={onClick}
+          activePath={activePath}
           level={1}
           childNodes={childNodes}
         />
@@ -94,6 +106,8 @@ describe('Folder', () => {
         <Folder
           node={folderNode}
           onToggle={onToggle}
+          onClick={onClick}
+          activePath={activePath}
           level={1}
           childNodes={childNodes}
         />
@@ -105,5 +119,24 @@ describe('Folder', () => {
     await fireEvent.click(getByLabelText('Create file'))
 
     expect(getByLabelText('Input file name')).toBeInTheDocument()
+  })
+
+  it('should call onClick if folder is clicked', async () => {
+    const { getByLabelText } = await render(
+      <MockProvider mockResolvers={resolvers}>
+        <Folder
+          node={folderNode}
+          onToggle={onToggle}
+          onClick={onClick}
+          activePath={activePath}
+          level={1}
+          childNodes={childNodes}
+        />
+      </MockProvider>
+    )
+
+    await fireEvent.click(getByLabelText('folder'))
+
+    expect(onClick).toBeCalled()
   })
 })

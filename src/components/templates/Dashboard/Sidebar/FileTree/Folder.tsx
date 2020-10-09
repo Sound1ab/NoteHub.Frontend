@@ -1,6 +1,5 @@
 import React, { ReactNode, useState } from 'react'
 
-import { useReadCurrentPath } from '../../../../../hooks'
 import { styled } from '../../../../../theme'
 import { ITreeNode } from '../../../../../types'
 import { Icon } from '../../../../atoms'
@@ -10,15 +9,23 @@ import { Node } from './Node'
 interface IFolder {
   node: ITreeNode
   onToggle: (path: string, toggled: boolean) => void
+  onClick: (path: string) => void
+  activePath: string
   level: number
   childNodes: ReactNode
 }
 
-export function Folder({ level, node, onToggle, childNodes }: IFolder) {
+export function Folder({
+  level,
+  node,
+  onToggle,
+  onClick,
+  activePath,
+  childNodes,
+}: IFolder) {
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
   const { path, toggled } = node
-  const { currentPath } = useReadCurrentPath()
-  const isActive = currentPath === node.path
+  const isActive = path === activePath
 
   function onChevronClick(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -45,12 +52,14 @@ export function Folder({ level, node, onToggle, childNodes }: IFolder) {
     },
   ]
 
-  function onClick() {
+  function handleOnClick() {
     if (isActive) {
       onToggle(node.path, !node.toggled)
     } else {
       onToggle(node.path, true)
     }
+
+    onClick(path)
   }
 
   return (
@@ -59,7 +68,8 @@ export function Folder({ level, node, onToggle, childNodes }: IFolder) {
         node={node}
         level={level}
         dropdownItems={dropdownItems}
-        onClick={onClick}
+        onClick={handleOnClick}
+        activePath={activePath}
         childNodes={childNodes}
       >
         <>

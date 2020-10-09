@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/react-hooks'
 import React, { useState } from 'react'
 
 import { CONTAINER_ID } from '../../../../../enums'
@@ -13,12 +14,16 @@ import { Node } from './Node'
 interface IFile {
   node: ITreeNode
   onToggle: (path: string, toggled: boolean) => void
+  onClick: (path: string) => void
+  activePath: string
   level: number
 }
 
-export function File({ node, onToggle, level }: IFile) {
+export function File({ node, onToggle, level, onClick, activePath }: IFile) {
+  const client = useApolloClient()
   const [isRenaming, setIsRenaming] = useState(false)
   const [deleteFile] = useDeleteFile()
+  const { path, type } = node
 
   function handleSetIsRenamingOpen(
     e: React.MouseEvent<HTMLElement, MouseEvent>
@@ -50,15 +55,21 @@ export function File({ node, onToggle, level }: IFile) {
     },
   ]
 
-  function onClick() {
-    if (node.type === Node_Type.File) {
+  function handleOnClick() {
+    if (type === Node_Type.File) {
       scrollIntoView(CONTAINER_ID.EDITOR)
     }
+
+    onClick(path)
+
+    client.writeData({
+      data: { currentPath: path },
+    })
   }
 
   return isRenaming ? (
     <FileInput
-      path={node.path}
+      path={path}
       onClickOutside={() => setIsRenaming(false)}
       onToggle={onToggle}
       action="rename"
@@ -67,7 +78,8 @@ export function File({ node, onToggle, level }: IFile) {
     <Node
       node={node}
       level={level}
-      onClick={onClick}
+      onClick={handleOnClick}
+      activePath={activePath}
       dropdownItems={dropdownItems}
     >
       <StyledIcon size="sm" icon="file" prefix="fa" />

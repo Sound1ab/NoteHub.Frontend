@@ -9,36 +9,56 @@ import { Folder } from './Folder'
 interface INode {
   node: ITreeNode
   onToggle: (path: string, toggled: boolean) => void
+  onClick: (path: string) => void
+  activePath: string
   level?: number
 }
 
-export function Tree({ node, onToggle, level = 0 }: INode) {
+export function Tree({
+  node,
+  onToggle,
+  onClick,
+  activePath,
+  level = 0,
+}: INode) {
   const { toggled, children, path, type } = node
 
   if (type === Node_Type.Folder && children?.length === 0 && path !== '') {
     return null
   }
 
-  const childNodes =
-    children && children?.length > 0
-      ? children.map((childNode) => (
-          <Tree
-            node={childNode}
-            onToggle={onToggle}
-            key={`${childNode.path}/${childNode.name}`}
-            level={level + 1}
-          />
-        ))
-      : []
+  const shouldShowChildNodes = toggled && children && children?.length > 0
 
   return type === Node_Type.Folder ? (
     <Folder
       node={node}
       onToggle={onToggle}
+      onClick={onClick}
+      activePath={activePath}
       level={level}
-      childNodes={<List>{toggled && childNodes}</List>}
+      childNodes={
+        <List>
+          {shouldShowChildNodes &&
+            children?.map((childNode) => (
+              <Tree
+                key={`${childNode.path}/${childNode.name}`}
+                node={childNode}
+                onToggle={onToggle}
+                onClick={onClick}
+                activePath={activePath}
+                level={level + 1}
+              />
+            ))}
+        </List>
+      }
     />
   ) : (
-    <File node={node} onToggle={onToggle} level={level} />
+    <File
+      node={node}
+      onToggle={onToggle}
+      onClick={onClick}
+      activePath={activePath}
+      level={level}
+    />
   )
 }

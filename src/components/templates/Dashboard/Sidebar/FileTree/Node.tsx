@@ -1,8 +1,7 @@
-import { useApolloClient } from '@apollo/react-hooks'
 import React, { ReactNode, SyntheticEvent, useRef } from 'react'
 import { css } from 'styled-components'
 
-import { useModalToggle, useReadCurrentPath } from '../../../../../hooks'
+import { useModalToggle } from '../../../../../hooks'
 import { styled } from '../../../../../theme'
 import { ITreeNode } from '../../../../../types'
 import { Fade } from '../../../../animation'
@@ -16,6 +15,7 @@ interface INode {
   childNodes?: ReactNode
   dropdownItems: IDropdownItem[]
   onClick: () => void
+  activePath: string
 }
 
 export function Node({
@@ -25,14 +25,13 @@ export function Node({
   childNodes,
   dropdownItems,
   onClick,
+  activePath,
 }: INode) {
   const containerRef = useRef(null)
-  const client = useApolloClient()
 
   const { isOpen, Portal, ref, setOpen } = useModalToggle()
-  const { currentPath } = useReadCurrentPath()
-  const isActive = currentPath === node.path
-  const { type, name } = node
+  const { type, name, path } = node
+  const isActive = path === activePath
 
   function handleToggleMenu(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -55,10 +54,6 @@ export function Node({
     }
 
     onClick()
-
-    client.writeData({
-      data: { currentPath: node.path },
-    })
   }
 
   return (

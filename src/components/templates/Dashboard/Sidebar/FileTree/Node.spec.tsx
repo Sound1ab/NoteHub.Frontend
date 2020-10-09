@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/react-hooks'
 import React from 'react'
 
 import { fileNodeOne, resolvers } from '../../../../../schema/mockResolvers'
@@ -6,18 +5,7 @@ import { fireEvent, render } from '../../../../../test-utils'
 import { MockProvider } from '../../../../providers'
 import { Node } from './Node'
 
-jest.mock('@apollo/react-hooks', () => {
-  const originalModule = jest.requireActual('@apollo/react-hooks')
-
-  return {
-    ...originalModule,
-    useApolloClient: jest.fn(),
-  }
-})
-
 describe('Node', () => {
-  const writeData = jest.fn()
-
   const dropdownItems = [
     {
       icon: 'edit' as const,
@@ -29,49 +17,10 @@ describe('Node', () => {
 
   const onClick = jest.fn()
 
+  const activePath = 'MOCK_PATH'
+
   beforeEach(() => {
     jest.resetAllMocks()
-    ;(useApolloClient as jest.Mock).mockReturnValue({
-      writeData,
-    })
-  })
-
-  it('should update the currentPath with clicked node path', async () => {
-    const { getByText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <Node
-          node={fileNodeOne}
-          level={1}
-          dropdownItems={dropdownItems}
-          onClick={onClick}
-        />
-      </MockProvider>
-    )
-
-    await fireEvent.click(getByText('MOCK_FILE_PATH_1.md'))
-
-    expect(writeData).toBeCalledWith({
-      data: { currentPath: fileNodeOne.path },
-    })
-  })
-
-  it('should disable clicks if optimistically updated', async () => {
-    const { getByText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <Node
-          node={{ ...fileNodeOne, isOptimistic: true }}
-          level={1}
-          dropdownItems={dropdownItems}
-          onClick={onClick}
-        />
-      </MockProvider>
-    )
-
-    await fireEvent.click(getByText('MOCK_FILE_PATH_1.md'))
-
-    expect(writeData).not.toBeCalledWith({
-      data: { currentPath: fileNodeOne.path },
-    })
   })
 
   it('should call onClick callback', async () => {
@@ -82,6 +31,7 @@ describe('Node', () => {
           level={1}
           dropdownItems={dropdownItems}
           onClick={onClick}
+          activePath={activePath}
         />
       </MockProvider>
     )
@@ -99,6 +49,7 @@ describe('Node', () => {
           level={1}
           dropdownItems={dropdownItems}
           onClick={onClick}
+          activePath={activePath}
         />
       </MockProvider>
     )
