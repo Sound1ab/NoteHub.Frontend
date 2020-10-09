@@ -1,9 +1,15 @@
 import React from 'react'
 
-import { folderNode, resolvers } from '../../../../../../../schema/mockResolvers'
+import { useFileTree } from '../../../../../../../hooks'
+import {
+  folderNode,
+  resolvers,
+} from '../../../../../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../../../../../test-utils'
 import { MockProvider } from '../../../../../../providers'
 import { Folder } from './Folder'
+
+jest.mock('../../../../../../../hooks/utils/useFileTree')
 
 describe('Folder', () => {
   const onToggle = jest.fn()
@@ -15,20 +21,18 @@ describe('Folder', () => {
   const childNodes = <div>MOCK CHILDREN</div>
 
   beforeEach(() => {
-    jest.resetAllMocks()
+    jest.clearAllMocks()
+    ;(useFileTree as jest.Mock).mockReturnValue({
+      activePath,
+      onClick,
+      onToggle,
+    })
   })
 
   it('should call onToggle with true if node is not already selected', async () => {
     const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <Folder
-          node={folderNode}
-          onToggle={onToggle}
-          onClick={onClick}
-          activePath={activePath}
-          level={1}
-          childNodes={childNodes}
-        />
+        <Folder node={folderNode} level={1} childNodes={childNodes} />
       </MockProvider>
     )
 
@@ -38,6 +42,12 @@ describe('Folder', () => {
   })
 
   it('should call onToggle with false if node is already selected', async () => {
+    ;(useFileTree as jest.Mock).mockReturnValue({
+      activePath: folderNode.path,
+      onClick,
+      onToggle,
+    })
+
     const { getByLabelText } = await render(
       <MockProvider
         mockResolvers={resolvers}
@@ -45,9 +55,6 @@ describe('Folder', () => {
       >
         <Folder
           node={{ ...folderNode, toggled: true }}
-          onToggle={onToggle}
-          onClick={onClick}
-          activePath={folderNode.path}
           level={1}
           childNodes={childNodes}
         />
@@ -67,9 +74,6 @@ describe('Folder', () => {
       >
         <Folder
           node={{ ...folderNode, toggled: true }}
-          onToggle={onToggle}
-          onClick={onClick}
-          activePath={activePath}
           level={1}
           childNodes={childNodes}
         />
@@ -81,17 +85,29 @@ describe('Folder', () => {
     expect(onToggle).toBeCalledWith(folderNode.path, false)
   })
 
-  it('should open folder dropdown menu', async () => {
-    const { getByLabelText, getByText } = await render(
-      <MockProvider mockResolvers={resolvers}>
+  it('should call onClick with path if chevron is clicked', async () => {
+    const { getByLabelText } = await render(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{ currentPath: folderNode.path }}
+      >
         <Folder
-          node={folderNode}
-          onToggle={onToggle}
-          onClick={onClick}
-          activePath={activePath}
+          node={{ ...folderNode, toggled: true }}
           level={1}
           childNodes={childNodes}
         />
+      </MockProvider>
+    )
+
+    await fireEvent.click(getByLabelText('chevron'))
+
+    expect(onClick).toBeCalledWith(folderNode.path)
+  })
+
+  it('should open folder dropdown menu', async () => {
+    const { getByLabelText, getByText } = await render(
+      <MockProvider mockResolvers={resolvers}>
+        <Folder node={folderNode} level={1} childNodes={childNodes} />
       </MockProvider>
     )
 
@@ -103,14 +119,7 @@ describe('Folder', () => {
   it('should open file input when create new file is selected from folder dropdown', async () => {
     const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <Folder
-          node={folderNode}
-          onToggle={onToggle}
-          onClick={onClick}
-          activePath={activePath}
-          level={1}
-          childNodes={childNodes}
-        />
+        <Folder node={folderNode} level={1} childNodes={childNodes} />
       </MockProvider>
     )
 
@@ -124,14 +133,7 @@ describe('Folder', () => {
   it('should call onClick if folder is clicked', async () => {
     const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <Folder
-          node={folderNode}
-          onToggle={onToggle}
-          onClick={onClick}
-          activePath={activePath}
-          level={1}
-          childNodes={childNodes}
-        />
+        <Folder node={folderNode} level={1} childNodes={childNodes} />
       </MockProvider>
     )
 

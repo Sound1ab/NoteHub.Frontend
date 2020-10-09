@@ -10,6 +10,7 @@ import {
   MockProvider,
   ThemeProvider,
 } from './components/providers'
+import { FileTreeProvider } from './components/templates/Dashboard/Sidebar/FileTree/FileTreeProvider'
 
 export type FireObject = {
   [K in EventType]: (
@@ -21,7 +22,13 @@ export type FireObject = {
 
 const Context = ({ node }: { node: ReactNode }) => (
   <MockProvider>
-    <ThemeProvider>{() => <IconProvider>{node}</IconProvider>}</ThemeProvider>
+    <ThemeProvider>
+      {() => (
+        <IconProvider>
+          <FileTreeProvider>{node}</FileTreeProvider>
+        </IconProvider>
+      )}
+    </ThemeProvider>
   </MockProvider>
 )
 

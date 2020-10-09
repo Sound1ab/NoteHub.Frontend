@@ -10,14 +10,11 @@ import { MockProvider } from '../../../../../providers'
 import { Tree } from './Tree'
 
 describe('Tree', () => {
-  const onToggle = jest.fn()
-
   it('should show children when toggled is true and tree has children', async () => {
     const { getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Tree
           node={{ ...folderNode, toggled: true, children: [fileNodeOne] }}
-          onToggle={onToggle}
           level={1}
         />
       </MockProvider>
@@ -31,7 +28,6 @@ describe('Tree', () => {
       <MockProvider mockResolvers={resolvers}>
         <Tree
           node={{ ...folderNode, toggled: true, children: [fileNodeOne] }}
-          onToggle={onToggle}
           level={1}
         />
       </MockProvider>

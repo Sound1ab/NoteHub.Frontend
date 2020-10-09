@@ -5,6 +5,7 @@ import { useReadSearch } from '../../../../hooks'
 import { styled } from '../../../../theme'
 import { Button, Icon } from '../../../atoms'
 import { FileTree } from './FileTree/FileTree'
+import { FileTreeProvider } from './FileTree/FileTreeProvider'
 import { SearchInput } from './SearchInput/SearchInput'
 
 export function Sidebar() {
@@ -15,10 +16,12 @@ export function Sidebar() {
     <StyledSidebar id={CONTAINER_ID.SIDEBAR}>
       <SearchInput />
       <Navigation>
-        <FileTree
-          isNewFileOpen={isNewFileOpen}
-          closeNewFile={() => setIsNewFileOpen(false)}
-        />
+        <FileTreeProvider>
+          <FileTree
+            isNewFileOpen={isNewFileOpen}
+            closeNewFile={() => setIsNewFileOpen(false)}
+          />
+        </FileTreeProvider>
       </Navigation>
       <StyledButton
         onClick={() => setIsNewFileOpen(true)}
@@ -57,12 +60,15 @@ const Navigation = styled.nav`
 
 const StyledButton = styled(Button)`
   flex: 0;
+  display: flex;
   width: 100%;
   height: 100%;
+  padding: ${({ theme }) => theme.spacing.xs};
 `
 
 const Add = styled.h4`
   margin-bottom: 0;
+  line-height: inherit;
 `
 
 const PlusIcon = styled(Icon)`

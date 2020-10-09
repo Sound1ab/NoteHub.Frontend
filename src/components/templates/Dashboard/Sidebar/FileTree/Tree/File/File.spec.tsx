@@ -1,7 +1,7 @@
 import { useApolloClient } from '@apollo/react-hooks'
 import React from 'react'
 
-import { useDeleteFile } from '../../../../../../../hooks'
+import { useDeleteFile, useFileTree } from '../../../../../../../hooks'
 import {
   fileNodeOne,
   resolvers,
@@ -10,6 +10,7 @@ import { fireEvent, render } from '../../../../../../../test-utils'
 import { MockProvider } from '../../../../../../providers'
 import { File } from './File'
 
+jest.mock('../../../../../../../hooks/utils/useFileTree')
 jest.mock('../../../../../../../hooks/file/useDeleteFile')
 jest.mock('@apollo/react-hooks', () => {
   const originalModule = jest.requireActual('@apollo/react-hooks')
@@ -21,15 +22,13 @@ jest.mock('@apollo/react-hooks', () => {
 })
 
 describe('File', () => {
-  const onToggle = jest.fn()
-
   const onClick = jest.fn()
-
-  const activePath = 'MOCK_PATH'
 
   const deleteFile = jest.fn()
 
   const writeData = jest.fn()
+
+  const activePath = 'MOCK_ACTIVE_PATH'
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -40,18 +39,16 @@ describe('File', () => {
     ;(useApolloClient as jest.Mock).mockReturnValue({
       writeData,
     })
+    ;(useFileTree as jest.Mock).mockReturnValue({
+      activePath,
+      onClick,
+    })
   })
 
   it('should update the currentPath with clicked node path', async () => {
     const { getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <File
-          node={fileNodeOne}
-          onToggle={onToggle}
-          onClick={onClick}
-          activePath={activePath}
-          level={1}
-        />
+        <File node={fileNodeOne} level={1} />
       </MockProvider>
     )
 
@@ -65,13 +62,7 @@ describe('File', () => {
   it('should call onClick with path', async () => {
     const { getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <File
-          node={fileNodeOne}
-          onToggle={onToggle}
-          onClick={onClick}
-          activePath={activePath}
-          level={1}
-        />
+        <File node={fileNodeOne} level={1} />
       </MockProvider>
     )
 
@@ -84,13 +75,7 @@ describe('File', () => {
     const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <div aria-label="outside">
-          <File
-            node={fileNodeOne}
-            onToggle={onToggle}
-            level={1}
-            onClick={onClick}
-            activePath={activePath}
-          />
+          <File node={fileNodeOne} level={1} />
         </div>
       </MockProvider>
     )
@@ -105,13 +90,7 @@ describe('File', () => {
   it('should open file dropdown menu', async () => {
     const { getByLabelText, getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <File
-          node={fileNodeOne}
-          onToggle={onToggle}
-          level={1}
-          onClick={onClick}
-          activePath={activePath}
-        />
+        <File node={fileNodeOne} level={1} />
       </MockProvider>
     )
 
@@ -123,13 +102,7 @@ describe('File', () => {
   it('should call deleteFile when selected from file dropdown', async () => {
     const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <File
-          node={fileNodeOne}
-          onToggle={onToggle}
-          level={1}
-          onClick={onClick}
-          activePath={activePath}
-        />
+        <File node={fileNodeOne} level={1} />
       </MockProvider>
     )
 
@@ -150,13 +123,7 @@ describe('File', () => {
 
     const { getByLabelText } = await render(
       <MockProvider>
-        <File
-          node={fileNodeOne}
-          onToggle={onToggle}
-          level={1}
-          onClick={onClick}
-          activePath={activePath}
-        />
+        <File node={fileNodeOne} level={1} />
       </MockProvider>
     )
 

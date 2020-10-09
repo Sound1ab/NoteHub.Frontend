@@ -37,12 +37,7 @@ describe('FileInput', () => {
   describe('when creating a file', () => {
     it('should call createNewfile with node path', async () => {
       const { getByLabelText } = await render(
-        <FileInput
-          path={path}
-          onClickOutside={jest.fn()}
-          onToggle={jest.fn()}
-          action="create"
-        />
+        <FileInput path={path} onClickOutside={jest.fn()} action="create" />
       )
 
       const input = getByLabelText('Input file name')
@@ -70,12 +65,7 @@ describe('FileInput', () => {
       ;(global as any).alert = alert
 
       const { getByLabelText } = await render(
-        <FileInput
-          path={path}
-          onClickOutside={jest.fn()}
-          onToggle={jest.fn()}
-          action="create"
-        />
+        <FileInput path={path} onClickOutside={jest.fn()} action="create" />
       )
 
       const input = getByLabelText('Input file name')
@@ -100,7 +90,6 @@ describe('FileInput', () => {
         <FileInput
           path="MOCK_FOLDER_PATH/MOCK_FILE_PATH.md"
           onClickOutside={jest.fn()}
-          onToggle={jest.fn()}
           action="rename"
         />
       )
@@ -136,7 +125,6 @@ describe('FileInput', () => {
         <FileInput
           path="MOCK_FOLDER_PATH/MOCK_FILE_PATH.md"
           onClickOutside={jest.fn()}
-          onToggle={jest.fn()}
           action="rename"
         />
       )

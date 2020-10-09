@@ -1,6 +1,9 @@
 import React from 'react'
 
-import { fileNodeOne, resolvers } from '../../../../../../../schema/mockResolvers'
+import {
+  fileNodeOne,
+  resolvers,
+} from '../../../../../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../../../../../test-utils'
 import { MockProvider } from '../../../../../../providers'
 import { Node } from './Node'
@@ -17,7 +20,7 @@ describe('Node', () => {
 
   const onClick = jest.fn()
 
-  const activePath = 'MOCK_PATH'
+  const isActive = false
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -31,7 +34,7 @@ describe('Node', () => {
           level={1}
           dropdownItems={dropdownItems}
           onClick={onClick}
-          activePath={activePath}
+          isActive={isActive}
         />
       </MockProvider>
     )
@@ -49,7 +52,7 @@ describe('Node', () => {
           level={1}
           dropdownItems={dropdownItems}
           onClick={onClick}
-          activePath={activePath}
+          isActive={isActive}
         />
       </MockProvider>
     )

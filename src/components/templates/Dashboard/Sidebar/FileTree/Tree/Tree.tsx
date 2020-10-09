@@ -8,19 +8,10 @@ import { Folder } from './Folder/Folder'
 
 interface INode {
   node: ITreeNode
-  onToggle: (path: string, toggled: boolean) => void
-  onClick: (path: string) => void
-  activePath: string
   level?: number
 }
 
-export function Tree({
-  node,
-  onToggle,
-  onClick,
-  activePath,
-  level = 0,
-}: INode) {
+export function Tree({ node, level = 0 }: INode) {
   const { toggled, children, path, type } = node
 
   if (type === Node_Type.Folder && children?.length === 0 && path !== '') {
@@ -32,9 +23,6 @@ export function Tree({
   return type === Node_Type.Folder ? (
     <Folder
       node={node}
-      onToggle={onToggle}
-      onClick={onClick}
-      activePath={activePath}
       level={level}
       childNodes={
         <List>
@@ -43,9 +31,6 @@ export function Tree({
               <Tree
                 key={`${childNode.path}/${childNode.name}`}
                 node={childNode}
-                onToggle={onToggle}
-                onClick={onClick}
-                activePath={activePath}
                 level={level + 1}
               />
             ))}
@@ -53,12 +38,6 @@ export function Tree({
       }
     />
   ) : (
-    <File
-      node={node}
-      onToggle={onToggle}
-      onClick={onClick}
-      activePath={activePath}
-      level={level}
-    />
+    <File node={node} level={level} />
   )
 }

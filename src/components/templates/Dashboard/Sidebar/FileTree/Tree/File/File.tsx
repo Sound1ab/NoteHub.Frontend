@@ -2,7 +2,7 @@ import { useApolloClient } from '@apollo/react-hooks'
 import React, { useState } from 'react'
 
 import { CONTAINER_ID } from '../../../../../../../enums'
-import { useDeleteFile } from '../../../../../../../hooks'
+import { useDeleteFile, useFileTree } from '../../../../../../../hooks'
 import { styled } from '../../../../../../../theme'
 import { ITreeNode } from '../../../../../../../types'
 import { scrollIntoView } from '../../../../../../../utils'
@@ -13,17 +13,16 @@ import { Node } from '../Node/Node'
 
 interface IFile {
   node: ITreeNode
-  onToggle: (path: string, toggled: boolean) => void
-  onClick: (path: string) => void
-  activePath: string
   level: number
 }
 
-export function File({ node, onToggle, level, onClick, activePath }: IFile) {
+export function File({ node, level }: IFile) {
   const client = useApolloClient()
   const [isRenaming, setIsRenaming] = useState(false)
   const [deleteFile] = useDeleteFile()
   const { path, type } = node
+  const { activePath, onClick } = useFileTree()
+  const isActive = path === activePath
 
   function handleSetIsRenamingOpen(
     e: React.MouseEvent<HTMLElement, MouseEvent>
@@ -71,7 +70,6 @@ export function File({ node, onToggle, level, onClick, activePath }: IFile) {
     <FileInput
       path={path}
       onClickOutside={() => setIsRenaming(false)}
-      onToggle={onToggle}
       action="rename"
     />
   ) : (
@@ -79,7 +77,7 @@ export function File({ node, onToggle, level, onClick, activePath }: IFile) {
       node={node}
       level={level}
       onClick={handleOnClick}
-      activePath={activePath}
+      isActive={isActive}
       dropdownItems={dropdownItems}
     >
       <StyledIcon size="sm" icon="file" prefix="fa" />

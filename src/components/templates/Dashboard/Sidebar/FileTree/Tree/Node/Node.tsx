@@ -15,7 +15,7 @@ interface INode {
   childNodes?: ReactNode
   dropdownItems: IDropdownItem[]
   onClick: () => void
-  activePath: string
+  isActive: boolean
 }
 
 export function Node({
@@ -25,13 +25,12 @@ export function Node({
   childNodes,
   dropdownItems,
   onClick,
-  activePath,
+  isActive,
 }: INode) {
   const containerRef = useRef(null)
 
   const { isOpen, Portal, ref, setOpen } = useModalToggle()
-  const { type, name, path } = node
-  const isActive = path === activePath
+  const { type, name } = node
 
   function handleToggleMenu(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>

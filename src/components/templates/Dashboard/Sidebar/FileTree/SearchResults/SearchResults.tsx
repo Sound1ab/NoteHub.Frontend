@@ -6,12 +6,7 @@ import { createNode, extractFilename } from '../../../../../../utils'
 import { Node_Type } from '../../../../../apollo'
 import { File } from '../Tree/File/File'
 
-interface ISearchResults {
-  onClick: (path: string) => void
-  activePath: string
-}
-
-export function SearchResults({ onClick, activePath }: ISearchResults) {
+export function SearchResults() {
   const { gitNodes } = useReadNodes()
   const { search } = useReadSearch()
 
@@ -44,16 +39,7 @@ export function SearchResults({ onClick, activePath }: ISearchResults) {
       {results.map(({ item: { path, type, slug } }) => {
         const node = createNode(type, slug, path, new Set())
 
-        return (
-          <File
-            key={path}
-            node={node}
-            onToggle={() => null}
-            onClick={onClick}
-            activePath={activePath}
-            level={-1}
-          />
-        )
+        return <File key={path} node={node} level={-1} />
       })}
     </>
   )

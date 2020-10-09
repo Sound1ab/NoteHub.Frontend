@@ -1,27 +1,23 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import { useCreateFile } from '../../../../../hooks'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
 import { styled } from '../../../../../theme'
 import { Input } from '../../../../atoms'
+import { FileTreeContext } from '../FileTree/FileTreeProvider'
 
 interface IFileInput {
   path?: string | null
   onClickOutside: () => void
-  onToggle: (path: string, toggled: boolean) => void
   action: 'create' | 'rename'
 }
 
-export function FileInput({
-  onClickOutside,
-  path,
-  onToggle,
-  action,
-}: IFileInput) {
+export function FileInput({ onClickOutside, path, action }: IFileInput) {
   const defaultState = { name: '' }
   const [{ name }, setForm] = useState<{ [key: string]: any }>(defaultState)
   const [createFile, { loading }] = useCreateFile()
   const [moveFile] = useMoveFile()
+  const { onToggle } = useContext(FileTreeContext)
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target

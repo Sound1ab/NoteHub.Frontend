@@ -1,5 +1,6 @@
 import React, { ReactNode, useState } from 'react'
 
+import { useFileTree } from '../../../../../../../hooks'
 import { styled } from '../../../../../../../theme'
 import { ITreeNode } from '../../../../../../../types'
 import { Icon } from '../../../../../../atoms'
@@ -8,23 +9,14 @@ import { Node } from '../Node/Node'
 
 interface IFolder {
   node: ITreeNode
-  onToggle: (path: string, toggled: boolean) => void
-  onClick: (path: string) => void
-  activePath: string
   level: number
   childNodes: ReactNode
 }
 
-export function Folder({
-  level,
-  node,
-  onToggle,
-  onClick,
-  activePath,
-  childNodes,
-}: IFolder) {
+export function Folder({ level, node, childNodes }: IFolder) {
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
   const { path, toggled } = node
+  const { activePath, onClick, onToggle } = useFileTree()
   const isActive = path === activePath
 
   function onChevronClick(
@@ -33,6 +25,8 @@ export function Folder({
   ) {
     e.stopPropagation()
     onToggle(node.path, !node.toggled)
+
+    onClick(path)
   }
 
   function handleSetIsNewFileOpen(
@@ -69,7 +63,7 @@ export function Folder({
         level={level}
         dropdownItems={dropdownItems}
         onClick={handleOnClick}
-        activePath={activePath}
+        isActive={isActive}
         childNodes={childNodes}
       >
         <>
@@ -90,7 +84,6 @@ export function Folder({
         <FileInput
           path={path}
           onClickOutside={() => setIsNewFileOpen(false)}
-          onToggle={onToggle}
           action="create"
         />
       )}
