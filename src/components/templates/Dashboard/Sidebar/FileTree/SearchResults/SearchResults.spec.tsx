@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { useReadSearch } from '../../../../../hooks'
-import { resolvers } from '../../../../../schema/mockResolvers'
-import { cleanup, render } from '../../../../../test-utils'
-import { MockProvider } from '../../../../providers'
+import { useReadSearch } from '../../../../../../hooks'
+import { resolvers } from '../../../../../../schema/mockResolvers'
+import { cleanup, render } from '../../../../../../test-utils'
+import { MockProvider } from '../../../../../providers'
 import { SearchResults } from './SearchResults'
 
-jest.mock('../../../../../hooks/localState/useReadSearch')
+jest.mock('../../../../../../hooks/localState/useReadSearch')
 
 afterEach(cleanup)
 

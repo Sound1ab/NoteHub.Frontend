@@ -1,13 +1,16 @@
 import { useApolloClient } from '@apollo/react-hooks'
 import React from 'react'
 
-import { useDeleteFile } from '../../../../../hooks'
-import { fileNodeOne, resolvers } from '../../../../../schema/mockResolvers'
-import { fireEvent, render } from '../../../../../test-utils'
-import { MockProvider } from '../../../../providers'
+import { useDeleteFile } from '../../../../../../../hooks'
+import {
+  fileNodeOne,
+  resolvers,
+} from '../../../../../../../schema/mockResolvers'
+import { fireEvent, render } from '../../../../../../../test-utils'
+import { MockProvider } from '../../../../../../providers'
 import { File } from './File'
 
-jest.mock('../../../../../hooks/file/useDeleteFile')
+jest.mock('../../../../../../../hooks/file/useDeleteFile')
 jest.mock('@apollo/react-hooks', () => {
   const originalModule = jest.requireActual('@apollo/react-hooks')
 

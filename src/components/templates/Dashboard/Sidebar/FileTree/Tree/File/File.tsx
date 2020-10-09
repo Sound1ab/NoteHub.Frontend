@@ -1,15 +1,15 @@
 import { useApolloClient } from '@apollo/react-hooks'
 import React, { useState } from 'react'
 
-import { CONTAINER_ID } from '../../../../../enums'
-import { useDeleteFile } from '../../../../../hooks'
-import { styled } from '../../../../../theme'
-import { ITreeNode } from '../../../../../types'
-import { scrollIntoView } from '../../../../../utils'
-import { Node_Type } from '../../../../apollo'
-import { Icon } from '../../../../atoms'
-import { FileInput } from '../FileInput/FileInput'
-import { Node } from './Node'
+import { CONTAINER_ID } from '../../../../../../../enums'
+import { useDeleteFile } from '../../../../../../../hooks'
+import { styled } from '../../../../../../../theme'
+import { ITreeNode } from '../../../../../../../types'
+import { scrollIntoView } from '../../../../../../../utils'
+import { Node_Type } from '../../../../../../apollo'
+import { Icon } from '../../../../../../atoms'
+import { FileInput } from '../../../FileInput/FileInput'
+import { Node } from '../Node/Node'
 
 interface IFile {
   node: ITreeNode

@@ -1,10 +1,10 @@
 import React, { ReactNode, useState } from 'react'
 
-import { styled } from '../../../../../theme'
-import { ITreeNode } from '../../../../../types'
-import { Icon } from '../../../../atoms'
-import { FileInput } from '../FileInput/FileInput'
-import { Node } from './Node'
+import { styled } from '../../../../../../../theme'
+import { ITreeNode } from '../../../../../../../types'
+import { Icon } from '../../../../../../atoms'
+import { FileInput } from '../../../FileInput/FileInput'
+import { Node } from '../Node/Node'
 
 interface IFolder {
   node: ITreeNode

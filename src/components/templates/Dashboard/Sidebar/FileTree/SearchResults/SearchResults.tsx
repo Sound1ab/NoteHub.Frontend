@@ -1,10 +1,10 @@
 import Fuse from 'fuse.js'
 import React from 'react'
 
-import { useReadNodes, useReadSearch } from '../../../../../hooks'
-import { createNode, extractFilename } from '../../../../../utils'
-import { Node_Type } from '../../../../apollo'
-import { File } from './File'
+import { useReadNodes, useReadSearch } from '../../../../../../hooks'
+import { createNode, extractFilename } from '../../../../../../utils'
+import { Node_Type } from '../../../../../apollo'
+import { File } from '../Tree/File/File'
 
 interface ISearchResults {
   onClick: (path: string) => void

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { folderNode, resolvers } from '../../../../../schema/mockResolvers'
-import { fireEvent, render } from '../../../../../test-utils'
-import { MockProvider } from '../../../../providers'
+import { folderNode, resolvers } from '../../../../../../../schema/mockResolvers'
+import { fireEvent, render } from '../../../../../../../test-utils'
+import { MockProvider } from '../../../../../../providers'
 import { Folder } from './Folder'
 
 describe('Folder', () => {

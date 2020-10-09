@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { ITreeNode } from '../../../../../types'
-import { Node_Type } from '../../../../apollo'
-import { List } from '../../../../atoms'
-import { File } from './File'
-import { Folder } from './Folder'
+import { ITreeNode } from '../../../../../../types'
+import { Node_Type } from '../../../../../apollo'
+import { List } from '../../../../../atoms'
+import { File } from './File/File'
+import { Folder } from './Folder/Folder'
 
 interface INode {
   node: ITreeNode

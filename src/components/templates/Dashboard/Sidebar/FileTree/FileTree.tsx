@@ -4,8 +4,8 @@ import { useReadNodes, useReadSearch } from '../../../../../hooks'
 import { createNodes } from '../../../../../utils'
 import { List } from '../../../../atoms'
 import { FileInput } from '../FileInput/FileInput'
-import { SearchResults } from './SearchResults'
-import { Tree } from './Tree'
+import { SearchResults } from './SearchResults/SearchResults'
+import { Tree } from './Tree/Tree'
 import { TreeSkeleton } from './TreeSkeleton'
 
 interface IFileTree {

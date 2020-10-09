@@ -4,9 +4,9 @@ import {
   fileNodeOne,
   folderNode,
   resolvers,
-} from '../../../../../schema/mockResolvers'
-import { fireEvent, render } from '../../../../../test-utils'
-import { MockProvider } from '../../../../providers'
+} from '../../../../../../schema/mockResolvers'
+import { fireEvent, render } from '../../../../../../test-utils'
+import { MockProvider } from '../../../../../providers'
 import { Tree } from './Tree'
 
 describe('Tree', () => {

@@ -1,12 +1,12 @@
 import React, { ReactNode, SyntheticEvent, useRef } from 'react'
 import { css } from 'styled-components'
 
-import { useModalToggle } from '../../../../../hooks'
-import { styled } from '../../../../../theme'
-import { ITreeNode } from '../../../../../types'
-import { Fade } from '../../../../animation'
-import { Node_Type } from '../../../../apollo'
-import { Dropdown, IDropdownItem, Icon } from '../../../../atoms'
+import { useModalToggle } from '../../../../../../../hooks'
+import { styled } from '../../../../../../../theme'
+import { ITreeNode } from '../../../../../../../types'
+import { Fade } from '../../../../../../animation'
+import { Node_Type } from '../../../../../../apollo'
+import { Dropdown, IDropdownItem, Icon } from '../../../../../../atoms'
 
 interface INode {
   node: ITreeNode

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { fileNodeOne, resolvers } from '../../../../../schema/mockResolvers'
-import { fireEvent, render } from '../../../../../test-utils'
-import { MockProvider } from '../../../../providers'
+import { fileNodeOne, resolvers } from '../../../../../../../schema/mockResolvers'
+import { fireEvent, render } from '../../../../../../../test-utils'
+import { MockProvider } from '../../../../../../providers'
 import { Node } from './Node'
 
 describe('Node', () => {
