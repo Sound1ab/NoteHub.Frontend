@@ -1,10 +1,10 @@
-import { useApolloClient } from '@apollo/react-hooks'
 import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import { useLogin } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Icon } from '../../atoms'
+import { currentJwtVar } from '../../providers/ApolloProvider/cache'
 import { LoginButton } from './LoginButton/LoginButton'
 
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
@@ -13,7 +13,6 @@ const STATE = process.env.REACT_APP_STATE
 const SCOPE = process.env.REACT_APP_SCOPE
 
 export function Login() {
-  const client = useApolloClient()
   const { jwt, loading } = useLogin()
 
   useEffect(() => {
@@ -21,8 +20,8 @@ export function Login() {
       return
     }
 
-    client.writeData({ data: { jwt } })
-  }, [client, jwt])
+    currentJwtVar(jwt)
+  }, [jwt])
 
   if (loading) {
     return null

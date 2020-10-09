@@ -1,4 +1,4 @@
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import React, { ReactNode, useRef } from 'react'
 import { Redirect } from 'react-router-dom'
 
@@ -11,6 +11,7 @@ import {
 import { styled } from '../../../../../theme'
 import { Fade } from '../../../../animation'
 import { Dropdown } from '../../../../atoms'
+import { currentJwtVar } from '../../../../providers/ApolloProvider/cache'
 import { Avatar } from './Avatar/Avatar'
 
 interface IProfile {
@@ -30,8 +31,9 @@ export function Profile(props: IProfile) {
   }
 
   if (called && data?.logout === 'ok') {
-    client.clearStore()
-    client.writeData({ data: { jwt: null } })
+    currentJwtVar(null)
+    client.cache.gc()
+
     return (
       <Redirect
         to={{

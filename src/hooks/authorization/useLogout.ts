@@ -1,5 +1,4 @@
-import { useLazyQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
+import { useLazyQuery, gql } from '@apollo/client'
 
 import { LogoutQuery, LogoutQueryVariables } from '../../components/apollo'
 

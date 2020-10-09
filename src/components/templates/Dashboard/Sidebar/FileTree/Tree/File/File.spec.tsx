@@ -1,4 +1,4 @@
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import React from 'react'
 
 import { useDeleteFile, useFileTree } from '../../../../../../../hooks'

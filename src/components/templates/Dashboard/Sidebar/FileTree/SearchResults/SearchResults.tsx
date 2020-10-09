@@ -1,14 +1,16 @@
+import { useReactiveVar } from '@apollo/client'
 import Fuse from 'fuse.js'
 import React from 'react'
 
-import { useReadNodes, useReadSearch } from '../../../../../../hooks'
+import { useReadNodes } from '../../../../../../hooks'
 import { createNode, extractFilename } from '../../../../../../utils'
 import { Node_Type } from '../../../../../apollo'
+import { searchVar } from '../../../../../providers/ApolloProvider/cache'
 import { File } from '../Tree/File/File'
 
 export function SearchResults() {
+  const search = useReactiveVar(searchVar)
   const { gitNodes } = useReadNodes()
-  const { search } = useReadSearch()
 
   if (!gitNodes) {
     return null

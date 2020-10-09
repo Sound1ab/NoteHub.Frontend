@@ -1,23 +1,16 @@
-import { NormalizedCacheObject } from 'apollo-cache-inmemory'
-import { ApolloClient } from 'apollo-client'
-import { setContext } from 'apollo-link-context'
+import { setContext } from '@apollo/client/link/context'
 
-import {
-  ReadJwtQuery,
-  ReadJwtQueryVariables,
-} from '../../components/apollo/generated_components_typings'
-import { ReadJwtDocument } from '../../hooks'
+import { currentJwtVar } from '../../components/providers/ApolloProvider/cache'
 
-export const context = (client: ApolloClient<NormalizedCacheObject>) =>
+export const context = () =>
   setContext((_, { headers }) => {
-    const jwtData = client.readQuery<ReadJwtQuery, ReadJwtQueryVariables>({
-      query: ReadJwtDocument,
-    })
+    // Doesn't need to use hook as we're not rerendering
+    const jwt = currentJwtVar()
 
     return {
       headers: {
         ...headers,
-        Authorization: jwtData?.jwt ? `Bearer ${jwtData.jwt}` : '',
+        Authorization: jwt ? `Bearer ${jwt}` : '',
       },
     }
   })

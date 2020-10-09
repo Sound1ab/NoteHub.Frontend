@@ -1,7 +1,5 @@
-import { MutationResult } from '@apollo/react-common'
-import { ExecutionResult } from '@apollo/react-common/lib/types/types'
-import { useMutation } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
+import { MutationResult, gql, useMutation } from '@apollo/client'
+import { ExecutionResult } from 'graphql'
 
 import {
   CreateFileMutation,

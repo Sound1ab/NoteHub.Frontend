@@ -1,15 +1,16 @@
+import { useReactiveVar } from '@apollo/client'
 import React, { useState } from 'react'
 
 import { CONTAINER_ID } from '../../../../enums'
-import { useReadSearch } from '../../../../hooks'
 import { styled } from '../../../../theme'
 import { Button, Icon } from '../../../atoms'
+import { searchVar } from '../../../providers/ApolloProvider/cache'
 import { FileTree } from './FileTree/FileTree'
 import { FileTreeProvider } from './FileTree/FileTreeProvider'
 import { SearchInput } from './SearchInput/SearchInput'
 
 export function Sidebar() {
-  const { search } = useReadSearch()
+  const search = useReactiveVar(searchVar)
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
 
   return (

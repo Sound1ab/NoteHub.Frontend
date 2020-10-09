@@ -1,10 +1,9 @@
-import { useQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
+import { gql, useQuery, useReactiveVar } from '@apollo/client'
 
 import { ReadFileQuery, ReadFileQueryVariables } from '../../components/apollo'
+import { currentPathVar } from '../../components/providers/ApolloProvider/cache'
 import { FileFragment } from '../../fragments'
 import { isFile } from '../../utils'
-import { useReadCurrentPath } from '../'
 
 export const ReadFileDocument = gql`
   ${FileFragment}
@@ -16,7 +15,7 @@ export const ReadFileDocument = gql`
 `
 
 export function useReadFile() {
-  const { currentPath } = useReadCurrentPath()
+  const currentPath = useReactiveVar(currentPathVar)
 
   const { data, loading, error } = useQuery<
     ReadFileQuery,
@@ -24,7 +23,7 @@ export function useReadFile() {
   >(ReadFileDocument, {
     skip: !isFile(currentPath),
     variables: {
-      path: currentPath ?? '',
+      path: currentPath,
     },
   })
 

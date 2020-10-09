@@ -1,19 +1,20 @@
 import React from 'react'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 
-import { useDarkMode, useReadAccentColor } from '../../../hooks'
+import { useDarkMode } from '../../../hooks'
 import { breakpoints, colors, createSpacing } from '../../../theme/theme'
 import { createTypography } from '../../../theme/typography'
+import { accentColorVar } from '../ApolloProvider/cache'
+import { useReactiveVar } from '@apollo/client'
 
 interface IThemeProvider {
   children: any
 }
 
 export function ThemeProvider({ children }: IThemeProvider) {
-  const { accentColor } = useReadAccentColor()
-
-  const { currentTheme } = useDarkMode()
-  const { accent, ...rest } = colors[currentTheme]
+  const accentColor = useReactiveVar(accentColorVar)
+  const { theme } = useDarkMode()
+  const { accent, ...rest } = colors[theme]
   const themeColors = { ...rest, accent: accentColor || accent }
   const typography = createTypography(themeColors)
   const spacing = createSpacing(typography)

@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import { useApolloClient } from '@apollo/client'
 
-import { useApolloClient } from '@apollo/react-hooks'
+import '@testing-library/jest-dom/extend-expect'
 import React, { FunctionComponent } from 'react'
 
 import { useLogin } from '../../../hooks'

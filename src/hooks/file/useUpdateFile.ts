@@ -1,6 +1,9 @@
-import { MutationResult } from '@apollo/react-common'
-import { useApolloClient, useMutation } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
+import {
+  useApolloClient,
+  useMutation,
+  gql,
+  MutationResult,
+} from '@apollo/client'
 
 import {
   ReadFileQuery,

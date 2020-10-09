@@ -1,8 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import { wait } from '@apollo/react-testing'
 import { EventType } from '@testing-library/dom/types/events'
-import { act, fireEvent, render } from '@testing-library/react'
+import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import React, { ReactNode } from 'react'
 
 import {
@@ -39,7 +38,8 @@ const customRender = async (
   const { rerender, ...rest } = render(<Context node={node} />, options)
 
   if (waitForLoad) {
-    await act(() => wait(0))
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    await act(() => waitFor(() => {}))
   }
 
   return {
@@ -47,7 +47,8 @@ const customRender = async (
     rerender: async (node: ReactNode) => {
       rerender(<Context node={node} />)
 
-      await act(() => wait(0))
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      await act(() => waitFor(() => {}))
     },
   }
 }
@@ -59,7 +60,8 @@ const customFireEvent: FireObject = Object.entries(fireEvent).reduce(
       if (typeof value === 'function') {
         value(element, options)
       }
-      await act(() => wait(0))
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      await act(() => waitFor(() => {}))
     }
     return acc
   },

@@ -1,9 +1,9 @@
-import { useApolloClient } from '@apollo/react-hooks'
 import { History, Location } from 'history'
 import React from 'react'
 import { Redirect, withRouter } from 'react-router-dom'
 
 import { useReadGithubUserAccessToken } from '../../../hooks'
+import { currentJwtVar } from '../../providers/ApolloProvider/cache'
 
 interface ICallback {
   location: Location
@@ -11,7 +11,6 @@ interface ICallback {
 }
 
 export const Callback = withRouter(({ location }: ICallback) => {
-  const client = useApolloClient()
   const params = new URLSearchParams(location.search)
   const code = params.get('code')
   const state = params.get('state')
@@ -19,7 +18,8 @@ export const Callback = withRouter(({ location }: ICallback) => {
   const { jwt } = useReadGithubUserAccessToken(code, state)
 
   if (jwt) {
-    client.writeData({ data: { jwt } })
+    currentJwtVar(jwt)
+
     return (
       <Redirect
         to={{

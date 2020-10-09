@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/react-hooks'
 import React, { useState } from 'react'
 
 import { CONTAINER_ID } from '../../../../../../../enums'
@@ -8,6 +7,7 @@ import { ITreeNode } from '../../../../../../../types'
 import { scrollIntoView } from '../../../../../../../utils'
 import { Node_Type } from '../../../../../../apollo'
 import { Icon } from '../../../../../../atoms'
+import { currentPathVar } from '../../../../../../providers/ApolloProvider/cache'
 import { FileInput } from '../../../FileInput/FileInput'
 import { Node } from '../Node/Node'
 
@@ -17,7 +17,6 @@ interface IFile {
 }
 
 export function File({ node, level }: IFile) {
-  const client = useApolloClient()
   const [isRenaming, setIsRenaming] = useState(false)
   const [deleteFile] = useDeleteFile()
   const { path, type } = node
@@ -61,9 +60,7 @@ export function File({ node, level }: IFile) {
 
     onClick(path)
 
-    client.writeData({
-      data: { currentPath: path },
-    })
+    currentPathVar(path)
   }
 
   return isRenaming ? (

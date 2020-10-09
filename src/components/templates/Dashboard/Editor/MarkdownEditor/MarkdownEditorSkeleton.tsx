@@ -1,12 +1,13 @@
+import { useReactiveVar } from '@apollo/client'
 import React from 'react'
 import ContentLoader from 'react-content-loader'
 
-import { useReadCurrentTheme } from '../../../../../hooks'
 import { styled } from '../../../../../theme'
 import { colors } from '../../../../../theme/theme'
+import { currentThemeVar } from '../../../../providers/ApolloProvider/cache'
 
 export function MarkdownEditorSkeleton() {
-  const { currentTheme } = useReadCurrentTheme()
+  const currentTheme = useReactiveVar(currentThemeVar)
 
   return (
     <Wrapper aria-label="Markdown loading">

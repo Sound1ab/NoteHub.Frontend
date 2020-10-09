@@ -1,8 +1,10 @@
+import { useReactiveVar } from '@apollo/client'
 import React, { useContext } from 'react'
 
-import { useReadNodes, useReadSearch } from '../../../../../hooks'
+import { useReadNodes } from '../../../../../hooks'
 import { createNodes } from '../../../../../utils'
 import { List } from '../../../../atoms'
+import { searchVar } from '../../../../providers/ApolloProvider/cache'
 import { FileInput } from '../FileInput/FileInput'
 import { FileTreeContext } from './FileTreeProvider'
 import { SearchResults } from './SearchResults/SearchResults'
@@ -15,7 +17,7 @@ interface IFileTree {
 }
 
 export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
-  const { search } = useReadSearch()
+  const search = useReactiveVar(searchVar)
   const { gitNodes, loading } = useReadNodes()
   const { listOfToggledPaths } = useContext(FileTreeContext)
 

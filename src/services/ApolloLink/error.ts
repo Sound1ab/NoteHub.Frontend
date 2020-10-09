@@ -1,22 +1,27 @@
-import { NormalizedCacheObject } from 'apollo-cache-inmemory'
-import { ApolloClient } from 'apollo-client'
-import { Observable, execute, makePromise } from 'apollo-link'
-import { onError } from 'apollo-link-error'
-import { HttpLink } from 'apollo-link-http'
-import gql from 'graphql-tag'
+import {
+  ApolloClient,
+  HttpLink,
+  NormalizedCacheObject,
+  Observable,
+  execute,
+  gql,
+  toPromise,
+} from '@apollo/client'
+import { onError } from '@apollo/client/link/error'
 
+import { currentJwtVar } from '../../components/providers/ApolloProvider/cache'
 import { APOLLO_ERRORS } from '../../enums'
 
 const GRAPHQL = process.env.REACT_APP_GRAPHQL
 
 export function error(client: ApolloClient<NormalizedCacheObject>) {
   function resetStore() {
-    client.clearStore()
-    client.writeData({ data: { jwt: false } })
+    currentJwtVar(null)
+    client.cache.gc()
   }
 
   async function refetchToken() {
-    const { data } = await makePromise(
+    const { data } = await toPromise(
       execute(new HttpLink({ uri: GRAPHQL, credentials: 'include' }), {
         query: gql`
           {
@@ -30,7 +35,7 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
       throw new Error('No refresh token')
     }
 
-    client.writeData({ data: { jwt: data.refresh } })
+    currentJwtVar(data.refresh)
 
     return data.refresh
   }

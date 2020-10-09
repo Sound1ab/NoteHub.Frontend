@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import { useApolloClient } from '@apollo/client'
 
-import { useApolloClient } from '@apollo/react-hooks'
+import '@testing-library/jest-dom/extend-expect'
 import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Router } from 'react-router-dom'

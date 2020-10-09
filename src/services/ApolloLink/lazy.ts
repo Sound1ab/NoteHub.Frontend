@@ -1,4 +1,4 @@
-import { ApolloLink, Observable, fromPromise, toPromise } from 'apollo-link'
+import { ApolloLink, Observable, fromPromise, toPromise } from '@apollo/client'
 
 type Lazy = (
   factory: () => Promise<ApolloLink | { default: ApolloLink }>

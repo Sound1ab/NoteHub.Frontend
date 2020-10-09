@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/react-hooks'
 import React, { useRef } from 'react'
 import { css } from 'styled-components'
 
@@ -6,10 +5,10 @@ import { useModalToggle } from '../../../../../hooks'
 import { styled } from '../../../../../theme'
 import { Fade } from '../../../../animation'
 import { Dropdown, Icon } from '../../../../atoms'
+import { accentColorVar } from '../../../../providers/ApolloProvider/cache'
 import { ToolbarButton } from '../ToolbarButton/ToolbarButton'
 
 export function ColorPicker() {
-  const client = useApolloClient()
   const containerRef = useRef(null)
   const { isOpen, Portal, ref, setOpen } = useModalToggle()
 
@@ -20,7 +19,7 @@ export function ColorPicker() {
   function handleSwatchClick(e: React.MouseEvent<SVGSVGElement, MouseEvent>) {
     const { backgroundColor } = getComputedStyle((e as any).target)
 
-    client.writeData({ data: { accentColor: backgroundColor } })
+    accentColorVar(backgroundColor)
   }
 
   return (

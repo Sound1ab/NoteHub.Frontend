@@ -1,7 +1,8 @@
+import { useReactiveVar } from '@apollo/client'
 import React, { ReactNode } from 'react'
 import { Redirect, Route } from 'react-router-dom'
 
-import { useReadJwt } from '../../../hooks'
+import { currentJwtVar } from '../../providers/ApolloProvider/cache'
 
 export interface IPrivateRoute {
   children: ReactNode
@@ -10,14 +11,14 @@ export interface IPrivateRoute {
 }
 
 export function PrivateRoute({ children, exact, path }: IPrivateRoute) {
-  const { jwt } = useReadJwt()
+  const currentJwt = useReactiveVar(currentJwtVar)
 
   return (
     <Route
       exact={exact}
       path={path}
       render={({ location }) =>
-        jwt ? (
+        currentJwt ? (
           children
         ) : (
           <Redirect

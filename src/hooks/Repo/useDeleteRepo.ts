@@ -1,7 +1,5 @@
-import { MutationResult } from '@apollo/react-common'
-import { ExecutionResult } from '@apollo/react-common/lib/types/types'
-import { useApolloClient, useMutation } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
+import { MutationResult, gql, useMutation } from '@apollo/client'
+import { ExecutionResult } from 'graphql'
 
 import {
   DeleteRepoMutation,
@@ -9,6 +7,7 @@ import {
   ReadRepoQuery,
   ReadRepoQueryVariables,
 } from '../../components/apollo'
+import { currentRepoNameVar } from '../../components/providers/ApolloProvider/cache'
 import { RepoFragment } from '../../fragments'
 import { ReadRepoDocument } from '..'
 
@@ -25,8 +24,6 @@ export function useDeleteRepo(): [
   (path: string) => Promise<ExecutionResult<DeleteRepoMutation>>,
   MutationResult<DeleteRepoMutation>
 ] {
-  const client = useApolloClient()
-
   const [mutation, rest] = useMutation<
     DeleteRepoMutation,
     DeleteRepoMutationVariables
@@ -42,9 +39,8 @@ export function useDeleteRepo(): [
   })
 
   async function deleteRepo() {
-    client.writeData({
-      data: { currentRepoName: null },
-    })
+    currentRepoNameVar('')
+
     return await mutation({
       optimisticResponse: {
         __typename: 'Mutation',

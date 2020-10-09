@@ -1,28 +1,29 @@
+import { useReactiveVar } from '@apollo/client'
 import { useLayoutEffect } from 'react'
 
+import { currentThemeVar } from '../../components/providers/ApolloProvider/cache'
 import { COLOR_MODE } from '../../enums'
-import { useReadCurrentTheme } from '..'
 
 export function useDarkMode() {
-  const { currentTheme, client } = useReadCurrentTheme()
+  const currentTheme = useReactiveVar(currentThemeVar)
 
   useLayoutEffect(() => {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      client.writeData({ data: { currentTheme: COLOR_MODE.DARK } })
+      currentThemeVar(COLOR_MODE.DARK)
     } else {
-      client.writeData({ data: { currentTheme: COLOR_MODE.LIGHT } })
+      currentThemeVar(COLOR_MODE.LIGHT)
     }
-  }, [client])
+  }, [])
 
   const isDarkMode = currentTheme === COLOR_MODE.DARK
 
   function toggleTheme() {
     const toggledTheme = isDarkMode ? COLOR_MODE.LIGHT : COLOR_MODE.DARK
-    client.writeData({ data: { currentTheme: toggledTheme } })
+    currentThemeVar(toggledTheme)
   }
 
   return {
-    currentTheme,
+    theme: currentTheme,
     toggleTheme,
     isDarkMode,
   }

@@ -1,8 +1,5 @@
-import { MutationResult } from '@apollo/react-common'
-import { ExecutionResult } from '@apollo/react-common/lib/types/types'
-import { useApolloClient, useMutation } from '@apollo/react-hooks'
-import { DataProxy } from 'apollo-cache'
-import gql from 'graphql-tag'
+import { DataProxy, MutationResult, gql, useMutation } from '@apollo/client'
+import { ExecutionResult } from 'graphql'
 
 import {
   DeleteFileMutation,
@@ -11,6 +8,7 @@ import {
   ReadNodesQuery,
   ReadNodesQueryVariables,
 } from '../../components/apollo'
+import { currentPathVar } from '../../components/providers/ApolloProvider/cache'
 import { FileFragment } from '../../fragments'
 import { extractFilename } from '../../utils'
 import { ReadNodesDocument } from '..'
@@ -68,8 +66,6 @@ export function useDeleteFile(): [
   (path?: string) => Promise<ExecutionResult<DeleteFileMutation>>,
   MutationResult<DeleteFileMutation>
 ] {
-  const client = useApolloClient()
-
   const [mutation, mutationResult] = useMutation<
     DeleteFileMutation,
     DeleteFileMutationVariables
@@ -88,9 +84,8 @@ export function useDeleteFile(): [
 
     const filename = extractFilename(path)
 
-    client.writeData({
-      data: { currentPath: null },
-    })
+    currentPathVar('')
+
     return mutation({
       variables: {
         input: {
