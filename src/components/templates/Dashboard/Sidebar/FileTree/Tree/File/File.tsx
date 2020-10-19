@@ -7,7 +7,7 @@ import { ITreeNode } from '../../../../../../../types'
 import { scrollIntoView } from '../../../../../../../utils'
 import { Node_Type } from '../../../../../../apollo'
 import { Icon } from '../../../../../../atoms'
-import { currentPathVar } from '../../../../../../providers/ApolloProvider/cache'
+import { localState } from '../../../../../../providers/ApolloProvider/cache'
 import { FileInput } from '../../../FileInput/FileInput'
 import { Node } from '../Node/Node'
 
@@ -60,7 +60,7 @@ export function File({ node, level }: IFile) {
 
     onClick(path)
 
-    currentPathVar(path)
+    localState.currentPathVar(path)
   }
 
   return isRenaming ? (

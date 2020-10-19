@@ -1,6 +1,5 @@
-import { useApolloClient } from '@apollo/client'
-
 import '@testing-library/jest-dom/extend-expect'
+
 import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Router } from 'react-router-dom'
@@ -8,29 +7,21 @@ import { Router } from 'react-router-dom'
 import { resolvers, user } from '../../../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../../../test-utils'
 import { MockProvider } from '../../../../providers'
+import { localState } from '../../../../providers/ApolloProvider/cache'
 import { Profile } from './Profile'
-
-jest.mock('@apollo/react-hooks', () => {
-  const originalModule = jest.requireActual('@apollo/react-hooks')
-
-  return {
-    ...originalModule,
-    useApolloClient: jest.fn(),
-  }
-})
 
 afterEach(cleanup)
 
 describe('Profile', () => {
-  const clearStore = jest.fn()
-  const writeData = jest.fn()
+  let currentJwtVar = jest.spyOn(localState, 'currentJwtVar')
 
   beforeEach(() => {
-    jest.restoreAllMocks()
-    const originalModule = jest.requireActual('@apollo/react-hooks')
-    ;(useApolloClient as jest.Mock).mockImplementation(
-      originalModule.useApolloClient
-    )
+    jest.clearAllMocks()
+    currentJwtVar = jest.spyOn(localState, 'currentJwtVar')
+  })
+
+  afterEach(() => {
+    currentJwtVar.mockRestore()
   })
 
   it('should display a profile', async () => {
@@ -55,11 +46,6 @@ describe('Profile', () => {
 
   describe('Dropdown', function () {
     it('should clear apollo store and deauth use when they logout', async () => {
-      ;(useApolloClient as jest.Mock).mockReturnValue({
-        clearStore,
-        writeData,
-      })
-
       const history = createMemoryHistory()
 
       const { getByAltText, getByLabelText } = await render(
@@ -74,8 +60,7 @@ describe('Profile', () => {
 
       await fireEvent.click(getByLabelText('Logout'))
 
-      expect(clearStore).toBeCalled()
-      expect(writeData).toBeCalled()
+      expect(currentJwtVar).toBeCalledWith(null)
     })
 
     it('should change color theme', async () => {
@@ -93,11 +78,6 @@ describe('Profile', () => {
     })
 
     it('should display message if logout errors', async () => {
-      ;(useApolloClient as jest.Mock).mockReturnValue({
-        clearStore,
-        writeData,
-      })
-
       const alert = jest.fn()
       ;(global as any).alert = alert
 

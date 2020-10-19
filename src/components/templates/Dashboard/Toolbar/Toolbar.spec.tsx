@@ -11,6 +11,7 @@ import {
 import { resolvers } from '../../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../../test-utils'
 import { MockProvider } from '../../../providers'
+import { localState } from '../../../providers/ApolloProvider/cache'
 import { Toolbar } from './Toolbar'
 
 jest.mock('../../../../hooks/utils/useDropzone')
@@ -79,7 +80,9 @@ describe('Toolbar', () => {
       const { getByTitle } = await render(
         <MockProvider
           mockResolvers={resolvers}
-          localData={{ currentPath: 'MOCK_FILE_PATH_1.md' }}
+          localData={{
+            currentPath: () => localState.currentPathVar('MOCK_FILE_PATH_1.md'),
+          }}
         >
           <Toolbar />
         </MockProvider>
@@ -95,7 +98,10 @@ describe('Toolbar', () => {
         const { getByTitle } = await render(
           <MockProvider
             mockResolvers={resolvers}
-            localData={{ currentPath: 'MOCK_FILE_PATH_1.md' }}
+            localData={{
+              currentPath: () =>
+                localState.currentPathVar('MOCK_FILE_PATH_1.md'),
+            }}
           >
             <Toolbar />
           </MockProvider>
@@ -120,7 +126,10 @@ describe('Toolbar', () => {
         const { getByTitle } = await render(
           <MockProvider
             mockResolvers={resolvers}
-            localData={{ currentPath: 'MOCK_FILE_PATH_1.md' }}
+            localData={{
+              currentPath: () =>
+                localState.currentPathVar('MOCK_FILE_PATH_1.md'),
+            }}
           >
             <Toolbar />
           </MockProvider>
@@ -150,7 +159,9 @@ describe('Toolbar', () => {
       const { getByTitle } = await render(
         <MockProvider
           mockResolvers={resolvers}
-          localData={{ currentPath: 'MOCK_FOLDER_PATH' }}
+          localData={{
+            currentPath: () => localState.currentPathVar('MOCK_FOLDER_PATH'),
+          }}
         >
           <Toolbar />
         </MockProvider>

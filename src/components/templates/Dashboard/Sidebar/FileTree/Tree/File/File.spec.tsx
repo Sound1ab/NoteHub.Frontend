@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/client'
 import React from 'react'
 
 import { useDeleteFile, useFileTree } from '../../../../../../../hooks'
@@ -8,27 +7,20 @@ import {
 } from '../../../../../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../../../../../test-utils'
 import { MockProvider } from '../../../../../../providers'
+import { localState } from '../../../../../../providers/ApolloProvider/cache'
 import { File } from './File'
 
 jest.mock('../../../../../../../hooks/utils/useFileTree')
 jest.mock('../../../../../../../hooks/file/useDeleteFile')
-jest.mock('@apollo/react-hooks', () => {
-  const originalModule = jest.requireActual('@apollo/react-hooks')
-
-  return {
-    ...originalModule,
-    useApolloClient: jest.fn(),
-  }
-})
 
 describe('File', () => {
   const onClick = jest.fn()
 
   const deleteFile = jest.fn()
 
-  const writeData = jest.fn()
-
   const activePath = 'MOCK_ACTIVE_PATH'
+
+  const currentPathVar = jest.spyOn(localState, 'currentPathVar')
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -36,13 +28,14 @@ describe('File', () => {
       deleteFile,
       { error: undefined },
     ])
-    ;(useApolloClient as jest.Mock).mockReturnValue({
-      writeData,
-    })
     ;(useFileTree as jest.Mock).mockReturnValue({
       activePath,
       onClick,
     })
+  })
+
+  afterEach(() => {
+    currentPathVar.mockRestore()
   })
 
   it('should update the currentPath with clicked node path', async () => {
@@ -54,9 +47,7 @@ describe('File', () => {
 
     await fireEvent.click(getByText('MOCK_FILE_PATH_1.md'))
 
-    expect(writeData).toBeCalledWith({
-      data: { currentPath: fileNodeOne.path },
-    })
+    expect(currentPathVar).toBeCalledWith(fileNodeOne.path)
   })
 
   it('should call onClick with path', async () => {

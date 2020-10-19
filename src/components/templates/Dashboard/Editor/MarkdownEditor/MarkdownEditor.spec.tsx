@@ -5,6 +5,7 @@ import React from 'react'
 import { resolvers } from '../../../../../schema/mockResolvers'
 import { cleanup, render } from '../../../../../test-utils'
 import { MockProvider } from '../../../../providers'
+import { localState } from '../../../../providers/ApolloProvider/cache'
 import { MarkdownEditor } from './MarkdownEditor'
 
 afterEach(cleanup)
@@ -35,7 +36,10 @@ describe('MarkdownEditor', () => {
     const { getByLabelText } = await render(
       <MockProvider
         mockResolvers={resolvers}
-        localData={{ currentPath: 'MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md' }}
+        localData={{
+          currentPath: () =>
+            localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md'),
+        }}
       >
         <MarkdownEditor />
       </MockProvider>
@@ -48,7 +52,9 @@ describe('MarkdownEditor', () => {
     const { queryByLabelText } = await render(
       <MockProvider
         mockResolvers={resolvers}
-        localData={{ currentPath: 'MOCK_FOLDER_PATH' }}
+        localData={{
+          currentPath: () => localState.currentPathVar('MOCK_FOLDER_PATH'),
+        }}
       >
         <MarkdownEditor />
       </MockProvider>

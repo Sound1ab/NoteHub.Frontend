@@ -8,7 +8,7 @@ import {
   ReadNodesQuery,
   ReadNodesQueryVariables,
 } from '../../components/apollo'
-import { currentPathVar } from '../../components/providers/ApolloProvider/cache'
+import { localState } from '../../components/providers/ApolloProvider/cache'
 import { FileFragment } from '../../fragments'
 import { extractFilename } from '../../utils'
 import { ReadNodesDocument } from '..'
@@ -84,7 +84,7 @@ export function useDeleteFile(): [
 
     const filename = extractFilename(path)
 
-    currentPathVar('')
+    localState.currentPathVar('')
 
     return mutation({
       variables: {

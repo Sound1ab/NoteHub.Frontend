@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 
 import { EventType } from '@testing-library/dom/types/events'
-import { act, fireEvent, render, waitFor } from '@testing-library/react'
+import { act, fireEvent, render } from '@testing-library/react'
 import React, { ReactNode } from 'react'
 
 import {
@@ -18,6 +18,14 @@ export type FireObject = {
   ) => Promise<boolean>
 }
 ;(global as any).matchMedia = () => ({ matches: false })
+
+const wait = (): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, 1)
+  })
+}
 
 const Context = ({ node }: { node: ReactNode }) => (
   <MockProvider>
@@ -39,7 +47,7 @@ const customRender = async (
 
   if (waitForLoad) {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    await act(() => waitFor(() => {}))
+    await act(wait)
   }
 
   return {
@@ -48,7 +56,7 @@ const customRender = async (
       rerender(<Context node={node} />)
 
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      await act(() => waitFor(() => {}))
+      await act(wait)
     },
   }
 }
@@ -61,7 +69,7 @@ const customFireEvent: FireObject = Object.entries(fireEvent).reduce(
         value(element, options)
       }
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      await act(() => waitFor(() => {}))
+      await act(wait)
     }
     return acc
   },

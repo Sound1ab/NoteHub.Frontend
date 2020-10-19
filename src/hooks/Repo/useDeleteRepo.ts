@@ -7,7 +7,7 @@ import {
   ReadRepoQuery,
   ReadRepoQueryVariables,
 } from '../../components/apollo'
-import { currentRepoNameVar } from '../../components/providers/ApolloProvider/cache'
+import { localState } from '../../components/providers/ApolloProvider/cache'
 import { RepoFragment } from '../../fragments'
 import { ReadRepoDocument } from '..'
 
@@ -39,7 +39,7 @@ export function useDeleteRepo(): [
   })
 
   async function deleteRepo() {
-    currentRepoNameVar('')
+    localState.currentRepoNameVar('')
 
     return await mutation({
       optimisticResponse: {

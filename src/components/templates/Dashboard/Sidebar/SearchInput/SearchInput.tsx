@@ -2,15 +2,15 @@ import React from 'react'
 
 import { styled } from '../../../../../theme'
 import { Input } from '../../../../atoms'
-import { searchVar } from '../../../../providers/ApolloProvider/cache'
-import { useReactiveVar } from '@apollo/client'
+import { localState } from '../../../../providers/ApolloProvider/cache'
+import { useReadSearch } from '../../../../../hooks'
 
 export function SearchInput() {
-  const search = useReactiveVar(searchVar)
+  const search = useReadSearch()
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target
 
-    searchVar(value)
+    localState.searchVar(value)
   }
 
   function onSubmit(e: React.ChangeEvent<HTMLFormElement>) {

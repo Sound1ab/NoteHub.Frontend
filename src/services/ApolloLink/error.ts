@@ -9,14 +9,14 @@ import {
 } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 
-import { currentJwtVar } from '../../components/providers/ApolloProvider/cache'
+import { localState } from '../../components/providers/ApolloProvider/cache'
 import { APOLLO_ERRORS } from '../../enums'
 
 const GRAPHQL = process.env.REACT_APP_GRAPHQL
 
 export function error(client: ApolloClient<NormalizedCacheObject>) {
   function resetStore() {
-    currentJwtVar(null)
+    localState.currentJwtVar(null)
     client.cache.gc()
   }
 
@@ -35,7 +35,7 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
       throw new Error('No refresh token')
     }
 
-    currentJwtVar(data.refresh)
+    localState.currentJwtVar(data.refresh)
 
     return data.refresh
   }

@@ -11,7 +11,7 @@ import {
 import { styled } from '../../../../../theme'
 import { Fade } from '../../../../animation'
 import { Dropdown } from '../../../../atoms'
-import { currentJwtVar } from '../../../../providers/ApolloProvider/cache'
+import { localState } from '../../../../providers/ApolloProvider/cache'
 import { Avatar } from './Avatar/Avatar'
 
 interface IProfile {
@@ -31,7 +31,7 @@ export function Profile(props: IProfile) {
   }
 
   if (called && data?.logout === 'ok') {
-    currentJwtVar(null)
+    localState.currentJwtVar(null)
     client.cache.gc()
 
     return (

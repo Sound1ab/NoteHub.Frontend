@@ -1,21 +1,12 @@
-import { useApolloClient } from '@apollo/client'
-
 import '@testing-library/jest-dom/extend-expect'
 import React, { FunctionComponent } from 'react'
 
 import { useLogin } from '../../../hooks'
 import { cleanup, render } from '../../../test-utils'
 import { Login } from './Login'
+import { localState } from '../../providers/ApolloProvider/cache'
 
 jest.mock('../../../hooks/authorization/useLogin')
-jest.mock('@apollo/react-hooks', () => {
-  const originalModule = jest.requireActual('@apollo/react-hooks')
-
-  return {
-    ...originalModule,
-    useApolloClient: jest.fn(),
-  }
-})
 jest.mock('react-router-dom', () => {
   const location = {
     search: '?code=1234&state=state',
@@ -34,10 +25,6 @@ afterEach(cleanup)
 describe('Login', () => {
   beforeEach(() => {
     jest.restoreAllMocks()
-    const originalModule = jest.requireActual('@apollo/react-hooks')
-    ;(useApolloClient as jest.Mock).mockImplementation(
-      originalModule.useApolloClient
-    )
   })
 
   it('should return null if loading', async () => {
@@ -51,15 +38,16 @@ describe('Login', () => {
   })
 
   it('should write jwt to client and redirect page if jwt is present', async () => {
+    const currentJwtVar = jest.spyOn(localState, 'currentJwtVar')
     const jwt = 'MOCK_JWT'
-    const writeData = jest.fn()
     ;(useLogin as jest.Mock).mockReturnValue({ jwt, loading: false })
-    ;(useApolloClient as jest.Mock).mockReturnValue({ writeData })
 
     const { getByText } = await render(<Login />)
 
-    expect(writeData).toBeCalledWith({ data: { jwt } })
+    expect(currentJwtVar).toBeCalledWith(jwt)
     expect(getByText('redirect')).toBeDefined()
+
+    currentJwtVar.mockRestore()
   })
 
   it('should show login button if no jwt is present', async () => {

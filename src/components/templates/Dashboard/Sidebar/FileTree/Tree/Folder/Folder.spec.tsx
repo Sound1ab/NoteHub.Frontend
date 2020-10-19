@@ -49,10 +49,7 @@ describe('Folder', () => {
     })
 
     const { getByLabelText } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{ currentPath: folderNode.path }}
-      >
+      <MockProvider mockResolvers={resolvers}>
         <Folder
           node={{ ...folderNode, toggled: true }}
           level={1}
@@ -68,10 +65,7 @@ describe('Folder', () => {
 
   it('should call onToggle with false if chevron is clicked and node is not selected', async () => {
     const { getByLabelText } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{ currentPath: folderNode.path }}
-      >
+      <MockProvider mockResolvers={resolvers}>
         <Folder
           node={{ ...folderNode, toggled: true }}
           level={1}
@@ -87,10 +81,7 @@ describe('Folder', () => {
 
   it('should call onClick with path if chevron is clicked', async () => {
     const { getByLabelText } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{ currentPath: folderNode.path }}
-      >
+      <MockProvider mockResolvers={resolvers}>
         <Folder
           node={{ ...folderNode, toggled: true }}
           level={1}

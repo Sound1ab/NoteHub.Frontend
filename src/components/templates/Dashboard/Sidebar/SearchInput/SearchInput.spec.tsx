@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { useReadSearch } from '../../../../../hooks'
 import { cleanup, fireEvent, render } from '../../../../../test-utils'
 import { MockProvider } from '../../../../providers'
+import { localState } from '../../../../providers/ApolloProvider/cache'
 import { SearchInput } from './SearchInput'
 
 jest.mock('../../../../../hooks/localState/useReadSearch')
@@ -10,13 +10,14 @@ jest.mock('../../../../../hooks/localState/useReadSearch')
 afterEach(cleanup)
 
 describe('SearchInput', () => {
-  const search = ''
-
-  const client = { writeData: jest.fn() }
+  const searchVar = jest.spyOn(localState, 'searchVar')
 
   beforeEach(() => {
     jest.resetAllMocks()
-    ;(useReadSearch as jest.Mock).mockImplementation(() => ({ search, client }))
+  })
+
+  afterEach(() => {
+    searchVar.mockRestore()
   })
 
   it('should update apollo local state with input text', async () => {
@@ -33,6 +34,6 @@ describe('SearchInput', () => {
       target: { value: 'MOCK_FILE' },
     })
 
-    expect(client.writeData).toBeCalledWith({ data: { search: 'MOCK_FILE' } })
+    expect(searchVar).toBeCalledWith('MOCK_FILE')
   })
 })

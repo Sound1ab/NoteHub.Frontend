@@ -1,21 +1,22 @@
-import { useReactiveVar } from '@apollo/client'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import ReactMarkdown from 'react-markdown'
 import SimpleMDE from 'react-simplemde-editor'
 
-import { useEasyMDE, useReadFile, useUpdateFile } from '../../../../../hooks'
+import {
+  useEasyMDE,
+  useReadCurrentPath,
+  useReadFile,
+  useUpdateFile,
+} from '../../../../../hooks'
 import { IPosition } from '../../../../../types'
 import { isFile } from '../../../../../utils'
-import {
-  currentPathVar,
-  cursorPositionVar,
-} from '../../../../providers/ApolloProvider/cache'
+import { localState } from '../../../../providers/ApolloProvider/cache'
 import { CodeRenderer } from '../CodeRenderer/CodeRenderer'
 import { Style } from './MarkdownEditor.styles'
 
 export function MarkdownEditor() {
-  const currentPath = useReactiveVar(currentPathVar)
+  const currentPath = useReadCurrentPath()
   const { file, error: readError } = useReadFile()
   const [updateFile, { error: updateError }] = useUpdateFile()
   const { setEasyMDE } = useEasyMDE()
@@ -29,7 +30,10 @@ export function MarkdownEditor() {
   }
 
   function handleSetMarkdownCursorPosition(currentCursorPosition: IPosition) {
-    cursorPositionVar({ ...currentCursorPosition, __typename: 'Position' })
+    localState.cursorPositionVar({
+      ...currentCursorPosition,
+      __typename: 'Position',
+    })
   }
 
   if (!isFile(currentPath)) {

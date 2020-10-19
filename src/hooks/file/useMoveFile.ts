@@ -1,9 +1,4 @@
-import {
-  MutationResult,
-  gql,
-  useMutation,
-  useReactiveVar,
-} from '@apollo/client'
+import { MutationResult, gql, useMutation } from '@apollo/client'
 import { ExecutionResult } from 'graphql'
 
 import {
@@ -13,10 +8,10 @@ import {
   ReadNodesQuery,
   ReadNodesQueryVariables,
 } from '../../components/apollo'
-import { currentPathVar } from '../../components/providers/ApolloProvider/cache'
+import { localState } from '../../components/providers/ApolloProvider/cache'
 import { FileFragment } from '../../fragments'
 import { extractFilename } from '../../utils'
-import { ReadNodesDocument } from '..'
+import { ReadNodesDocument, useReadCurrentPath } from '..'
 
 export const MoveFileDocument = gql`
   ${FileFragment}
@@ -34,7 +29,7 @@ export function useMoveFile(): [
   ) => Promise<ExecutionResult<MoveFileMutation>>,
   MutationResult<MoveFileMutation>
 ] {
-  const currentPath = useReactiveVar(currentPathVar)
+  const currentPath = useReadCurrentPath()
 
   let oldPath: string
 
@@ -78,7 +73,7 @@ export function useMoveFile(): [
       // to the new file name after server change so the item stays activated
       // in list
       if (oldPath === currentPath && movedFile.sha !== 'optimistic') {
-        currentPathVar(movedFile.path)
+        localState.currentPathVar(movedFile.path)
       }
     },
     errorPolicy: 'all',

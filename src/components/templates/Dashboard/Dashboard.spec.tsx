@@ -5,6 +5,7 @@ import React from 'react'
 import { fileGitNodeTwo, resolvers } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
 import { MockProvider } from '../../providers'
+import { localState } from '../../providers/ApolloProvider/cache'
 import { Dashboard } from './Dashboard'
 
 jest.mock('react-simplemde-editor', function () {
@@ -59,7 +60,12 @@ describe('Dashboard', () => {
     const { path } = fileGitNodeTwo
 
     const { getByLabelText, getByText, getByTitle } = await render(
-      <MockProvider mockResolvers={resolvers} localData={{ currentPath: path }}>
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{
+          currentPath: () => localState.currentPathVar(path),
+        }}
+      >
         <Dashboard />
       </MockProvider>
     )
@@ -89,7 +95,9 @@ describe('Dashboard', () => {
 
     const { getByLabelText, getByText } = await render(
       <MockProvider
-        localData={{ currentPath: path }}
+        localData={{
+          currentPath: () => localState.currentPathVar(path),
+        }}
         mockResolvers={{
           ...resolvers,
           Mutation: () => ({

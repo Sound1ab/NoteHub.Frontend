@@ -3,7 +3,7 @@ import React from 'react'
 import { Redirect, withRouter } from 'react-router-dom'
 
 import { useReadGithubUserAccessToken } from '../../../hooks'
-import { currentJwtVar } from '../../providers/ApolloProvider/cache'
+import { localState } from '../../providers/ApolloProvider/cache'
 
 interface ICallback {
   location: Location
@@ -18,7 +18,7 @@ export const Callback = withRouter(({ location }: ICallback) => {
   const { jwt } = useReadGithubUserAccessToken(code, state)
 
   if (jwt) {
-    currentJwtVar(jwt)
+    localState.currentJwtVar(jwt)
 
     return (
       <Redirect

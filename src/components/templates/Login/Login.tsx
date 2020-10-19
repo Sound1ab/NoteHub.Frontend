@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { useLogin } from '../../../hooks'
 import { styled } from '../../../theme'
 import { Icon } from '../../atoms'
-import { currentJwtVar } from '../../providers/ApolloProvider/cache'
+import { localState } from '../../providers/ApolloProvider/cache'
 import { LoginButton } from './LoginButton/LoginButton'
 
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
@@ -20,7 +20,7 @@ export function Login() {
       return
     }
 
-    currentJwtVar(jwt)
+    localState.currentJwtVar(jwt)
   }, [jwt])
 
   if (loading) {

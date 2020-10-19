@@ -27,7 +27,7 @@ afterEach(cleanup)
 
 describe('PrivateRoute', () => {
   it('should display children if jwt is present', async () => {
-    ;(useReadJwt as jest.Mock).mockReturnValue({ jwt: 'MOCK_JWT' })
+    ;(useReadJwt as jest.Mock).mockReturnValue('MOCK_JWT')
 
     const { getByText } = await render(
       <PrivateRoute path="MOCK_PATH" exact={true}>
@@ -39,7 +39,7 @@ describe('PrivateRoute', () => {
   })
 
   it('should redirect if jwt is not present', async () => {
-    ;(useReadJwt as jest.Mock).mockReturnValue({ jwt: null })
+    ;(useReadJwt as jest.Mock).mockReturnValue(null)
 
     const { getByText } = await render(
       <PrivateRoute path="MOCK_PATH" exact={true}>

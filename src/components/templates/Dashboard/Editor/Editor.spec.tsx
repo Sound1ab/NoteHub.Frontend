@@ -6,6 +6,7 @@ import { useReadFile } from '../../../../hooks'
 import { fileGitNodeTwo, resolvers } from '../../../../schema/mockResolvers'
 import { cleanup, render } from '../../../../test-utils'
 import { MockProvider } from '../../../providers'
+import { localState } from '../../../providers/ApolloProvider/cache'
 import { Editor } from './Editor'
 
 jest.mock('../../../../hooks/file/useReadFile')
@@ -28,7 +29,9 @@ describe('Editor', () => {
     const { getByLabelText } = await render(
       <MockProvider
         mockResolvers={resolvers}
-        localData={{ currentPath: fileGitNodeTwo.path }}
+        localData={{
+          currentPath: () => localState.currentPathVar(fileGitNodeTwo.path),
+        }}
       >
         <Editor />
       </MockProvider>
@@ -43,7 +46,9 @@ describe('Editor', () => {
     const { getByLabelText } = await render(
       <MockProvider
         mockResolvers={resolvers}
-        localData={{ currentPath: fileGitNodeTwo.path }}
+        localData={{
+          currentPath: () => localState.currentPathVar(fileGitNodeTwo.path),
+        }}
       >
         <Editor />
       </MockProvider>

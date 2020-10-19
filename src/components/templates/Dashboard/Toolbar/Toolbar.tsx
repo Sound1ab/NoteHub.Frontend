@@ -1,10 +1,12 @@
-import { useReactiveVar } from '@apollo/client'
 import React, { Fragment, useRef } from 'react'
 
 import {
   useDropzone,
   useEasyMDE,
   useModalToggle,
+  useReadCurrentPath,
+  useReadCurrentRepoName,
+  useReadCursorPosition,
   useReadFile,
   useUpdateFile,
 } from '../../../../hooks'
@@ -12,19 +14,14 @@ import { styled } from '../../../../theme'
 import { isFile } from '../../../../utils'
 import { Fade } from '../../../animation'
 import { Dropdown, Icon } from '../../../atoms'
-import {
-  currentPathVar,
-  currentRepoNameVar,
-  cursorPositionVar,
-} from '../../../providers/ApolloProvider/cache'
 import { ColorPicker } from './ColorPicker/ColorPicker'
 import { Profile } from './Profile/Profile'
 import { ToolbarButton } from './ToolbarButton/ToolbarButton'
 
 export function Toolbar() {
-  const currentPath = useReactiveVar(currentPathVar)
-  const currentRepoName = useReactiveVar(currentRepoNameVar)
-  const cursorPosition = useReactiveVar(cursorPositionVar)
+  const currentPath = useReadCurrentPath()
+  const currentRepoName = useReadCurrentRepoName()
+  const cursorPosition = useReadCursorPosition()
   const containerRef = useRef(null)
   const { selectFileAndUpload, Dropzone } = useDropzone()
   const [updateFile] = useUpdateFile()

@@ -1,13 +1,12 @@
-import { useReactiveVar } from '@apollo/client'
 import React from 'react'
 import ContentLoader from 'react-content-loader'
 
 import { styled } from '../../../../../theme'
 import { colors } from '../../../../../theme/theme'
-import { currentThemeVar } from '../../../../providers/ApolloProvider/cache'
+import { useReadCurrentTheme } from '../../../../../hooks'
 
 export function TreeSkeleton() {
-  const currentTheme = useReactiveVar(currentThemeVar)
+  const currentTheme = useReadCurrentTheme()
 
   return (
     <Wrapper aria-label="Markdown loading">

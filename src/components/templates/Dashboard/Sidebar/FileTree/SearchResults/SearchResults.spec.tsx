@@ -15,7 +15,7 @@ describe('SearchResults', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
-    ;(useReadSearch as jest.Mock).mockImplementation(() => ({ search }))
+    ;(useReadSearch as jest.Mock).mockImplementation(() => search)
   })
 
   it('should display all files', async () => {
