@@ -26,6 +26,7 @@ export function SearchInput() {
         onSubmit={onSubmit}
         inputAriaLabel="Search files"
         type="text"
+        placeholder="Search"
       />
     </Wrapper>
   )

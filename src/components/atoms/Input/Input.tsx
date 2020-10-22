@@ -16,6 +16,7 @@ interface IInlineInput {
   autocorrect?: 'on' | 'off'
   autocapitalize?: 'on' | 'off'
   autoFocus?: boolean
+  placeholder?: string
 }
 
 export function Input({

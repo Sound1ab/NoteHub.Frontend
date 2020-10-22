@@ -99,6 +99,7 @@ const Triangle = styled.div<Pick<IDropdownMenuProps, 'trianglePosition'>>`
 const Item = styled.li`
   display: flex;
   margin-bottom: 0;
+  align-items: center;
 `
 
 const StyledIcon = styled(Icon)`

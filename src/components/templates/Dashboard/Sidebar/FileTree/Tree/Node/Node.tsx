@@ -111,7 +111,7 @@ const Wrapper = styled.div<
     if (level === -1) {
       return 0
     } else if (level === 0 && type === Node_Type.File) {
-      return theme.spacing.s
+      return theme.spacing.ms
     } else if (level === 0 && type === Node_Type.Folder) {
       return 0
     }
@@ -160,7 +160,6 @@ const Actions = styled(Button)`
   flex: 0;
   position: relative;
   display: flex;
-  width: ${({ theme }) => theme.spacing.xs};
   align-self: stretch;
   padding: ${({ theme }) => theme.spacing.xs};
   color: ${({ theme }) => theme.colors.text.primary};
