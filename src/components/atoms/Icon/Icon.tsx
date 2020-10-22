@@ -84,7 +84,7 @@ export function Icon({
     >
       <StyledFontAwesomeIcon
         icon={[prefix as any, icon]}
-        size={size}
+        size="1x"
         title={title}
       />
     </Wrapper>
@@ -95,25 +95,15 @@ const Wrapper = styled.div<
   Pick<IIcon, 'marginLeft' | 'marginRight' | 'size' | 'isDisabled'>
 >`
   position: relative;
-  display: inline-block !important;
+  display: flex;
   margin-right: ${({ theme, marginRight }) =>
     marginRight ? theme.spacing.xxs : 0};
   margin-left: ${({ theme, marginLeft }) =>
     marginLeft ? theme.spacing.xxs : 0};
   pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'all')};
-
-  padding: ${({ size }) => {
-    switch (size) {
-      case 'xs':
-        return '5px'
-      case 'sm':
-        return '5px'
-      case 'lg':
-        return '10px'
-      default:
-        return '6px'
-    }
-  }};
+  width: 1.15em;
+  height: 1.15em;
+  align-items: center;
 `
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`

@@ -75,12 +75,12 @@ const StyledInput = styled.input`
   background-color: ${({ theme }) => theme.colors.background.secondary};
   color: ${({ theme }) => theme.colors.text.primary};
   min-width: 20px;
-  padding: ${({ theme }) => theme.spacing.xxs}
-    ${({ theme }) => theme.spacing.xs};
-  font-size: 16px; // Note: Has to be 16px to stop ios zoom
+  padding: ${({ theme }) => theme.spacing.xs};
+  font-size: 14px; // Note: Has to be 16px to stop ios zoom
   font-weight: ${({ theme }) => theme.typographyStyles.h5.fontWeight};
   border: none;
   border-radius: ${({ theme }) => theme.spacing.xxs};
+  line-height: 0;
 
   &:focus {
     outline: ${({ theme }) => theme.spacing.xxxs} solid

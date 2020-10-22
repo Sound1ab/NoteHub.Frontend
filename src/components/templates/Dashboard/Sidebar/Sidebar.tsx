@@ -27,7 +27,7 @@ export function Sidebar() {
         onClick={() => setIsNewFileOpen(true)}
         isDisabled={Boolean(search)}
       >
-        <PlusIcon size="lg" icon={'plus-circle'} />
+        <PlusIcon size="1x" icon="plus-circle" />
         <Add>New file</Add>
       </StyledButton>
     </StyledSidebar>

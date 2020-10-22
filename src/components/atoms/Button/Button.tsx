@@ -18,7 +18,7 @@ export const Button = forwardRef(
     return (
       <StyledButton ref={ref} {...props} disabled={props.isDisabled}>
         {props.isLoading ? (
-          <Icon size="sm" icon="spinner" prefix="fa" />
+          <Icon size="1x" icon="spinner" prefix="fa" />
         ) : (
           props.children
         )}
@@ -29,6 +29,8 @@ export const Button = forwardRef(
 
 const StyledButton = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
   position: relative;
+  display: flex;
+  align-items: center;
 
   &[disabled] {
     cursor: not-allowed;

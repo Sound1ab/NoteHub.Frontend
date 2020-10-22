@@ -69,7 +69,7 @@ export function Folder({ level, node, childNodes }: IFolder) {
         <>
           <Chevron
             toggled={toggled}
-            size="sm"
+            size="1x"
             icon="chevron-right"
             prefix="fa"
             aria-label="chevron"
@@ -77,7 +77,7 @@ export function Folder({ level, node, childNodes }: IFolder) {
               onChevronClick(e, node)
             }
           />
-          <StyledIcon size="sm" icon="folder" prefix="fa" />
+          <StyledIcon size="1x" icon="folder" prefix="fa" />
         </>
       </Node>
       {isNewFileOpen && (

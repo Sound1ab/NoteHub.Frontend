@@ -6,7 +6,7 @@ import { styled } from '../../../../../../../theme'
 import { ITreeNode } from '../../../../../../../types'
 import { Fade } from '../../../../../../animation'
 import { Node_Type } from '../../../../../../apollo'
-import { Dropdown, IDropdownItem, Icon } from '../../../../../../atoms'
+import { Button, Dropdown, IDropdownItem, Icon } from '../../../../../../atoms'
 
 interface INode {
   node: ITreeNode
@@ -32,9 +32,7 @@ export function Node({
   const { isOpen, Portal, ref, setOpen } = useModalToggle()
   const { type, name } = node
 
-  function handleToggleMenu(
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) {
+  function handleToggleMenu(e: React.MouseEvent<HTMLElement, MouseEvent>) {
     e.stopPropagation()
     setOpen((isOpen) => !isOpen)
   }
@@ -72,6 +70,7 @@ export function Node({
         </Details>
         <Actions onClick={handleToggleMenu}>
           <StyledIcon
+            size="xs"
             icon="ellipsis-h"
             isDisabled={isOpen}
             aria-label={`${name} actions`}
@@ -116,7 +115,7 @@ const Wrapper = styled.div<
     } else if (level === 0 && type === Node_Type.Folder) {
       return 0
     }
-    const additionalPadding = type === Node_Type.File ? theme.spacing.s : '0px'
+    const additionalPadding = type === Node_Type.File ? theme.spacing.ms : '0px'
     return css`calc(calc(${level} * ${theme.spacing.s}) + ${additionalPadding})`
   }};
   cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
@@ -139,6 +138,7 @@ const Details = styled.div`
   justify-content: flex-start;
   padding: ${({ theme }) => theme.spacing.xs};
   overflow: hidden;
+  align-items: center;
 
   * + * {
     margin-left: ${({ theme }) => theme.spacing.xs};
@@ -156,7 +156,7 @@ const Heading = styled.h4<{
   user-select: none;
 `
 
-const Actions = styled.button`
+const Actions = styled(Button)`
   flex: 0;
   position: relative;
   display: flex;
