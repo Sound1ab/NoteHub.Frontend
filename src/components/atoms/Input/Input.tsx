@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef } from 'react'
+import React, { ReactNode, useLayoutEffect, useRef } from 'react'
 
 import { useClickOutside } from '../../../hooks'
 import { styled } from '../../../theme'
@@ -30,12 +30,19 @@ export function Input({
   type = 'text',
   autocorrect = 'off',
   autocapitalize = 'off',
-  autoFocus = false,
+  autoFocus,
   ...rest
 }: IInlineInput) {
   const wrapperRef = useRef<HTMLFormElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
   useClickOutside(clickOutsideCallback, wrapperRef)
+
+  useLayoutEffect(() => {
+    if (!autoFocus) {
+      return
+    }
+    inputRef.current?.focus()
+  }, [autoFocus])
 
   return (
     <Form ref={wrapperRef} onSubmit={onSubmit} aria-label={formAriaLabel}>
@@ -51,7 +58,6 @@ export function Input({
         aria-label={inputAriaLabel}
         autoCorrect={autocorrect}
         autoCapitalize={autocapitalize}
-        autoFocus={autoFocus}
       />
       <HiddenSubmit type="submit" />
     </Form>

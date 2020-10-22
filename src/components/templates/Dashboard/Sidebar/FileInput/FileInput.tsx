@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { useCreateFile } from '../../../../../hooks'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
@@ -10,14 +10,31 @@ interface IFileInput {
   path?: string | null
   onClickOutside: () => void
   action: 'create' | 'rename'
+  startingText?: string
 }
 
-export function FileInput({ onClickOutside, path, action }: IFileInput) {
+export function FileInput({
+  onClickOutside,
+  path,
+  action,
+  startingText,
+}: IFileInput) {
   const defaultState = { name: '' }
   const [{ name }, setForm] = useState<{ [key: string]: any }>(defaultState)
   const [createFile, { loading }] = useCreateFile()
   const [moveFile] = useMoveFile()
   const { onToggle } = useContext(FileTreeContext)
+
+  useEffect(() => {
+    if (!startingText) {
+      return
+    }
+
+    setForm((prevState) => ({
+      ...prevState,
+      name: startingText,
+    }))
+  }, [startingText])
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target

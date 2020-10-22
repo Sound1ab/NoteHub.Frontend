@@ -1,9 +1,9 @@
 import React from 'react'
 
+import { useReadSearch } from '../../../../../hooks'
 import { styled } from '../../../../../theme'
 import { Input } from '../../../../atoms'
 import { localState } from '../../../../providers/ApolloProvider/cache'
-import { useReadSearch } from '../../../../../hooks'
 
 export function SearchInput() {
   const search = useReadSearch()

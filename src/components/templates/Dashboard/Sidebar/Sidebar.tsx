@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 
 import { CONTAINER_ID } from '../../../../enums'
+import { useReadSearch } from '../../../../hooks'
 import { styled } from '../../../../theme'
 import { Button, Icon } from '../../../atoms'
 import { FileTree } from './FileTree/FileTree'
 import { FileTreeProvider } from './FileTree/FileTreeProvider'
 import { SearchInput } from './SearchInput/SearchInput'
-import { useReadSearch } from '../../../../hooks'
 
 export function Sidebar() {
   const search = useReadSearch()
@@ -28,7 +28,7 @@ export function Sidebar() {
         isDisabled={Boolean(search)}
       >
         <PlusIcon size="lg" icon={'plus-circle'} />
-        <Add>New folder</Add>
+        <Add>New file</Add>
       </StyledButton>
     </StyledSidebar>
   )

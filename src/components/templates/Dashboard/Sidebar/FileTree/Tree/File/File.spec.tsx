@@ -78,6 +78,24 @@ describe('File', () => {
     expect(getByLabelText('Input file name')).toBeInTheDocument()
   })
 
+  it('should insert file name into inline file input when renaming file', async () => {
+    const { getByLabelText } = await render(
+      <MockProvider mockResolvers={resolvers}>
+        <div aria-label="outside">
+          <File node={fileNodeOne} level={1} />
+        </div>
+      </MockProvider>
+    )
+
+    await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+
+    await fireEvent.click(getByLabelText('Rename'))
+
+    const input = getByLabelText('Input file name')
+
+    expect((input as any).value).toEqual('MOCK_FILE_PATH_1')
+  })
+
   it('should open file dropdown menu', async () => {
     const { getByLabelText, getByText } = await render(
       <MockProvider mockResolvers={resolvers}>

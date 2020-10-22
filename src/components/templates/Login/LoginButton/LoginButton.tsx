@@ -6,11 +6,13 @@ export const LoginButton = styled(Button)`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: #fff;
   text-decoration: none;
+  background-color: ${({ theme }) => theme.colors.company.github};
+  border-radius: ${({ theme }) => theme.spacing.xxs};
 
   &:visited {
-    color: ${({ theme }) => theme.colors.text.primary};
+    color: #fff;
   }
 
   * svg {

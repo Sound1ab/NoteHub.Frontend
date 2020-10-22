@@ -4,7 +4,10 @@ import { CONTAINER_ID } from '../../../../../../../enums'
 import { useDeleteFile, useFileTree } from '../../../../../../../hooks'
 import { styled } from '../../../../../../../theme'
 import { ITreeNode } from '../../../../../../../types'
-import { scrollIntoView } from '../../../../../../../utils'
+import {
+  removeMarkdownExtension,
+  scrollIntoView,
+} from '../../../../../../../utils'
 import { Node_Type } from '../../../../../../apollo'
 import { Icon } from '../../../../../../atoms'
 import { localState } from '../../../../../../providers/ApolloProvider/cache'
@@ -19,7 +22,7 @@ interface IFile {
 export function File({ node, level }: IFile) {
   const [isRenaming, setIsRenaming] = useState(false)
   const [deleteFile] = useDeleteFile()
-  const { path, type } = node
+  const { path, type, name } = node
   const { activePath, onClick } = useFileTree()
   const isActive = path === activePath
 
@@ -68,6 +71,7 @@ export function File({ node, level }: IFile) {
       path={path}
       onClickOutside={() => setIsRenaming(false)}
       action="rename"
+      startingText={removeMarkdownExtension(name)}
     />
   ) : (
     <Node
