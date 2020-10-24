@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "jsx": "preserve",
+    "jsx": "react",
     "outDir": "lib",
     "strict": true,
     "allowSyntheticDefaultImports": true,
@@ -15,7 +15,8 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "isolatedModules": true,
-    "inlineSourceMap": true
+    "inlineSourceMap": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src"]
 }

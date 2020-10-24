@@ -20,7 +20,9 @@ export function FileInput({
   startingText,
 }: IFileInput) {
   const defaultState = { name: '' }
-  const [{ name }, setForm] = useState<{ [key: string]: any }>(defaultState)
+  const [{ name }, setForm] = useState<{
+    [key: string]: string
+  }>(defaultState)
   const [createFile, { loading }] = useCreateFile()
   const [moveFile] = useMoveFile()
   const { onToggle } = useContext(FileTreeContext)

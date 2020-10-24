@@ -14,10 +14,13 @@ import { FileTreeProvider } from './components/templates/Dashboard/Sidebar/FileT
 export type FireObject = {
   [K in EventType]: (
     element: Document | Element | Window,
-    options?: {}
+    options?: Record<string, unknown>
   ) => Promise<boolean>
 }
-;(global as any).matchMedia = () => ({ matches: false })
+global.matchMedia = () =>
+  ({
+    matches: false,
+  } as MediaQueryList)
 
 const wait = (): Promise<void> => {
   return new Promise((resolve) => {
@@ -61,10 +64,22 @@ const customRender = async (
   }
 }
 
-const customFireEvent: FireObject = Object.entries(fireEvent).reduce(
-  (acc: any, keyValue) => {
+const customFireEvent = Object.entries(fireEvent).reduce(
+  (
+    acc: Record<
+      string,
+      (
+        element: Document | Element | Window,
+        options: Record<string, string>
+      ) => Promise<unknown>
+    >,
+    keyValue
+  ) => {
     const [key, value] = keyValue
-    acc[key] = async (element: Document | Element | Window, options: {}) => {
+    acc[key] = async (
+      element: Document | Element | Window,
+      options: Record<string, unknown>
+    ) => {
       if (typeof value === 'function') {
         value(element, options)
       }

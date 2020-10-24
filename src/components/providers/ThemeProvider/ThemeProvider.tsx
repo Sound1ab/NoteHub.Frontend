@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components'
+import Typography from 'typography'
 
 import { useDarkMode, useReadAccentColor } from '../../../hooks'
 import { breakpoints, colors, createSpacing } from '../../../theme/theme'
 import { createTypography } from '../../../theme/typography'
 
 interface IThemeProvider {
-  children: any
+  children: (typography: Typography) => ReactNode
 }
 
 export function ThemeProvider({ children }: IThemeProvider) {
@@ -17,7 +18,8 @@ export function ThemeProvider({ children }: IThemeProvider) {
   const typography = createTypography(themeColors)
   const spacing = createSpacing(typography)
 
-  const { h1, h2, h3, h4, h5, h6, html } = typography.toJSON() as any
+  // @ts-ignore
+  const { h1, h2, h3, h4, h5, h6, html } = typography.toJSON()
 
   return (
     <StyledThemeProvider

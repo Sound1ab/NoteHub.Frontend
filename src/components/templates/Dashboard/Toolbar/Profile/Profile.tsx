@@ -24,7 +24,7 @@ export function Profile(props: IProfile) {
   const containerRef = useRef(null)
   const user = useReadGithubUser()
   const [logout, { called, data, error }] = useLogout()
-  const { isOpen, Portal, ref, setOpen } = useModalToggle()
+  const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
 
   if (error) {
     alert('Could not logout. Please try again.')
@@ -64,11 +64,10 @@ export function Profile(props: IProfile) {
           placementAroundContainer="bottom-left"
         >
           <Dropdown
-            ref={ref}
+            containerRef={ref}
             items={[
               {
                 icon: 'sign-out-alt' as const,
-                prefix: 'fa' as const,
                 label: 'Logout',
                 onClick: handleLogout,
               },
@@ -80,7 +79,6 @@ export function Profile(props: IProfile) {
               },
               {
                 icon: 'moon' as const,
-                prefix: 'fa' as const,
                 label: isDarkMode ? 'Light theme' : 'Dark theme',
                 onClick: toggleTheme,
               },

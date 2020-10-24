@@ -10,11 +10,18 @@ const Style = styled.input`
 export function useDropzone() {
   const input = useRef<HTMLInputElement>(null)
   const [loading, setLoading] = useState(false)
-  const resolver = useRef<(value?: any | PromiseLike<any>) => void>(null)
-  const rejecter = useRef<(value?: any | PromiseLike<any>) => void>(null)
+  const resolver = useRef<
+    (value?: unknown | PromiseLike<unknown>) => void | null
+  >(null)
+  const rejecter = useRef<
+    (value?: unknown | PromiseLike<unknown>) => void | null
+  >(null)
   const [createImage] = useCreateImage()
 
-  async function handleCreateNewImage(path: string, content: any) {
+  async function handleCreateNewImage(
+    path: string,
+    content: string | ArrayBuffer | null
+  ) {
     if (!content) {
       rejecter?.current?.('No content')
       return

@@ -39,7 +39,7 @@ export function Toolbar() {
     drawTable,
   } = useEasyMDE()
   const isMarkdownEditorActive = isFile(currentPath)
-  const { isOpen, Portal, ref, setOpen } = useModalToggle()
+  const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
 
   function handleButtonClick() {
     setOpen(true)
@@ -159,13 +159,13 @@ export function Toolbar() {
                 title={action.title}
                 isDisabled={action.isDisabled}
               >
-                <Icon size="1x" icon={action.icon} prefix="fa" />
+                <Icon size="1x" icon={action.icon} />
               </ToolbarButton>
             </Fragment>
           ))}
           <ColorPicker />
           <MobileMenuButton ref={containerRef} onClick={handleButtonClick}>
-            <Icon size="sm" icon="bars" prefix="fa" />
+            <Icon size="sm" icon="bars" />
           </MobileMenuButton>
           <Fade show={isOpen}>
             <Portal
@@ -173,10 +173,9 @@ export function Toolbar() {
               placementAroundContainer="bottom-right"
             >
               <Dropdown
-                ref={ref}
+                containerRef={ref}
                 items={actions.map((action) => ({
                   label: action.title,
-                  prefix: 'fa',
                   icon: action.icon,
                   onClick: action.onClick,
                   isDisabled: action.isDisabled,

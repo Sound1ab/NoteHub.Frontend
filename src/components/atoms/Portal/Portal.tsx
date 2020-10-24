@@ -23,7 +23,7 @@ export const Portal = React.forwardRef(
       hasBackground = false,
       placementAroundContainer,
     }: IPortal,
-    ref?: React.Ref<HTMLElement>
+    ref?: React.Ref<HTMLElement> | null
   ) => {
     useClickOutside(() => setOpen(false), ref)
 

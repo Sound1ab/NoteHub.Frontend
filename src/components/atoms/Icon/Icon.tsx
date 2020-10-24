@@ -43,7 +43,7 @@ export type TIcons =
 interface IIcon {
   icon: TIcons
   color?: COLOR
-  prefix?: 'fab' | 'fa'
+  prefix?: 'fas' | 'fab' | 'far' | 'fal' | 'fad'
   marginRight?: boolean
   marginLeft?: boolean
   size?:
@@ -70,7 +70,7 @@ export function Icon({
   marginRight = false,
   marginLeft = false,
   size = 'xs',
-  prefix,
+  prefix = 'fas',
   title,
   icon,
   ...rest
@@ -82,11 +82,7 @@ export function Icon({
       marginLeft={marginLeft}
       size={size}
     >
-      <StyledFontAwesomeIcon
-        icon={[prefix as any, icon]}
-        size="1x"
-        title={title}
-      />
+      <StyledFontAwesomeIcon icon={[prefix, icon]} size="1x" title={title} />
     </Wrapper>
   )
 }

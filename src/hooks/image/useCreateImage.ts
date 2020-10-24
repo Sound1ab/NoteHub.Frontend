@@ -19,7 +19,7 @@ export const CreateImageDocument = gql`
 export function useCreateImage(): [
   (
     path: string,
-    content?: string
+    content?: string | ArrayBuffer | null
   ) => Promise<ExecutionResult<CreateImageMutation>>,
   MutationResult<CreateImageMutation>
 ] {
@@ -28,12 +28,15 @@ export function useCreateImage(): [
     CreateImageMutationVariables
   >(CreateImageDocument)
 
-  async function createImage(path: string, content?: string) {
+  async function createImage(
+    path: string,
+    content?: string | ArrayBuffer | null
+  ) {
     if (!path) {
       throw new Error('Create file: missing path')
     }
 
-    if (!content) {
+    if (!content || typeof content !== 'string') {
       throw new Error('Create file: no content')
     }
 

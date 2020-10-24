@@ -121,7 +121,7 @@ describe('Toolbar', () => {
         ])
 
         const alert = jest.fn()
-        ;(global as any).alert = alert
+        global.alert = alert
 
         const { getByTitle } = await render(
           <MockProvider

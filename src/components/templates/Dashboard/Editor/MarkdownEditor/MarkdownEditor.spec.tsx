@@ -11,7 +11,8 @@ import { MarkdownEditor } from './MarkdownEditor'
 afterEach(cleanup)
 
 describe('MarkdownEditor', () => {
-  ;(global as any).document.body.createTextRange = () => {
+  // @ts-ignore
+  global.document.body.createTextRange = () => {
     return {
       setEnd: jest.fn(),
       setStart: jest.fn(),

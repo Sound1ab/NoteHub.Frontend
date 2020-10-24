@@ -2,9 +2,9 @@ import React, { useRef, useState } from 'react'
 
 import { IPortal, Portal } from '../../components/atoms'
 
-export function useModalToggle() {
+export function useModalToggle<T extends HTMLElement>() {
   const [isOpen, setOpen] = useState(false)
-  const ref = useRef<any | null>(null)
+  const ref = useRef<T | null>(null)
 
   const PartiallyAppliedPortal = ({
     children,

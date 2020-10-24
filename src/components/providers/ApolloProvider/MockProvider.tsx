@@ -7,6 +7,7 @@ import {
 } from '@apollo/client'
 import { SchemaLink } from '@apollo/client/link/schema'
 import { act } from '@testing-library/react'
+import { GraphQLSchema } from 'graphql'
 import {
   IMocks,
   addMockFunctionsToSchema,
@@ -19,7 +20,10 @@ import introspectionResult from '../../../schema.json'
 import { context, error, lazy } from '../../../services/ApolloLink'
 import { Fields, fields } from './cache'
 
-async function link(client: ApolloClient<NormalizedCacheObject>, schema: any) {
+async function link(
+  client: ApolloClient<NormalizedCacheObject>,
+  schema: GraphQLSchema
+) {
   return ApolloLink.from([context(), error(client), new SchemaLink({ schema })])
 }
 
@@ -43,7 +47,8 @@ export const MockProvider = ({
   })
 
   const schemaSDL = printSchema(
-    buildClientSchema({ __schema: introspectionResult.__schema as any })
+    // @ts-ignore
+    buildClientSchema({ __schema: introspectionResult.__schema })
   )
 
   const schema = makeExecutableSchema({

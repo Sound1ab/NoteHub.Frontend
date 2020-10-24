@@ -44,13 +44,11 @@ export function File({ node, level }: IFile) {
   const dropdownItems = [
     {
       icon: 'trash' as const,
-      prefix: 'fa' as const,
       label: 'Delete file',
       onClick: handleDeleteFile,
     },
     {
       icon: 'pen' as const,
-      prefix: 'fa' as const,
       label: 'Rename',
       onClick: handleSetIsRenamingOpen,
     },
@@ -81,7 +79,7 @@ export function File({ node, level }: IFile) {
       isActive={isActive}
       dropdownItems={dropdownItems}
     >
-      <StyledIcon size="sm" icon="file" prefix="fa" />
+      <StyledIcon size="sm" icon="file" />
     </Node>
   )
 }

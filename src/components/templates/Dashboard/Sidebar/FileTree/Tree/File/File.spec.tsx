@@ -93,7 +93,7 @@ describe('File', () => {
 
     const input = getByLabelText('Input file name')
 
-    expect((input as any).value).toEqual('MOCK_FILE_PATH_1')
+    expect((input as HTMLInputElement).value).toEqual('MOCK_FILE_PATH_1')
   })
 
   it('should open file dropdown menu', async () => {
@@ -128,7 +128,7 @@ describe('File', () => {
     ])
 
     const alert = jest.fn()
-    ;(global as any).alert = alert
+    global.alert = alert
 
     const { getByLabelText } = await render(
       <MockProvider>

@@ -1,4 +1,4 @@
-import React, { ReactNode, Ref, forwardRef } from 'react'
+import React, { ReactNode, Ref } from 'react'
 import { css } from 'styled-components'
 
 import { styled } from '../../../theme'
@@ -9,7 +9,7 @@ export interface IDropdownItem {
   icon?: TIcons
   label?: string
   onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
-  prefix?: 'fa' | 'fab'
+  prefix?: 'fas' | 'fab' | 'far' | 'fal' | 'fad'
   custom?: ReactNode
   isDisabled?: boolean
 }
@@ -18,49 +18,50 @@ interface IDropdownMenuProps {
   items: IDropdownItem[]
   trianglePosition?: 'left' | 'right'
   onClose?: () => void
+  containerRef: Ref<HTMLUListElement>
 }
 
-export const Dropdown = forwardRef(
-  (
-    { items, trianglePosition = 'right', onClose }: IDropdownMenuProps,
-    ref: Ref<HTMLUListElement>
-  ) => {
-    return (
-      <StyledDropdown ref={ref} aria-label="dropdown">
-        <Triangle trianglePosition={trianglePosition} />
-        {items.map(
-          ({ isDisabled = false, onClick, icon, prefix, custom, label }) => (
-            <DropdownButton
-              key={label}
-              onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-                onClose && onClose()
-                onClick?.(e)
-              }}
-              aria-label={label}
-              isDisabled={isDisabled}
-            >
-              {custom ? (
-                custom
-              ) : (
-                <Item>
-                  {icon && prefix && (
-                    <StyledIcon
-                      size="sm"
-                      icon={icon}
-                      prefix={prefix}
-                      title={`${label} icon`}
-                    />
-                  )}
-                  {label}
-                </Item>
-              )}
-            </DropdownButton>
-          )
-        )}
-      </StyledDropdown>
-    )
-  }
-)
+export function Dropdown({
+  items,
+  trianglePosition = 'right',
+  onClose,
+  containerRef,
+}: IDropdownMenuProps) {
+  return (
+    <StyledDropdown ref={containerRef} aria-label="dropdown">
+      <Triangle trianglePosition={trianglePosition} />
+      {items.map(
+        ({ isDisabled = false, onClick, icon, prefix, custom, label }) => (
+          <DropdownButton
+            key={label}
+            onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+              onClose && onClose()
+              onClick?.(e)
+            }}
+            aria-label={label}
+            isDisabled={isDisabled}
+          >
+            {custom ? (
+              custom
+            ) : (
+              <Item>
+                {icon && (
+                  <StyledIcon
+                    size="sm"
+                    icon={icon}
+                    prefix={prefix}
+                    title={`${label} icon`}
+                  />
+                )}
+                {label}
+              </Item>
+            )}
+          </DropdownButton>
+        )
+      )}
+    </StyledDropdown>
+  )
+}
 
 const StyledDropdown = styled.ul`
   background-color: ${({ theme }) => theme.colors.background.secondary};

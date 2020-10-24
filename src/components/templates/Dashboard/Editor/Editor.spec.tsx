@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { useReadFile } from '../../../../hooks'
 import { fileGitNodeTwo, resolvers } from '../../../../schema/mockResolvers'
@@ -16,7 +16,7 @@ afterEach(cleanup)
 jest.mock('react-simplemde-editor', function () {
   return {
     __esModule: true,
-    default({ value }: any) {
+    default({ value }: { value: ReactNode }) {
       return <div>{value}</div>
     },
   }

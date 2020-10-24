@@ -43,8 +43,8 @@ import {
 import React, { ReactNode } from 'react'
 
 library.add(
-  faGithub as any,
-  faSoundcloud as any,
+  faGithub,
+  faSoundcloud,
   faEnvelope,
   faUser,
   faMoon,

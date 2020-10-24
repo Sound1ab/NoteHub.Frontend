@@ -1,8 +1,8 @@
 import {
+  MutationResult,
+  gql,
   useApolloClient,
   useMutation,
-  gql,
-  MutationResult,
 } from '@apollo/client'
 
 import {
@@ -20,6 +20,10 @@ let abortController: AbortController
 const debouncedSave = debounce((updateFile, options) => {
   const controller = new window.AbortController()
   abortController = controller
+
+  if (typeof updateFile !== 'function' || typeof options !== 'object') {
+    return
+  }
 
   updateFile({
     ...options,

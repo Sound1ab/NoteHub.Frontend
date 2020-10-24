@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { fileGitNodeTwo, resolvers } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
@@ -11,13 +11,14 @@ import { Dashboard } from './Dashboard'
 jest.mock('react-simplemde-editor', function () {
   return {
     __esModule: true,
-    default({ value }: any) {
+    default({ value }: { value: ReactNode }) {
       return <div>{value}</div>
     },
   }
 })
 jest.mock('../../../utils/debounce', () => ({
-  debounce: (fn: any) => (...args: any) => fn(...args),
+  debounce: (fn: (...rest: unknown[]) => void) => (...args: unknown[]) =>
+    fn(...args),
 }))
 jest.mock('../../../utils/scrollIntoView')
 
@@ -91,7 +92,7 @@ describe('Dashboard', () => {
     const { path } = fileGitNodeTwo
 
     const alert = jest.fn()
-    ;(global as any).alert = alert
+    global.alert = alert
 
     const { getByLabelText, getByText } = await render(
       <MockProvider

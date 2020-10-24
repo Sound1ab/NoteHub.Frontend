@@ -40,7 +40,6 @@ export function Folder({ level, node, childNodes }: IFolder) {
   const dropdownItems = [
     {
       icon: 'edit' as const,
-      prefix: 'fa' as const,
       label: 'Create file',
       onClick: handleSetIsNewFileOpen,
     },
@@ -71,13 +70,12 @@ export function Folder({ level, node, childNodes }: IFolder) {
             toggled={toggled}
             size="1x"
             icon="chevron-right"
-            prefix="fa"
             aria-label="chevron"
             onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
               onChevronClick(e, node)
             }
           />
-          <StyledIcon size="1x" icon="folder" prefix="fa" />
+          <StyledIcon size="1x" icon="folder" />
         </>
       </Node>
       {isNewFileOpen && (

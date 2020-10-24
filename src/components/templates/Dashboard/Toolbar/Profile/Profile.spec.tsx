@@ -79,7 +79,7 @@ describe('Profile', () => {
 
     it('should display message if logout errors', async () => {
       const alert = jest.fn()
-      ;(global as any).alert = alert
+      global.alert = alert
 
       const { getByAltText, getByLabelText } = await render(
         <MockProvider

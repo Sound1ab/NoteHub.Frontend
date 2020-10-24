@@ -29,7 +29,7 @@ export function Node({
 }: INode) {
   const containerRef = useRef(null)
 
-  const { isOpen, Portal, ref, setOpen } = useModalToggle()
+  const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
   const { type, name } = node
 
   function handleToggleMenu(e: React.MouseEvent<HTMLElement, MouseEvent>) {
@@ -41,7 +41,7 @@ export function Node({
     // Enter event from form submission when renaming file propogates down
     // to this click event. We don't want to call this if the event came from
     // the rename form.
-    if ((e.target as any).form) {
+    if ((e.target as HTMLInputElement).form) {
       return
     }
 
@@ -83,7 +83,7 @@ export function Node({
           placementAroundContainer="bottom-left"
         >
           <Dropdown
-            ref={ref}
+            containerRef={ref}
             items={dropdownItems}
             onClose={() => setOpen(false)}
           />

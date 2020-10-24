@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, ReactNode } from 'react'
 
 import { useReadJwt } from '../../../hooks'
 import { cleanup, render } from '../../../test-utils'
@@ -17,9 +17,11 @@ jest.mock('react-router-dom', () => {
       Component: FunctionComponent<{ location: typeof location }>
     ) => () => <Component location={location} />,
     Redirect: () => <div>redirect</div>,
-    Route: ({ render }: any) => (
-      <div>{render && render({ location: 'mock' })}</div>
-    ),
+    Route: ({
+      render,
+    }: {
+      render: ({ location }: { location: string }) => ReactNode
+    }) => <div>{render && render({ location: 'mock' })}</div>,
   }
 })
 

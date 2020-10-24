@@ -17,11 +17,7 @@ export const Button = forwardRef(
   (props: IButton, ref: Ref<HTMLButtonElement>) => {
     return (
       <StyledButton ref={ref} {...props} disabled={props.isDisabled}>
-        {props.isLoading ? (
-          <Icon size="1x" icon="spinner" prefix="fa" />
-        ) : (
-          props.children
-        )}
+        {props.isLoading ? <Icon size="1x" icon="spinner" /> : props.children}
       </StyledButton>
     )
   }

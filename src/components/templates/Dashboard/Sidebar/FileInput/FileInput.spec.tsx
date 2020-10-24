@@ -28,7 +28,7 @@ describe('FileInput', () => {
       moveFile,
       { loading: false },
     ])
-    ;(global as any).alert = alert
+    global.alert = alert
   })
 
   const newFileName = 'Mock file Na/me'
@@ -62,7 +62,7 @@ describe('FileInput', () => {
       ])
 
       const alert = jest.fn()
-      ;(global as any).alert = alert
+      global.alert = alert
 
       const { getByLabelText } = await render(
         <FileInput path={path} onClickOutside={jest.fn()} action="create" />
@@ -119,7 +119,7 @@ describe('FileInput', () => {
       ])
 
       const alert = jest.fn()
-      ;(global as any).alert = alert
+      global.alert = alert
 
       const { getByLabelText } = await render(
         <FileInput

@@ -10,14 +10,14 @@ import { ToolbarButton } from '../ToolbarButton/ToolbarButton'
 
 export function ColorPicker() {
   const containerRef = useRef(null)
-  const { isOpen, Portal, ref, setOpen } = useModalToggle()
+  const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
 
   function handleButtonClick() {
     setOpen(true)
   }
 
   function handleSwatchClick(e: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-    const { backgroundColor } = getComputedStyle((e as any).target)
+    const { backgroundColor } = getComputedStyle(e.target as Element)
 
     localState.accentColorVar(backgroundColor)
   }
@@ -29,7 +29,7 @@ export function ColorPicker() {
         onClick={handleButtonClick}
         title="Set accent color"
       >
-        <Icon size="1x" icon="eye-dropper" prefix="fa" />
+        <Icon size="1x" icon="eye-dropper" />
       </ToolbarButton>
       <Fade show={isOpen}>
         <Portal
@@ -37,7 +37,7 @@ export function ColorPicker() {
           placementAroundContainer="bottom-left"
         >
           <Dropdown
-            ref={ref}
+            containerRef={ref}
             items={[
               {
                 label: 'Swatches',

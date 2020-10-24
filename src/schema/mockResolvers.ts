@@ -93,10 +93,10 @@ export const resolvers = {
   Query: () => ({
     readGithubUser: () => user,
     readGithubUserAccessToken: (
-      _: any,
+      _: unknown,
       { code, state }: QueryReadGithubUserAccessTokenArgs
     ) => (code && state ? 'MOCK_JWT' : null),
-    readFile: (_: any, input: QueryReadFileArgs) =>
+    readFile: (_: unknown, input: QueryReadFileArgs) =>
       files.find(({ path }) => path === input.path),
     readNodes: () => ({
       nodes: [folderGitNode, fileGitNodeOne, fileGitNodeTwo],
@@ -104,7 +104,7 @@ export const resolvers = {
     logout: () => 'ok',
   }),
   Mutation: () => ({
-    deleteFile: (_: any, { input }: MutationDeleteFileArgs): File => ({
+    deleteFile: (_: unknown, { input }: MutationDeleteFileArgs): File => ({
       filename: 'MOCK_FILENAME',
       path: input.path,
       content: 'MOCK_CONTENT_2',
@@ -113,7 +113,7 @@ export const resolvers = {
       type: Node_Type.File,
       url: 'MOCK_URL',
     }),
-    createFile: (_: any, { input }: MutationCreateFileArgs): File => ({
+    createFile: (_: unknown, { input }: MutationCreateFileArgs): File => ({
       filename: 'MOCK_FILENAME',
       path: input.path,
       content: 'MOCK_CONTENT_2',
@@ -123,7 +123,7 @@ export const resolvers = {
       url: 'MOCK_URL',
     }),
     updateFile: (
-      _: any,
+      _: unknown,
       { input }: MutationUpdateFileArgs
     ): {
       path: string
@@ -134,7 +134,7 @@ export const resolvers = {
       content: string
       url: string
     } => {
-      const findFile = ({ path }: any) => path === input.path
+      const findFile = ({ path }: { path: string }) => path === input.path
       const fileIndex = files.findIndex(findFile)
       const file = files.find(findFile)
 
@@ -151,7 +151,7 @@ export const resolvers = {
       }
       return files[fileIndex]
     },
-    moveFile: (_: any, { input }: MutationMoveFileArgs) => {
+    moveFile: (_: unknown, { input }: MutationMoveFileArgs) => {
       const filename = extractFilename(input.newPath)
 
       return {

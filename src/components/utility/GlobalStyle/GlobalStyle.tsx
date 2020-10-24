@@ -60,8 +60,7 @@ export const GlobalStyle = createGlobalStyle<{
   body {
     height: 100%;
     margin: 0;
-    background-color: ${({ theme }: { theme: any }) =>
-      theme.colors.background.primary};
+    background-color: ${({ theme }) => theme.colors.background.primary};
   }
   
   #root {

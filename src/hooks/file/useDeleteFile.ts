@@ -1,4 +1,10 @@
-import { DataProxy, MutationResult, gql, useMutation } from '@apollo/client'
+import {
+  DataProxy,
+  MutationResult,
+  gql,
+  useMutation,
+  ApolloCache,
+} from '@apollo/client'
 import { ExecutionResult } from 'graphql'
 
 import {
@@ -50,14 +56,19 @@ function removeNode(cache: DataProxy, data?: DeleteFileMutation | null) {
   })
 }
 
-function removeFile(cache: any, data?: DeleteFileMutation | null) {
+function removeFile(
+  cache: ApolloCache<unknown>,
+  data?: DeleteFileMutation | null
+) {
   const file = data?.deleteFile
 
   if (!file) {
     throw new Error('Delete file: no file returned')
   }
 
+  // @ts-ignore
   Object.keys(cache.data.data).forEach(
+    // @ts-ignore
     (key) => key.match(/^\$ROOT_QUERY.readFile/) && cache.data.delete(key)
   )
 }
