@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import React, { ReactNode } from 'react'
+import React from 'react'
 
 import { fileGitNodeTwo, resolvers } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../test-utils'
@@ -8,14 +8,8 @@ import { MockProvider } from '../../providers'
 import { localState } from '../../providers/ApolloProvider/cache'
 import { Dashboard } from './Dashboard'
 
-jest.mock('react-simplemde-editor', function () {
-  return {
-    __esModule: true,
-    default({ value }: { value: ReactNode }) {
-      return <div>{value}</div>
-    },
-  }
-})
+jest.setTimeout(10000)
+
 jest.mock('../../../utils/debounce', () => ({
   debounce: (fn: (...rest: unknown[]) => void) => (...args: unknown[]) =>
     fn(...args),
@@ -25,6 +19,29 @@ jest.mock('../../../utils/scrollIntoView')
 afterEach(cleanup)
 
 describe('Dashboard', () => {
+  // This is an implementation detail inside codemirror.js
+  // This may break if codemirror changes. Nulling createRange so
+  // codemirror picks up createTextRange to place in their function 'range'
+  // @ts-ignore
+  global.document.createRange = null
+  // @ts-ignore
+  global.document.body.createTextRange = () => {
+    return {
+      setEnd: jest.fn(),
+      setStart: jest.fn(),
+      getBoundingClientRect: function () {
+        return { right: 0 }
+      },
+      getClientRects: function () {
+        return {
+          length: 0,
+          left: 0,
+          right: 0,
+        }
+      },
+    }
+  }
+
   beforeEach(() => {
     jest.resetAllMocks()
   })
@@ -83,7 +100,7 @@ describe('Dashboard', () => {
       target: { files: [file] },
     })
 
-    const image = `![](https://github.com/Sound1ab/NoteHub.Notebook/blob/master/__notehub__images__/${imageFilename}?raw=true)MOCK_CONTENT_2`
+    const image = `https://github.com/Sound1ab/NoteHub.Notebook/blob/master/__notehub__images__/${imageFilename}?raw=true`
 
     expect(getByText(image)).toBeInTheDocument()
   })

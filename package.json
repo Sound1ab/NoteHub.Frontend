@@ -77,5 +77,10 @@
       "parser": "typescript",
       "style": "module"
     }
+  },
+  "jest": {
+    "resetMocks": false,
+    "clearMocks": false,
+    "resetModules": false
   }
 }

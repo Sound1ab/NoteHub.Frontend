@@ -9,6 +9,8 @@ afterEach(cleanup)
 
 jest.mock('../../../../../utils/scrollIntoView')
 
+jest.setTimeout(10000)
+
 describe('FileTree', () => {
   beforeEach(() => {
     jest.clearAllMocks()

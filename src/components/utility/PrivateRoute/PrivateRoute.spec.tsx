@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import React, { FunctionComponent, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
+import { Redirect, Route } from 'react-router-dom'
 
 import { useReadJwt } from '../../../hooks'
 import { cleanup, render } from '../../../test-utils'
@@ -8,26 +9,30 @@ import { PrivateRoute } from './PrivateRoute'
 
 jest.mock('../../../hooks/localState/useReadJwt')
 jest.mock('react-router-dom', () => {
-  const location = {
-    search: '?code=1234&state=state',
-  }
+  const module = jest.requireActual('react-router-dom')
 
   return {
-    withRouter: (
-      Component: FunctionComponent<{ location: typeof location }>
-    ) => () => <Component location={location} />,
-    Redirect: () => <div>redirect</div>,
-    Route: ({
-      render,
-    }: {
-      render: ({ location }: { location: string }) => ReactNode
-    }) => <div>{render && render({ location: 'mock' })}</div>,
+    ...module,
+    Redirect: jest.fn(),
+    Route: jest.fn(),
   }
 })
 
 afterEach(cleanup)
 
 describe('PrivateRoute', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    ;(Route as jest.Mock).mockImplementation(
+      ({
+        render,
+      }: {
+        render: ({ location }: { location: string }) => ReactNode
+      }) => <div>{render && render({ location: 'mock' })}</div>
+    )
+    ;(Redirect as jest.Mock).mockImplementation(() => <div>redirect</div>)
+  })
+
   it('should display children if jwt is present', async () => {
     ;(useReadJwt as jest.Mock).mockReturnValue('MOCK_JWT')
 

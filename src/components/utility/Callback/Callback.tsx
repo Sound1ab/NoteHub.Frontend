@@ -1,17 +1,13 @@
-import { History, Location } from 'history'
 import React from 'react'
-import { Redirect, withRouter } from 'react-router-dom'
+import { Redirect, useLocation } from 'react-router-dom'
 
 import { useReadGithubUserAccessToken } from '../../../hooks'
 import { localState } from '../../providers/ApolloProvider/cache'
 
-interface ICallback {
-  location: Location
-  history: History
-}
+export const Callback = () => {
+  const { search } = useLocation()
 
-export const Callback = withRouter(({ location }: ICallback) => {
-  const params = new URLSearchParams(location.search)
+  const params = new URLSearchParams(search)
   const code = params.get('code')
   const state = params.get('state')
 
@@ -30,4 +26,4 @@ export const Callback = withRouter(({ location }: ICallback) => {
   }
 
   return null
-})
+}

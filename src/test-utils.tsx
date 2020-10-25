@@ -65,16 +65,8 @@ const customRender = async (
 }
 
 const customFireEvent = Object.entries(fireEvent).reduce(
-  (
-    acc: Record<
-      string,
-      (
-        element: Document | Element | Window,
-        options: Record<string, string>
-      ) => Promise<unknown>
-    >,
-    keyValue
-  ) => {
+  /* eslint-disable */
+  (acc: any, keyValue) => {
     const [key, value] = keyValue
     acc[key] = async (
       element: Document | Element | Window,
