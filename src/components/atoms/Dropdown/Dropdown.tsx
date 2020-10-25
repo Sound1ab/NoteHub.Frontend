@@ -18,7 +18,7 @@ interface IDropdownMenuProps {
   items: IDropdownItem[]
   trianglePosition?: 'left' | 'right'
   onClose?: () => void
-  containerRef: Ref<HTMLUListElement>
+  containerRef?: Ref<HTMLUListElement>
 }
 
 export function Dropdown({

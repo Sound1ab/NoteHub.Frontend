@@ -19,7 +19,7 @@ describe('Dropdown', () => {
     } as const,
     {
       icon: 'sign-out-alt',
-      prefix: 'fa',
+      prefix: 'fas',
       label: 'label 2',
       onClick: mockItemTwoOnClick,
     } as const,

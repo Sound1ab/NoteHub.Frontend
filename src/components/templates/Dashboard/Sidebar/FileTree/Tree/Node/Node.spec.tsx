@@ -12,7 +12,7 @@ describe('Node', () => {
   const dropdownItems = [
     {
       icon: 'edit' as const,
-      prefix: 'fa' as const,
+      prefix: 'fas' as const,
       label: 'Create file',
       onClick: jest.fn(),
     },
