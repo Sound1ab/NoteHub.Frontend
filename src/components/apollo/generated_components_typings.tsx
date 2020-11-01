@@ -105,6 +105,7 @@ export type Mutation = {
   createImage?: Maybe<File>;
   updateImage?: Maybe<File>;
   deleteImage?: Maybe<File>;
+  createSignedUrl?: Maybe<Scalars['String']>;
   createRepo?: Maybe<Repo>;
   updateRepo?: Maybe<Repo>;
   deleteRepo?: Maybe<Repo>;
@@ -146,6 +147,11 @@ export type MutationDeleteImageArgs = {
 };
 
 
+export type MutationCreateSignedUrlArgs = {
+  input: CreateSignedUrl;
+};
+
+
 export type MutationUpdateRepoArgs = {
   input: UpdateRepoInput;
 };
@@ -167,6 +173,10 @@ export type DeleteFileInput = {
 export type MoveFileInput = {
   path: Scalars['String'];
   newPath: Scalars['String'];
+};
+
+export type CreateSignedUrl = {
+  key: Scalars['String'];
 };
 
 export type UpdateRepoInput = {
@@ -364,6 +374,16 @@ export type CreateImageMutation = (
   )> }
 );
 
+export type CreateSignedUrlMutationVariables = Exact<{
+  input: CreateSignedUrl;
+}>;
+
+
+export type CreateSignedUrlMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createSignedUrl'>
+);
+
 export type ReadImageQueryVariables = Exact<{
   path: Scalars['String'];
 }>;
@@ -388,65 +408,6 @@ export type UpdateImageMutation = (
     { __typename?: 'File' }
     & FileFragment
   )> }
-);
-
-export type ReadAccentColorQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ReadAccentColorQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'accentColor'>
-);
-
-export type ReadCurrentPathQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ReadCurrentPathQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'currentPath'>
-);
-
-export type ReadCurrentRepoNameQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ReadCurrentRepoNameQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'currentRepoName'>
-);
-
-export type ReadCurrentThemeQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ReadCurrentThemeQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'currentTheme'>
-);
-
-export type ReadCursorPositionQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ReadCursorPositionQuery = (
-  { __typename?: 'Query' }
-  & { cursorPosition: (
-    { __typename?: 'Position' }
-    & Pick<Position, 'ch' | 'line'>
-  ) }
-);
-
-export type ReadJwtQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ReadJwtQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'jwt'>
-);
-
-export type ReadSearchQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ReadSearchQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'search'>
 );
 
 export type ReadGithubUserQueryVariables = Exact<{ [key: string]: never; }>;

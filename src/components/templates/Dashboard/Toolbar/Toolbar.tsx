@@ -1,11 +1,10 @@
-import React, { Fragment, useRef } from 'react'
+import React, { Fragment, useCallback, useEffect, useRef } from 'react'
 
 import {
   useDropzone,
   useEasyMDE,
   useModalToggle,
   useReadCurrentPath,
-  useReadCurrentRepoName,
   useReadCursorPosition,
   useReadFile,
   useUpdateFile,
@@ -20,10 +19,9 @@ import { ToolbarButton } from './ToolbarButton/ToolbarButton'
 
 export function Toolbar() {
   const currentPath = useReadCurrentPath()
-  const currentRepoName = useReadCurrentRepoName()
   const cursorPosition = useReadCursorPosition()
   const containerRef = useRef(null)
-  const { selectFileAndUpload, Dropzone } = useDropzone()
+  const { openFileDialog, Dropzone, done, imagePath } = useDropzone()
   const [updateFile] = useUpdateFile()
   const { file } = useReadFile()
   const {
@@ -45,25 +43,44 @@ export function Toolbar() {
     setOpen(true)
   }
 
-  function insertPathIntoString(filename: string) {
-    const text = `![](https://github.com/Sound1ab/${currentRepoName}/blob/master/${filename}?raw=true)`
-    const { ch, line } = cursorPosition
-    const lines = file?.content ? file.content.split('\n') : []
-    const characters = [...lines[line]]
-    characters.splice(ch, 0, text)
-    lines[line] = characters.join('')
-    return lines.join('\n')
-  }
+  const fileContent = file?.content
 
-  async function handleImageUpload() {
+  const insertPathIntoString = useCallback(
+    (path: string | null) => {
+      if (!path) {
+        return
+      }
+
+      const text = `![](${path})`
+      const { ch, line } = cursorPosition
+      const lines = fileContent ? fileContent.split('\n') : []
+      const characters = [...lines[line]]
+      characters.splice(ch, 0, text)
+      lines[line] = characters.join('')
+      return lines.join('\n')
+    },
+    [cursorPosition, fileContent]
+  )
+
+  const updateEditor = useCallback(async () => {
     try {
-      const path = await selectFileAndUpload()
-      const content = insertPathIntoString(path)
+      const content = insertPathIntoString(imagePath)
 
       await updateFile(currentPath, content)
     } catch (error) {
       alert('There was an issue uploading your image. Please try again.')
     }
+  }, [currentPath, imagePath, updateFile, insertPathIntoString])
+
+  useEffect(() => {
+    if (!done || !imagePath) {
+      return
+    }
+    updateEditor()
+  }, [done, updateEditor, imagePath])
+
+  function handleImageUpload() {
+    openFileDialog()
   }
 
   const actions = [

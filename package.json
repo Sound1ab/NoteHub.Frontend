@@ -52,6 +52,7 @@
     "react-syntax-highlighter": "^13.5.1",
     "react-transition-group": "^4.3.0",
     "react-typography": "^0.16.19",
+    "react-use-upload": "^0.5.15",
     "styled-components": "^5.1.1",
     "typography": "^0.16.19"
   },

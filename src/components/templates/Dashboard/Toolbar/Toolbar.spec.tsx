@@ -22,7 +22,7 @@ jest.mock('../../../../hooks/file/useReadFile')
 afterEach(cleanup)
 
 describe('Toolbar', () => {
-  const selectFileAndUpload = jest.fn(() => Promise.resolve('MOCK_PATH'))
+  const openFileDialog = jest.fn()
 
   const toggleOrderedList = jest.fn()
   const toggleCodeBlock = jest.fn()
@@ -41,7 +41,7 @@ describe('Toolbar', () => {
     jest.clearAllMocks()
     ;(useDropzone as jest.Mock).mockImplementation(() => ({
       Dropzone: () => <div>Dropzone</div>,
-      selectFileAndUpload,
+      openFileDialog,
     }))
     ;(useEasyMDE as jest.Mock).mockReturnValue({
       toggleOrderedList,
@@ -75,7 +75,7 @@ describe('Toolbar', () => {
       [drawLink, 'Add link'],
       [drawTable, 'Add table'],
       [toggleSideBySide, 'Toggle side by side'],
-      [selectFileAndUpload, 'Upload an image'],
+      [openFileDialog, 'Upload an image'],
     ])('should call easyMDE using buttons', async (fn, title) => {
       const { getByTitle } = await render(
         <MockProvider
@@ -95,7 +95,14 @@ describe('Toolbar', () => {
 
     describe('When uploading an image', () => {
       it('should call updateFile with the currentPath and content if successfully uploaded', async () => {
-        const { getByTitle } = await render(
+        ;(useDropzone as jest.Mock).mockImplementation(() => ({
+          Dropzone: () => <div>Dropzone</div>,
+          openFileDialog,
+          done: true,
+          imagePath: 'MOCK_IMAGE_PATH',
+        }))
+
+        await render(
           <MockProvider
             mockResolvers={resolvers}
             localData={{
@@ -107,15 +114,19 @@ describe('Toolbar', () => {
           </MockProvider>
         )
 
-        await fireEvent.click(getByTitle('Upload an image'))
-
         expect(updateFile).toBeCalledWith(
           'MOCK_FILE_PATH_1.md',
-          '![](https://github.com/Sound1ab/NoteHub.Notebook/blob/master/MOCK_PATH?raw=true)MOCK FILE CONTENTS'
+          '![](MOCK_IMAGE_PATH)MOCK FILE CONTENTS'
         )
       })
 
       it('should display alert if uploading an image errors', async () => {
+        ;(useDropzone as jest.Mock).mockImplementation(() => ({
+          Dropzone: () => <div>Dropzone</div>,
+          openFileDialog,
+          done: true,
+          imagePath: 'MOCK_IMAGE_PATH',
+        }))
         ;(useUpdateFile as jest.Mock).mockImplementation(() => [
           async () => Promise.reject(),
         ])
@@ -154,7 +165,7 @@ describe('Toolbar', () => {
       [drawLink, 'Add link'],
       [drawTable, 'Add table'],
       [toggleSideBySide, 'Toggle side by side'],
-      [selectFileAndUpload, 'Upload an image'],
+      [openFileDialog, 'Upload an image'],
     ])('should call easyMDE using buttons', async (fn, title) => {
       const { getByTitle } = await render(
         <MockProvider

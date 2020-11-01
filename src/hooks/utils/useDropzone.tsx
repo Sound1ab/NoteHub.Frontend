@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useUpload } from 'react-use-upload'
 
 import { styled } from '../../theme'
-import { useCreateImage } from '..'
+import { useCreateSignedUrl } from '..'
 
 const Style = styled.input`
   display: none;
@@ -9,75 +10,60 @@ const Style = styled.input`
 
 export function useDropzone() {
   const input = useRef<HTMLInputElement>(null)
-  const [loading, setLoading] = useState(false)
-  const resolver = useRef<
-    (value?: unknown | PromiseLike<unknown>) => void | null
-  >(null)
-  const rejecter = useRef<
-    (value?: unknown | PromiseLike<unknown>) => void | null
-  >(null)
-  const [createImage] = useCreateImage()
+  const [createSignedUrl] = useCreateSignedUrl()
+  const [file, setFile] = useState<File | null>(null)
+  const [imagePath, setImagePath] = useState<string | null>(null)
 
-  async function handleCreateNewImage(
-    path: string,
-    content: string | ArrayBuffer | null
-  ) {
-    if (!content) {
-      rejecter?.current?.('No content')
+  async function getUrl() {
+    const { data } = await createSignedUrl()
+
+    const signedUrl = data?.createSignedUrl
+
+    if (!signedUrl) {
+      throw new Error('No signedUrl')
+    }
+
+    const [imagePath] = signedUrl.split('?')
+
+    setImagePath(imagePath)
+
+    return signedUrl
+  }
+
+  const { progress, done } = useUpload(file!, {
+    getUrl,
+    method: 'PUT',
+  })
+
+  useEffect(() => {
+    if (!done) {
       return
     }
-    setLoading(true)
-    try {
-      await createImage(path, content)
-    } catch (e) {
-      rejecter?.current?.(e)
-    } finally {
-      setLoading(false)
-    }
-  }
+    setFile(null)
+    setImagePath(null)
+  }, [done, file, imagePath])
 
-  function removeWhiteSpace(str: string) {
-    return str.replace(/\s+/g, '')
-  }
-
-  function handleDrop(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleDrop = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target
 
     if (!files || files.length === 0) {
-      rejecter?.current?.()
       return
     }
 
-    const [file] = files
     const reader = new FileReader()
 
-    reader.onabort = () => console.log('file reading was aborted')
-    reader.onerror = () => console.log('file reading has failed')
     reader.onload = async () => {
-      const { name } = file
-      const validatedName = removeWhiteSpace(name)
-      const path = `__notehub__images__/${validatedName}`
-      await handleCreateNewImage(path, reader.result)
-      if (resolver && resolver.current) {
-        resolver.current(path)
-      }
+      setFile(files[0])
     }
 
-    reader.readAsBinaryString(file)
-  }
+    reader.readAsBinaryString(files[0])
+  }, [])
 
-  function selectFileAndUpload(): Promise<string> {
-    return new Promise((resolve, reject) => {
-      if (!input.current) {
-        return
-      }
-      input.current.click()
-      // Todo: Note sure about this. Can be done better I think
-      // @ts-ignore
-      resolver.current = resolve
-      // @ts-ignore
-      rejecter.current = reject
-    })
+  function openFileDialog() {
+    if (!input.current) {
+      return
+    }
+    input.current.click()
   }
 
   const onInputClick = (
@@ -87,7 +73,7 @@ export function useDropzone() {
     element.value = ''
   }
 
-  const inputElement = () => {
+  const inputElement = useCallback(() => {
     return (
       <Style
         autoComplete="off"
@@ -101,7 +87,13 @@ export function useDropzone() {
         aria-label="Upload file"
       />
     )
-  }
+  }, [handleDrop])
 
-  return { Dropzone: inputElement, selectFileAndUpload, loading }
+  return {
+    Dropzone: inputElement,
+    openFileDialog,
+    done,
+    progress,
+    imagePath,
+  }
 }

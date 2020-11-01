@@ -15,6 +15,26 @@ jest.mock('../../../utils/debounce', () => ({
     fn(...args),
 }))
 jest.mock('../../../utils/scrollIntoView')
+jest.mock('react-use-upload', () => ({
+  useUpload: (file: File | null, { getUrl }: { getUrl: () => void }) => {
+    getUrl()
+
+    return file
+      ? {
+          progress: 100,
+          done: true,
+        }
+      : {
+          progress: 0,
+          done: false,
+        }
+  },
+}))
+jest.mock('../../../hooks/image/useCreateSignedUrl', () => ({
+  useCreateSignedUrl: () => [
+    () => Promise.resolve({ data: { createSignedUrl: 'MOCK_IMAGE_PATH' } }),
+  ],
+}))
 
 afterEach(cleanup)
 
@@ -100,9 +120,7 @@ describe('Dashboard', () => {
       target: { files: [file] },
     })
 
-    const image = `https://github.com/Sound1ab/NoteHub.Notebook/blob/master/__notehub__images__/${imageFilename}?raw=true`
-
-    expect(getByText(image)).toBeInTheDocument()
+    expect(getByText('MOCK_IMAGE_PATH')).toBeInTheDocument()
   })
 
   it('should show alert if deleting a file errors', async () => {
