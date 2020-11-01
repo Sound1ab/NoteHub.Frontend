@@ -50,6 +50,7 @@
     "react-router-dom": "^5.0.0",
     "react-simplemde-editor": "^4.1.0",
     "react-syntax-highlighter": "^13.5.1",
+    "react-toastify": "^6.0.9",
     "react-transition-group": "^4.3.0",
     "react-typography": "^0.16.19",
     "react-use-upload": "^0.5.15",

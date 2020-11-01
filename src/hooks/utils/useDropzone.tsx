@@ -30,7 +30,7 @@ export function useDropzone() {
     return signedUrl
   }
 
-  const { progress, done } = useUpload(file!, {
+  const { progress, done, loading } = useUpload(file!, {
     getUrl,
     method: 'PUT',
   })
@@ -95,5 +95,6 @@ export function useDropzone() {
     done,
     progress,
     imagePath,
+    loading,
   }
 }

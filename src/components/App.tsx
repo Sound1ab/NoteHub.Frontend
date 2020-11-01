@@ -2,6 +2,7 @@ import React from 'react'
 import { GoogleFont, TypographyStyle } from 'react-typography'
 import Typography from 'typography'
 
+import { Toast } from './atoms'
 import { ApolloProvider, IconProvider, ThemeProvider } from './providers'
 import { GlobalStyle, Router } from './utility'
 
@@ -11,6 +12,7 @@ export function App() {
       <ThemeProvider>
         {(typography: Typography) => (
           <IconProvider>
+            <Toast />
             <GlobalStyle />
             <TypographyStyle typography={typography} />
             <GoogleFont typography={typography} />

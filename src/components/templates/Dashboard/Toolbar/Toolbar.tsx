@@ -1,4 +1,11 @@
-import React, { Fragment, useCallback, useEffect, useRef } from 'react'
+import React, {
+  Fragment,
+  ReactText,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react'
+import { toast } from 'react-toastify'
 
 import {
   useDropzone,
@@ -21,7 +28,14 @@ export function Toolbar() {
   const currentPath = useReadCurrentPath()
   const cursorPosition = useReadCursorPosition()
   const containerRef = useRef(null)
-  const { openFileDialog, Dropzone, done, imagePath } = useDropzone()
+  const {
+    openFileDialog,
+    Dropzone,
+    done,
+    imagePath,
+    progress,
+    loading,
+  } = useDropzone()
   const [updateFile] = useUpdateFile()
   const { file } = useReadFile()
   const {
@@ -38,6 +52,7 @@ export function Toolbar() {
   } = useEasyMDE()
   const isMarkdownEditorActive = isFile(currentPath)
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
+  const toastId = React.useRef<ReactText | null>(null)
 
   function handleButtonClick() {
     setOpen(true)
@@ -54,7 +69,7 @@ export function Toolbar() {
       const text = `![](${path})`
       const { ch, line } = cursorPosition
       const lines = fileContent ? fileContent.split('\n') : []
-      const characters = [...lines[line]]
+      const characters = lines.length > 0 ? [...lines[line]] : []
       characters.splice(ch, 0, text)
       lines[line] = characters.join('')
       return lines.join('\n')
@@ -78,6 +93,26 @@ export function Toolbar() {
     }
     updateEditor()
   }, [done, updateEditor, imagePath])
+
+  useEffect(() => {
+    if (done) {
+      return
+    }
+
+    if (!loading) {
+      return
+    }
+
+    if (toastId.current === null) {
+      toastId.current = toast('Upload in Progress', {
+        progress,
+      })
+    } else {
+      toast.update(toastId.current, {
+        progress,
+      })
+    }
+  }, [loading, progress, done])
 
   function handleImageUpload() {
     openFileDialog()
