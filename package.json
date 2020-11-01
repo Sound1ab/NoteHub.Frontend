@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "@graphql-codegen/add": "^2.0.1",
-    "@graphql-codegen/cli": "^1.17.8",
+    "@graphql-codegen/cli": "^1.19.0",
     "@graphql-codegen/fragment-matcher": "^1.17.8",
     "@graphql-codegen/introspection": "^1.17.8",
     "@graphql-codegen/typescript": "^1.17.9",
