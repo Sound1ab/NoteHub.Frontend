@@ -163,10 +163,17 @@ const Actions = styled(Button)`
   align-self: stretch;
   padding: ${({ theme }) => theme.spacing.xs};
   color: ${({ theme }) => theme.colors.text.primary};
+  opacity: 0;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
       background-color: ${({ theme }) => theme.colors.background.quaternary};
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    ${Wrapper}:hover:not(:disabled) & {
+      opacity: 1;
     }
   }
 `

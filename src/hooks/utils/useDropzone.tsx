@@ -30,6 +30,7 @@ export function useDropzone() {
     return signedUrl
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { progress, done, loading } = useUpload(file!, {
     getUrl,
     method: 'PUT',
