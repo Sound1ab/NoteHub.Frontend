@@ -34,6 +34,9 @@ export function useDropzone() {
   const { progress, done, loading } = useUpload(file!, {
     getUrl,
     method: 'PUT',
+    headers: {
+      'x-amz-acl': 'public-read',
+    },
   })
 
   useEffect(() => {
