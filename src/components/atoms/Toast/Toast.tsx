@@ -97,14 +97,6 @@ const StyledToastContainer = styled(ToastContainer)`
     opacity: 1;
   }
 
-  @keyframes Toastify__trackProgress {
-    0% {
-      transform: scaleX(1);
-    }
-    100% {
-      transform: scaleX(0);
-    }
-  }
   .Toastify__progress-bar {
     position: absolute;
     bottom: 0;
@@ -114,9 +106,6 @@ const StyledToastContainer = styled(ToastContainer)`
     z-index: 9999;
     background-color: ${({ theme }) => theme.colors.background.primary};
     transform-origin: left;
-  }
-  .Toastify__progress-bar--animated {
-    animation: Toastify__trackProgress linear 1 forwards;
   }
   .Toastify__progress-bar--controlled {
     transition: transform 0.2s;

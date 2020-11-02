@@ -95,12 +95,19 @@ export function Toolbar() {
   }, [done, updateEditor, imagePath])
 
   useEffect(() => {
-    if (done) {
-      toastId.current && toast.done(toastId.current)
-      toastId.current = null
+    if (!done) {
       return
     }
 
+    if (toastId.current && toast.isActive(toastId.current)) {
+      toast.done(toastId.current)
+      toastId.current = null
+    }
+
+    return
+  }, [done])
+
+  useEffect(() => {
     if (!loading) {
       return
     }
@@ -114,7 +121,7 @@ export function Toolbar() {
         progress,
       })
     }
-  }, [loading, progress, done])
+  }, [loading, progress])
 
   function handleImageUpload() {
     openFileDialog()
