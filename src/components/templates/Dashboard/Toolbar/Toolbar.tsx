@@ -96,6 +96,8 @@ export function Toolbar() {
 
   useEffect(() => {
     if (done) {
+      toastId.current && toast.done(toastId.current)
+      toastId.current = null
       return
     }
 
