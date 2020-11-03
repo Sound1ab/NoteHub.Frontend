@@ -1,4 +1,11 @@
-import React, { Fragment, useCallback, useEffect, useRef } from 'react'
+import React, {
+  Fragment,
+  ReactText,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react'
+import { toast } from 'react-toastify'
 
 import {
   useDropzone,
@@ -21,7 +28,14 @@ export function Toolbar() {
   const currentPath = useReadCurrentPath()
   const cursorPosition = useReadCursorPosition()
   const containerRef = useRef(null)
-  const { openFileDialog, Dropzone, done, imagePath } = useDropzone()
+  const {
+    openFileDialog,
+    Dropzone,
+    done,
+    imagePath,
+    loading,
+    progress,
+  } = useDropzone()
   const [updateFile] = useUpdateFile()
   const { file } = useReadFile()
   const {
@@ -38,6 +52,7 @@ export function Toolbar() {
   } = useEasyMDE()
   const isMarkdownEditorActive = isFile(currentPath)
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
+  const toastId = React.useRef<ReactText | null>(null)
 
   function handleButtonClick() {
     setOpen(true)
@@ -68,7 +83,7 @@ export function Toolbar() {
 
       await updateFile(currentPath, content)
     } catch (error) {
-      alert('There was an issue uploading your image. Please try again.')
+      toast('There was an issue uploading your image. Please try again.')
     }
   }, [currentPath, imagePath, updateFile, insertPathIntoString])
 
@@ -78,6 +93,46 @@ export function Toolbar() {
     }
     updateEditor()
   }, [done, updateEditor, imagePath])
+
+  useEffect(() => {
+    if (!done) {
+      return
+    }
+
+    // Have to wait for next tick to let whatever async stuff
+    // toast is doing finish. If we don't do this and we reach 100
+    // too quickly, the dismiss goes weird
+    setTimeout(() => {
+      if (toastId.current) {
+        if (progress !== 100 || toast.isActive(toastId.current)) {
+          // If the upload has finished but doesn't reach 100, the toast will not
+          // close. In this case we need to dismiss ourselves
+          toast.dismiss(toastId.current)
+        }
+        toastId.current = null
+      }
+    }, 1)
+
+    return
+  }, [done, progress])
+
+  useEffect(() => {
+    if (!loading) {
+      return
+    }
+
+    const decimalProgress = progress / 100
+
+    if (toastId.current === null) {
+      toastId.current = toast('Upload in Progress', {
+        progress: decimalProgress,
+      })
+    } else {
+      toast.update(toastId.current, {
+        progress: decimalProgress,
+      })
+    }
+  }, [loading, progress])
 
   function handleImageUpload() {
     openFileDialog()

@@ -4,6 +4,7 @@ import { EventType } from '@testing-library/dom/types/events'
 import { act, fireEvent, render } from '@testing-library/react'
 import React, { ReactNode } from 'react'
 
+import { Toast } from './components/atoms'
 import {
   IconProvider,
   MockProvider,
@@ -22,7 +23,7 @@ global.matchMedia = () =>
     matches: false,
   } as MediaQueryList)
 
-const wait = (): Promise<void> => {
+export const wait = (): Promise<void> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve()
@@ -35,6 +36,7 @@ const Context = ({ node }: { node: ReactNode }) => (
     <ThemeProvider>
       {() => (
         <IconProvider>
+          <Toast />
           <FileTreeProvider>{node}</FileTreeProvider>
         </IconProvider>
       )}

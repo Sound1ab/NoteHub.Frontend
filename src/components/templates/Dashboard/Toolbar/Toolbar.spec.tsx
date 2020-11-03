@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 
+import { act } from '@testing-library/react'
 import React from 'react'
 
 import {
@@ -9,7 +10,7 @@ import {
   useUpdateFile,
 } from '../../../../hooks'
 import { resolvers } from '../../../../schema/mockResolvers'
-import { cleanup, fireEvent, render } from '../../../../test-utils'
+import { cleanup, fireEvent, render, wait } from '../../../../test-utils'
 import { MockProvider } from '../../../providers'
 import { localState } from '../../../providers/ApolloProvider/cache'
 import { Toolbar } from './Toolbar'
@@ -120,7 +121,47 @@ describe('Toolbar', () => {
         )
       })
 
-      it('should display alert if uploading an image errors', async () => {
+      it('should display toast message while uploading', async () => {
+        // Using because toast uses setTimeout under the hood
+        jest.useFakeTimers('modern')
+        ;(useDropzone as jest.Mock).mockImplementation(() => ({
+          Dropzone: () => <div>Dropzone</div>,
+          openFileDialog,
+          done: false,
+          imagePath: 'MOCK_IMAGE_PATH',
+          loading: true,
+          progress: 50,
+        }))
+
+        const { getByText } = await render(
+          <MockProvider
+            mockResolvers={resolvers}
+            localData={{
+              currentPath: () =>
+                localState.currentPathVar('MOCK_FILE_PATH_1.md'),
+            }}
+          >
+            <Toolbar />
+          </MockProvider>,
+          // Otherwise test will hang when awaiting on fake timers
+          { waitForLoad: false }
+        )
+
+        // Make toast timers finish
+        act(() => {
+          jest.runAllTimers()
+        })
+
+        // For apollo provider otherwise test hangs on await
+        jest.useRealTimers()
+
+        await act(wait)
+
+        expect(getByText('Upload in Progress')).toBeInTheDocument()
+      })
+
+      it('should display toast alert if uploading an image errors', async () => {
+        jest.useFakeTimers('modern')
         ;(useDropzone as jest.Mock).mockImplementation(() => ({
           Dropzone: () => <div>Dropzone</div>,
           openFileDialog,
@@ -131,10 +172,7 @@ describe('Toolbar', () => {
           async () => Promise.reject(),
         ])
 
-        const alert = jest.fn()
-        global.alert = alert
-
-        const { getByTitle } = await render(
+        const { getByTitle, getByText } = await render(
           <MockProvider
             mockResolvers={resolvers}
             localData={{
@@ -143,12 +181,27 @@ describe('Toolbar', () => {
             }}
           >
             <Toolbar />
-          </MockProvider>
+          </MockProvider>,
+          { waitForLoad: false }
         )
+
+        // Make toast timers finish
+        act(() => {
+          jest.runAllTimers()
+        })
+
+        // For apollo provider otherwise test hangs on await
+        jest.useRealTimers()
+
+        await act(wait)
 
         await fireEvent.click(getByTitle('Upload an image'))
 
-        expect(alert).toBeCalled()
+        expect(
+          getByText(
+            'There was an issue uploading your image. Please try again.'
+          )
+        ).toBeInTheDocument()
       })
     })
   })

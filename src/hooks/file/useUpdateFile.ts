@@ -71,7 +71,7 @@ export function useUpdateFile(): [
   })
 
   function updateFile(path?: string | null, content?: string) {
-    if (!path || !file) {
+    if (!path || !file || typeof content !== 'string') {
       alert('Missing some details needed to update file')
       return
     }
