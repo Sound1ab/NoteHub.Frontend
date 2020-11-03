@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  ReactText,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import { toast } from 'react-toastify'
 import { useUpload } from 'react-use-upload'
 
 import { styled } from '../../theme'
@@ -13,6 +20,7 @@ export function useDropzone() {
   const [createSignedUrl] = useCreateSignedUrl()
   const [file, setFile] = useState<File | null>(null)
   const [imagePath, setImagePath] = useState<string | null>(null)
+  const toastId = React.useRef<ReactText | null>(null)
 
   async function getUrl() {
     const { data } = await createSignedUrl()
@@ -43,10 +51,49 @@ export function useDropzone() {
     if (!done || !file || !imagePath) {
       return
     }
-    console.log('useDropzone: done and resetting')
     setFile(null)
     setImagePath(null)
   }, [done, file, imagePath])
+
+  useEffect(() => {
+    if (!done) {
+      return
+    }
+
+    // Have to wait for next tick to let whatever async stuff
+    // toast is doing finish. If we don't do this and we reach 100
+    // too quickly, the dismiss goes weird
+    setTimeout(() => {
+      if (toastId.current) {
+        if (progress !== 100 || toast.isActive(toastId.current)) {
+          // If the upload has finished but doesn't reach 100, the toast will not
+          // close. In this case we need to dismiss ourselves
+          toast.dismiss(toastId.current)
+        }
+        toastId.current = null
+      }
+    }, 1)
+
+    return
+  }, [done, progress])
+
+  useEffect(() => {
+    if (!loading) {
+      return
+    }
+
+    const decimalProgress = progress / 100
+
+    if (toastId.current === null) {
+      toastId.current = toast('Upload in Progress', {
+        progress: decimalProgress,
+      })
+    } else {
+      toast.update(toastId.current, {
+        progress: decimalProgress,
+      })
+    }
+  }, [loading, progress])
 
   const handleDrop = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target

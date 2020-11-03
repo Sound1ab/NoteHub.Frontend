@@ -1,11 +1,4 @@
-import React, {
-  Fragment,
-  ReactText,
-  useCallback,
-  useEffect,
-  useRef,
-} from 'react'
-import { toast } from 'react-toastify'
+import React, { Fragment, useCallback, useEffect, useRef } from 'react'
 
 import {
   useDropzone,
@@ -28,14 +21,7 @@ export function Toolbar() {
   const currentPath = useReadCurrentPath()
   const cursorPosition = useReadCursorPosition()
   const containerRef = useRef(null)
-  const {
-    openFileDialog,
-    Dropzone,
-    done,
-    imagePath,
-    progress,
-    loading,
-  } = useDropzone()
+  const { openFileDialog, Dropzone, done, imagePath } = useDropzone()
   const [updateFile] = useUpdateFile()
   const { file } = useReadFile()
   const {
@@ -52,7 +38,6 @@ export function Toolbar() {
   } = useEasyMDE()
   const isMarkdownEditorActive = isFile(currentPath)
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
-  const toastId = React.useRef<ReactText | null>(null)
 
   function handleButtonClick() {
     setOpen(true)
@@ -93,41 +78,6 @@ export function Toolbar() {
     }
     updateEditor()
   }, [done, updateEditor, imagePath])
-
-  useEffect(() => {
-    if (!done) {
-      return
-    }
-
-    if (toastId.current) {
-      if (progress !== 100) {
-        // If the upload has finished but doesn't reach 100, the toast will not
-        // close. In this case we need to finish off the progress to close it ourselves
-        toast.done(toastId.current)
-      }
-      toastId.current = null
-    }
-
-    return
-  }, [done, progress])
-
-  useEffect(() => {
-    if (!loading) {
-      return
-    }
-
-    const decimalProgress = progress / 100
-
-    if (toastId.current === null) {
-      toastId.current = toast('Upload in Progress', {
-        progress: decimalProgress,
-      })
-    } else {
-      toast.update(toastId.current, {
-        progress: decimalProgress,
-      })
-    }
-  }, [loading, progress])
 
   function handleImageUpload() {
     openFileDialog()
