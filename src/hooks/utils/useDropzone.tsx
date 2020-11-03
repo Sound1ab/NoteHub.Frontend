@@ -40,9 +40,10 @@ export function useDropzone() {
   })
 
   useEffect(() => {
-    if (!done) {
+    if (!done || !file || !imagePath) {
       return
     }
+    console.log('useDropzone: done and resetting')
     setFile(null)
     setImagePath(null)
   }, [done, file, imagePath])

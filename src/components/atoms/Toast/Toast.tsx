@@ -15,6 +15,7 @@ export function Toast() {
       draggable
       transition={Slide}
       closeButton={<Icon size="1x" icon="times" />}
+      autoClose={false}
     />
   )
 }

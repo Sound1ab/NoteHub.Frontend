@@ -99,26 +99,32 @@ export function Toolbar() {
       return
     }
 
-    if (toastId.current && toast.isActive(toastId.current)) {
-      toast.done(toastId.current)
+    if (toastId.current) {
+      if (progress !== 100) {
+        // If the upload has finished but doesn't reach 100, the toast will not
+        // close. In this case we need to finish off the progress to close it ourselves
+        toast.done(toastId.current)
+      }
       toastId.current = null
     }
 
     return
-  }, [done])
+  }, [done, progress])
 
   useEffect(() => {
     if (!loading) {
       return
     }
 
+    const decimalProgress = progress / 100
+
     if (toastId.current === null) {
       toastId.current = toast('Upload in Progress', {
-        progress,
+        progress: decimalProgress,
       })
     } else {
       toast.update(toastId.current, {
-        progress,
+        progress: decimalProgress,
       })
     }
   }, [loading, progress])
