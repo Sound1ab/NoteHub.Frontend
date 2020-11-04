@@ -144,7 +144,7 @@ describe('Toolbar', () => {
             <Toolbar />
           </MockProvider>,
           // Otherwise test will hang when awaiting on fake timers
-          { waitForLoad: false }
+          { waitForLoad: false, enableToast: true }
         )
 
         // Make toast timers finish
@@ -182,7 +182,7 @@ describe('Toolbar', () => {
           >
             <Toolbar />
           </MockProvider>,
-          { waitForLoad: false }
+          { waitForLoad: false, enableToast: true }
         )
 
         // Make toast timers finish

@@ -31,12 +31,18 @@ export const wait = (): Promise<void> => {
   })
 }
 
-const Context = ({ node }: { node: ReactNode }) => (
+const Context = ({
+  node,
+  enableToast,
+}: {
+  node: ReactNode
+  enableToast: boolean
+}) => (
   <MockProvider>
     <ThemeProvider>
       {() => (
         <IconProvider>
-          <Toast />
+          {enableToast && <Toast />}
           <FileTreeProvider>{node}</FileTreeProvider>
         </IconProvider>
       )}
@@ -46,9 +52,12 @@ const Context = ({ node }: { node: ReactNode }) => (
 
 const customRender = async (
   node: ReactNode,
-  { waitForLoad = true, ...options } = {}
+  { waitForLoad = true, enableToast = false, ...options } = {}
 ) => {
-  const { rerender, ...rest } = render(<Context node={node} />, options)
+  const { rerender, ...rest } = render(
+    <Context node={node} enableToast={enableToast} />,
+    options
+  )
 
   if (waitForLoad) {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -58,7 +67,7 @@ const customRender = async (
   return {
     ...rest,
     rerender: async (node: ReactNode) => {
-      rerender(<Context node={node} />)
+      rerender(<Context node={node} enableToast={enableToast} />)
 
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       await act(wait)
