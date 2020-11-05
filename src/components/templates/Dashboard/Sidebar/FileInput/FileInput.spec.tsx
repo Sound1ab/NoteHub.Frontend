@@ -5,7 +5,7 @@ import React from 'react'
 import { useCreateFile } from '../../../../../hooks'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
 import { folderNode } from '../../../../../schema/mockResolvers'
-import { cleanup, fireEvent, render } from '../../../../../test-utils'
+import { cleanup, fireEvent, render, waitFor } from '../../../../../test-utils'
 import { FileInput } from './FileInput'
 
 jest.mock('../../../../../hooks/file/useCreateFile')
@@ -55,17 +55,15 @@ describe('FileInput', () => {
       expect(createNewFile).toBeCalledWith(`${path}/${newFileName}.md`)
     })
 
-    it('should display error message if create file fails', async () => {
+    it('should display the toast alert if create file errors', async () => {
       ;(useCreateFile as jest.Mock).mockImplementation(() => [
-        async () => Promise.reject(),
+        async () => Promise.reject('mock error'),
         { loading: false },
       ])
 
-      const alert = jest.fn()
-      global.alert = alert
-
-      const { getByLabelText } = await render(
-        <FileInput path={path} onClickOutside={jest.fn()} action="create" />
+      const { getByLabelText, getByText } = await render(
+        <FileInput path={path} onClickOutside={jest.fn()} action="create" />,
+        { enableToast: true }
       )
 
       const input = getByLabelText('Input file name')
@@ -80,7 +78,11 @@ describe('FileInput', () => {
 
       await fireEvent.submit(form)
 
-      expect(alert).toBeCalledWith('Could not create file. Please try again.')
+      await waitFor(() =>
+        expect(
+          getByText('There was an issue creating your file. mock error')
+        ).toBeInTheDocument()
+      )
     })
   })
 
@@ -112,21 +114,19 @@ describe('FileInput', () => {
       )
     })
 
-    it('should display error message if create file fails', async () => {
+    it('should display error message if rename file fails', async () => {
       ;(useMoveFile as jest.Mock).mockImplementation(() => [
-        async () => Promise.reject(),
+        async () => Promise.reject('mock error'),
         { loading: false },
       ])
 
-      const alert = jest.fn()
-      global.alert = alert
-
-      const { getByLabelText } = await render(
+      const { getByLabelText, getByText } = await render(
         <FileInput
           path="MOCK_FOLDER_PATH/MOCK_FILE_PATH.md"
           onClickOutside={jest.fn()}
           action="rename"
-        />
+        />,
+        { enableToast: true }
       )
 
       const input = getByLabelText('Input file name')
@@ -141,7 +141,11 @@ describe('FileInput', () => {
 
       await fireEvent.submit(form)
 
-      expect(alert).toBeCalledWith('Could not rename file. Please try again.')
+      await waitFor(() =>
+        expect(
+          getByText('There was an issue renaming your file. mock error')
+        ).toBeInTheDocument()
+      )
     })
   })
 })

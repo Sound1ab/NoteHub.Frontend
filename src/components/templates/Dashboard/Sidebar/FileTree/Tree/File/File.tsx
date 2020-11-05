@@ -9,7 +9,7 @@ import {
   scrollIntoView,
 } from '../../../../../../../utils'
 import { Node_Type } from '../../../../../../apollo'
-import { Icon } from '../../../../../../atoms'
+import { ErrorToast, Icon } from '../../../../../../atoms'
 import { localState } from '../../../../../../providers/ApolloProvider/cache'
 import { FileInput } from '../../../FileInput/FileInput'
 import { Node } from '../Node/Node'
@@ -36,8 +36,8 @@ export function File({ node, level }: IFile) {
   async function handleDeleteFile() {
     try {
       await deleteFile(node.path)
-    } catch {
-      alert('Could not delete file. Please try again.')
+    } catch (error) {
+      ErrorToast(`There was an issue deleting your file. ${error}`)
     }
   }
 

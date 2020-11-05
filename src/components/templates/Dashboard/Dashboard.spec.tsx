@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 
 import { fileGitNodeTwo, resolvers } from '../../../schema/mockResolvers'
-import { cleanup, fireEvent, render } from '../../../test-utils'
+import { cleanup, fireEvent, render, waitFor } from '../../../test-utils'
 import { MockProvider } from '../../providers'
 import { localState } from '../../providers/ApolloProvider/cache'
 import { Dashboard } from './Dashboard'
@@ -126,9 +126,6 @@ describe('Dashboard', () => {
   it('should show alert if deleting a file errors', async () => {
     const { path } = fileGitNodeTwo
 
-    const alert = jest.fn()
-    global.alert = alert
-
     const { getByLabelText, getByText } = await render(
       <MockProvider
         localData={{
@@ -139,13 +136,14 @@ describe('Dashboard', () => {
           Mutation: () => ({
             ...resolvers.Mutation(),
             deleteFile: (): File => {
-              throw new Error()
+              throw new Error('mock error')
             },
           }),
         }}
       >
         <Dashboard />
-      </MockProvider>
+      </MockProvider>,
+      { enableToast: true }
     )
 
     // Open folder
@@ -157,6 +155,12 @@ describe('Dashboard', () => {
     // Delete file
     await fireEvent.click(getByLabelText('Delete file'))
 
-    expect(alert).toBeCalledWith('Could not delete file. Please try again.')
+    await waitFor(() =>
+      expect(
+        getByText(
+          'There was an issue deleting your file. Error: Delete file: no file returned'
+        )
+      ).toBeInTheDocument()
+    )
   })
 })

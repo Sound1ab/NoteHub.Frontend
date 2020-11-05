@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useCreateFile } from '../../../../../hooks'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
 import { styled } from '../../../../../theme'
-import { Input } from '../../../../atoms'
+import { ErrorToast, Input } from '../../../../atoms'
 import { FileTreeContext } from '../FileTree/FileTreeProvider'
 
 interface IFileInput {
@@ -65,8 +65,8 @@ export function FileInput({
     // Create the file at the full path
     try {
       await createFile(nodePath)
-    } catch {
-      alert('Could not create file. Please try again.')
+    } catch (error) {
+      ErrorToast(`There was an issue creating your file. ${error}`)
     }
   }
 
@@ -92,8 +92,8 @@ export function FileInput({
 
     try {
       await moveFile(newPath, path)
-    } catch {
-      alert('Could not rename file. Please try again.')
+    } catch (error) {
+      ErrorToast(`There was an issue renaming your file. ${error}`)
     }
   }
 

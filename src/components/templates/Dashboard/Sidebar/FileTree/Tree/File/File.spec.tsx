@@ -5,7 +5,7 @@ import {
   fileNodeOne,
   resolvers,
 } from '../../../../../../../schema/mockResolvers'
-import { fireEvent, render } from '../../../../../../../test-utils'
+import { fireEvent, render, waitFor } from '../../../../../../../test-utils'
 import { MockProvider } from '../../../../../../providers'
 import { localState } from '../../../../../../providers/ApolloProvider/cache'
 import { File } from './File'
@@ -124,22 +124,24 @@ describe('File', () => {
 
   it('should show alert if deleteFile returns an error', async () => {
     ;(useDeleteFile as jest.Mock).mockImplementation(() => [
-      async () => Promise.reject(),
+      async () => Promise.reject('mock error'),
     ])
 
-    const alert = jest.fn()
-    global.alert = alert
-
-    const { getByLabelText } = await render(
+    const { getByLabelText, getByText } = await render(
       <MockProvider>
         <File node={fileNodeOne} level={1} />
-      </MockProvider>
+      </MockProvider>,
+      { enableToast: true }
     )
 
     await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
 
     await fireEvent.click(getByLabelText('Delete file'))
 
-    expect(alert).toBeCalledWith('Could not delete file. Please try again.')
+    await waitFor(() =>
+      expect(
+        getByText('There was an issue deleting your file. mock error')
+      ).toBeInTheDocument()
+    )
   })
 })
