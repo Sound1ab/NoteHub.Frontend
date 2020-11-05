@@ -71,9 +71,16 @@ export function useUpdateFile(): [
   })
 
   function updateFile(path?: string | null, content?: string) {
-    if (!path || !file || typeof content !== 'string') {
-      alert('Missing some details needed to update file')
-      return
+    if (!path) {
+      throw new Error('Update file: no file path')
+    }
+
+    if (!file) {
+      throw new Error('Update file: no file')
+    }
+
+    if (typeof content !== 'string') {
+      throw new Error('Update file: content is not a string')
     }
 
     client.writeQuery<ReadFileQuery, ReadFileQueryVariables>({

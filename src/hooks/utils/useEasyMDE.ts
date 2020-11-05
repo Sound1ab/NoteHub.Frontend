@@ -11,7 +11,7 @@ export function useEasyMDE() {
       if (!context.editor) {
         return
       }
-      fn && fn(context.editor)
+      fn?.(context.editor)
     }
   }
 

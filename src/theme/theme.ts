@@ -28,17 +28,26 @@ export const breakpoints = {
 
 const darkPrimary = '#1e1e1e'
 const lightPrimary = '#e2e2e2'
+const accentChoices = {
+  primary: '#70dda5',
+  secondary: '#7072dd',
+  tertiary: '#dd7089',
+  quaternary: '#bcc12f',
+  quinary: '#c1622f',
+}
+const company = {
+  github: '#04AA51',
+}
+const feedback = {
+  info: '#3498db',
+  warning: '#f1c40f',
+  error: '#e74c3c',
+}
 
 export const colors = {
   [COLOR_MODE.LIGHT]: {
     accent: '#70dda5',
-    accentChoices: {
-      primary: '#70dda5',
-      secondary: '#7072dd',
-      tertiary: '#dd7089',
-      quaternary: '#bcc12f',
-      quinary: '#c1622f',
-    },
+    accentChoices,
     background: {
       primary: lightPrimary,
       secondary: darken(0.05, lightPrimary),
@@ -52,19 +61,12 @@ export const colors = {
       secondary: lighten(0.3, darkPrimary),
       tertiary: lighten(0.5, darkPrimary),
     },
-    company: {
-      github: '#04AA51',
-    },
+    company,
+    feedback,
   },
   [COLOR_MODE.DARK]: {
     accent: '#70dda5',
-    accentChoices: {
-      primary: '#70dda5',
-      secondary: '#7072dd',
-      tertiary: '#dd7089',
-      quaternary: '#bcc12f',
-      quinary: '#c1622f',
-    },
+    accentChoices,
     background: {
       primary: darkPrimary,
       secondary: lighten(0.05, darkPrimary),
@@ -78,8 +80,7 @@ export const colors = {
       secondary: darken(0.3, lightPrimary),
       tertiary: darken(0.5, lightPrimary),
     },
-    company: {
-      github: '#04AA51',
-    },
+    company,
+    feedback,
   },
 }

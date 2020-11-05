@@ -1,5 +1,5 @@
 import React from 'react'
-import { Slide, ToastContainer } from 'react-toastify'
+import { Slide, toast, ToastContainer } from 'react-toastify'
 
 import { styled } from '../../../theme'
 import { Icon } from '..'
@@ -19,6 +19,9 @@ export function Toast() {
     />
   )
 }
+
+export const ErrorToast = (copy: string) =>
+  toast.error(copy, { autoClose: 5000, hideProgressBar: true })
 
 const StyledToastContainer = styled(ToastContainer)`
   z-index: 9999;
@@ -57,16 +60,16 @@ const StyledToastContainer = styled(ToastContainer)`
     color: ${({ theme }) => theme.colors.text.primary};
   }
   .Toastify__toast--info {
-    background: #3498db;
+    background: ${({ theme }) => theme.colors.feedback.info};
   }
   .Toastify__toast--success {
-    background: #07bc0c;
+    background: ${({ theme }) => theme.colors.accent};
   }
   .Toastify__toast--warning {
-    background: #f1c40f;
+    background: ${({ theme }) => theme.colors.feedback.warning};
   }
   .Toastify__toast--error {
-    background: #e74c3c;
+    background: ${({ theme }) => theme.colors.feedback.error};
   }
   .Toastify__toast-body {
     margin: auto 0;
@@ -112,7 +115,7 @@ const StyledToastContainer = styled(ToastContainer)`
     transition: transform 0.2s;
   }
   .Toastify__progress-bar--default {
-    background: ${({ theme }) => theme.colors.background.secondary};
+    background: ${({ theme }) => theme.colors.accent};
   }
 
   @keyframes Toastify__slideInRight {

@@ -19,7 +19,7 @@ import {
 import { styled } from '../../../../theme'
 import { isFile } from '../../../../utils'
 import { Fade } from '../../../animation'
-import { Dropdown, Icon } from '../../../atoms'
+import { Dropdown, ErrorToast, Icon } from '../../../atoms'
 import { ColorPicker } from './ColorPicker/ColorPicker'
 import { Profile } from './Profile/Profile'
 import { ToolbarButton } from './ToolbarButton/ToolbarButton'
@@ -83,7 +83,7 @@ export function Toolbar() {
 
       await updateFile(currentPath, content)
     } catch (error) {
-      toast('There was an issue uploading your image. Please try again.')
+      ErrorToast(`There was an issue uploading your image. ${error.message}`)
     }
   }, [currentPath, imagePath, updateFile, insertPathIntoString])
 

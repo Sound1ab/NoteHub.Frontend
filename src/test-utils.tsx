@@ -54,23 +54,53 @@ const customRender = async (
   node: ReactNode,
   { waitForLoad = true, enableToast = false, ...options } = {}
 ) => {
+  if (enableToast) {
+    // Toast uses setTimeout under the hood
+    jest.useFakeTimers('modern')
+  }
+
   const { rerender, ...rest } = render(
     <Context node={node} enableToast={enableToast} />,
     options
   )
 
+  if (enableToast) {
+    // Make toast timers finish
+    act(() => {
+      jest.runAllTimers()
+    })
+
+    // For apollo provider otherwise test hangs on await
+    jest.useRealTimers()
+  }
+
   if (waitForLoad) {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     await act(wait)
   }
 
   return {
     ...rest,
     rerender: async (node: ReactNode) => {
+      if (enableToast) {
+        // Toast uses setTimeout under the hood
+        jest.useFakeTimers('modern')
+      }
+
       rerender(<Context node={node} enableToast={enableToast} />)
 
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      await act(wait)
+      if (enableToast) {
+        // Make toast timers finish
+        act(() => {
+          jest.runAllTimers()
+        })
+
+        // For apollo provider otherwise test hangs on await
+        jest.useRealTimers()
+      }
+
+      if (waitForLoad) {
+        await act(wait)
+      }
     },
   }
 }

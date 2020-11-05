@@ -11,6 +11,7 @@ import {
 } from '../../../../../hooks'
 import { IPosition } from '../../../../../types'
 import { isFile } from '../../../../../utils'
+import { ErrorToast } from '../../../../atoms'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { CodeRenderer } from '../CodeRenderer/CodeRenderer'
 import { Style } from './MarkdownEditor.styles'
@@ -18,15 +19,19 @@ import { Style } from './MarkdownEditor.styles'
 export function MarkdownEditor() {
   const currentPath = useReadCurrentPath()
   const { file, error: readError } = useReadFile()
-  const [updateFile, { error: updateError }] = useUpdateFile()
+  const [updateFile] = useUpdateFile()
   const { setEasyMDE } = useEasyMDE()
 
   if (readError) {
     alert('Could not read file. Please try again.')
   }
 
-  if (updateError) {
-    alert('Could not update file. Please try again.')
+  async function handleUpdateFile(value: string) {
+    try {
+      await updateFile(currentPath, value)
+    } catch (error) {
+      ErrorToast(`There was an issue updating your document. ${error.message}`)
+    }
   }
 
   function handleSetMarkdownCursorPosition(currentCursorPosition: IPosition) {
@@ -45,7 +50,7 @@ export function MarkdownEditor() {
       <SimpleMDE
         key={file?.path}
         className="MarkdownEditor-wrapper"
-        onChange={(value) => updateFile(currentPath, value)}
+        onChange={handleUpdateFile}
         value={file?.content ?? ''}
         getLineAndCursor={handleSetMarkdownCursorPosition}
         options={{
