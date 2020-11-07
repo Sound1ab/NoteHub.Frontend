@@ -14,7 +14,6 @@ export function CodeRenderer({ inline, language, value }: ICodeRenderer) {
       language={language}
       style={darcula}
       PreTag={inline ? 'span' : 'pre'}
-      useInlineStyles={inline}
       customStyle={inline ? { padding: '2px' } : {}}
     >
       {value}

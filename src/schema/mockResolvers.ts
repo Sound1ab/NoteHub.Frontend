@@ -33,6 +33,13 @@ export const fileGitNodeTwo: GitNode = {
   url: 'MOCK_URL',
 }
 
+export const fileGitNodeThree: GitNode = {
+  type: Node_Type.File,
+  path: 'MOCK_FOLDER_PATH/MOCK_FILE_PATH_3.md',
+  sha: 'MOCK_SHA',
+  url: 'MOCK_URL',
+}
+
 export const folderNode: ITreeNode = {
   type: folderGitNode.type,
   name: 'MOCK_FOLDER',
@@ -76,6 +83,15 @@ export const files = [
     content: 'MOCK_CONTENT_1',
     excerpt: 'MOCK_EXCERPT_1',
     sha: 'MOCK_SHA_1',
+    type: Node_Type.File,
+    url: 'MOCK_URL',
+  },
+  {
+    filename: 'MOCK_FILE_PATH_3.md',
+    path: fileGitNodeThree.path,
+    content: '# MOCK_CONTENT_3',
+    excerpt: 'MOCK_EXCERPT_3',
+    sha: 'MOCK_SHA_3',
     type: Node_Type.File,
     url: 'MOCK_URL',
   },

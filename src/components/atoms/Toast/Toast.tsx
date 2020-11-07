@@ -1,5 +1,5 @@
 import React from 'react'
-import { Slide, toast, ToastContainer } from 'react-toastify'
+import { Slide, ToastContainer, ToastOptions, toast } from 'react-toastify'
 
 import { styled } from '../../../theme'
 import { Icon } from '..'
@@ -15,13 +15,12 @@ export function Toast() {
       draggable
       transition={Slide}
       closeButton={<Icon size="1x" icon="times" />}
-      autoClose={false}
     />
   )
 }
 
-export const ErrorToast = (copy: string) =>
-  toast.error(copy, { autoClose: 5000, hideProgressBar: true })
+export const ErrorToast = (copy: string, options?: ToastOptions) =>
+  toast(copy, { ...options })
 
 const StyledToastContainer = styled(ToastContainer)`
   z-index: 9999;
@@ -37,6 +36,27 @@ const StyledToastContainer = styled(ToastContainer)`
     width: ${({ theme }) => theme.spacing.xxxl};
     top: ${({ theme }) => theme.spacing.xs};
     right: ${({ theme }) => theme.spacing.xs};
+  }
+  
+  @media only screen and (max-width : 480px) {
+    .Toastify__toast-container {
+      width: 100vw;
+      padding: 0;
+      left: 0;
+      margin: 0;
+    }
+    .Toastify__toast-container--top-left, .Toastify__toast-container--top-center, .Toastify__toast-container--top-right {
+      top: 0;
+      transform: translateX(0);
+    }
+    .Toastify__toast-container--bottom-left, .Toastify__toast-container--bottom-center, .Toastify__toast-container--bottom-right {
+      bottom: 0;
+      transform: translateX(0);
+    }
+    .Toastify__toast-container--rtl {
+      right: 0;
+      left: initial;
+    }
   }
 
   .Toastify__toast {
@@ -108,14 +128,30 @@ const StyledToastContainer = styled(ToastContainer)`
     width: 100%;
     height: ${({ theme }) => theme.spacing.xxs};
     z-index: 9999;
-    background-color: ${({ theme }) => theme.colors.background.primary};
+    background-color: ${({ theme }) => theme.colors.accent};
     transform-origin: left;
+  }
+  @keyframes Toastify__trackProgress {
+    0% {
+      transform: scaleX(1);
+    }
+    100% {
+      transform: scaleX(0);
+    }
+  }
+  .Toastify__progress-bar--animated {
+    animation: Toastify__trackProgress linear 1 forwards;
   }
   .Toastify__progress-bar--controlled {
     transition: transform 0.2s;
   }
   .Toastify__progress-bar--default {
     background: ${({ theme }) => theme.colors.accent};
+  }
+  .Toastify__progress-bar--rtl {
+    right: 0;
+    left: initial;
+    transform-origin: right;
   }
 
   @keyframes Toastify__slideInRight {

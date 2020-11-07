@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client'
-import { useLayoutEffect } from 'react'
+import { useEffect } from 'react'
 
 import { localState } from '../../components/providers/ApolloProvider/cache'
 import { COLOR_MODE } from '../../enums'
@@ -7,7 +7,7 @@ import { COLOR_MODE } from '../../enums'
 export function useDarkMode() {
   const currentTheme = useReactiveVar(localState.currentThemeVar)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       localState.currentThemeVar(COLOR_MODE.DARK)
     } else {

@@ -2,7 +2,11 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
-import { fileGitNodeTwo, resolvers } from '../../../schema/mockResolvers'
+import {
+  fileGitNodeThree,
+  fileGitNodeTwo,
+  resolvers,
+} from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render, waitFor } from '../../../test-utils'
 import { MockProvider } from '../../providers'
 import { localState } from '../../providers/ApolloProvider/cache'
@@ -120,7 +124,9 @@ describe('Dashboard', () => {
       target: { files: [file] },
     })
 
-    expect(getByText('MOCK_IMAGE_PATH')).toBeInTheDocument()
+    await waitFor(() =>
+      expect(getByText('MOCK_IMAGE_PATH')).toBeInTheDocument()
+    )
   })
 
   it('should show alert if deleting a file errors', async () => {
@@ -162,5 +168,26 @@ describe('Dashboard', () => {
         )
       ).toBeInTheDocument()
     )
+  })
+
+  it('should show mdx preview when preview is toggled', async () => {
+    const { path } = fileGitNodeThree
+
+    const { getByTitle, container } = await render(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{
+          currentPath: () => localState.currentPathVar(path),
+        }}
+      >
+        <Dashboard />
+      </MockProvider>
+    )
+
+    await fireEvent.click(getByTitle('Toggle side by side'))
+
+    const heading = container.querySelector('h1')
+
+    expect(heading).toContainHTML('<h1>MOCK_CONTENT_3</h1>')
   })
 })

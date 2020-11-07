@@ -1,6 +1,4 @@
 import React from 'react'
-import ReactDOMServer from 'react-dom/server'
-import ReactMarkdown from 'react-markdown'
 import SimpleMDE from 'react-simplemde-editor'
 
 import {
@@ -13,8 +11,9 @@ import { IPosition } from '../../../../../types'
 import { isFile } from '../../../../../utils'
 import { ErrorToast } from '../../../../atoms'
 import { localState } from '../../../../providers/ApolloProvider/cache'
-import { CodeRenderer } from '../CodeRenderer/CodeRenderer'
 import { Style } from './MarkdownEditor.styles'
+import { renderMarkdown } from './renderMarkdown'
+import { renderMdx } from './renderMdx'
 
 export function MarkdownEditor() {
   const currentPath = useReadCurrentPath()
@@ -41,6 +40,8 @@ export function MarkdownEditor() {
     })
   }
 
+  const shouldRenderMdx = true
+
   if (!isFile(currentPath)) {
     return null
   }
@@ -58,16 +59,7 @@ export function MarkdownEditor() {
           status: true,
           theme: 'darcula',
           previewRender(text) {
-            return ReactDOMServer.renderToString(
-              <ReactMarkdown
-                source={text}
-                renderers={{
-                  code: (props) => CodeRenderer({ ...props, inline: false }),
-                  inlineCode: (props) =>
-                    CodeRenderer({ ...props, inline: true }),
-                }}
-              />
-            )
+            return shouldRenderMdx ? renderMdx(text) : renderMarkdown(text)
           },
         }}
         getMdeInstance={setEasyMDE}
