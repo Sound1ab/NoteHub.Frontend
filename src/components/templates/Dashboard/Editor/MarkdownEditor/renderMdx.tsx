@@ -14,11 +14,15 @@ import removeImports from 'remark-mdx-remove-imports'
 import unified from 'unified'
 import { Node } from 'unist'
 import visit from 'unist-util-visit'
-import { VFileCompatible } from 'vfile'
+import { VFile } from 'vfile'
 
 import { ThemeProvider } from '../../../../providers'
 import { CodeRenderer } from '../CodeRenderer/CodeRenderer'
 import { TestButton } from './TestButton'
+
+interface INode extends Node {
+  value: VFile
+}
 
 // Any custom react components must be added to tagNames in lower case as
 // rehype-stringify lowercases all elements meaning the component would never
@@ -43,16 +47,45 @@ const schema = {
   },
 }
 
-export const _poly = { assign }
+export function renderMdx(mdxCode: string) {
+  try {
+    return renderMarkup(createElement(transform(transpileMdx(mdxCode))))
+  } catch (error) {
+    return ReactDOMServer.renderToString(
+      <CodeRenderer inline={false} language="html" value={error.message} />
+    )
+  }
+}
 
-const transform = (code: string) =>
-  _transform(code, {
-    objectAssign: '_poly.assign',
-    transforms: {
-      dangerousForOf: true,
-      dangerousTaggedTemplateString: true,
-    },
-  }).code
+function transpileMdx(mdxCode: string) {
+  return mdx.sync(mdxCode, {
+    skipExport: true,
+    remarkPlugins: [removeExports, removeImports],
+    rehypePlugins: [sanitizeJsx],
+  })
+}
+
+// If we were to pass sanitize directly to rehypePlugins it would remove all
+// html elements as rehype will mark these as 'jsx' elements. So we're tapping
+// into the tree and visiting each 'jsx' node individually. This allows us sanitize
+// the content of the node instead of removing it altogether
+function sanitizeJsx() {
+  return (tree: Node) => {
+    visit(tree, 'jsx', (node: INode) => {
+      node.value = unified()
+        .use(parse)
+        .use(stringify, {
+          // Means void elements <img> don't break the markdown compiler with
+          // a missing trailing slash (/)
+          closeSelfClosing: true,
+        })
+        .use(sanitize, (schema as unknown) as Schema)
+        // Pascal case all custom elements so they work as JSX
+        .use(replaceCustomElementsWithJsx)
+        .processSync(node.value)
+    })
+  }
+}
 
 // rehype-stringify lowercases all element names. This means it passes
 // the sanitization but they need to be converted back to render as JSX components
@@ -68,34 +101,29 @@ function replaceCustomElementsWithJsx() {
   }
 }
 
-// If we were to pass sanitize directly to rehypePlugins it would remove all
-// html elements as rehype will mark these as 'jsx' elements. So we're tapping
-// into the tree and visiting each 'jsx' node individually. This allows us sanitize
-// the content of the node instead of removing it altogether
-function sanitizeJsx() {
-  return (tree: Node) => {
-    visit(tree, 'jsx', (node: Node) => {
-      node.value = unified()
-        .use(parse)
-        .use(stringify, {
-          // Means void elements <img> don't break the markdown compiler with
-          // a missing trailing slash (/)
-          closeSelfClosing: true,
-        })
-        .use(sanitize, (schema as unknown) as Schema)
-        // Pascal case all custom elements so they work as JSX
-        .use(replaceCustomElementsWithJsx)
-        .processSync(node.value as VFileCompatible)
-    })
-  }
+function transform(code: string) {
+  return _transform(code, {
+    objectAssign: '_poly.assign',
+    transforms: {
+      dangerousForOf: true,
+      dangerousTaggedTemplateString: true,
+    },
+  }).code
 }
 
-function transpileMdx(mdxCode: string) {
-  return mdx.sync(mdxCode, {
-    skipExport: true,
-    remarkPlugins: [removeImports, removeExports],
-    rehypePlugins: [sanitizeJsx],
-  })
+export const _poly = { assign }
+
+function createElement(code: string) {
+  const scope = { mdx: createMdxElement }
+
+  const fn = new Function(
+    '_poly',
+    'React',
+    ...Object.keys(scope),
+    `${code}; return React.createElement(MDXContent)`
+  )
+
+  return fn(_poly, React, ...Object.values(scope))
 }
 
 function renderMarkup(element: ReactNode) {
@@ -118,27 +146,4 @@ function renderMarkup(element: ReactNode) {
       }}
     </ThemeProvider>
   )
-}
-
-function createElement(code: string) {
-  const scope = { mdx: createMdxElement }
-
-  const fn = new Function(
-    '_poly',
-    'React',
-    ...Object.keys(scope),
-    `${code}; return React.createElement(MDXContent)`
-  )
-
-  return fn(_poly, React, ...Object.values(scope))
-}
-
-export const renderMdx = (mdxCode: string) => {
-  try {
-    return renderMarkup(createElement(transform(transpileMdx(mdxCode))))
-  } catch (error) {
-    return ReactDOMServer.renderToString(
-      <CodeRenderer inline={false} language="html" value={error.message} />
-    )
-  }
 }
