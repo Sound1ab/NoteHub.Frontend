@@ -1,3 +1,5 @@
+import { CoordsMode } from 'codemirror'
+import CodeMirror from 'codemirror'
 import EasyMDE from 'easymde'
 import { useCallback, useContext } from 'react'
 
@@ -17,29 +19,62 @@ export function useEasyMDE() {
 
   const markText = useCallback(
     (
-      from: CodeMirror.Position,
-      to: CodeMirror.Position,
-      options?: CodeMirror.TextMarkerOptions
-    ) => {
-      if (typeof context.editor !== 'object') {
-        return
-      }
-      return context.editor?.codemirror.markText(from, to, options)
-    },
+      ...args: [
+        CodeMirror.Position,
+        CodeMirror.Position,
+        CodeMirror.TextMarkerOptions
+      ]
+    ) => context.editor?.codemirror.markText(...args),
     [context.editor]
   )
 
   const posFromIndex = useCallback(
-    (index: number) => {
-      if (typeof context.editor !== 'object') {
-        return
-      }
-      return context.editor?.codemirror.posFromIndex(index)
-    },
+    (index: number) => context.editor?.codemirror.posFromIndex(index),
+    [context.editor]
+  )
+
+  const charCoords = useCallback(
+    (...args: [CodeMirror.Position, CoordsMode]) =>
+      context.editor?.codemirror.charCoords(...args),
+    [context.editor]
+  )
+
+  const coordsChar = useCallback(
+    (...args: [{ left: number; top: number }, CoordsMode]) =>
+      context.editor?.codemirror.coordsChar(...args),
+    [context.editor]
+  )
+
+  const cursorCoords = useCallback(
+    (...args: [CodeMirror.Position, CoordsMode]) =>
+      context.editor?.codemirror.cursorCoords(...args),
+    [context.editor]
+  )
+
+  const findMarksAt = useCallback(
+    (...args: [CodeMirror.Position]) =>
+      context.editor?.codemirror.findMarksAt(...args),
+    [context.editor]
+  )
+
+  const getScrollInfo = useCallback(
+    () => context.editor?.codemirror.getScrollInfo(),
+    [context.editor]
+  )
+
+  const heightAtLine = useCallback(
+    (line: number, mode: CoordsMode) =>
+      context.editor?.codemirror.heightAtLine(line, mode),
     [context.editor]
   )
 
   return {
+    heightAtLine,
+    getScrollInfo,
+    cursorCoords,
+    findMarksAt,
+    coordsChar,
+    charCoords,
     markText,
     posFromIndex,
     toggleBlockquote: runIfEditor(context.EasyMDE?.toggleBlockquote),

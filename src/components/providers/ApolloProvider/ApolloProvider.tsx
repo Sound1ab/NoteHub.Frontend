@@ -24,6 +24,17 @@ export function ApolloProvider({ children }: IApolloProvider) {
       Query: {
         fields,
       },
+      // File doesn't have an ID so apollo doesn't know how to merge new
+      // request. Use 'path' as the ID and make sure to always overwrite
+      // incoming messages
+      File: {
+        keyFields: ['path'],
+        fields: {
+          messages: {
+            merge: false,
+          },
+        },
+      },
     },
   })
 

@@ -3,6 +3,7 @@ import { styled } from '../../../../../theme'
 export const Style = styled.article`
   position: relative;
   height: 100%;
+  overflow: hidden;
 
   .editor-preview-side {
     display: none;

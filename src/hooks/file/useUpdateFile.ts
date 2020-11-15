@@ -11,7 +11,7 @@ import {
   UpdateFileMutation,
   UpdateFileMutationVariables,
 } from '../../components/apollo'
-import { FileFragment } from '../../fragments'
+import { FileWithMessagesFragment } from '../../fragments'
 import { debounce } from '../../utils'
 import { ReadFileDocument, useReadFile } from './useReadFile'
 
@@ -32,10 +32,10 @@ const debouncedSave = debounce((updateFile, options) => {
 }, 1000)
 
 export const UpdateFileDocument = gql`
-  ${FileFragment}
+  ${FileWithMessagesFragment}
   mutation UpdateFile($input: UpdateFileInput!) {
     updateFile(input: $input) {
-      ...file
+      ...fileWithMessages
     }
   }
 `

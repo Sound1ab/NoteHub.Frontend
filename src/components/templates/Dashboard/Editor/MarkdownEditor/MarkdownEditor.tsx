@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import CodeMirror from 'codemirror'
+import React, { useEffect, useState } from 'react'
 import SimpleMDE from 'react-simplemde-editor'
 
 import {
@@ -15,15 +16,38 @@ import { localState } from '../../../../providers/ApolloProvider/cache'
 import { Style } from './MarkdownEditor.styles'
 import { renderMarkdown } from './renderMarkdown'
 import { renderMdx } from './renderMdx'
+import { Widget } from './Widget/Widget'
 
-type MarkerOrUndefined = CodeMirror.TextMarker | undefined
-let markers: MarkerOrUndefined[] = []
+interface IMarker {
+  marker: CodeMirror.TextMarker
+  options: {
+    id: string
+    coords: { left: number; right: number; top: number; bottom: number }
+    isActive: boolean
+    message: string
+  }
+}
+
+interface IActiveWidget {
+  coords: { left: number; right: number; top: number; bottom: number }
+  message: string
+}
 
 export function MarkdownEditor() {
   const currentPath = useReadCurrentPath()
   const { file, error: readError } = useReadFile()
   const [updateFile] = useUpdateFile()
-  const { setEasyMDE, markText, posFromIndex } = useEasyMDE()
+  const {
+    setEasyMDE,
+    markText,
+    posFromIndex,
+    charCoords,
+    findMarksAt,
+    coordsChar,
+    getScrollInfo,
+  } = useEasyMDE()
+  const [markers, setMarkers] = useState<IMarker[]>([])
+  const [activeWidget, setActiveWidget] = useState<IActiveWidget | null>(null)
 
   const nodes = file?.messages?.nodes
     ? JSON.stringify(file?.messages.nodes)
@@ -43,6 +67,14 @@ export function MarkdownEditor() {
         return
       }
 
+      const widgetMessage = message.message
+
+      if (!widgetMessage) {
+        return
+      }
+
+      // Using the absolute offset get the line and character position in the
+      // editor
       const startPosition = posFromIndex(startOffset)
       const endPosition = posFromIndex(endOffset)
 
@@ -50,15 +82,45 @@ export function MarkdownEditor() {
         return
       }
 
+      // Mark it
       const marker = markText?.(
         { line: startPosition.line, ch: startPosition.ch },
         { line: endPosition.line, ch: endPosition.ch },
-        { css: 'color: pink' }
+        {
+          css:
+            'text-decoration: underline; text-decoration-color: red; text-decoration-style: wavy',
+        }
       )
 
-      markers = [...markers, marker]
+      if (!marker) {
+        return
+      }
+
+      // Get the absolute position of the marker based on the text area
+      const coords = charCoords(
+        { line: startPosition.line, ch: startPosition.ch },
+        'local'
+      )
+
+      if (!coords) {
+        return
+      }
+
+      setMarkers((markers) => [
+        ...markers,
+        {
+          marker,
+          options: {
+            // @ts-ignore
+            id: marker.id,
+            coords,
+            isActive: false,
+            message: widgetMessage,
+          },
+        },
+      ])
     })
-  }, [nodes, markText, posFromIndex, file?.readAt])
+  }, [nodes, markText, posFromIndex, file?.readAt, charCoords])
 
   if (readError) {
     alert('Could not read file. Please try again.')
@@ -67,9 +129,9 @@ export function MarkdownEditor() {
   async function handleUpdateFile(value: string) {
     // Clear markers
     if (markers.length > 0) {
-      markers.forEach((marker) => marker?.clear())
-
-      markers = []
+      removeWidget()
+      markers.forEach((marker) => marker.marker?.clear?.())
+      setMarkers([])
     }
 
     try {
@@ -92,26 +154,84 @@ export function MarkdownEditor() {
     return null
   }
 
+  function handleEditorClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+    // Get line and character given the position of the mouse in the editor
+    const lineCh = coordsChar({ left: e.clientX, top: e.clientY }, 'page')
+
+    if (!lineCh) {
+      return
+    }
+
+    // Check the editor to see if there is a marker at that position
+    const selectedMarkers = findMarksAt(lineCh)
+
+    // If there is no marker there hide all markers
+    if (!selectedMarkers || selectedMarkers.length === 0) {
+      setActiveWidget(null)
+      return
+    }
+
+    // Get the absolute position of the marker based on the text area
+    const coords = charCoords({ line: lineCh.line, ch: lineCh.ch }, 'local')
+
+    if (!coords) {
+      return
+    }
+
+    // Find which marker from our set of markers is active based on the id.
+    const activeMarker = markers.find((marker) =>
+      selectedMarkers.find(
+        // @ts-ignore
+        (selectedMarker) => selectedMarker.id === marker.options.id
+      )
+    )
+
+    if (!activeMarker) {
+      return
+    }
+
+    // Update the position of the widget to take into account any scrolling
+    // done within the textarea.
+    setActiveWidget({
+      coords: {
+        ...coords,
+        left: coords.left,
+        top: coords.top - (getScrollInfo()?.top ?? 0),
+      },
+      message: activeMarker.options.message,
+    })
+  }
+
+  function removeWidget() {
+    setActiveWidget(() => null)
+  }
+
   return (
     <Style aria-label="Markdown editor">
-      <SimpleMDE
-        key={file?.path}
-        className="MarkdownEditor-wrapper"
-        onChange={handleUpdateFile}
-        value={file?.content ?? ''}
-        getLineAndCursor={handleSetMarkdownCursorPosition}
-        options={{
-          spellChecker: false,
-          nativeSpellcheck: false,
-          toolbar: true,
-          status: true,
-          theme: 'darcula',
-          previewRender(text) {
-            return shouldRenderMdx ? renderMdx(text) : renderMarkdown(text)
-          },
-        }}
-        getMdeInstance={setEasyMDE}
-      />
+      {activeWidget && (
+        <Widget position={activeWidget.coords} message={activeWidget.message} />
+      )}
+      <span onClick={handleEditorClick}>
+        <SimpleMDE
+          key={file?.path}
+          className="MarkdownEditor-wrapper"
+          onChange={handleUpdateFile}
+          value={file?.content ?? ''}
+          getLineAndCursor={handleSetMarkdownCursorPosition}
+          events={{ scroll: removeWidget, viewportChange: removeWidget }}
+          options={{
+            spellChecker: false,
+            nativeSpellcheck: false,
+            toolbar: true,
+            status: true,
+            theme: 'darcula',
+            previewRender(text) {
+              return shouldRenderMdx ? renderMdx(text) : renderMarkdown(text)
+            },
+          }}
+          getMdeInstance={setEasyMDE}
+        />
+      </span>
     </Style>
   )
 }

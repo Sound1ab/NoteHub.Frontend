@@ -2,16 +2,15 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
-import { useEasyMDE, useReadFile, useUpdateFile } from '../../../../../hooks'
+import { useReadFile, useUpdateFile } from '../../../../../hooks'
 import { resolvers } from '../../../../../schema/mockResolvers'
-import { cleanup, render, waitFor } from '../../../../../test-utils'
+import { cleanup, fireEvent, render, waitFor } from '../../../../../test-utils'
 import { MockProvider } from '../../../../providers'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { MarkdownEditor } from './MarkdownEditor'
 
 jest.mock('../../../../../hooks/file/useUpdateFile')
 jest.mock('../../../../../hooks/file/useReadFile')
-jest.mock('../../../../../hooks/utils/useEasyMDE')
 
 afterEach(cleanup)
 
@@ -50,11 +49,6 @@ describe('MarkdownEditor', () => {
         },
       },
     })
-    ;(useEasyMDE as jest.Mock).mockImplementation(() => ({
-      setEasyMDE: jest.fn(),
-      markText: jest.fn(),
-      posFromIndex: jest.fn(),
-    }))
   })
 
   it('should show markdown editor', async () => {
@@ -136,18 +130,86 @@ describe('MarkdownEditor', () => {
     )
   })
 
-  it('should call markText with posFromIndex values and style', async () => {
-    const markText = jest.fn()
-    const posFromIndex = jest
-      .fn()
-      .mockImplementationOnce(() => ({ line: 0, ch: 0 }))
-      .mockImplementationOnce(() => ({ line: 0, ch: 5 }))
+  it('should underline text if file contains messages', async () => {
+    ;(useReadFile as jest.Mock).mockReturnValue({
+      file: {
+        content: 'hello',
+        readAt: '1',
+      },
+    })
 
-    ;(useEasyMDE as jest.Mock).mockImplementation(() => ({
-      setEasyMDE: jest.fn(),
-      markText,
-      posFromIndex,
-    }))
+    const { rerender, getByText } = await render(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{
+          currentPath: () =>
+            localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md'),
+        }}
+      >
+        <MarkdownEditor />
+      </MockProvider>
+    )
+
+    ;(useReadFile as jest.Mock).mockReturnValue({
+      file: {
+        content: 'heelo',
+        readAt: '2',
+        messages: {
+          nodes: [
+            {
+              message: '`heelo` is misspelt',
+              location: {
+                start: {
+                  offset: 0,
+                },
+                end: {
+                  offset: 5,
+                },
+              },
+            },
+          ],
+        },
+      },
+    })
+
+    rerender(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{
+          currentPath: () =>
+            localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md'),
+        }}
+      >
+        <MarkdownEditor />
+      </MockProvider>
+    )
+
+    expect(getByText('heelo')).toHaveAttribute(
+      'style',
+      'text-decoration: underline; text-decoration-color: red; text-decoration-style: wavy;'
+    )
+  })
+
+  it('should display message widget when marker is clicked', async () => {
+    ;(useReadFile as jest.Mock).mockReturnValue({
+      file: {
+        content: 'hello',
+        readAt: '1',
+      },
+    })
+
+    const { rerender, getByText } = await render(
+      <MockProvider
+        mockResolvers={resolvers}
+        localData={{
+          currentPath: () =>
+            localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md'),
+        }}
+      >
+        <MarkdownEditor />
+      </MockProvider>
+    )
+
     ;(useReadFile as jest.Mock).mockReturnValue({
       file: {
         content: 'heelo',
@@ -160,7 +222,7 @@ describe('MarkdownEditor', () => {
                   offset: 0,
                 },
                 end: {
-                  offset: 4,
+                  offset: 5,
                 },
               },
             },
@@ -170,7 +232,7 @@ describe('MarkdownEditor', () => {
       },
     })
 
-    render(
+    rerender(
       <MockProvider
         mockResolvers={resolvers}
         localData={{
@@ -182,10 +244,8 @@ describe('MarkdownEditor', () => {
       </MockProvider>
     )
 
-    expect(markText).toBeCalledWith(
-      { line: 0, ch: 0 },
-      { line: 0, ch: 5 },
-      { css: 'color: pink' }
-    )
+    await fireEvent.click(getByText('heelo'))
+
+    expect(getByText('`heelo` is misspelt')).toBeInTheDocument()
   })
 })
