@@ -4,14 +4,17 @@ import SimpleMDE from 'react-simplemde-editor'
 
 import {
   useEasyMDE,
+  useModalToggle,
   useReadCurrentPath,
   useReadFile,
   useUpdateFile,
 } from '../../../../../hooks'
+import { styled } from '../../../../../theme'
 import { IPosition } from '../../../../../types'
 import { isFile, isNumber } from '../../../../../utils'
+import { Fade } from '../../../../animation'
 import { MessagesFragment } from '../../../../apollo'
-import { ErrorToast } from '../../../../atoms'
+import { ErrorToast, Icon } from '../../../../atoms'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { Style } from './MarkdownEditor.styles'
 import { renderMarkdown } from './renderMarkdown'
@@ -36,7 +39,7 @@ interface IActiveWidget {
 export function MarkdownEditor() {
   const currentPath = useReadCurrentPath()
   const { file, error: readError } = useReadFile()
-  const [updateFile] = useUpdateFile()
+  const [updateFile, { loading }] = useUpdateFile()
   const {
     setEasyMDE,
     markText,
@@ -48,6 +51,7 @@ export function MarkdownEditor() {
   } = useEasyMDE()
   const [markers, setMarkers] = useState<IMarker[]>([])
   const [activeWidget, setActiveWidget] = useState<IActiveWidget | null>(null)
+  const { isOpen, setOpen } = useModalToggle()
 
   const nodes = file?.messages?.nodes
     ? JSON.stringify(file?.messages.nodes)
@@ -165,9 +169,9 @@ export function MarkdownEditor() {
     // Check the editor to see if there is a marker at that position
     const selectedMarkers = findMarksAt(lineCh)
 
-    // If there is no marker there hide all markers
+    // If there is no marker there hide widget
     if (!selectedMarkers || selectedMarkers.length === 0) {
-      setActiveWidget(null)
+      removeWidget()
       return
     }
 
@@ -200,17 +204,24 @@ export function MarkdownEditor() {
       },
       message: activeMarker.options.message,
     })
+    setOpen(true)
   }
 
   function removeWidget() {
-    setActiveWidget(() => null)
+    setOpen(false)
   }
 
   return (
     <Style aria-label="Markdown editor">
-      {activeWidget && (
-        <Widget position={activeWidget.coords} message={activeWidget.message} />
-      )}
+      <Fade show={loading}>
+        <Spinner size="1x" icon="spinner" />
+      </Fade>
+      <Fade show={isOpen}>
+        <Widget
+          position={activeWidget?.coords}
+          message={activeWidget?.message}
+        />
+      </Fade>
       <span onClick={handleEditorClick}>
         <SimpleMDE
           key={file?.path}
@@ -235,3 +246,20 @@ export function MarkdownEditor() {
     </Style>
   )
 }
+
+const Spinner = styled(Icon)`
+  animation: spin 1s linear infinite;
+  color: ${({ theme }) => theme.colors.text.primary};
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  margin: ${({ theme }) => theme.spacing.xs};
+  animation-fill-mode: forwards;
+
+  @keyframes spin {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`

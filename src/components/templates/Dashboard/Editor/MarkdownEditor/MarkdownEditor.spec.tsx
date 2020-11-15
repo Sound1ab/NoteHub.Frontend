@@ -40,7 +40,10 @@ describe('MarkdownEditor', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useUpdateFile as jest.Mock).mockImplementation(() => [jest.fn()])
+    ;(useUpdateFile as jest.Mock).mockImplementation(() => [
+      jest.fn(),
+      { loading: false },
+    ])
     ;(useReadFile as jest.Mock).mockReturnValue({
       file: {
         content: 'MOCK FILE CONTENTS',
@@ -87,6 +90,7 @@ describe('MarkdownEditor', () => {
       async () => {
         throw new Error('mock error')
       },
+      { loading: false },
     ])
 
     const { rerender, getByText } = await render(
