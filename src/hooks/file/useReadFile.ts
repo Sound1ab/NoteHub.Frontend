@@ -1,15 +1,15 @@
 import { gql, useQuery } from '@apollo/client'
 
 import { ReadFileQuery, ReadFileQueryVariables } from '../../components/apollo'
-import { FileFragment } from '../../fragments'
+import { FileWithMessagesFragment } from '../../fragments'
 import { isFile } from '../../utils'
 import { useReadCurrentPath } from '..'
 
 export const ReadFileDocument = gql`
-  ${FileFragment}
+  ${FileWithMessagesFragment}
   query ReadFile($path: String!) {
     readFile(path: $path) {
-      ...file
+      ...fileWithMessages
     }
   }
 `

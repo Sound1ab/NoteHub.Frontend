@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SimpleMDE from 'react-simplemde-editor'
 
 import {
@@ -8,24 +8,70 @@ import {
   useUpdateFile,
 } from '../../../../../hooks'
 import { IPosition } from '../../../../../types'
-import { isFile } from '../../../../../utils'
+import { isFile, isNumber } from '../../../../../utils'
+import { MessagesFragment } from '../../../../apollo'
 import { ErrorToast } from '../../../../atoms'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { Style } from './MarkdownEditor.styles'
 import { renderMarkdown } from './renderMarkdown'
 import { renderMdx } from './renderMdx'
 
+type MarkerOrUndefined = CodeMirror.TextMarker | undefined
+let markers: MarkerOrUndefined[] = []
+
 export function MarkdownEditor() {
   const currentPath = useReadCurrentPath()
   const { file, error: readError } = useReadFile()
   const [updateFile] = useUpdateFile()
-  const { setEasyMDE } = useEasyMDE()
+  const { setEasyMDE, markText, posFromIndex } = useEasyMDE()
+
+  const nodes = file?.messages?.nodes
+    ? JSON.stringify(file?.messages.nodes)
+    : undefined
+
+  useEffect(() => {
+    if (!nodes || !file?.readAt) {
+      return
+    }
+
+    // Create markers
+    ;(JSON.parse(nodes) as MessagesFragment['nodes']).forEach((message) => {
+      const startOffset = message.location?.start?.offset
+      const endOffset = message.location?.end?.offset
+
+      if (!isNumber(startOffset) || !isNumber(endOffset)) {
+        return
+      }
+
+      const startPosition = posFromIndex(startOffset)
+      const endPosition = posFromIndex(endOffset)
+
+      if (!startPosition || !endPosition) {
+        return
+      }
+
+      const marker = markText?.(
+        { line: startPosition.line, ch: startPosition.ch },
+        { line: endPosition.line, ch: endPosition.ch },
+        { css: 'color: pink' }
+      )
+
+      markers = [...markers, marker]
+    })
+  }, [nodes, markText, posFromIndex, file?.readAt])
 
   if (readError) {
     alert('Could not read file. Please try again.')
   }
 
   async function handleUpdateFile(value: string) {
+    // Clear markers
+    if (markers.length > 0) {
+      markers.forEach((marker) => marker?.clear())
+
+      markers = []
+    }
+
     try {
       await updateFile(currentPath, value)
     } catch (error) {
@@ -55,6 +101,8 @@ export function MarkdownEditor() {
         value={file?.content ?? ''}
         getLineAndCursor={handleSetMarkdownCursorPosition}
         options={{
+          spellChecker: false,
+          nativeSpellcheck: false,
           toolbar: true,
           status: true,
           theme: 'darcula',

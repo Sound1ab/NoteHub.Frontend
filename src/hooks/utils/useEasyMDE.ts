@@ -1,5 +1,5 @@
 import EasyMDE from 'easymde'
-import { useContext } from 'react'
+import { useCallback, useContext } from 'react'
 
 import { EasyMDEContext } from '../../components/providers'
 
@@ -15,7 +15,33 @@ export function useEasyMDE() {
     }
   }
 
+  const markText = useCallback(
+    (
+      from: CodeMirror.Position,
+      to: CodeMirror.Position,
+      options?: CodeMirror.TextMarkerOptions
+    ) => {
+      if (typeof context.editor !== 'object') {
+        return
+      }
+      return context.editor?.codemirror.markText(from, to, options)
+    },
+    [context.editor]
+  )
+
+  const posFromIndex = useCallback(
+    (index: number) => {
+      if (typeof context.editor !== 'object') {
+        return
+      }
+      return context.editor?.codemirror.posFromIndex(index)
+    },
+    [context.editor]
+  )
+
   return {
+    markText,
+    posFromIndex,
     toggleBlockquote: runIfEditor(context.EasyMDE?.toggleBlockquote),
     drawHorizontalRule: runIfEditor(context.EasyMDE?.drawHorizontalRule),
     cleanBlock: runIfEditor(context.EasyMDE?.cleanBlock),

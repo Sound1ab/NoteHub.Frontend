@@ -1,5 +1,21 @@
 import { gql } from '@apollo/client'
 
+export const MessagesFragment = gql`
+  fragment messages on ModelMessageConnection {
+    nodes {
+      message
+      location {
+        start {
+          offset
+        }
+        end {
+          offset
+        }
+      }
+    }
+  }
+`
+
 export const FileFragment = gql`
   fragment file on File {
     filename
@@ -9,6 +25,7 @@ export const FileFragment = gql`
     sha
     type
     url
+    readAt
   }
 `
 
@@ -36,5 +53,16 @@ export const GitNodeFragment = gql`
     type
     sha
     url
+  }
+`
+
+export const FileWithMessagesFragment = gql`
+  ${FileFragment}
+  ${MessagesFragment}
+  fragment fileWithMessages on File {
+    ...file
+    messages {
+      ...messages
+    }
   }
 `

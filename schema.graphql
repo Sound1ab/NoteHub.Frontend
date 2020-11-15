@@ -1,107 +1,148 @@
 # This file was generated based on ".graphqlconfig". Do not edit manually.
 
 schema {
-  query: Query
-  mutation: Mutation
+    query: Query
+    mutation: Mutation
 }
 
 type File {
-  _links: Links!
-  content: String
-  excerpt: String
-  filename: String!
-  path: String!
-  repo: String!
-  sha: String!
+    content: String
+    excerpt: String
+    filename: String!
+    messages: ModelMessageConnection
+    path: String!
+    readAt: String
+    sha: String!
+    type: NODE_TYPE!
+    url: String!
 }
 
 type GitNode {
-  mode: String!
-  path: String!
-  sha: String!
-  size: Int
-  type: String!
-  url: String!
+    path: String!
+    sha: String!
+    type: NODE_TYPE!
+    url: String!
 }
 
 type GithubUser {
-  avatar_url: String!
-  html_url: String!
-  id: Int!
-  login: String!
-  name: String!
+    avatar_url: String!
+    html_url: String!
+    id: Int!
+    login: String!
+    name: String!
 }
 
 type Links {
-  html: String!
+    html: String!
+}
+
+type Location {
+    end: Point
+    start: Point
+}
+
+type Message {
+    actual: Int
+    column: Int
+    fatal: Boolean
+    line: Int
+    location: Location
+    message: String
+    name: String
+    reason: String
+    ruleId: String
+    source: String
 }
 
 type ModelFileConnection {
-  items: [File!]!
+    items: [File!]!
+}
+
+type ModelMessageConnection {
+    nodes: [Message!]!
 }
 
 type ModelNodeConnection {
-  nodes: [GitNode!]!
+    nodes: [GitNode!]!
 }
 
 type ModelRepoConnection {
-  items: [Repo!]!
+    items: [Repo!]!
 }
 
 type Mutation {
-  createFile(input: CreateFileInput!): File
-  createImage(input: CreateFileInput!): File
-  createRepo: Repo
-  deleteFile(input: DeleteFileInput!): File
-  deleteImage(input: DeleteFileInput!): File
-  deleteRepo: Repo
-  updateFile(input: UpdateFileInput!): File
-  updateImage(input: UpdateFileInput!): File
-  updateRepo(input: UpdateRepoInput!): Repo
+    createFile(input: CreateFileInput!): File
+    createImage(input: CreateFileInput!): File
+    createRepo: Repo
+    createSignedUrl: String
+    deleteFile(input: DeleteFileInput!): File
+    deleteImage(input: DeleteFileInput!): File
+    deleteRepo: Repo
+    moveFile(input: MoveFileInput!): File
+    updateFile(input: UpdateFileInput!): File
+    updateImage(input: UpdateFileInput!): File
+    updateRepo(input: UpdateRepoInput!): Repo
+}
+
+type Point {
+    offset: Int
 }
 
 type Query {
-  listImages: ModelFileConnection!
-  login: String!
-  logout: String!
-  readFile(path: String!): File
-  readGithubUser: GithubUser
-  readGithubUserAccessToken(code: String!, state: String!): String!
-  readImage(path: String!): File
-  readNodes: ModelNodeConnection!
-  readRepo: Repo
-  refresh: String
+    login: String!
+    logout: String!
+    readFile(path: String!): File
+    readGithubUser: GithubUser
+    readGithubUserAccessToken(code: String!, state: String!): String!
+    readImage(path: String!): File
+    readNodes: ModelNodeConnection!
+    readRepo: Repo
+    refresh: String
 }
 
 type Repo {
-  description: String
-  full_name: String!
-  id: Int!
-  name: String!
-  node_id: String!
-  private: Boolean!
+    description: String
+    full_name: String!
+    id: Int!
+    name: String!
+    node_id: String!
+    private: Boolean!
 }
 
 enum CacheControlScope {
-  PRIVATE
-  PUBLIC
+    PRIVATE
+    PUBLIC
+}
+
+enum NODE_TYPE {
+    FILE
+    FOLDER
 }
 
 input CreateFileInput {
-  content: String
-  path: String!
+    content: String
+    path: String!
 }
 
 input DeleteFileInput {
-  path: String!
+    path: String!
+}
+
+input MoveFileInput {
+    newPath: String!
+    path: String!
 }
 
 input UpdateFileInput {
-  content: String
-  path: String!
+    content: String
+    path: String!
 }
 
 input UpdateRepoInput {
-  description: String
-  private: Boolean
+    description: String
+    private: Boolean
 }
+
+
+"The `Upload` scalar type represents a file upload."
+scalar Upload

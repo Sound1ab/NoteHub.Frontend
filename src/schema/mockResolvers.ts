@@ -40,6 +40,13 @@ export const fileGitNodeThree: GitNode = {
   url: 'MOCK_URL',
 }
 
+export const fileGitNodeFour: GitNode = {
+  type: Node_Type.File,
+  path: 'MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md',
+  sha: 'MOCK_SHA',
+  url: 'MOCK_URL',
+}
+
 export const folderNode: ITreeNode = {
   type: folderGitNode.type,
   name: 'MOCK_FOLDER',
@@ -67,7 +74,32 @@ export const fileNodeTwo: ITreeNode = {
   isOptimistic: false,
 }
 
-export const files = [
+export const files: File[] = [
+  {
+    filename: 'MOCK_FILE_PATH_4.md',
+    path: fileGitNodeFour.path,
+    content: 'heelo',
+    excerpt: 'MOCK_EXCERPT_2',
+    sha: 'MOCK_SHA_2',
+    type: Node_Type.File,
+    url: 'MOCK_URL',
+    messages: {
+      nodes: [
+        {
+          message: '`heelo` is misspelt',
+          location: {
+            start: {
+              offset: 0,
+            },
+            end: {
+              offset: 5,
+            },
+          },
+          actual: 16,
+        },
+      ],
+    },
+  },
   {
     filename: 'MOCK_FILE_PATH_2.md',
     path: fileGitNodeTwo.path,
@@ -76,6 +108,7 @@ export const files = [
     sha: 'MOCK_SHA_2',
     type: Node_Type.File,
     url: 'MOCK_URL',
+    readAt: new Date().toString(),
   },
   {
     filename: 'MOCK_FILE_PATH_1.md',
@@ -85,6 +118,7 @@ export const files = [
     sha: 'MOCK_SHA_1',
     type: Node_Type.File,
     url: 'MOCK_URL',
+    readAt: new Date().toString(),
   },
   {
     filename: 'MOCK_FILE_PATH_3.md',
@@ -94,6 +128,7 @@ export const files = [
     sha: 'MOCK_SHA_3',
     type: Node_Type.File,
     url: 'MOCK_URL',
+    readAt: new Date().toString(),
   },
 ]
 
@@ -138,18 +173,7 @@ export const resolvers = {
       type: Node_Type.File,
       url: 'MOCK_URL',
     }),
-    updateFile: (
-      _: unknown,
-      { input }: MutationUpdateFileArgs
-    ): {
-      path: string
-      filename: string
-      excerpt: string
-      type: string
-      sha: string
-      content: string
-      url: string
-    } => {
+    updateFile: (_: unknown, { input }: MutationUpdateFileArgs): File => {
       const findFile = ({ path }: { path: string }) => path === input.path
       const fileIndex = files.findIndex(findFile)
       const file = files.find(findFile)

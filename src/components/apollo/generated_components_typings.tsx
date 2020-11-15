@@ -57,12 +57,44 @@ export type File = {
   sha: Scalars['String'];
   type: Node_Type;
   url: Scalars['String'];
+  messages?: Maybe<ModelMessageConnection>;
+  readAt?: Maybe<Scalars['String']>;
 };
 
 export enum Node_Type {
   File = 'FILE',
   Folder = 'FOLDER'
 }
+
+export type ModelMessageConnection = {
+  __typename?: 'ModelMessageConnection';
+  nodes: Array<Message>;
+};
+
+export type Message = {
+  __typename?: 'Message';
+  message?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  reason?: Maybe<Scalars['String']>;
+  line?: Maybe<Scalars['Int']>;
+  column?: Maybe<Scalars['Int']>;
+  location?: Maybe<Location>;
+  actual?: Maybe<Scalars['Int']>;
+  source?: Maybe<Scalars['String']>;
+  ruleId?: Maybe<Scalars['String']>;
+  fatal?: Maybe<Scalars['Boolean']>;
+};
+
+export type Location = {
+  __typename?: 'Location';
+  start?: Maybe<Point>;
+  end?: Maybe<Point>;
+};
+
+export type Point = {
+  __typename?: 'Point';
+  offset?: Maybe<Scalars['Int']>;
+};
 
 export type ModelNodeConnection = {
   __typename?: 'ModelNodeConnection';
@@ -147,11 +179,6 @@ export type MutationDeleteImageArgs = {
 };
 
 
-export type MutationCreateSignedUrlArgs = {
-  input: CreateSignedUrl;
-};
-
-
 export type MutationUpdateRepoArgs = {
   input: UpdateRepoInput;
 };
@@ -173,10 +200,6 @@ export type DeleteFileInput = {
 export type MoveFileInput = {
   path: Scalars['String'];
   newPath: Scalars['String'];
-};
-
-export type CreateSignedUrl = {
-  key: Scalars['String'];
 };
 
 export type UpdateRepoInput = {
@@ -211,9 +234,27 @@ export type Position = {
   line: Scalars['Int'];
 };
 
+export type MessagesFragment = (
+  { __typename?: 'ModelMessageConnection' }
+  & { nodes: Array<(
+    { __typename?: 'Message' }
+    & Pick<Message, 'message'>
+    & { location?: Maybe<(
+      { __typename?: 'Location' }
+      & { start?: Maybe<(
+        { __typename?: 'Point' }
+        & Pick<Point, 'offset'>
+      )>, end?: Maybe<(
+        { __typename?: 'Point' }
+        & Pick<Point, 'offset'>
+      )> }
+    )> }
+  )> }
+);
+
 export type FileFragment = (
   { __typename?: 'File' }
-  & Pick<File, 'filename' | 'path' | 'content' | 'excerpt' | 'sha' | 'type' | 'url'>
+  & Pick<File, 'filename' | 'path' | 'content' | 'excerpt' | 'sha' | 'type' | 'url' | 'readAt'>
 );
 
 export type RepoFragment = (
@@ -229,6 +270,15 @@ export type GithubUserFragment = (
 export type GitNodeFragment = (
   { __typename?: 'GitNode' }
   & Pick<GitNode, 'path' | 'type' | 'sha' | 'url'>
+);
+
+export type FileWithMessagesFragment = (
+  { __typename?: 'File' }
+  & { messages?: Maybe<(
+    { __typename?: 'ModelMessageConnection' }
+    & MessagesFragment
+  )> }
+  & FileFragment
 );
 
 export type DeleteRepoMutationVariables = Exact<{ [key: string]: never; }>;
@@ -330,7 +380,7 @@ export type ReadFileQuery = (
   { __typename?: 'Query' }
   & { readFile?: Maybe<(
     { __typename?: 'File' }
-    & FileFragment
+    & FileWithMessagesFragment
   )> }
 );
 
@@ -374,9 +424,7 @@ export type CreateImageMutation = (
   )> }
 );
 
-export type CreateSignedUrlMutationVariables = Exact<{
-  input: CreateSignedUrl;
-}>;
+export type CreateSignedUrlMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CreateSignedUrlMutation = (

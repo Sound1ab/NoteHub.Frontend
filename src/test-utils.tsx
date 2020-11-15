@@ -6,6 +6,7 @@ import React, { ReactNode } from 'react'
 
 import { Toast } from './components/atoms'
 import {
+  EasyMDEProvider,
   IconProvider,
   MockProvider,
   ThemeProvider,
@@ -43,7 +44,9 @@ const Context = ({
       {() => (
         <IconProvider>
           {enableToast && <Toast />}
-          <FileTreeProvider>{node}</FileTreeProvider>
+          <EasyMDEProvider>
+            <FileTreeProvider>{node}</FileTreeProvider>
+          </EasyMDEProvider>
         </IconProvider>
       )}
     </ThemeProvider>
