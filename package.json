@@ -44,6 +44,7 @@
     "@fortawesome/react-fontawesome": "^0.1.4",
     "@mdx-js/mdx": "^1.6.19",
     "@mdx-js/react": "^1.6.19",
+    "apollo3-cache-persist": "^0.8.0",
     "buble": "^0.20.0",
     "core-js-bundle": "3.7.0",
     "fuse.js": "^6.4.1",
