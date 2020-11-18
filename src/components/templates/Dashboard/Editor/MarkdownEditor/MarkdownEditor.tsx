@@ -127,7 +127,7 @@ export function MarkdownEditor() {
   }, [nodes, markText, posFromIndex, file?.readAt, charCoords])
 
   if (readError) {
-    alert('Could not read file. Please try again.')
+    ErrorToast(`Could not read file. Please try again.`)
   }
 
   async function handleUpdateFile(value: string) {

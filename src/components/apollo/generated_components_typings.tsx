@@ -14,22 +14,15 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  accentColor?: Maybe<Scalars['String']>;
-  currentPath?: Maybe<Scalars['String']>;
-  currentRepoName?: Maybe<Scalars['String']>;
-  currentTheme?: Maybe<Scalars['String']>;
-  cursorPosition: Position;
-  jwt?: Maybe<Scalars['String']>;
+  readFile?: Maybe<File>;
+  readNodes: ModelNodeConnection;
+  readImage?: Maybe<File>;
+  readRepo?: Maybe<Repo>;
+  readGithubUserAccessToken: Scalars['String'];
+  readGithubUser?: Maybe<GithubUser>;
   login: Scalars['String'];
   logout: Scalars['String'];
-  readFile?: Maybe<File>;
-  readGithubUser?: Maybe<GithubUser>;
-  readGithubUserAccessToken: Scalars['String'];
-  readImage?: Maybe<File>;
-  readNodes: ModelNodeConnection;
-  readRepo?: Maybe<Repo>;
   refresh?: Maybe<Scalars['String']>;
-  search: Scalars['String'];
 };
 
 
@@ -38,14 +31,14 @@ export type QueryReadFileArgs = {
 };
 
 
-export type QueryReadGithubUserAccessTokenArgs = {
-  code: Scalars['String'];
-  state: Scalars['String'];
+export type QueryReadImageArgs = {
+  path: Scalars['String'];
 };
 
 
-export type QueryReadImageArgs = {
-  path: Scalars['String'];
+export type QueryReadGithubUserAccessTokenArgs = {
+  code: Scalars['String'];
+  state: Scalars['String'];
 };
 
 export type File = {
@@ -228,12 +221,6 @@ export enum CacheControlScope {
 }
 
 
-export type Position = {
-  __typename?: 'Position';
-  ch: Scalars['Int'];
-  line: Scalars['Int'];
-};
-
 export type MessagesFragment = (
   { __typename?: 'ModelMessageConnection' }
   & { nodes: Array<(
@@ -407,7 +394,7 @@ export type UpdateFileMutation = (
   { __typename?: 'Mutation' }
   & { updateFile?: Maybe<(
     { __typename?: 'File' }
-    & FileFragment
+    & FileWithMessagesFragment
   )> }
 );
 

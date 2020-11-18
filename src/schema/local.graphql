@@ -1,14 +1,1 @@
-type Query {
-  currentRepoName: String
-  currentPath: String
-  currentTheme: String
-  cursorPosition: Position!
-  jwt: String
-  accentColor: String
-  search: String!
-}
-
-type Position {
-  ch: Int!
-  line: Int!
-}
+#For codegen purposes only
