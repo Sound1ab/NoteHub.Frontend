@@ -229,6 +229,7 @@ export const Style = styled.article`
   .CodeMirror-sizer {
     position: relative;
     border-right: 30px solid transparent;
+    max-width: 80ch;
   }
   .CodeMirror-gutter-filler,
   .CodeMirror-hscrollbar,

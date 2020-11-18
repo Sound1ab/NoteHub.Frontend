@@ -37,12 +37,11 @@ const cache = new InMemoryCache({
     },
   },
 })
-console.log('here')
+
 persistCacheSync({
   cache,
   storage: window.localStorage,
 })
-console.log('here')
 
 export function ApolloProvider({ children }: IApolloProvider) {
   const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
