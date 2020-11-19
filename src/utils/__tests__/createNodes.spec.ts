@@ -298,6 +298,86 @@ describe('insertNodeIntoParentNode', () => {
       isOptimistic: false,
     })
   })
+
+  it('should create next node if it does not exist deeper in the tree', async () => {
+    const rootFile = {
+      mode: '100644',
+      path: 'MOCK_FOLDER/MOCK_FOLDER_2/MOCK_FILE.md',
+      sha: '21e60f8358c6175f2efbbe34808a4d99d12d18ee',
+      size: 6,
+      type: Node_Type.File,
+      url:
+        'https://api.github.com/repos/Sound1ab/NoteHub.Test/git/blobs/21e60f8358c6175f2efbbe34808a4d99d12d18ee',
+    }
+
+    const node = {
+      children: [
+        {
+          children: [],
+          name: 'OTHER_MOCK_FOLDER',
+          path: `OTHER_MOCK_FOLDER`,
+          toggled: false,
+          type: Node_Type.Folder,
+          isOptimistic: false,
+        },
+      ],
+      name: 'Notes',
+      path: '',
+      toggled: true,
+      type: Node_Type.Folder,
+      isOptimistic: false,
+    }
+
+    insertNodeIntoParentNode({
+      path: ['MOCK_FOLDER', 'MOCK_FOLDER_2', 'MOCK_FILE.md'],
+      parentNode: node,
+      gitNode: rootFile,
+      listOfToggledPaths: new Set(),
+    })
+
+    expect(node).toEqual({
+      children: [
+        {
+          children: [],
+          name: 'OTHER_MOCK_FOLDER',
+          path: `OTHER_MOCK_FOLDER`,
+          toggled: false,
+          type: Node_Type.Folder,
+          isOptimistic: false,
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  name: 'MOCK_FILE.md',
+                  path: `MOCK_FOLDER/MOCK_FOLDER_2/MOCK_FILE.md`,
+                  toggled: false,
+                  type: Node_Type.File,
+                  isOptimistic: false,
+                },
+              ],
+              name: 'MOCK_FOLDER_2',
+              path: `MOCK_FOLDER/MOCK_FOLDER_2`,
+              toggled: false,
+              type: Node_Type.Folder,
+              isOptimistic: false,
+            },
+          ],
+          name: 'MOCK_FOLDER',
+          path: `MOCK_FOLDER`,
+          toggled: false,
+          type: Node_Type.Folder,
+          isOptimistic: false,
+        },
+      ],
+      name: 'Notes',
+      path: '',
+      toggled: true,
+      type: Node_Type.Folder,
+      isOptimistic: false,
+    })
+  })
 })
 
 describe('createFolderNode', () => {

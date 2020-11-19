@@ -100,9 +100,7 @@ export function insertNodeIntoParentNode({
   // If no next node the optimistic update has run and generated a file without
   // a parent gitNode. Create parent node and retry.
   if (!nextNode) {
-    const parentPath = parentNode.path
-      ? `${parentNode.path}/${nextPath}`
-      : nextPath
+    const parentPath = parentNode.path ? `${parentNode.path}/${slug}` : nextPath
 
     parentNode.children = [
       ...parentNode.children,
@@ -141,14 +139,19 @@ export function createNodes(
 
     const [rootSlug, ...restOfPath] = path.split('/')
 
+    // Does the parent of the root slug exist at the top level in our
+    // accumulated list already?
     const parentNode = getNode(acc, rootSlug)
 
-    // Oops we've create two files with the same name at the top level
-    // lets just ignore that and let the graphql error show
+    // If the parent does exist and it's a file, we've created a file with the
+    // same name and the optimistic result has got through to here.
+    // Lets just ignore that and let the graphql error show
     if (isFile(parentNode?.path)) {
       return acc
     }
 
+    // If the parent does exist let's start the process of inserting it into
+    // the tree
     if (parentNode) {
       insertNodeIntoParentNode({
         path: restOfPath,
@@ -160,13 +163,16 @@ export function createNodes(
       return acc
     }
 
+    // At this point we're only dealing with optimistic results or top-level
+    // files/folders. If it's a file with additional path slugs, the optimistic
+    // update has run and generated a file without a parent gitNode.
+    // Otherwise we have a top level file/folder.
     const isNestedFiled = isFile(path) && restOfPath.length > 0
 
     if (isNestedFiled) {
-      // If no parentNode and its a file inside a folder, the optimistic update has
-      // run and generated a file without a parent gitNode. Create a parent node
-      // and insert file node. Any other missing parent nodes further along the path
-      // will be created inside insertNodeIntoParentNode.
+      // Create a parent node and insert file node into it. Any other missing
+      // parent nodes further along the path will be created inside
+      // insertNodeIntoParentNode.
       const newParentNode = createNode(
         Node_Type.Folder,
         rootSlug,

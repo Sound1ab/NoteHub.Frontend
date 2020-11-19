@@ -53,7 +53,6 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
         }
         switch (err.extensions.code) {
           case APOLLO_ERRORS.INTERNAL_SERVER_ERROR: {
-            // Handle error in component
             break
           }
           case APOLLO_ERRORS.JWT_EXPIRED: {

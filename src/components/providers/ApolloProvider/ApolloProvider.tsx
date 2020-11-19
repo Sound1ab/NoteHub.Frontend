@@ -5,7 +5,6 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client'
-import { persistCacheSync } from 'apollo3-cache-persist'
 import React, { ReactNode } from 'react'
 
 import { context, error, httpLink, lazy } from '../../../services/ApolloLink'
@@ -36,11 +35,6 @@ const cache = new InMemoryCache({
       },
     },
   },
-})
-
-persistCacheSync({
-  cache,
-  storage: window.localStorage,
 })
 
 export function ApolloProvider({ children }: IApolloProvider) {
