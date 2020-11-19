@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
-import { useCreateFile } from '../../../../../hooks'
+import { useCreateFile, useFileTree } from '../../../../../hooks'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
 import { folderNode } from '../../../../../schema/mockResolvers'
 import { cleanup, fireEvent, render, waitFor } from '../../../../../test-utils'
@@ -10,6 +10,7 @@ import { FileInput } from './FileInput'
 
 jest.mock('../../../../../hooks/file/useCreateFile')
 jest.mock('../../../../../hooks/file/useMoveFile')
+jest.mock('../../../../../hooks/utils/useFileTree')
 
 afterEach(cleanup)
 
@@ -17,6 +18,7 @@ describe('FileInput', () => {
   const alert = jest.fn()
   const createNewFile = jest.fn()
   const moveFile = jest.fn()
+  const onToggle = jest.fn()
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -28,6 +30,9 @@ describe('FileInput', () => {
       moveFile,
       { loading: false },
     ])
+    ;(useFileTree as jest.Mock).mockImplementation(() => ({
+      onToggle,
+    }))
     global.alert = alert
   })
 
@@ -53,6 +58,32 @@ describe('FileInput', () => {
       await fireEvent.submit(form)
 
       expect(createNewFile).toBeCalledWith(`${path}/${newFileName}.md`)
+    })
+
+    it('should call onToggle with folder paths', async () => {
+      const nestedFilePath = 'mock_folder_1/mock_folder_2/mock_file'
+
+      const { getByLabelText } = await render(
+        <FileInput path={path} onClickOutside={jest.fn()} action="create" />
+      )
+
+      const input = getByLabelText('Input file name')
+
+      await fireEvent.change(input, {
+        target: { value: nestedFilePath },
+      })
+
+      expect(input).toHaveAttribute('value', nestedFilePath)
+
+      const form = getByLabelText('File name form')
+
+      await fireEvent.submit(form)
+
+      expect(onToggle).toBeCalledWith(`${path}/mock_folder_1`, true)
+      expect(onToggle).toBeCalledWith(
+        `${path}/mock_folder_1/mock_folder_2`,
+        true
+      )
     })
 
     it('should display the toast alert if create file errors', async () => {

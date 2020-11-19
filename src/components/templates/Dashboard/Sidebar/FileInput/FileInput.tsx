@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { useCreateFile } from '../../../../../hooks'
+import { useCreateFile, useFileTree } from '../../../../../hooks'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
 import { styled } from '../../../../../theme'
 import { ErrorToast, Input } from '../../../../atoms'
-import { FileTreeContext } from '../FileTree/FileTreeProvider'
 
 interface IFileInput {
   path?: string | null
@@ -25,7 +24,7 @@ export function FileInput({
   }>(defaultState)
   const [createFile, { loading }] = useCreateFile()
   const [moveFile] = useMoveFile()
-  const { onToggle } = useContext(FileTreeContext)
+  const { onToggle } = useFileTree()
 
   useEffect(() => {
     if (!startingText) {
@@ -59,8 +58,11 @@ export function FileInput({
     // Pop off the file so that we have the path of the folder
     nodePathArray.pop()
 
-    // Toggle the folder open so we can see the new file
-    onToggle(nodePathArray.join('/'), true)
+    // Toggle all the folders in the path open so we can see the new file
+    for (let i = nodePathArray.length - 1; i >= 0; i--) {
+      onToggle(nodePathArray.join('/'), true)
+      nodePathArray.pop()
+    }
 
     // Create the file at the full path
     try {

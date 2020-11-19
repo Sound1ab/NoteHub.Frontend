@@ -89,6 +89,35 @@ describe('FileTree', () => {
       expect(getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
     })
 
+    it('should toggle nested folder open if placed inside a closed folder', async () => {
+      const { getByText, getByLabelText } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
+        </MockProvider>
+      )
+
+      // open dropdown
+      await fireEvent.click(getByLabelText('MOCK_FOLDER_PATH actions'))
+
+      // open new file
+      await fireEvent.click(getByLabelText('Create file'))
+
+      const input = getByLabelText('Input file name')
+
+      await fireEvent.change(input, {
+        target: {
+          value:
+            'MOCK_FOLDER_PATH/MOCK_FOLDER_PATH_2/MOCK_FOLDER_PATH_3/NEW_MOCK_FILE_NAME_5',
+        },
+      })
+
+      const form = getByLabelText('File name form')
+
+      await fireEvent.submit(form)
+
+      expect(getByText('NEW_MOCK_FILE_NAME_5.md')).toBeInTheDocument()
+    })
+
     it('should be possible to toggle newly created folder', async () => {
       const { getByText, getByLabelText, queryByText } = await render(
         <MockProvider mockResolvers={resolvers}>
