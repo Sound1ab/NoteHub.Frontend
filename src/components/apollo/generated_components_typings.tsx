@@ -18,10 +18,10 @@ export type Query = {
   login: Scalars['String'];
   logout: Scalars['String'];
   readFile?: Maybe<File>;
+  readFiles?: Maybe<Array<File>>;
   readGithubUser?: Maybe<GithubUser>;
   readGithubUserAccessToken: Scalars['String'];
   readImage?: Maybe<File>;
-  readNodes: ModelNodeConnection;
   readRepo?: Maybe<Repo>;
   refresh?: Maybe<Scalars['String']>;
 };
@@ -44,13 +44,13 @@ export type QueryReadImageArgs = {
 
 export type File = {
   __typename?: 'File';
-  filename: Scalars['String'];
+  id: Scalars['ID'];
   path: Scalars['String'];
-  content?: Maybe<Scalars['String']>;
-  excerpt?: Maybe<Scalars['String']>;
-  sha: Scalars['String'];
   type: Node_Type;
+  sha: Scalars['String'];
   url: Scalars['String'];
+  filename?: Maybe<Scalars['String']>;
+  content?: Maybe<Scalars['String']>;
   messages?: Maybe<ModelMessageConnection>;
   readAt?: Maybe<Scalars['String']>;
 };
@@ -88,19 +88,6 @@ export type Location = {
 export type Point = {
   __typename?: 'Point';
   offset?: Maybe<Scalars['Int']>;
-};
-
-export type ModelNodeConnection = {
-  __typename?: 'ModelNodeConnection';
-  nodes: Array<GitNode>;
-};
-
-export type GitNode = {
-  __typename?: 'GitNode';
-  path: Scalars['String'];
-  type: Node_Type;
-  sha: Scalars['String'];
-  url: Scalars['String'];
 };
 
 export type Repo = {
@@ -240,9 +227,15 @@ export type MessagesFragment = (
   )> }
 );
 
+export type TreeFileFragment = (
+  { __typename?: 'File' }
+  & Pick<File, 'id' | 'path' | 'type' | 'url' | 'sha'>
+);
+
 export type FileFragment = (
   { __typename?: 'File' }
-  & Pick<File, 'filename' | 'path' | 'content' | 'excerpt' | 'sha' | 'type' | 'url' | 'readAt'>
+  & Pick<File, 'filename' | 'content' | 'readAt'>
+  & TreeFileFragment
 );
 
 export type RepoFragment = (
@@ -253,11 +246,6 @@ export type RepoFragment = (
 export type GithubUserFragment = (
   { __typename?: 'GithubUser' }
   & Pick<GithubUser, 'id' | 'login' | 'avatar_url' | 'html_url' | 'name'>
-);
-
-export type GitNodeFragment = (
-  { __typename?: 'GitNode' }
-  & Pick<GitNode, 'path' | 'type' | 'sha' | 'url'>
 );
 
 export type FileWithMessagesFragment = (
@@ -337,18 +325,15 @@ export type ReadFileQuery = (
   )> }
 );
 
-export type ReadNodesQueryVariables = Exact<{ [key: string]: never; }>;
+export type ReadFilesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ReadNodesQuery = (
+export type ReadFilesQuery = (
   { __typename?: 'Query' }
-  & { readNodes: (
-    { __typename?: 'ModelNodeConnection' }
-    & { nodes: Array<(
-      { __typename?: 'GitNode' }
-      & GitNodeFragment
-    )> }
-  ) }
+  & { readFiles?: Maybe<Array<(
+    { __typename?: 'File' }
+    & TreeFileFragment
+  )>> }
 );
 
 export type UpdateFileMutationVariables = Exact<{

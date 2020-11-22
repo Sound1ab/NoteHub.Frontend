@@ -1,11 +1,10 @@
 import React from 'react'
 
 import { useFileTree } from '../../../../../../../hooks'
-import {
-  folderNode,
-  resolvers,
-} from '../../../../../../../schema/mockResolvers'
+import { files, resolvers } from '../../../../../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../../../../../test-utils'
+import { createNodes } from '../../../../../../../utils'
+import { Node_Type } from '../../../../../../apollo'
 import { MockProvider } from '../../../../../../providers'
 import { Folder } from './Folder'
 
@@ -19,6 +18,10 @@ describe('Folder', () => {
   const activePath = 'MOCK_PATH'
 
   const childNodes = <div>MOCK CHILDREN</div>
+
+  const nodes = createNodes(files, new Set())
+
+  const [folderNode] = nodes.filter((node) => node.type === Node_Type.Folder)
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -102,7 +105,7 @@ describe('Folder', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('MOCK_FOLDER actions'))
+    await fireEvent.click(getByLabelText(`${folderNode.name} actions`))
 
     expect(getByText('Create file')).toBeInTheDocument()
   })
@@ -114,7 +117,7 @@ describe('Folder', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('MOCK_FOLDER actions'))
+    await fireEvent.click(getByLabelText(`${folderNode.name} actions`))
 
     await fireEvent.click(getByLabelText('Create file'))
 

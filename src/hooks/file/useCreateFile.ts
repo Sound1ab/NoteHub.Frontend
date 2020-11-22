@@ -5,8 +5,8 @@ import {
   CreateFileMutation,
   CreateFileMutationVariables,
   Node_Type,
-  ReadNodesQuery,
-  ReadNodesQueryVariables,
+  ReadFilesQuery,
+  ReadFilesQueryVariables,
 } from '../../components/apollo'
 import { FileFragment } from '../../fragments'
 import { extractFilename } from '../../utils'
@@ -40,23 +40,17 @@ export function useCreateFile(): [
         throw new Error('Create file: No file returned')
       }
 
-      const result = cache.readQuery<ReadNodesQuery, ReadNodesQueryVariables>({
+      const result = cache.readQuery<ReadFilesQuery, ReadFilesQueryVariables>({
         query: ReadNodesDocument,
       })
 
-      if (!result?.readNodes.nodes) {
+      if (!result?.readFiles) {
         throw new Error('Create file: No nodes found in cache result')
       }
 
-      cache.writeQuery<ReadNodesQuery, ReadNodesQueryVariables>({
+      cache.writeQuery<ReadFilesQuery, ReadFilesQueryVariables>({
         data: {
-          readNodes: {
-            ...result.readNodes,
-            nodes: [
-              ...result.readNodes.nodes,
-              { ...file, __typename: 'GitNode' },
-            ],
-          },
+          readFiles: [...result.readFiles, { ...file, __typename: 'File' }],
         },
         query: ReadNodesDocument,
       })
@@ -84,10 +78,10 @@ export function useCreateFile(): [
         __typename: 'Mutation',
         createFile: {
           __typename: 'File',
+          id: 'optimistic',
           filename,
           path,
           content: `# ${filename}`,
-          excerpt: null,
           sha: 'optimistic',
           type: Node_Type.File,
           url: 'optimistic',

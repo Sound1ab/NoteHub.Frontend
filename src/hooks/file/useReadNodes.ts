@@ -1,27 +1,25 @@
-import { useQuery, gql } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 
 import {
-  ReadNodesQuery,
-  ReadNodesQueryVariables,
+  ReadFilesQuery,
+  ReadFilesQueryVariables,
 } from '../../components/apollo'
-import { GitNodeFragment } from '../../fragments'
+import { TreeFileFragment } from '../../fragments'
 
 export const ReadNodesDocument = gql`
-  ${GitNodeFragment}
-  query ReadNodes {
-    readNodes {
-      nodes {
-        ...gitNode
-      }
+  ${TreeFileFragment}
+  query ReadFiles {
+    readFiles {
+      ...treeFile
     }
   }
 `
 
 export function useReadNodes() {
   const { data, loading, error } = useQuery<
-    ReadNodesQuery,
-    ReadNodesQueryVariables
+    ReadFilesQuery,
+    ReadFilesQueryVariables
   >(ReadNodesDocument)
 
-  return { gitNodes: data?.readNodes.nodes, loading, error }
+  return { gitNodes: data?.readFiles, loading, error }
 }

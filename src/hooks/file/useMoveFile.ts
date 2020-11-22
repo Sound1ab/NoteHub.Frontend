@@ -5,8 +5,8 @@ import {
   MoveFileMutation,
   MoveFileMutationVariables,
   Node_Type,
-  ReadNodesQuery,
-  ReadNodesQueryVariables,
+  ReadFilesQuery,
+  ReadFilesQueryVariables,
 } from '../../components/apollo'
 import { localState } from '../../components/providers/ApolloProvider/cache'
 import { FileFragment } from '../../fragments'
@@ -44,27 +44,24 @@ export function useMoveFile(): [
         throw new Error('Move file: No file returned')
       }
 
-      const result = cache.readQuery<ReadNodesQuery, ReadNodesQueryVariables>({
+      const result = cache.readQuery<ReadFilesQuery, ReadFilesQueryVariables>({
         query: ReadNodesDocument,
       })
 
-      if (!result?.readNodes.nodes) {
+      if (!result?.readFiles) {
         throw new Error('Create file: No nodes found in cache result')
       }
 
-      cache.writeQuery<ReadNodesQuery, ReadNodesQueryVariables>({
+      cache.writeQuery<ReadFilesQuery, ReadFilesQueryVariables>({
         data: {
-          readNodes: {
-            ...result.readNodes,
-            nodes: result.readNodes.nodes.map((node) => {
-              return node.path === oldPath
-                ? {
-                    ...movedFile,
-                    __typename: 'GitNode',
-                  }
-                : node
-            }),
-          },
+          readFiles: result.readFiles.map((node) => {
+            return node.path === oldPath
+              ? {
+                  ...movedFile,
+                  __typename: 'File',
+                }
+              : node
+          }),
         },
         query: ReadNodesDocument,
       })
@@ -100,10 +97,10 @@ export function useMoveFile(): [
         __typename: 'Mutation',
         moveFile: {
           __typename: 'File',
+          id: 'optimistic',
           filename,
           path: newPath,
           content: 'optimistic',
-          excerpt: null,
           sha: 'optimistic',
           type: Node_Type.File,
           url: 'optimistic',

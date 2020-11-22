@@ -1,9 +1,9 @@
 import {
+  ApolloCache,
   DataProxy,
   MutationResult,
   gql,
   useMutation,
-  ApolloCache,
 } from '@apollo/client'
 import { ExecutionResult } from 'graphql'
 
@@ -11,8 +11,8 @@ import {
   DeleteFileMutation,
   DeleteFileMutationVariables,
   Node_Type,
-  ReadNodesQuery,
-  ReadNodesQueryVariables,
+  ReadFilesQuery,
+  ReadFilesQueryVariables,
 } from '../../components/apollo'
 import { localState } from '../../components/providers/ApolloProvider/cache'
 import { FileFragment } from '../../fragments'
@@ -35,22 +35,19 @@ function removeNode(cache: DataProxy, data?: DeleteFileMutation | null) {
     throw new Error('Delete file: no file returned')
   }
 
-  const result = cache.readQuery<ReadNodesQuery, ReadNodesQueryVariables>({
+  const result = cache.readQuery<ReadFilesQuery, ReadFilesQueryVariables>({
     query: ReadNodesDocument,
   })
 
-  if (!result?.readNodes.nodes) {
+  if (!result?.readFiles) {
     throw new Error('Delete file: No nodes found')
   }
 
-  cache.writeQuery<ReadNodesQuery, ReadNodesQueryVariables>({
+  cache.writeQuery<ReadFilesQuery, ReadFilesQueryVariables>({
     data: {
-      readNodes: {
-        ...result.readNodes,
-        nodes: result.readNodes.nodes.filter(
-          (gitNode) => gitNode.path !== file.path
-        ),
-      },
+      readFiles: result.readFiles.filter(
+        (cachedFiles) => cachedFiles.path !== file.path
+      ),
     },
     query: ReadNodesDocument,
   })
@@ -107,10 +104,10 @@ export function useDeleteFile(): [
         __typename: 'Mutation',
         deleteFile: {
           __typename: 'File',
+          id: 'optimistic',
           filename,
           path,
           content: '',
-          excerpt: null,
           sha: 'optimistic',
           type: Node_Type.File,
           url: 'optimistic',

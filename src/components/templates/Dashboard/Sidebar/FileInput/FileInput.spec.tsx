@@ -4,8 +4,10 @@ import React from 'react'
 
 import { useCreateFile, useFileTree } from '../../../../../hooks'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
-import { folderNode } from '../../../../../schema/mockResolvers'
+import { files } from '../../../../../schema/mockResolvers'
 import { cleanup, fireEvent, render, waitFor } from '../../../../../test-utils'
+import { createNodes } from '../../../../../utils'
+import { Node_Type } from '../../../../apollo'
 import { FileInput } from './FileInput'
 
 jest.mock('../../../../../hooks/file/useCreateFile')
@@ -19,6 +21,10 @@ describe('FileInput', () => {
   const createNewFile = jest.fn()
   const moveFile = jest.fn()
   const onToggle = jest.fn()
+
+  const nodes = createNodes(files, new Set())
+
+  const [folderNode] = nodes.filter((node) => node.type === Node_Type.Folder)
 
   beforeEach(() => {
     jest.resetAllMocks()

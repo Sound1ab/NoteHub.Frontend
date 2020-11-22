@@ -1,11 +1,10 @@
 import React from 'react'
 
 import { useDeleteFile, useFileTree } from '../../../../../../../hooks'
-import {
-  fileNodeOne,
-  resolvers,
-} from '../../../../../../../schema/mockResolvers'
+import { files, resolvers } from '../../../../../../../schema/mockResolvers'
 import { fireEvent, render, waitFor } from '../../../../../../../test-utils'
+import { createNodes } from '../../../../../../../utils'
+import { Node_Type } from '../../../../../../apollo'
 import { MockProvider } from '../../../../../../providers'
 import { localState } from '../../../../../../providers/ApolloProvider/cache'
 import { File } from './File'
@@ -21,6 +20,10 @@ describe('File', () => {
   const activePath = 'MOCK_ACTIVE_PATH'
 
   const currentPathVar = jest.spyOn(localState, 'currentPathVar')
+
+  const nodes = createNodes(files, new Set())
+
+  const [fileNode] = nodes.filter((node) => node.type === Node_Type.File)
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -41,37 +44,37 @@ describe('File', () => {
   it('should update the currentPath with clicked node path', async () => {
     const { getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <File node={fileNodeOne} level={1} />
+        <File node={fileNode} level={1} />
       </MockProvider>
     )
 
-    await fireEvent.click(getByText('MOCK_FILE_PATH_1.md'))
+    await fireEvent.click(getByText(fileNode.name))
 
-    expect(currentPathVar).toBeCalledWith(fileNodeOne.path)
+    expect(currentPathVar).toBeCalledWith(fileNode.path)
   })
 
   it('should call onClick with path', async () => {
     const { getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <File node={fileNodeOne} level={1} />
+        <File node={fileNode} level={1} />
       </MockProvider>
     )
 
-    await fireEvent.click(getByText('MOCK_FILE_PATH_1.md'))
+    await fireEvent.click(getByText(fileNode.name))
 
-    expect(onClick).toBeCalledWith(fileNodeOne.path)
+    expect(onClick).toBeCalledWith(fileNode.path)
   })
 
   it('should show and hide inline file input when renaming file', async () => {
     const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <div aria-label="outside">
-          <File node={fileNodeOne} level={1} />
+          <File node={fileNode} level={1} />
         </div>
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
 
     await fireEvent.click(getByLabelText('Rename'))
 
@@ -82,28 +85,28 @@ describe('File', () => {
     const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <div aria-label="outside">
-          <File node={fileNodeOne} level={1} />
+          <File node={fileNode} level={1} />
         </div>
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
 
     await fireEvent.click(getByLabelText('Rename'))
 
     const input = getByLabelText('Input file name')
 
-    expect((input as HTMLInputElement).value).toEqual('MOCK_FILE_PATH_1')
+    expect((input as HTMLInputElement).value).toEqual('MOCK_FILE_PATH_3')
   })
 
   it('should open file dropdown menu', async () => {
     const { getByLabelText, getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <File node={fileNodeOne} level={1} />
+        <File node={fileNode} level={1} />
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
 
     expect(getByText('Delete file')).toBeInTheDocument()
   })
@@ -111,11 +114,11 @@ describe('File', () => {
   it('should call deleteFile when selected from file dropdown', async () => {
     const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
-        <File node={fileNodeOne} level={1} />
+        <File node={fileNode} level={1} />
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
 
     await fireEvent.click(getByLabelText('Delete file'))
 
@@ -129,12 +132,12 @@ describe('File', () => {
 
     const { getByLabelText, getByText } = await render(
       <MockProvider>
-        <File node={fileNodeOne} level={1} />
+        <File node={fileNode} level={1} />
       </MockProvider>,
       { enableToast: true }
     )
 
-    await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
 
     await fireEvent.click(getByLabelText('Delete file'))
 

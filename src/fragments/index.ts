@@ -16,15 +16,22 @@ export const MessagesFragment = gql`
   }
 `
 
-export const FileFragment = gql`
-  fragment file on File {
-    filename
+export const TreeFileFragment = gql`
+  fragment treeFile on File {
+    id
     path
-    content
-    excerpt
-    sha
     type
     url
+    sha
+  }
+`
+
+export const FileFragment = gql`
+  ${TreeFileFragment}
+  fragment file on File {
+    ...treeFile
+    filename
+    content
     readAt
   }
 `
@@ -44,15 +51,6 @@ export const GithubUserFragment = gql`
     avatar_url
     html_url
     name
-  }
-`
-
-export const GitNodeFragment = gql`
-  fragment gitNode on GitNode {
-    path
-    type
-    sha
-    url
   }
 `
 

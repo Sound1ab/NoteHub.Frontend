@@ -52,6 +52,9 @@ export const cacheOptions = {
             return localState.currentThemeVar() === COLOR_MODE.DARK
           },
         },
+        readFiles: {
+          merge: false,
+        },
       },
     },
     // File doesn't have an ID so apollo doesn't know how to merge new

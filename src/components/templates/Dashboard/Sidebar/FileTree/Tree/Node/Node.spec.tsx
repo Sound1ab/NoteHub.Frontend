@@ -1,10 +1,9 @@
 import React from 'react'
 
-import {
-  fileNodeOne,
-  resolvers,
-} from '../../../../../../../schema/mockResolvers'
+import { files, resolvers } from '../../../../../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../../../../../test-utils'
+import { createNodes } from '../../../../../../../utils'
+import { Node_Type } from '../../../../../../apollo'
 import { MockProvider } from '../../../../../../providers'
 import { Node } from './Node'
 
@@ -26,11 +25,15 @@ describe('Node', () => {
     jest.resetAllMocks()
   })
 
+  const nodes = createNodes(files, new Set())
+
+  const [fileNode] = nodes.filter((node) => node.type === Node_Type.File)
+
   it('should call onClick callback', async () => {
     const { getByText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Node
-          node={fileNodeOne}
+          node={fileNode}
           level={1}
           dropdownItems={dropdownItems}
           onClick={onClick}
@@ -39,7 +42,7 @@ describe('Node', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByText('MOCK_FILE_PATH_1.md'))
+    await fireEvent.click(getByText(fileNode.name))
 
     expect(onClick).toBeCalled()
   })
@@ -48,7 +51,7 @@ describe('Node', () => {
     const { getByLabelText } = await render(
       <MockProvider mockResolvers={resolvers}>
         <Node
-          node={fileNodeOne}
+          node={fileNode}
           level={1}
           dropdownItems={dropdownItems}
           onClick={onClick}
@@ -57,7 +60,7 @@ describe('Node', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
 
     expect(getByLabelText('Create file')).toBeInTheDocument()
   })

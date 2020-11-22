@@ -3,8 +3,10 @@ import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 
 import { useReadFile } from '../../../../hooks'
-import { fileGitNodeTwo, resolvers } from '../../../../schema/mockResolvers'
+import { files, resolvers } from '../../../../schema/mockResolvers'
 import { cleanup, render } from '../../../../test-utils'
+import { createNodes } from '../../../../utils'
+import { Node_Type } from '../../../apollo'
 import { MockProvider } from '../../../providers'
 import { localState } from '../../../providers/ApolloProvider/cache'
 import { Editor } from './Editor'
@@ -37,6 +39,10 @@ describe('Editor', () => {
     }
   }
 
+  const nodes = createNodes(files, new Set())
+
+  const [fileNode] = nodes.filter((node) => node.type === Node_Type.File)
+
   beforeEach(() => {
     jest.restoreAllMocks()
   })
@@ -48,7 +54,7 @@ describe('Editor', () => {
       <MockProvider
         mockResolvers={resolvers}
         localData={{
-          currentPath: () => localState.currentPathVar(fileGitNodeTwo.path),
+          currentPath: () => localState.currentPathVar(fileNode.path),
         }}
       >
         <Editor />
@@ -65,7 +71,7 @@ describe('Editor', () => {
       <MockProvider
         mockResolvers={resolvers}
         localData={{
-          currentPath: () => localState.currentPathVar(fileGitNodeTwo.path),
+          currentPath: () => localState.currentPathVar(fileNode.path),
         }}
       >
         <Editor />

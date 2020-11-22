@@ -1,4 +1,4 @@
-import { GitNode, Node_Type } from '../components/apollo'
+import { Node_Type, TreeFileFragment } from '../components/apollo'
 import { ITreeNode } from '../types'
 import { isFile } from './isFile'
 
@@ -53,7 +53,7 @@ export function createNode(
 interface IInsertNodes {
   path: string[]
   parentNode: ITreeNode
-  gitNode: GitNode
+  gitNode: TreeFileFragment
   currentPath?: string
   listOfToggledPaths: Set<string>
 }
@@ -131,7 +131,7 @@ export function insertNodeIntoParentNode({
 }
 
 export function createNodes(
-  gitNodes: GitNode[],
+  gitNodes: TreeFileFragment[],
   listOfToggledPaths: Set<string>
 ) {
   return gitNodes.reduce<ITreeNode[]>((acc, gitNode) => {

@@ -21,7 +21,7 @@ export function useReadFile() {
     ReadFileQuery,
     ReadFileQueryVariables
   >(ReadFileDocument, {
-    skip: !isFile(currentPath),
+    skip: !currentPath || !isFile(currentPath),
     variables: {
       path: currentPath,
     },

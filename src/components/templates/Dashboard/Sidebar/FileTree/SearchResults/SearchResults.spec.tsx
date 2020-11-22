@@ -46,7 +46,7 @@ describe('SearchResults', () => {
           ...resolvers,
           Query: () => ({
             ...resolvers.Query(),
-            readNodes: () => ({ nodes: [] }),
+            readFiles: () => [],
           }),
         }}
       >
