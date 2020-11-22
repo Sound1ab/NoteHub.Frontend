@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import { useReadNodes, useReadSearch } from '../../../../../hooks'
+import { useReadFiles, useReadSearch } from '../../../../../hooks'
 import { createNodes } from '../../../../../utils'
 import { List } from '../../../../atoms'
 import { FileInput } from '../FileInput/FileInput'
@@ -16,7 +16,7 @@ interface IFileTree {
 
 export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const search = useReadSearch()
-  const { gitNodes, loading } = useReadNodes()
+  const { files, loading } = useReadFiles()
   const { listOfToggledPaths } = useContext(FileTreeContext)
 
   if (loading) {
@@ -27,8 +27,8 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
     <SearchResults />
   ) : (
     <>
-      {gitNodes &&
-        createNodes(gitNodes, listOfToggledPaths).map((node) => (
+      {files &&
+        createNodes(files, listOfToggledPaths).map((node) => (
           <List key={node.name}>
             <Tree key={node.name} node={node} />
           </List>

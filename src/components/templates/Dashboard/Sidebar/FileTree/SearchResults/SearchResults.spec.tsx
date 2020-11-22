@@ -26,7 +26,6 @@ describe('SearchResults', () => {
     )
 
     expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
-    expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
   })
 
   it('should not display folders', async () => {

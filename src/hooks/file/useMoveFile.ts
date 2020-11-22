@@ -11,7 +11,7 @@ import {
 import { localState } from '../../components/providers/ApolloProvider/cache'
 import { FileFragment } from '../../fragments'
 import { extractFilename } from '../../utils'
-import { ReadNodesDocument, useReadCurrentPath } from '..'
+import { ReadFilesDocument, useReadCurrentPath } from '..'
 
 export const MoveFileDocument = gql`
   ${FileFragment}
@@ -45,7 +45,7 @@ export function useMoveFile(): [
       }
 
       const result = cache.readQuery<ReadFilesQuery, ReadFilesQueryVariables>({
-        query: ReadNodesDocument,
+        query: ReadFilesDocument,
       })
 
       if (!result?.readFiles) {
@@ -63,7 +63,7 @@ export function useMoveFile(): [
               : node
           }),
         },
-        query: ReadNodesDocument,
+        query: ReadFilesDocument,
       })
 
       // If the file is currently selected, make sure to update the cache

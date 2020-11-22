@@ -1,21 +1,21 @@
 import Fuse from 'fuse.js'
 import React from 'react'
 
-import { useReadNodes, useReadSearch } from '../../../../../../hooks'
+import { useReadFiles, useReadSearch } from '../../../../../../hooks'
 import { createNode, extractFilename } from '../../../../../../utils'
 import { Node_Type } from '../../../../../apollo'
 import { File } from '../Tree/File/File'
 
 export function SearchResults() {
   const search = useReadSearch()
-  const { gitNodes } = useReadNodes()
+  const { files } = useReadFiles()
 
-  if (!gitNodes) {
+  if (!files) {
     return null
   }
 
   const fuse = new Fuse(
-    gitNodes
+    files
       .filter(({ type }) => type === Node_Type.File)
       .map(({ type, path }) => {
         const slug = extractFilename(path)

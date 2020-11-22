@@ -6,7 +6,7 @@ import {
 } from '../../components/apollo'
 import { TreeFileFragment } from '../../fragments'
 
-export const ReadNodesDocument = gql`
+export const ReadFilesDocument = gql`
   ${TreeFileFragment}
   query ReadFiles {
     readFiles {
@@ -15,11 +15,11 @@ export const ReadNodesDocument = gql`
   }
 `
 
-export function useReadNodes() {
+export function useReadFiles() {
   const { data, loading, error } = useQuery<
     ReadFilesQuery,
     ReadFilesQueryVariables
-  >(ReadNodesDocument)
+  >(ReadFilesDocument)
 
-  return { gitNodes: data?.readFiles, loading, error }
+  return { files: data?.readFiles, loading, error }
 }

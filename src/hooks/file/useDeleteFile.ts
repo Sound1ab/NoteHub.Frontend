@@ -17,7 +17,7 @@ import {
 import { localState } from '../../components/providers/ApolloProvider/cache'
 import { FileFragment } from '../../fragments'
 import { extractFilename } from '../../utils'
-import { ReadNodesDocument } from '..'
+import { ReadFilesDocument } from '..'
 
 export const DeleteFileDocument = gql`
   ${FileFragment}
@@ -36,7 +36,7 @@ function removeNode(cache: DataProxy, data?: DeleteFileMutation | null) {
   }
 
   const result = cache.readQuery<ReadFilesQuery, ReadFilesQueryVariables>({
-    query: ReadNodesDocument,
+    query: ReadFilesDocument,
   })
 
   if (!result?.readFiles) {
@@ -49,7 +49,7 @@ function removeNode(cache: DataProxy, data?: DeleteFileMutation | null) {
         (cachedFiles) => cachedFiles.path !== file.path
       ),
     },
-    query: ReadNodesDocument,
+    query: ReadFilesDocument,
   })
 }
 

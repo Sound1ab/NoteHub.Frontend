@@ -10,7 +10,7 @@ import {
 } from '../../components/apollo'
 import { FileFragment } from '../../fragments'
 import { extractFilename } from '../../utils'
-import { ReadNodesDocument } from './useReadNodes'
+import { ReadFilesDocument } from './useReadFiles'
 
 export const CreateFileDocument = gql`
   ${FileFragment}
@@ -41,7 +41,7 @@ export function useCreateFile(): [
       }
 
       const result = cache.readQuery<ReadFilesQuery, ReadFilesQueryVariables>({
-        query: ReadNodesDocument,
+        query: ReadFilesDocument,
       })
 
       if (!result?.readFiles) {
@@ -52,7 +52,7 @@ export function useCreateFile(): [
         data: {
           readFiles: [...result.readFiles, { ...file, __typename: 'File' }],
         },
-        query: ReadNodesDocument,
+        query: ReadFilesDocument,
       })
     },
   })
