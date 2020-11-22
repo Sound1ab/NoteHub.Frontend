@@ -24,7 +24,7 @@ describe('FileInput', () => {
 
   const nodes = createNodes(files, new Set())
 
-  const [folderNode] = nodes.filter((node) => node.type === Node_Type.Folder)
+  const [fileNode] = nodes.filter((node) => node.type === Node_Type.File)
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -43,12 +43,11 @@ describe('FileInput', () => {
   })
 
   const newFileName = 'Mock file Na/me'
-  const path = folderNode.path
 
   describe('when creating a file', () => {
     it('should call createNewfile with node path', async () => {
       const { getByLabelText } = await render(
-        <FileInput path={path} onClickOutside={jest.fn()} action="create" />
+        <FileInput node={fileNode} onClickOutside={jest.fn()} action="create" />
       )
 
       const input = getByLabelText('Input file name')
@@ -63,14 +62,14 @@ describe('FileInput', () => {
 
       await fireEvent.submit(form)
 
-      expect(createNewFile).toBeCalledWith(`${path}/${newFileName}.md`)
+      expect(createNewFile).toBeCalledWith(`${fileNode.path}/${newFileName}.md`)
     })
 
     it('should call onToggle with folder paths', async () => {
       const nestedFilePath = 'mock_folder_1/mock_folder_2/mock_file'
 
       const { getByLabelText } = await render(
-        <FileInput path={path} onClickOutside={jest.fn()} action="create" />
+        <FileInput node={fileNode} onClickOutside={jest.fn()} action="create" />
       )
 
       const input = getByLabelText('Input file name')
@@ -85,9 +84,9 @@ describe('FileInput', () => {
 
       await fireEvent.submit(form)
 
-      expect(onToggle).toBeCalledWith(`${path}/mock_folder_1`, true)
+      expect(onToggle).toBeCalledWith(`${fileNode.path}/mock_folder_1`, true)
       expect(onToggle).toBeCalledWith(
-        `${path}/mock_folder_1/mock_folder_2`,
+        `${fileNode.path}/mock_folder_1/mock_folder_2`,
         true
       )
     })
@@ -99,7 +98,11 @@ describe('FileInput', () => {
       ])
 
       const { getByLabelText, getByText } = await render(
-        <FileInput path={path} onClickOutside={jest.fn()} action="create" />,
+        <FileInput
+          node={fileNode}
+          onClickOutside={jest.fn()}
+          action="create"
+        />,
         { enableToast: true }
       )
 
@@ -126,11 +129,7 @@ describe('FileInput', () => {
   describe('when renaming a file', () => {
     it('should call moveFile with new node path and old node path', async () => {
       const { getByLabelText } = await render(
-        <FileInput
-          path="MOCK_FOLDER_PATH/MOCK_FILE_PATH.md"
-          onClickOutside={jest.fn()}
-          action="rename"
-        />
+        <FileInput node={fileNode} onClickOutside={jest.fn()} action="rename" />
       )
 
       const input = getByLabelText('Input file name')
@@ -145,10 +144,7 @@ describe('FileInput', () => {
 
       await fireEvent.submit(form)
 
-      expect(moveFile).toBeCalledWith(
-        'MOCK_FOLDER_PATH/NEW_MOCK_FILE_PATH.md',
-        'MOCK_FOLDER_PATH/MOCK_FILE_PATH.md'
-      )
+      expect(moveFile).toBeCalledWith('NEW_MOCK_FILE_PATH.md', fileNode)
     })
 
     it('should display error message if rename file fails', async () => {
@@ -159,7 +155,7 @@ describe('FileInput', () => {
 
       const { getByLabelText, getByText } = await render(
         <FileInput
-          path="MOCK_FOLDER_PATH/MOCK_FILE_PATH.md"
+          node={fileNode}
           onClickOutside={jest.fn()}
           action="rename"
         />,

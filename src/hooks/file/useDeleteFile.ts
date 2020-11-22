@@ -1,23 +1,15 @@
-import {
-  ApolloCache,
-  DataProxy,
-  MutationResult,
-  gql,
-  useMutation,
-} from '@apollo/client'
+import { MutationResult, gql, useMutation } from '@apollo/client'
+import { StoreValue } from '@apollo/client/utilities/graphql/storeUtils'
 import { ExecutionResult } from 'graphql'
 
 import {
   DeleteFileMutation,
   DeleteFileMutationVariables,
-  Node_Type,
-  ReadFilesQuery,
-  ReadFilesQueryVariables,
+  File,
 } from '../../components/apollo'
 import { localState } from '../../components/providers/ApolloProvider/cache'
 import { FileFragment } from '../../fragments'
-import { extractFilename } from '../../utils'
-import { ReadFilesDocument } from '..'
+import { ITreeNode } from '../../types'
 
 export const DeleteFileDocument = gql`
   ${FileFragment}
@@ -28,50 +20,8 @@ export const DeleteFileDocument = gql`
   }
 `
 
-function removeNode(cache: DataProxy, data?: DeleteFileMutation | null) {
-  const file = data?.deleteFile
-
-  if (!file) {
-    throw new Error('Delete file: no file returned')
-  }
-
-  const result = cache.readQuery<ReadFilesQuery, ReadFilesQueryVariables>({
-    query: ReadFilesDocument,
-  })
-
-  if (!result?.readFiles) {
-    throw new Error('Delete file: No nodes found')
-  }
-
-  cache.writeQuery<ReadFilesQuery, ReadFilesQueryVariables>({
-    data: {
-      readFiles: result.readFiles.filter(
-        (cachedFiles) => cachedFiles.path !== file.path
-      ),
-    },
-    query: ReadFilesDocument,
-  })
-}
-
-function removeFile(
-  cache: ApolloCache<unknown>,
-  data?: DeleteFileMutation | null
-) {
-  const file = data?.deleteFile
-
-  if (!file) {
-    throw new Error('Delete file: no file returned')
-  }
-
-  // @ts-ignore
-  Object.keys(cache.data.data).forEach(
-    // @ts-ignore
-    (key) => key.match(/^\$ROOT_QUERY.readFile/) && cache.data.delete(key)
-  )
-}
-
 export function useDeleteFile(): [
-  (path?: string) => Promise<ExecutionResult<DeleteFileMutation>>,
+  (file?: ITreeNode) => Promise<ExecutionResult<DeleteFileMutation>>,
   MutationResult<DeleteFileMutation>
 ] {
   const [mutation, mutationResult] = useMutation<
@@ -79,18 +29,38 @@ export function useDeleteFile(): [
     DeleteFileMutationVariables
   >(DeleteFileDocument, {
     update: (cache, { data }) => {
-      removeNode(cache, data)
-      removeFile(cache, data)
+      cache.modify({
+        fields: {
+          readFiles(existingFileRefs = []) {
+            const file = data && data.deleteFile
+
+            if (!file) {
+              return existingFileRefs
+            }
+
+            const id = cache.identify(file)
+
+            if (id) {
+              cache.evict({ id })
+            }
+
+            return existingFileRefs.filter(
+              (cachedFiles: File & { [storeFieldName: string]: StoreValue }) =>
+                cachedFiles.path !== file.path
+            )
+          },
+        },
+      })
     },
     errorPolicy: 'all',
   })
 
-  async function deleteFile(path?: string) {
-    if (!path) {
+  async function deleteFile(file?: ITreeNode) {
+    if (!file?.path) {
       throw new Error('Delete file: no path provided')
     }
 
-    const filename = extractFilename(path)
+    const { path, type, name, id } = file
 
     localState.currentPathVar('')
 
@@ -104,12 +74,12 @@ export function useDeleteFile(): [
         __typename: 'Mutation',
         deleteFile: {
           __typename: 'File',
-          id: 'optimistic',
-          filename,
+          id,
+          filename: name,
           path,
           content: '',
           sha: 'optimistic',
-          type: Node_Type.File,
+          type,
           url: 'optimistic',
         },
       },

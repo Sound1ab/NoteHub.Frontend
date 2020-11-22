@@ -2,7 +2,7 @@ import Fuse from 'fuse.js'
 import React from 'react'
 
 import { useReadFiles, useReadSearch } from '../../../../../../hooks'
-import { createNode, extractFilename } from '../../../../../../utils'
+import { extractFilename } from '../../../../../../utils'
 import { Node_Type } from '../../../../../apollo'
 import { File } from '../Tree/File/File'
 
@@ -37,9 +37,19 @@ export function SearchResults() {
   return (
     <>
       {results.map(({ item: { path, type, slug } }) => {
-        const node = createNode(type, slug, path, new Set())
-
-        return <File key={path} node={node} level={-1} />
+        return (
+          <File
+            key={path}
+            node={{
+              id: path,
+              name: slug,
+              type,
+              path,
+              isOptimistic: false,
+            }}
+            level={-1}
+          />
+        )
       })}
     </>
   )

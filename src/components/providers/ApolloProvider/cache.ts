@@ -1,4 +1,4 @@
-import { InMemoryCache, makeVar } from '@apollo/client'
+import { makeVar } from '@apollo/client'
 
 import { COLOR_MODE } from '../../../enums'
 
@@ -53,17 +53,6 @@ export const cacheOptions = {
           },
         },
         readFiles: {
-          merge: false,
-        },
-      },
-    },
-    // File doesn't have an ID so apollo doesn't know how to merge new
-    // request. Use 'path' as the ID and make sure to always overwrite
-    // incoming messages
-    File: {
-      keyFields: ['path'],
-      fields: {
-        messages: {
           merge: false,
         },
       },

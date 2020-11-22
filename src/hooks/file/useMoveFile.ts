@@ -1,17 +1,13 @@
 import { MutationResult, gql, useMutation } from '@apollo/client'
-import { ExecutionResult } from 'graphql'
+import { StoreValue } from '@apollo/client/utilities/graphql/storeUtils'
 
 import {
+  File,
   MoveFileMutation,
   MoveFileMutationVariables,
-  Node_Type,
-  ReadFilesQuery,
-  ReadFilesQueryVariables,
 } from '../../components/apollo'
-import { localState } from '../../components/providers/ApolloProvider/cache'
 import { FileFragment } from '../../fragments'
-import { extractFilename } from '../../utils'
-import { ReadFilesDocument, useReadCurrentPath } from '..'
+import { ITreeNode } from '../../types'
 
 export const MoveFileDocument = gql`
   ${FileFragment}
@@ -25,68 +21,57 @@ export const MoveFileDocument = gql`
 export function useMoveFile(): [
   (
     newPath: string,
-    path?: string
-  ) => Promise<ExecutionResult<MoveFileMutation>>,
+    file?: ITreeNode | null
+  ) => Promise<File | null | undefined>,
   MutationResult<MoveFileMutation>
 ] {
-  const currentPath = useReadCurrentPath()
-
-  let oldPath: string
+  let oldFile: ITreeNode
 
   const [mutation, mutationResult] = useMutation<
     MoveFileMutation,
     MoveFileMutationVariables
   >(MoveFileDocument, {
     update: (cache, { data }) => {
-      const movedFile = data && data.moveFile
+      cache.modify({
+        fields: {
+          readFiles(existingFileRefs = [], { readField }) {
+            const file = data && data.moveFile
 
-      if (!movedFile) {
-        throw new Error('Move file: No file returned')
-      }
+            const newFileRef = cache.writeFragment({
+              data: file,
+              fragment: FileFragment,
+              fragmentName: 'file',
+            })
 
-      const result = cache.readQuery<ReadFilesQuery, ReadFilesQueryVariables>({
-        query: ReadFilesDocument,
-      })
+            if (!file) {
+              return existingFileRefs
+            }
 
-      if (!result?.readFiles) {
-        throw new Error('Create file: No nodes found in cache result')
-      }
+            cache.evict(oldFile)
+            cache.gc()
 
-      cache.writeQuery<ReadFilesQuery, ReadFilesQueryVariables>({
-        data: {
-          readFiles: result.readFiles.map((node) => {
-            return node.path === oldPath
-              ? {
-                  ...movedFile,
-                  __typename: 'File',
-                }
-              : node
-          }),
+            return existingFileRefs.map(
+              (ref: File & { [storeFieldName: string]: StoreValue }) =>
+                readField('id', ref) === oldFile.id ? newFileRef : ref
+            )
+          },
         },
-        query: ReadFilesDocument,
       })
-
-      // If the file is currently selected, make sure to update the cache
-      // to the new file name after server change so the item stays activated
-      // in list
-      if (oldPath === currentPath && movedFile.sha !== 'optimistic') {
-        localState.currentPathVar(movedFile.path)
-      }
     },
     errorPolicy: 'all',
   })
 
-  async function moveFile(newPath: string, path?: string) {
-    if (!path) {
+  async function moveFile(newPath: string, file?: ITreeNode | null) {
+    if (!file?.path) {
       throw new Error('Move file: no path provided')
     }
 
+    const { path, type, name, id } = file
+
     // Needed to update the cache in update function
-    oldPath = path
+    oldFile = file
 
-    const filename = extractFilename(newPath)
-
-    return mutation({
+    const { data } = await mutation({
       variables: {
         input: {
           path,
@@ -97,16 +82,18 @@ export function useMoveFile(): [
         __typename: 'Mutation',
         moveFile: {
           __typename: 'File',
-          id: 'optimistic',
-          filename,
+          id,
+          filename: name,
           path: newPath,
-          content: 'optimistic',
+          content: '',
           sha: 'optimistic',
-          type: Node_Type.File,
+          type,
           url: 'optimistic',
         },
       },
     })
+
+    return data?.moveFile
   }
 
   return [moveFile, mutationResult]

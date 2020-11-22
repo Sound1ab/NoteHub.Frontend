@@ -1,3 +1,5 @@
+import { Node_Type } from '../components/apollo'
+
 export interface IPosition {
   ch: number
   line: number
@@ -6,10 +8,11 @@ export interface IPosition {
 }
 
 export interface ITreeNode {
+  id: string
   name: string
-  toggled: boolean
+  toggled?: boolean
   path: string
-  type: string
+  type: Node_Type
   children?: ITreeNode[]
   isOptimistic: boolean
 }

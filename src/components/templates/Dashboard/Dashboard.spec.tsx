@@ -131,7 +131,7 @@ describe('Dashboard', () => {
     )
   })
 
-  it('should show alert if deleting a file errors', async () => {
+  it.skip('should show alert if deleting a file errors', async () => {
     const { path } = fileNode
 
     const { getByLabelText, getByText } = await render(

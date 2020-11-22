@@ -15,7 +15,7 @@ interface IFolder {
 
 export function Folder({ level, node, childNodes }: IFolder) {
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
-  const { path, toggled } = node
+  const { path, toggled = false } = node
   const { activePath, onClick, onToggle } = useFileTree()
   const isActive = path === activePath
 
@@ -80,7 +80,7 @@ export function Folder({ level, node, childNodes }: IFolder) {
       </Node>
       {isNewFileOpen && (
         <FileInput
-          path={path}
+          node={node}
           onClickOutside={() => setIsNewFileOpen(false)}
           action="create"
         />

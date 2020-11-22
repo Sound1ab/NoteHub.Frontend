@@ -3,12 +3,14 @@ import { ITreeNode } from '../types'
 import { isFile } from './isFile'
 
 export function createFolderNode(
+  id: string,
   name: string,
   path: string,
   toggled: boolean,
   isOptimistic: boolean
 ) {
   return {
+    id,
     children: [],
     name,
     path,
@@ -19,11 +21,13 @@ export function createFolderNode(
 }
 
 export function createFileNode(
+  id: string,
   name: string,
   path: string,
   isOptimistic: boolean
 ) {
   return {
+    id,
     name,
     path,
     toggled: false,
@@ -37,6 +41,7 @@ function getNode(nodes: ITreeNode[], slug: string) {
 }
 
 export function createNode(
+  id: string,
   type: Node_Type,
   slug: string,
   path: string,
@@ -46,8 +51,14 @@ export function createNode(
   const isFile = type === Node_Type.File
 
   return isFile
-    ? createFileNode(slug, path, isOptimistic)
-    : createFolderNode(slug, path, listOfToggledPaths.has(path), isOptimistic)
+    ? createFileNode(id, slug, path, isOptimistic)
+    : createFolderNode(
+        id,
+        slug,
+        path,
+        listOfToggledPaths.has(path),
+        isOptimistic
+      )
 }
 
 interface IInsertNodes {
@@ -75,6 +86,7 @@ export function insertNodeIntoParentNode({
     // optimistic update. This allows us to determine if the change is in flight
     // in NodeItem
     const node = createNode(
+      gitNode.id,
       gitNode.type,
       slug,
       gitNode.path,
@@ -105,6 +117,7 @@ export function insertNodeIntoParentNode({
     parentNode.children = [
       ...parentNode.children,
       createFolderNode(
+        parentPath,
         slug,
         parentPath,
         listOfToggledPaths.has(parentPath),
@@ -174,6 +187,7 @@ export function createNodes(
       // parent nodes further along the path will be created inside
       // insertNodeIntoParentNode.
       const newParentNode = createNode(
+        rootSlug,
         Node_Type.Folder,
         rootSlug,
         rootSlug,
@@ -192,7 +206,14 @@ export function createNodes(
       // Else we just have a top level file/folder that we need to create.
       return [
         ...acc,
-        createNode(gitNode.type, rootSlug, path, listOfToggledPaths),
+        createNode(
+          gitNode.id,
+          gitNode.type,
+          rootSlug,
+          path,
+          listOfToggledPaths,
+          gitNode.sha === 'optimistic'
+        ),
       ]
     }
   }, [])

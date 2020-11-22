@@ -1,16 +1,14 @@
 import { MutationResult, gql, useMutation } from '@apollo/client'
+import { StoreValue } from '@apollo/client/utilities/graphql/storeUtils'
 import { ExecutionResult } from 'graphql'
 
 import {
   CreateFileMutation,
   CreateFileMutationVariables,
   Node_Type,
-  ReadFilesQuery,
-  ReadFilesQueryVariables,
 } from '../../components/apollo'
 import { FileFragment } from '../../fragments'
 import { extractFilename } from '../../utils'
-import { ReadFilesDocument } from './useReadFiles'
 
 export const CreateFileDocument = gql`
   ${FileFragment}
@@ -34,25 +32,33 @@ export function useCreateFile(): [
   >(CreateFileDocument, {
     errorPolicy: 'all',
     update: (cache, { data }) => {
-      const file = data && data.createFile
+      cache.modify({
+        fields: {
+          readFiles(existingFileRefs = [], { readField }) {
+            const file = data && data.createFile
 
-      if (!file) {
-        throw new Error('Create file: No file returned')
-      }
+            const newFileRef = cache.writeFragment({
+              data: file,
+              fragment: FileFragment,
+              fragmentName: 'file',
+            })
 
-      const result = cache.readQuery<ReadFilesQuery, ReadFilesQueryVariables>({
-        query: ReadFilesDocument,
-      })
+            if (!file) {
+              return existingFileRefs
+            }
 
-      if (!result?.readFiles) {
-        throw new Error('Create file: No nodes found in cache result')
-      }
+            if (
+              existingFileRefs.some(
+                (ref: File & { [storeFieldName: string]: StoreValue }) =>
+                  readField('id', ref) === file.id
+              )
+            ) {
+              return existingFileRefs
+            }
 
-      cache.writeQuery<ReadFilesQuery, ReadFilesQueryVariables>({
-        data: {
-          readFiles: [...result.readFiles, { ...file, __typename: 'File' }],
+            return [...existingFileRefs, newFileRef]
+          },
         },
-        query: ReadFilesDocument,
       })
     },
   })

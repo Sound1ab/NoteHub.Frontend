@@ -35,7 +35,7 @@ export function File({ node, level }: IFile) {
 
   async function handleDeleteFile() {
     try {
-      await deleteFile(node.path)
+      await deleteFile(node)
     } catch (error) {
       ErrorToast(`There was an issue deleting your file. ${error}`)
     }
@@ -66,7 +66,7 @@ export function File({ node, level }: IFile) {
 
   return isRenaming ? (
     <FileInput
-      path={path}
+      node={node}
       onClickOutside={() => setIsRenaming(false)}
       action="rename"
       startingText={removeMarkdownExtension(name)}

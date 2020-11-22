@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { useCreateFile, useFileTree } from '../../../../../hooks'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
 import { styled } from '../../../../../theme'
+import { ITreeNode } from '../../../../../types'
 import { ErrorToast, Input } from '../../../../atoms'
 
 interface IFileInput {
-  path?: string | null
+  node?: ITreeNode | null
   onClickOutside: () => void
   action: 'create' | 'rename'
   startingText?: string
@@ -14,7 +15,7 @@ interface IFileInput {
 
 export function FileInput({
   onClickOutside,
-  path,
+  node,
   action,
   startingText,
 }: IFileInput) {
@@ -24,7 +25,7 @@ export function FileInput({
   }>(defaultState)
   const [createFile, { loading }] = useCreateFile()
   const [moveFile] = useMoveFile()
-  const { onToggle } = useFileTree()
+  const { onToggle, onClick } = useFileTree()
 
   useEffect(() => {
     if (!startingText) {
@@ -50,7 +51,7 @@ export function FileInput({
     e.preventDefault()
     onClickOutside()
 
-    const nodePath = path ? `${path}/${name}.md` : `${name}.md`
+    const nodePath = node?.path ? `${node.path}/${name}.md` : `${name}.md`
 
     // Split path into parts
     const nodePathArray = nodePath.split('/')
@@ -76,12 +77,12 @@ export function FileInput({
     e.preventDefault()
     onClickOutside()
 
-    if (!path) {
+    if (!node?.path) {
       throw new Error('No path selected')
     }
 
     // Split path into parts
-    const currentPathArray = path.split('/')
+    const currentPathArray = node.path.split('/')
 
     // Pop off the last node
     currentPathArray.pop()
@@ -92,8 +93,22 @@ export function FileInput({
         ? `${name}.md`
         : `${currentPathArray}/${name}.md`
 
+    const newPathArray = newPath.split('/')
+
+    // Toggle all the folders in the path open so we can see the new file
+    for (let i = newPathArray.length - 1; i >= 0; i--) {
+      onToggle(newPathArray.join('/'), true)
+      newPathArray.pop()
+    }
+
     try {
-      await moveFile(newPath, path)
+      const file = await moveFile(newPath, node)
+
+      if (!file) {
+        return
+      }
+
+      onClick(file.path)
     } catch (error) {
       ErrorToast(`There was an issue renaming your file. ${error}`)
     }
