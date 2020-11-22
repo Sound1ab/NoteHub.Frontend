@@ -18,7 +18,7 @@ import React, { ReactNode } from 'react'
 
 import introspectionResult from '../../../schema.json'
 import { context, error, lazy } from '../../../services/ApolloLink'
-import { Fields, fields } from './cache'
+import { Fields, cacheOptions } from './cache'
 
 async function link(
   client: ApolloClient<NormalizedCacheObject>,
@@ -38,13 +38,7 @@ export const MockProvider = ({
   mockResolvers,
   localData,
 }: IMockProvider) => {
-  const cache = new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields,
-      },
-    },
-  })
+  const cache = new InMemoryCache(cacheOptions)
 
   const schemaSDL = printSchema(
     // @ts-ignore

@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 import Typography from 'typography'
 
-import { useDarkMode, useReadAccentColor } from '../../../hooks'
+import { useReadAccentColor, useReadCurrentTheme } from '../../../hooks'
 import { breakpoints, colors, createSpacing } from '../../../theme/theme'
 import { createTypography } from '../../../theme/typography'
 
@@ -12,7 +12,7 @@ interface IThemeProvider {
 
 export function ThemeProvider({ children }: IThemeProvider) {
   const accentColor = useReadAccentColor()
-  const { theme } = useDarkMode()
+  const theme = useReadCurrentTheme()
   const { accent, ...rest } = colors[theme]
   const themeColors = { ...rest, accent: accentColor || accent }
   const typography = createTypography(themeColors)

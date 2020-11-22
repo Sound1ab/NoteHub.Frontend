@@ -72,9 +72,9 @@ describe('Profile', () => {
 
       await fireEvent.click(getByAltText('avatar'))
 
-      await fireEvent.click(getByLabelText('Dark theme'))
+      await fireEvent.click(getByLabelText('Light theme'))
 
-      expect(getByLabelText('Light theme')).toBeDefined()
+      expect(getByLabelText('Dark theme')).toBeDefined()
     })
 
     it('should display message if logout errors', async () => {

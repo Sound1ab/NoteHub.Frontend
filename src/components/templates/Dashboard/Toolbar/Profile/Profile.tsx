@@ -2,11 +2,12 @@ import { useApolloClient } from '@apollo/client'
 import React, { ReactNode, useRef } from 'react'
 import { Redirect } from 'react-router-dom'
 
+import { COLOR_MODE } from '../../../../../enums'
 import {
-  useDarkMode,
   useLogout,
   useModalToggle,
   useReadGithubUser,
+  useReadIsDarkMode,
 } from '../../../../../hooks'
 import { styled } from '../../../../../theme'
 import { Fade } from '../../../../animation'
@@ -20,7 +21,7 @@ interface IProfile {
 
 export function Profile(props: IProfile) {
   const client = useApolloClient()
-  const { isDarkMode, toggleTheme } = useDarkMode()
+  const { isDarkMode } = useReadIsDarkMode()
   const containerRef = useRef(null)
   const user = useReadGithubUser()
   const [logout, { called, data, error }] = useLogout()
@@ -55,6 +56,10 @@ export function Profile(props: IProfile) {
     await logout()
   }
 
+  function handleToggleTheme() {
+    localState.currentThemeVar(isDarkMode ? COLOR_MODE.LIGHT : COLOR_MODE.DARK)
+  }
+
   return (
     <Wrapper {...props} ref={containerRef}>
       <Avatar image={user?.avatar_url} onClick={handleOpen} />
@@ -80,7 +85,7 @@ export function Profile(props: IProfile) {
               {
                 icon: 'moon' as const,
                 label: isDarkMode ? 'Light theme' : 'Dark theme',
-                onClick: toggleTheme,
+                onClick: handleToggleTheme,
               },
             ]}
           />

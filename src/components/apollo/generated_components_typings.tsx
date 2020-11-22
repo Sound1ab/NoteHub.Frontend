@@ -14,14 +14,15 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  readFile?: Maybe<File>;
-  readNodes: ModelNodeConnection;
-  readImage?: Maybe<File>;
-  readRepo?: Maybe<Repo>;
-  readGithubUserAccessToken: Scalars['String'];
-  readGithubUser?: Maybe<GithubUser>;
+  isDarkMode: Scalars['Boolean'];
   login: Scalars['String'];
   logout: Scalars['String'];
+  readFile?: Maybe<File>;
+  readGithubUser?: Maybe<GithubUser>;
+  readGithubUserAccessToken: Scalars['String'];
+  readImage?: Maybe<File>;
+  readNodes: ModelNodeConnection;
+  readRepo?: Maybe<Repo>;
   refresh?: Maybe<Scalars['String']>;
 };
 
@@ -31,14 +32,14 @@ export type QueryReadFileArgs = {
 };
 
 
-export type QueryReadImageArgs = {
-  path: Scalars['String'];
-};
-
-
 export type QueryReadGithubUserAccessTokenArgs = {
   code: Scalars['String'];
   state: Scalars['String'];
+};
+
+
+export type QueryReadImageArgs = {
+  path: Scalars['String'];
 };
 
 export type File = {
@@ -268,41 +269,6 @@ export type FileWithMessagesFragment = (
   & FileFragment
 );
 
-export type DeleteRepoMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type DeleteRepoMutation = (
-  { __typename?: 'Mutation' }
-  & { deleteRepo?: Maybe<(
-    { __typename?: 'Repo' }
-    & RepoFragment
-  )> }
-);
-
-export type ReadRepoQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ReadRepoQuery = (
-  { __typename?: 'Query' }
-  & { readRepo?: Maybe<(
-    { __typename?: 'Repo' }
-    & RepoFragment
-  )> }
-);
-
-export type UpdateRepoMutationVariables = Exact<{
-  input: UpdateRepoInput;
-}>;
-
-
-export type UpdateRepoMutation = (
-  { __typename?: 'Mutation' }
-  & { updateRepo?: Maybe<(
-    { __typename?: 'Repo' }
-    & RepoFragment
-  )> }
-);
-
 export type LoginQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -442,6 +408,49 @@ export type UpdateImageMutation = (
   & { updateImage?: Maybe<(
     { __typename?: 'File' }
     & FileFragment
+  )> }
+);
+
+export type ReadIsDarkModeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ReadIsDarkModeQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'isDarkMode'>
+);
+
+export type DeleteRepoMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DeleteRepoMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteRepo?: Maybe<(
+    { __typename?: 'Repo' }
+    & RepoFragment
+  )> }
+);
+
+export type ReadRepoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ReadRepoQuery = (
+  { __typename?: 'Query' }
+  & { readRepo?: Maybe<(
+    { __typename?: 'Repo' }
+    & RepoFragment
+  )> }
+);
+
+export type UpdateRepoMutationVariables = Exact<{
+  input: UpdateRepoInput;
+}>;
+
+
+export type UpdateRepoMutation = (
+  { __typename?: 'Mutation' }
+  & { updateRepo?: Maybe<(
+    { __typename?: 'Repo' }
+    & RepoFragment
   )> }
 );
 

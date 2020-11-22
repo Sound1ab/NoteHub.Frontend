@@ -1,1 +1,4 @@
 #For codegen purposes only
+type Query {
+    isDarkMode: Boolean!
+}
