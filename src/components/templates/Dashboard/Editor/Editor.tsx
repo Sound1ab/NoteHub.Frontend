@@ -1,8 +1,8 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { CONTAINER_ID } from '../../../../enums'
 import { useReadFile } from '../../../../hooks'
-import { styled } from '../../../../theme'
 import { MarkdownEditor, MarkdownEditorSkeleton } from './MarkdownEditor'
 
 export function Editor() {

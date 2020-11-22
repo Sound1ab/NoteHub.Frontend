@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { CONTAINER_ID } from '../../../../../../../enums'
 import { useDeleteFile, useFileTree } from '../../../../../../../hooks'
-import { styled } from '../../../../../../../theme'
+import styled from 'styled-components'
 import { ITreeNode } from '../../../../../../../types'
 import {
   removeMarkdownExtension,

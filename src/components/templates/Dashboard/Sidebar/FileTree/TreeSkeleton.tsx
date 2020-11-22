@@ -1,9 +1,9 @@
 import React from 'react'
 import ContentLoader from 'react-content-loader'
+import styled from 'styled-components'
 
-import { styled } from '../../../../../theme'
-import { colors } from '../../../../../theme/theme'
 import { useReadCurrentTheme } from '../../../../../hooks'
+import { colors } from '../../../../../theme/theme'
 
 export function TreeSkeleton() {
   const currentTheme = useReadCurrentTheme()

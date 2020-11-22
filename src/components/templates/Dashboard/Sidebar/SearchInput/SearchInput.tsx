@@ -1,7 +1,7 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { useReadSearch } from '../../../../../hooks'
-import { styled } from '../../../../../theme'
 import { Input } from '../../../../atoms'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 

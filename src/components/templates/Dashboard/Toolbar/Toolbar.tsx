@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from 'react'
 import { toast } from 'react-toastify'
+import styled from 'styled-components'
 
 import {
   useDropzone,
@@ -16,7 +17,6 @@ import {
   useReadFile,
   useUpdateFile,
 } from '../../../../hooks'
-import { styled } from '../../../../theme'
 import { isFile } from '../../../../utils'
 import { Fade } from '../../../animation'
 import { Dropdown, ErrorToast, Icon } from '../../../atoms'

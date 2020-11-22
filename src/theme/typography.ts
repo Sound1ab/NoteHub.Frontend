@@ -1,6 +1,5 @@
 import Typography from 'typography'
-
-import { TColors } from './index'
+import { TColors } from './styled'
 
 export const createTypography = (colors: TColors) => {
   return new Typography({

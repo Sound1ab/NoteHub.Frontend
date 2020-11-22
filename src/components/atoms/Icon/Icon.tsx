@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
+import styled from 'styled-components'
 
 import { COLOR } from '../../../enums'
-import { styled } from '../../../theme'
 
 export type TIcons =
   | 'github'

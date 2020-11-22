@@ -1,7 +1,7 @@
 import React from 'react'
 import { Slide, ToastContainer, ToastOptions, toast } from 'react-toastify'
+import styled from 'styled-components'
 
-import { styled } from '../../../theme'
 import { Icon } from '..'
 
 export function Toast() {

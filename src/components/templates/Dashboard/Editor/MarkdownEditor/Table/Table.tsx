@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTable } from 'react-table'
 
-import { styled } from '../../../../../../theme'
+import styled from 'styled-components'
 
 interface IColumn {
   Header: string

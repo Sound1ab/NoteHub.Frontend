@@ -1,8 +1,7 @@
 import React, { useRef } from 'react'
-import { css } from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { useModalToggle } from '../../../../../hooks'
-import { styled } from '../../../../../theme'
 import { Fade } from '../../../../animation'
 import { Dropdown, Icon } from '../../../../atoms'
 import { localState } from '../../../../providers/ApolloProvider/cache'

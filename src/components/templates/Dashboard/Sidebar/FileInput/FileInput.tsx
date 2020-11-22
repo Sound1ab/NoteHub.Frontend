@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { useCreateFile, useFileTree } from '../../../../../hooks'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
-import { styled } from '../../../../../theme'
+import styled from 'styled-components'
 import { ITreeNode } from '../../../../../types'
 import { ErrorToast, Input } from '../../../../atoms'
 

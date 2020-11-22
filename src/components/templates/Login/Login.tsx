@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { useLogin } from '../../../hooks'
-import { styled } from '../../../theme'
 import { Icon } from '../../atoms'
 import { localState } from '../../providers/ApolloProvider/cache'
 import { LoginButton } from './LoginButton/LoginButton'

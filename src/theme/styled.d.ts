@@ -1,4 +1,5 @@
-import baseStyled, { ThemedStyledInterface } from 'styled-components'
+import {} from 'styled-components'
+
 import { VerticalRhythm } from 'typography'
 
 import { breakpoints, colors, createSpacing } from './theme'
@@ -30,4 +31,7 @@ export interface ITheme {
   }
 }
 
-export const styled = baseStyled as ThemedStyledInterface<ITheme>
+declare module 'styled-components' {
+  // eslint-disable-next-line
+  export interface DefaultTheme extends ITheme {}
+}

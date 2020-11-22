@@ -1,7 +1,7 @@
 import React from 'react'
 import ContentLoader from 'react-content-loader'
 
-import { styled } from '../../../../../theme'
+import styled from 'styled-components'
 import { colors } from '../../../../../theme/theme'
 import { useReadCurrentTheme } from '../../../../../hooks'
 

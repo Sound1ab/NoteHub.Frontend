@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { styled } from '../../../../../../theme'
+import styled from 'styled-components'
 
 interface IWidget {
   position?: { left: number; right: number; top: number; bottom: number } | null

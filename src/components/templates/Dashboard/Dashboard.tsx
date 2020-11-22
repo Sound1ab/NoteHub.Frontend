@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { styled } from '../../../theme'
+import styled from 'styled-components'
 import { EasyMDEProvider } from '../../providers'
 import { Editor } from './Editor/Editor'
 import { Sidebar } from './Sidebar/Sidebar'

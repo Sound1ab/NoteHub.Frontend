@@ -1,4 +1,4 @@
-import { styled } from '../../../../../theme'
+import styled from 'styled-components'
 import { Button } from '../../../../atoms'
 
 export const ToolbarButton = styled(Button)`

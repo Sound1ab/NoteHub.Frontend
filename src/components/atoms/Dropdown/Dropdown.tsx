@@ -1,7 +1,7 @@
 import React, { ReactNode, Ref } from 'react'
 import { css } from 'styled-components'
 
-import { styled } from '../../../theme'
+import styled from 'styled-components'
 import { Icon, TIcons } from '../Icon/Icon'
 import { DropdownButton } from './DropdownButton'
 

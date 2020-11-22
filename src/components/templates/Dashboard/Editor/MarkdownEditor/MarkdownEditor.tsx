@@ -1,6 +1,7 @@
 import CodeMirror from 'codemirror'
 import React, { useEffect, useState } from 'react'
 import SimpleMDE from 'react-simplemde-editor'
+import styled from 'styled-components'
 
 import {
   useEasyMDE,
@@ -9,7 +10,6 @@ import {
   useReadFile,
   useUpdateFile,
 } from '../../../../../hooks'
-import { styled } from '../../../../../theme'
 import { IPosition } from '../../../../../types'
 import { isFile, isNumber } from '../../../../../utils'
 import { Fade } from '../../../../animation'

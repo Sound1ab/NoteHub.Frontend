@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
+import styled from 'styled-components'
 
 import { CONTAINER_ID } from '../../../../enums'
 import { useReadSearch } from '../../../../hooks'
-import { styled } from '../../../../theme'
 import { Button, Icon } from '../../../atoms'
 import { FileTree } from './FileTree/FileTree'
 import { FileTreeProvider } from './FileTree/FileTreeProvider'

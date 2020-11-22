@@ -1,6 +1,7 @@
 import { useApolloClient } from '@apollo/client'
 import React, { ReactNode, useRef } from 'react'
 import { Redirect } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { COLOR_MODE } from '../../../../../enums'
 import {
@@ -9,7 +10,6 @@ import {
   useReadGithubUser,
   useReadIsDarkMode,
 } from '../../../../../hooks'
-import { styled } from '../../../../../theme'
 import { Fade } from '../../../../animation'
 import { Dropdown } from '../../../../atoms'
 import { localState } from '../../../../providers/ApolloProvider/cache'

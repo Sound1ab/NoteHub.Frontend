@@ -1,7 +1,6 @@
 import React, { ReactNode, Ref, forwardRef } from 'react'
-import { css } from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { styled } from '../../../theme'
 import { Icon } from '..'
 
 interface IButton {

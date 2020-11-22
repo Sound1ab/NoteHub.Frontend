@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react'
 
 import { useFileTree } from '../../../../../../../hooks'
-import { styled } from '../../../../../../../theme'
+import styled from 'styled-components'
 import { ITreeNode } from '../../../../../../../types'
 import { Icon } from '../../../../../../atoms'
 import { FileInput } from '../../../FileInput/FileInput'

@@ -2,9 +2,9 @@ import React, { Dispatch, ReactNode, SetStateAction } from 'react'
 import ReactDOM from 'react-dom'
 import FocusLock from 'react-focus-lock'
 import { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { useClickOutside } from '../../../hooks'
-import { styled } from '../../../theme'
 
 export interface IPortal {
   children?: ReactNode

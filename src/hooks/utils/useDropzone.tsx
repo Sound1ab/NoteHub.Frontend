@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useUpload } from 'react-use-upload'
+import styled from 'styled-components'
 
-import { styled } from '../../theme'
 import { useCreateSignedUrl } from '..'
 
 const Style = styled.input`

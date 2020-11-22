@@ -1,8 +1,8 @@
 import React, { ReactNode, SyntheticEvent, useRef } from 'react'
 import { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { useModalToggle } from '../../../../../../../hooks'
-import { styled } from '../../../../../../../theme'
 import { ITreeNode } from '../../../../../../../types'
 import { Fade } from '../../../../../../animation'
 import { Node_Type } from '../../../../../../apollo'
@@ -53,8 +53,50 @@ export function Node({
     onClick()
   }
 
+  function handleDragStart(e: React.DragEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+    e.dataTransfer.setData('text', 'test')
+    console.log('dragStart')
+  }
+
+  function handleDragOver(e: React.DragEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+    console.log('drageover')
+  }
+
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+    console.log(
+      "e.dataTransfer.getData('text')",
+      e.dataTransfer.getData('text')
+    )
+    console.log('drop')
+  }
+
+  function handleDragEnter(e: React.DragEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+    console.log('dragenter')
+  }
+
+  function onDragLeave(e: React.DragEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+    console.log('dragleave')
+  }
+
   return (
-    <StyledListItem>
+    <StyledListItem
+      draggable="true"
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      onDragStart={handleDragStart}
+      onDragEnter={handleDragEnter}
+      onDragLeave={onDragLeave}
+    >
       <Wrapper
         isDisabled={node.isOptimistic}
         isActive={isActive}
