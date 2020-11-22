@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import ReactMarkdown from 'react-markdown'
 
-import { CodeRenderer } from '../CodeRenderer/CodeRenderer'
+import { CodeRenderer } from '../../CodeRenderer/CodeRenderer'
 
 export const renderMarkdown = (text: string) =>
   ReactDOMServer.renderToString(

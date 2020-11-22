@@ -2406,6 +2406,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-table@^7.0.25":
+  version "7.0.25"
+  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.0.25.tgz#79efba1c58149d75b3c030634ed36215b7ba8390"
+  integrity sha512-MLWxIiFKIW2CjcB8yQ5LfLNyVfwXfIYm2yrQfTkroK5tJ3Ai+Xzq73EQcdKWQvi/nLk431v2WV0cf30VQV+5Ow==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-transition-group@^4.4.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-4.4.0.tgz#882839db465df1320e4753e6e9f70ca7e9b4d46d"
@@ -5015,6 +5022,11 @@ deep-extend@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
   integrity sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==
+
+deep-get-set@^1.0.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/deep-get-set/-/deep-get-set-1.1.1.tgz#caa720cbeaa4def5a924a63362be3f3d4bdb04b0"
+  integrity sha512-dBrY4GeR55KfyF9Ipswif/Et4muInKpXkf3ro9hFT/8OdPMVsEGNSfuGzfBv/dJKKwKSqInoZGKV5f40bA7TJA==
 
 deep-is@^0.1.3, deep-is@~0.1.3:
   version "0.1.3"
@@ -11353,6 +11365,13 @@ react-scripts@4.0.0:
   optionalDependencies:
     fsevents "^2.1.3"
 
+react-simple-table@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-simple-table/-/react-simple-table-1.0.1.tgz#941390bd68eca63d028c1873bd90772a21143b9c"
+  integrity sha1-lBOQvWjspj0CjBhzvZB3KiEUO5w=
+  dependencies:
+    deep-get-set "^1.0.0"
+
 react-simplemde-editor@^4.1.0:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/react-simplemde-editor/-/react-simplemde-editor-4.1.3.tgz#e3f5eba988817035c5aa1cae8f1a9d5dfec6081a"
@@ -11372,6 +11391,11 @@ react-syntax-highlighter@^13.5.1:
     lowlight "^1.14.0"
     prismjs "^1.21.0"
     refractor "^3.1.0"
+
+react-table@^7.6.2:
+  version "7.6.2"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.6.2.tgz#b60932fa6d457c2bca0da49815cd6a8fe9451f77"
+  integrity sha512-urwNZTieb+xg/+BITUIrqdH5jZfJlw7rKVAAq25iXpBPwbQojLCEKJuGycLbVwn8fzU+Ovly3y8HHNaLNrPCvQ==
 
 react-toastify@^6.0.9:
   version "6.0.9"

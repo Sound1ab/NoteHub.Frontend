@@ -16,35 +16,12 @@ import { Node } from 'unist'
 import visit from 'unist-util-visit'
 import { VFile } from 'vfile'
 
-import { ThemeProvider } from '../../../../providers'
-import { CodeRenderer } from '../CodeRenderer/CodeRenderer'
-import { TestButton } from './TestButton'
+import { ThemeProvider } from '../../../../../providers'
+import { CodeRenderer } from '../../CodeRenderer/CodeRenderer'
+import { Table } from '../Table/Table'
 
 interface INode extends Node {
   value: VFile
-}
-
-// Any custom react components must be added to tagNames in lower case as
-// rehype-stringify lowercases all elements meaning the component would never
-// pass sanitization. We will convert back to pascal case after sanitization
-const customComponents = {
-  TestButton: 'testbutton',
-}
-
-// The sanitization wont allow through anything that isn't in this schema.
-// Allowing all data* props on custom components incase we need to pass props
-// down the line.
-const schema = {
-  ...gh,
-  tagNames: [...gh.tagNames, 'testbutton'],
-  attributes: {
-    ...gh.attributes,
-    // Allow all data- attributes on custom components
-    ...Object.values(customComponents).reduce((acc, element) => {
-      acc[element] = ['data*']
-      return acc
-    }, {} as Record<string, string[]>),
-  },
 }
 
 export function renderMdx(mdxCode: string) {
@@ -65,6 +42,8 @@ function transpileMdx(mdxCode: string) {
   })
 }
 
+const isJSXRegex = /<\/?[A-Z]/
+
 // If we were to pass sanitize directly to rehypePlugins it would remove all
 // html elements as rehype will mark these as 'jsx' elements. So we're tapping
 // into the tree and visiting each 'jsx' node individually. This allows us sanitize
@@ -72,31 +51,26 @@ function transpileMdx(mdxCode: string) {
 function sanitizeJsx() {
   return (tree: Node) => {
     visit(tree, 'jsx', (node: INode) => {
+      if (typeof node.value !== 'string') {
+        return
+      }
+
+      const html = (node.value as unknown) as string
+
+      if (isJSXRegex.test(html)) {
+        return
+      }
+
       node.value = unified()
-        .use(parse)
+        .use(parse, { fragment: true })
         .use(stringify, {
           // Means void elements <img> don't break the markdown compiler with
           // a missing trailing slash (/)
           closeSelfClosing: true,
         })
-        .use(sanitize, (schema as unknown) as Schema)
+        .use(sanitize, (gh as unknown) as Schema)
         // Pascal case all custom elements so they work as JSX
-        .use(replaceCustomElementsWithJsx)
         .processSync(node.value)
-    })
-  }
-}
-
-// rehype-stringify lowercases all element names. This means it passes
-// the sanitization but they need to be converted back to render as JSX components
-function replaceCustomElementsWithJsx() {
-  return (tree: Node) => {
-    visit(tree, 'element', (node: Node) => {
-      Object.entries(customComponents).forEach(([component, element]) => {
-        if (node.tagName === element) {
-          node.tagName = component
-        }
-      })
     })
   }
 }
@@ -127,7 +101,7 @@ function createElement(code: string) {
 }
 
 function renderMarkup(element: ReactNode) {
-  const components: Components & { TestButton: ReactNode } = {
+  const components: Components & { Table: ReactNode } = {
     code: ({ children, className }) => {
       const language = className.replace(/language-/, '')
       return CodeRenderer({
@@ -136,7 +110,8 @@ function renderMarkup(element: ReactNode) {
         language,
       })
     },
-    TestButton,
+    // Insert custom components
+    Table,
   }
 
   return renderToStaticMarkup(
