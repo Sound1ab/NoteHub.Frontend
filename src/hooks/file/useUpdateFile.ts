@@ -1,35 +1,44 @@
+import { MutationResult, gql, useMutation } from '@apollo/client'
+import { FetchResult } from '@apollo/client/link/core'
 import {
-  MutationResult,
-  gql,
-  useApolloClient,
-  useMutation,
-} from '@apollo/client'
+  MutationFunctionOptions,
+  MutationHookOptions,
+} from '@apollo/client/react/types/types'
 
 import {
-  ReadFileQuery,
-  ReadFileQueryVariables,
+  File,
   UpdateFileMutation,
   UpdateFileMutationVariables,
 } from '../../components/apollo'
 import { FileWithMessagesFragment } from '../../fragments'
 import { debounce } from '../../utils'
-import { ReadFileDocument, useReadFile } from './useReadFile'
 
 let abortController: AbortController
 
-const debouncedSave = debounce((updateFile, options) => {
-  const controller = new window.AbortController()
-  abortController = controller
+const debouncedSave = debounce(
+  async (
+    mutation: (
+      options?: MutationFunctionOptions<
+        UpdateFileMutation,
+        UpdateFileMutationVariables
+      >
+    ) => Promise<FetchResult<UpdateFileMutation>>,
+    options?: MutationHookOptions<
+      UpdateFileMutation,
+      UpdateFileMutationVariables
+    >
+  ) => {
+    const controller = new window.AbortController()
 
-  if (typeof updateFile !== 'function' || typeof options !== 'object') {
-    return
-  }
+    abortController = controller
 
-  updateFile({
-    ...options,
-    context: { fetchOptions: { signal: controller.signal } },
-  })
-}, 1000)
+    await mutation({
+      ...options,
+      context: { fetchOptions: { signal: controller.signal } },
+    })
+  },
+  1000
+)
 
 export const UpdateFileDocument = gql`
   ${FileWithMessagesFragment}
@@ -41,40 +50,15 @@ export const UpdateFileDocument = gql`
 `
 
 export function useUpdateFile(): [
-  (path?: string | null, content?: string) => void,
+  (file?: File | null, content?: string) => void,
   MutationResult<UpdateFileMutation>
 ] {
-  const { file } = useReadFile()
-  const client = useApolloClient()
-
   const [mutation, mutationResult] = useMutation<
     UpdateFileMutation,
     UpdateFileMutationVariables
-  >(UpdateFileDocument, {
-    update: (cache, { data }) => {
-      const file = data && data.updateFile
+  >(UpdateFileDocument)
 
-      if (!file) {
-        return
-      }
-
-      cache.writeQuery<ReadFileQuery, ReadFileQueryVariables>({
-        data: {
-          readFile: file,
-        },
-        query: ReadFileDocument,
-        variables: {
-          path: file.path,
-        },
-      })
-    },
-  })
-
-  function updateFile(path?: string | null, content?: string) {
-    if (!path) {
-      throw new Error('Update file: no file path')
-    }
-
+  async function updateFile(file?: File | null, content?: string) {
     if (!file) {
       throw new Error('Update file: no file')
     }
@@ -83,26 +67,13 @@ export function useUpdateFile(): [
       throw new Error('Update file: content is not a string')
     }
 
-    client.writeQuery<ReadFileQuery, ReadFileQueryVariables>({
-      data: {
-        readFile: {
-          ...file,
-          content,
-        },
-      },
-      query: ReadFileDocument,
-      variables: {
-        path: file.path,
-      },
-    })
-
     abortController && abortController.abort()
 
-    debouncedSave(mutation, {
+    await debouncedSave(mutation, {
       variables: {
         input: {
           content,
-          path,
+          path: file.path,
         },
       },
     })

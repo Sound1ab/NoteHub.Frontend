@@ -81,11 +81,11 @@ export function Toolbar() {
     try {
       const content = insertPathIntoString(imagePath)
 
-      await updateFile(currentPath, content)
+      await updateFile(file, content)
     } catch (error) {
       ErrorToast(`There was an issue uploading your image. ${error.message}`)
     }
-  }, [currentPath, imagePath, updateFile, insertPathIntoString])
+  }, [file, imagePath, updateFile, insertPathIntoString])
 
   useEffect(() => {
     if (!done || !imagePath) {

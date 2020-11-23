@@ -138,7 +138,7 @@ export function MarkdownEditor() {
     }
 
     try {
-      await updateFile(currentPath, value)
+      await updateFile(file, value)
     } catch (error) {
       ErrorToast(`There was an issue updating your document. ${error.message}`)
     }

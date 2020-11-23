@@ -115,7 +115,7 @@ describe('Toolbar', () => {
         )
 
         expect(updateFile).toBeCalledWith(
-          'MOCK_FILE_PATH_1.md',
+          { content: 'MOCK FILE CONTENTS' },
           '![](MOCK_IMAGE_PATH)MOCK FILE CONTENTS'
         )
       })

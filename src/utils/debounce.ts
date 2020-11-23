@@ -1,4 +1,4 @@
-export const debounce = <F extends (...args: unknown[]) => void>(
+export const debounce = <F extends (...args: any[]) => Promise<void>>(
   func: F,
   waitFor: number
 ) => {
@@ -6,7 +6,7 @@ export const debounce = <F extends (...args: unknown[]) => void>(
 
   const debounced = (...args: unknown[]) => {
     clearTimeout(timeout)
-    timeout = setTimeout(() => func(...args), waitFor)
+    timeout = setTimeout(async () => await func(...args), waitFor)
   }
 
   return (debounced as unknown) as (...args: Parameters<F>) => ReturnType<F>
