@@ -12,6 +12,8 @@ import {
   ThemeProvider,
 } from './components/providers'
 import { FileTreeProvider } from './components/templates/Dashboard/Sidebar/FileTree/FileTreeProvider'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { DndProvider } from 'react-dnd'
 
 export type FireObject = {
   [K in EventType]: (
@@ -45,7 +47,9 @@ const Context = ({
         <IconProvider>
           {enableToast && <Toast />}
           <EasyMDEProvider>
-            <FileTreeProvider>{node}</FileTreeProvider>
+            <FileTreeProvider>
+              <DndProvider backend={HTML5Backend}>{node}</DndProvider>
+            </FileTreeProvider>
           </EasyMDEProvider>
         </IconProvider>
       )}

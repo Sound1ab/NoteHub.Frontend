@@ -1,4 +1,4 @@
-import { makeVar } from '@apollo/client'
+import { InMemoryCacheConfig, makeVar } from '@apollo/client'
 
 import { COLOR_MODE } from '../../../enums'
 
@@ -42,7 +42,7 @@ export const fields = {
 
 export type Fields = typeof fields
 
-export const cacheOptions = {
+export const cacheOptions: InMemoryCacheConfig = {
   typePolicies: {
     Query: {
       fields: {

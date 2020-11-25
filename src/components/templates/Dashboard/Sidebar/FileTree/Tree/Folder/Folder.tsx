@@ -1,9 +1,12 @@
 import React, { ReactNode, useState } from 'react'
-
-import { useFileTree } from '../../../../../../../hooks'
+import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
+
+import { useCreateFile, useFileTree } from '../../../../../../../hooks'
+import { useMoveFile } from '../../../../../../../hooks/file/useMoveFile'
 import { ITreeNode } from '../../../../../../../types'
-import { Icon } from '../../../../../../atoms'
+import { extractFilename } from '../../../../../../../utils'
+import { ErrorToast, Icon } from '../../../../../../atoms'
 import { FileInput } from '../../../FileInput/FileInput'
 import { Node } from '../Node/Node'
 
@@ -16,8 +19,22 @@ interface IFolder {
 export function Folder({ level, node, childNodes }: IFolder) {
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
   const { path, toggled = false } = node
-  const { activePath, onClick, onToggle } = useFileTree()
+  const [createFile, { loading: loadingCreate }] = useCreateFile()
+  const [moveFile, { loading: loadingMove }] = useMoveFile()
+  const { activePath, onClick, onToggle, openFoldersInPath } = useFileTree()
+
   const isActive = path === activePath
+  const [{ isOver }, dropRef] = useDrop<
+    { type: string; file: ITreeNode },
+    Promise<void>,
+    { isOver: boolean }
+  >({
+    accept: 'NODE',
+    drop: handleMove,
+    collect: (monitor) => ({
+      isOver: monitor.isOver({ shallow: true }),
+    }),
+  })
 
   function onChevronClick(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -55,15 +72,47 @@ export function Folder({ level, node, childNodes }: IFolder) {
     onClick(path)
   }
 
+  async function handleCreate(name: string) {
+    const path = `${node.path}/${name}.md`
+
+    openFoldersInPath(path)
+
+    try {
+      await createFile(path)
+    } catch (error) {
+      ErrorToast(`There was an issue creating your file`)
+    }
+  }
+
+  async function handleMove({ file }: { file: ITreeNode }) {
+    if (!isOver) {
+      return
+    }
+
+    const name = extractFilename(file.path)
+
+    const newPath = `${path}/${name}`
+
+    openFoldersInPath(newPath)
+
+    try {
+      await moveFile(file, newPath)
+    } catch {
+      ErrorToast('Could not move file')
+    }
+  }
+
   return (
     <>
-      <Node
+      <StyledFolder
         node={node}
         level={level}
         dropdownItems={dropdownItems}
         onClick={handleOnClick}
         isActive={isActive}
         childNodes={childNodes}
+        dndRef={dropRef}
+        isOver={isOver}
       >
         <>
           <Chevron
@@ -77,17 +126,22 @@ export function Folder({ level, node, childNodes }: IFolder) {
           />
           <StyledIcon size="1x" icon="folder" />
         </>
-      </Node>
+      </StyledFolder>
       {isNewFileOpen && (
         <FileInput
-          node={node}
           onClickOutside={() => setIsNewFileOpen(false)}
-          action="create"
+          onSubmit={handleCreate}
+          isDisabled={loadingCreate || loadingMove}
         />
       )}
     </>
   )
 }
+
+const StyledFolder = styled(Node)<{ isOver: boolean }>`
+  background-color: ${({ isOver, theme }) =>
+    isOver ? theme.colors.accent : 'transparent'}!important;
+`
 
 const StyledIcon = styled(Icon)`
   color: ${({ theme }) => theme.colors.text.secondary};

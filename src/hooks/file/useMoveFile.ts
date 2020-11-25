@@ -1,5 +1,4 @@
-import { MutationResult, gql, useMutation } from '@apollo/client'
-import { StoreValue } from '@apollo/client/utilities/graphql/storeUtils'
+import { MutationResult, StoreValue, gql, useMutation } from '@apollo/client'
 
 import {
   File,
@@ -19,57 +18,22 @@ export const MoveFileDocument = gql`
 `
 
 export function useMoveFile(): [
-  (
-    newPath: string,
-    file?: ITreeNode | null
-  ) => Promise<File | null | undefined>,
+  (node: ITreeNode | null, newPath: string) => Promise<File | null | undefined>,
   MutationResult<MoveFileMutation>
 ] {
-  let oldFile: ITreeNode
-
   const [mutation, mutationResult] = useMutation<
     MoveFileMutation,
     MoveFileMutationVariables
   >(MoveFileDocument, {
-    update: (cache, { data }) => {
-      cache.modify({
-        fields: {
-          readFiles(existingFileRefs = [], { readField }) {
-            const file = data && data.moveFile
-
-            const newFileRef = cache.writeFragment({
-              data: file,
-              fragment: FileFragment,
-              fragmentName: 'file',
-            })
-
-            if (!file) {
-              return existingFileRefs
-            }
-
-            cache.evict(oldFile)
-            cache.gc()
-
-            return existingFileRefs.map(
-              (ref: File & { [storeFieldName: string]: StoreValue }) =>
-                readField('id', ref) === oldFile.id ? newFileRef : ref
-            )
-          },
-        },
-      })
-    },
     errorPolicy: 'all',
   })
 
-  async function moveFile(newPath: string, file?: ITreeNode | null) {
-    if (!file?.path) {
+  async function moveFile(node: ITreeNode | null, newPath: string) {
+    if (!node?.path) {
       throw new Error('Move file: no path provided')
     }
 
-    const { path, type, name, id } = file
-
-    // Needed to update the cache in update function
-    oldFile = file
+    const { path, type, name, id } = node
 
     const { data } = await mutation({
       variables: {
@@ -90,6 +54,33 @@ export function useMoveFile(): [
           type,
           url: 'optimistic',
         },
+      },
+      update: (cache, { data }) => {
+        cache.modify({
+          fields: {
+            readFiles(existingFileRefs = [], { readField }) {
+              const file = data && data.moveFile
+
+              const newFileRef = cache.writeFragment({
+                data: file,
+                fragment: FileFragment,
+                fragmentName: 'file',
+              })
+
+              if (!file) {
+                return existingFileRefs
+              }
+
+              cache.evict(file)
+              cache.gc()
+
+              return existingFileRefs.map(
+                (ref: File & { [storeFieldName: string]: StoreValue }) =>
+                  readField('id', ref) === id ? newFileRef : ref
+              )
+            },
+          },
+        })
       },
     })
 

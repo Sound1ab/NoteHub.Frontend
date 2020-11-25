@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
+import { useDrag } from 'react-dnd'
+import styled from 'styled-components'
 
 import { CONTAINER_ID } from '../../../../../../../enums'
 import { useDeleteFile, useFileTree } from '../../../../../../../hooks'
-import styled from 'styled-components'
+import { useMoveFile } from '../../../../../../../hooks/file/useMoveFile'
 import { ITreeNode } from '../../../../../../../types'
 import {
+  removeLastSlug,
   removeMarkdownExtension,
   scrollIntoView,
 } from '../../../../../../../utils'
@@ -23,8 +26,15 @@ export function File({ node, level }: IFile) {
   const [isRenaming, setIsRenaming] = useState(false)
   const [deleteFile] = useDeleteFile()
   const { path, type, name } = node
-  const { activePath, onClick } = useFileTree()
+  const { activePath, onClick, openFoldersInPath } = useFileTree()
   const isActive = path === activePath
+  const [{ isDragging }, dragRef] = useDrag({
+    item: { type: 'NODE', file: node },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  })
+  const [moveFile, { loading }] = useMoveFile()
 
   function handleSetIsRenamingOpen(
     e: React.MouseEvent<HTMLElement, MouseEvent>
@@ -64,25 +74,45 @@ export function File({ node, level }: IFile) {
     localState.currentPathVar(path)
   }
 
+  async function handleRename(name: string) {
+    const path = removeLastSlug(node.path)
+
+    const newPath = path.length > 0 ? `${path}/${name}.md` : `${name}.md`
+
+    openFoldersInPath(newPath)
+
+    try {
+      await moveFile(node, newPath)
+    } catch {
+      ErrorToast('Could not move file')
+    }
+  }
+
   return isRenaming ? (
     <FileInput
-      node={node}
       onClickOutside={() => setIsRenaming(false)}
-      action="rename"
+      onSubmit={handleRename}
       startingText={removeMarkdownExtension(name)}
+      isDisabled={loading}
     />
   ) : (
-    <Node
+    <StyledFile
       node={node}
       level={level}
       onClick={handleOnClick}
       isActive={isActive}
       dropdownItems={dropdownItems}
+      dndRef={dragRef}
+      isDragging={isDragging}
     >
       <StyledIcon size="sm" icon="file" />
-    </Node>
+    </StyledFile>
   )
 }
+
+const StyledFile = styled(Node)<{ isDragging: boolean }>`
+  opacity: ${({ isDragging }) => (isDragging ? 0.5 : 1)};
+`
 
 const StyledIcon = styled(Icon)`
   color: ${({ theme }) => theme.colors.text.secondary};

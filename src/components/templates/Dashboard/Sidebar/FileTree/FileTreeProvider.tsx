@@ -9,6 +9,7 @@ type ContextProps = {
   onClick: (path: string) => void
   activePath: string
   listOfToggledPaths: Set<string>
+  openFoldersInPath: (path: string) => void
 }
 
 export const FileTreeContext = React.createContext({} as ContextProps)
@@ -32,6 +33,19 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
     setActivePath(path)
   }
 
+  function openFoldersInPath(path: string) {
+    const newPathArray = path.split('/')
+
+    // Pop off the file so that we have the path of the folder
+    newPathArray.pop()
+
+    // Toggle all the folders in the path open so we can see the new file
+    for (let i = newPathArray.length - 1; i >= 0; i--) {
+      handleOnToggle(newPathArray.join('/'), true)
+      newPathArray.pop()
+    }
+  }
+
   return (
     <FileTreeContext.Provider
       value={{
@@ -39,6 +53,7 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
         onClick: handleOnClick,
         activePath,
         listOfToggledPaths,
+        openFoldersInPath,
       }}
     >
       {children}

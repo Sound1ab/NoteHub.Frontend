@@ -1,31 +1,25 @@
 import React, { useEffect, useState } from 'react'
-
-import { useCreateFile, useFileTree } from '../../../../../hooks'
-import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
 import styled from 'styled-components'
-import { ITreeNode } from '../../../../../types'
-import { ErrorToast, Input } from '../../../../atoms'
+
+import { Input } from '../../../../atoms'
 
 interface IFileInput {
-  node?: ITreeNode | null
   onClickOutside: () => void
-  action: 'create' | 'rename'
+  onSubmit: (name: string) => Promise<void>
   startingText?: string
+  isDisabled: boolean
 }
 
 export function FileInput({
   onClickOutside,
-  node,
-  action,
+  onSubmit,
   startingText,
+  isDisabled,
 }: IFileInput) {
   const defaultState = { name: '' }
   const [{ name }, setForm] = useState<{
     [key: string]: string
   }>(defaultState)
-  const [createFile, { loading }] = useCreateFile()
-  const [moveFile] = useMoveFile()
-  const { onToggle, onClick } = useFileTree()
 
   useEffect(() => {
     if (!startingText) {
@@ -47,94 +41,22 @@ export function FileInput({
     }))
   }
 
-  async function handleCreateNewFile(e: React.ChangeEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
     e.preventDefault()
+
     onClickOutside()
 
-    const nodePath = node?.path ? `${node.path}/${name}.md` : `${name}.md`
-
-    // Split path into parts
-    const nodePathArray = nodePath.split('/')
-
-    // Pop off the file so that we have the path of the folder
-    nodePathArray.pop()
-
-    // Toggle all the folders in the path open so we can see the new file
-    for (let i = nodePathArray.length - 1; i >= 0; i--) {
-      onToggle(nodePathArray.join('/'), true)
-      nodePathArray.pop()
-    }
-
-    // Create the file at the full path
-    try {
-      await createFile(nodePath)
-    } catch (error) {
-      ErrorToast(`There was an issue creating your file. ${error}`)
-    }
-  }
-
-  async function handleRenameFile(e: React.ChangeEvent<HTMLFormElement>) {
-    e.preventDefault()
-    onClickOutside()
-
-    if (!node?.path) {
-      throw new Error('No path selected')
-    }
-
-    // Split path into parts
-    const currentPathArray = node.path.split('/')
-
-    // Pop off the last node
-    currentPathArray.pop()
-
-    // If we're editing a top level node, we don't need the '/'
-    const newPath =
-      currentPathArray.length === 0
-        ? `${name}.md`
-        : `${currentPathArray}/${name}.md`
-
-    const newPathArray = newPath.split('/')
-
-    // Toggle all the folders in the path open so we can see the new file
-    for (let i = newPathArray.length - 1; i >= 0; i--) {
-      onToggle(newPathArray.join('/'), true)
-      newPathArray.pop()
-    }
-
-    try {
-      const file = await moveFile(newPath, node)
-
-      if (!file) {
-        return
-      }
-
-      onClick(file.path)
-    } catch (error) {
-      ErrorToast(`There was an issue renaming your file. ${error}`)
-    }
-  }
-
-  let actionHandler: (e: React.ChangeEvent<HTMLFormElement>) => Promise<void>
-
-  switch (action) {
-    case 'create':
-      actionHandler = handleCreateNewFile
-      break
-    case 'rename':
-      actionHandler = handleRenameFile
-      break
-    default:
-      throw new Error('Action not supported')
+    await onSubmit(name)
   }
 
   return (
     <Wrapper>
       <StyledFileInput
-        isDisabled={loading}
+        isDisabled={isDisabled}
         value={name}
         clickOutsideCallback={onClickOutside}
         handleOnChange={handleOnChange}
-        onSubmit={actionHandler}
+        onSubmit={handleSubmit}
         inputAriaLabel="Input file name"
         formAriaLabel="File name form"
         type="text"

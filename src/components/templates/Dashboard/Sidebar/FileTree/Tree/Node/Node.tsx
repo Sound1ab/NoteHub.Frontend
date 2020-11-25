@@ -1,6 +1,5 @@
-import React, { ReactNode, SyntheticEvent, useRef } from 'react'
-import { css } from 'styled-components'
-import styled from 'styled-components'
+import React, { ReactNode, Ref, SyntheticEvent, useRef } from 'react'
+import styled, { css } from 'styled-components'
 
 import { useModalToggle } from '../../../../../../../hooks'
 import { ITreeNode } from '../../../../../../../types'
@@ -16,6 +15,8 @@ interface INode {
   dropdownItems: IDropdownItem[]
   onClick: () => void
   isActive: boolean
+  dndRef?: Ref<HTMLLIElement>
+  className?: string
 }
 
 export function Node({
@@ -26,9 +27,10 @@ export function Node({
   dropdownItems,
   onClick,
   isActive,
+  dndRef,
+  className,
 }: INode) {
   const containerRef = useRef(null)
-
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
   const { type, name } = node
 
@@ -53,50 +55,8 @@ export function Node({
     onClick()
   }
 
-  function handleDragStart(e: React.DragEvent) {
-    e.preventDefault()
-    e.stopPropagation()
-    e.dataTransfer.setData('text', 'test')
-    console.log('dragStart')
-  }
-
-  function handleDragOver(e: React.DragEvent) {
-    e.preventDefault()
-    e.stopPropagation()
-    console.log('drageover')
-  }
-
-  function handleDrop(e: React.DragEvent) {
-    e.preventDefault()
-    e.stopPropagation()
-    console.log(
-      "e.dataTransfer.getData('text')",
-      e.dataTransfer.getData('text')
-    )
-    console.log('drop')
-  }
-
-  function handleDragEnter(e: React.DragEvent) {
-    e.preventDefault()
-    e.stopPropagation()
-    console.log('dragenter')
-  }
-
-  function onDragLeave(e: React.DragEvent) {
-    e.preventDefault()
-    e.stopPropagation()
-    console.log('dragleave')
-  }
-
   return (
-    <StyledListItem
-      draggable="true"
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
-      onDragStart={handleDragStart}
-      onDragEnter={handleDragEnter}
-      onDragLeave={onDragLeave}
-    >
+    <StyledListItem ref={dndRef}>
       <Wrapper
         isDisabled={node.isOptimistic}
         isActive={isActive}
@@ -105,6 +65,7 @@ export function Node({
         ref={containerRef}
         type={type}
         aria-label={node.type === Node_Type.File ? 'file' : 'folder'}
+        className={className}
       >
         <Details>
           {children}
