@@ -129,6 +129,7 @@ export const resolvers = {
       const filename = extractFilename(input.newPath)
 
       return {
+        id: 'MOVE_MOCK_ID',
         filename,
         path: input.newPath,
         content: 'MOCK_CONTENT_2',

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { useDeleteFile, useFileTree } from '../../../../../../../hooks'
+import { useMoveFile } from '../../../../../../../hooks/file/useMoveFile'
 import { files, resolvers } from '../../../../../../../schema/mockResolvers'
 import { fireEvent, render, waitFor } from '../../../../../../../test-utils'
 import { createNodes } from '../../../../../../../utils'
@@ -11,11 +12,16 @@ import { File } from './File'
 
 jest.mock('../../../../../../../hooks/utils/useFileTree')
 jest.mock('../../../../../../../hooks/file/useDeleteFile')
+jest.mock('../../../../../../../hooks/file/useMoveFile')
 
 describe('File', () => {
   const onClick = jest.fn()
 
   const deleteFile = jest.fn()
+
+  const moveFile = jest.fn()
+
+  const openFoldersInPath = jest.fn()
 
   const activePath = 'MOCK_ACTIVE_PATH'
 
@@ -34,7 +40,12 @@ describe('File', () => {
     ;(useFileTree as jest.Mock).mockReturnValue({
       activePath,
       onClick,
+      openFoldersInPath,
     })
+    ;(useMoveFile as jest.Mock).mockReturnValue([
+      moveFile,
+      { error: undefined },
+    ])
   })
 
   afterEach(() => {
@@ -97,6 +108,60 @@ describe('File', () => {
     const input = getByLabelText('Input file name')
 
     expect((input as HTMLInputElement).value).toEqual('MOCK_FILE_PATH_3')
+  })
+
+  it('should call move file when renaming file', async () => {
+    const { getByLabelText } = await render(
+      <MockProvider mockResolvers={resolvers}>
+        <div aria-label="outside">
+          <File node={fileNode} level={1} />
+        </div>
+      </MockProvider>
+    )
+
+    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
+
+    await fireEvent.click(getByLabelText('Rename'))
+
+    const input = getByLabelText('Input file name')
+
+    expect((input as HTMLInputElement).value).toEqual('MOCK_FILE_PATH_3')
+
+    const form = getByLabelText('File name form')
+
+    await fireEvent.submit(form)
+
+    expect(moveFile).toBeCalledWith(fileNode, 'MOCK_FILE_PATH_3.md')
+  })
+
+  it('should show alert if deleteFile returns an error', async () => {
+    ;(useMoveFile as jest.Mock).mockImplementation(() => [
+      async () => Promise.reject('mock error'),
+      { loading: false },
+    ])
+
+    const { getByLabelText, getByText } = await render(
+      <MockProvider>
+        <File node={fileNode} level={1} />
+      </MockProvider>,
+      { enableToast: true }
+    )
+
+    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
+
+    await fireEvent.click(getByLabelText('Rename'))
+
+    const input = getByLabelText('Input file name')
+
+    expect((input as HTMLInputElement).value).toEqual('MOCK_FILE_PATH_3')
+
+    const form = getByLabelText('File name form')
+
+    await fireEvent.submit(form)
+
+    await waitFor(() =>
+      expect(getByText('Could not move file')).toBeInTheDocument()
+    )
   })
 
   it('should open file dropdown menu', async () => {
