@@ -269,9 +269,35 @@ describe('FileTree', () => {
 
       expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
 
+      // Close the folder so we can test it's placement
       await fireEvent.click(getByLabelText('chevron'))
 
       expect(queryByText('MOCK_FILE_PATH_4.md')).not.toBeInTheDocument()
+    })
+
+    it('should place file into folder', async () => {
+      const { getByText, getByLabelText, queryByText } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
+        </MockProvider>
+      )
+
+      expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
+
+      await fireEvent.click(getByLabelText('chevron'))
+
+      expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
+
+      await fireEvent.dragStart(getByText('MOCK_FILE_PATH_1.md'))
+      await fireEvent.dragEnter(getByText('MOCK_FOLDER_PATH'))
+      await fireEvent.dragOver(getByText('MOCK_FOLDER_PATH'))
+      await fireEvent.drop(getByText('MOCK_FOLDER_PATH'))
+
+      expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
+
+      await fireEvent.click(getByLabelText('chevron'))
+
+      expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
     })
   })
 })

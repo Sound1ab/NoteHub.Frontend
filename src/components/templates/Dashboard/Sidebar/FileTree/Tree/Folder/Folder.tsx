@@ -93,6 +93,11 @@ export function Folder({ level, node, childNodes }: IFolder) {
 
     const newPath = `${path}/${name}`
 
+    // Return if we dropped the file in its original folder
+    if (newPath === file.path) {
+      return
+    }
+
     openFoldersInPath(newPath)
 
     try {

@@ -29,8 +29,8 @@ export const breakpoints = {
 const darkPrimary = '#1e1e1e'
 const lightPrimary = '#e2e2e2'
 const accentChoices = {
-  primary: '#70dda5',
-  secondary: '#7072dd',
+  primary: '#7072dd',
+  secondary: '#70dda5',
   tertiary: '#dd7089',
   quaternary: '#bcc12f',
   quinary: '#c1622f',
@@ -46,7 +46,7 @@ const feedback = {
 
 export const colors = {
   [COLOR_MODE.LIGHT]: {
-    accent: '#70dda5',
+    accent: accentChoices.primary,
     accentChoices,
     background: {
       primary: lightPrimary,
@@ -65,7 +65,7 @@ export const colors = {
     feedback,
   },
   [COLOR_MODE.DARK]: {
-    accent: '#70dda5',
+    accent: accentChoices.primary,
     accentChoices,
     background: {
       primary: darkPrimary,
