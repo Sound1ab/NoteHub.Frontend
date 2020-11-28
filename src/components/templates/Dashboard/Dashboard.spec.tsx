@@ -103,7 +103,7 @@ describe('Dashboard', () => {
   it('should insert uploaded image at cursor position', async () => {
     const { path } = fileNode
 
-    const { getByLabelText, getByText, getByTitle } = await render(
+    const { getByLabelText, getByText } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{
@@ -114,7 +114,9 @@ describe('Dashboard', () => {
       </MockProvider>
     )
 
-    await fireEvent.click(getByTitle('Upload an image'))
+    await fireEvent.contextMenu(getByLabelText('Markdown editor'))
+
+    await fireEvent.click(getByLabelText('Upload an image'))
 
     const imageFilename = 'chucknorris.png'
 

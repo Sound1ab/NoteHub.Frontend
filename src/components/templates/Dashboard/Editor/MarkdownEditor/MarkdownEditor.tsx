@@ -1,5 +1,5 @@
 import CodeMirror from 'codemirror'
-import React, { useEffect, useState } from 'react'
+import React, { Ref, useEffect, useState } from 'react'
 import SimpleMDE from 'react-simplemde-editor'
 import styled from 'styled-components'
 
@@ -35,19 +35,15 @@ interface IActiveWidget {
   message: string
 }
 
-export function MarkdownEditor() {
+interface IMarkdownEditor {
+  targetRef: Ref<HTMLElement>
+}
+
+export function MarkdownEditor({ targetRef }: IMarkdownEditor) {
   const currentPath = useReadCurrentPath()
   const { file, error: readError } = useReadFile()
   const [updateFile, { loading }] = useUpdateFile()
-  const {
-    setEasyMDE,
-    markText,
-    posFromIndex,
-    charCoords,
-    findMarksAt,
-    coordsChar,
-    getScrollInfo,
-  } = useEasyMDE()
+  const { setEasyMDE, codemirror } = useEasyMDE()
   const [markers, setMarkers] = useState<IMarker[]>([])
   const [activeWidget, setActiveWidget] = useState<IActiveWidget | null>(null)
   const { isOpen, setOpen } = useModalToggle()
@@ -78,15 +74,15 @@ export function MarkdownEditor() {
 
       // Using the absolute offset get the line and character position in the
       // editor
-      const startPosition = posFromIndex(startOffset)
-      const endPosition = posFromIndex(endOffset)
+      const startPosition = codemirror?.posFromIndex(startOffset)
+      const endPosition = codemirror?.posFromIndex(endOffset)
 
       if (!startPosition || !endPosition) {
         return
       }
 
       // Mark it
-      const marker = markText?.(
+      const marker = codemirror?.markText?.(
         { line: startPosition.line, ch: startPosition.ch },
         { line: endPosition.line, ch: endPosition.ch },
         {
@@ -100,7 +96,7 @@ export function MarkdownEditor() {
       }
 
       // Get the absolute position of the marker based on the text area
-      const coords = charCoords(
+      const coords = codemirror?.charCoords(
         { line: startPosition.line, ch: startPosition.ch },
         'local'
       )
@@ -123,7 +119,7 @@ export function MarkdownEditor() {
         },
       ])
     })
-  }, [nodes, markText, posFromIndex, file?.readAt, charCoords])
+  }, [nodes, file?.readAt, codemirror])
 
   if (readError) {
     ErrorToast(`Could not read file. Please try again.`)
@@ -159,14 +155,17 @@ export function MarkdownEditor() {
 
   function handleEditorClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
     // Get line and character given the position of the mouse in the editor
-    const lineCh = coordsChar({ left: e.clientX, top: e.clientY }, 'page')
+    const lineCh = codemirror?.coordsChar(
+      { left: e.clientX, top: e.clientY },
+      'page'
+    )
 
     if (!lineCh) {
       return
     }
 
     // Check the editor to see if there is a marker at that position
-    const selectedMarkers = findMarksAt(lineCh)
+    const selectedMarkers = codemirror?.findMarksAt(lineCh)
 
     // If there is no marker there hide widget
     if (!selectedMarkers || selectedMarkers.length === 0) {
@@ -175,7 +174,10 @@ export function MarkdownEditor() {
     }
 
     // Get the absolute position of the marker based on the text area
-    const coords = charCoords({ line: lineCh.line, ch: lineCh.ch }, 'local')
+    const coords = codemirror?.charCoords(
+      { line: lineCh.line, ch: lineCh.ch },
+      'local'
+    )
 
     if (!coords) {
       return
@@ -199,7 +201,7 @@ export function MarkdownEditor() {
       coords: {
         ...coords,
         left: coords.left,
-        top: coords.top - (getScrollInfo()?.top ?? 0),
+        top: coords.top - (codemirror?.getScrollInfo()?.top ?? 0),
       },
       message: activeMarker.options.message,
     })
@@ -211,7 +213,7 @@ export function MarkdownEditor() {
   }
 
   return (
-    <StyledMarkdownEditor aria-label="Markdown editor">
+    <StyledMarkdownEditor aria-label="Markdown editor" ref={targetRef}>
       <Fade show={loading}>
         <Spinner size="1x" icon="spinner" />
       </Fade>

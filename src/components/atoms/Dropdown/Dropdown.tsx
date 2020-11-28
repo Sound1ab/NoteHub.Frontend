@@ -1,7 +1,7 @@
 import React, { ReactNode, Ref } from 'react'
 import { css } from 'styled-components'
-
 import styled from 'styled-components'
+
 import { Icon, TIcons } from '../Icon/Icon'
 import { DropdownButton } from './DropdownButton'
 
@@ -19,6 +19,7 @@ interface IDropdownMenuProps {
   trianglePosition?: 'left' | 'right'
   onClose?: () => void
   containerRef?: Ref<HTMLUListElement>
+  hasTriangle?: boolean
 }
 
 export function Dropdown({
@@ -26,10 +27,11 @@ export function Dropdown({
   trianglePosition = 'right',
   onClose,
   containerRef,
+  hasTriangle = true,
 }: IDropdownMenuProps) {
   return (
     <StyledDropdown ref={containerRef} aria-label="dropdown">
-      <Triangle trianglePosition={trianglePosition} />
+      {hasTriangle && <Triangle trianglePosition={trianglePosition} />}
       {items.map(
         ({ isDisabled = false, onClick, icon, prefix, custom, label }) => (
           <DropdownButton

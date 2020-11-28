@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import React from 'react'
+import React, { createRef } from 'react'
 
 import { useReadFile, useUpdateFile } from '../../../../../hooks'
 import { resolvers } from '../../../../../schema/mockResolvers'
@@ -63,7 +63,7 @@ describe('MarkdownEditor', () => {
             localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md'),
         }}
       >
-        <MarkdownEditor />
+        <MarkdownEditor targetRef={createRef()} />
       </MockProvider>
     )
 
@@ -78,7 +78,7 @@ describe('MarkdownEditor', () => {
           currentPath: () => localState.currentPathVar('MOCK_FOLDER_PATH'),
         }}
       >
-        <MarkdownEditor />
+        <MarkdownEditor targetRef={createRef()} />
       </MockProvider>
     )
 
@@ -101,7 +101,7 @@ describe('MarkdownEditor', () => {
             localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md'),
         }}
       >
-        <MarkdownEditor />
+        <MarkdownEditor targetRef={createRef()} />
       </MockProvider>,
       { enableToast: true }
     )
@@ -123,7 +123,7 @@ describe('MarkdownEditor', () => {
             localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md'),
         }}
       >
-        <MarkdownEditor />
+        <MarkdownEditor targetRef={createRef()} />
       </MockProvider>
     )
 
@@ -150,7 +150,7 @@ describe('MarkdownEditor', () => {
             localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md'),
         }}
       >
-        <MarkdownEditor />
+        <MarkdownEditor targetRef={createRef()} />
       </MockProvider>
     )
 
@@ -184,7 +184,7 @@ describe('MarkdownEditor', () => {
             localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md'),
         }}
       >
-        <MarkdownEditor />
+        <MarkdownEditor targetRef={createRef()} />
       </MockProvider>
     )
 
@@ -210,7 +210,7 @@ describe('MarkdownEditor', () => {
             localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md'),
         }}
       >
-        <MarkdownEditor />
+        <MarkdownEditor targetRef={createRef()} />
       </MockProvider>
     )
 
@@ -244,7 +244,7 @@ describe('MarkdownEditor', () => {
             localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md'),
         }}
       >
-        <MarkdownEditor />
+        <MarkdownEditor targetRef={createRef()} />
       </MockProvider>
     )
 

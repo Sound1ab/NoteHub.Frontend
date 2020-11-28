@@ -1,8 +1,21 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  ReactText,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import { toast } from 'react-toastify'
 import { useUpload } from 'react-use-upload'
 import styled from 'styled-components'
 
-import { useCreateSignedUrl } from '..'
+import { ErrorToast } from '../../components/atoms'
+import {
+  useCreateSignedUrl,
+  useReadCursorPosition,
+  useReadFile,
+  useUpdateFile,
+} from '../'
 
 const Style = styled.input`
   display: none;
@@ -11,8 +24,20 @@ const Style = styled.input`
 export function useDropzone() {
   const input = useRef<HTMLInputElement>(null)
   const [createSignedUrl] = useCreateSignedUrl()
-  const [file, setFile] = useState<File | null>(null)
+  const [uploadFile, setUploadFile] = useState<File | null>(null)
   const [imagePath, setImagePath] = useState<string | null>(null)
+  const toastId = React.useRef<ReactText | null>(null)
+  const [updateFile] = useUpdateFile()
+  const { file } = useReadFile()
+  const cursorPosition = useReadCursorPosition()
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { progress, done, loading } = useUpload(uploadFile!, {
+    getUrl,
+    method: 'PUT',
+    headers: {
+      'x-amz-acl': 'public-read',
+    },
+  })
 
   async function getUrl() {
     const { data } = await createSignedUrl()
@@ -30,22 +55,13 @@ export function useDropzone() {
     return signedUrl
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { progress, done, loading } = useUpload(file!, {
-    getUrl,
-    method: 'PUT',
-    headers: {
-      'x-amz-acl': 'public-read',
-    },
-  })
-
   useEffect(() => {
-    if (!done || !file || !imagePath) {
+    if (!done || !uploadFile || !imagePath) {
       return
     }
-    setFile(null)
+    setUploadFile(null)
     setImagePath(null)
-  }, [done, file, imagePath])
+  }, [done, uploadFile, imagePath])
 
   const handleDrop = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target
@@ -57,7 +73,7 @@ export function useDropzone() {
     const reader = new FileReader()
 
     reader.onload = async () => {
-      setFile(files[0])
+      setUploadFile(files[0])
     }
 
     reader.readAsBinaryString(files[0])
@@ -92,6 +108,82 @@ export function useDropzone() {
       />
     )
   }, [handleDrop])
+
+  const fileContent = file?.content
+
+  const insertPathIntoString = useCallback(
+    (path: string | null) => {
+      if (!path) {
+        return
+      }
+
+      const text = `![](${path})`
+      const { ch, line } = cursorPosition
+      const lines = fileContent ? fileContent.split('\n') : []
+      const characters = lines.length > 0 ? [...lines[line]] : []
+      characters.splice(ch, 0, text)
+      lines[line] = characters.join('')
+      return lines.join('\n')
+    },
+    [cursorPosition, fileContent]
+  )
+
+  const updateEditor = useCallback(async () => {
+    try {
+      const content = insertPathIntoString(imagePath)
+
+      await updateFile(file, content)
+    } catch (error) {
+      ErrorToast(`There was an issue uploading your image. ${error.message}`)
+    }
+  }, [file, imagePath, updateFile, insertPathIntoString])
+
+  useEffect(() => {
+    if (!done || !imagePath) {
+      return
+    }
+    updateEditor()
+  }, [done, updateEditor, imagePath])
+
+  useEffect(() => {
+    if (!done) {
+      return
+    }
+
+    // Have to wait for next tick to let whatever async stuff
+    // toast is doing finish. If we don't do this and we reach 100
+    // too quickly, the dismiss goes weird
+    setTimeout(() => {
+      if (toastId.current) {
+        if (progress !== 100 || toast.isActive(toastId.current)) {
+          // If the upload has finished but doesn't reach 100, the toast will not
+          // close. In this case we need to dismiss ourselves
+          toast.dismiss(toastId.current)
+        }
+        toastId.current = null
+      }
+    }, 1)
+
+    return
+  }, [done, progress])
+
+  useEffect(() => {
+    if (!loading) {
+      return
+    }
+
+    const decimalProgress = progress / 100
+
+    if (toastId.current === null) {
+      toastId.current = toast('Upload in Progress', {
+        progress: decimalProgress,
+      })
+    } else {
+      toast.update(toastId.current, {
+        progress: decimalProgress,
+      })
+    }
+  }, [loading, progress])
 
   return {
     Dropzone: inputElement,

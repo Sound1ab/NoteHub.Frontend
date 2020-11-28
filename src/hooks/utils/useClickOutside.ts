@@ -20,10 +20,10 @@ export function useClickOutside(
       }
     }
 
-    document.addEventListener('mouseup', closeMenu)
+    document.addEventListener('mousedown', closeMenu)
     document.addEventListener('keydown', handleKeyPressed)
     return () => {
-      document.removeEventListener('mouseup', closeMenu)
+      document.removeEventListener('mousedown', closeMenu)
       document.removeEventListener('keydown', handleKeyPressed)
     }
   }, [ref, callback])

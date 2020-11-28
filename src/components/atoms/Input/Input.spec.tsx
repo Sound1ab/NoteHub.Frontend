@@ -37,7 +37,7 @@ describe('InlineInput', () => {
       </MockProvider>
     )
 
-    await fireEvent.mouseUp(container)
+    await fireEvent.mouseDown(container)
 
     expect(clickOutsideCallback).toBeCalled()
   })

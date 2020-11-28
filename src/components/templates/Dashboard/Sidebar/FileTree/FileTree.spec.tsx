@@ -56,7 +56,7 @@ describe('FileTree', () => {
         </MockProvider>
       )
 
-      await fireEvent.mouseUp(container)
+      await fireEvent.mouseDown(container)
 
       expect(closeNewFile).toBeCalled()
     })

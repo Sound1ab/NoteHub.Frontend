@@ -2,7 +2,11 @@ import '@testing-library/jest-dom/extend-expect'
 
 import { EventType } from '@testing-library/dom/types/events'
 import { act, fireEvent, render } from '@testing-library/react'
+import { act as hooksAct, renderHook } from '@testing-library/react-hooks'
 import React, { ReactNode } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { resolvers as mockResolvers } from './schema/mockResolvers'
 
 import { Toast } from './components/atoms'
 import {
@@ -12,8 +16,7 @@ import {
   ThemeProvider,
 } from './components/providers'
 import { FileTreeProvider } from './components/templates/Dashboard/Sidebar/FileTree/FileTreeProvider'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { DndProvider } from 'react-dnd'
+import { IMocks } from 'graphql-tools'
 
 export type FireObject = {
   [K in EventType]: (
@@ -37,11 +40,13 @@ export const wait = (): Promise<void> => {
 const Context = ({
   node,
   enableToast,
+  resolvers,
 }: {
   node: ReactNode
   enableToast: boolean
+  resolvers?: IMocks
 }) => (
-  <MockProvider>
+  <MockProvider mockResolvers={{ ...mockResolvers, ...resolvers }}>
     <ThemeProvider>
       {() => (
         <IconProvider>
@@ -56,6 +61,26 @@ const Context = ({
     </ThemeProvider>
   </MockProvider>
 )
+
+async function customRenderHook<T>(
+  callback: () => T,
+  { enableToast = false, resolvers = {}, ...options } = {}
+) {
+  const result = renderHook(callback, {
+    ...options,
+    wrapper: ({ children }) => (
+      <Context
+        node={children}
+        enableToast={enableToast}
+        resolvers={resolvers}
+      />
+    ),
+  })
+
+  await hooksAct(wait)
+
+  return result
+}
 
 const customRender = async (
   node: ReactNode,
@@ -132,9 +157,12 @@ const customFireEvent = Object.entries(fireEvent).reduce(
 )
 
 // re-export everything
+export * as reactHooks from '@testing-library/react-hooks'
+// @ts-ignore
 export * from '@testing-library/react'
 
 // override render method
 export { customRender as render }
+export { customRenderHook as renderHook }
 
 export { customFireEvent as fireEvent }

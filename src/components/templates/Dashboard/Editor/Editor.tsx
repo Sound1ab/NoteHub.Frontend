@@ -1,16 +1,25 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 
 import { CONTAINER_ID } from '../../../../enums'
 import { useReadFile } from '../../../../hooks'
+import { ContextMenu } from './ContextMenu/ContextMenu'
 import { MarkdownEditor, MarkdownEditorSkeleton } from './MarkdownEditor'
 
 export function Editor() {
   const { loading } = useReadFile()
+  const target = useRef(null)
 
   return (
     <Wrapper id={CONTAINER_ID.EDITOR}>
-      {loading ? <MarkdownEditorSkeleton /> : <MarkdownEditor />}
+      {loading ? (
+        <MarkdownEditorSkeleton />
+      ) : (
+        <>
+          <ContextMenu targetRef={target} />
+          <MarkdownEditor targetRef={target} />
+        </>
+      )}
     </Wrapper>
   )
 }

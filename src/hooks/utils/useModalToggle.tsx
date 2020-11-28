@@ -11,9 +11,14 @@ export function useModalToggle<T extends HTMLElement>() {
     domNode,
     hasBackground,
     placementAroundContainer,
+    style,
   }: Pick<
     IPortal,
-    'children' | 'domNode' | 'hasBackground' | 'placementAroundContainer'
+    | 'children'
+    | 'domNode'
+    | 'hasBackground'
+    | 'placementAroundContainer'
+    | 'style'
   >) => (
     <Portal
       ref={ref}
@@ -21,6 +26,7 @@ export function useModalToggle<T extends HTMLElement>() {
       domNode={domNode}
       hasBackground={hasBackground}
       placementAroundContainer={placementAroundContainer}
+      style={style}
     >
       {children}
     </Portal>

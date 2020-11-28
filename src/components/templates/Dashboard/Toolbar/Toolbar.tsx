@@ -1,266 +1,33 @@
-import React, {
-  Fragment,
-  ReactText,
-  useCallback,
-  useEffect,
-  useRef,
-} from 'react'
-import { toast } from 'react-toastify'
+import React from 'react'
 import styled from 'styled-components'
 
-import {
-  useDropzone,
-  useEasyMDE,
-  useModalToggle,
-  useReadCurrentPath,
-  useReadCursorPosition,
-  useReadFile,
-  useUpdateFile,
-} from '../../../../hooks'
-import { isFile } from '../../../../utils'
-import { Fade } from '../../../animation'
-import { Dropdown, ErrorToast, Icon } from '../../../atoms'
-import { ColorPicker } from './ColorPicker/ColorPicker'
+import { useEasyMDE } from '../../../../hooks'
+import { Icon } from '../../../atoms'
 import { Profile } from './Profile/Profile'
 import { ToolbarButton } from './ToolbarButton/ToolbarButton'
 
 export function Toolbar() {
-  const currentPath = useReadCurrentPath()
-  const cursorPosition = useReadCursorPosition()
-  const containerRef = useRef(null)
-  const {
-    openFileDialog,
-    Dropzone,
-    done,
-    imagePath,
-    loading,
-    progress,
-  } = useDropzone()
-  const [updateFile] = useUpdateFile()
-  const { file } = useReadFile()
-  const {
-    toggleOrderedList,
-    toggleCodeBlock,
-    toggleUnorderedList,
-    toggleItalic,
-    toggleBold,
-    toggleSideBySide,
-    toggleBlockquote,
-    drawHorizontalRule,
-    drawLink,
-    drawTable,
-  } = useEasyMDE()
-  const isMarkdownEditorActive = isFile(currentPath)
-  const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
-  const toastId = React.useRef<ReactText | null>(null)
+  const { easyMDE, editor } = useEasyMDE()
 
-  function handleButtonClick() {
-    setOpen(true)
+  function handleToggleSideBySide() {
+    if (!editor) {
+      return
+    }
+    easyMDE?.toggleSideBySide(editor)
   }
-
-  const fileContent = file?.content
-
-  const insertPathIntoString = useCallback(
-    (path: string | null) => {
-      if (!path) {
-        return
-      }
-
-      const text = `![](${path})`
-      const { ch, line } = cursorPosition
-      const lines = fileContent ? fileContent.split('\n') : []
-      const characters = lines.length > 0 ? [...lines[line]] : []
-      characters.splice(ch, 0, text)
-      lines[line] = characters.join('')
-      return lines.join('\n')
-    },
-    [cursorPosition, fileContent]
-  )
-
-  const updateEditor = useCallback(async () => {
-    try {
-      const content = insertPathIntoString(imagePath)
-
-      await updateFile(file, content)
-    } catch (error) {
-      ErrorToast(`There was an issue uploading your image. ${error.message}`)
-    }
-  }, [file, imagePath, updateFile, insertPathIntoString])
-
-  useEffect(() => {
-    if (!done || !imagePath) {
-      return
-    }
-    updateEditor()
-  }, [done, updateEditor, imagePath])
-
-  useEffect(() => {
-    if (!done) {
-      return
-    }
-
-    // Have to wait for next tick to let whatever async stuff
-    // toast is doing finish. If we don't do this and we reach 100
-    // too quickly, the dismiss goes weird
-    setTimeout(() => {
-      if (toastId.current) {
-        if (progress !== 100 || toast.isActive(toastId.current)) {
-          // If the upload has finished but doesn't reach 100, the toast will not
-          // close. In this case we need to dismiss ourselves
-          toast.dismiss(toastId.current)
-        }
-        toastId.current = null
-      }
-    }, 1)
-
-    return
-  }, [done, progress])
-
-  useEffect(() => {
-    if (!loading) {
-      return
-    }
-
-    const decimalProgress = progress / 100
-
-    if (toastId.current === null) {
-      toastId.current = toast('Upload in Progress', {
-        progress: decimalProgress,
-      })
-    } else {
-      toast.update(toastId.current, {
-        progress: decimalProgress,
-      })
-    }
-  }, [loading, progress])
-
-  function handleImageUpload() {
-    openFileDialog()
-  }
-
-  const actions = [
-    {
-      onClick: toggleItalic,
-      title: 'Add italic',
-      isDisabled: !isMarkdownEditorActive,
-      icon: 'italic' as const,
-      separator: false,
-    },
-    {
-      onClick: toggleBold,
-      title: 'Add bold',
-      isDisabled: !isMarkdownEditorActive,
-      icon: 'bold' as const,
-      separator: false,
-    },
-    {
-      onClick: toggleBlockquote,
-      title: 'Add quote',
-      isDisabled: !isMarkdownEditorActive,
-      icon: 'quote-right' as const,
-      separator: false,
-    },
-    {
-      onClick: toggleOrderedList,
-      title: 'Add ordered list',
-      isDisabled: !isMarkdownEditorActive,
-      icon: 'list-ol' as const,
-      separator: false,
-    },
-    {
-      onClick: toggleUnorderedList,
-      title: 'Add unordered list',
-      isDisabled: !isMarkdownEditorActive,
-      icon: 'list' as const,
-      separator: false,
-    },
-    {
-      onClick: toggleCodeBlock,
-      title: 'Add code block',
-      isDisabled: !isMarkdownEditorActive,
-      icon: 'code' as const,
-      separator: false,
-    },
-    {
-      onClick: drawHorizontalRule,
-      title: 'Add horizontal line',
-      isDisabled: !isMarkdownEditorActive,
-      icon: 'minus' as const,
-      separator: false,
-    },
-    {
-      onClick: drawTable,
-      title: 'Add table',
-      isDisabled: !isMarkdownEditorActive,
-      icon: 'table' as const,
-      separator: false,
-    },
-    {
-      onClick: drawLink,
-      title: 'Add link',
-      isDisabled: !isMarkdownEditorActive,
-      icon: 'link' as const,
-      separator: true,
-    },
-    {
-      onClick: handleImageUpload,
-      title: 'Upload an image',
-      isDisabled: !isMarkdownEditorActive,
-      icon: 'image' as const,
-      separator: false,
-    },
-    {
-      onClick: toggleSideBySide,
-      title: 'Toggle side by side',
-      isDisabled: !isMarkdownEditorActive,
-      icon: 'columns' as const,
-      separator: true,
-    },
-  ]
 
   return (
-    <>
-      <Dropzone />
-      <StyledToolbar>
-        <Actions>
-          {actions.map((action) => (
-            <Fragment key={action.title}>
-              {action.separator && <Separator>|</Separator>}
-              <ToolbarButton
-                onClick={action.onClick}
-                title={action.title}
-                isDisabled={action.isDisabled}
-              >
-                <Icon size="1x" icon={action.icon} />
-              </ToolbarButton>
-            </Fragment>
-          ))}
-          <ColorPicker />
-          <MobileMenuButton ref={containerRef} onClick={handleButtonClick}>
-            <Icon size="sm" icon="bars" />
-          </MobileMenuButton>
-          <Fade show={isOpen}>
-            <Portal
-              domNode={containerRef.current}
-              placementAroundContainer="bottom-right"
-            >
-              <Dropdown
-                containerRef={ref}
-                items={actions.map((action) => ({
-                  label: action.title,
-                  icon: action.icon,
-                  onClick: action.onClick,
-                  isDisabled: action.isDisabled,
-                }))}
-                trianglePosition="left"
-                onClose={() => setOpen(false)}
-              />
-            </Portal>
-          </Fade>
-          <StyledProfile />
-        </Actions>
-      </StyledToolbar>
-    </>
+    <StyledToolbar>
+      <Actions>
+        <ToolbarButton
+          onClick={handleToggleSideBySide}
+          title="Toggle side by side"
+        >
+          <Icon size="1x" icon="columns" />
+        </ToolbarButton>
+        <StyledProfile />
+      </Actions>
+    </StyledToolbar>
   )
 }
 
@@ -300,23 +67,4 @@ const Actions = styled.div`
 
 const StyledProfile = styled(Profile)`
   margin-left: auto;
-`
-
-const MobileMenuButton = styled(ToolbarButton)`
-  position: relative;
-  display: inline-flex;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    display: none;
-  }
-`
-
-const Separator = styled.span`
-  display: none;
-  color: ${({ theme }) => theme.colors.text.secondary};
-  margin-right: ${({ theme }) => theme.spacing.xxs};
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    display: inline-block;
-  }
 `

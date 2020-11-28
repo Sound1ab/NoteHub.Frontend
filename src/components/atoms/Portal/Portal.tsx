@@ -12,6 +12,7 @@ export interface IPortal {
   domNode?: HTMLElement | null
   hasBackground?: boolean
   placementAroundContainer?: 'bottom-left' | 'bottom-right'
+  style?: Record<string, string | number>
 }
 
 export const Portal = React.forwardRef(
@@ -22,6 +23,7 @@ export const Portal = React.forwardRef(
       domNode,
       hasBackground = false,
       placementAroundContainer,
+      style,
     }: IPortal,
     ref?: React.Ref<HTMLElement> | null
   ) => {
@@ -31,6 +33,7 @@ export const Portal = React.forwardRef(
       <Wrapper
         hasBackground={hasBackground}
         placementAroundContainer={placementAroundContainer}
+        style={style}
       >
         <ClickLayer />
         <StyledFocusLock>{children}</StyledFocusLock>
