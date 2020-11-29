@@ -40,73 +40,66 @@ export function ContextMenu({ targetRef }: IContextMenu) {
   const actions = [
     {
       onClick: toggleItalic,
-      title: 'Add italic',
+      title: 'Italic',
       isDisabled: !isMarkdownEditorActive,
       icon: 'italic' as const,
-      separator: false,
     },
     {
       onClick: toggleBold,
-      title: 'Add bold',
+      title: 'Bold',
       isDisabled: !isMarkdownEditorActive,
       icon: 'bold' as const,
-      separator: false,
     },
     {
       onClick: toggleBlockquote,
-      title: 'Add quote',
+      title: 'Quote',
       isDisabled: !isMarkdownEditorActive,
       icon: 'quote-right' as const,
-      separator: false,
+      hasSeparator: true,
     },
     {
       onClick: toggleOrderedList,
-      title: 'Add ordered list',
+      title: 'Ordered list',
       isDisabled: !isMarkdownEditorActive,
       icon: 'list-ol' as const,
-      separator: false,
     },
     {
       onClick: toggleUnorderedList,
-      title: 'Add unordered list',
+      title: 'Unordered list',
       isDisabled: !isMarkdownEditorActive,
       icon: 'list' as const,
-      separator: false,
+      hasSeparator: true,
     },
     {
       onClick: toggleCodeBlock,
-      title: 'Add code block',
+      title: 'Code block',
       isDisabled: !isMarkdownEditorActive,
       icon: 'code' as const,
-      separator: false,
     },
     {
       onClick: drawHorizontalRule,
-      title: 'Add horizontal line',
+      title: 'Horizontal line',
       isDisabled: !isMarkdownEditorActive,
       icon: 'minus' as const,
-      separator: false,
     },
     {
       onClick: drawTable,
-      title: 'Add table',
+      title: 'Table',
       isDisabled: !isMarkdownEditorActive,
       icon: 'table' as const,
-      separator: false,
+      hasSeparator: true,
     },
     {
       onClick: drawLink,
-      title: 'Add link',
+      title: 'Link',
       isDisabled: !isMarkdownEditorActive,
       icon: 'link' as const,
-      separator: true,
     },
     {
       onClick: openFileDialog,
       title: 'Upload an image',
       isDisabled: !isMarkdownEditorActive,
       icon: 'image' as const,
-      separator: false,
     },
   ]
 
@@ -123,6 +116,7 @@ export function ContextMenu({ targetRef }: IContextMenu) {
               icon: action.icon,
               onClick: () => action.onClick(editor),
               isDisabled: action.isDisabled,
+              hasSeparator: action.hasSeparator,
             }))}
             onClose={() => setOpen(false)}
           />

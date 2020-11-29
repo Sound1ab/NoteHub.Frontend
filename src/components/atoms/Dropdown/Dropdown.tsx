@@ -12,6 +12,7 @@ export interface IDropdownItem {
   prefix?: 'fas' | 'fab' | 'far' | 'fal' | 'fad'
   custom?: ReactNode
   isDisabled?: boolean
+  hasSeparator?: boolean
 }
 
 interface IDropdownMenuProps {
@@ -33,32 +34,43 @@ export function Dropdown({
     <StyledDropdown ref={containerRef} aria-label="dropdown">
       {hasTriangle && <Triangle trianglePosition={trianglePosition} />}
       {items.map(
-        ({ isDisabled = false, onClick, icon, prefix, custom, label }) => (
-          <DropdownButton
-            key={label}
-            onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-              onClose && onClose()
-              onClick?.(e)
-            }}
-            aria-label={label}
-            isDisabled={isDisabled}
-          >
-            {custom ? (
-              custom
-            ) : (
-              <Item>
-                {icon && (
-                  <StyledIcon
-                    size="sm"
-                    icon={icon}
-                    prefix={prefix}
-                    title={`${label} icon`}
-                  />
-                )}
-                {label}
-              </Item>
-            )}
-          </DropdownButton>
+        ({
+          isDisabled = false,
+          onClick,
+          icon,
+          prefix,
+          custom,
+          label,
+          hasSeparator,
+        }) => (
+          <>
+            <DropdownButton
+              key={label}
+              onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                onClose && onClose()
+                onClick?.(e)
+              }}
+              aria-label={label}
+              isDisabled={isDisabled}
+            >
+              {custom ? (
+                custom
+              ) : (
+                <Item>
+                  {icon && (
+                    <StyledIcon
+                      size="sm"
+                      icon={icon}
+                      prefix={prefix}
+                      title={`${label} icon`}
+                    />
+                  )}
+                  {label}
+                </Item>
+              )}
+            </DropdownButton>
+            {hasSeparator && <Separator />}
+          </>
         )
       )}
     </StyledDropdown>
@@ -108,4 +120,8 @@ const Item = styled.li`
 const StyledIcon = styled(Icon)`
   color: ${({ theme }) => theme.colors.text.secondary};
   margin-right: ${({ theme }) => theme.spacing.xs};
+`
+
+const Separator = styled.hr`
+  margin: ${({ theme }) => theme.spacing.xxs} 0;
 `

@@ -2,13 +2,14 @@ import React, { useRef } from 'react'
 import styled from 'styled-components'
 
 import { CONTAINER_ID } from '../../../../enums'
-import { useReadFile } from '../../../../hooks'
+import { useEasyMDE, useReadFile } from '../../../../hooks'
 import { ContextMenu } from './ContextMenu/ContextMenu'
 import { MarkdownEditor, MarkdownEditorSkeleton } from './MarkdownEditor'
 
 export function Editor() {
   const { loading } = useReadFile()
   const target = useRef(null)
+  const { isPreviewActive } = useEasyMDE()
 
   return (
     <Wrapper id={CONTAINER_ID.EDITOR}>
@@ -16,7 +17,7 @@ export function Editor() {
         <MarkdownEditorSkeleton />
       ) : (
         <>
-          <ContextMenu targetRef={target} />
+          {!isPreviewActive && <ContextMenu targetRef={target} />}
           <MarkdownEditor targetRef={target} />
         </>
       )}

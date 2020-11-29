@@ -93,15 +93,15 @@ describe('ContextMenu', () => {
   })
 
   it.each([
-    [toggleItalic, 'Add italic'],
-    [toggleBold, 'Add bold'],
-    [toggleBlockquote, 'Add quote'],
-    [toggleOrderedList, 'Add ordered list'],
-    [toggleUnorderedList, 'Add unordered list'],
-    [toggleCodeBlock, 'Add code block'],
-    [drawHorizontalRule, 'Add horizontal line'],
-    [drawLink, 'Add link'],
-    [drawTable, 'Add table'],
+    [toggleItalic, 'Italic'],
+    [toggleBold, 'Bold'],
+    [toggleBlockquote, 'Quote'],
+    [toggleOrderedList, 'Ordered list'],
+    [toggleUnorderedList, 'Unordered list'],
+    [toggleCodeBlock, 'Code block'],
+    [drawHorizontalRule, 'Horizontal line'],
+    [drawLink, 'Link'],
+    [drawTable, 'Table'],
   ])('should call easyMDE using buttons', async (fn, title) => {
     const { getByLabelText } = await render(
       <MockProvider
