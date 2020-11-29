@@ -43,7 +43,7 @@ export function MarkdownEditor({ targetRef }: IMarkdownEditor) {
   const currentPath = useReadCurrentPath()
   const { file, error: readError } = useReadFile()
   const [updateFile, { loading }] = useUpdateFile()
-  const { setEasyMDE, codemirror } = useEasyMDE()
+  const { setEasyMDE, codemirror, isPreviewActive } = useEasyMDE()
   const [markers, setMarkers] = useState<IMarker[]>([])
   const [activeWidget, setActiveWidget] = useState<IActiveWidget | null>(null)
   const { isOpen, setOpen } = useModalToggle()
@@ -213,7 +213,11 @@ export function MarkdownEditor({ targetRef }: IMarkdownEditor) {
   }
 
   return (
-    <StyledMarkdownEditor aria-label="Markdown editor" ref={targetRef}>
+    <StyledMarkdownEditor
+      aria-label="Markdown editor"
+      ref={targetRef}
+      isPreviewActive={isPreviewActive}
+    >
       <Fade show={loading}>
         <Spinner size="1x" icon="spinner" />
       </Fade>
@@ -265,7 +269,7 @@ const Spinner = styled(Icon)`
   }
 `
 
-const StyledMarkdownEditor = styled.article`
+const StyledMarkdownEditor = styled.article<{ isPreviewActive?: boolean }>`
   position: relative;
   height: 100%;
   overflow: hidden;
@@ -508,6 +512,7 @@ const StyledMarkdownEditor = styled.article`
     position: relative;
     width: 100%;
     padding: 0 ${({ theme }) => theme.spacing.xs};
+    display: ${({ isPreviewActive }) => (isPreviewActive ? 'none' : 'block')};
   }
   .CodeMirror-sizer {
     position: relative;

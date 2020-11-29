@@ -7,45 +7,26 @@ import { Profile } from './Profile/Profile'
 import { ToolbarButton } from './ToolbarButton/ToolbarButton'
 
 export function Toolbar() {
-  const { easyMDE, editor } = useEasyMDE()
-
-  function handleToggleSideBySide() {
-    if (!editor) {
-      return
-    }
-    try {
-      easyMDE?.toggleSideBySide(editor)
-    } catch {
-      // Ignore errors
-    }
-  }
-
-  function handlePreview() {
-    if (!editor) {
-      return
-    }
-    try {
-      easyMDE?.togglePreview(editor)
-    } catch {
-      // Ignore errors
-    }
-  }
-
-  console.log('preview', editor?.isPreviewActive())
+  const {
+    isSideBySideActive,
+    isPreviewActive,
+    togglePreview,
+    toggleSideBySide,
+  } = useEasyMDE()
 
   return (
     <StyledToolbar>
       <Actions>
         <ToolbarButton
-          isActive={editor?.isSideBySideActive()}
-          onClick={handleToggleSideBySide}
+          isActive={isSideBySideActive}
+          onClick={() => toggleSideBySide?.()}
           title="Toggle side by side"
         >
           <Icon size="1x" icon="columns" />
         </ToolbarButton>
         <ToolbarButton
-          isActive={editor?.isPreviewActive()}
-          onClick={handlePreview}
+          isActive={isPreviewActive}
+          onClick={() => togglePreview?.()}
           title="Toggle preview"
         >
           <Icon size="1x" icon="align-justify" />

@@ -14,6 +14,8 @@ export const localState = {
   currentJwtVar: makeVar<string | null>(null),
   accentColorVar: makeVar<string | null>(null),
   searchVar: makeVar(''),
+  isPreviewActiveVar: makeVar(false),
+  isSideBySideActiveVar: makeVar(false),
 }
 
 export const fields = {
@@ -37,6 +39,12 @@ export const fields = {
   },
   searchVar() {
     return localState.searchVar()
+  },
+  isPreviewActive() {
+    return localState.isPreviewActiveVar()
+  },
+  isSideBySideActive() {
+    return localState.isSideBySideActiveVar()
   },
 }
 
