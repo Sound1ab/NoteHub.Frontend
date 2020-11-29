@@ -5,6 +5,7 @@ import {
   faSoundcloud,
 } from '@fortawesome/free-brands-svg-icons'
 import {
+  faAlignJustify,
   faBars,
   faBold,
   faBook,
@@ -79,7 +80,8 @@ library.add(
   faColumns,
   faLink,
   faTable,
-  faBars
+  faBars,
+  faAlignJustify
 )
 
 interface IIconProvider {

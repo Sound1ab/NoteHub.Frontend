@@ -39,6 +39,7 @@ export type TIcons =
   | 'link'
   | 'table'
   | 'bars'
+  | 'align-justify'
 
 interface IIcon {
   icon: TIcons

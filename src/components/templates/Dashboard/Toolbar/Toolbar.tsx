@@ -13,19 +13,44 @@ export function Toolbar() {
     if (!editor) {
       return
     }
-    easyMDE?.toggleSideBySide(editor)
+    try {
+      easyMDE?.toggleSideBySide(editor)
+    } catch {
+      // Ignore errors
+    }
   }
+
+  function handlePreview() {
+    if (!editor) {
+      return
+    }
+    try {
+      easyMDE?.togglePreview(editor)
+    } catch {
+      // Ignore errors
+    }
+  }
+
+  console.log('preview', editor?.isPreviewActive())
 
   return (
     <StyledToolbar>
       <Actions>
         <ToolbarButton
+          isActive={editor?.isSideBySideActive()}
           onClick={handleToggleSideBySide}
           title="Toggle side by side"
         >
           <Icon size="1x" icon="columns" />
         </ToolbarButton>
-        <StyledProfile />
+        <ToolbarButton
+          isActive={editor?.isPreviewActive()}
+          onClick={handlePreview}
+          title="Toggle preview"
+        >
+          <Icon size="1x" icon="align-justify" />
+        </ToolbarButton>
+        <Profile />
       </Actions>
     </StyledToolbar>
   )
@@ -58,13 +83,9 @@ const StyledToolbar = styled.header`
 
 const Actions = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
   padding: ${({ theme }) => theme.spacing.xs};
   grid-area: editoractions;
   width: 100%;
-`
-
-const StyledProfile = styled(Profile)`
-  margin-left: auto;
 `

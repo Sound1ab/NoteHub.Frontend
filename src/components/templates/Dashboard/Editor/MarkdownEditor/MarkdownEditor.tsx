@@ -281,6 +281,24 @@ const StyledMarkdownEditor = styled.article`
     display: block;
   }
 
+  .editor-preview-full {
+    overflow: scroll !important;
+    height: 100%;
+    outline: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0 ${({ theme }) => theme.spacing.xs};
+    background-color: ${({ theme }) => theme.colors.background.primary};
+    width: 100%;
+    z-index: 2;
+    display: none;
+  }
+
+  .editor-preview-active {
+    display: block;
+  }
+
   .CodeMirror-sided {
     flex: 0 0 50%;
   }
@@ -483,13 +501,13 @@ const StyledMarkdownEditor = styled.article`
     background: #fff;
   }
   .CodeMirror-scroll {
+    box-sizing: border-box !important;
     overflow: scroll !important;
-    margin-bottom: -30px;
-    margin-right: -30px;
-    padding-bottom: 30px;
     height: 100%;
     outline: 0;
     position: relative;
+    width: 100%;
+    padding: 0 ${({ theme }) => theme.spacing.xs};
   }
   .CodeMirror-sizer {
     position: relative;
@@ -502,13 +520,13 @@ const StyledMarkdownEditor = styled.article`
   .CodeMirror-vscrollbar {
     position: absolute;
     z-index: 6;
-    display: none;
   }
   .CodeMirror-vscrollbar {
     right: 0;
     top: 0;
     overflow-x: hidden;
     overflow-y: scroll;
+    display: none !important;
   }
   .CodeMirror-hscrollbar {
     bottom: 0;
@@ -689,7 +707,6 @@ const StyledMarkdownEditor = styled.article`
     color: #000;
     direction: ltr;
     box-sizing: border-box;
-    padding: 0 ${({ theme }) => theme.spacing.xs};
     font: inherit;
     z-index: 1;
     word-wrap: break-word;

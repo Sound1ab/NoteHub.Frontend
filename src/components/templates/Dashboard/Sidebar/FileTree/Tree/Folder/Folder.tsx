@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react'
 import { useDrop } from 'react-dnd'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { useCreateFile, useFileTree } from '../../../../../../../hooks'
 import { useMoveFile } from '../../../../../../../hooks/file/useMoveFile'
@@ -145,7 +145,11 @@ export function Folder({ level, node, childNodes }: IFolder) {
 
 const StyledFolder = styled(Node)<{ isOver: boolean }>`
   background-color: ${({ isOver, theme }) =>
-    isOver ? theme.colors.accent : 'transparent'}!important;
+    isOver
+      ? css`
+          ${theme.colors.accent}!important;
+        `
+      : 'transparent'};
 `
 
 const StyledIcon = styled(Icon)`
