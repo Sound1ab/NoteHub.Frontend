@@ -3,12 +3,12 @@ import { gql, useQuery } from '@apollo/client'
 import { ReadFileQuery, ReadFileQueryVariables } from '../../components/apollo'
 import { FileWithMessagesFragment } from '../../fragments'
 import { isFile } from '../../utils'
-import { useReadCurrentPath } from '..'
+import { useReadActiveRetextSettings, useReadCurrentPath } from '..'
 
 export const ReadFileDocument = gql`
   ${FileWithMessagesFragment}
-  query ReadFile($path: String!) {
-    readFile(path: $path) {
+  query ReadFile($path: String!, $retextSettings: [RETEXT_SETTINGS!]) {
+    readFile(path: $path, retextSettings: $retextSettings) {
       ...fileWithMessages
     }
   }
@@ -16,6 +16,7 @@ export const ReadFileDocument = gql`
 
 export function useReadFile() {
   const currentPath = useReadCurrentPath()
+  const { activeRetextSettings } = useReadActiveRetextSettings()
 
   const { data, loading, error } = useQuery<
     ReadFileQuery,
@@ -24,7 +25,10 @@ export function useReadFile() {
     skip: !currentPath || !isFile(currentPath),
     variables: {
       path: currentPath,
+      retextSettings: activeRetextSettings,
     },
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
   })
 
   return { file: data?.readFile, loading, error }

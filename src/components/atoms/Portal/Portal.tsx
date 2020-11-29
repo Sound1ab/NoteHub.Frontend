@@ -1,6 +1,5 @@
 import React, { Dispatch, ReactNode, SetStateAction } from 'react'
 import ReactDOM from 'react-dom'
-import FocusLock from 'react-focus-lock'
 import { css } from 'styled-components'
 import styled from 'styled-components'
 
@@ -36,7 +35,7 @@ export const Portal = React.forwardRef(
         style={style}
       >
         <ClickLayer />
-        <StyledFocusLock>{children}</StyledFocusLock>
+        {children}
       </Wrapper>,
       domNode ?? document.body
     )
@@ -47,6 +46,7 @@ const Wrapper = styled.div<
   Pick<IPortal, 'hasBackground' | 'placementAroundContainer'>
 >`
   position: relative;
+  z-index: 100;
   ${({ hasBackground }) =>
     hasBackground &&
     css`
@@ -60,7 +60,7 @@ const Wrapper = styled.div<
       display: flex;
       justify-content: center;
       align-items: center;
-    `};
+    `}
   ${({ placementAroundContainer }) => {
     switch (placementAroundContainer) {
       case 'bottom-left':
@@ -68,22 +68,15 @@ const Wrapper = styled.div<
           position: absolute;
           top: calc(100% + ${({ theme }) => theme.spacing.xs});
           right: ${({ theme }) => theme.spacing.xs};
-          z-index: 100;
         `
       case 'bottom-right':
         return css`
           position: absolute;
           top: calc(100% + ${({ theme }) => theme.spacing.xs});
           left: ${({ theme }) => theme.spacing.xs};
-          z-index: 100;
         `
     }
   }};
-`
-
-const StyledFocusLock = styled(FocusLock)`
-  position: relative;
-  z-index: 1;
 `
 
 const ClickLayer = styled.div`

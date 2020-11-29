@@ -1,6 +1,7 @@
 import { InMemoryCacheConfig, makeVar } from '@apollo/client'
 
 import { COLOR_MODE } from '../../../enums'
+import { Retext_Settings } from '../../apollo'
 
 export const localState = {
   currentRepoNameVar: makeVar('NoteHub.Notebook'),
@@ -16,6 +17,13 @@ export const localState = {
   searchVar: makeVar(''),
   isPreviewActiveVar: makeVar(false),
   isSideBySideActiveVar: makeVar(false),
+  retextSettingsVar: makeVar({
+    [Retext_Settings.Spell]: false,
+    [Retext_Settings.Equality]: false,
+    [Retext_Settings.IndefiniteArticle]: false,
+    [Retext_Settings.RepeatedWords]: false,
+    [Retext_Settings.Readability]: false,
+  }),
 }
 
 export const fields = {
@@ -45,6 +53,17 @@ export const fields = {
   },
   isSideBySideActive() {
     return localState.isSideBySideActiveVar()
+  },
+  retextSettings() {
+    return localState.retextSettingsVar()
+  },
+  activeRetextSettings() {
+    return (
+      Object.entries(localState.retextSettingsVar())
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .filter(([_, value]) => value)
+        .map(([setting]) => setting)
+    )
   },
 }
 

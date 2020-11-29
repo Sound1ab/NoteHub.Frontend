@@ -13,6 +13,7 @@ import {
   useReadFile,
   useReadIsPreviewActive,
   useReadIsSideBySideActive,
+  useTheme,
   useUpdateFile,
 } from '../../../hooks'
 import { IPosition } from '../../../types'
@@ -71,6 +72,9 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
   const [activeWidget, setActiveWidget] = useState<IActiveWidget | null>(null)
   const { isOpen: isWidgetOpen, setOpen: setIsWidgetOpen } = useModalToggle()
   const { file, error: readError } = useReadFile()
+  const {
+    colors: { accent },
+  } = useTheme()
 
   function ignoreErrorFromFn(fn: () => void) {
     try {
@@ -149,8 +153,7 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
         { line: startPosition.line, ch: startPosition.ch },
         { line: endPosition.line, ch: endPosition.ch },
         {
-          css:
-            'text-decoration: underline; text-decoration-color: red; text-decoration-style: wavy',
+          css: `text-decoration: underline; text-decoration-color: ${accent}; text-decoration-style: wavy`,
         }
       )
 
@@ -182,7 +185,7 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
         },
       ])
     })
-  }, [nodes, file?.readAt, easyMDE?.codemirror])
+  }, [nodes, file?.readAt, easyMDE?.codemirror, accent])
 
   if (readError) {
     ErrorToast(`Could not read file. Please try again.`)

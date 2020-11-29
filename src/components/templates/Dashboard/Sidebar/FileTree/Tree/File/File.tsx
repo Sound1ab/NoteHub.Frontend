@@ -53,14 +53,16 @@ export function File({ node, level }: IFile) {
 
   const dropdownItems = [
     {
-      icon: 'trash' as const,
-      label: 'Delete file',
-      onClick: handleDeleteFile,
-    },
-    {
+      heading: 'File',
       icon: 'pen' as const,
       label: 'Rename',
       onClick: handleSetIsRenamingOpen,
+      hasSeparator: true,
+    },
+    {
+      icon: 'trash' as const,
+      label: 'Delete',
+      onClick: handleDeleteFile,
     },
   ]
 

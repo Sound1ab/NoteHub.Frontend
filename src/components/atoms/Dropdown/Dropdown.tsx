@@ -13,6 +13,7 @@ export interface IDropdownItem {
   custom?: ReactNode
   isDisabled?: boolean
   hasSeparator?: boolean
+  heading?: string
 }
 
 interface IDropdownMenuProps {
@@ -42,8 +43,10 @@ export function Dropdown({
           custom,
           label,
           hasSeparator,
+          heading,
         }) => (
           <div key={label}>
+            {heading && <Heading>{heading}</Heading>}
             <DropdownButton
               onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
                 onClose && onClose()
@@ -83,6 +86,7 @@ const StyledDropdown = styled.ul`
   white-space: pre;
   margin: 0;
   padding: ${({ theme }) => theme.spacing.xxs} 0;
+  z-index: 1;
 `
 
 const Triangle = styled.div<Pick<IDropdownMenuProps, 'trianglePosition'>>`
@@ -123,4 +127,12 @@ const StyledIcon = styled(Icon)`
 
 const Separator = styled.hr`
   margin: ${({ theme }) => theme.spacing.xxs} 0;
+`
+
+const Heading = styled.h6`
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.colors.text.secondary};
+  padding: ${({ theme }) => theme.spacing.xxs}
+    ${({ theme }) => theme.spacing.xs};
+  margin: 0;
 `

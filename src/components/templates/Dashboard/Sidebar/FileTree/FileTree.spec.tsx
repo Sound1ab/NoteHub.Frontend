@@ -173,7 +173,7 @@ describe('FileTree', () => {
       // open file menu
       await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
 
-      await fireEvent.click(getByLabelText('Delete file'))
+      await fireEvent.click(getByLabelText('Delete'))
 
       expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
 
@@ -197,7 +197,7 @@ describe('FileTree', () => {
       // open file menu
       await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
 
-      await fireEvent.click(getByLabelText('Delete file'))
+      await fireEvent.click(getByLabelText('Delete'))
 
       expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
 
@@ -205,7 +205,7 @@ describe('FileTree', () => {
 
       await fireEvent.click(getByLabelText('MOCK_FILE_PATH_2.md actions'))
 
-      await fireEvent.click(getByLabelText('Delete file'))
+      await fireEvent.click(getByLabelText('Delete'))
 
       expect(queryByText('MOCK_FILE_PATH_2.md')).not.toBeInTheDocument()
 

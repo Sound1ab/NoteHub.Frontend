@@ -14,6 +14,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  activeRetextSettings?: Maybe<Array<Retext_Settings>>;
   isDarkMode: Scalars['Boolean'];
   login: Scalars['String'];
   logout: Scalars['String'];
@@ -29,6 +30,7 @@ export type Query = {
 
 export type QueryReadFileArgs = {
   path: Scalars['String'];
+  retextSettings?: Maybe<Array<Retext_Settings>>;
 };
 
 
@@ -41,6 +43,14 @@ export type QueryReadGithubUserAccessTokenArgs = {
 export type QueryReadImageArgs = {
   path: Scalars['String'];
 };
+
+export enum Retext_Settings {
+  Spell = 'SPELL',
+  Equality = 'EQUALITY',
+  IndefiniteArticle = 'INDEFINITE_ARTICLE',
+  RepeatedWords = 'REPEATED_WORDS',
+  Readability = 'READABILITY'
+}
 
 export type File = {
   __typename?: 'File';
@@ -167,11 +177,13 @@ export type MutationUpdateRepoArgs = {
 export type CreateFileInput = {
   path: Scalars['String'];
   content?: Maybe<Scalars['String']>;
+  retextSettings?: Maybe<Array<Retext_Settings>>;
 };
 
 export type UpdateFileInput = {
   path: Scalars['String'];
   content?: Maybe<Scalars['String']>;
+  retextSettings?: Maybe<Array<Retext_Settings>>;
 };
 
 export type DeleteFileInput = {
@@ -314,6 +326,7 @@ export type MoveFileMutation = (
 
 export type ReadFileQueryVariables = Exact<{
   path: Scalars['String'];
+  retextSettings?: Maybe<Array<Retext_Settings>>;
 }>;
 
 
@@ -349,19 +362,6 @@ export type UpdateFileMutation = (
   )> }
 );
 
-export type CreateImageMutationVariables = Exact<{
-  input: CreateFileInput;
-}>;
-
-
-export type CreateImageMutation = (
-  { __typename?: 'Mutation' }
-  & { createImage?: Maybe<(
-    { __typename?: 'File' }
-    & FileFragment
-  )> }
-);
-
 export type CreateSignedUrlMutationVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -370,30 +370,12 @@ export type CreateSignedUrlMutation = (
   & Pick<Mutation, 'createSignedUrl'>
 );
 
-export type ReadImageQueryVariables = Exact<{
-  path: Scalars['String'];
-}>;
+export type ReadActiveRetextSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ReadImageQuery = (
+export type ReadActiveRetextSettingsQuery = (
   { __typename?: 'Query' }
-  & { readImage?: Maybe<(
-    { __typename?: 'File' }
-    & FileFragment
-  )> }
-);
-
-export type UpdateImageMutationVariables = Exact<{
-  input: UpdateFileInput;
-}>;
-
-
-export type UpdateImageMutation = (
-  { __typename?: 'Mutation' }
-  & { updateImage?: Maybe<(
-    { __typename?: 'File' }
-    & FileFragment
-  )> }
+  & Pick<Query, 'activeRetextSettings'>
 );
 
 export type ReadIsDarkModeQueryVariables = Exact<{ [key: string]: never; }>;

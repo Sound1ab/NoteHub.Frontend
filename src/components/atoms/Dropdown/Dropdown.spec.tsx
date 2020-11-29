@@ -12,10 +12,12 @@ describe('Dropdown', () => {
 
   const MOCK_ITEMS = [
     {
+      heading: 'MOCK_HEADING',
       icon: 'github',
       prefix: 'fab',
       label: 'label 1',
       onClick: mockItemOneOnClick,
+      hasSeparator: true,
     } as const,
     {
       icon: 'sign-out-alt',
@@ -34,19 +36,24 @@ describe('Dropdown', () => {
   } as const
 
   it('should displays items and call on click handler for items', async () => {
-    const { getByText, getByTitle } = await render(
+    const { getByText, getByTitle, container } = await render(
       <Dropdown items={MOCK_ITEMS} />
     )
 
-    for (const { label, onClick } of MOCK_ITEMS) {
-      const itemLabel = getByText(label)
-      expect(itemLabel).toBeDefined()
+    for (const { label, onClick, hasSeparator, heading } of MOCK_ITEMS) {
+      expect(getByText(label)).toBeInTheDocument()
 
-      const itemIcon = getByTitle(`${label} icon`)
-      expect(itemIcon).toBeDefined()
+      expect(getByTitle(`${label} icon`)).toBeInTheDocument()
 
-      await fireEvent.click(itemLabel)
+      if (heading) {
+        expect(getByText(heading)).toBeInTheDocument()
+      }
 
+      if (hasSeparator) {
+        expect(container.querySelector('hr')).toBeInTheDocument()
+      }
+
+      await fireEvent.click(getByTitle(`${label} icon`))
       expect(onClick).toBeCalled()
     }
   })
@@ -57,13 +64,30 @@ describe('Dropdown', () => {
     )
 
     const itemLabel = getByText(MOCK_DISABLED_ITEM.label)
-    expect(itemLabel).toBeDefined()
+    expect(itemLabel).toBeInTheDocument()
 
     const itemIcon = getByTitle(`${MOCK_DISABLED_ITEM.label} icon`)
-    expect(itemIcon).toBeDefined()
+    expect(itemIcon).toBeInTheDocument()
 
     await fireEvent.click(itemLabel)
 
     expect(MOCK_DISABLED_ITEM.onClick).not.toBeCalled()
+  })
+
+  it('should display custom items', async () => {
+    const MockComponent = () => <div>MOCK_CUSTOM_ITEM</div>
+
+    const { getByText } = await render(
+      <Dropdown
+        items={[
+          {
+            label: 'MOCK_LABEL',
+            custom: <MockComponent />,
+          },
+        ]}
+      />
+    )
+
+    expect(getByText('MOCK_CUSTOM_ITEM')).toBeInTheDocument()
   })
 })

@@ -9,9 +9,13 @@ import {
   useModalToggle,
   useReadGithubUser,
   useReadIsDarkMode,
+  useReadRetextSettings,
 } from '../../../../../hooks'
+import { isRetextSetting } from '../../../../../utils/typeGuards/isRetextSetting'
 import { Fade } from '../../../../animation'
+import { Retext_Settings } from '../../../../apollo'
 import { Dropdown } from '../../../../atoms'
+import { CheckboxItem } from '../../../../atoms/Dropdown/CheckboxItem/CheckboxItem'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { Avatar } from './Avatar/Avatar'
 
@@ -26,6 +30,7 @@ export function Profile(props: IProfile) {
   const user = useReadGithubUser()
   const [logout, { called, data, error }] = useLogout()
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
+  const retextSettings = useReadRetextSettings()
 
   if (error) {
     alert('Could not logout. Please try again.')
@@ -60,6 +65,17 @@ export function Profile(props: IProfile) {
     localState.currentThemeVar(isDarkMode ? COLOR_MODE.LIGHT : COLOR_MODE.DARK)
   }
 
+  function handleToggleRetextSetting(name: string) {
+    if (!isRetextSetting(name)) {
+      throw new Error()
+    }
+
+    localState.retextSettingsVar({
+      ...retextSettings,
+      [name]: !retextSettings[name],
+    })
+  }
+
   return (
     <Wrapper {...props} ref={containerRef}>
       <Avatar image={user?.avatar_url} onClick={handleOpen} />
@@ -72,16 +88,80 @@ export function Profile(props: IProfile) {
             containerRef={ref}
             items={[
               {
+                heading: 'Theme',
+                icon: 'moon' as const,
+                label: isDarkMode ? 'Light' : 'Dark',
+                onClick: handleToggleTheme,
+                hasSeparator: true,
+              },
+              {
+                heading: 'style check',
+                label: 'Spelling',
+                custom: (
+                  <CheckboxItem
+                    label="Spelling"
+                    name={Retext_Settings.Spell}
+                    title="Checks spelling"
+                    checked={retextSettings[Retext_Settings.Spell]}
+                    onChange={handleToggleRetextSetting}
+                  />
+                ),
+              },
+              {
+                label: 'Readability',
+                custom: (
+                  <CheckboxItem
+                    label="Readability"
+                    name={Retext_Settings.Readability}
+                    title="Detects possibly hard to read sentences"
+                    checked={retextSettings[Retext_Settings.Readability]}
+                    onChange={handleToggleRetextSetting}
+                  />
+                ),
+              },
+              {
+                label: 'Repeated Words',
+                custom: (
+                  <CheckboxItem
+                    label="Repeated Words"
+                    title="Checks for repeated words e.g. for for"
+                    name={Retext_Settings.RepeatedWords}
+                    checked={retextSettings[Retext_Settings.RepeatedWords]}
+                    onChange={handleToggleRetextSetting}
+                  />
+                ),
+              },
+              {
+                label: 'Indefinite Article',
+                custom: (
+                  <CheckboxItem
+                    label="Indefinite Article"
+                    title="Checks if indefinite articles (a and an) are used correctly"
+                    name={Retext_Settings.IndefiniteArticle}
+                    checked={retextSettings[Retext_Settings.IndefiniteArticle]}
+                    onChange={handleToggleRetextSetting}
+                  />
+                ),
+              },
+              {
+                label: 'Equality',
+                hasSeparator: true,
+                custom: (
+                  <CheckboxItem
+                    label="Equality"
+                    title="Checks for possibly insensitive, inconsiderate language"
+                    name={Retext_Settings.Equality}
+                    checked={retextSettings[Retext_Settings.Equality]}
+                    onChange={handleToggleRetextSetting}
+                  />
+                ),
+              },
+              {
+                heading: 'Account',
                 icon: 'github' as const,
                 prefix: 'fab' as const,
                 label: 'Github',
                 onClick: gitlink,
-              },
-              {
-                icon: 'moon' as const,
-                label: isDarkMode ? 'Light theme' : 'Dark theme',
-                onClick: handleToggleTheme,
-                hasSeparator: true,
               },
               {
                 icon: 'sign-out-alt' as const,

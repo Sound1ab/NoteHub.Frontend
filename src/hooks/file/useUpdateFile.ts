@@ -12,6 +12,7 @@ import {
 } from '../../components/apollo'
 import { FileWithMessagesFragment } from '../../fragments'
 import { debounce } from '../../utils'
+import { useReadActiveRetextSettings } from '..'
 
 let abortController: AbortController
 
@@ -53,6 +54,8 @@ export function useUpdateFile(): [
   (file?: File | null, content?: string) => void,
   MutationResult<UpdateFileMutation>
 ] {
+  const { activeRetextSettings } = useReadActiveRetextSettings()
+
   const [mutation, mutationResult] = useMutation<
     UpdateFileMutation,
     UpdateFileMutationVariables
@@ -74,6 +77,7 @@ export function useUpdateFile(): [
         input: {
           content,
           path: file.path,
+          retextSettings: activeRetextSettings,
         },
       },
     })

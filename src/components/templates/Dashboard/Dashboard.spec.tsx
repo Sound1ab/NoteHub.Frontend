@@ -116,7 +116,7 @@ describe('Dashboard', () => {
 
     await fireEvent.contextMenu(getByLabelText('Markdown editor'))
 
-    await fireEvent.click(getByLabelText('Upload an image'))
+    await fireEvent.click(getByLabelText('Image'))
 
     const imageFilename = 'chucknorris.png'
 

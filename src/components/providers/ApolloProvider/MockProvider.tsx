@@ -56,7 +56,9 @@ export const MockProvider = ({
 
   if (localData) {
     act(() => {
-      Object.values(localData).forEach((entry) => entry && entry())
+      Object.values(localData).forEach(
+        (entry) => entry && typeof entry === 'function' && entry()
+      )
     })
   }
 

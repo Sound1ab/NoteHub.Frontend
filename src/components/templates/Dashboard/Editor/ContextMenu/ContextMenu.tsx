@@ -39,6 +39,7 @@ export function ContextMenu({ targetRef }: IContextMenu) {
 
   const actions = [
     {
+      heading: 'Text',
       onClick: toggleItalic,
       title: 'Italic',
       isDisabled: !isMarkdownEditorActive,
@@ -58,19 +59,21 @@ export function ContextMenu({ targetRef }: IContextMenu) {
       hasSeparator: true,
     },
     {
+      heading: 'List',
       onClick: toggleOrderedList,
-      title: 'Ordered list',
+      title: 'Ordered',
       isDisabled: !isMarkdownEditorActive,
       icon: 'list-ol' as const,
     },
     {
       onClick: toggleUnorderedList,
-      title: 'Unordered list',
+      title: 'Unordered',
       isDisabled: !isMarkdownEditorActive,
       icon: 'list' as const,
       hasSeparator: true,
     },
     {
+      heading: 'Insert',
       onClick: toggleCodeBlock,
       title: 'Code block',
       isDisabled: !isMarkdownEditorActive,
@@ -87,7 +90,6 @@ export function ContextMenu({ targetRef }: IContextMenu) {
       title: 'Table',
       isDisabled: !isMarkdownEditorActive,
       icon: 'table' as const,
-      hasSeparator: true,
     },
     {
       onClick: drawLink,
@@ -97,7 +99,7 @@ export function ContextMenu({ targetRef }: IContextMenu) {
     },
     {
       onClick: openFileDialog,
-      title: 'Upload an image',
+      title: 'Image',
       isDisabled: !isMarkdownEditorActive,
       icon: 'image' as const,
     },
@@ -112,6 +114,7 @@ export function ContextMenu({ targetRef }: IContextMenu) {
             containerRef={ref}
             hasTriangle={false}
             items={actions.map((action) => ({
+              heading: action.heading,
               label: action.title,
               icon: action.icon,
               onClick: () => action.onClick(editor),

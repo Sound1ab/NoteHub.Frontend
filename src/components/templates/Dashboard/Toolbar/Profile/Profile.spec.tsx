@@ -4,24 +4,39 @@ import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Router } from 'react-router-dom'
 
+import { useReadRetextSettings } from '../../../../../hooks'
 import { resolvers, user } from '../../../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../../../test-utils'
+import { Retext_Settings } from '../../../../apollo'
 import { MockProvider } from '../../../../providers'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { Profile } from './Profile'
+
+jest.mock('../../../../../hooks/localState/useReadRetextSettings')
 
 afterEach(cleanup)
 
 describe('Profile', () => {
   let currentJwtVar = jest.spyOn(localState, 'currentJwtVar')
+  let retextSettingsVar = jest.spyOn(localState, 'retextSettingsVar')
+  const retextSettings = {
+    [Retext_Settings.Spell]: false,
+    [Retext_Settings.Equality]: false,
+    [Retext_Settings.IndefiniteArticle]: false,
+    [Retext_Settings.RepeatedWords]: false,
+    [Retext_Settings.Readability]: false,
+  }
 
   beforeEach(() => {
     jest.clearAllMocks()
     currentJwtVar = jest.spyOn(localState, 'currentJwtVar')
+    retextSettingsVar = jest.spyOn(localState, 'retextSettingsVar')
+    ;(useReadRetextSettings as jest.Mock).mockReturnValue(retextSettings)
   })
 
   afterEach(() => {
     currentJwtVar.mockRestore()
+    retextSettingsVar.mockRestore()
   })
 
   it('should display a profile', async () => {
@@ -72,9 +87,9 @@ describe('Profile', () => {
 
       await fireEvent.click(getByAltText('avatar'))
 
-      await fireEvent.click(getByLabelText('Light theme'))
+      await fireEvent.click(getByLabelText('Light'))
 
-      expect(getByLabelText('Dark theme')).toBeDefined()
+      expect(getByLabelText('Dark')).toBeDefined()
     })
 
     it('should display message if logout errors', async () => {
@@ -102,6 +117,29 @@ describe('Profile', () => {
       await fireEvent.click(getByLabelText('Logout'))
 
       expect(alert).toBeCalledWith('Could not logout. Please try again.')
+    })
+
+    it.each([
+      ['Spelling', Retext_Settings.Spell, true],
+      ['Readability', Retext_Settings.Readability, true],
+      ['Repeated Words', Retext_Settings.RepeatedWords, true],
+      ['Indefinite Article', Retext_Settings.IndefiniteArticle, true],
+      ['Equality', Retext_Settings.Equality, true],
+    ])('should update retext settings', async (label, setting, value) => {
+      const { getByText, getByAltText } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <Profile />
+        </MockProvider>
+      )
+
+      await fireEvent.click(getByAltText('avatar'))
+
+      await fireEvent.click(getByText(label))
+
+      expect(retextSettingsVar).toBeCalledWith({
+        ...retextSettings,
+        [setting]: value,
+      })
     })
   })
 })

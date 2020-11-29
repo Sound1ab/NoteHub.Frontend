@@ -56,6 +56,7 @@ export function Folder({ level, node, childNodes }: IFolder) {
 
   const dropdownItems = [
     {
+      heading: 'Folder',
       icon: 'edit' as const,
       label: 'Create file',
       onClick: handleSetIsNewFileOpen,

@@ -182,7 +182,7 @@ describe('File', () => {
 
     await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
 
-    expect(getByText('Delete file')).toBeInTheDocument()
+    expect(getByText('Delete')).toBeInTheDocument()
   })
 
   it('should call deleteFile when selected from file dropdown', async () => {
@@ -194,7 +194,7 @@ describe('File', () => {
 
     await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
 
-    await fireEvent.click(getByLabelText('Delete file'))
+    await fireEvent.click(getByLabelText('Delete'))
 
     expect(deleteFile).toBeCalled()
   })
@@ -213,7 +213,7 @@ describe('File', () => {
 
     await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
 
-    await fireEvent.click(getByLabelText('Delete file'))
+    await fireEvent.click(getByLabelText('Delete'))
 
     await waitFor(() =>
       expect(

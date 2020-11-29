@@ -190,7 +190,7 @@ describe('MarkdownEditor', () => {
 
     expect(getByText('heelo')).toHaveAttribute(
       'style',
-      'text-decoration: underline; text-decoration-color: red; text-decoration-style: wavy;'
+      'text-decoration: underline; text-decoration-color: #7072dd; text-decoration-style: wavy;'
     )
   })
 

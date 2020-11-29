@@ -9,6 +9,7 @@ import {
 } from '../../components/apollo'
 import { FileFragment } from '../../fragments'
 import { extractFilename } from '../../utils'
+import { useReadActiveRetextSettings } from '..'
 
 export const CreateFileDocument = gql`
   ${FileFragment}
@@ -26,6 +27,8 @@ export function useCreateFile(): [
   ) => Promise<ExecutionResult<CreateFileMutation>>,
   MutationResult<CreateFileMutation>
 ] {
+  const { activeRetextSettings } = useReadActiveRetextSettings()
+
   const [mutation, mutationResult] = useMutation<
     CreateFileMutation,
     CreateFileMutationVariables
@@ -78,6 +81,7 @@ export function useCreateFile(): [
         input: {
           content: content ? content : `# ${filename}`,
           path,
+          retextSettings: activeRetextSettings,
         },
       },
       optimisticResponse: {
