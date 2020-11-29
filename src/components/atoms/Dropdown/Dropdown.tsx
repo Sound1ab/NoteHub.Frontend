@@ -43,9 +43,8 @@ export function Dropdown({
           label,
           hasSeparator,
         }) => (
-          <>
+          <div key={label}>
             <DropdownButton
-              key={label}
               onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
                 onClose && onClose()
                 onClick?.(e)
@@ -70,7 +69,7 @@ export function Dropdown({
               )}
             </DropdownButton>
             {hasSeparator && <Separator />}
-          </>
+          </div>
         )
       )}
     </StyledDropdown>

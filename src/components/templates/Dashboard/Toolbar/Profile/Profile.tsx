@@ -72,11 +72,6 @@ export function Profile(props: IProfile) {
             containerRef={ref}
             items={[
               {
-                icon: 'sign-out-alt' as const,
-                label: 'Logout',
-                onClick: handleLogout,
-              },
-              {
                 icon: 'github' as const,
                 prefix: 'fab' as const,
                 label: 'Github',
@@ -86,6 +81,12 @@ export function Profile(props: IProfile) {
                 icon: 'moon' as const,
                 label: isDarkMode ? 'Light theme' : 'Dark theme',
                 onClick: handleToggleTheme,
+                hasSeparator: true,
+              },
+              {
+                icon: 'sign-out-alt' as const,
+                label: 'Logout',
+                onClick: handleLogout,
               },
             ]}
           />

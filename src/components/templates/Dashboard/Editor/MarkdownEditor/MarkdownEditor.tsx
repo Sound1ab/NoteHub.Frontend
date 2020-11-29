@@ -1,39 +1,14 @@
-import CodeMirror from 'codemirror'
-import React, { Ref, useEffect, useState } from 'react'
+import React, { Ref } from 'react'
 import SimpleMDE from 'react-simplemde-editor'
 import styled from 'styled-components'
 
-import {
-  useEasyMDE,
-  useModalToggle,
-  useReadCurrentPath,
-  useReadFile,
-  useUpdateFile,
-} from '../../../../../hooks'
-import { IPosition } from '../../../../../types'
-import { isFile, isNumber } from '../../../../../utils'
+import { useEasyMDE, useReadCurrentPath } from '../../../../../hooks'
+import { isFile } from '../../../../../utils'
 import { Fade } from '../../../../animation'
-import { MessagesFragment } from '../../../../apollo'
-import { ErrorToast, Icon } from '../../../../atoms'
-import { localState } from '../../../../providers/ApolloProvider/cache'
+import { Icon } from '../../../../atoms'
 import { renderMarkdown } from './utils/renderMarkdown'
 import { renderMdx } from './utils/renderMdx'
 import { Widget } from './Widget/Widget'
-
-interface IMarker {
-  marker: CodeMirror.TextMarker
-  options: {
-    id: string
-    coords: { left: number; right: number; top: number; bottom: number }
-    isActive: boolean
-    message: string
-  }
-}
-
-interface IActiveWidget {
-  coords: { left: number; right: number; top: number; bottom: number }
-  message: string
-}
 
 interface IMarkdownEditor {
   targetRef: Ref<HTMLElement>
@@ -41,175 +16,23 @@ interface IMarkdownEditor {
 
 export function MarkdownEditor({ targetRef }: IMarkdownEditor) {
   const currentPath = useReadCurrentPath()
-  const { file, error: readError } = useReadFile()
-  const [updateFile, { loading }] = useUpdateFile()
-  const { setEasyMDE, codemirror, isPreviewActive } = useEasyMDE()
-  const [markers, setMarkers] = useState<IMarker[]>([])
-  const [activeWidget, setActiveWidget] = useState<IActiveWidget | null>(null)
-  const { isOpen, setOpen } = useModalToggle()
-
-  const nodes = file?.messages?.nodes
-    ? JSON.stringify(file?.messages.nodes)
-    : undefined
-
-  useEffect(() => {
-    if (!nodes || !file?.readAt) {
-      return
-    }
-
-    // Create markers
-    ;(JSON.parse(nodes) as MessagesFragment['nodes']).forEach((message) => {
-      const startOffset = message.location?.start?.offset
-      const endOffset = message.location?.end?.offset
-
-      if (!isNumber(startOffset) || !isNumber(endOffset)) {
-        return
-      }
-
-      const widgetMessage = message.message
-
-      if (!widgetMessage) {
-        return
-      }
-
-      // Using the absolute offset get the line and character position in the
-      // editor
-      const startPosition = codemirror?.posFromIndex(startOffset)
-      const endPosition = codemirror?.posFromIndex(endOffset)
-
-      if (!startPosition || !endPosition) {
-        return
-      }
-
-      // Mark it
-      const marker = codemirror?.markText?.(
-        { line: startPosition.line, ch: startPosition.ch },
-        { line: endPosition.line, ch: endPosition.ch },
-        {
-          css:
-            'text-decoration: underline; text-decoration-color: red; text-decoration-style: wavy',
-        }
-      )
-
-      if (!marker) {
-        return
-      }
-
-      // Get the absolute position of the marker based on the text area
-      const coords = codemirror?.charCoords(
-        { line: startPosition.line, ch: startPosition.ch },
-        'local'
-      )
-
-      if (!coords) {
-        return
-      }
-
-      setMarkers((markers) => [
-        ...markers,
-        {
-          marker,
-          options: {
-            // @ts-ignore
-            id: marker.id,
-            coords,
-            isActive: false,
-            message: widgetMessage,
-          },
-        },
-      ])
-    })
-  }, [nodes, file?.readAt, codemirror])
-
-  if (readError) {
-    ErrorToast(`Could not read file. Please try again.`)
-  }
-
-  async function handleUpdateFile(value: string) {
-    // Clear markers
-    if (markers.length > 0) {
-      removeWidget()
-      markers.forEach((marker) => marker.marker?.clear?.())
-      setMarkers([])
-    }
-
-    try {
-      await updateFile(file, value)
-    } catch (error) {
-      ErrorToast(`There was an issue updating your document. ${error.message}`)
-    }
-  }
-
-  function handleSetMarkdownCursorPosition(currentCursorPosition: IPosition) {
-    localState.cursorPositionVar({
-      ...currentCursorPosition,
-      __typename: 'Position',
-    })
-  }
+  const {
+    setEasyMDE,
+    isPreviewActive,
+    loading,
+    activeWidget,
+    isWidgetOpen,
+    onEditorClick,
+    onUpdateFile,
+    onMarkdownCursorPosition,
+    onRemoveWidget,
+    file,
+  } = useEasyMDE()
 
   const shouldRenderMdx = true
 
   if (!isFile(currentPath)) {
     return null
-  }
-
-  function handleEditorClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
-    // Get line and character given the position of the mouse in the editor
-    const lineCh = codemirror?.coordsChar(
-      { left: e.clientX, top: e.clientY },
-      'page'
-    )
-
-    if (!lineCh) {
-      return
-    }
-
-    // Check the editor to see if there is a marker at that position
-    const selectedMarkers = codemirror?.findMarksAt(lineCh)
-
-    // If there is no marker there hide widget
-    if (!selectedMarkers || selectedMarkers.length === 0) {
-      removeWidget()
-      return
-    }
-
-    // Get the absolute position of the marker based on the text area
-    const coords = codemirror?.charCoords(
-      { line: lineCh.line, ch: lineCh.ch },
-      'local'
-    )
-
-    if (!coords) {
-      return
-    }
-
-    // Find which marker from our set of markers is active based on the id.
-    const activeMarker = markers.find((marker) =>
-      selectedMarkers.find(
-        // @ts-ignore
-        (selectedMarker) => selectedMarker.id === marker.options.id
-      )
-    )
-
-    if (!activeMarker) {
-      return
-    }
-
-    // Update the position of the widget to take into account any scrolling
-    // done within the textarea.
-    setActiveWidget({
-      coords: {
-        ...coords,
-        left: coords.left,
-        top: coords.top - (codemirror?.getScrollInfo()?.top ?? 0),
-      },
-      message: activeMarker.options.message,
-    })
-    setOpen(true)
-  }
-
-  function removeWidget() {
-    setOpen(false)
   }
 
   return (
@@ -218,23 +41,23 @@ export function MarkdownEditor({ targetRef }: IMarkdownEditor) {
       ref={targetRef}
       isPreviewActive={isPreviewActive}
     >
-      <Fade show={loading}>
+      <Fade show={Boolean(loading)}>
         <Spinner size="1x" icon="spinner" />
       </Fade>
-      <Fade show={isOpen}>
+      <Fade show={Boolean(isWidgetOpen)}>
         <Widget
           position={activeWidget?.coords}
           message={activeWidget?.message}
         />
       </Fade>
-      <span onClick={handleEditorClick}>
+      <span onClick={onEditorClick}>
         <SimpleMDE
           key={file?.path}
           className="MarkdownEditor-wrapper"
-          onChange={handleUpdateFile}
+          onChange={onUpdateFile}
           value={file?.content ?? ''}
-          getLineAndCursor={handleSetMarkdownCursorPosition}
-          events={{ scroll: removeWidget, viewportChange: removeWidget }}
+          getLineAndCursor={onMarkdownCursorPosition}
+          events={{ scroll: onRemoveWidget, viewportChange: onRemoveWidget }}
           options={{
             spellChecker: false,
             nativeSpellcheck: false,

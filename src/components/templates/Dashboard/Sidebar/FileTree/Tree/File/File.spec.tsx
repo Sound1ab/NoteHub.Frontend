@@ -1,6 +1,10 @@
 import React from 'react'
 
-import { useDeleteFile, useFileTree } from '../../../../../../../hooks'
+import {
+  useDeleteFile,
+  useFileTree,
+  useReadFile,
+} from '../../../../../../../hooks'
 import { useMoveFile } from '../../../../../../../hooks/file/useMoveFile'
 import { files, resolvers } from '../../../../../../../schema/mockResolvers'
 import { fireEvent, render, waitFor } from '../../../../../../../test-utils'
@@ -13,6 +17,7 @@ import { File } from './File'
 jest.mock('../../../../../../../hooks/utils/useFileTree')
 jest.mock('../../../../../../../hooks/file/useDeleteFile')
 jest.mock('../../../../../../../hooks/file/useMoveFile')
+jest.mock('../../../../../../../hooks/file/useReadFile')
 
 describe('File', () => {
   const onClick = jest.fn()
@@ -46,6 +51,10 @@ describe('File', () => {
       moveFile,
       { error: undefined },
     ])
+    ;(useReadFile as jest.Mock).mockReturnValue({
+      file: files[0],
+      error: undefined,
+    })
   })
 
   afterEach(() => {

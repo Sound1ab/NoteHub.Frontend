@@ -63,7 +63,10 @@ describe('ContextMenu', () => {
       },
       editor: 'MOCK_EDITOR',
     })
-    ;(useUpdateFile as jest.Mock).mockImplementation(() => [updateFile])
+    ;(useUpdateFile as jest.Mock).mockImplementation(() => [
+      updateFile,
+      { loading: false },
+    ])
     ;(useReadFile as jest.Mock).mockReturnValue({
       file: {
         content: 'MOCK FILE CONTENTS',
@@ -208,6 +211,7 @@ describe('ContextMenu', () => {
         async () => {
           throw new Error('mock error')
         },
+        { loading: false },
       ])
 
       const Wrapper = () => {
