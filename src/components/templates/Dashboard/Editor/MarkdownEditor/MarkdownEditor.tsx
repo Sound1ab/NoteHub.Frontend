@@ -2,7 +2,12 @@ import React, { Ref } from 'react'
 import SimpleMDE from 'react-simplemde-editor'
 import styled from 'styled-components'
 
-import { useEasyMDE, useReadCurrentPath } from '../../../../../hooks'
+import { FONT } from '../../../../../enums'
+import {
+  useEasyMDE,
+  useReadCurrentPath,
+  useReadThemeSettings,
+} from '../../../../../hooks'
 import { isFile } from '../../../../../utils'
 import { Fade } from '../../../../animation'
 import { Icon } from '../../../../atoms'
@@ -28,6 +33,7 @@ export function MarkdownEditor({ targetRef }: IMarkdownEditor) {
     onRemoveWidget,
     file,
   } = useEasyMDE()
+  const { isFullWidth, font } = useReadThemeSettings()
 
   const shouldRenderMdx = true
 
@@ -40,6 +46,8 @@ export function MarkdownEditor({ targetRef }: IMarkdownEditor) {
       aria-label="Markdown editor"
       ref={targetRef}
       isPreviewActive={isPreviewActive}
+      isFullWidth={isFullWidth}
+      font={font}
     >
       <Fade show={Boolean(loading)}>
         <Spinner size="1x" icon="spinner" />
@@ -92,7 +100,11 @@ const Spinner = styled(Icon)`
   }
 `
 
-const StyledMarkdownEditor = styled.article<{ isPreviewActive?: boolean }>`
+const StyledMarkdownEditor = styled.article<{
+  isPreviewActive?: boolean
+  isFullWidth?: boolean
+  font?: FONT
+}>`
   position: relative;
   height: 100%;
   overflow: hidden;
@@ -120,6 +132,107 @@ const StyledMarkdownEditor = styled.article<{ isPreviewActive?: boolean }>`
     width: 100%;
     z-index: 2;
     display: none;
+  }
+
+  .CodeMirror-sizer {
+    position: relative;
+    max-width: ${({ isFullWidth }) => (isFullWidth ? '100%' : '90ch')};
+  }
+
+  .markdown-sizer {
+    max-width: ${({ isFullWidth }) => (isFullWidth ? '100%' : '90ch')};
+  }
+
+  .CodeMirror-scroll {
+    box-sizing: border-box !important;
+    overflow: scroll !important;
+    height: 100%;
+    outline: 0;
+    position: relative;
+    width: 100%;
+    padding: 0 ${({ theme }) => theme.spacing.xs};
+    display: ${({ isPreviewActive }) => (isPreviewActive ? 'none' : 'block')};
+  }
+
+  .CodeMirror pre.CodeMirror-line,
+  .CodeMirror pre.CodeMirror-line-like {
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    border-width: 0;
+    background: 0 0;
+    margin: 0;
+    white-space: pre;
+    word-wrap: normal;
+    line-height: ${({ theme }) => theme.typographyStyles.html.lineHeight};
+    color: inherit;
+    z-index: 2;
+    position: relative;
+    overflow: visible;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-variant-ligatures: contextual;
+    font-variant-ligatures: contextual;
+  }
+
+  .cm-s-darcula span {
+    font-family: ${({ font }) => {
+      switch (font) {
+        case FONT.IS_DEFAULT:
+          return `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;!important;`
+        case FONT.IS_SERIF:
+          return `Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif;!important;`
+        case FONT.IS_MONO:
+          return `iawriter-mono, Nitti, Menlo, Courier, monospace;!important;`
+      }
+    }};
+  }
+
+  .cm-header-1 {
+    font-size: ${({ theme }) => theme.typographyStyles.h1.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h1.fontWeight};
+    line-height: ${({ theme }) => theme.typographyStyles.h1.lineHeight};
+    margin-bottom: ${({ theme }) => theme.typographyStyles.h1.marginBottom};
+    color: ${({ theme }) => theme.typographyStyles.h1.color};
+  }
+  .cm-header-2 {
+    font-size: ${({ theme }) => theme.typographyStyles.h2.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h2.fontWeight};
+    line-height: ${({ theme }) => theme.typographyStyles.h2.lineHeight};
+    margin-bottom: ${({ theme }) => theme.typographyStyles.h2.marginBottom};
+    color: ${({ theme }) => theme.typographyStyles.h2.color};
+  }
+  .cm-header-3 {
+    font-size: ${({ theme }) => theme.typographyStyles.h3.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h3.fontWeight};
+    line-height: ${({ theme }) => theme.typographyStyles.h3.lineHeight};
+    margin-bottom: ${({ theme }) => theme.typographyStyles.h3.marginBottom};
+    color: ${({ theme }) => theme.typographyStyles.h3.color};
+  }
+  .cm-header-4 {
+    font-size: ${({ theme }) => theme.typographyStyles.h4.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h4.fontWeight};
+    line-height: ${({ theme }) => theme.typographyStyles.h4.lineHeight};
+    margin-bottom: ${({ theme }) => theme.typographyStyles.h4.marginBottom};
+    color: ${({ theme }) => theme.typographyStyles.h4.color};
+  }
+  .cm-header-5 {
+    font-size: ${({ theme }) => theme.typographyStyles.h5.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h5.fontWeight};
+    line-height: ${({ theme }) => theme.typographyStyles.h5.lineHeight};
+    margin-bottom: ${({ theme }) => theme.typographyStyles.h5.marginBottom};
+    color: ${({ theme }) => theme.typographyStyles.h5.color};
+  }
+  .cm-header-6 {
+    font-size: ${({ theme }) => theme.typographyStyles.h6.fontSize};
+    font-weight: ${({ theme }) => theme.typographyStyles.h6.fontWeight};
+    line-height: ${({ theme }) => theme.typographyStyles.h6.lineHeight};
+    margin-bottom: ${({ theme }) => theme.typographyStyles.h6.marginBottom};
+    color: ${({ theme }) => theme.typographyStyles.h6.color};
+  }
+  .cm-s-darcula.CodeMirror {
+    background: ${({ theme }) => theme.colors.background.primary};
+    color: ${({ theme }) => theme.colors.text.primary};
+    line-height: ${({ theme }) => theme.typographyStyles.html.lineHeight};
   }
 
   .editor-preview-active {
@@ -327,21 +440,6 @@ const StyledMarkdownEditor = styled.article<{ isPreviewActive?: boolean }>`
     overflow: hidden;
     background: #fff;
   }
-  .CodeMirror-scroll {
-    box-sizing: border-box !important;
-    overflow: scroll !important;
-    height: 100%;
-    outline: 0;
-    position: relative;
-    width: 100%;
-    padding: 0 ${({ theme }) => theme.spacing.xs};
-    display: ${({ isPreviewActive }) => (isPreviewActive ? 'none' : 'block')};
-  }
-  .CodeMirror-sizer {
-    position: relative;
-    border-right: 30px solid transparent;
-    max-width: 80ch;
-  }
   .CodeMirror-gutter-filler,
   .CodeMirror-hscrollbar,
   .CodeMirror-scrollbar-filler,
@@ -410,27 +508,6 @@ const StyledMarkdownEditor = styled.article<{ isPreviewActive?: boolean }>`
   .CodeMirror-lines {
     cursor: text;
     min-height: 1px;
-  }
-  .CodeMirror pre.CodeMirror-line,
-  .CodeMirror pre.CodeMirror-line-like {
-    -moz-border-radius: 0;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    border-width: 0;
-    background: 0 0;
-    font-family: inherit;
-    font-size: 14px;
-    margin: 0;
-    white-space: pre;
-    word-wrap: normal;
-    line-height: ${({ theme }) => theme.typographyStyles.html.lineHeight};
-    color: inherit;
-    z-index: 2;
-    position: relative;
-    overflow: visible;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-font-variant-ligatures: contextual;
-    font-variant-ligatures: contextual;
   }
   .CodeMirror-wrap pre.CodeMirror-line,
   .CodeMirror-wrap pre.CodeMirror-line-like {
@@ -529,7 +606,6 @@ const StyledMarkdownEditor = styled.article<{ isPreviewActive?: boolean }>`
   }
 
   .CodeMirror {
-    font-family: monospace;
     height: 100%;
     width: 100%;
     color: #000;
@@ -538,59 +614,6 @@ const StyledMarkdownEditor = styled.article<{ isPreviewActive?: boolean }>`
     font: inherit;
     z-index: 1;
     word-wrap: break-word;
-  }
-
-  .cm-header-1 {
-    font-size: ${({ theme }) => theme.typographyStyles.h1.fontSize};
-    font-weight: ${({ theme }) => theme.typographyStyles.h1.fontWeight};
-    line-height: ${({ theme }) => theme.typographyStyles.h1.lineHeight};
-    margin-bottom: ${({ theme }) => theme.typographyStyles.h1.marginBottom};
-    color: ${({ theme }) => theme.typographyStyles.h1.color};
-  }
-  .cm-header-2 {
-    font-size: ${({ theme }) => theme.typographyStyles.h2.fontSize};
-    font-weight: ${({ theme }) => theme.typographyStyles.h2.fontWeight};
-    line-height: ${({ theme }) => theme.typographyStyles.h2.lineHeight};
-    margin-bottom: ${({ theme }) => theme.typographyStyles.h2.marginBottom};
-    color: ${({ theme }) => theme.typographyStyles.h2.color};
-  }
-  .cm-header-3 {
-    font-size: ${({ theme }) => theme.typographyStyles.h3.fontSize};
-    font-weight: ${({ theme }) => theme.typographyStyles.h3.fontWeight};
-    line-height: ${({ theme }) => theme.typographyStyles.h3.lineHeight};
-    margin-bottom: ${({ theme }) => theme.typographyStyles.h3.marginBottom};
-    color: ${({ theme }) => theme.typographyStyles.h3.color};
-  }
-  .cm-header-4 {
-    font-size: ${({ theme }) => theme.typographyStyles.h4.fontSize};
-    font-weight: ${({ theme }) => theme.typographyStyles.h4.fontWeight};
-    line-height: ${({ theme }) => theme.typographyStyles.h4.lineHeight};
-    margin-bottom: ${({ theme }) => theme.typographyStyles.h4.marginBottom};
-    color: ${({ theme }) => theme.typographyStyles.h4.color};
-  }
-  .cm-header-5 {
-    font-size: ${({ theme }) => theme.typographyStyles.h5.fontSize};
-    font-weight: ${({ theme }) => theme.typographyStyles.h5.fontWeight};
-    line-height: ${({ theme }) => theme.typographyStyles.h5.lineHeight};
-    margin-bottom: ${({ theme }) => theme.typographyStyles.h5.marginBottom};
-    color: ${({ theme }) => theme.typographyStyles.h5.color};
-  }
-  .cm-header-6 {
-    font-size: ${({ theme }) => theme.typographyStyles.h6.fontSize};
-    font-weight: ${({ theme }) => theme.typographyStyles.h6.fontWeight};
-    line-height: ${({ theme }) => theme.typographyStyles.h6.lineHeight};
-    margin-bottom: ${({ theme }) => theme.typographyStyles.h6.marginBottom};
-    color: ${({ theme }) => theme.typographyStyles.h6.color};
-  }
-
-  .cm-s-darcula {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-      Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-  }
-  .cm-s-darcula.CodeMirror {
-    background: ${({ theme }) => theme.colors.background.primary};
-    color: ${({ theme }) => theme.colors.text.primary};
-    line-height: ${({ theme }) => theme.typographyStyles.html.lineHeight};
   }
 
   .cm-s-darcula span.cm-meta {

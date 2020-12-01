@@ -1,12 +1,11 @@
 import { InMemoryCacheConfig, makeVar } from '@apollo/client'
 
-import { COLOR_MODE } from '../../../enums'
+import { FONT, THEME_SETTINGS } from '../../../enums'
 import { Retext_Settings } from '../../apollo'
 
 export const localState = {
   currentRepoNameVar: makeVar('NoteHub.Notebook'),
   currentPathVar: makeVar(''),
-  currentThemeVar: makeVar<COLOR_MODE>(COLOR_MODE.DARK),
   cursorPositionVar: makeVar({
     ch: 0,
     line: 0,
@@ -24,6 +23,12 @@ export const localState = {
     [Retext_Settings.RepeatedWords]: false,
     [Retext_Settings.Readability]: false,
   }),
+  themeSettingsVar: makeVar({
+    [THEME_SETTINGS.IS_LIGHT_THEME]: false,
+    [THEME_SETTINGS.IS_FULL_WIDTH]: false,
+    [THEME_SETTINGS.IS_LARGE_TEXT]: false,
+    [THEME_SETTINGS.FONT]: FONT.IS_DEFAULT,
+  }),
 }
 
 export const fields = {
@@ -32,9 +37,6 @@ export const fields = {
   },
   currentPath() {
     return localState.currentPathVar()
-  },
-  currentTheme() {
-    return localState.currentThemeVar()
   },
   cursorPosition() {
     return localState.cursorPositionVar()
@@ -65,6 +67,9 @@ export const fields = {
         .map(([setting]) => setting)
     )
   },
+  themeSettings() {
+    return localState.themeSettingsVar()
+  },
 }
 
 export type Fields = typeof fields
@@ -74,11 +79,6 @@ export const cacheOptions: InMemoryCacheConfig = {
     Query: {
       fields: {
         ...fields,
-        isDarkMode: {
-          read() {
-            return localState.currentThemeVar() === COLOR_MODE.DARK
-          },
-        },
         readFiles: {
           merge: false,
         },

@@ -3,19 +3,19 @@ import React, { ReactNode, useRef } from 'react'
 import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { COLOR_MODE } from '../../../../../enums'
+import { FONT, THEME_SETTINGS } from '../../../../../enums'
 import {
   useLogout,
   useModalToggle,
   useReadGithubUser,
-  useReadIsDarkMode,
   useReadRetextSettings,
+  useReadThemeSettings,
 } from '../../../../../hooks'
-import { isRetextSetting } from '../../../../../utils/typeGuards/isRetextSetting'
 import { Fade } from '../../../../animation'
 import { Retext_Settings } from '../../../../apollo'
 import { Dropdown } from '../../../../atoms'
 import { CheckboxItem } from '../../../../atoms/Dropdown/CheckboxItem/CheckboxItem'
+import { RadioItem } from '../../../../atoms/Dropdown/RadioItem/RadioItem'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { Avatar } from './Avatar/Avatar'
 
@@ -25,7 +25,7 @@ interface IProfile {
 
 export function Profile(props: IProfile) {
   const client = useApolloClient()
-  const { isDarkMode } = useReadIsDarkMode()
+  const themeSettings = useReadThemeSettings()
   const containerRef = useRef(null)
   const user = useReadGithubUser()
   const [logout, { called, data, error }] = useLogout()
@@ -61,18 +61,24 @@ export function Profile(props: IProfile) {
     await logout()
   }
 
-  function handleToggleTheme() {
-    localState.currentThemeVar(isDarkMode ? COLOR_MODE.LIGHT : COLOR_MODE.DARK)
+  function handleToggleFontSetting(value: FONT) {
+    localState.themeSettingsVar({
+      ...themeSettings,
+      font: value,
+    })
   }
 
-  function handleToggleRetextSetting(name: string) {
-    if (!isRetextSetting(name)) {
-      throw new Error()
-    }
+  function handleToggleThemeSetting(value: THEME_SETTINGS) {
+    localState.themeSettingsVar({
+      ...themeSettings,
+      [value]: !themeSettings[value],
+    })
+  }
 
+  function handleToggleRetextSetting(value: Retext_Settings) {
     localState.retextSettingsVar({
       ...retextSettings,
-      [name]: !retextSettings[name],
+      [value]: !retextSettings[value],
     })
   }
 
@@ -88,10 +94,75 @@ export function Profile(props: IProfile) {
             containerRef={ref}
             items={[
               {
+                heading: 'Font',
+                custom: (
+                  <RadioItem
+                    label="Default"
+                    value={FONT.IS_DEFAULT}
+                    title="Default font"
+                    checked={themeSettings.font === FONT.IS_DEFAULT}
+                    onChange={handleToggleFontSetting}
+                    group="font"
+                  />
+                ),
+              },
+              {
+                custom: (
+                  <RadioItem
+                    label="Serif"
+                    value={FONT.IS_SERIF}
+                    title="Serif font"
+                    checked={themeSettings.font === FONT.IS_SERIF}
+                    onChange={handleToggleFontSetting}
+                    group="font"
+                  />
+                ),
+              },
+              {
+                custom: (
+                  <RadioItem
+                    label="Mono"
+                    value={FONT.IS_MONO}
+                    title="Mono font"
+                    checked={themeSettings.font === FONT.IS_MONO}
+                    onChange={handleToggleFontSetting}
+                    group="font"
+                  />
+                ),
+              },
+              {
                 heading: 'Theme',
-                icon: 'moon' as const,
-                label: isDarkMode ? 'Light' : 'Dark',
-                onClick: handleToggleTheme,
+                custom: (
+                  <CheckboxItem
+                    label="Light mode"
+                    value={THEME_SETTINGS.IS_LIGHT_THEME}
+                    title="Activate light mode"
+                    checked={themeSettings.isLightTheme}
+                    onChange={handleToggleThemeSetting}
+                  />
+                ),
+              },
+              {
+                custom: (
+                  <CheckboxItem
+                    label="Full width"
+                    value={THEME_SETTINGS.IS_FULL_WIDTH}
+                    title="Increase width of the editor"
+                    checked={themeSettings.isFullWidth}
+                    onChange={handleToggleThemeSetting}
+                  />
+                ),
+              },
+              {
+                custom: (
+                  <CheckboxItem
+                    label="Large text"
+                    value={THEME_SETTINGS.IS_LARGE_TEXT}
+                    title="Increase size of text"
+                    checked={themeSettings.isLargeText}
+                    onChange={handleToggleThemeSetting}
+                  />
+                ),
                 hasSeparator: true,
               },
               {
@@ -100,7 +171,7 @@ export function Profile(props: IProfile) {
                 custom: (
                   <CheckboxItem
                     label="Spelling"
-                    name={Retext_Settings.Spell}
+                    value={Retext_Settings.Spell}
                     title="Checks spelling"
                     checked={retextSettings[Retext_Settings.Spell]}
                     onChange={handleToggleRetextSetting}
@@ -112,7 +183,7 @@ export function Profile(props: IProfile) {
                 custom: (
                   <CheckboxItem
                     label="Readability"
-                    name={Retext_Settings.Readability}
+                    value={Retext_Settings.Readability}
                     title="Detects possibly hard to read sentences"
                     checked={retextSettings[Retext_Settings.Readability]}
                     onChange={handleToggleRetextSetting}
@@ -125,7 +196,7 @@ export function Profile(props: IProfile) {
                   <CheckboxItem
                     label="Repeated Words"
                     title="Checks for repeated words e.g. for for"
-                    name={Retext_Settings.RepeatedWords}
+                    value={Retext_Settings.RepeatedWords}
                     checked={retextSettings[Retext_Settings.RepeatedWords]}
                     onChange={handleToggleRetextSetting}
                   />
@@ -137,7 +208,7 @@ export function Profile(props: IProfile) {
                   <CheckboxItem
                     label="Indefinite Article"
                     title="Checks if indefinite articles (a and an) are used correctly"
-                    name={Retext_Settings.IndefiniteArticle}
+                    value={Retext_Settings.IndefiniteArticle}
                     checked={retextSettings[Retext_Settings.IndefiniteArticle]}
                     onChange={handleToggleRetextSetting}
                   />
@@ -150,7 +221,7 @@ export function Profile(props: IProfile) {
                   <CheckboxItem
                     label="Equality"
                     title="Checks for possibly insensitive, inconsiderate language"
-                    name={Retext_Settings.Equality}
+                    value={Retext_Settings.Equality}
                     checked={retextSettings[Retext_Settings.Equality]}
                     onChange={handleToggleRetextSetting}
                   />

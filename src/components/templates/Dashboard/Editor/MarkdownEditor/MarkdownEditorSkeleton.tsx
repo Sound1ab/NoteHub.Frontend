@@ -1,19 +1,16 @@
 import React from 'react'
 import ContentLoader from 'react-content-loader'
-
-import styled from 'styled-components'
-import { colors } from '../../../../../theme/theme'
-import { useReadCurrentTheme } from '../../../../../hooks'
+import styled, { useTheme } from 'styled-components'
 
 export function MarkdownEditorSkeleton() {
-  const currentTheme = useReadCurrentTheme()
+  const currentTheme = useTheme()
 
   return (
     <Wrapper aria-label="Markdown loading">
       <StyledContentLoader
         className="MarkdownEditorSkeleton-content"
-        backgroundColor={colors[currentTheme].background.secondary}
-        foregroundColor={colors[currentTheme].background.tertiary}
+        backgroundColor={currentTheme.colors.background.secondary}
+        foregroundColor={currentTheme.colors.background.tertiary}
       >
         <rect y="0" height="30" width="20%" />
         <rect y="40" height="15" width="60%" />

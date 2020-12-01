@@ -1,9 +1,10 @@
 import Typography from 'typography'
+
 import { TColors } from './styled'
 
-export const createTypography = (colors: TColors) => {
+export const createTypography = (colors: TColors, isLargeText: boolean) => {
   return new Typography({
-    baseFontSize: '14px',
+    baseFontSize: isLargeText ? '16px' : '14px',
     bodyFontFamily: [
       '-apple-system',
       'Blink,acSystemFont',
@@ -25,7 +26,7 @@ export const createTypography = (colors: TColors) => {
       'sans-serif',
     ],
     scaleRatio: 2.9,
-    overrideThemeStyles: ({ rhythm }) => ({
+    overrideThemeStyles: ({ rhythm, scale }) => ({
       body: {
         fontSizeAdjust: '0.5',
       },
@@ -34,6 +35,9 @@ export const createTypography = (colors: TColors) => {
       },
       p: {
         color: colors.text.primary,
+      },
+      pre: {
+        fontSize: scale(1),
       },
       li: {
         color: colors.text.primary,

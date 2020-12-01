@@ -1,44 +1,43 @@
 import React from 'react'
 import styled from 'styled-components'
 
-interface ICheckboxItem<T extends string> {
+interface IRadioItem<T extends string> {
   label: string
   value: T
   checked: boolean
   onChange: (value: T) => void
-  title?: string
+  title: string
+  group: string
 }
 
-export function CheckboxItem<T extends string>({
+export function RadioItem<T extends string>({
   label,
   value,
   checked,
   onChange,
   title,
-}: ICheckboxItem<T>) {
-  function handleClick() {
-    onChange(value)
-  }
-
+  group,
+}: IRadioItem<T>) {
   return (
-    <StyledCheckboxItem onClick={handleClick} title={title}>
-      <Checkbox
-        type="checkbox"
-        name={value}
+    <StyledRadioItem title={title}>
+      <Radio
+        type="radio"
+        value={value}
         checked={checked}
-        readOnly={true}
         id={value}
+        name={group}
+        onChange={() => onChange(value)}
       />
       <label htmlFor={value}>{label}</label>
-    </StyledCheckboxItem>
+    </StyledRadioItem>
   )
 }
 
-const StyledCheckboxItem = styled.div`
+const StyledRadioItem = styled.div`
   position: relative;
 `
 
-const Checkbox = styled.input`
+const Radio = styled.input`
   width: 1.15em;
   height: 1.15em;
   margin-right: ${({ theme }) => theme.spacing.xs};

@@ -25,3 +25,16 @@ export enum CONTAINER_ID {
   SIDEBAR = 'sidebar',
   EDITOR = 'editor',
 }
+
+export enum THEME_SETTINGS {
+  IS_LIGHT_THEME = 'isLightTheme',
+  IS_LARGE_TEXT = 'isLargeText',
+  IS_FULL_WIDTH = 'isFullWidth',
+  FONT = 'font',
+}
+
+export enum FONT {
+  IS_DEFAULT = 'isDefault',
+  IS_SERIF = 'isSerif',
+  IS_MONO = 'isMono',
+}

@@ -117,7 +117,11 @@ function renderMarkup(element: ReactNode) {
   return renderToStaticMarkup(
     <ThemeProvider>
       {() => {
-        return <MDXProvider components={components}>{element}</MDXProvider>
+        return (
+          <MDXProvider components={components}>
+            <div className="markdown-sizer">{element}</div>
+          </MDXProvider>
+        )
       }}
     </ThemeProvider>
   )

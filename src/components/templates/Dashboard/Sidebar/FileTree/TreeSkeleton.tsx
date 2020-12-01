@@ -1,18 +1,15 @@
 import React from 'react'
 import ContentLoader from 'react-content-loader'
-import styled from 'styled-components'
-
-import { useReadCurrentTheme } from '../../../../../hooks'
-import { colors } from '../../../../../theme/theme'
+import styled, { useTheme } from 'styled-components'
 
 export function TreeSkeleton() {
-  const currentTheme = useReadCurrentTheme()
+  const currentTheme = useTheme()
 
   return (
     <Wrapper aria-label="Markdown loading">
       <StyledContentLoader
-        backgroundColor={colors[currentTheme].background.secondary}
-        foregroundColor={colors[currentTheme].background.tertiary}
+        backgroundColor={currentTheme.colors.background.secondary}
+        foregroundColor={currentTheme.colors.background.tertiary}
       >
         <rect y="0" height="30" width="75%" />
         <rect y="0" x="80%" height="30" width="20%" />

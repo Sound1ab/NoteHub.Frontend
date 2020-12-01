@@ -31,6 +31,7 @@ const Wrapper = styled.div`
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+  justify-content: center;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     grid-area: editor;
