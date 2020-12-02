@@ -66,14 +66,14 @@ const Wrapper = styled.div<
       case 'bottom-left':
         return css`
           position: absolute;
-          top: calc(100% + ${({ theme }) => theme.spacing.xs});
-          right: ${({ theme }) => theme.spacing.xs};
+          top: calc(100% + ${({ theme }) => theme.spacing.xxs});
+          right: 0;
         `
       case 'bottom-right':
         return css`
           position: absolute;
           top: calc(100% + ${({ theme }) => theme.spacing.xs});
-          left: ${({ theme }) => theme.spacing.xs};
+          left: 0;
         `
     }
   }};

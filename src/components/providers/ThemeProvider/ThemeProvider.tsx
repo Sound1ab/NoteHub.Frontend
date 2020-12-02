@@ -4,7 +4,12 @@ import Typography from 'typography'
 
 import { COLOR_MODE } from '../../../enums'
 import { useReadAccentColor, useReadThemeSettings } from '../../../hooks'
-import { breakpoints, colors, createSpacing } from '../../../theme/theme'
+import {
+  breakpoints,
+  colors,
+  createSpacing,
+  boxShadow,
+} from '../../../theme/theme'
 import { createTypography } from '../../../theme/typography'
 
 interface IThemeProvider {
@@ -41,6 +46,7 @@ export function ThemeProvider({ children }: IThemeProvider) {
           h6,
           html,
         },
+        boxShadow,
       }}
     >
       {children(typography)}
