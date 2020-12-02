@@ -7,17 +7,18 @@ afterEach(cleanup)
 
 describe('CheckboxItem', () => {
   it('should display a checkbox', async () => {
-    const { getByText, getByTitle } = await render(
+    const { getByText, getByRole } = await render(
       <CheckboxItem
         label="MOCK_LABEL"
-        name="MOCK_NAME"
+        value="MOCK_VALUE"
         checked={false}
         onChange={jest.fn()}
+        title="MOCK_TITLE"
       />
     )
 
     expect(getByText('MOCK_LABEL')).toBeInTheDocument()
-    expect(getByTitle('MOCK_NAME checkbox')).toBeInTheDocument()
+    expect(getByRole('checkbox')).toBeInTheDocument()
   })
 
   it('should call onChange when checked', async () => {
@@ -26,38 +27,41 @@ describe('CheckboxItem', () => {
     const { getByTitle } = await render(
       <CheckboxItem
         label="MOCK_LABEL"
-        name="MOCK_NAME"
+        value="MOCK_VALUE"
         checked={false}
         onChange={onChange}
+        title="MOCK_TITLE"
       />
     )
 
-    await fireEvent.click(getByTitle('MOCK_NAME checkbox'))
+    await fireEvent.click(getByTitle('MOCK_TITLE'))
 
-    expect(onChange).toBeCalledWith('MOCK_NAME')
+    expect(onChange).toBeCalledWith('MOCK_VALUE')
   })
 
   it('should have a controlled checkbox', async () => {
-    const { getByTitle, rerender } = await render(
+    const { rerender, getByRole } = await render(
       <CheckboxItem
         label="MOCK_LABEL"
-        name="MOCK_NAME"
+        value="MOCK_VALUE"
         checked={false}
         onChange={jest.fn()}
+        title="MOCK_TITLE"
       />
     )
 
-    expect(getByTitle('MOCK_NAME checkbox')).not.toBeChecked()
+    expect(getByRole('checkbox')).not.toBeChecked()
 
     await rerender(
       <CheckboxItem
         label="MOCK_LABEL"
-        name="MOCK_NAME"
+        value="MOCK_VALUE"
         checked={true}
         onChange={jest.fn()}
+        title="MOCK_TITLE"
       />
     )
 
-    expect(getByTitle('MOCK_NAME checkbox')).toBeChecked()
+    expect(getByRole('checkbox')).toBeChecked()
   })
 })

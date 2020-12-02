@@ -41,13 +41,9 @@ jest.mock('../../../hooks/image/useCreateSignedUrl', () => ({
 afterEach(cleanup)
 
 describe('Dashboard', () => {
-  // This is an implementation detail inside codemirror.js
-  // This may break if codemirror changes. Nulling createRange so
-  // codemirror picks up createTextRange to place in their function 'range'
+  // Mocking out for codemirror as JSDOM doesn't do this
   // @ts-ignore
-  global.document.createRange = null
-  // @ts-ignore
-  global.document.body.createTextRange = () => {
+  global.document.createRange = () => {
     return {
       setEnd: jest.fn(),
       setStart: jest.fn(),

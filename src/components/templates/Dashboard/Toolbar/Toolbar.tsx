@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useEasyMDE } from '../../../../hooks'
+import { useCodeMirror } from '../../../../hooks'
 import { Icon } from '../../../atoms'
 import { Profile } from './Profile/Profile'
 import { ToolbarButton } from './ToolbarButton/ToolbarButton'
@@ -12,7 +12,7 @@ export function Toolbar() {
     isPreviewActive,
     togglePreview,
     toggleSideBySide,
-  } = useEasyMDE()
+  } = useCodeMirror()
 
   return (
     <StyledToolbar>

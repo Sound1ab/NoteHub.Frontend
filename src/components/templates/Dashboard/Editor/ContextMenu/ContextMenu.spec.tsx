@@ -4,7 +4,7 @@ import { useUpload } from 'react-use-upload'
 import {
   useContextMenu,
   useDropzone,
-  useEasyMDE,
+  useCodeMirror,
   useReadFile,
   useUpdateFile,
 } from '../../../../../hooks'
@@ -21,7 +21,7 @@ import { MockProvider } from '../../../../providers'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { ContextMenu } from './ContextMenu'
 
-jest.mock('../../../../../hooks/utils/useEasyMDE')
+jest.mock('../../../../../hooks/utils/useCodeMirror')
 jest.mock('../../../../../hooks/utils/useContextMenu')
 jest.mock('../../../../../hooks/file/useUpdateFile')
 jest.mock('../../../../../hooks/file/useReadFile')
@@ -49,8 +49,8 @@ describe('ContextMenu', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useEasyMDE as jest.Mock).mockReturnValue({
-      easyMDE: {
+    ;(useCodeMirror as jest.Mock).mockReturnValue({
+      actions: {
         toggleOrderedList,
         toggleCodeBlock,
         toggleUnorderedList,
@@ -105,7 +105,7 @@ describe('ContextMenu', () => {
     [drawHorizontalRule, 'Horizontal line'],
     [drawLink, 'Link'],
     [drawTable, 'Table'],
-  ])('should call easyMDE using buttons', async (fn, title) => {
+  ])('should call codemirror using buttons', async (fn, title) => {
     const { getByLabelText } = await render(
       <MockProvider
         mockResolvers={resolvers}

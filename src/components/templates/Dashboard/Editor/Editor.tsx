@@ -2,14 +2,15 @@ import React, { useRef } from 'react'
 import styled from 'styled-components'
 
 import { CONTAINER_ID } from '../../../../enums'
-import { useEasyMDE, useReadFile } from '../../../../hooks'
+import { useCodeMirror, useReadFile } from '../../../../hooks'
 import { ContextMenu } from './ContextMenu/ContextMenu'
 import { MarkdownEditor, MarkdownEditorSkeleton } from './MarkdownEditor'
+import { MdxRenderer } from './MarkdownEditor/MdxRenderer/MdxRenderer'
 
 export function Editor() {
   const { loading } = useReadFile()
   const target = useRef(null)
-  const { isPreviewActive } = useEasyMDE()
+  const { isPreviewActive, isSideBySideActive, actions } = useCodeMirror()
 
   return (
     <Wrapper id={CONTAINER_ID.EDITOR}>
@@ -18,7 +19,8 @@ export function Editor() {
       ) : (
         <>
           {!isPreviewActive && <ContextMenu targetRef={target} />}
-          <MarkdownEditor targetRef={target} />
+          {!isPreviewActive && <MarkdownEditor targetRef={target} />}
+          {(isPreviewActive || isSideBySideActive) && <MdxRenderer />}
         </>
       )}
     </Wrapper>
@@ -32,6 +34,7 @@ const Wrapper = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   justify-content: center;
+  display: flex;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     grid-area: editor;

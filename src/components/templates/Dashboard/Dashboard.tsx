@@ -1,7 +1,7 @@
 import React from 'react'
-
 import styled from 'styled-components'
-import { EasyMDEProvider } from '../../providers'
+
+import { CodeMirrorProvider } from '../../providers'
 import { Editor } from './Editor/Editor'
 import { Sidebar } from './Sidebar/Sidebar'
 import { Toolbar } from './Toolbar/Toolbar'
@@ -9,13 +9,13 @@ import { Toolbar } from './Toolbar/Toolbar'
 export function Dashboard() {
   return (
     <Grid>
-      <EasyMDEProvider>
+      <CodeMirrorProvider>
         <Toolbar />
         <MobileScroll>
           <Sidebar />
           <Editor />
         </MobileScroll>
-      </EasyMDEProvider>
+      </CodeMirrorProvider>
     </Grid>
   )
 }

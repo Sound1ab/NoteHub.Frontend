@@ -1,5 +1,5 @@
 export * from './ApolloProvider/ApolloProvider'
 export * from './ApolloProvider/MockProvider'
-export * from './EasyMDEProvider/EasyMDEProvider'
+export * from './CodeMirrorProvider/CodeMirrorProvider'
 export * from './IconProvider/IconProvider'
 export * from './ThemeProvider/ThemeProvider'

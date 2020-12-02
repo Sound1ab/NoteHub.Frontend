@@ -1,5 +1,4 @@
 import CodeMirror from 'codemirror'
-import EasyMDE from 'easymde'
 import React, {
   Dispatch,
   ReactNode,
@@ -18,11 +17,12 @@ import {
 } from '../../../hooks'
 import { IPosition } from '../../../types'
 import { isNumber } from '../../../utils'
-import { File, MessagesFragment } from '../../apollo'
+import { MessagesFragment } from '../../apollo'
 import { ErrorToast } from '../../atoms'
+import { IActions } from '../../templates/Dashboard/Editor/MarkdownEditor/CodeMirror/CodeMirror'
 import { localState } from '../ApolloProvider/cache'
 
-interface IEasyMDEProvider {
+interface ICodeMirrorProvider {
   children?: ReactNode
 }
 
@@ -42,10 +42,9 @@ interface IActiveWidget {
 }
 
 type ContextProps = {
-  editor: EasyMDE
-  setEasyMDE: Dispatch<SetStateAction<EasyMDE | undefined>>
+  setActions: Dispatch<SetStateAction<IActions | undefined>>
   codemirror: CodeMirror.Editor
-  easyMDE: typeof EasyMDE
+  actions: IActions
   toggleSideBySide: () => void
   togglePreview: () => void
   isSideBySideActive: boolean
@@ -57,16 +56,14 @@ type ContextProps = {
   onMarkdownCursorPosition: (currentCursorPosition: IPosition) => void
   onEditorClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
   onRemoveWidget: () => void
-  file: File | null
 }
 
-export const EasyMDEContext = React.createContext<Partial<ContextProps>>({})
+export const CodeMirrorContext = React.createContext<Partial<ContextProps>>({})
 
-export function EasyMDEProvider({ children }: IEasyMDEProvider) {
-  const [easyMDE, setEasyMDE] = useState<EasyMDE | undefined>(undefined)
+export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
+  const [actions, setActions] = useState<IActions | undefined>(undefined)
   const isSideBySideActive = useReadIsSideBySideActive()
   const isPreviewActive = useReadIsPreviewActive()
-  const EasyMDEConstructor = easyMDE?.constructor as typeof EasyMDE
   const [updateFile, { loading }] = useUpdateFile()
   const [markers, setMarkers] = useState<IMarker[]>([])
   const [activeWidget, setActiveWidget] = useState<IActiveWidget | null>(null)
@@ -75,31 +72,6 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
   const {
     colors: { accent },
   } = useTheme()
-
-  function ignoreErrorFromFn(fn: () => void) {
-    try {
-      fn()
-    } catch {
-      // ignore
-    }
-  }
-
-  useEffect(() => {
-    if (!easyMDE) {
-      return
-    }
-
-    if (isSideBySideActive && !easyMDE.isSideBySideActive()) {
-      ignoreErrorFromFn(() => EasyMDEConstructor?.toggleSideBySide(easyMDE))
-    } else if (!isSideBySideActive && easyMDE.isSideBySideActive()) {
-      ignoreErrorFromFn(() => EasyMDEConstructor?.toggleSideBySide(easyMDE))
-    }
-    if (isPreviewActive && !easyMDE?.isPreviewActive()) {
-      ignoreErrorFromFn(() => EasyMDEConstructor?.togglePreview(easyMDE))
-    } else if (!isPreviewActive && easyMDE?.isPreviewActive()) {
-      ignoreErrorFromFn(() => EasyMDEConstructor?.togglePreview(easyMDE))
-    }
-  }, [EasyMDEConstructor, isSideBySideActive, isPreviewActive, easyMDE])
 
   function toggleSideBySide() {
     if (!isSideBySideActive) {
@@ -141,15 +113,15 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
 
       // Using the absolute offset get the line and character position in the
       // editor
-      const startPosition = easyMDE?.codemirror.posFromIndex(startOffset)
-      const endPosition = easyMDE?.codemirror.posFromIndex(endOffset)
+      const startPosition = actions?.editor?.posFromIndex(startOffset)
+      const endPosition = actions?.editor?.posFromIndex(endOffset)
 
       if (!startPosition || !endPosition) {
         return
       }
 
       // Mark it
-      const marker = easyMDE?.codemirror.markText?.(
+      const marker = actions?.editor?.markText?.(
         { line: startPosition.line, ch: startPosition.ch },
         { line: endPosition.line, ch: endPosition.ch },
         {
@@ -162,7 +134,7 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
       }
 
       // Get the absolute position of the marker based on the text area
-      const coords = easyMDE?.codemirror.charCoords(
+      const coords = actions?.editor?.charCoords(
         { line: startPosition.line, ch: startPosition.ch },
         'local'
       )
@@ -185,7 +157,7 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
         },
       ])
     })
-  }, [nodes, file?.readAt, easyMDE?.codemirror, accent])
+  }, [nodes, file?.readAt, actions?.editor, accent])
 
   if (readError) {
     ErrorToast(`Could not read file. Please try again.`)
@@ -215,7 +187,7 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
 
   function handleEditorClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
     // Get line and character given the position of the mouse in the editor
-    const lineCh = easyMDE?.codemirror.coordsChar(
+    const lineCh = actions?.editor?.coordsChar(
       { left: e.clientX, top: e.clientY },
       'page'
     )
@@ -225,7 +197,7 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
     }
 
     // Check the editor to see if there is a marker at that position
-    const selectedMarkers = easyMDE?.codemirror.findMarksAt(lineCh)
+    const selectedMarkers = actions?.editor?.findMarksAt(lineCh)
 
     // If there is no marker there hide widget
     if (!selectedMarkers || selectedMarkers.length === 0) {
@@ -234,7 +206,7 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
     }
 
     // Get the absolute position of the marker based on the text area
-    const coords = easyMDE?.codemirror.charCoords(
+    const coords = actions?.editor?.charCoords(
       { line: lineCh.line, ch: lineCh.ch },
       'local'
     )
@@ -261,7 +233,7 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
       coords: {
         ...coords,
         left: coords.left,
-        top: coords.top - (easyMDE?.codemirror.getScrollInfo()?.top ?? 0),
+        top: coords.top - (actions?.editor?.getScrollInfo()?.top ?? 0),
       },
       message: activeMarker.options.message,
     })
@@ -269,12 +241,10 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
   }
 
   return (
-    <EasyMDEContext.Provider
+    <CodeMirrorContext.Provider
       value={{
-        editor: easyMDE,
-        setEasyMDE,
-        codemirror: easyMDE?.codemirror,
-        easyMDE: EasyMDEConstructor,
+        setActions,
+        actions,
         toggleSideBySide,
         togglePreview,
         isPreviewActive,
@@ -286,10 +256,9 @@ export function EasyMDEProvider({ children }: IEasyMDEProvider) {
         onMarkdownCursorPosition: handleSetMarkdownCursorPosition,
         onEditorClick: handleEditorClick,
         onRemoveWidget: () => setIsWidgetOpen(false),
-        file,
       }}
     >
       {children}
-    </EasyMDEContext.Provider>
+    </CodeMirrorContext.Provider>
   )
 }

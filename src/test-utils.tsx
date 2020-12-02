@@ -10,7 +10,7 @@ import { resolvers as mockResolvers } from './schema/mockResolvers'
 
 import { Toast } from './components/atoms'
 import {
-  EasyMDEProvider,
+  CodeMirrorProvider,
   IconProvider,
   MockProvider,
   ThemeProvider,
@@ -51,11 +51,11 @@ const Context = ({
       {() => (
         <IconProvider>
           {enableToast && <Toast />}
-          <EasyMDEProvider>
+          <CodeMirrorProvider>
             <FileTreeProvider>
               <DndProvider backend={HTML5Backend}>{node}</DndProvider>
             </FileTreeProvider>
-          </EasyMDEProvider>
+          </CodeMirrorProvider>
         </IconProvider>
       )}
     </ThemeProvider>

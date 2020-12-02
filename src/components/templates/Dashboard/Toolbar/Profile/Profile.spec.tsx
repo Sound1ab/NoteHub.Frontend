@@ -4,7 +4,11 @@ import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Router } from 'react-router-dom'
 
-import { useReadRetextSettings } from '../../../../../hooks'
+import { FONT, THEME_SETTINGS } from '../../../../../enums'
+import {
+  useReadRetextSettings,
+  useReadThemeSettings,
+} from '../../../../../hooks'
 import { resolvers, user } from '../../../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../../../test-utils'
 import { Retext_Settings } from '../../../../apollo'
@@ -13,12 +17,14 @@ import { localState } from '../../../../providers/ApolloProvider/cache'
 import { Profile } from './Profile'
 
 jest.mock('../../../../../hooks/localState/useReadRetextSettings')
+jest.mock('../../../../../hooks/localState/useReadThemeSettings')
 
 afterEach(cleanup)
 
 describe('Profile', () => {
   let currentJwtVar = jest.spyOn(localState, 'currentJwtVar')
   let retextSettingsVar = jest.spyOn(localState, 'retextSettingsVar')
+  let themeSettingsVar = jest.spyOn(localState, 'themeSettingsVar')
   const retextSettings = {
     [Retext_Settings.Spell]: false,
     [Retext_Settings.Equality]: false,
@@ -26,17 +32,26 @@ describe('Profile', () => {
     [Retext_Settings.RepeatedWords]: false,
     [Retext_Settings.Readability]: false,
   }
+  const themeSettings = {
+    [THEME_SETTINGS.IS_LIGHT_THEME]: false,
+    [THEME_SETTINGS.IS_FULL_WIDTH]: false,
+    [THEME_SETTINGS.IS_LARGE_TEXT]: false,
+    [THEME_SETTINGS.FONT]: FONT.IS_DEFAULT,
+  }
 
   beforeEach(() => {
     jest.clearAllMocks()
     currentJwtVar = jest.spyOn(localState, 'currentJwtVar')
     retextSettingsVar = jest.spyOn(localState, 'retextSettingsVar')
+    themeSettingsVar = jest.spyOn(localState, 'themeSettingsVar')
     ;(useReadRetextSettings as jest.Mock).mockReturnValue(retextSettings)
+    ;(useReadThemeSettings as jest.Mock).mockReturnValue(themeSettings)
   })
 
   afterEach(() => {
     currentJwtVar.mockRestore()
     retextSettingsVar.mockRestore()
+    themeSettingsVar.mockRestore()
   })
 
   it('should display a profile', async () => {
@@ -76,20 +91,6 @@ describe('Profile', () => {
       await fireEvent.click(getByLabelText('Logout'))
 
       expect(currentJwtVar).toBeCalledWith(null)
-    })
-
-    it('should change color theme', async () => {
-      const { getByAltText, getByLabelText } = await render(
-        <MockProvider mockResolvers={resolvers}>
-          <Profile />
-        </MockProvider>
-      )
-
-      await fireEvent.click(getByAltText('avatar'))
-
-      await fireEvent.click(getByLabelText('Light'))
-
-      expect(getByLabelText('Dark')).toBeDefined()
     })
 
     it('should display message if logout errors', async () => {
@@ -138,6 +139,29 @@ describe('Profile', () => {
 
       expect(retextSettingsVar).toBeCalledWith({
         ...retextSettings,
+        [setting]: value,
+      })
+    })
+
+    it.only.each([
+      ['Light mode', THEME_SETTINGS.IS_LIGHT_THEME, true],
+      ['Full width', THEME_SETTINGS.IS_FULL_WIDTH, true],
+      ['Large text', THEME_SETTINGS.IS_LARGE_TEXT, true],
+      ['Mono', THEME_SETTINGS.FONT, FONT.IS_MONO],
+      ['Serif', THEME_SETTINGS.FONT, FONT.IS_SERIF],
+    ])('should update theme settings', async (label, setting, value) => {
+      const { getByText, getByAltText } = await render(
+        <MockProvider mockResolvers={resolvers}>
+          <Profile />
+        </MockProvider>
+      )
+
+      await fireEvent.click(getByAltText('avatar'))
+
+      await fireEvent.click(getByText(label))
+
+      expect(themeSettingsVar).toBeCalledWith({
+        ...themeSettings,
         [setting]: value,
       })
     })

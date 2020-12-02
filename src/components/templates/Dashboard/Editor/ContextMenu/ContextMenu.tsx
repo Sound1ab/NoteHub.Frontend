@@ -3,7 +3,7 @@ import React, { RefObject } from 'react'
 import {
   useContextMenu,
   useDropzone,
-  useEasyMDE,
+  useCodeMirror,
   useReadCurrentPath,
 } from '../../../../../hooks'
 import { isFile } from '../../../../../utils'
@@ -18,10 +18,10 @@ export function ContextMenu({ targetRef }: IContextMenu) {
   const currentPath = useReadCurrentPath()
   const isMarkdownEditorActive = isFile(currentPath)
   const { isOpen, Portal, ref, setOpen } = useContextMenu(targetRef)
-  const { easyMDE, editor } = useEasyMDE()
+  const { actions } = useCodeMirror()
   const { openFileDialog, Dropzone } = useDropzone()
 
-  if (!easyMDE || !editor) {
+  if (!actions) {
     return null
   }
 
@@ -35,9 +35,9 @@ export function ContextMenu({ targetRef }: IContextMenu) {
     drawHorizontalRule,
     drawLink,
     drawTable,
-  } = easyMDE
+  } = actions
 
-  const actions = [
+  const items = [
     {
       heading: 'Text',
       onClick: toggleItalic,
@@ -113,11 +113,11 @@ export function ContextMenu({ targetRef }: IContextMenu) {
           <Dropdown
             containerRef={ref}
             hasTriangle={false}
-            items={actions.map((action) => ({
+            items={items.map((action) => ({
               heading: action.heading,
               label: action.title,
               icon: action.icon,
-              onClick: () => action.onClick(editor),
+              onClick: action.onClick,
               isDisabled: action.isDisabled,
               hasSeparator: action.hasSeparator,
             }))}
