@@ -1,13 +1,8 @@
 import React, { Ref } from 'react'
 import styled from 'styled-components'
 
-import {
-  useCodeMirror,
-  useReadCurrentPath,
-  useReadFile,
-  useReadThemeSettings,
-} from '../../../../../hooks'
-import { isFile } from '../../../../../utils'
+import { useCodeMirror, useReadCurrentPath } from '../../../../../hooks'
+import { composeRefs, isFile } from '../../../../../utils'
 import { Fade } from '../../../../animation'
 import { Icon } from '../../../../atoms'
 import { CodeMirror } from './CodeMirror/CodeMirror'
@@ -19,45 +14,25 @@ interface IMarkdownEditor {
 
 export function MarkdownEditor({ targetRef }: IMarkdownEditor) {
   const currentPath = useReadCurrentPath()
-  const {
-    setActions,
-    loading,
-    activeWidget,
-    isWidgetOpen,
-    onEditorClick,
-    onUpdateFile,
-    onMarkdownCursorPosition,
-    onRemoveWidget,
-  } = useCodeMirror()
-  const { isFullWidth, font } = useReadThemeSettings()
-  const { file } = useReadFile()
+  const { loading, isWidgetOpen, onRemoveWidget, scrollRef } = useCodeMirror()
 
   if (!isFile(currentPath)) {
     return null
   }
 
   return (
-    <StyledMarkdownEditor aria-label="Markdown editor" ref={targetRef}>
+    <StyledMarkdownEditor
+      aria-label="Markdown editor"
+      ref={composeRefs(targetRef, scrollRef)}
+      onScroll={() => onRemoveWidget?.()}
+    >
       <Fade show={Boolean(loading)}>
         <Spinner size="1x" icon="spinner" />
       </Fade>
       <Fade show={Boolean(isWidgetOpen)}>
-        <Widget
-          position={activeWidget?.coords}
-          message={activeWidget?.message}
-        />
+        <Widget />
       </Fade>
-      <CodeMirror
-        value={file?.content ?? ''}
-        onChange={onUpdateFile}
-        onLineAndCursor={onMarkdownCursorPosition}
-        onScroll={onRemoveWidget}
-        onViewportChange={onRemoveWidget}
-        onSetActions={(actions) => setActions?.(actions)}
-        onEditorClick={onEditorClick}
-        isFullWidth={isFullWidth}
-        font={font}
-      />
+      <CodeMirror />
     </StyledMarkdownEditor>
   )
 }

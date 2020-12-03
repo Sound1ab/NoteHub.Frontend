@@ -1,8 +1,13 @@
-import Codemirror, { Editor, EditorFromTextArea, Position } from 'codemirror'
-import React, { MouseEvent, useCallback, useEffect, useRef } from 'react'
+import Codemirror, { Editor, EditorFromTextArea } from 'codemirror'
+import React, { useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { FONT } from '../../../../../../enums'
+import {
+  useCodeMirror,
+  useReadFile,
+  useReadThemeSettings,
+} from '../../../../../../hooks'
 import {
   drawHorizontalRule,
   drawLink,
@@ -37,31 +42,19 @@ export interface IActions {
   drawTable: () => void
 }
 
-interface ICodeMirror {
-  value: string
-  onChange?: (value: string) => void
-  onLineAndCursor?: (currentCursorPosition: Position) => void
-  onScroll?: () => void
-  onViewportChange?: () => void
-  onSetActions?: (actions: IActions) => void
-  onEditorClick?: (e: MouseEvent<HTMLElement>) => void
-  isFullWidth?: boolean
-  font?: FONT
-}
-
-export function CodeMirror({
-  value,
-  onChange,
-  onLineAndCursor,
-  onScroll,
-  onViewportChange,
-  onSetActions,
-  onEditorClick,
-  isFullWidth,
-  font,
-}: ICodeMirror) {
+export function CodeMirror() {
   const textArea = useRef<HTMLTextAreaElement | null>(null)
   const codeMirrorRef = useRef<EditorFromTextArea | null>(null)
+  const {
+    setActions,
+    onEditorClick,
+    onUpdateFile,
+    onMarkdownCursorPosition,
+  } = useCodeMirror()
+  const { isFullWidth, font } = useReadThemeSettings()
+  const { file } = useReadFile()
+
+  const value = file?.content ?? ''
 
   const handleOnChange = useCallback(
     (editor: Editor) => {
@@ -71,9 +64,9 @@ export function CodeMirror({
         return
       }
 
-      onChange?.(editor.getValue())
+      onUpdateFile?.(editor.getValue())
     },
-    [value, onChange]
+    [value, onUpdateFile]
   )
 
   useEffect(() => {
@@ -100,14 +93,12 @@ export function CodeMirror({
 
     editor?.on('change', handleOnChange)
     editor?.on('cursorActivity', (editor) =>
-      onLineAndCursor?.(editor.getCursor())
+      onMarkdownCursorPosition?.(editor.getCursor())
     )
-    editor?.on('scroll', () => onScroll?.())
-    editor?.on('viewportChange', () => onViewportChange?.())
 
     codeMirrorRef.current = editor
 
-    onSetActions?.({
+    setActions?.({
       editor,
       toggleOrderedList: () => toggleOrderedList(editor),
       toggleCodeBlock: () => toggleCodeBlock(editor),
@@ -119,7 +110,7 @@ export function CodeMirror({
       drawLink: () => drawLink(editor),
       drawTable: () => drawTable(editor),
     })
-  }, [onChange, onLineAndCursor, onScroll, onViewportChange, onSetActions])
+  }, [handleOnChange, onMarkdownCursorPosition, setActions])
 
   // Sync codemirror with value
   useEffect(() => {
@@ -140,9 +131,7 @@ export function CodeMirror({
   )
 }
 
-const StyledCodeMirror = styled.article<
-  Pick<ICodeMirror, 'isFullWidth' | 'font'>
->`
+const StyledCodeMirror = styled.article<{ isFullWidth: boolean; font: FONT }>`
   position: relative;
   overflow: hidden;
 

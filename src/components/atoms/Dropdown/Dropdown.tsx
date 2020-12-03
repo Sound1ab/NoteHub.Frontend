@@ -27,17 +27,20 @@ export function Dropdown({ items, onClose, containerRef }: IDropdownMenuProps) {
   return (
     <StyledDropdown ref={containerRef} aria-label="dropdown">
       {items.map(
-        ({
-          isDisabled = false,
-          onClick,
-          icon,
-          prefix,
-          custom,
-          label,
-          hasSeparator,
-          heading,
-        }) => (
-          <div key={label}>
+        (
+          {
+            isDisabled = false,
+            onClick,
+            icon,
+            prefix,
+            custom,
+            label,
+            hasSeparator,
+            heading,
+          },
+          index
+        ) => (
+          <div key={`${index}`}>
             {heading && <Heading>{heading}</Heading>}
             <DropdownButton
               onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {

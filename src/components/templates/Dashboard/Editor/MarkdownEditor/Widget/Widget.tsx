@@ -1,25 +1,27 @@
 import React from 'react'
-
 import styled from 'styled-components'
 
-interface IWidget {
-  position?: { left: number; right: number; top: number; bottom: number } | null
-  message?: string | null
-}
+import { useCodeMirror } from '../../../../../../hooks'
 
-export function Widget({ position, message }: IWidget) {
-  if (!position || !message) {
+type Coords = { left: number; right: number; top: number; bottom: number }
+
+export function Widget() {
+  const { activeWidget } = useCodeMirror()
+
+  if (!activeWidget?.coords || !activeWidget.message) {
     return null
   }
 
+  const { message, coords } = activeWidget
+
   return (
-    <Wrapper position={position}>
+    <Wrapper position={coords}>
       <Message>{message}</Message>
     </Wrapper>
   )
 }
 
-const Wrapper = styled.div<Pick<IWidget, 'position'>>`
+const Wrapper = styled.div<{ position: Coords }>`
   position: absolute;
   background-color: ${({ theme }) => theme.colors.background.secondary};
   border-radius: 3px;
@@ -30,6 +32,7 @@ const Wrapper = styled.div<Pick<IWidget, 'position'>>`
     `calc(${position?.left ?? -9999}px + ${theme.spacing.xs})`};
   z-index: 2;
   max-width: 40ch;
+  box-shadow: ${({ theme }) => theme.boxShadow};
 `
 
 const Message = styled.p`

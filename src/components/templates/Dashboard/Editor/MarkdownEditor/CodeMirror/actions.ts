@@ -8,6 +8,7 @@ function _replaceSelection(
 ) {
   if (
     /editor-preview-active/.test(
+      // eslint-disable-next-line
       (cm as any).getWrapperElement?.()?.lastChild?.className
     )
   )
@@ -92,6 +93,7 @@ function _toggleBlock(
 ) {
   if (
     /editor-preview-active/.test(
+      // eslint-disable-next-line
       (editor as any).getWrapperElement()?.lastChild?.className
     )
   )
@@ -181,6 +183,7 @@ export function toggleStrikethrough(editor: EditorFromTextArea) {
 export function toggleCodeBlock(editor: EditorFromTextArea) {
   const fenceCharsToInsert = '```'
 
+  // eslint-disable-next-line
   function fencing_line(line: any) {
     /* return true, if this is a ``` or ~~~ line */
     if (typeof line !== 'object') {
@@ -292,6 +295,7 @@ export function toggleCodeBlock(editor: EditorFromTextArea) {
     ch: cur_start.ch || 1,
   }) // avoid ch 0 which is a cursor pos but not token
   let line = cm.getLineHandle(cur_start.line)
+  // eslint-disable-next-line
   const is_code = code_type(cm, cur_start.line, line as any, tok)
   let block_start: number | undefined = undefined
   let block_end: number | undefined = undefined
@@ -325,6 +329,7 @@ export function toggleCodeBlock(editor: EditorFromTextArea) {
       // find the fenced line so we know what type it is (tilde, backticks, number of them)
       for (block_start = cur_start.line; block_start >= 0; block_start--) {
         line = cm.getLineHandle(block_start)
+        // eslint-disable-next-line
         if (fencing_line(line as any)) {
           break
         }
@@ -439,10 +444,12 @@ export function toggleCodeBlock(editor: EditorFromTextArea) {
         cm.replaceRange(
           '',
           {
+            // eslint-disable-next-line
             line: block_start!,
             ch: 0,
           },
           {
+            // eslint-disable-next-line
             line: block_start! + 1,
             ch: 0,
           }
@@ -450,10 +457,12 @@ export function toggleCodeBlock(editor: EditorFromTextArea) {
         cm.replaceRange(
           '',
           {
+            // eslint-disable-next-line
             line: block_end! - 1,
             ch: 0,
           },
           {
+            // eslint-disable-next-line
             line: block_end!,
             ch: 0,
           }
@@ -474,7 +483,6 @@ export function toggleCodeBlock(editor: EditorFromTextArea) {
       for (block_start = cur_start.line; block_start >= 0; block_start--) {
         line = cm.getLineHandle(block_start)
         if (line.text.match(/^\s*$/)) {
-          // empty or all whitespace - keep going
           continue
         } else {
           if (code_type(cm, block_start, line) !== 'indented') {
@@ -537,6 +545,7 @@ export function toggleCodeBlock(editor: EditorFromTextArea) {
 function _toggleLine(cm: EditorFromTextArea, name: string) {
   if (
     /editor-preview-active/.test(
+      // eslint-disable-next-line
       (cm as any).getWrapperElement?.()?.lastChild?.className
     )
   )

@@ -2,8 +2,10 @@ import CodeMirror from 'codemirror'
 import React, {
   Dispatch,
   ReactNode,
+  Ref,
   SetStateAction,
   useEffect,
+  useRef,
   useState,
 } from 'react'
 
@@ -56,6 +58,7 @@ type ContextProps = {
   onMarkdownCursorPosition: (currentCursorPosition: IPosition) => void
   onEditorClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
   onRemoveWidget: () => void
+  scrollRef: Ref<HTMLDivElement>
 }
 
 export const CodeMirrorContext = React.createContext<Partial<ContextProps>>({})
@@ -72,6 +75,7 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
   const {
     colors: { accent },
   } = useTheme()
+  const scrollRef = useRef<HTMLDivElement | null>(null)
 
   function toggleSideBySide() {
     if (!isSideBySideActive) {
@@ -233,11 +237,18 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
       coords: {
         ...coords,
         left: coords.left,
-        top: coords.top - (actions?.editor?.getScrollInfo()?.top ?? 0),
+        top: coords.top - (scrollRef.current?.scrollTop ?? 0),
       },
       message: activeMarker.options.message,
     })
     setIsWidgetOpen(true)
+  }
+
+  function handleRemoveWidget() {
+    if (!isWidgetOpen) {
+      return
+    }
+    setIsWidgetOpen(false)
   }
 
   return (
@@ -255,7 +266,8 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
         onUpdateFile: handleUpdateFile,
         onMarkdownCursorPosition: handleSetMarkdownCursorPosition,
         onEditorClick: handleEditorClick,
-        onRemoveWidget: () => setIsWidgetOpen(false),
+        onRemoveWidget: handleRemoveWidget,
+        scrollRef,
       }}
     >
       {children}

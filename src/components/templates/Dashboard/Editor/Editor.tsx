@@ -10,7 +10,7 @@ import { MdxRenderer } from './MarkdownEditor/MdxRenderer/MdxRenderer'
 export function Editor() {
   const { loading } = useReadFile()
   const target = useRef(null)
-  const { isPreviewActive, isSideBySideActive, actions } = useCodeMirror()
+  const { isPreviewActive, isSideBySideActive } = useCodeMirror()
 
   return (
     <Wrapper id={CONTAINER_ID.EDITOR}>
