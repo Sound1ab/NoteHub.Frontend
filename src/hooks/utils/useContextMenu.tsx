@@ -18,9 +18,42 @@ export function useContextMenu(target: RefObject<HTMLElement>) {
         e.preventDefault()
         setOpen(true)
 
-        if (!ref.current) return
+        if (!ref.current || !target.current) return
 
-        setClickPosition({ top: `${e.clientY}px`, left: `${e.clientX}px` })
+        const { left, top } = target.current.getBoundingClientRect()
+
+        const cursorX = e.clientX
+        const cursorY = e.clientY
+
+        // We need to take into account the head and sidebar as mouse position
+        // doesn't do this for us
+        const cursorWithinTargetX = e.clientX - left
+        const cursorWithinTargetY = e.clientY - top
+
+        const containerWidth = target.current.clientWidth
+        const containerHeight = target.current.clientHeight
+        const elementWidth = ref.current.clientWidth
+        const elementHeight = ref.current.clientHeight
+
+        // Detect if the element is going over the container boundaries
+        const xOffset = containerWidth - (elementWidth + cursorWithinTargetX)
+        const yOffset = containerHeight - (elementHeight + cursorWithinTargetY)
+
+        const willDisplayOverXBoundary = xOffset < 0
+        const willDisplayOverYBoundary = yOffset < 0
+
+        // Move the element within the boundaries of the container
+        const elementXPosition = willDisplayOverXBoundary
+          ? cursorX - Math.abs(xOffset)
+          : cursorX
+        const elementYPosition = willDisplayOverYBoundary
+          ? cursorY - Math.abs(yOffset)
+          : cursorY
+
+        setClickPosition({
+          left: `${elementXPosition}px`,
+          top: `${elementYPosition}px`,
+        })
       }
     }
     window.addEventListener('contextmenu', handleContextClick)
