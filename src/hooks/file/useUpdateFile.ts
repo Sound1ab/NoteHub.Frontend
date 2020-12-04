@@ -1,4 +1,9 @@
-import { MutationResult, gql, useMutation } from '@apollo/client'
+import {
+  MutationResult,
+  gql,
+  useApolloClient,
+  useMutation,
+} from '@apollo/client'
 import { FetchResult } from '@apollo/client/link/core'
 import {
   MutationFunctionOptions,
@@ -54,6 +59,7 @@ export function useUpdateFile(): [
   (file?: File | null, content?: string) => void,
   MutationResult<UpdateFileMutation>
 ] {
+  const client = useApolloClient()
   const { activeRetextSettings } = useReadActiveRetextSettings()
 
   const [mutation, mutationResult] = useMutation<
@@ -69,6 +75,15 @@ export function useUpdateFile(): [
     if (typeof content !== 'string') {
       throw new Error('Update file: content is not a string')
     }
+
+    client.cache.modify({
+      id: client.cache.identify(file),
+      fields: {
+        content() {
+          return content
+        },
+      },
+    })
 
     abortController && abortController.abort()
 

@@ -89,7 +89,7 @@ describe('MarkdownEditor', () => {
       { loading: false },
     ])
 
-    const { rerender, getByText } = await render(
+    const { getByText } = await render(
       <MockProvider
         mockResolvers={resolvers}
         localData={{
@@ -100,27 +100,6 @@ describe('MarkdownEditor', () => {
         <MarkdownEditor targetRef={createRef()} />
       </MockProvider>,
       { enableToast: true }
-    )
-
-    ;(useReadFile as jest.Mock).mockReturnValue({
-      file: {
-        content: 'MOCK FILE CONTENTS new content',
-        messages: {
-          nodes: [],
-        },
-      },
-    })
-
-    await rerender(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{
-          currentPath: () =>
-            localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md'),
-        }}
-      >
-        <MarkdownEditor targetRef={createRef()} />
-      </MockProvider>
     )
 
     await waitFor(() =>

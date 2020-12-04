@@ -18,11 +18,8 @@ afterEach(cleanup)
 describe('Editor', () => {
   // This is an implementation detail inside codemirror.js
   // This may break if codemirror changes. Nulling createRange so
-  // codemirror picks up createTextRange to place in their function 'range'
   // @ts-ignore
-  global.document.createRange = null
-  // @ts-ignore
-  global.document.body.createTextRange = () => {
+  global.document.createRange = () => {
     return {
       setEnd: jest.fn(),
       setStart: jest.fn(),

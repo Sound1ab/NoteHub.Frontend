@@ -1,4 +1,4 @@
-import Codemirror, { Editor, EditorFromTextArea } from 'codemirror'
+import Codemirror, { Editor, EditorFromTextArea, Position } from 'codemirror'
 import React, { useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
@@ -42,6 +42,10 @@ export interface IActions {
   drawTable: () => void
 }
 
+let mounted = false
+let hydrated = false
+let cursorApplied = false
+
 export function CodeMirror() {
   const textArea = useRef<HTMLTextAreaElement | null>(null)
   const codeMirrorRef = useRef<EditorFromTextArea | null>(null)
@@ -56,23 +60,34 @@ export function CodeMirror() {
 
   const value = file?.content ?? ''
 
-  const handleOnChange = useCallback(
-    (editor: Editor) => {
-      const editorValue = editor.getValue()
+  const hydrate = useCallback((editor: Editor, value: string) => {
+    if (hydrated) return
 
-      if (editorValue === value) {
-        return
-      }
+    const doc = editor.getDoc()
+    const lastLine = doc.lastLine()
+    const lastChar = doc.getLine(doc.lastLine()).length
 
-      onUpdateFile?.(editor.getValue())
-    },
-    [value, onUpdateFile]
-  )
+    doc.replaceRange(
+      value || '',
+      { line: 0, ch: 0 },
+      { line: lastLine, ch: lastChar }
+    )
+
+    hydrated = true
+  }, [])
+
+  const preserveCursor = useCallback((editor: Editor, position: Position) => {
+    if (cursorApplied) return
+
+    const doc = editor.getDoc()
+
+    doc.setCursor(position)
+
+    cursorApplied = true
+  }, [])
 
   useEffect(() => {
-    if (!textArea || !textArea.current || codeMirrorRef.current) {
-      return
-    }
+    if (!textArea || !textArea.current || mounted) return
 
     const editor = Codemirror.fromTextArea(textArea.current, {
       mode: {
@@ -91,10 +106,19 @@ export function CodeMirror() {
       viewportMargin: Infinity,
     })
 
-    editor?.on('change', handleOnChange)
-    editor?.on('cursorActivity', (editor) =>
+    const handleChange = (editor: Editor) => {
+      if (!mounted) return
+
+      onUpdateFile?.(editor.getValue())
+    }
+    const handleCursorActivity = (editor: Editor) => {
+      if (!mounted) return
+
       onMarkdownCursorPosition?.(editor.getCursor())
-    )
+    }
+
+    editor?.on('change', handleChange)
+    editor?.on('cursorActivity', handleCursorActivity)
 
     codeMirrorRef.current = editor
 
@@ -110,15 +134,30 @@ export function CodeMirror() {
       drawLink: () => drawLink(editor),
       drawTable: () => drawTable(editor),
     })
-  }, [handleOnChange, onMarkdownCursorPosition, setActions])
 
-  // Sync codemirror with value
+    hydrate(editor, value)
+
+    mounted = true
+
+    editor.getDoc().clearHistory()
+  }, [onUpdateFile, onMarkdownCursorPosition, setActions, hydrate, value])
+
   useEffect(() => {
-    if (codeMirrorRef.current?.getValue() === value) {
-      return
+    const editor = codeMirrorRef.current
+
+    if (!editor) return
+
+    if (codeMirrorRef.current?.getValue() !== value) {
+      hydrated = false
+      cursorApplied = false
     }
-    codeMirrorRef.current?.getDoc().setValue(value)
-  }, [value])
+
+    const cursor = editor.getDoc().getCursor()
+
+    hydrate(editor, value)
+
+    preserveCursor(editor, cursor)
+  }, [value, hydrate, preserveCursor])
 
   return (
     <StyledCodeMirror
