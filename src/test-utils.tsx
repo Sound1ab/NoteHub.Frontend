@@ -3,10 +3,10 @@ import '@testing-library/jest-dom/extend-expect'
 import { EventType } from '@testing-library/dom/types/events'
 import { act, fireEvent, render } from '@testing-library/react'
 import { act as hooksAct, renderHook } from '@testing-library/react-hooks'
+import { IMocks } from 'graphql-tools'
 import React, { ReactNode } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { resolvers as mockResolvers } from './schema/mockResolvers'
 
 import { Toast } from './components/atoms'
 import {
@@ -16,7 +16,7 @@ import {
   ThemeProvider,
 } from './components/providers'
 import { FileTreeProvider } from './components/templates/Dashboard/Sidebar/FileTree/FileTreeProvider'
-import { IMocks } from 'graphql-tools'
+import { resolvers as mockResolvers } from './schema/mockResolvers'
 
 export type FireObject = {
   [K in EventType]: (
@@ -82,18 +82,29 @@ async function customRenderHook<T>(
   return result
 }
 
+type Fn = () => void
+
 const customRender = async (
   node: ReactNode,
-  { waitForLoad = true, enableToast = false, ...options } = {}
+  options?: {
+    waitForLoad?: boolean
+    enableToast?: boolean
+    resolvers?: IMocks
+    localState?: Fn[]
+  }
 ) => {
+  const waitForLoad = options?.waitForLoad ?? false
+  const enableToast = options?.enableToast ?? false
+  const resolvers = options?.resolvers
+  const localState = options?.localState
+
   if (enableToast) {
     // Toast uses setTimeout under the hood
     jest.useFakeTimers('modern')
   }
 
   const { rerender, ...rest } = render(
-    <Context node={node} enableToast={enableToast} />,
-    options
+    <Context node={node} enableToast={enableToast} resolvers={resolvers} />
   )
 
   if (enableToast) {
@@ -106,8 +117,16 @@ const customRender = async (
     jest.useRealTimers()
   }
 
-  if (waitForLoad) {
+  if (!waitForLoad) {
     await act(wait)
+  }
+
+  if (localState) {
+    await act(async () => {
+      localState.forEach((localState) => localState())
+
+      await wait()
+    })
   }
 
   return {

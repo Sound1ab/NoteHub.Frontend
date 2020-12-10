@@ -42,10 +42,6 @@ export interface IActions {
   drawTable: () => void
 }
 
-let mounted = false
-let hydrated = false
-let cursorApplied = false
-
 export function CodeMirror() {
   const textArea = useRef<HTMLTextAreaElement | null>(null)
   const codeMirrorRef = useRef<EditorFromTextArea | null>(null)
@@ -57,12 +53,14 @@ export function CodeMirror() {
   } = useCodeMirror()
   const { isFullWidth, font } = useReadThemeSettings()
   const { file } = useReadFile()
+  const mountedRef = useRef(false)
+  const hydratedRef = useRef(false)
+  const cursorAppliedRef = useRef(false)
 
   const value = file?.content ?? ''
 
   const hydrate = useCallback((editor: Editor, value: string) => {
-    if (hydrated) return
-
+    if (hydratedRef.current) return
     const doc = editor.getDoc()
     const lastLine = doc.lastLine()
     const lastChar = doc.getLine(doc.lastLine()).length
@@ -73,21 +71,21 @@ export function CodeMirror() {
       { line: lastLine, ch: lastChar }
     )
 
-    hydrated = true
+    hydratedRef.current = true
   }, [])
 
   const preserveCursor = useCallback((editor: Editor, position: Position) => {
-    if (cursorApplied) return
+    if (cursorAppliedRef.current) return
 
     const doc = editor.getDoc()
 
     doc.setCursor(position)
 
-    cursorApplied = true
+    cursorAppliedRef.current = true
   }, [])
 
   useEffect(() => {
-    if (!textArea || !textArea.current || mounted) return
+    if (!textArea || !textArea.current || mountedRef.current) return
 
     const editor = Codemirror.fromTextArea(textArea.current, {
       mode: {
@@ -106,20 +104,6 @@ export function CodeMirror() {
       viewportMargin: Infinity,
     })
 
-    const handleChange = (editor: Editor) => {
-      if (!mounted) return
-
-      onUpdateFile?.(editor.getValue())
-    }
-    const handleCursorActivity = (editor: Editor) => {
-      if (!mounted) return
-
-      onMarkdownCursorPosition?.(editor.getCursor())
-    }
-
-    editor?.on('change', handleChange)
-    editor?.on('cursorActivity', handleCursorActivity)
-
     codeMirrorRef.current = editor
 
     setActions?.({
@@ -137,7 +121,7 @@ export function CodeMirror() {
 
     hydrate(editor, value)
 
-    mounted = true
+    mountedRef.current = true
 
     editor.getDoc().clearHistory()
   }, [onUpdateFile, onMarkdownCursorPosition, setActions, hydrate, value])
@@ -145,11 +129,38 @@ export function CodeMirror() {
   useEffect(() => {
     const editor = codeMirrorRef.current
 
+    if (!editor) {
+      return
+    }
+
+    const handleChange = (editor: Editor) => {
+      if (!mountedRef.current) return
+
+      onUpdateFile?.(editor.getValue())
+    }
+    const handleCursorActivity = (editor: Editor) => {
+      if (!mountedRef.current) return
+
+      onMarkdownCursorPosition?.(editor.getCursor())
+    }
+
+    editor.on('change', handleChange)
+    editor.on('cursorActivity', handleCursorActivity)
+
+    return () => {
+      editor.off('change', handleChange)
+      editor.off('cursorActivity', handleCursorActivity)
+    }
+  }, [onUpdateFile, onMarkdownCursorPosition])
+
+  useEffect(() => {
+    const editor = codeMirrorRef.current
+
     if (!editor) return
 
     if (codeMirrorRef.current?.getValue() !== value) {
-      hydrated = false
-      cursorApplied = false
+      hydratedRef.current = false
+      cursorAppliedRef.current = false
     }
 
     const cursor = editor.getDoc().getCursor()

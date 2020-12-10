@@ -1,18 +1,19 @@
 import '@testing-library/jest-dom/extend-expect'
 
+import { act } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React, { createRef } from 'react'
 
-import { useReadFile, useUpdateFile } from '../../../../../hooks'
-import { resolvers } from '../../../../../schema/mockResolvers'
-import { cleanup, fireEvent, render, waitFor } from '../../../../../test-utils'
-import { MockProvider } from '../../../../providers'
+import { fileWithMessage, resolvers } from '../../../../../schema/mockResolvers'
+import { cleanup, render, waitFor } from '../../../../../test-utils'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { MarkdownEditor } from './MarkdownEditor'
 
-jest.mock('../../../../../hooks/file/useUpdateFile')
-jest.mock('../../../../../hooks/file/useReadFile')
-
 afterEach(cleanup)
+
+jest.mock('../../../../../utils/debounce', () => ({
+  debounce: (fn: () => void) => fn,
+}))
 
 describe('MarkdownEditor', () => {
   // Mocking out for codemirror as JSDOM doesn't do this
@@ -36,31 +37,17 @@ describe('MarkdownEditor', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useUpdateFile as jest.Mock).mockImplementation(() => [
-      jest.fn(),
-      { loading: false },
-    ])
-    ;(useReadFile as jest.Mock).mockReturnValue({
-      file: {
-        content: 'MOCK FILE CONTENTS',
-        messages: {
-          nodes: [],
-        },
-      },
-    })
   })
 
   it('should show markdown editor', async () => {
     const { getByLabelText } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{
-          currentPath: () =>
+      <MarkdownEditor targetRef={createRef()} />,
+      {
+        localState: [
+          () =>
             localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md'),
-        }}
-      >
-        <MarkdownEditor targetRef={createRef()} />
-      </MockProvider>
+        ],
+      }
     )
 
     expect(getByLabelText('Markdown editor')).toBeInTheDocument()
@@ -68,39 +55,39 @@ describe('MarkdownEditor', () => {
 
   it('should not show markdown editor if path is not a file', async () => {
     const { queryByLabelText } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{
-          currentPath: () => localState.currentPathVar('MOCK_FOLDER_PATH'),
-        }}
-      >
-        <MarkdownEditor targetRef={createRef()} />
-      </MockProvider>
+      <MarkdownEditor targetRef={createRef()} />,
+      {
+        localState: [() => localState.currentPathVar('MOCK_FOLDER_PATH')],
+      }
     )
 
     expect(queryByLabelText('Markdown editor')).not.toBeInTheDocument()
   })
 
   it('should display the toast alert if updating file errors', async () => {
-    ;(useUpdateFile as jest.Mock).mockImplementation(() => [
-      async () => {
-        throw new Error('mock error')
-      },
-      { loading: false },
-    ])
-
-    const { getByText } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{
-          currentPath: () =>
+    const { getByText, getByRole } = await render(
+      <MarkdownEditor targetRef={createRef()} />,
+      {
+        enableToast: true,
+        resolvers: {
+          ...resolvers,
+          Mutation: () => ({
+            ...resolvers.Mutation(),
+            updateFile: () => {
+              throw new Error('mock error')
+            },
+          }),
+        },
+        localState: [
+          () =>
             localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md'),
-        }}
-      >
-        <MarkdownEditor targetRef={createRef()} />
-      </MockProvider>,
-      { enableToast: true }
+        ],
+      }
     )
+
+    await act(async () => {
+      userEvent.type(getByRole('textbox'), '1')
+    })
 
     await waitFor(() =>
       expect(
@@ -110,120 +97,50 @@ describe('MarkdownEditor', () => {
   })
 
   it('should underline text if file contains messages', async () => {
-    ;(useReadFile as jest.Mock).mockReturnValue({
-      file: {
-        content: 'hello',
-        readAt: '1',
-      },
-    })
-
-    const { rerender, getByText } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{
-          currentPath: () =>
-            localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md'),
-        }}
-      >
-        <MarkdownEditor targetRef={createRef()} />
-      </MockProvider>
-    )
-
-    ;(useReadFile as jest.Mock).mockReturnValue({
-      file: {
-        content: 'heelo',
-        readAt: '2',
-        messages: {
-          nodes: [
-            {
-              message: '`heelo` is misspelt',
-              location: {
-                start: {
-                  offset: 0,
-                },
-                end: {
-                  offset: 5,
-                },
-              },
-            },
-          ],
+    const { getByText } = await render(
+      <MarkdownEditor targetRef={createRef()} />,
+      {
+        localState: [() => localState.currentPathVar('MOCK_FILE_PATH_4.md')],
+        resolvers: {
+          ...resolvers,
+          Mutation: () => ({
+            ...resolvers.Mutation(),
+            updateFile: () => ({
+              ...fileWithMessage,
+              readAt: 'MOCK_READ_AT',
+            }),
+          }),
         },
-      },
+      }
+    )
+
+    await waitFor(() => {
+      expect(getByText('heelo')).toHaveAttribute(
+        'style',
+        'text-decoration: underline; text-decoration-color: #7072dd; text-decoration-style: wavy;'
+      )
     })
-
-    rerender(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{
-          currentPath: () =>
-            localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md'),
-        }}
-      >
-        <MarkdownEditor targetRef={createRef()} />
-      </MockProvider>
-    )
-
-    expect(getByText('heelo')).toHaveAttribute(
-      'style',
-      'text-decoration: underline; text-decoration-color: #7072dd; text-decoration-style: wavy;'
-    )
   })
 
   it('should display message widget when marker is clicked', async () => {
-    ;(useReadFile as jest.Mock).mockReturnValue({
-      file: {
-        content: 'hello',
-        readAt: '1',
-      },
-    })
-
-    const { rerender, getByText } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{
-          currentPath: () =>
-            localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md'),
-        }}
-      >
-        <MarkdownEditor targetRef={createRef()} />
-      </MockProvider>
-    )
-
-    ;(useReadFile as jest.Mock).mockReturnValue({
-      file: {
-        content: 'heelo',
-        messages: {
-          nodes: [
-            {
-              message: '`heelo` is misspelt',
-              location: {
-                start: {
-                  offset: 0,
-                },
-                end: {
-                  offset: 5,
-                },
-              },
-            },
-          ],
+    const { getByText } = await render(
+      <MarkdownEditor targetRef={createRef()} />,
+      {
+        localState: [() => localState.currentPathVar('MOCK_FILE_PATH_4.md')],
+        resolvers: {
+          ...resolvers,
+          Mutation: () => ({
+            ...resolvers.Mutation(),
+            updateFile: () => ({
+              ...fileWithMessage,
+              readAt: 'MOCK_READ_AT',
+            }),
+          }),
         },
-        readAt: '2',
-      },
-    })
-
-    await rerender(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{
-          currentPath: () =>
-            localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md'),
-        }}
-      >
-        <MarkdownEditor targetRef={createRef()} />
-      </MockProvider>
+      }
     )
 
-    await fireEvent.click(getByText('heelo'))
+    await userEvent.click(getByText('heelo'))
 
     await waitFor(() =>
       expect(getByText('`heelo` is misspelt')).toBeInTheDocument()
