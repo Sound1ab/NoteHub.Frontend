@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
@@ -11,7 +11,6 @@ import {
 import { createNodes } from '../../../../../utils'
 import { ErrorToast, List } from '../../../../atoms'
 import { FileInput } from '../FileInput/FileInput'
-import { FileTreeContext } from './FileTreeProvider'
 import { SearchResults } from './SearchResults/SearchResults'
 import { Tree } from './Tree/Tree'
 import { TreeSkeleton } from './TreeSkeleton'
@@ -23,9 +22,8 @@ interface IFileTree {
 
 export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const search = useReadSearch()
-  const { openFoldersInPath } = useFileTree()
+  const { openFoldersInPath, listOfToggledPaths } = useFileTree()
   const { files, loading } = useReadFiles()
-  const { listOfToggledPaths } = useContext(FileTreeContext)
   const [createFile, { loading: createLoading }] = useCreateFile()
 
   if (loading) {

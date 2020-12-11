@@ -184,6 +184,7 @@ export function CodeMirror() {
 const StyledCodeMirror = styled.article<{ isFullWidth: boolean; font: FONT }>`
   position: relative;
   overflow: hidden;
+  min-height: 100%;
 
   .CodeMirror-sizer {
     position: relative;

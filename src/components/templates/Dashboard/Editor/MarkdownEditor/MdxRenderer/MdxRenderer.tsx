@@ -1,11 +1,11 @@
 import { Components, MDXProvider } from '@mdx-js/react'
-import React, { ReactNode, useMemo } from 'react'
+import React, { ReactNode } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import styled from 'styled-components'
 
 import { FONT } from '../../../../../../enums'
 import { useReadFile, useReadThemeSettings } from '../../../../../../hooks'
 import { ThemeProvider } from '../../../../../providers'
-import { ErrorBoundary } from '../../../../../utility'
 import { CodeRenderer } from '../../CodeRenderer/CodeRenderer'
 import { Table } from '../Table/Table'
 import { createElement, transform, transpileMdx } from './utils'
@@ -27,35 +27,45 @@ export function MdxRenderer() {
     Table,
   }
 
-  const element: ReactNode = useMemo(
-    () => createElement(transform(transpileMdx(file?.content ?? ''))),
-    [file?.content]
-  )
+  let element: ReactNode
 
-  return (
-    <ErrorBoundary
-      fallback={(errorMessage: string) => (
-        <CodeRenderer inline={false} language="html" value={errorMessage} />
-      )}
-    >
+  try {
+    element = createElement(transform(transpileMdx(file?.content ?? '')))
+  } catch (error) {
+    return (
+      <Wrapper>
+        <CodeRenderer inline={false} language="html" value={error.message} />
+      </Wrapper>
+    )
+  }
+
+  try {
+    const component = renderToStaticMarkup(
       <ThemeProvider>
         {() => {
           return (
             <MDXProvider components={components}>
-              <MdxPreview>
+              <Wrapper>
                 <Sizer isFullWidth={isFullWidth} font={font}>
                   {element}
                 </Sizer>
-              </MdxPreview>
+              </Wrapper>
             </MDXProvider>
           )
         }}
       </ThemeProvider>
-    </ErrorBoundary>
-  )
+    )
+    return <Wrapper dangerouslySetInnerHTML={{ __html: component }} />
+  } catch (error) {
+    return (
+      <Wrapper>
+        <CodeRenderer inline={false} language="html" value={error.message} />
+      </Wrapper>
+    )
+  }
 }
 
-const MdxPreview = styled.div`
+const Wrapper = styled.div`
   flex: 1 1 100%;
   position: relative;
   height: 100%;

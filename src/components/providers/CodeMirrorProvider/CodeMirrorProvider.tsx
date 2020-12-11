@@ -45,7 +45,6 @@ interface IActiveWidget {
 
 type ContextProps = {
   setActions: Dispatch<SetStateAction<IActions | undefined>>
-  codemirror: CodeMirror.Editor
   actions: IActions
   toggleSideBySide: () => void
   togglePreview: () => void
@@ -58,6 +57,7 @@ type ContextProps = {
   onMarkdownCursorPosition: (currentCursorPosition: IPosition) => void
   onEditorClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
   onRemoveWidget: () => void
+  onRefresh: () => void
   scrollRef: Ref<HTMLDivElement>
 }
 
@@ -82,6 +82,7 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
       localState.isPreviewActiveVar(false)
     }
     localState.isSideBySideActiveVar(!isSideBySideActive)
+    handleRefresh()
   }
 
   function togglePreview() {
@@ -89,6 +90,7 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
       localState.isSideBySideActiveVar(false)
     }
     localState.isPreviewActiveVar(!isPreviewActive)
+    handleRefresh()
   }
 
   const nodes = file?.messages?.nodes
@@ -251,6 +253,13 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
     setIsWidgetOpen(false)
   }
 
+  function handleRefresh() {
+    setTimeout(() => {
+      actions?.editor?.setOption('viewportMargin', Infinity)
+      actions?.editor?.refresh()
+    }, 1)
+  }
+
   return (
     <CodeMirrorContext.Provider
       value={{
@@ -268,6 +277,7 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
         onEditorClick: handleEditorClick,
         onRemoveWidget: handleRemoveWidget,
         scrollRef,
+        onRefresh: handleRefresh,
       }}
     >
       {children}

@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 import { FONT, THEME_SETTINGS } from '../../../../../enums'
 import {
+  useCodeMirror,
   useLogout,
   useModalToggle,
   useReadGithubUser,
@@ -31,6 +32,7 @@ export function Profile(props: IProfile) {
   const [logout, { called, data, error }] = useLogout()
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
   const retextSettings = useReadRetextSettings()
+  const { onRefresh } = useCodeMirror()
 
   if (error) {
     alert('Could not logout. Please try again.')
@@ -66,6 +68,7 @@ export function Profile(props: IProfile) {
       ...themeSettings,
       font: value,
     })
+    onRefresh?.()
   }
 
   function handleToggleThemeSetting(value: THEME_SETTINGS) {
@@ -73,6 +76,7 @@ export function Profile(props: IProfile) {
       ...themeSettings,
       [value]: !themeSettings[value],
     })
+    onRefresh?.()
   }
 
   function handleToggleRetextSetting(value: Retext_Settings) {

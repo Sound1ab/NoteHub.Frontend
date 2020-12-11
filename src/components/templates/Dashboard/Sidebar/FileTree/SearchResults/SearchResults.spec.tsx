@@ -1,9 +1,8 @@
-import { act } from '@testing-library/react'
 import React from 'react'
 
 import { useReadSearch } from '../../../../../../hooks'
 import { resolvers } from '../../../../../../schema/mockResolvers'
-import { cleanup, render, wait } from '../../../../../../test-utils'
+import { cleanup, render } from '../../../../../../test-utils'
 import { MockProvider } from '../../../../../providers'
 import { SearchResults } from './SearchResults'
 
