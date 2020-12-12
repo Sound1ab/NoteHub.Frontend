@@ -193,6 +193,10 @@ export const GlobalStyle = createGlobalStyle<{
     border: none;
   }
   
+  textarea {
+    opacity: 0;
+  }
+  
   input {
     padding: ${({ theme }) => theme.spacing.xs};
     border: 1px solid ${({ theme }) => theme.colors.text.secondary};

@@ -45,11 +45,9 @@ export function MdxRenderer() {
         {() => {
           return (
             <MDXProvider components={components}>
-              <Wrapper>
-                <Sizer isFullWidth={isFullWidth} font={font}>
-                  {element}
-                </Sizer>
-              </Wrapper>
+              <Sizer isFullWidth={isFullWidth} font={font}>
+                {element}
+              </Sizer>
             </MDXProvider>
           )
         }}
