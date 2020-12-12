@@ -2,14 +2,9 @@ import React from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
-import {
-  useCreateFile,
-  useFileTree,
-  useReadFiles,
-  useReadSearch,
-} from '../../../../../hooks'
+import { useFileTree, useReadFiles, useReadSearch } from '../../../../../hooks'
 import { createNodes } from '../../../../../utils'
-import { ErrorToast, List } from '../../../../atoms'
+import { List } from '../../../../atoms'
 import { FileInput } from '../FileInput/FileInput'
 import { SearchResults } from './SearchResults/SearchResults'
 import { Tree } from './Tree/Tree'
@@ -22,24 +17,17 @@ interface IFileTree {
 
 export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const search = useReadSearch()
-  const { openFoldersInPath, listOfToggledPaths } = useFileTree()
-  const { files, loading } = useReadFiles()
-  const [createFile, { loading: createLoading }] = useCreateFile()
+  const { listOfToggledPaths, onCreate, loading: createLoading } = useFileTree()
+  const { files, loading: readLoading } = useReadFiles()
 
-  if (loading) {
+  if (readLoading) {
     return <TreeSkeleton />
   }
 
   async function handleCreate(name: string) {
     const path = `${name}.md`
 
-    openFoldersInPath(path)
-
-    try {
-      await createFile(path)
-    } catch (error) {
-      ErrorToast(`There was an issue creating your file`)
-    }
+    await onCreate(path)
   }
 
   return search ? (

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { cleanup, render } from '../../../../../../test-utils'
+import { cleanup, render } from '../../../test-utils'
 import { Avatar } from './Avatar'
 
 afterEach(cleanup)

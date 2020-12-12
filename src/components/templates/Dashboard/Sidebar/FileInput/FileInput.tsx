@@ -5,7 +5,7 @@ import { Input } from '../../../../atoms'
 
 interface IFileInput {
   onClickOutside: () => void
-  onSubmit: (name: string) => Promise<void>
+  onSubmit: (name: string) => Promise<void> | void
   startingText?: string
   isDisabled: boolean
 }

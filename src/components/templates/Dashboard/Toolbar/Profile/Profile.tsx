@@ -5,13 +5,12 @@ import styled from 'styled-components'
 
 import {
   useModalToggle,
-  useReadGithubUser,
   useProfileDropdown,
+  useReadGithubUser,
 } from '../../../../../hooks'
 import { Fade } from '../../../../animation'
-import { Dropdown } from '../../../../atoms'
+import { Avatar, Dropdown } from '../../../../atoms'
 import { localState } from '../../../../providers/ApolloProvider/cache'
-import { Avatar } from './Avatar/Avatar'
 
 interface IProfile {
   children?: ReactNode

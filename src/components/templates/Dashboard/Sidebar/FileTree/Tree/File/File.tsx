@@ -2,18 +2,10 @@ import React, { useState } from 'react'
 import { useDrag } from 'react-dnd'
 import styled from 'styled-components'
 
-import { CONTAINER_ID } from '../../../../../../../enums'
-import { useDeleteFile, useFileTree } from '../../../../../../../hooks'
-import { useMoveFile } from '../../../../../../../hooks/file/useMoveFile'
+import { useFileTree } from '../../../../../../../hooks'
 import { ITreeNode } from '../../../../../../../types'
-import {
-  removeLastSlug,
-  removeMarkdownExtension,
-  scrollIntoView,
-} from '../../../../../../../utils'
-import { Node_Type } from '../../../../../../apollo'
-import { ErrorToast, Icon } from '../../../../../../atoms'
-import { localState } from '../../../../../../providers/ApolloProvider/cache'
+import { removeMarkdownExtension } from '../../../../../../../utils'
+import { Icon } from '../../../../../../atoms'
 import { FileInput } from '../../../FileInput/FileInput'
 import { Node } from '../Node/Node'
 
@@ -24,31 +16,27 @@ interface IFile {
 
 export function File({ node, level }: IFile) {
   const [isRenaming, setIsRenaming] = useState(false)
-  const [deleteFile] = useDeleteFile()
   const { path, type, name } = node
-  const { activePath, onClick, openFoldersInPath } = useFileTree()
-  const isActive = path === activePath
+  const {
+    activePath,
+    onDeleteFile,
+    onFileClick,
+    onRename,
+    loading,
+  } = useFileTree()
   const [{ isDragging }, dragRef] = useDrag({
     item: { type: 'NODE', file: node },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   })
-  const [moveFile, { loading }] = useMoveFile()
+  const isActive = path === activePath
 
   function handleSetIsRenamingOpen(
     e: React.MouseEvent<HTMLElement, MouseEvent>
   ) {
     e.stopPropagation()
     setIsRenaming(true)
-  }
-
-  async function handleDeleteFile() {
-    try {
-      await deleteFile(node)
-    } catch (error) {
-      ErrorToast(`There was an issue deleting your file. ${error}`)
-    }
   }
 
   const dropdownItems = [
@@ -62,38 +50,14 @@ export function File({ node, level }: IFile) {
     {
       icon: 'trash' as const,
       label: 'Delete',
-      onClick: handleDeleteFile,
+      onClick: () => onDeleteFile(node),
     },
   ]
-
-  function handleOnClick() {
-    if (type === Node_Type.File) {
-      scrollIntoView(CONTAINER_ID.EDITOR)
-    }
-
-    onClick(path)
-
-    localState.currentPathVar(path)
-  }
-
-  async function handleRename(name: string) {
-    const path = removeLastSlug(node.path)
-
-    const newPath = path.length > 0 ? `${path}/${name}.md` : `${name}.md`
-
-    openFoldersInPath(newPath)
-
-    try {
-      await moveFile(node, newPath)
-    } catch {
-      ErrorToast('Could not move file')
-    }
-  }
 
   return isRenaming ? (
     <FileInput
       onClickOutside={() => setIsRenaming(false)}
-      onSubmit={handleRename}
+      onSubmit={(name) => onRename(node, name)}
       startingText={removeMarkdownExtension(name)}
       isDisabled={loading}
     />
@@ -101,7 +65,7 @@ export function File({ node, level }: IFile) {
     <StyledFile
       node={node}
       level={level}
-      onClick={handleOnClick}
+      onClick={() => onFileClick(type, path)}
       isActive={isActive}
       dropdownItems={dropdownItems}
       dndRef={dragRef}
