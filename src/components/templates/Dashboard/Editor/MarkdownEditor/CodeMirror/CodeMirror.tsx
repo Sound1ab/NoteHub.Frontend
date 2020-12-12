@@ -55,7 +55,7 @@ export function CodeMirror() {
   const { file } = useReadFile()
   const mountedRef = useRef(false)
   const hydratedRef = useRef(false)
-  const cursorAppliedRef = useRef(false)
+  const cursorAppliedRef = useRef(true)
 
   const value = file?.content ?? ''
 
