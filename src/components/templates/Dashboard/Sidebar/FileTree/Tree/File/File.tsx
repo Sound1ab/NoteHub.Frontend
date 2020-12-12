@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDrag } from 'react-dnd'
 import styled from 'styled-components'
 
-import { useFileTree } from '../../../../../../../hooks'
+import { useFileDropdown, useFileTree } from '../../../../../../../hooks'
 import { ITreeNode } from '../../../../../../../types'
 import { removeMarkdownExtension } from '../../../../../../../utils'
 import { Icon } from '../../../../../../atoms'
@@ -15,48 +15,21 @@ interface IFile {
 }
 
 export function File({ node, level }: IFile) {
-  const [isRenaming, setIsRenaming] = useState(false)
-  const { path, type, name } = node
-  const {
-    activePath,
-    onDeleteFile,
-    onFileClick,
-    onRename,
-    loading,
-  } = useFileTree()
+  const { items, isRenaming, handleSetIsRenamingClose } = useFileDropdown(node)
+  const { activePath, onFileClick, onRename, loading } = useFileTree()
   const [{ isDragging }, dragRef] = useDrag({
     item: { type: 'NODE', file: node },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   })
+
+  const { path, type, name } = node
   const isActive = path === activePath
-
-  function handleSetIsRenamingOpen(
-    e: React.MouseEvent<HTMLElement, MouseEvent>
-  ) {
-    e.stopPropagation()
-    setIsRenaming(true)
-  }
-
-  const dropdownItems = [
-    {
-      heading: 'File',
-      icon: 'pen' as const,
-      label: 'Rename',
-      onClick: handleSetIsRenamingOpen,
-      hasSeparator: true,
-    },
-    {
-      icon: 'trash' as const,
-      label: 'Delete',
-      onClick: () => onDeleteFile(node),
-    },
-  ]
 
   return isRenaming ? (
     <FileInput
-      onClickOutside={() => setIsRenaming(false)}
+      onClickOutside={handleSetIsRenamingClose}
       onSubmit={(name) => onRename(node, name)}
       startingText={removeMarkdownExtension(name)}
       isDisabled={loading}
@@ -67,7 +40,7 @@ export function File({ node, level }: IFile) {
       level={level}
       onClick={() => onFileClick(type, path)}
       isActive={isActive}
-      dropdownItems={dropdownItems}
+      dropdownItems={items}
       dndRef={dragRef}
       isDragging={isDragging}
     >
