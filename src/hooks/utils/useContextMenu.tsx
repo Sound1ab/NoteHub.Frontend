@@ -1,6 +1,6 @@
 import React, { ReactNode, RefObject, useLayoutEffect, useState } from 'react'
 
-import { useModalToggle } from './useModalToggle'
+import { useModalToggle } from '../'
 
 export function useContextMenu(target: RefObject<HTMLElement>) {
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()

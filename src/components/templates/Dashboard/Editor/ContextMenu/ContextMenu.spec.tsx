@@ -2,9 +2,9 @@ import React, { ReactNode, createRef } from 'react'
 import { useUpload } from 'react-use-upload'
 
 import {
+  useCodeMirror,
   useContextMenu,
   useDropzone,
-  useCodeMirror,
   useReadFile,
   useUpdateFile,
 } from '../../../../../hooks'
@@ -21,7 +21,7 @@ import { MockProvider } from '../../../../providers'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { ContextMenu } from './ContextMenu'
 
-jest.mock('../../../../../hooks/utils/useCodeMirror')
+jest.mock('../../../../../hooks/context/useCodeMirror')
 jest.mock('../../../../../hooks/utils/useContextMenu')
 jest.mock('../../../../../hooks/file/useUpdateFile')
 jest.mock('../../../../../hooks/file/useReadFile')

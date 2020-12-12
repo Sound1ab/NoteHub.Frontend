@@ -9,7 +9,7 @@ import { MockProvider } from '../../../providers'
 import { localState } from '../../../providers/ApolloProvider/cache'
 import { Toolbar } from './Toolbar'
 
-jest.mock('../../../../hooks/utils/useCodeMirror')
+jest.mock('../../../../hooks/context/useCodeMirror')
 
 afterEach(cleanup)
 

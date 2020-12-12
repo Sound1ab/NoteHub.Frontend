@@ -143,7 +143,7 @@ describe('Profile', () => {
       })
     })
 
-    it.only.each([
+    it.each([
       ['Light mode', THEME_SETTINGS.IS_LIGHT_THEME, true],
       ['Full width', THEME_SETTINGS.IS_FULL_WIDTH, true],
       ['Large text', THEME_SETTINGS.IS_LARGE_TEXT, true],
