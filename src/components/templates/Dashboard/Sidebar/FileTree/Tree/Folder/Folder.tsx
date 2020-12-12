@@ -1,8 +1,8 @@
-import React, { MouseEvent, ReactNode, useState } from 'react'
+import React, { MouseEvent, ReactNode } from 'react'
 import { useDrop } from 'react-dnd'
 import styled, { css } from 'styled-components'
 
-import { useFileTree } from '../../../../../../../hooks'
+import { useFileTree, useFolderDropdown } from '../../../../../../../hooks'
 import { ITreeNode } from '../../../../../../../types'
 import { Icon } from '../../../../../../atoms'
 import { FileInput } from '../../../FileInput/FileInput'
@@ -15,10 +15,11 @@ interface IFolder {
 }
 
 export function Folder({ level, node, childNodes }: IFolder) {
-  const [isNewFileOpen, setIsNewFileOpen] = useState(false)
+  const { items, isNewFileOpen, handleSetIsNewFileClose } = useFolderDropdown(
+    node
+  )
   const {
     activePath,
-    onToggle,
     onCreate,
     loading,
     onMove,
@@ -41,21 +42,6 @@ export function Folder({ level, node, childNodes }: IFolder) {
     }),
   })
 
-  function handleSetIsNewFileOpen() {
-    setIsNewFileOpen(true)
-
-    onToggle(path, true)
-  }
-
-  const dropdownItems = [
-    {
-      heading: 'Folder',
-      icon: 'edit' as const,
-      label: 'Create file',
-      onClick: handleSetIsNewFileOpen,
-    },
-  ]
-
   async function handleMove({ file }: { file: ITreeNode }) {
     await onMove(file, path, isOver)
   }
@@ -65,7 +51,7 @@ export function Folder({ level, node, childNodes }: IFolder) {
       <StyledFolder
         node={node}
         level={level}
-        dropdownItems={dropdownItems}
+        dropdownItems={items}
         onClick={() => onFolderClick(node)}
         isActive={isActive}
         childNodes={childNodes}
@@ -85,7 +71,7 @@ export function Folder({ level, node, childNodes }: IFolder) {
       </StyledFolder>
       {isNewFileOpen && (
         <FileInput
-          onClickOutside={() => setIsNewFileOpen(false)}
+          onClickOutside={handleSetIsNewFileClose}
           onSubmit={(name) => onCreate(`${path}/${name}.md`)}
           isDisabled={loading}
         />
