@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { CodeMirrorProvider } from '../../providers'
 import { Editor } from './Editor/Editor'
+import { CodeMirrorProvider } from './Editor/MarkdownEditor/CodeMirror/CodeMirrorProvider'
 import { Sidebar } from './Sidebar/Sidebar'
 import { Toolbar } from './Toolbar/Toolbar'
 

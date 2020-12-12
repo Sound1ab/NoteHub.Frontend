@@ -10,11 +10,11 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import { Toast } from './components/atoms'
 import {
-  CodeMirrorProvider,
   IconProvider,
   MockProvider,
   ThemeProvider,
 } from './components/providers'
+import { CodeMirrorProvider } from './components/templates/Dashboard/Editor/MarkdownEditor/CodeMirror/CodeMirrorProvider'
 import { FileTreeProvider } from './components/templates/Dashboard/Sidebar/FileTree/FileTreeProvider'
 import { resolvers as mockResolvers } from './schema/mockResolvers'
 

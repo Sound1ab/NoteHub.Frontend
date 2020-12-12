@@ -16,13 +16,13 @@ import {
   useReadIsSideBySideActive,
   useTheme,
   useUpdateFile,
-} from '../../../hooks'
-import { IPosition } from '../../../types'
-import { isNumber } from '../../../utils'
-import { MessagesFragment } from '../../apollo'
-import { ErrorToast } from '../../atoms'
-import { IActions } from '../../templates/Dashboard/Editor/MarkdownEditor/CodeMirror/CodeMirror'
-import { localState } from '../ApolloProvider/cache'
+} from '../../../../../../hooks'
+import { IPosition } from '../../../../../../types'
+import { isNumber } from '../../../../../../utils'
+import { MessagesFragment } from '../../../../../apollo'
+import { ErrorToast } from '../../../../../atoms'
+import { IActions } from './CodeMirror'
+import { localState } from '../../../../../providers/ApolloProvider/cache'
 
 interface ICodeMirrorProvider {
   children?: ReactNode

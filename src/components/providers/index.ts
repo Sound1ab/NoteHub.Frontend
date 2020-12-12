@@ -1,5 +1,4 @@
 export * from './ApolloProvider/ApolloProvider'
 export * from './ApolloProvider/MockProvider'
-export * from './CodeMirrorProvider/CodeMirrorProvider'
 export * from './IconProvider/IconProvider'
 export * from './ThemeProvider/ThemeProvider'

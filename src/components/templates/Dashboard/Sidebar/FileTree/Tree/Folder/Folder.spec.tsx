@@ -7,7 +7,7 @@ import { createNodes } from '../../../../../../../utils'
 import { Node_Type } from '../../../../../../apollo'
 import { Folder } from './Folder'
 
-jest.mock('../../../../../../../hooks/utils/useFileTree')
+jest.mock('../../../../../../../hooks/context/useFileTree')
 
 describe('Folder', () => {
   const onToggle = jest.fn()

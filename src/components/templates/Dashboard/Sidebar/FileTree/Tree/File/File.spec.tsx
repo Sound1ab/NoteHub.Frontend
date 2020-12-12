@@ -8,7 +8,7 @@ import { Node_Type } from '../../../../../../apollo'
 import { MockProvider } from '../../../../../../providers'
 import { File } from './File'
 
-jest.mock('../../../../../../../hooks/utils/useFileTree')
+jest.mock('../../../../../../../hooks/context/useFileTree')
 
 describe('File', () => {
   const onFileClick = jest.fn()
