@@ -8,7 +8,6 @@ import {
   useProfileDropdown,
   useReadGithubUser,
 } from '../../../../../hooks'
-import { Fade } from '../../../../animation'
 import { Avatar, Dropdown } from '../../../../atoms'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 
@@ -21,7 +20,9 @@ export function Profile(props: IProfile) {
 
   const containerRef = useRef(null)
   const user = useReadGithubUser()
-  const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
+  const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>(
+    containerRef
+  )
   const { items, logout, called } = useProfileDropdown()
 
   if (called && logout === 'ok') {
@@ -45,10 +46,7 @@ export function Profile(props: IProfile) {
     <Wrapper {...props} ref={containerRef}>
       <Avatar image={user?.avatar_url} onClick={handleOpen} />
       {isOpen && (
-        <Portal
-          domNode={containerRef.current}
-          placementAroundContainer="bottom-left"
-        >
+        <Portal>
           <Dropdown containerRef={ref} items={items} />
         </Portal>
       )}

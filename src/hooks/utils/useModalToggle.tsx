@@ -1,10 +1,29 @@
-import React, { useRef, useState } from 'react'
+import React, { RefObject, useRef, useState } from 'react'
 
 import { IPortal, Portal } from '../../components/atoms'
+import { useTheme } from '..'
 
-export function useModalToggle<T extends HTMLElement>() {
+export function useModalToggle<T extends HTMLElement>(
+  origin?: RefObject<HTMLElement>
+) {
   const [isOpen, setOpen] = useState(false)
   const ref = useRef<T | null>(null)
+  const theme = useTheme()
+
+  let position: Record<string, string>
+
+  if (origin?.current) {
+    const { bottom, right } = origin.current.getBoundingClientRect()
+
+    const positionFromRight = window.innerWidth - right
+
+    position = {
+      paddingTop: theme.spacing.xxs,
+      top: `${bottom}px`,
+      right: `${positionFromRight}px`,
+      position: 'absolute',
+    }
+  }
 
   const PartiallyAppliedPortal = ({
     children,
@@ -26,7 +45,7 @@ export function useModalToggle<T extends HTMLElement>() {
       domNode={domNode}
       hasBackground={hasBackground}
       placementAroundContainer={placementAroundContainer}
-      style={style}
+      style={position ? position : style}
     >
       {children}
     </Portal>

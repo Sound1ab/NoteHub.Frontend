@@ -19,8 +19,6 @@ describe('Node', () => {
 
   const onClick = jest.fn()
 
-  const isActive = false
-
   beforeEach(() => {
     jest.resetAllMocks()
   })
@@ -37,7 +35,6 @@ describe('Node', () => {
           level={1}
           dropdownItems={dropdownItems}
           onClick={onClick}
-          isActive={isActive}
         />
       </MockProvider>
     )
@@ -55,7 +52,6 @@ describe('Node', () => {
           level={1}
           dropdownItems={dropdownItems}
           onClick={onClick}
-          isActive={isActive}
         />
       </MockProvider>
     )

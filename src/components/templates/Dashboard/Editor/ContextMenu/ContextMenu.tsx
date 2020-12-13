@@ -1,7 +1,6 @@
 import React, { RefObject } from 'react'
 
 import { useContextMenu, useContextMenuDropdown } from '../../../../../hooks'
-import { Fade } from '../../../../animation'
 import { Dropdown } from '../../../../atoms'
 
 interface IContextMenu {

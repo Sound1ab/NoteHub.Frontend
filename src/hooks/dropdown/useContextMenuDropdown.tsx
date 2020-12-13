@@ -78,7 +78,7 @@ export function useContextMenuDropdown() {
         {
           heading: 'Components',
           onClick: actions.drawTableComponent,
-          title: 'Table',
+          title: 'Table mdx',
           isDisabled: !isMarkdownEditorActive,
           icon: 'table' as const,
         },

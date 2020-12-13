@@ -6,6 +6,7 @@ import { fireEvent, render } from '../../../../../../../test-utils'
 import { createNodes } from '../../../../../../../utils'
 import { Node_Type } from '../../../../../../apollo'
 import { Folder } from './Folder'
+import { IFolderNode } from '../../../../../../../types'
 
 jest.mock('../../../../../../../hooks/context/useFileTree')
 
@@ -45,7 +46,11 @@ describe('Folder', () => {
 
   it('should call onFolderClick with node', async () => {
     const { getByLabelText } = await render(
-      <Folder node={folderNode} level={1} childNodes={childNodes} />
+      <Folder
+        node={folderNode as IFolderNode}
+        level={1}
+        childNodes={childNodes}
+      />
     )
 
     await fireEvent.click(getByLabelText('folder'))
@@ -55,7 +60,11 @@ describe('Folder', () => {
 
   it('should call onChevronClick if chevron is clicked', async () => {
     const { getByLabelText } = await render(
-      <Folder node={folderNode} level={1} childNodes={childNodes} />
+      <Folder
+        node={folderNode as IFolderNode}
+        level={1}
+        childNodes={childNodes}
+      />
     )
 
     await fireEvent.click(getByLabelText('chevron'))
@@ -65,7 +74,11 @@ describe('Folder', () => {
 
   it('should open folder dropdown menu', async () => {
     const { getByLabelText, getByText } = await render(
-      <Folder node={folderNode} level={1} childNodes={childNodes} />
+      <Folder
+        node={folderNode as IFolderNode}
+        level={1}
+        childNodes={childNodes}
+      />
     )
 
     await fireEvent.click(getByLabelText(`${folderNode.name} actions`))
@@ -75,7 +88,11 @@ describe('Folder', () => {
 
   it('should open file input when create new file is selected from folder dropdown', async () => {
     const { getByLabelText } = await render(
-      <Folder node={folderNode} level={1} childNodes={childNodes} />
+      <Folder
+        node={folderNode as IFolderNode}
+        level={1}
+        childNodes={childNodes}
+      />
     )
 
     await fireEvent.click(getByLabelText(`${folderNode.name} actions`))

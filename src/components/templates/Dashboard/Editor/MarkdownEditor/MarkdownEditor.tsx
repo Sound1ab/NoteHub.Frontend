@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import { useCodeMirror, useReadCurrentPath } from '../../../../../hooks'
 import { composeRefs, isFile } from '../../../../../utils'
-import { Fade } from '../../../../animation'
 import { Icon } from '../../../../atoms'
 import { CodeMirror } from './CodeMirror/CodeMirror'
 import { Widget } from './Widget/Widget'

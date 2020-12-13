@@ -1,9 +1,8 @@
 import React, { ReactNode, Ref, SyntheticEvent, useRef } from 'react'
 import styled, { css } from 'styled-components'
 
-import { useModalToggle } from '../../../../../../../hooks'
+import { useFileTree, useModalToggle } from '../../../../../../../hooks'
 import { ITreeNode } from '../../../../../../../types'
-import { Fade } from '../../../../../../animation'
 import { Node_Type } from '../../../../../../apollo'
 import { Button, Dropdown, IDropdownItem, Icon } from '../../../../../../atoms'
 
@@ -14,7 +13,6 @@ interface INode {
   childNodes?: ReactNode
   dropdownItems: IDropdownItem[]
   onClick: () => void
-  isActive: boolean
   dndRef?: Ref<HTMLLIElement>
   className?: string
 }
@@ -26,13 +24,16 @@ export function Node({
   childNodes,
   dropdownItems,
   onClick,
-  isActive,
   dndRef,
   className,
 }: INode) {
   const containerRef = useRef(null)
-  const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
-  const { type, name } = node
+  const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>(
+    containerRef
+  )
+  const { type, name, path } = node
+  const { activePath } = useFileTree()
+  const isActive = path === activePath
 
   function handleToggleMenu(e: React.MouseEvent<HTMLElement, MouseEvent>) {
     e.stopPropagation()
@@ -81,10 +82,7 @@ export function Node({
         </Actions>
       </Wrapper>
       {isOpen && (
-        <Portal
-          domNode={containerRef.current}
-          placementAroundContainer="bottom-left"
-        >
+        <Portal>
           <Dropdown
             containerRef={ref}
             items={dropdownItems}

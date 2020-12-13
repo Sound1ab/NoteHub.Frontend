@@ -16,7 +16,7 @@ interface IFile {
 
 export function File({ node, level }: IFile) {
   const { items, isRenaming, handleSetIsRenamingClose } = useFileDropdown(node)
-  const { activePath, onFileClick, onRename, loading } = useFileTree()
+  const { onFileClick, onRename, loading } = useFileTree()
   const [{ isDragging }, dragRef] = useDrag({
     item: { type: 'NODE', file: node },
     collect: (monitor) => ({
@@ -25,7 +25,6 @@ export function File({ node, level }: IFile) {
   })
 
   const { path, type, name } = node
-  const isActive = path === activePath
 
   return isRenaming ? (
     <FileInput
@@ -39,7 +38,6 @@ export function File({ node, level }: IFile) {
       node={node}
       level={level}
       onClick={() => onFileClick(type, path)}
-      isActive={isActive}
       dropdownItems={items}
       dndRef={dragRef}
       isDragging={isDragging}

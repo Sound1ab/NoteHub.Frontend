@@ -19,7 +19,6 @@ export function Folder({ level, node, childNodes }: IFolder) {
     node
   )
   const {
-    activePath,
     onCreate,
     loading,
     onMove,
@@ -27,8 +26,6 @@ export function Folder({ level, node, childNodes }: IFolder) {
     onFolderClick,
   } = useFileTree()
   const { path, toggled = false } = node
-
-  const isActive = path === activePath
 
   const [{ isOver }, dropRef] = useDrop<
     { type: string; file: ITreeNode },
@@ -53,7 +50,6 @@ export function Folder({ level, node, childNodes }: IFolder) {
         level={level}
         dropdownItems={items}
         onClick={() => onFolderClick(node)}
-        isActive={isActive}
         childNodes={childNodes}
         dndRef={dropRef}
         isOver={isOver}
