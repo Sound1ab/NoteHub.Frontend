@@ -81,12 +81,11 @@ export function Folder({ level, node, childNodes }: IFolder) {
 }
 
 const StyledFolder = styled(Node)<{ isOver: boolean }>`
-  background-color: ${({ isOver, theme }) =>
-    isOver
-      ? css`
-          ${theme.colors.accent}!important;
-        `
-      : 'transparent'};
+  ${({ isOver, theme }) =>
+    isOver &&
+    css`
+      background-color: ${theme.colors.accent}!important;
+    `}
 `
 
 const StyledIcon = styled(Icon)`

@@ -115,6 +115,39 @@ export function createNodes(
   return parentNode.children
 }
 
+export function traverseTree(
+  root: IFolderNode,
+  nodeMutator: (node: ITreeNode) => void
+) {
+  const queue: ITreeNode[] = []
+
+  queue.push(root)
+
+  while (queue.length > 0) {
+    const size = queue.length
+
+    let current: ITreeNode | undefined
+
+    for (let i = 0; i < size; i++) {
+      current = queue.shift()
+
+      if (!current) {
+        return
+      }
+
+      nodeMutator(current)
+
+      if (!isFolderNode(current)) {
+        continue
+      }
+
+      for (const child of current.children) {
+        queue.push(child)
+      }
+    }
+  }
+}
+
 function findNode(nodes: ITreeNode[], slug: string) {
   return nodes.find((node) => node.name === slug)
 }

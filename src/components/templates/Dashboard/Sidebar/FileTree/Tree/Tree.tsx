@@ -1,7 +1,8 @@
 import React from 'react'
 
 import { ITreeNode } from '../../../../../../types'
-import { isFolderNode } from '../../../../../../utils'
+import { isFolderNode, traverseTree } from '../../../../../../utils'
+import { Node_Type } from '../../../../../apollo'
 import { List } from '../../../../../atoms'
 import { File } from './File/File'
 import { Folder } from './Folder/Folder'
@@ -12,6 +13,21 @@ interface INode {
 }
 
 export function Tree({ node, level = 0 }: INode) {
+  // When we delete a file and the folder is empty we want to hide the folder
+  if (isFolderNode(node)) {
+    let hasFiles = false
+
+    traverseTree(node, (node) => {
+      if (node.type === Node_Type.File) {
+        hasFiles = true
+      }
+    })
+
+    if (!hasFiles) {
+      return null
+    }
+  }
+
   return isFolderNode(node) ? (
     <Folder
       node={node}

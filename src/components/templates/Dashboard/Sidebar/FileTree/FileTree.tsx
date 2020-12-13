@@ -30,25 +30,27 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
     await onCreate(path)
   }
 
-  return search ? (
-    <SearchResults />
-  ) : (
-    <>
-      <DndProvider backend={HTML5Backend}>
-        {files &&
-          createNodes(files, listOfToggledPaths).map((node) => (
-            <List key={node.name}>
-              <Tree key={node.name} node={node} />
-            </List>
-          ))}
-        {isNewFileOpen && (
-          <FileInput
-            onClickOutside={closeNewFile}
-            onSubmit={handleCreate}
-            isDisabled={createLoading}
-          />
-        )}
-      </DndProvider>
-    </>
+  return (
+    <DndProvider backend={HTML5Backend}>
+      {search ? (
+        <SearchResults />
+      ) : (
+        <>
+          {files &&
+            createNodes(files, listOfToggledPaths).map((node) => (
+              <List key={node.name}>
+                <Tree key={node.name} node={node} />
+              </List>
+            ))}
+          {isNewFileOpen && (
+            <FileInput
+              onClickOutside={closeNewFile}
+              onSubmit={handleCreate}
+              isDisabled={createLoading}
+            />
+          )}
+        </>
+      )}
+    </DndProvider>
   )
 }
