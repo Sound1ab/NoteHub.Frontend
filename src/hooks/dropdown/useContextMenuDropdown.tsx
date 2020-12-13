@@ -73,6 +73,14 @@ export function useContextMenuDropdown() {
           title: 'Image',
           isDisabled: !isMarkdownEditorActive,
           icon: 'image' as const,
+          hasSeparator: true,
+        },
+        {
+          heading: 'Components',
+          onClick: actions.drawTableComponent,
+          title: 'Table',
+          isDisabled: !isMarkdownEditorActive,
+          icon: 'table' as const,
         },
       ]
     : null

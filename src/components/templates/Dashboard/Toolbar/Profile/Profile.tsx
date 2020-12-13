@@ -44,14 +44,14 @@ export function Profile(props: IProfile) {
   return (
     <Wrapper {...props} ref={containerRef}>
       <Avatar image={user?.avatar_url} onClick={handleOpen} />
-      <Fade show={isOpen}>
+      {isOpen && (
         <Portal
           domNode={containerRef.current}
           placementAroundContainer="bottom-left"
         >
           <Dropdown containerRef={ref} items={items} />
         </Portal>
-      </Fade>
+      )}
     </Wrapper>
   )
 }

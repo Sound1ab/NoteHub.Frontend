@@ -44,8 +44,8 @@ export function Dropdown({ items, onClose, containerRef }: IDropdownMenuProps) {
             {heading && <Heading>{heading}</Heading>}
             <DropdownButton
               onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-                onClose && onClose()
                 onClick?.(e)
+                onClose?.()
               }}
               aria-label={label}
               isDisabled={isDisabled}

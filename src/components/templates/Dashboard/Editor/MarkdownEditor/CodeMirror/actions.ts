@@ -610,6 +610,30 @@ const insertTexts = {
   horizontalRule: ['', '\n\n-----\n\n'],
 }
 
+const insertComponents = {
+  table: [
+    '',
+    `<Table
+      columns={[
+        {
+          Header: 'Column 1',
+          accessor: 'col1',
+        },
+        {
+          Header: 'Column 2',
+          accessor: 'col2',
+        },
+      ]}
+      data={[
+        {
+          col1: 'Hello',
+          col2: 'World',
+        },
+      ]}
+    />`,
+  ],
+}
+
 export function drawLink(editor: EditorFromTextArea) {
   const stat = getState(editor)
   _replaceSelection(editor, stat.link, insertTexts.link)
@@ -628,4 +652,8 @@ export function drawTable(editor: EditorFromTextArea) {
 export function drawHorizontalRule(editor: EditorFromTextArea) {
   const stat = getState(editor)
   _replaceSelection(editor, stat.image, insertTexts.horizontalRule)
+}
+
+export function drawTableComponent(editor: EditorFromTextArea) {
+  _replaceSelection(editor, false, insertComponents.table)
 }

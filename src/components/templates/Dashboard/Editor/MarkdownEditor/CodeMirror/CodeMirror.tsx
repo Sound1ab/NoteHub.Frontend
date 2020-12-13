@@ -12,6 +12,7 @@ import {
   drawHorizontalRule,
   drawLink,
   drawTable,
+  drawTableComponent,
   toggleBlockquote,
   toggleBold,
   toggleCodeBlock,
@@ -40,6 +41,7 @@ export interface IActions {
   drawHorizontalRule: () => void
   drawLink: () => void
   drawTable: () => void
+  drawTableComponent: () => void
 }
 
 export function CodeMirror() {
@@ -117,6 +119,7 @@ export function CodeMirror() {
       drawHorizontalRule: () => drawHorizontalRule(editor),
       drawLink: () => drawLink(editor),
       drawTable: () => drawTable(editor),
+      drawTableComponent: () => drawTableComponent(editor),
     })
 
     hydrate(editor, value)

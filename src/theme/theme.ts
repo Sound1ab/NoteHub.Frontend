@@ -33,7 +33,7 @@ export const breakpoints = {
 }
 
 const darkPrimary = '#1e1e1e'
-const lightPrimary = '#e2e2e2'
+const lightPrimary = '#efefef'
 const accentChoices = {
   primary: '#7072dd',
   secondary: '#70dda5',

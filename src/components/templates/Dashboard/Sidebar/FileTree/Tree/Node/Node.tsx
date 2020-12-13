@@ -80,7 +80,7 @@ export function Node({
           />
         </Actions>
       </Wrapper>
-      <Fade show={isOpen}>
+      {isOpen && (
         <Portal
           domNode={containerRef.current}
           placementAroundContainer="bottom-left"
@@ -91,7 +91,7 @@ export function Node({
             onClose={() => setOpen(false)}
           />
         </Portal>
-      </Fade>
+      )}
       {childNodes}
     </StyledListItem>
   )

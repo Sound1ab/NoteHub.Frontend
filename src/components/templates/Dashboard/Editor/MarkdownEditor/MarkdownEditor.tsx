@@ -26,12 +26,8 @@ export function MarkdownEditor({ targetRef }: IMarkdownEditor) {
       ref={composeRefs(targetRef, scrollRef)}
       onScroll={() => onRemoveWidget?.()}
     >
-      <Fade show={Boolean(loading)}>
-        <Spinner size="1x" icon="spinner" />
-      </Fade>
-      <Fade show={Boolean(isWidgetOpen)}>
-        <Widget />
-      </Fade>
+      {loading && <Spinner size="1x" icon="spinner" />}
+      {isWidgetOpen && <Widget />}
       <CodeMirror />
     </StyledMarkdownEditor>
   )

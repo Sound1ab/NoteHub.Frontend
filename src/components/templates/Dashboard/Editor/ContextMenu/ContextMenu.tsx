@@ -19,7 +19,7 @@ export function ContextMenu({ targetRef }: IContextMenu) {
   return (
     <>
       <Dropzone />
-      <Fade show={isOpen}>
+      {isOpen && (
         <Portal>
           <Dropdown
             containerRef={ref}
@@ -35,7 +35,7 @@ export function ContextMenu({ targetRef }: IContextMenu) {
             onClose={() => setOpen(false)}
           />
         </Portal>
-      </Fade>
+      )}
     </>
   )
 }
