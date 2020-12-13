@@ -7,12 +7,22 @@ export interface IPosition {
   __typename?: 'Position'
 }
 
-export interface ITreeNode {
+export interface IFileNode {
   id: string
   name: string
-  toggled?: boolean
   path: string
   type: Node_Type
-  children?: ITreeNode[]
   isOptimistic: boolean
 }
+
+export interface IFolderNode {
+  id: string
+  name: string
+  toggled: boolean
+  path: string
+  type: Node_Type
+  children: ITreeNode[]
+  isOptimistic: boolean
+}
+
+export type ITreeNode = IFileNode | IFolderNode

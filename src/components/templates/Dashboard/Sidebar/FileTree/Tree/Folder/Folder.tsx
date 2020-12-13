@@ -3,13 +3,13 @@ import { useDrop } from 'react-dnd'
 import styled, { css } from 'styled-components'
 
 import { useFileTree, useFolderDropdown } from '../../../../../../../hooks'
-import { ITreeNode } from '../../../../../../../types'
+import { IFolderNode, ITreeNode } from '../../../../../../../types'
 import { Icon } from '../../../../../../atoms'
 import { FileInput } from '../../../FileInput/FileInput'
 import { Node } from '../Node/Node'
 
 interface IFolder {
-  node: ITreeNode
+  node: IFolderNode
   level: number
   childNodes: ReactNode
 }

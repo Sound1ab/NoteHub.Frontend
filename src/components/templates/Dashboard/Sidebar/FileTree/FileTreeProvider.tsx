@@ -3,7 +3,7 @@ import React, { MouseEvent, ReactNode, useState } from 'react'
 import { CONTAINER_ID } from '../../../../../enums'
 import { useCreateFile, useDeleteFile } from '../../../../../hooks'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
-import { ITreeNode } from '../../../../../types'
+import { IFolderNode, ITreeNode } from '../../../../../types'
 import {
   extractFilename,
   removeLastSlug,
@@ -26,8 +26,8 @@ type ContextProps = {
   loading: boolean
   onCreate: (path: string) => void
   onMove: (file: ITreeNode, path: string, isOver: boolean) => void
-  onChevronClick: (e: MouseEvent<HTMLElement>, node: ITreeNode) => void
-  onFolderClick: (node: ITreeNode) => void
+  onChevronClick: (e: MouseEvent<HTMLElement>, node: IFolderNode) => void
+  onFolderClick: (node: IFolderNode) => void
   onDeleteFile: (node: ITreeNode) => void
   onFileClick: (type: Node_Type, path: string) => void
   onRename: (node: ITreeNode, name: string) => void
@@ -80,7 +80,7 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
     }
   }
 
-  function handleChevronClick(e: MouseEvent<HTMLElement>, node: ITreeNode) {
+  function handleChevronClick(e: MouseEvent<HTMLElement>, node: IFolderNode) {
     e.stopPropagation()
 
     handleOnToggle(node.path, !node.toggled)
@@ -88,7 +88,7 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
     handleOnClick(node.path)
   }
 
-  function handleFolderClick(node: ITreeNode) {
+  function handleFolderClick(node: IFolderNode) {
     const isActive = node.path === activePath
 
     if (isActive) {
