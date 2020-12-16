@@ -29,6 +29,7 @@ export const localState = {
     [THEME_SETTINGS.IS_LARGE_TEXT]: false,
     [THEME_SETTINGS.FONT]: FONT.IS_DEFAULT,
   }),
+  tabsVar: makeVar<Set<string>>(new Set([])),
 }
 
 export const fields = {
@@ -69,6 +70,9 @@ export const fields = {
   },
   themeSettings() {
     return localState.themeSettingsVar()
+  },
+  tabs() {
+    return localState.tabsVar()
   },
 }
 

@@ -1,7 +1,7 @@
 import React, { MouseEvent, ReactNode, useState } from 'react'
 
 import { CONTAINER_ID } from '../../../../../enums'
-import { useCreateFile, useDeleteFile } from '../../../../../hooks'
+import { useCreateFile, useDeleteFile, useReadTabs } from '../../../../../hooks'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
 import { IFolderNode, ITreeNode } from '../../../../../types'
 import {
@@ -43,6 +43,7 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
   const [createFile, { loading: createLoading }] = useCreateFile()
   const [moveFile, { loading: moveLoading }] = useMoveFile()
   const [deleteFile] = useDeleteFile()
+  const tabs = useReadTabs()
 
   function handleOnToggle(path: string, toggled: boolean) {
     if (toggled) {
@@ -139,6 +140,10 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
     handleOnClick(path)
 
     localState.currentPathVar(path)
+
+    tabs.add(path)
+
+    localState.tabsVar(new Set(tabs))
   }
 
   async function handleRename(node: ITreeNode, name: string) {

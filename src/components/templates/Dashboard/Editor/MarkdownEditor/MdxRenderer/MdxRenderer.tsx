@@ -68,7 +68,7 @@ const Wrapper = styled.div`
   position: relative;
   height: 100%;
   overflow-y: scroll;
-  padding: 0 ${({ theme }) => theme.spacing.xs};
+  padding: ${({ theme }) => theme.spacing.xs};
 `
 
 const Sizer = styled.div<{ isFullWidth: boolean; font: FONT }>`

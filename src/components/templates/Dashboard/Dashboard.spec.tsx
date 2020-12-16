@@ -1,5 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 
+import { act } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import { files, resolvers } from '../../../schema/mockResolvers'
@@ -124,8 +126,9 @@ describe('Dashboard', () => {
       target: { files: [file] },
     })
 
-    await waitFor(() =>
-      expect(getByText('MOCK_IMAGE_PATH')).toBeInTheDocument()
+    await waitFor(
+      () => expect(getByText('MOCK_IMAGE_PATH')).toBeInTheDocument(),
+      { timeout: 7000 }
     )
   })
 
@@ -189,5 +192,37 @@ describe('Dashboard', () => {
     const heading = container.querySelector('h1')
 
     expect(heading).toContainHTML('<h1>MOCK_CONTENT</h1>')
+  })
+
+  it('should add tabs when files are selected in the sidebar and close them', async () => {
+    const { getByText, getByTitle } = await render(<Dashboard />)
+
+    await userEvent.click(getByText('MOCK_FILE_PATH_3.md'))
+
+    await act(async () => {
+      await userEvent.click(getByText('MOCK_FOLDER_PATH'))
+    })
+
+    await act(async () => {
+      await userEvent.click(getByText('MOCK_FILE_PATH_1.md'))
+    })
+
+    const tabOne = getByTitle('MOCK_FILE_PATH_3.md')
+    const tabTwo = getByTitle('MOCK_FOLDER_PATH/MOCK_FILE_PATH_1.md')
+
+    expect(tabOne).toBeInTheDocument()
+
+    expect(tabTwo).toBeInTheDocument()
+
+    await act(async () => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      await userEvent.click(tabOne.querySelector('svg')!)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      await userEvent.click(tabTwo.querySelector('svg')!)
+    })
+
+    expect(tabOne).not.toBeInTheDocument()
+
+    expect(tabTwo).not.toBeInTheDocument()
   })
 })

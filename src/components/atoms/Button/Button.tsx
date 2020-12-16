@@ -31,7 +31,7 @@ const StyledButton = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
     cursor: not-allowed;
 
     > * {
-      color: ${({ theme }) => theme.colors.text.tertiary};
+      color: var(--text-tertiary);
     }
   }
 

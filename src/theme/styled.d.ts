@@ -16,7 +16,6 @@ interface IHeading {
 }
 
 export interface ITheme {
-  colors: TColors
   breakpoints: typeof breakpoints
   spacing: TSpacing
   rhythm: VerticalRhythm['rhythm']

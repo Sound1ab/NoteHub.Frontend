@@ -73,8 +73,8 @@ const Form = styled.form`
 
 const StyledInput = styled.input`
   flex: 1 1 100%;
-  background-color: ${({ theme }) => theme.colors.background.secondary};
-  color: ${({ theme }) => theme.colors.text.primary};
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
   min-width: 20px;
   padding: ${({ theme }) => theme.spacing.xs};
   font-size: 14px; // Note: Has to be 16px to stop ios zoom
@@ -84,8 +84,7 @@ const StyledInput = styled.input`
   line-height: 0;
 
   &:focus {
-    outline: ${({ theme }) => theme.spacing.xxxs} solid
-      ${({ theme }) => theme.colors.accent};
+    outline: ${({ theme }) => theme.spacing.xxxs} solid var(--accent-primary);
   }
 `
 

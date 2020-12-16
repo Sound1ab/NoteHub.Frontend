@@ -75,7 +75,7 @@ export function Dropdown({ items, onClose, containerRef }: IDropdownMenuProps) {
 }
 
 const StyledDropdown = styled.ul`
-  background-color: ${({ theme }) => theme.colors.background.secondary};
+  background-color: var(--background-secondary);
   list-style: none;
   border-radius: 3px;
   white-space: pre;
@@ -92,7 +92,7 @@ const Item = styled.li`
 `
 
 const StyledIcon = styled(Icon)`
-  color: ${({ theme }) => theme.colors.text.secondary};
+  color: var(--text-secondary);
   margin-right: ${({ theme }) => theme.spacing.xs};
 `
 
@@ -102,7 +102,7 @@ const Separator = styled.hr`
 
 const Heading = styled.h6`
   text-transform: uppercase;
-  color: ${({ theme }) => theme.colors.text.secondary};
+  color: var(--text-secondary);
   padding: ${({ theme }) => theme.spacing.xxs}
     ${({ theme }) => theme.spacing.xs};
   margin: 0;

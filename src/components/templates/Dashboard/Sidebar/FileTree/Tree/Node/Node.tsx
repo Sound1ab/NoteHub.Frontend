@@ -120,14 +120,14 @@ const Wrapper = styled.div<
     return css`calc(calc(${level} * ${theme.spacing.s}) + ${additionalPadding})`
   }};
   cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
-  background-color: ${({ theme, isActive }) =>
-    isActive ? theme.colors.background.secondary : 'transparent'};
+  background-color: ${({ isActive }) =>
+    isActive ? css`var(--background-secondary)` : 'transparent'};
   box-shadow: inset ${({ theme }) => theme.spacing.xxxs} 0px 0px 0px
-    ${({ theme, isActive }) => (isActive ? theme.colors.accent : 'transparent')};
+    ${({ isActive }) => (isActive ? css`var(--accent-primary)` : 'transparent')};
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
-      background-color: ${({ theme }) => theme.colors.background.tertiary};
+      background-color: var(--background-tertiary);
     }
   }
 `
@@ -149,8 +149,11 @@ const Details = styled.div`
 const Heading = styled.h4<{
   isDisabled: boolean
 }>`
-  color: ${({ theme, isDisabled }) =>
-    isDisabled ? theme.colors.text.secondary : theme.colors.text.primary};
+  ${({ isDisabled }) =>
+    isDisabled &&
+    css`
+      color: var(--text-secondary);
+    `};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -163,12 +166,12 @@ const Actions = styled(Button)`
   display: flex;
   align-self: stretch;
   padding: ${({ theme }) => theme.spacing.xs};
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: var(--text-primary);
   opacity: 0;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
-      background-color: ${({ theme }) => theme.colors.background.quaternary};
+      background-color: var(--background-quaternary);
     }
   }
 
@@ -180,5 +183,5 @@ const Actions = styled(Button)`
 `
 
 const StyledIcon = styled(Icon)`
-  color: ${({ theme }) => theme.colors.text.secondary};
+  color: var(--text-secondary);
 `

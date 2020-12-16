@@ -72,7 +72,7 @@ const Wrapper = styled.div`
 
   &:after {
     content: '.md';
-    color: ${({ theme }) => theme.colors.text.secondary};
+    color: var(--text-secondary);
     position: absolute;
     top: 50%;
     right: ${({ theme }) => theme.spacing.s};

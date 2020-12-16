@@ -52,5 +52,5 @@ const StyledFile = styled(Node)<{ isDragging: boolean }>`
 `
 
 const StyledIcon = styled(Icon)`
-  color: ${({ theme }) => theme.colors.text.secondary};
+  color: var(--text-secondary);
 `

@@ -1,11 +1,52 @@
+import { darken as polishedDarken, lighten as polishedLighten } from 'polished'
 import { createGlobalStyle } from 'styled-components'
 
 import { ITheme } from '../../../theme/styled'
+
+export function getCssVariable(variable: string) {
+  return getComputedStyle(document.documentElement).getPropertyValue(variable)
+}
+
+function lighten(variable: string, amount: number) {
+  const value = getCssVariable(variable)
+
+  return polishedLighten(amount, value.trim())
+}
+
+export function darken(variable: string, amount: number) {
+  const value = getCssVariable(variable)
+
+  return polishedDarken(amount, value.trim())
+}
 
 export const GlobalStyle = createGlobalStyle<{
   theme: ITheme
 }>`
   /*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */
+  
+  [data-theme="light"] {
+    --background-primary: var(--light-primary);
+    --background-secondary: ${darken('--light-primary', 0.05)};
+    --background-tertiary: ${darken('--light-primary', 0.07)};
+    --background-quaternary: ${darken('--light-primary', 0.09)};
+    --background-quinary: ${darken('--light-primary', 0.1)};
+    --border-primary: ${lighten('--light-primary', 0.03)};
+    --text-primary: ${lighten('--dark-primary', 0.1)};
+    --text-secondary: ${lighten('--dark-primary', 0.3)};
+    --text-tertiary: ${lighten('--dark-primary', 0.5)};
+  }
+  
+  [data-theme="dark"] {
+    --background-primary: var(--dark-primary);
+    --background-secondary: ${lighten('--dark-primary', 0.05)};
+    --background-tertiary: ${lighten('--dark-primary', 0.07)};
+    --background-quaternary: ${lighten('--dark-primary', 0.09)};
+    --background-quinary: ${lighten('--dark-primary', 0.1)};
+    --border-primary: ${darken('--dark-primary', 0.03)};
+    --text-primary: ${darken('--light-primary', 0.1)};
+    --text-secondary: ${darken('--light-primary', 0.3)};
+    --text-tertiary: ${darken('--light-primary', 0.5)};
+  }
   
   ::-webkit-scrollbar {
     display: none;
@@ -60,7 +101,8 @@ export const GlobalStyle = createGlobalStyle<{
   body {
     height: 100%;
     margin: 0;
-    background-color: ${({ theme }) => theme.colors.background.primary};
+    background-color: var(--background-primary);
+    font-size-adjust: 0.5;
   }
   
   #root {
@@ -81,24 +123,61 @@ export const GlobalStyle = createGlobalStyle<{
   }
 
   a:link {
-    color: ${({ theme }) => theme.colors.text.primary};
+    color: var(--text-primary);
   }
 
   a:visited {
-    color: ${({ theme }) => theme.colors.text.primary};
+    color: var(--text-primary);
   }
   
   @media (hover: hover) and (pointer: fine) {
     a:hover {
-      color: ${({ theme }) => theme.colors.accent};
+      color: var(--accent-primary);
     }
   }
 
   a:active {
-    color: ${({ theme }) => theme.colors.accent};
+    color: var(--accent-primary);
   }
   
+  p {
+    color: var(--text-primary)!important;
+  }
   
+  h1 {
+    color: var(--text-primary)!important;
+    font-weight: bold!important;
+  }
+  
+  h2 {
+    color: var(--text-primary)!important;
+    font-weight: bold!important;
+  }
+  
+  h3 {
+    color: var(--text-primary)!important;
+    font-weight: bold!important;
+  }
+  
+  h4 {
+    color: var(--text-primary)!important;
+  }
+  
+  h5 {
+    color: var(--text-primary)!important;
+  }
+  
+  h6 {
+    color: var(--text-primary)!important;
+  }
+  
+  li {
+    color: var(--text-primary)!important;
+  }
+  
+  pre {
+    font-size: 1em!important;
+  }
   
   /* Grouping content
      ========================================================================== */
@@ -109,7 +188,7 @@ export const GlobalStyle = createGlobalStyle<{
   
   hr {
     height: 0;
-    background: ${({ theme }) => theme.colors.accent}!important;
+    background: var(--accent-primary)!important;
   }
   
   /* Text-level semantics
@@ -181,6 +260,10 @@ export const GlobalStyle = createGlobalStyle<{
    * 2. Remove the margin in Firefox and Safari.
    */
    
+   form {
+    margin-bottom: 0!important;
+   }
+   
   button,
   input,
   optgroup,
@@ -199,7 +282,7 @@ export const GlobalStyle = createGlobalStyle<{
   
   input {
     padding: ${({ theme }) => theme.spacing.xs};
-    border: 1px solid ${({ theme }) => theme.colors.text.secondary};
+    border: 1px solid var(--text-secondary);
     width: 100%;
    }
   
@@ -334,10 +417,10 @@ export const GlobalStyle = createGlobalStyle<{
      ========================================================================== */
   
   table {
-    color: ${({ theme }) => theme.colors.text.primary};
+    color: var(--text-primary)!important;
   }
   
   td, th {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.accent}!important;
+    border-bottom: 1px solid var(--accent-primary)!important;
   }
 `

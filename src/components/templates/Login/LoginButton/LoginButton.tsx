@@ -8,7 +8,7 @@ export const LoginButton = styled(Button)`
   align-items: center;
   color: #fff;
   text-decoration: none;
-  background-color: ${({ theme }) => theme.colors.company.github};
+  background-color: var(--company-github);
   border-radius: ${({ theme }) => theme.spacing.xxs};
 
   &:visited {

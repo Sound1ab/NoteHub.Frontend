@@ -1,17 +1,15 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { Button } from '../../../../atoms'
-import { darken } from 'polished'
+import { darken } from '../../../../utility'
 
 export const ToolbarButton = styled(Button)`
   margin-right: ${({ theme }) => theme.spacing.xs};
-  color: ${({ theme, isActive }) =>
-    isActive ? theme.colors.accent : theme.colors.text.primary};
+  color: ${({ isActive }) =>
+    isActive ? css`var(--accent-primary)` : css`var(--text-primary)`};
 
   &:hover {
-    color: ${({ theme, isActive }) =>
-      isActive
-        ? darken(0.05, theme.colors.accent)
-        : theme.colors.text.secondary};
+    color: ${({ isActive }) =>
+      isActive ? darken('--accent-primary', 0.05) : css`var(--text-secondary)`};
   }
 `

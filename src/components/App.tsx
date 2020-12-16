@@ -1,3 +1,5 @@
+import '../theme/ColorPalette.css'
+
 import React from 'react'
 import { GoogleFont, TypographyStyle } from 'react-typography'
 import Typography from 'typography'

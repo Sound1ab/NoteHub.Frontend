@@ -23,7 +23,7 @@ export function Widget() {
 
 const Wrapper = styled.div<{ position: Coords }>`
   position: absolute;
-  background-color: ${({ theme }) => theme.colors.background.secondary};
+  background-color: var(--background-secondary);
   border-radius: 3px;
   padding: ${({ theme }) => theme.spacing.xxs};
   margin-top: ${({ theme }) => theme.spacing.s};

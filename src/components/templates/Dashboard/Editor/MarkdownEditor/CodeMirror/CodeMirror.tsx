@@ -278,8 +278,8 @@ const StyledCodeMirror = styled.article<{ isFullWidth: boolean; font: FONT }>`
     color: ${({ theme }) => theme.typographyStyles.h6.color};
   }
   .cm-s-darcula.CodeMirror {
-    background: ${({ theme }) => theme.colors.background.primary};
-    color: ${({ theme }) => theme.colors.text.primary};
+    background: var(--background-primary);
+    color: var(--text-primary);
     line-height: ${({ theme }) => theme.typographyStyles.html.lineHeight};
   }
 

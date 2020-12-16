@@ -14,15 +14,14 @@ import {
   useReadFile,
   useReadIsPreviewActive,
   useReadIsSideBySideActive,
-  useTheme,
   useUpdateFile,
 } from '../../../../../../hooks'
 import { IPosition } from '../../../../../../types'
 import { isNumber } from '../../../../../../utils'
 import { MessagesFragment } from '../../../../../apollo'
 import { ErrorToast } from '../../../../../atoms'
-import { IActions } from './CodeMirror'
 import { localState } from '../../../../../providers/ApolloProvider/cache'
+import { IActions } from './CodeMirror'
 
 interface ICodeMirrorProvider {
   children?: ReactNode
@@ -72,9 +71,6 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
   const [activeWidget, setActiveWidget] = useState<IActiveWidget | null>(null)
   const { isOpen: isWidgetOpen, setOpen: setIsWidgetOpen } = useModalToggle()
   const { file, error: readError } = useReadFile()
-  const {
-    colors: { accent },
-  } = useTheme()
   const scrollRef = useRef<HTMLDivElement | null>(null)
 
   function toggleSideBySide() {
@@ -131,7 +127,7 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
         { line: startPosition.line, ch: startPosition.ch },
         { line: endPosition.line, ch: endPosition.ch },
         {
-          css: `text-decoration: underline; text-decoration-color: ${accent}; text-decoration-style: wavy`,
+          css: `text-decoration: underline; text-decoration-color: var(--accent-primary); text-decoration-style: wavy`,
         }
       )
 
@@ -163,7 +159,7 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
         },
       ])
     })
-  }, [nodes, file?.readAt, actions?.editor, accent])
+  }, [nodes, file?.readAt, actions?.editor])
 
   if (readError) {
     ErrorToast(`Could not read file. Please try again.`)

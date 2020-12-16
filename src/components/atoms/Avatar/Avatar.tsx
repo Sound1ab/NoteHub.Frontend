@@ -1,5 +1,4 @@
 import React from 'react'
-
 import styled from 'styled-components'
 
 interface IAvatar {
@@ -32,5 +31,5 @@ const Placeholder = styled.div`
   border-radius: 50%;
   height: 100%;
   width: 100%;
-  background-color: ${({ theme }) => theme.colors.accent};
+  background-color: var(--accent-primary);
 `

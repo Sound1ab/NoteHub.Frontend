@@ -27,8 +27,7 @@ export function useReadFile() {
       path: currentPath,
       retextSettings: activeRetextSettings,
     },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-first',
   })
 
   return { file: data?.readFile, loading, error }

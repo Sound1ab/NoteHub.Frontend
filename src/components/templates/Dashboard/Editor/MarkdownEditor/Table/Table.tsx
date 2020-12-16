@@ -66,15 +66,15 @@ export function Table({ columns, data }: ITable) {
 }
 
 const TableHeading = styled.th`
-  border-bottom: solid 2px ${({ theme }) => theme.colors.accent};
+  border-bottom: var(--accent-primary);
   background-color: transparent;
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: var(--text-primary);
   font-weight: bold;
   padding: ${({ theme }) => theme.spacing.xs}!important;
 `
 
 const TableCell = styled.td`
   padding: ${({ theme }) => theme.spacing.xs}!important;
-  border: solid px ${({ theme }) => theme.colors.accent};
+  border: solid px var(--accent-primary);
   background-color: transparent;
 `

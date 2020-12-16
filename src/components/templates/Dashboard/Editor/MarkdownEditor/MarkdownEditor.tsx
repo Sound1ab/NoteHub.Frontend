@@ -34,13 +34,13 @@ export function MarkdownEditor({ targetRef }: IMarkdownEditor) {
 
 const StyledMarkdownEditor = styled.div`
   flex: 1 1 100%;
-  padding: 0 ${({ theme }) => theme.spacing.xs};
+  padding: ${({ theme }) => theme.spacing.xs};
   overflow-y: scroll;
 `
 
 const Spinner = styled(Icon)`
   animation: spin 1s linear infinite;
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: var(--text-primary);
   position: absolute;
   top: 0;
   right: 0;

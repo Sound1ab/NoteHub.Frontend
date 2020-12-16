@@ -28,7 +28,7 @@ const StyledToastContainer = styled(ToastContainer)`
   position: fixed;
   width: 100vw;
   box-sizing: border-box;
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: var(--text-primary);
   top: 0;
   right: 0;
 
@@ -76,20 +76,20 @@ const StyledToastContainer = styled(ToastContainer)`
   }
   }
   .Toastify__toast--default {
-    background: ${({ theme }) => theme.colors.background.quinary};
-    color: ${({ theme }) => theme.colors.text.primary};
+    background: var(--background-quinary);
+    color: var(--text-primary);
   }
   .Toastify__toast--info {
-    background: ${({ theme }) => theme.colors.feedback.info};
+    background: var(--feedback-info);
   }
   .Toastify__toast--success {
-    background: ${({ theme }) => theme.colors.accent};
+    background: var(--accent-primary);
   }
   .Toastify__toast--warning {
-    background: ${({ theme }) => theme.colors.feedback.warning};
+    background: var(--feedback-warning);
   }
   .Toastify__toast--error {
-    background: ${({ theme }) => theme.colors.feedback.error};
+    background: var(--feedback-error);
   }
   .Toastify__toast-body {
     margin: auto 0;
@@ -102,7 +102,7 @@ const StyledToastContainer = styled(ToastContainer)`
     }
   }
   .Toastify__close-button {
-    color: ${({ theme }) => theme.colors.text.primary};
+    color: var(--text-primary);
     background: transparent;
     outline: none;
     border: none;
@@ -128,7 +128,7 @@ const StyledToastContainer = styled(ToastContainer)`
     width: 100%;
     height: ${({ theme }) => theme.spacing.xxs};
     z-index: 9999;
-    background-color: ${({ theme }) => theme.colors.accent};
+    background-color: var(--accent-primary);
     transform-origin: left;
   }
   @keyframes Toastify__trackProgress {
@@ -146,7 +146,7 @@ const StyledToastContainer = styled(ToastContainer)`
     transition: transform 0.2s;
   }
   .Toastify__progress-bar--default {
-    background: ${({ theme }) => theme.colors.accent};
+    background: var(--accent-primary);
   }
   .Toastify__progress-bar--rtl {
     right: 0;

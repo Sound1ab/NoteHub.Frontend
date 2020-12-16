@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useCodeMirror } from '../../../../hooks'
+import { useCodeMirror, useReadTabs } from '../../../../hooks'
+import { extractFilename } from '../../../../utils'
 import { Icon } from '../../../atoms'
 import { Profile } from './Profile/Profile'
+import { Tab } from './Tab/Tab'
 import { ToolbarButton } from './ToolbarButton/ToolbarButton'
 
 export function Toolbar() {
@@ -13,9 +15,15 @@ export function Toolbar() {
     togglePreview,
     toggleSideBySide,
   } = useCodeMirror()
+  const tabs = [...useReadTabs()]
 
   return (
     <StyledToolbar>
+      <Tabs>
+        {tabs.map((path) => (
+          <Tab key={path} name={extractFilename(path)} path={path} />
+        ))}
+      </Tabs>
       <Actions>
         <ToolbarButton
           isActive={isSideBySideActive}
@@ -41,32 +49,21 @@ const StyledToolbar = styled.header`
   position: relative;
   width: 100%;
   display: flex;
-  background-color: ${({ theme }) => theme.colors.background.primary};
+  background-color: var(--background-primary);
+  // Needed to contain children from overflowing and make flex item scroll
+  overflow-x: auto;
+`
 
-  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    position: relative;
-
-    grid-area: toolbar;
-    display: grid;
-    @supports (grid-template-columns: subgrid) {
-      grid-template-columns: subgrid;
-    }
-    @supports not (grid-template-columns: subgrid) {
-      grid-template-columns:
-        minmax(0, ${({ theme }) => theme.spacing.xl})
-        minmax(0, ${({ theme }) => theme.spacing.xxl})
-        3fr;
-    }
-    grid-template-rows: auto;
-    grid-template-areas: 'repoactions editoractions';
-  }
+const Tabs = styled.div`
+  flex: 1;
+  position: relative;
+  display: flex;
+  overflow-x: auto;
 `
 
 const Actions = styled.div`
+  flex: 0;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
   padding: ${({ theme }) => theme.spacing.xs};
-  grid-area: editoractions;
-  width: 100%;
 `

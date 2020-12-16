@@ -77,15 +77,18 @@ export function Folder({ level, node, childNodes }: IFolder) {
 }
 
 const StyledFolder = styled(Node)<{ isOver: boolean }>`
-  ${({ isOver, theme }) =>
-    isOver &&
-    css`
-      background-color: ${theme.colors.accent}!important;
-    `}
+  ${({ isOver }) => {
+    return (
+      isOver &&
+      css`
+        background-color: var(--accent-primary) !important;
+      `
+    )
+  }};
 `
 
 const StyledIcon = styled(Icon)`
-  color: ${({ theme }) => theme.colors.text.secondary};
+  color: var(--text-secondary);
 `
 
 const Chevron = styled(StyledIcon)<{ toggled: boolean }>`
