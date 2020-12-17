@@ -36,6 +36,9 @@ export function CheckboxItem<T extends string>({
 
 const StyledCheckboxItem = styled.div`
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const Checkbox = styled.input`

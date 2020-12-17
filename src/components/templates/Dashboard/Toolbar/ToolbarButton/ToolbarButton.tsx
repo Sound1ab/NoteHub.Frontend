@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { darken } from '../../../../../utils'
 import { Button } from '../../../../atoms'
-import { darken } from '../../../../utility'
 
 export const ToolbarButton = styled(Button)`
   margin-right: ${({ theme }) => theme.spacing.xs};

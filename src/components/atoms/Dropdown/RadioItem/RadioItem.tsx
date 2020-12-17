@@ -35,6 +35,9 @@ export function RadioItem<T extends string>({
 
 const StyledRadioItem = styled.div`
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const Radio = styled.input`

@@ -1,9 +1,11 @@
-import { FONT, THEME_SETTINGS } from '../../enums'
-import { localState } from '../../components/providers/ApolloProvider/cache'
-import { Retext_Settings } from '../../components/apollo'
-import { RadioItem } from '../../components/atoms/Dropdown/RadioItem/RadioItem'
-import { CheckboxItem } from '../../components/atoms/Dropdown/CheckboxItem/CheckboxItem'
 import React from 'react'
+
+import { Retext_Settings } from '../../components/apollo'
+import { CheckboxItem } from '../../components/atoms/Dropdown/CheckboxItem/CheckboxItem'
+import { ColorPickerItem } from '../../components/atoms/Dropdown/ColorPickerItem/ColorPickerItem'
+import { RadioItem } from '../../components/atoms/Dropdown/RadioItem/RadioItem'
+import { localState } from '../../components/providers/ApolloProvider/cache'
+import { FONT, THEME_SETTINGS } from '../../enums'
 import {
   useCodeMirror,
   useLogout,
@@ -125,6 +127,9 @@ export function useProfileDropdown() {
           onChange={handleToggleThemeSetting}
         />
       ),
+    },
+    {
+      custom: <ColorPickerItem />,
       hasSeparator: true,
     },
     {

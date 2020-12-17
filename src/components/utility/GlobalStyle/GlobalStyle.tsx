@@ -1,23 +1,7 @@
-import { darken as polishedDarken, lighten as polishedLighten } from 'polished'
 import { createGlobalStyle } from 'styled-components'
 
 import { ITheme } from '../../../theme/styled'
-
-export function getCssVariable(variable: string) {
-  return getComputedStyle(document.documentElement).getPropertyValue(variable)
-}
-
-function lighten(variable: string, amount: number) {
-  const value = getCssVariable(variable)
-
-  return polishedLighten(amount, value.trim())
-}
-
-export function darken(variable: string, amount: number) {
-  const value = getCssVariable(variable)
-
-  return polishedDarken(amount, value.trim())
-}
+import { darken, lighten } from '../../../utils'
 
 export const GlobalStyle = createGlobalStyle<{
   theme: ITheme
@@ -282,7 +266,6 @@ export const GlobalStyle = createGlobalStyle<{
   
   input {
     padding: ${({ theme }) => theme.spacing.xs};
-    border: 1px solid var(--text-secondary);
     width: 100%;
    }
   
