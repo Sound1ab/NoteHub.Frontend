@@ -1,5 +1,7 @@
 import styled from 'styled-components'
+
 import { Button } from '../../../atoms'
+import { darken } from '../../../../utils'
 
 export const LoginButton = styled(Button)`
   padding: ${({ theme }) => theme.spacing.xs};
@@ -13,6 +15,14 @@ export const LoginButton = styled(Button)`
 
   &:visited {
     color: #fff;
+  }
+
+  &:link {
+    color: var(--white);
+  }
+
+  &:hover {
+    background-color: ${darken('--company-github', 0.08)};
   }
 
   * svg {

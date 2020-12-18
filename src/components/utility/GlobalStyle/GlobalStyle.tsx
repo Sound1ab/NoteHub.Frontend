@@ -10,9 +10,9 @@ export const GlobalStyle = createGlobalStyle<{
   
   [data-theme="light"] {
     --background-primary: var(--light-primary);
-    --background-secondary: ${darken('--light-primary', 0.05)};
-    --background-tertiary: ${darken('--light-primary', 0.07)};
-    --background-quaternary: ${darken('--light-primary', 0.09)};
+    --background-secondary: ${darken('--light-primary', 0.03)};
+    --background-tertiary: ${darken('--light-primary', 0.05)};
+    --background-quaternary: ${darken('--light-primary', 0.07)};
     --background-quinary: ${darken('--light-primary', 0.1)};
     --border-primary: ${lighten('--light-primary', 0.03)};
     --text-primary: ${lighten('--dark-primary', 0.1)};
@@ -22,9 +22,9 @@ export const GlobalStyle = createGlobalStyle<{
   
   [data-theme="dark"] {
     --background-primary: var(--dark-primary);
-    --background-secondary: ${lighten('--dark-primary', 0.05)};
-    --background-tertiary: ${lighten('--dark-primary', 0.07)};
-    --background-quaternary: ${lighten('--dark-primary', 0.09)};
+    --background-secondary: ${lighten('--dark-primary', 0.03)};
+    --background-tertiary: ${lighten('--dark-primary', 0.05)};
+    --background-quaternary: ${lighten('--dark-primary', 0.07)};
     --background-quinary: ${lighten('--dark-primary', 0.1)};
     --border-primary: ${darken('--dark-primary', 0.03)};
     --text-primary: ${darken('--light-primary', 0.1)};
