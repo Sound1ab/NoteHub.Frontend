@@ -613,7 +613,8 @@ const insertTexts = {
 const insertComponents = {
   table: [
     '',
-    `<Table
+    ` \`\`\`mdx
+    <Table
       columns={[
         {
           Header: 'Column 1',
@@ -630,7 +631,8 @@ const insertComponents = {
           col2: 'World',
         },
       ]}
-    />`,
+    />
+    \`\`\``,
   ],
 }
 
