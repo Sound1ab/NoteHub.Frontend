@@ -260,15 +260,6 @@ export type GithubUserFragment = (
   & Pick<GithubUser, 'id' | 'login' | 'avatar_url' | 'html_url' | 'name'>
 );
 
-export type FileWithMessagesFragment = (
-  { __typename?: 'File' }
-  & { messages?: Maybe<(
-    { __typename?: 'ModelMessageConnection' }
-    & MessagesFragment
-  )> }
-  & FileFragment
-);
-
 export type LoginQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -326,7 +317,6 @@ export type MoveFileMutation = (
 
 export type ReadFileQueryVariables = Exact<{
   path: Scalars['String'];
-  retextSettings?: Maybe<Array<Retext_Settings>>;
 }>;
 
 
@@ -334,7 +324,7 @@ export type ReadFileQuery = (
   { __typename?: 'Query' }
   & { readFile?: Maybe<(
     { __typename?: 'File' }
-    & FileWithMessagesFragment
+    & FileFragment
   )> }
 );
 
@@ -358,7 +348,7 @@ export type UpdateFileMutation = (
   { __typename?: 'Mutation' }
   & { updateFile?: Maybe<(
     { __typename?: 'File' }
-    & FileWithMessagesFragment
+    & FileFragment
   )> }
 );
 
@@ -376,14 +366,6 @@ export type ReadActiveRetextSettingsQueryVariables = Exact<{ [key: string]: neve
 export type ReadActiveRetextSettingsQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'activeRetextSettings'>
-);
-
-export type ReadIsDarkModeQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ReadIsDarkModeQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'isDarkMode'>
 );
 
 export type DeleteRepoMutationVariables = Exact<{ [key: string]: never; }>;

@@ -62,3 +62,16 @@ declare module '@mdx-js/react' {
 
   export class mdx {}
 }
+
+declare module 'retext-spell'
+declare module 'dictionary-en-gb'
+declare module 'retext-latin'
+declare module 'retext-stringify'
+declare module 'retext-repeated-words'
+declare module 'retext-equality'
+declare module 'retext-indefinite-article'
+declare module 'remark-retext'
+declare module 'parse-english'
+declare module 'remark-extract-frontmatter'
+declare module 'remark-frontmatter'
+declare module 'retext-readability'

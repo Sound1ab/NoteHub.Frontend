@@ -1,11 +1,9 @@
-import '@testing-library/jest-dom/extend-expect'
-
 import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Redirect, Router } from 'react-router-dom'
 
 import { useLogin } from '../../../hooks'
-import { cleanup, render } from '../../../test-utils'
+import { render } from '../../../test-utils'
 import { localState } from '../../providers/ApolloProvider/cache'
 import { Login } from './Login'
 
@@ -18,8 +16,6 @@ jest.mock('react-router-dom', () => {
     Redirect: jest.fn(),
   }
 })
-
-afterEach(cleanup)
 
 describe('Login', () => {
   beforeEach(() => {

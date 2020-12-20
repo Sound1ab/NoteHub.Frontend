@@ -10,7 +10,7 @@ import {
 } from '../components/apollo'
 import { extractFilename } from '../utils'
 
-export const fileWithMessage = {
+export const file = {
   id: 'MOCK_ID_1',
   filename: 'MOCK_FILE_PATH_4.md',
   path: 'MOCK_FILE_PATH_4.md',
@@ -18,23 +18,6 @@ export const fileWithMessage = {
   sha: 'MOCK_SHA_2',
   type: Node_Type.File,
   url: 'MOCK_URL',
-  readAt: new Date().toString(),
-  messages: {
-    nodes: [
-      {
-        message: '`heelo` is misspelt',
-        location: {
-          start: {
-            offset: 0,
-          },
-          end: {
-            offset: 5,
-          },
-        },
-        actual: 16,
-      },
-    ],
-  },
 }
 
 export const files: File[] = [
@@ -46,7 +29,6 @@ export const files: File[] = [
     sha: 'MOCK_SHA_2',
     type: Node_Type.File,
     url: 'MOCK_URL',
-    readAt: new Date().toString(),
   },
   {
     id: 'MOCK_ID_3',
@@ -56,7 +38,6 @@ export const files: File[] = [
     sha: 'MOCK_SHA_1',
     type: Node_Type.File,
     url: 'MOCK_URL',
-    readAt: new Date().toString(),
   },
   {
     id: 'MOCK_ID_4',
@@ -66,9 +47,8 @@ export const files: File[] = [
     sha: 'MOCK_SHA_3',
     type: Node_Type.File,
     url: 'MOCK_URL',
-    readAt: new Date().toString(),
   },
-  fileWithMessage,
+  file,
 ]
 
 export const user = {

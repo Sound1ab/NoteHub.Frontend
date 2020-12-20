@@ -4,21 +4,23 @@ import React, {
   ReactNode,
   Ref,
   SetStateAction,
-  useEffect,
+  useCallback,
   useRef,
   useState,
 } from 'react'
 
 import {
   useModalToggle,
+  useReadActiveRetextSettings,
   useReadFile,
   useReadIsPreviewActive,
   useReadIsSideBySideActive,
   useUpdateFile,
 } from '../../../../../../hooks'
-import { IPosition } from '../../../../../../types'
+import useDeepCompareEffect from '../../../../../../hooks/utils/useDeepCompareEffect'
+import { process } from '../../../../../../services/retext/process'
+import { IMessage, IPosition } from '../../../../../../types'
 import { isNumber } from '../../../../../../utils'
-import { MessagesFragment } from '../../../../../apollo'
 import { ErrorToast } from '../../../../../atoms'
 import { localState } from '../../../../../providers/ApolloProvider/cache'
 import { IActions } from './CodeMirror'
@@ -72,6 +74,11 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
   const { isOpen: isWidgetOpen, setOpen: setIsWidgetOpen } = useModalToggle()
   const { file, error: readError } = useReadFile()
   const scrollRef = useRef<HTMLDivElement | null>(null)
+  const { activeRetextSettings } = useReadActiveRetextSettings()
+
+  if (readError) {
+    ErrorToast(`Could not read file. Please try again.`)
+  }
 
   function toggleSideBySide() {
     if (!isSideBySideActive) {
@@ -89,90 +96,98 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
     handleRefresh()
   }
 
-  const nodes = file?.messages?.nodes
-    ? JSON.stringify(file?.messages.nodes)
-    : undefined
+  const clearMarkers = useCallback(() => {
+    setIsWidgetOpen(false)
 
-  useEffect(() => {
-    if (!nodes || !file?.readAt) {
+    setMarkers((markers) => {
+      markers.forEach((marker: IMarker) => marker.marker?.clear?.())
+      return []
+    })
+  }, [setIsWidgetOpen])
+
+  const createMarkers = useCallback(
+    (messages: IMessage[]) => {
+      messages.forEach((message) => {
+        const startOffset = message.location?.start?.offset
+        const endOffset = message.location?.end?.offset
+
+        if (!isNumber(startOffset) || !isNumber(endOffset)) {
+          return
+        }
+
+        const widgetMessage = message.message
+
+        if (!widgetMessage) {
+          return
+        }
+
+        // Using the absolute offset get the line and character position in the
+        // editor
+        const startPosition = actions?.editor?.posFromIndex(startOffset)
+        const endPosition = actions?.editor?.posFromIndex(endOffset)
+
+        if (!startPosition || !endPosition) {
+          return
+        }
+
+        // Mark it
+        const marker = actions?.editor?.markText?.(
+          { line: startPosition.line, ch: startPosition.ch },
+          { line: endPosition.line, ch: endPosition.ch },
+          {
+            css: `text-decoration: underline; text-decoration-color: var(--accent-primary); text-decoration-style: wavy`,
+          }
+        )
+
+        if (!marker) {
+          return
+        }
+
+        // Get the absolute position of the marker based on the text area
+        const coords = actions?.editor?.charCoords(
+          { line: startPosition.line, ch: startPosition.ch },
+          'local'
+        )
+
+        if (!coords) {
+          return
+        }
+
+        setMarkers((markers) => [
+          ...markers,
+          {
+            marker,
+            options: {
+              // @ts-ignore
+              id: marker.id,
+              coords,
+              isActive: false,
+              message: widgetMessage,
+            },
+          },
+        ])
+      })
+    },
+    [actions?.editor]
+  )
+
+  useDeepCompareEffect(() => {
+    if (!activeRetextSettings || !file?.content) {
       return
     }
 
-    // Create markers
-    ;(JSON.parse(nodes) as MessagesFragment['nodes']).forEach((message) => {
-      const startOffset = message.location?.start?.offset
-      const endOffset = message.location?.end?.offset
-
-      if (!isNumber(startOffset) || !isNumber(endOffset)) {
-        return
-      }
-
-      const widgetMessage = message.message
-
-      if (!widgetMessage) {
-        return
-      }
-
-      // Using the absolute offset get the line and character position in the
-      // editor
-      const startPosition = actions?.editor?.posFromIndex(startOffset)
-      const endPosition = actions?.editor?.posFromIndex(endOffset)
-
-      if (!startPosition || !endPosition) {
-        return
-      }
-
-      // Mark it
-      const marker = actions?.editor?.markText?.(
-        { line: startPosition.line, ch: startPosition.ch },
-        { line: endPosition.line, ch: endPosition.ch },
-        {
-          css: `text-decoration: underline; text-decoration-color: var(--accent-primary); text-decoration-style: wavy`,
-        }
-      )
-
-      if (!marker) {
-        return
-      }
-
-      // Get the absolute position of the marker based on the text area
-      const coords = actions?.editor?.charCoords(
-        { line: startPosition.line, ch: startPosition.ch },
-        'local'
-      )
-
-      if (!coords) {
-        return
-      }
-
-      setMarkers((markers) => [
-        ...markers,
-        {
-          marker,
-          options: {
-            // @ts-ignore
-            id: marker.id,
-            coords,
-            isActive: false,
-            message: widgetMessage,
-          },
-        },
-      ])
-    })
-  }, [nodes, file?.readAt, actions?.editor])
-
-  if (readError) {
-    ErrorToast(`Could not read file. Please try again.`)
-  }
-
-  async function handleUpdateFile(value: string) {
-    // Clear markers
-    if (markers.length > 0) {
-      setIsWidgetOpen(false)
-      markers.forEach((marker) => marker.marker?.clear?.())
-      setMarkers([])
+    if (activeRetextSettings.length === 0) {
+      clearMarkers()
+      return
     }
 
+    process(file?.content, activeRetextSettings).then((result) => {
+      clearMarkers()
+      createMarkers(result)
+    })
+  }, [activeRetextSettings, createMarkers, file?.content, clearMarkers])
+
+  async function handleUpdateFile(value: string) {
     try {
       await updateFile(file, value)
     } catch (error) {

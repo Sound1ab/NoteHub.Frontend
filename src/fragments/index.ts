@@ -32,7 +32,6 @@ export const FileFragment = gql`
     ...treeFile
     filename
     content
-    readAt
   }
 `
 
@@ -51,16 +50,5 @@ export const GithubUserFragment = gql`
     avatar_url
     html_url
     name
-  }
-`
-
-export const FileWithMessagesFragment = gql`
-  ${FileFragment}
-  ${MessagesFragment}
-  fragment fileWithMessages on File {
-    ...file
-    messages {
-      ...messages
-    }
   }
 `

@@ -26,3 +26,25 @@ export interface IFolderNode {
 }
 
 export type ITreeNode = IFileNode | IFolderNode
+
+interface IPoint {
+  offset: number
+}
+
+interface ILocation {
+  start?: IPoint
+  end?: IPoint
+}
+
+export interface IMessage {
+  message?: string
+  name?: string
+  reason?: string
+  line?: number
+  column?: number
+  location?: ILocation
+  actual?: number
+  source?: string
+  ruleId?: string
+  fatal?: boolean
+}

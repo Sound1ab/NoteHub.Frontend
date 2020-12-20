@@ -1,42 +1,33 @@
-import '@testing-library/jest-dom/extend-expect'
-
 import { act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React, { createRef } from 'react'
 
-import { fileWithMessage, resolvers } from '../../../../../schema/mockResolvers'
-import { cleanup, render, waitFor } from '../../../../../test-utils'
+import { resolvers } from '../../../../../schema/mockResolvers'
+import { process } from '../../../../../services/retext/process'
+import { render, waitFor } from '../../../../../test-utils'
+import { Retext_Settings } from '../../../../apollo'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { MarkdownEditor } from './MarkdownEditor'
 
-afterEach(cleanup)
-
-jest.mock('../../../../../utils/debounce', () => ({
-  debounce: (fn: () => void) => fn,
-}))
-
 describe('MarkdownEditor', () => {
-  // Mocking out for codemirror as JSDOM doesn't do this
-  // @ts-ignore
-  global.document.createRange = () => {
-    return {
-      setEnd: jest.fn(),
-      setStart: jest.fn(),
-      getBoundingClientRect: function () {
-        return { right: 0 }
-      },
-      getClientRects: function () {
-        return {
-          length: 0,
-          left: 0,
-          right: 0,
-        }
-      },
-    }
-  }
-
   beforeEach(() => {
     jest.clearAllMocks()
+    ;((process as unknown) as jest.Mock).mockReturnValue(
+      Promise.resolve([
+        {
+          message: '`heelo` is misspelt',
+          location: {
+            start: {
+              offset: 0,
+            },
+            end: {
+              offset: 5,
+            },
+          },
+          actual: 16,
+        },
+      ])
+    )
   })
 
   it('should show markdown editor', async () => {
@@ -100,24 +91,21 @@ describe('MarkdownEditor', () => {
     const { getByText } = await render(
       <MarkdownEditor targetRef={createRef()} />,
       {
-        localState: [() => localState.currentPathVar('MOCK_FILE_PATH_4.md')],
-        resolvers: {
-          ...resolvers,
-          Mutation: () => ({
-            ...resolvers.Mutation(),
-            updateFile: () => ({
-              ...fileWithMessage,
-              readAt: 'MOCK_READ_AT',
+        localState: [
+          () => localState.currentPathVar('MOCK_FILE_PATH_4.md'),
+          () =>
+            localState.retextSettingsVar({
+              ...localState.retextSettingsVar(),
+              [Retext_Settings.Spell]: true,
             }),
-          }),
-        },
+        ],
       }
     )
 
     await waitFor(() => {
       expect(getByText('heelo')).toHaveAttribute(
         'style',
-        'text-decoration: underline; text-decoration-color: #7072dd; text-decoration-style: wavy;'
+        'text-decoration: underline; text-decoration-color: var(--accent-primary); text-decoration-style: wavy;'
       )
     })
   })
@@ -126,17 +114,14 @@ describe('MarkdownEditor', () => {
     const { getByText } = await render(
       <MarkdownEditor targetRef={createRef()} />,
       {
-        localState: [() => localState.currentPathVar('MOCK_FILE_PATH_4.md')],
-        resolvers: {
-          ...resolvers,
-          Mutation: () => ({
-            ...resolvers.Mutation(),
-            updateFile: () => ({
-              ...fileWithMessage,
-              readAt: 'MOCK_READ_AT',
+        localState: [
+          () => localState.currentPathVar('MOCK_FILE_PATH_4.md'),
+          () =>
+            localState.retextSettingsVar({
+              ...localState.retextSettingsVar(),
+              [Retext_Settings.Spell]: true,
             }),
-          }),
-        },
+        ],
       }
     )
 
