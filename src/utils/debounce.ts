@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Procedure = (...args: any[]) => void
 
 export type Options = {
@@ -5,6 +6,7 @@ export type Options = {
 }
 
 export interface IDebouncedFunction<F extends Procedure> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (this: ThisParameterType<F>, ...args: Parameters<F>): Promise<any>
   cancel: () => void
 }

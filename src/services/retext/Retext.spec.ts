@@ -1,5 +1,5 @@
-import { Retext } from './Retext'
 import { Retext_Settings } from '../../components/apollo'
+import { Retext } from './Retext'
 
 describe('Retext', () => {
   describe('addPlugin', () => {
@@ -14,7 +14,9 @@ describe('Retext', () => {
 
       const result = await retext.createParser([retextSetting])
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const plugins = (result as any).attachers.map(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (attacher: any) => attacher[0].name
       )
 
@@ -30,7 +32,9 @@ describe('Retext', () => {
         Retext_Settings.IndefiniteArticle,
       ])
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const plugins = (result as any).attachers.map(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (attacher: any) => attacher[0].name
       )
 

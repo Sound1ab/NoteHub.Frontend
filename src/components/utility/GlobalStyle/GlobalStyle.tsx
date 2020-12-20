@@ -268,6 +268,12 @@ export const GlobalStyle = createGlobalStyle<{
     padding: ${({ theme }) => theme.spacing.xs};
     width: 100%;
    }
+
+  [type="checkbox"], [type="radio"] {
+    width: 1.15em;
+    height: 1.15em;
+    margin-right: 0.725rem;
+  }
   
   /**
    * Remove the inheritance of text transform in Edge and Firefox.

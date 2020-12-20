@@ -5,7 +5,7 @@ import { CONTAINER_ID } from '../../../../enums'
 import { useCodeMirror, useReadFile } from '../../../../hooks'
 import { ContextMenu } from './ContextMenu/ContextMenu'
 import { MarkdownEditor, MarkdownEditorSkeleton } from './MarkdownEditor'
-import { MdxRenderer } from './MarkdownEditor/MdxRenderer/MdxRenderer'
+import { MarkdownRenderer } from './MarkdownEditor/MarkdownRenderer/MarkdownRenderer'
 
 export function Editor() {
   const { loading } = useReadFile()
@@ -20,7 +20,7 @@ export function Editor() {
         <>
           {!isPreviewActive && <ContextMenu targetRef={target} />}
           {!isPreviewActive && <MarkdownEditor targetRef={target} />}
-          {(isPreviewActive || isSideBySideActive) && <MdxRenderer />}
+          {(isPreviewActive || isSideBySideActive) && <MarkdownRenderer />}
         </>
       )}
     </Wrapper>

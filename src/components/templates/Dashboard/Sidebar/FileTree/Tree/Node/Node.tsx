@@ -124,6 +124,7 @@ const Wrapper = styled.div<
     isActive ? css`var(--background-secondary)` : 'transparent'};
   box-shadow: inset ${({ theme }) => theme.spacing.xxxs} 0px 0px 0px
     ${({ isActive }) => (isActive ? css`var(--accent-primary)` : 'transparent')};
+  width: 100%;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
