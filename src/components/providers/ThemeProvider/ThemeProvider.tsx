@@ -4,7 +4,12 @@ import Typography from 'typography'
 
 import { COLOR_MODE } from '../../../enums'
 import { useReadThemeSettings } from '../../../hooks'
-import { boxShadow, breakpoints, createSpacing } from '../../../theme/theme'
+import {
+  boxShadow,
+  breakpoints,
+  createSpacing,
+  transition,
+} from '../../../theme/theme'
 import { createTypography } from '../../../theme/typography'
 
 interface IThemeProvider {
@@ -30,6 +35,7 @@ export function ThemeProvider({ children }: IThemeProvider) {
         // @ts-ignore
         typographyStyles: typography.toJSON(),
         boxShadow,
+        transition,
       }}
     >
       {children(typography)}

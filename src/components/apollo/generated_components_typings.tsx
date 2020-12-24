@@ -30,7 +30,6 @@ export type Query = {
 
 export type QueryReadFileArgs = {
   path: Scalars['String'];
-  retextSettings?: Maybe<Array<Retext_Settings>>;
 };
 
 
@@ -44,14 +43,6 @@ export type QueryReadImageArgs = {
   path: Scalars['String'];
 };
 
-export enum Retext_Settings {
-  Spell = 'SPELL',
-  Equality = 'EQUALITY',
-  IndefiniteArticle = 'INDEFINITE_ARTICLE',
-  RepeatedWords = 'REPEATED_WORDS',
-  Readability = 'READABILITY'
-}
-
 export type File = {
   __typename?: 'File';
   id: Scalars['ID'];
@@ -61,44 +52,12 @@ export type File = {
   url: Scalars['String'];
   filename?: Maybe<Scalars['String']>;
   content?: Maybe<Scalars['String']>;
-  messages?: Maybe<ModelMessageConnection>;
-  readAt?: Maybe<Scalars['String']>;
 };
 
 export enum Node_Type {
   File = 'FILE',
   Folder = 'FOLDER'
 }
-
-export type ModelMessageConnection = {
-  __typename?: 'ModelMessageConnection';
-  nodes: Array<Message>;
-};
-
-export type Message = {
-  __typename?: 'Message';
-  message?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  reason?: Maybe<Scalars['String']>;
-  line?: Maybe<Scalars['Int']>;
-  column?: Maybe<Scalars['Int']>;
-  location?: Maybe<Location>;
-  actual?: Maybe<Scalars['Int']>;
-  source?: Maybe<Scalars['String']>;
-  ruleId?: Maybe<Scalars['String']>;
-  fatal?: Maybe<Scalars['Boolean']>;
-};
-
-export type Location = {
-  __typename?: 'Location';
-  start?: Maybe<Point>;
-  end?: Maybe<Point>;
-};
-
-export type Point = {
-  __typename?: 'Point';
-  offset?: Maybe<Scalars['Int']>;
-};
 
 export type Repo = {
   __typename?: 'Repo';
@@ -116,7 +75,7 @@ export type GithubUser = {
   login: Scalars['String'];
   avatar_url: Scalars['String'];
   html_url: Scalars['String'];
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -180,6 +139,14 @@ export type CreateFileInput = {
   retextSettings?: Maybe<Array<Retext_Settings>>;
 };
 
+export enum Retext_Settings {
+  Spell = 'SPELL',
+  Equality = 'EQUALITY',
+  IndefiniteArticle = 'INDEFINITE_ARTICLE',
+  RepeatedWords = 'REPEATED_WORDS',
+  Readability = 'READABILITY'
+}
+
 export type UpdateFileInput = {
   path: Scalars['String'];
   content?: Maybe<Scalars['String']>;
@@ -221,24 +188,6 @@ export enum CacheControlScope {
 }
 
 
-export type MessagesFragment = (
-  { __typename?: 'ModelMessageConnection' }
-  & { nodes: Array<(
-    { __typename?: 'Message' }
-    & Pick<Message, 'message'>
-    & { location?: Maybe<(
-      { __typename?: 'Location' }
-      & { start?: Maybe<(
-        { __typename?: 'Point' }
-        & Pick<Point, 'offset'>
-      )>, end?: Maybe<(
-        { __typename?: 'Point' }
-        & Pick<Point, 'offset'>
-      )> }
-    )> }
-  )> }
-);
-
 export type TreeFileFragment = (
   { __typename?: 'File' }
   & Pick<File, 'id' | 'path' | 'type' | 'url' | 'sha'>
@@ -246,7 +195,7 @@ export type TreeFileFragment = (
 
 export type FileFragment = (
   { __typename?: 'File' }
-  & Pick<File, 'filename' | 'content' | 'readAt'>
+  & Pick<File, 'filename' | 'content'>
   & TreeFileFragment
 );
 
@@ -366,6 +315,17 @@ export type ReadActiveRetextSettingsQueryVariables = Exact<{ [key: string]: neve
 export type ReadActiveRetextSettingsQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'activeRetextSettings'>
+);
+
+export type CreateRepoMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateRepoMutation = (
+  { __typename?: 'Mutation' }
+  & { createRepo?: Maybe<(
+    { __typename?: 'Repo' }
+    & RepoFragment
+  )> }
 );
 
 export type DeleteRepoMutationVariables = Exact<{ [key: string]: never; }>;

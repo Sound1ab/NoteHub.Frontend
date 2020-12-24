@@ -29,6 +29,7 @@ export interface ITheme {
     html: IHeading
   }
   boxShadow: string
+  transition: string
 }
 
 declare module 'styled-components' {

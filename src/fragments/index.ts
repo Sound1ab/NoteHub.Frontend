@@ -1,21 +1,5 @@
 import { gql } from '@apollo/client'
 
-export const MessagesFragment = gql`
-  fragment messages on ModelMessageConnection {
-    nodes {
-      message
-      location {
-        start {
-          offset
-        }
-        end {
-          offset
-        }
-      }
-    }
-  }
-`
-
 export const TreeFileFragment = gql`
   fragment treeFile on File {
     id

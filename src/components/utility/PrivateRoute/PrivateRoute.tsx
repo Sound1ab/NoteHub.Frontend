@@ -1,7 +1,8 @@
-import React, { ReactNode } from 'react'
-import { Redirect, Route } from 'react-router-dom'
+import React, { ReactNode, useEffect } from 'react'
+import { Route } from 'react-router-dom'
 
-import { useReadJwt } from '../../../hooks'
+import { useLogin, useReadJwt } from '../../../hooks'
+import { localState } from '../../providers/ApolloProvider/cache'
 
 export interface IPrivateRoute {
   children: ReactNode
@@ -10,24 +11,26 @@ export interface IPrivateRoute {
 }
 
 export function PrivateRoute({ children, exact, path }: IPrivateRoute) {
-  const currentJwt = useReadJwt()
+  const { jwt, loading } = useLogin()
+  const savedJwt = useReadJwt()
+
+  useEffect(() => {
+    if (!jwt) {
+      return
+    }
+
+    localState.currentJwtVar(jwt)
+  }, [jwt])
+
+  if (loading) {
+    return null
+  }
 
   return (
     <Route
       exact={exact}
       path={path}
-      render={({ location }) =>
-        currentJwt ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/',
-              state: { from: location },
-            }}
-          />
-        )
-      }
+      render={() => (savedJwt ? children : null)}
     />
   )
 }

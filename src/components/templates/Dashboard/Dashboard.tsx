@@ -1,12 +1,30 @@
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { useReadRepo } from '../../../hooks'
 import { Editor } from './Editor/Editor'
 import { CodeMirrorProvider } from './Editor/MarkdownEditor/CodeMirror/CodeMirrorProvider'
 import { Sidebar } from './Sidebar/Sidebar'
 import { Toolbar } from './Toolbar/Toolbar'
 
 export function Dashboard() {
+  const { repo, loading } = useReadRepo()
+
+  if (loading) {
+    return null
+  }
+
+  if (!repo) {
+    return (
+      <Redirect
+        to={{
+          pathname: '/setup',
+        }}
+      />
+    )
+  }
+
   return (
     <Grid>
       <CodeMirrorProvider>

@@ -50,3 +50,27 @@ const StyledButton = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
     }
   }
 `
+
+export const RegularButton = styled(Button)`
+  padding: ${({ theme }) => theme.spacing.xs};
+  align-items: center;
+  text-decoration: none;
+  border-radius: ${({ theme }) => theme.spacing.xxs};
+`
+
+export const GithubButton = styled(RegularButton)`
+  color: #fff;
+  background-color: var(--company-github);
+
+  &:visited {
+    color: #fff;
+  }
+
+  &:link {
+    color: var(--white);
+  }
+
+  * svg {
+    color: #fff;
+  }
+`
