@@ -70,6 +70,7 @@ export const resolvers = {
       files.find(({ path }) => path === input.path),
     readFiles: () => files,
     logout: () => 'ok',
+    login: () => 'MOCK_JWT',
   }),
   Mutation: () => ({
     deleteFile: (_: unknown, { input }: MutationDeleteFileArgs): File => ({
