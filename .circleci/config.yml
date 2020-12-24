@@ -134,7 +134,7 @@ workflows:
             - typescript
           filters:
             branches:
-              only: master
+              only: main
 
       - deploy:
           name: deploy-development
