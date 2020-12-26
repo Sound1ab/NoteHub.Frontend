@@ -9,6 +9,10 @@ interface ICodeRenderer {
 }
 
 export function CodeRenderer({ inline, language, value }: ICodeRenderer) {
+  if (!value) {
+    return null
+  }
+
   return (
     <SyntaxHighlighter
       language={language}
