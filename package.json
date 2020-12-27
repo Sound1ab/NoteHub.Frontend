@@ -57,7 +57,7 @@
     "comlink-loader": "^2.0.0",
     "core-js-bundle": "3.7.0",
     "dequal": "^2.0.2",
-    "fuse.js": "^6.4.1",
+    "fuse.js": "^6.4.3",
     "graphql-tag": "^2.10.1",
     "hast-util-sanitize": "^3.0.1",
     "parse-english": "^4.2.0",
