@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useCodeMirror } from '../../../../../../hooks'
+import { useCodeMirror } from '../../../../../../hooks/context/useCodeMirror'
 
 type Coords = { left: number; right: number; top: number; bottom: number }
 

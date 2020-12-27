@@ -8,12 +8,10 @@ import React, { ReactNode } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
-import { Toast } from './components/atoms'
-import {
-  IconProvider,
-  MockProvider,
-  ThemeProvider,
-} from './components/providers'
+import { Toast } from './components/atoms/Toast/Toast'
+import { MockProvider } from './components/providers/ApolloProvider/MockProvider'
+import { IconProvider } from './components/providers/IconProvider/IconProvider'
+import { ThemeProvider } from './components/providers/ThemeProvider/ThemeProvider'
 import { CodeMirrorProvider } from './components/templates/Dashboard/Editor/MarkdownEditor/CodeMirror/CodeMirrorProvider'
 import { FileTreeProvider } from './components/templates/Dashboard/Sidebar/FileTree/FileTreeProvider'
 import { resolvers as mockResolvers } from './schema/mockResolvers'

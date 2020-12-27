@@ -3,11 +3,9 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { FONT } from '../../../../../../enums'
-import {
-  useCodeMirror,
-  useReadFile,
-  useReadThemeSettings,
-} from '../../../../../../hooks'
+import { useCodeMirror } from '../../../../../../hooks/context/useCodeMirror'
+import { useReadFile } from '../../../../../../hooks/file/useReadFile'
+import { useReadThemeSettings } from '../../../../../../hooks/localState/useReadThemeSettings'
 import {
   drawHorizontalRule,
   drawLink,

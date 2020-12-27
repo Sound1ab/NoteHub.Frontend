@@ -4,9 +4,12 @@ import React from 'react'
 import { GoogleFont, TypographyStyle } from 'react-typography'
 import Typography from 'typography'
 
-import { Toast } from './atoms'
-import { ApolloProvider, IconProvider, ThemeProvider } from './providers'
-import { GlobalStyle, Router } from './utility'
+import { Toast } from './atoms/Toast/Toast'
+import { ApolloProvider } from './providers/ApolloProvider/ApolloProvider'
+import { IconProvider } from './providers/IconProvider/IconProvider'
+import { ThemeProvider } from './providers/ThemeProvider/ThemeProvider'
+import { GlobalStyle } from './utility/GlobalStyle/GlobalStyle'
+import { Router } from './utility/Router/Router'
 
 export function App() {
   return (

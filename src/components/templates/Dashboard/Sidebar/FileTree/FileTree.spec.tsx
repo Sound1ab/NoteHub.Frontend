@@ -2,7 +2,7 @@ import React from 'react'
 
 import { resolvers } from '../../../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../../../test-utils'
-import { MockProvider } from '../../../../providers'
+import { MockProvider } from '../../../../providers/ApolloProvider/MockProvider'
 import { FileTree } from './FileTree'
 
 afterEach(cleanup)

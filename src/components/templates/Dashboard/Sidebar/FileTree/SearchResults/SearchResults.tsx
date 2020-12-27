@@ -1,9 +1,10 @@
 import Fuse from 'fuse.js'
 import React from 'react'
 
-import { useReadFiles, useReadSearch } from '../../../../../../hooks'
-import { extractFilename } from '../../../../../../utils'
-import { Node_Type } from '../../../../../apollo'
+import { useReadFiles } from '../../../../../../hooks/file/useReadFiles'
+import { useReadSearch } from '../../../../../../hooks/localState/useReadSearch'
+import { extractFilename } from '../../../../../../utils/extractFilename'
+import { Node_Type } from '../../../../../apollo/generated_components_typings'
 import { File } from '../Tree/File/File'
 
 export function SearchResults() {
@@ -16,8 +17,8 @@ export function SearchResults() {
 
   const fuse = new Fuse(
     files
-      .filter(({ type }) => type === Node_Type.File)
-      .map(({ type, path }) => {
+      .filter(({ type }: { type: Node_Type }) => type === Node_Type.File)
+      .map(({ type, path }: { type: Node_Type; path: string }) => {
         const slug = extractFilename(path)
 
         return {
@@ -32,7 +33,9 @@ export function SearchResults() {
     }
   )
 
-  const results = fuse.search(search)
+  const results = fuse.search<{ type: Node_Type; path: string; slug: string }>(
+    search
+  )
 
   return (
     <>

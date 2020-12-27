@@ -1,6 +1,9 @@
-import { useQuery, gql } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 
-import { ReadRepoQuery, ReadRepoQueryVariables } from '../../components/apollo'
+import {
+  ReadRepoQuery,
+  ReadRepoQueryVariables,
+} from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
 
 export const ReadRepoDocument = gql`

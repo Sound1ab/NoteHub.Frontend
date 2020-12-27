@@ -3,9 +3,12 @@ import { Redirect } from 'react-router-dom'
 import ReactSpinner from 'react-spinkit'
 import styled from 'styled-components'
 
-import { useCreateRepo, useReadRepo } from '../../../hooks'
+import { useCreateRepo } from '../../../hooks/repo/useCreateRepo'
+import { useReadRepo } from '../../../hooks/repo/useReadRepo'
 import image from '../../../images/app_development_PNG.png'
-import { ErrorToast, GithubButton, Icon } from '../../atoms'
+import { GithubButton } from '../../atoms/Button/Button'
+import { Icon } from '../../atoms/Icon/Icon'
+import { ErrorToast } from '../../atoms/Toast/Toast'
 
 function Setup() {
   const { repo } = useReadRepo()

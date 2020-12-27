@@ -2,13 +2,13 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
-import { useReadFile } from '../../../../hooks'
+import { useReadFile } from '../../../../hooks/file/useReadFile'
 import { files, resolvers } from '../../../../schema/mockResolvers'
 import { cleanup, render } from '../../../../test-utils'
-import { createNodes } from '../../../../utils'
-import { Node_Type } from '../../../apollo'
-import { MockProvider } from '../../../providers'
+import { createNodes } from '../../../../utils/createNodes'
+import { Node_Type } from '../../../apollo/generated_components_typings'
 import { localState } from '../../../providers/ApolloProvider/cache'
+import { MockProvider } from '../../../providers/ApolloProvider/MockProvider'
 import { Editor } from './Editor'
 
 jest.mock('../../../../hooks/file/useReadFile')

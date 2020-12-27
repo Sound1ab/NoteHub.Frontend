@@ -1,7 +1,8 @@
 import React, { ChangeEvent, useState } from 'react'
 import styled from 'styled-components'
 
-import { getCssVariable, setCssVariable } from '../../../../utils'
+import { getCssVariable } from '../../../../utils/css/getCssVariable'
+import { setCssVariable } from '../../../../utils/css/setCssVariable'
 
 export function ColorPickerItem() {
   const [value, setValue] = useState(getCssVariable('--accent-primary'))

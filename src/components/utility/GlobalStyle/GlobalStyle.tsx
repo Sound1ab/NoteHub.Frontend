@@ -1,7 +1,8 @@
 import { createGlobalStyle } from 'styled-components'
 
 import { ITheme } from '../../../theme/styled'
-import { darken, lighten } from '../../../utils'
+import { darken } from '../../../utils/css/darken'
+import { lighten } from '../../../utils/css/lighten'
 
 export const GlobalStyle = createGlobalStyle<{
   theme: ITheme

@@ -14,10 +14,10 @@ import {
   File,
   UpdateFileMutation,
   UpdateFileMutationVariables,
-} from '../../components/apollo'
+} from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
-import { debounce } from '../../utils'
-import { useReadActiveRetextSettings } from '..'
+import { debounce } from '../../utils/debounce'
+import { useReadActiveRetextSettings } from '../localState/useReadActiveRetextSettings'
 
 let abortController: AbortController
 

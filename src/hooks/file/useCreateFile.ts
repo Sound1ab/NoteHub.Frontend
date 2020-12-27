@@ -6,10 +6,10 @@ import {
   CreateFileMutation,
   CreateFileMutationVariables,
   Node_Type,
-} from '../../components/apollo'
+} from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
-import { extractFilename } from '../../utils'
-import { useReadActiveRetextSettings } from '..'
+import { extractFilename } from '../../utils/extractFilename'
+import { useReadActiveRetextSettings } from '../localState/useReadActiveRetextSettings'
 
 export const CreateFileDocument = gql`
   ${FileFragment}

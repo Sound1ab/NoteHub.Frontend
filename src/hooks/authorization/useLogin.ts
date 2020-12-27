@@ -1,6 +1,9 @@
-import { useQuery, gql } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 
-import { LoginQuery, LoginQueryVariables } from '../../components/apollo'
+import {
+  LoginQuery,
+  LoginQueryVariables,
+} from '../../components/apollo/generated_components_typings'
 
 export const LoginDocument = gql`
   query Login {

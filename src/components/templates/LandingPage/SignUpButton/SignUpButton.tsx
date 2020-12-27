@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 
-import { getLoginLink } from '../../../../utils'
-import { GithubButton } from '../../../atoms'
+import { getLoginLink } from '../../../../utils/getLoginLink'
+import { GithubButton } from '../../../atoms/Button/Button'
 
 interface ISignUpButton {
   children: ReactNode

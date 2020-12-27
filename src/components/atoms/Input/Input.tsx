@@ -1,7 +1,7 @@
 import React, { ReactNode, useLayoutEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import { useClickOutside } from '../../../hooks'
+import { useClickOutside } from '../../../hooks/utils/useClickOutside'
 
 interface IInlineInput {
   value: string

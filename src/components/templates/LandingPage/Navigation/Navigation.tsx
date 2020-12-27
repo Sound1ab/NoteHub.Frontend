@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { getLoginLink } from '../../../../utils'
+import { getLoginLink } from '../../../../utils/getLoginLink'
 import { HorizontalList, ListItem } from '../HorizontalList/HoriztonalList'
 import { Logo } from '../Logo/logo'
 import { Section } from '../Section/Section'

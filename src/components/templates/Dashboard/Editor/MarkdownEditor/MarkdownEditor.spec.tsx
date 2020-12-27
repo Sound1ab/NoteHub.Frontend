@@ -5,7 +5,7 @@ import React, { createRef } from 'react'
 import { resolvers } from '../../../../../schema/mockResolvers'
 import { process } from '../../../../../services/retext/process'
 import { render, waitFor } from '../../../../../test-utils'
-import { Retext_Settings } from '../../../../apollo'
+import { Retext_Settings } from '../../../../apollo/generated_components_typings'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { MarkdownEditor } from './MarkdownEditor'
 

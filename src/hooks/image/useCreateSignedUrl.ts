@@ -4,7 +4,7 @@ import { ExecutionResult } from 'graphql'
 import {
   CreateSignedUrlMutation,
   CreateSignedUrlMutationVariables,
-} from '../../components/apollo'
+} from '../../components/apollo/generated_components_typings'
 
 export const CreateSignedUrlDocument = gql`
   mutation CreateSignedUrl {

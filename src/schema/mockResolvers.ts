@@ -7,8 +7,8 @@ import {
   Node_Type,
   QueryReadFileArgs,
   QueryReadGithubUserAccessTokenArgs,
-} from '../components/apollo'
-import { extractFilename } from '../utils'
+} from '../components/apollo/generated_components_typings'
+import { extractFilename } from '../utils/extractFilename'
 
 export const file = {
   id: 'MOCK_ID_1',

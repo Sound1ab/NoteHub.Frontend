@@ -1,7 +1,8 @@
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 
-import { useReadCurrentPath, useReadTabs } from '../../../../../hooks'
+import { useReadCurrentPath } from '../../../../../hooks/localState/useReadCurrentPath'
+import { useReadTabs } from '../../../../../hooks/localState/useReadTabs'
 import { cleanup, render } from '../../../../../test-utils'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { Tab } from './Tab'

@@ -9,13 +9,11 @@ import { toast } from 'react-toastify'
 import { useUpload } from 'react-use-upload'
 import styled from 'styled-components'
 
-import { ErrorToast } from '../../components/atoms'
-import {
-  useCreateSignedUrl,
-  useReadCursorPosition,
-  useReadFile,
-  useUpdateFile,
-} from '../'
+import { ErrorToast } from '../../components/atoms/Toast/Toast'
+import { useCreateSignedUrl } from '../image/useCreateSignedUrl'
+import { useReadCursorPosition } from '../localState/useReadCursorPosition'
+import { useReadFile } from '../file/useReadFile'
+import { useUpdateFile } from '../file/useUpdateFile'
 
 const Style = styled.input`
   display: none;

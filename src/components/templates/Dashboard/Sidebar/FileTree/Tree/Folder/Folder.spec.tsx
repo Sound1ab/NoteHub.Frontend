@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { useFileTree } from '../../../../../../../hooks'
+import { useFileTree } from '../../../../../../../hooks/context/useFileTree'
 import { files } from '../../../../../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../../../../../test-utils'
-import { createNodes } from '../../../../../../../utils'
-import { Node_Type } from '../../../../../../apollo'
-import { Folder } from './Folder'
 import { IFolderNode } from '../../../../../../../types'
+import { createNodes } from '../../../../../../../utils/createNodes'
+import { Node_Type } from '../../../../../../apollo/generated_components_typings'
+import { Folder } from './Folder'
 
 jest.mock('../../../../../../../hooks/context/useFileTree')
 

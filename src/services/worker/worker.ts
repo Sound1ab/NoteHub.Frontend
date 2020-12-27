@@ -1,4 +1,4 @@
-import { Retext_Settings } from '../../components/apollo'
+import { Retext_Settings } from '../../components/apollo/generated_components_typings'
 import { Retext } from '../retext/Retext'
 
 const retext = new Retext()

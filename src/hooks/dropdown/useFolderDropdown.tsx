@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { ITreeNode } from '../../types'
-import { useFileTree } from '..'
+import { useFileTree } from '../context/useFileTree'
 
 export function useFolderDropdown(node: ITreeNode) {
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)

@@ -2,7 +2,7 @@ import React from 'react'
 import { Slide, ToastContainer, ToastOptions, toast } from 'react-toastify'
 import styled from 'styled-components'
 
-import { Icon } from '..'
+import { Icon } from '../Icon/Icon'
 
 export function Toast() {
   return (

@@ -7,7 +7,10 @@ import {
 } from '@apollo/client'
 import React, { ReactNode } from 'react'
 
-import { context, error, httpLink, lazy } from '../../../services/ApolloLink'
+import { error } from '../../../services/ApolloLink/error'
+import { context } from '../../../services/ApolloLink/context'
+import { httpLink } from '../../../services/ApolloLink/httpLink'
+import { lazy } from '../../../services/ApolloLink/lazy'
 import { cacheOptions } from './cache'
 
 interface IApolloProvider {

@@ -1,7 +1,8 @@
 import React, { RefObject, useRef, useState } from 'react'
 
-import { IPortal, Portal } from '../../components/atoms'
-import { useTheme } from '..'
+import { IPortal } from '../../components/atoms/Portal/Portal'
+import { Portal } from '../../components/atoms/Portal/Portal'
+import { useTheme } from '../context/useTheme'
 
 export function useModalToggle<T extends HTMLElement>(
   origin?: RefObject<HTMLElement>

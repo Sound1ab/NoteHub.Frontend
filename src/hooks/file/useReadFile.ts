@@ -1,9 +1,12 @@
 import { gql, useQuery } from '@apollo/client'
 
-import { ReadFileQuery, ReadFileQueryVariables } from '../../components/apollo'
+import {
+  ReadFileQuery,
+  ReadFileQueryVariables,
+} from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
-import { isFile } from '../../utils'
-import { useReadCurrentPath } from '..'
+import { isFile } from '../../utils/isFile'
+import { useReadCurrentPath } from '../localState/useReadCurrentPath'
 
 export const ReadFileDocument = gql`
   ${FileFragment}

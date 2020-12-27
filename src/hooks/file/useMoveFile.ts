@@ -4,7 +4,7 @@ import {
   File,
   MoveFileMutation,
   MoveFileMutationVariables,
-} from '../../components/apollo'
+} from '../../components/apollo/generated_components_typings'
 import { FileFragment } from '../../fragments'
 import { ITreeNode } from '../../types'
 

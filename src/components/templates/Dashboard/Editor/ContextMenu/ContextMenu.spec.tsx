@@ -1,13 +1,12 @@
 import React, { ReactNode, createRef } from 'react'
 import { useUpload } from 'react-use-upload'
 
-import {
-  useCodeMirror,
-  useContextMenu,
-  useDropzone,
-  useReadFile,
-  useUpdateFile,
-} from '../../../../../hooks'
+import { useCodeMirror } from '../../../../../hooks/context/useCodeMirror'
+import { useContextMenu } from '../../../../../hooks/utils/useContextMenu'
+import { useDropzone } from '../../../../../hooks/utils/useDropzone'
+import { useReadFile } from '../../../../../hooks/file/useReadFile'
+import { useUpdateFile } from '../../../../../hooks/file/useUpdateFile'
+
 import { resolvers } from '../../../../../schema/mockResolvers'
 import {
   cleanup,
@@ -17,7 +16,7 @@ import {
   renderHook,
   waitFor,
 } from '../../../../../test-utils'
-import { MockProvider } from '../../../../providers'
+import { MockProvider } from '../../../../providers/ApolloProvider/MockProvider'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { ContextMenu } from './ContextMenu'
 

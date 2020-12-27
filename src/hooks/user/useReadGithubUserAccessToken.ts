@@ -1,9 +1,9 @@
-import { useQuery, gql } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 
 import {
   ReadGithubUserAccessTokenQuery,
   ReadGithubUserAccessTokenQueryVariables,
-} from '../../components/apollo'
+} from '../../components/apollo/generated_components_typings'
 
 export const ReadGithubUserAccessTokenDocument = gql`
   query ReadGithubUserAccessToken($code: String!, $state: String!) {

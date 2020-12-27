@@ -10,7 +10,7 @@ import spell from 'retext-spell'
 import retextStringify from 'retext-stringify'
 import unified, { Processor } from 'unified'
 
-import { Retext_Settings } from '../../components/apollo'
+import { Retext_Settings } from '../../components/apollo/generated_components_typings'
 import { enGbAff } from './enGbAff'
 import { enGbDic } from './enGbDic'
 

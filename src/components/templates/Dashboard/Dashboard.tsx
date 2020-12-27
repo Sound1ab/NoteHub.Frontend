@@ -2,7 +2,7 @@ import React from 'react'
 import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { useReadRepo } from '../../../hooks'
+import { useReadRepo } from '../../../hooks/repo/useReadRepo'
 import { Editor } from './Editor/Editor'
 import { CodeMirrorProvider } from './Editor/MarkdownEditor/CodeMirror/CodeMirrorProvider'
 import { Sidebar } from './Sidebar/Sidebar'

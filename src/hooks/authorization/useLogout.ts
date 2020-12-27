@@ -1,6 +1,9 @@
-import { useLazyQuery, gql } from '@apollo/client'
+import { gql, useLazyQuery } from '@apollo/client'
 
-import { LogoutQuery, LogoutQueryVariables } from '../../components/apollo'
+import {
+  LogoutQuery,
+  LogoutQueryVariables,
+} from '../../components/apollo/generated_components_typings'
 
 export const LogoutDocument = gql`
   query Logout {

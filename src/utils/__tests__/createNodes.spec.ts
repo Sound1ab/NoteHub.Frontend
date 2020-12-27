@@ -1,4 +1,4 @@
-import { Node_Type } from '../../components/apollo'
+import { Node_Type } from '../../components/apollo/generated_components_typings'
 import { createNodes } from '../createNodes'
 
 export const rootFile = {

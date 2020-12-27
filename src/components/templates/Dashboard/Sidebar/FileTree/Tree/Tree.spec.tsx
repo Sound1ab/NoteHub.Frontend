@@ -2,9 +2,9 @@ import React from 'react'
 
 import { files, resolvers } from '../../../../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../../../../test-utils'
-import { createNodes } from '../../../../../../utils'
-import { Node_Type } from '../../../../../apollo'
-import { MockProvider } from '../../../../../providers'
+import { createNodes } from '../../../../../../utils/createNodes'
+import { Node_Type } from '../../../../../apollo/generated_components_typings'
+import { MockProvider } from '../../../../../providers/ApolloProvider/MockProvider'
 import { Tree } from './Tree'
 
 describe('Tree', () => {

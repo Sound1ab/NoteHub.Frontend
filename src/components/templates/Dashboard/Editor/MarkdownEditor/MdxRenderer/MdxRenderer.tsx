@@ -2,7 +2,7 @@ import { Components, MDXProvider } from '@mdx-js/react'
 import React, { ReactNode } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-import { ThemeProvider } from '../../../../../providers'
+import { ThemeProvider } from '../../../../../providers/ThemeProvider/ThemeProvider'
 import { CodeRenderer } from '../../CodeRenderer/CodeRenderer'
 import { Table } from '../Table/Table'
 import { createElement, transform, transpileMdx } from './utils'

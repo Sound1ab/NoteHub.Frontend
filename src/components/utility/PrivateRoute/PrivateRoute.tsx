@@ -1,7 +1,8 @@
 import React, { ReactNode, useEffect } from 'react'
 import { Route } from 'react-router-dom'
 
-import { useLogin, useReadJwt } from '../../../hooks'
+import { useLogin } from '../../../hooks/authorization/useLogin'
+import { useReadJwt } from '../../../hooks/localState/useReadJwt'
 import { localState } from '../../providers/ApolloProvider/cache'
 
 export interface IPrivateRoute {

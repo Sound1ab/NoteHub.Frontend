@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Icon } from '../../../atoms'
+import { Icon } from '../../../atoms/Icon/Icon'
 import { Section } from '../Section/Section'
 
 export function Features() {

@@ -1,7 +1,8 @@
 import React, { RefObject } from 'react'
 
-import { useContextMenu, useContextMenuDropdown } from '../../../../../hooks'
-import { Dropdown } from '../../../../atoms'
+import { useContextMenuDropdown } from '../../../../../hooks/dropdown/useContextMenuDropdown'
+import { useContextMenu } from '../../../../../hooks/utils/useContextMenu'
+import { Dropdown } from '../../../../atoms/Dropdown/Dropdown'
 
 interface IContextMenu {
   targetRef: RefObject<HTMLElement>

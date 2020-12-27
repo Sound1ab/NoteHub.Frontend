@@ -2,9 +2,10 @@ import React, { MouseEvent, ReactNode } from 'react'
 import { useDrop } from 'react-dnd'
 import styled, { css } from 'styled-components'
 
-import { useFileTree, useFolderDropdown } from '../../../../../../../hooks'
+import { useFileTree } from '../../../../../../../hooks/context/useFileTree'
+import { useFolderDropdown } from '../../../../../../../hooks/dropdown/useFolderDropdown'
 import { IFolderNode, ITreeNode } from '../../../../../../../types'
-import { Icon } from '../../../../../../atoms'
+import { Icon } from '../../../../../../atoms/Icon/Icon'
 import { FileInput } from '../../../FileInput/FileInput'
 import { Node } from '../Node/Node'
 

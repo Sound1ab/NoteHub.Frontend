@@ -1,16 +1,16 @@
 import React, { MouseEvent, ReactNode, useState } from 'react'
 
 import { CONTAINER_ID } from '../../../../../enums'
-import { useCreateFile, useDeleteFile, useReadTabs } from '../../../../../hooks'
+import { useCreateFile } from '../../../../../hooks/file/useCreateFile'
+import { useDeleteFile } from '../../../../../hooks/file/useDeleteFile'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
+import { useReadTabs } from '../../../../../hooks/localState/useReadTabs'
 import { IFolderNode, ITreeNode } from '../../../../../types'
-import {
-  extractFilename,
-  removeLastSlug,
-  scrollIntoView,
-} from '../../../../../utils'
-import { Node_Type } from '../../../../apollo'
-import { ErrorToast } from '../../../../atoms'
+import { extractFilename } from '../../../../../utils/extractFilename'
+import { removeLastSlug } from '../../../../../utils/removeLastSlug'
+import { scrollIntoView } from '../../../../../utils/scrollIntoView'
+import { Node_Type } from '../../../../apollo/generated_components_typings'
+import { ErrorToast } from '../../../../atoms/Toast/Toast'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 
 interface IFileTreeProvider {

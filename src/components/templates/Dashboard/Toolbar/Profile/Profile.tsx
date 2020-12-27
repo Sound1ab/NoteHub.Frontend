@@ -3,12 +3,11 @@ import React, { ReactNode, useRef } from 'react'
 import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 
-import {
-  useModalToggle,
-  useProfileDropdown,
-  useReadGithubUser,
-} from '../../../../../hooks'
-import { Avatar, Dropdown } from '../../../../atoms'
+import { useModalToggle } from '../../../../../hooks/utils/useModalToggle'
+import { useProfileDropdown } from '../../../../../hooks/dropdown/useProfileDropdown'
+import { useReadGithubUser } from '../../../../../hooks/user/useReadGithubUser'
+import { Avatar } from '../../../../atoms/Avatar/Avatar'
+import { Dropdown } from '../../../../atoms/Dropdown/Dropdown'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 
 interface IProfile {

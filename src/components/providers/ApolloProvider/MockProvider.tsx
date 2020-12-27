@@ -17,7 +17,9 @@ import { buildClientSchema, printSchema } from 'graphql/utilities'
 import React, { ReactNode } from 'react'
 
 import introspectionResult from '../../../schema.json'
-import { context, error, lazy } from '../../../services/ApolloLink'
+import { error } from '../../../services/ApolloLink/error'
+import { context } from '../../../services/ApolloLink/context'
+import { lazy } from '../../../services/ApolloLink/lazy'
 import { Fields, cacheOptions } from './cache'
 
 async function link(

@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { ITreeNode } from '../../../../../../types'
-import { isFolderNode, traverseTree } from '../../../../../../utils'
-import { Node_Type } from '../../../../../apollo'
-import { List } from '../../../../../atoms'
+import { isFolderNode, traverseTree } from '../../../../../../utils/createNodes'
+import { Node_Type } from '../../../../../apollo/generated_components_typings'
+import { List } from '../../../../../atoms/List/List'
 import { File } from './File/File'
 import { Folder } from './Folder/Folder'
 

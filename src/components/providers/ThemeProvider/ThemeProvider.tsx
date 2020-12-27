@@ -3,7 +3,7 @@ import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 import Typography from 'typography'
 
 import { COLOR_MODE } from '../../../enums'
-import { useReadThemeSettings } from '../../../hooks'
+import { useReadThemeSettings } from '../../../hooks/localState/useReadThemeSettings'
 import {
   boxShadow,
   breakpoints,

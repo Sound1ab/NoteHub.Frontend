@@ -6,10 +6,10 @@ import React from 'react'
 
 import { files, resolvers } from '../../../schema/mockResolvers'
 import { cleanup, fireEvent, render, waitFor } from '../../../test-utils'
-import { createNodes } from '../../../utils'
-import { Node_Type } from '../../apollo'
-import { MockProvider } from '../../providers'
+import { createNodes } from '../../../utils/createNodes'
+import { Node_Type } from '../../apollo/generated_components_typings'
 import { localState } from '../../providers/ApolloProvider/cache'
+import { MockProvider } from '../../providers/ApolloProvider/MockProvider'
 import Dashboard from './Dashboard'
 
 jest.setTimeout(10000)

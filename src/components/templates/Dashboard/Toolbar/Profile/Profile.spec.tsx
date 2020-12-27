@@ -5,14 +5,12 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 
 import { FONT, THEME_SETTINGS } from '../../../../../enums'
-import {
-  useReadRetextSettings,
-  useReadThemeSettings,
-} from '../../../../../hooks'
+import { useReadThemeSettings } from '../../../../../hooks/localState/useReadThemeSettings'
+import { useReadRetextSettings } from '../../../../../hooks/localState/useReadRetextSettings'
 import { resolvers, user } from '../../../../../schema/mockResolvers'
 import { cleanup, fireEvent, render } from '../../../../../test-utils'
-import { Retext_Settings } from '../../../../apollo'
-import { MockProvider } from '../../../../providers'
+import { Retext_Settings } from '../../../../apollo/generated_components_typings'
+import { MockProvider } from '../../../../providers/ApolloProvider/MockProvider'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { Profile } from './Profile'
 

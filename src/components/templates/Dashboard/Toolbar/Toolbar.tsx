@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useCodeMirror, useReadTabs } from '../../../../hooks'
-import { extractFilename } from '../../../../utils'
-import { Icon } from '../../../atoms'
+import { useCodeMirror } from '../../../../hooks/context/useCodeMirror'
+import { useReadTabs } from '../../../../hooks/localState/useReadTabs'
+import { extractFilename } from '../../../../utils/extractFilename'
+import { Icon } from '../../../atoms/Icon/Icon'
 import { Profile } from './Profile/Profile'
 import { Tab } from './Tab/Tab'
 import { ToolbarButton } from './ToolbarButton/ToolbarButton'

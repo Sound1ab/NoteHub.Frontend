@@ -1,8 +1,8 @@
 import React, { ReactNode, Ref, forwardRef } from 'react'
 import styled, { css } from 'styled-components'
 
-import { darken } from '../../../utils'
-import { Icon } from '..'
+import { darken } from '../../../utils/css/darken'
+import { Icon } from '../Icon/Icon'
 
 interface IButton {
   isActive?: boolean

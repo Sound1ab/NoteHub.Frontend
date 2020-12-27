@@ -1,18 +1,16 @@
 import React from 'react'
 
-import { Retext_Settings } from '../../components/apollo'
+import { Retext_Settings } from '../../components/apollo/generated_components_typings'
 import { CheckboxItem } from '../../components/atoms/Dropdown/CheckboxItem/CheckboxItem'
 import { ColorPickerItem } from '../../components/atoms/Dropdown/ColorPickerItem/ColorPickerItem'
 import { RadioItem } from '../../components/atoms/Dropdown/RadioItem/RadioItem'
 import { localState } from '../../components/providers/ApolloProvider/cache'
 import { FONT, THEME_SETTINGS } from '../../enums'
-import {
-  useCodeMirror,
-  useLogout,
-  useReadGithubUser,
-  useReadRetextSettings,
-  useReadThemeSettings,
-} from '..'
+import { useLogout } from '../authorization/useLogout'
+import { useCodeMirror } from '../context/useCodeMirror'
+import { useReadRetextSettings } from '../localState/useReadRetextSettings'
+import { useReadThemeSettings } from '../localState/useReadThemeSettings'
+import { useReadGithubUser } from '../user/useReadGithubUser'
 
 export function useProfileDropdown() {
   const retextSettings = useReadRetextSettings()

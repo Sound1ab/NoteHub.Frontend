@@ -3,7 +3,7 @@ import { gql, useQuery } from '@apollo/client'
 import {
   ReadFilesQuery,
   ReadFilesQueryVariables,
-} from '../../components/apollo'
+} from '../../components/apollo/generated_components_typings'
 import { TreeFileFragment } from '../../fragments'
 
 export const ReadFilesDocument = gql`

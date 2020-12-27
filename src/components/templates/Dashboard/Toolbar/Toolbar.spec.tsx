@@ -2,7 +2,8 @@ import '@testing-library/jest-dom/extend-expect'
 
 import React from 'react'
 
-import { useCodeMirror, useReadTabs } from '../../../../hooks'
+import { useCodeMirror } from '../../../../hooks/context/useCodeMirror'
+import { useReadTabs } from '../../../../hooks/localState/useReadTabs'
 import { cleanup, fireEvent, render } from '../../../../test-utils'
 import { localState } from '../../../providers/ApolloProvider/cache'
 import { Toolbar } from './Toolbar'

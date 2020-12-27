@@ -1,8 +1,10 @@
 import React, { MouseEvent } from 'react'
 import styled, { css } from 'styled-components'
 
-import { useReadCurrentPath, useReadTabs } from '../../../../../hooks'
-import { Button, Icon } from '../../../../atoms'
+import { useReadCurrentPath } from '../../../../../hooks/localState/useReadCurrentPath'
+import { useReadTabs } from '../../../../../hooks/localState/useReadTabs'
+import { Button } from '../../../../atoms/Button/Button'
+import { Icon } from '../../../../atoms/Icon/Icon'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 
 interface ITab {

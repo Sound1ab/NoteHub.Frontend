@@ -9,19 +9,17 @@ import React, {
   useState,
 } from 'react'
 
-import {
-  useModalToggle,
-  useReadActiveRetextSettings,
-  useReadFile,
-  useReadIsPreviewActive,
-  useReadIsSideBySideActive,
-  useUpdateFile,
-} from '../../../../../../hooks'
+import { useReadFile } from '../../../../../../hooks/file/useReadFile'
+import { useUpdateFile } from '../../../../../../hooks/file/useUpdateFile'
+import { useReadActiveRetextSettings } from '../../../../../../hooks/localState/useReadActiveRetextSettings'
+import { useReadIsPreviewActive } from '../../../../../../hooks/localState/useReadIsPreviewActive'
+import { useReadIsSideBySideActive } from '../../../../../../hooks/localState/useReadIsSideBySideActive'
 import useDeepCompareEffect from '../../../../../../hooks/utils/useDeepCompareEffect'
+import { useModalToggle } from '../../../../../../hooks/utils/useModalToggle'
 import { process } from '../../../../../../services/retext/process'
 import { IMessage, IPosition } from '../../../../../../types'
-import { isNumber } from '../../../../../../utils'
-import { ErrorToast } from '../../../../../atoms'
+import { isNumber } from '../../../../../../utils/typeGuards/isNumber'
+import { ErrorToast } from '../../../../../atoms/Toast/Toast'
 import { localState } from '../../../../../providers/ApolloProvider/cache'
 import { IActions } from './CodeMirror'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { cleanup, fireEvent, render } from '../../../../../test-utils'
-import { MockProvider } from '../../../../providers'
+import { MockProvider } from '../../../../providers/ApolloProvider/MockProvider'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { SearchInput } from './SearchInput'
 

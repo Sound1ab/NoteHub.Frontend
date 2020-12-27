@@ -4,7 +4,7 @@ import { ExecutionResult } from 'graphql'
 import {
   CreateRepoMutation,
   CreateRepoMutationVariables,
-} from '../../components/apollo'
+} from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
 
 export const CreateRepoDocument = gql`

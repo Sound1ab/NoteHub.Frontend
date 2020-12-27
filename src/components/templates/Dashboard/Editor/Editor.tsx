@@ -2,9 +2,11 @@ import React, { useRef } from 'react'
 import styled from 'styled-components'
 
 import { CONTAINER_ID } from '../../../../enums'
-import { useCodeMirror, useReadFile } from '../../../../hooks'
+import { useCodeMirror } from '../../../../hooks/context/useCodeMirror'
+import { useReadFile } from '../../../../hooks/file/useReadFile'
 import { ContextMenu } from './ContextMenu/ContextMenu'
-import { MarkdownEditor, MarkdownEditorSkeleton } from './MarkdownEditor'
+import { MarkdownEditor } from './MarkdownEditor/MarkdownEditor'
+import { MarkdownEditorSkeleton } from './MarkdownEditor/MarkdownEditorSkeleton'
 import { MarkdownRenderer } from './MarkdownEditor/MarkdownRenderer/MarkdownRenderer'
 
 export function Editor() {

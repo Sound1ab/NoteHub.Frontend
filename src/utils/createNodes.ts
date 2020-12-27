@@ -1,4 +1,7 @@
-import { Node_Type, TreeFileFragment } from '../components/apollo'
+import {
+  Node_Type,
+  TreeFileFragment,
+} from '../components/apollo/generated_components_typings'
 import { IFileNode, IFolderNode, ITreeNode } from '../types'
 import { extractFilename } from './extractFilename'
 import { isFile } from './isFile'

@@ -1,9 +1,9 @@
-import { useQuery, gql } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 
 import {
   ReadGithubUserQuery,
   ReadGithubUserQueryVariables,
-} from '../../components/apollo'
+} from '../../components/apollo/generated_components_typings'
 import { GithubUserFragment } from '../../fragments'
 
 export const ReadGithubUserDocument = gql`

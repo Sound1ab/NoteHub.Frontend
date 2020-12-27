@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { useReadSearch } from '../../../../../../hooks'
+import { useReadSearch } from '../../../../../../hooks/localState/useReadSearch'
 import { resolvers } from '../../../../../../schema/mockResolvers'
 import { cleanup, render } from '../../../../../../test-utils'
-import { MockProvider } from '../../../../../providers'
+import { MockProvider } from '../../../../../providers/ApolloProvider/MockProvider'
 import { SearchResults } from './SearchResults'
 
 jest.mock('../../../../../../hooks/localState/useReadSearch')

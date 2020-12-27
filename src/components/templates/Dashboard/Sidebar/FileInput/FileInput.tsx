@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { Input } from '../../../../atoms'
+import { Input } from '../../../../atoms/Input/Input'
 
 interface IFileInput {
   onClickOutside: () => void

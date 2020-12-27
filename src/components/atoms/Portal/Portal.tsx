@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { css } from 'styled-components'
 import styled from 'styled-components'
 
-import { useClickOutside } from '../../../hooks'
+import { useClickOutside } from '../../../hooks/utils/useClickOutside'
 
 export interface IPortal {
   children?: ReactNode

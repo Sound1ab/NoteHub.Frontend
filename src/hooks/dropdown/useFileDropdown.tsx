@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-import { useFileTree } from '..'
 import { ITreeNode } from '../../types'
+import { useFileTree } from '../context/useFileTree'
 
 export function useFileDropdown(node: ITreeNode) {
   const [isRenaming, setIsRenaming] = useState(false)

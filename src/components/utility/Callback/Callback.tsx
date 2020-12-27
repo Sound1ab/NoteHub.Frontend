@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect, useLocation } from 'react-router-dom'
 
-import { useReadGithubUserAccessToken } from '../../../hooks'
+import { useReadGithubUserAccessToken } from '../../../hooks/user/useReadGithubUserAccessToken'
 import { localState } from '../../providers/ApolloProvider/cache'
 
 export const Callback = () => {

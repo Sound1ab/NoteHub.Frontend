@@ -1,7 +1,8 @@
 import React, { Suspense, lazy } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import { Callback, PrivateRoute } from '..'
+import { Callback } from '../Callback/Callback'
+import { PrivateRoute } from '../PrivateRoute/PrivateRoute'
 
 const Dashboard = lazy(() => import('../../templates/Dashboard/Dashboard'))
 const Setup = lazy(() => import('../../templates/Setup/Setup'))

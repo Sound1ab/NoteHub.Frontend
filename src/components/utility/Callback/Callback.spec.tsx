@@ -4,7 +4,7 @@ import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Redirect, Router, useLocation } from 'react-router-dom'
 
-import { useReadGithubUserAccessToken } from '../../../hooks'
+import { useReadGithubUserAccessToken } from '../../../hooks/user/useReadGithubUserAccessToken'
 import { cleanup, render } from '../../../test-utils'
 import { Callback } from './Callback'
 

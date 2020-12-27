@@ -1,7 +1,7 @@
 import { InMemoryCacheConfig, makeVar } from '@apollo/client'
 
 import { FONT, THEME_SETTINGS } from '../../../enums'
-import { Retext_Settings } from '../../apollo'
+import { Retext_Settings } from '../../apollo/generated_components_typings'
 
 export const localState = {
   currentRepoNameVar: makeVar('NoteHub.Notebook'),

@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useReadSearch } from '../../../../../hooks'
-import { Input } from '../../../../atoms'
+import { useReadSearch } from '../../../../../hooks/localState/useReadSearch'
+import { Input } from '../../../../atoms/Input/Input'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 
 export function SearchInput() {

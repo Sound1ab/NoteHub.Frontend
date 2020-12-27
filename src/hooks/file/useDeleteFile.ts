@@ -6,7 +6,7 @@ import {
   DeleteFileMutation,
   DeleteFileMutationVariables,
   File,
-} from '../../components/apollo'
+} from '../../components/apollo/generated_components_typings'
 import { localState } from '../../components/providers/ApolloProvider/cache'
 import { FileFragment } from '../../fragments'
 import { ITreeNode } from '../../types'

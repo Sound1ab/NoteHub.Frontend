@@ -1,5 +1,7 @@
-import { isFile } from '../../utils'
-import { useCodeMirror, useDropzone, useReadCurrentPath } from '..'
+import { isFile } from '../../utils/isFile'
+import { useCodeMirror } from '../context/useCodeMirror'
+import { useReadCurrentPath } from '../localState/useReadCurrentPath'
+import { useDropzone } from '../utils/useDropzone'
 
 export function useContextMenuDropdown() {
   const currentPath = useReadCurrentPath()

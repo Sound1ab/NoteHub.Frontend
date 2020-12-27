@@ -5,7 +5,8 @@ import toc from 'remark-toc'
 import styled from 'styled-components'
 
 import { FONT } from '../../../../../../enums'
-import { useReadFile, useReadThemeSettings } from '../../../../../../hooks'
+import { useReadFile } from '../../../../../../hooks/file/useReadFile'
+import { useReadThemeSettings } from '../../../../../../hooks/localState/useReadThemeSettings'
 import { CodeRenderer } from '../../CodeRenderer/CodeRenderer'
 import { MdxRenderer } from '../MdxRenderer/MdxRenderer'
 

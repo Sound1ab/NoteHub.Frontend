@@ -1,4 +1,4 @@
-import { useMutation, gql, MutationResult } from '@apollo/client'
+import { MutationResult, gql, useMutation } from '@apollo/client'
 import { ExecutionResult } from 'graphql'
 
 import {
@@ -6,7 +6,7 @@ import {
   ReadRepoQueryVariables,
   UpdateRepoMutation,
   UpdateRepoMutationVariables,
-} from '../../components/apollo'
+} from '../../components/apollo/generated_components_typings'
 import { RepoFragment } from '../../fragments'
 import { ReadRepoDocument } from './useReadRepo'
 
