@@ -2,8 +2,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 import styled from 'styled-components'
 
-import { COLOR } from '../../../enums'
-
 export type TIcons =
   | 'github'
   | 'soundcloud'
@@ -40,10 +38,12 @@ export type TIcons =
   | 'table'
   | 'bars'
   | 'align-justify'
+  | 'binoculars'
+  | 'rocket'
+  | 'info-circle'
 
 interface IIcon {
   icon: TIcons
-  color?: COLOR
   prefix?: 'fas' | 'fab' | 'far' | 'fal' | 'fad'
   marginRight?: boolean
   marginLeft?: boolean

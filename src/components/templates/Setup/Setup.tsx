@@ -91,12 +91,6 @@ const Copy = styled.p`
 
 const Button = styled(GithubButton)`
   margin: 0 auto;
-  transition: ${({ theme }) => theme.transition};
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.11);
-
-  &:hover {
-    box-shadow: ${({ theme }) => theme.boxShadow};
-  }
 `
 
 const Spinner = styled(ReactSpinner)`

@@ -1,3 +1,3 @@
 export * from './Dashboard/Dashboard'
-export * from './Login/Login'
+export * from './LandingPage/LandingPage'
 export * from './Setup/Setup'

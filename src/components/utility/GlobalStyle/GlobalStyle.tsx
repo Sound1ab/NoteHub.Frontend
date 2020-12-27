@@ -48,7 +48,7 @@ export const GlobalStyle = createGlobalStyle<{
     min-height: 100%;
     height: 100%;
     width: 100%;
-    overflow: hidden!important;
+    //overflow: hidden;
   }
   
   *,
@@ -94,7 +94,7 @@ export const GlobalStyle = createGlobalStyle<{
   }
   
   img {
-    margin-bottom: 0!important;
+    margin-bottom: 0;
   }
   
   /* Text-level semantics
@@ -124,43 +124,8 @@ export const GlobalStyle = createGlobalStyle<{
     color: var(--accent-primary);
   }
   
-  p {
-    color: var(--text-primary)!important;
-  }
-  
-  h1 {
-    color: var(--text-primary)!important;
-    font-weight: bold!important;
-  }
-  
-  h2 {
-    color: var(--text-primary)!important;
-    font-weight: bold!important;
-  }
-  
-  h3 {
-    color: var(--text-primary)!important;
-    font-weight: bold!important;
-  }
-  
-  h4 {
-    color: var(--text-primary)!important;
-  }
-  
-  h5 {
-    color: var(--text-primary)!important;
-  }
-  
-  h6 {
-    color: var(--text-primary)!important;
-  }
-  
-  li {
-    color: var(--text-primary)!important;
-  }
-  
   pre {
-    font-size: 1em!important;
+    font-size: 1em;
   }
   
   /* Grouping content
@@ -172,7 +137,6 @@ export const GlobalStyle = createGlobalStyle<{
   
   hr {
     height: 0;
-    background: var(--accent-primary)!important;
   }
   
   /* Text-level semantics
@@ -245,7 +209,7 @@ export const GlobalStyle = createGlobalStyle<{
    */
    
    form {
-    margin-bottom: 0!important;
+    margin-bottom: 0;
    }
    
   button,
@@ -406,10 +370,14 @@ export const GlobalStyle = createGlobalStyle<{
      ========================================================================== */
   
   table {
-    color: var(--text-primary)!important;
+    color: var(--text-primary);
   }
   
   td, th {
-    border-bottom: 1px solid var(--accent-primary)!important;
+    border-bottom: 1px solid var(--accent-primary);
+  }
+  
+  blockquote {
+    border-left: 3px solid var(--text-secondary);
   }
 `

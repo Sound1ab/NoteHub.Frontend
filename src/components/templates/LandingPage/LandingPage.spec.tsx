@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { render } from '../../../test-utils'
-import { Login } from './Login'
+import { LandingPage } from './LandingPage'
 
-describe('Login', () => {
+describe('LandingPage', () => {
   it('should show login button', async () => {
-    const { getByText } = await render(<Login />)
+    const { getByText } = await render(<LandingPage />)
 
     expect(getByText('Log in with Github')).toBeDefined()
   })
