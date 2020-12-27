@@ -113,20 +113,12 @@
     "ts": "tsc --noEmit --pretty --noUnusedParameters --noUnusedLocals",
     "codechecks": "yarn ts && yarn lint && yarn test"
   },
-  "browserslist": {
-    "production": [
-      "Chrome >= 60",
-      "Safari >= 10.1",
-      "iOS >= 10.3",
-      "Firefox >= 54",
-      "Edge >= 15"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
   "importSort": {
     ".js, .jsx, .es6, .es, .mjs, .ts, .tsx": {
       "parser": "typescript",
