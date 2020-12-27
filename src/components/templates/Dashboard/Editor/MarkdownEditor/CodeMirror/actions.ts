@@ -613,26 +613,26 @@ const insertTexts = {
 const insertComponents = {
   table: [
     '',
-    ` \`\`\`mdx
-    <Table
-      columns={[
-        {
-          Header: 'Column 1',
-          accessor: 'col1',
-        },
-        {
-          Header: 'Column 2',
-          accessor: 'col2',
-        },
-      ]}
-      data={[
-        {
-          col1: 'Hello',
-          col2: 'World',
-        },
-      ]}
-    />
-    \`\`\``,
+    `\`\`\`mdx
+<Table
+  columns={[
+    {
+      Header: 'Column 1',
+      accessor: 'col1',
+    },
+    {
+      Header: 'Column 2',
+      accessor: 'col2',
+    },
+  ]}
+  data={[
+    {
+      col1: 'Hello',
+      col2: 'World',
+    },
+  ]}
+/>
+\`\`\``,
   ],
 }
 

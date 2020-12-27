@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
+import gfm from 'remark-gfm'
 import toc from 'remark-toc'
 import styled from 'styled-components'
 
@@ -17,7 +18,7 @@ export const MarkdownRenderer = () => {
       <Sizer font={font} isFullWidth={isFullWidth}>
         <ReactMarkdown
           source={file?.content ?? ''}
-          plugins={[toc]}
+          plugins={[gfm, toc]}
           renderers={{
             code: (props) => {
               if (props.language === 'mdx') {

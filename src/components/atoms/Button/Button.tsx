@@ -1,6 +1,7 @@
 import React, { ReactNode, Ref, forwardRef } from 'react'
 import styled, { css } from 'styled-components'
 
+import { darken } from '../../../utils'
 import { Icon } from '..'
 
 interface IButton {
@@ -8,7 +9,7 @@ interface IButton {
   isDisabled?: boolean
   isLoading?: boolean
   children?: ReactNode
-  onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
+  onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
   title?: string
 }
 
@@ -61,6 +62,11 @@ export const RegularButton = styled(Button)`
 export const GithubButton = styled(RegularButton)`
   color: #fff;
   background-color: var(--company-github);
+  transition: ${({ theme }) => theme.transition};
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.11);
+  font-size: ${({ theme }) => theme.typographyStyles.h3.fontSize};
+  font-weight: lighter;
+  line-height: 1;
 
   &:visited {
     color: #fff;
@@ -72,5 +78,14 @@ export const GithubButton = styled(RegularButton)`
 
   * svg {
     color: #fff;
+  }
+
+  &:hover {
+    box-shadow: ${({ theme }) => theme.boxShadow};
+    background-color: ${darken('--company-github', 0.05)};
+  }
+
+  &:active {
+    transform: translateY(${({ theme }) => theme.spacing.xxxs});
   }
 `

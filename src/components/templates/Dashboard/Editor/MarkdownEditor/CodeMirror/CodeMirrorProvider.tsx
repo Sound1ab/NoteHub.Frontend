@@ -250,7 +250,7 @@ export function CodeMirrorProvider({ children }: ICodeMirrorProvider) {
       coords: {
         ...coords,
         left: coords.left,
-        top: coords.top - (scrollRef.current?.scrollTop ?? 0),
+        top: coords.top - (scrollRef.current?.scrollTop ?? 0) + 10,
       },
       message: activeMarker.options.message,
     })

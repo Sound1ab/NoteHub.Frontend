@@ -1,6 +1,5 @@
 import React from 'react'
 import { useTable } from 'react-table'
-
 import styled from 'styled-components'
 
 interface IColumn {
@@ -75,6 +74,6 @@ const TableHeading = styled.th`
 
 const TableCell = styled.td`
   padding: ${({ theme }) => theme.spacing.xs}!important;
-  border: solid px var(--accent-primary);
+  border: solid 1px var(--accent-primary);
   background-color: transparent;
 `

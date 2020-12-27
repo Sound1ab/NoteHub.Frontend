@@ -78,6 +78,7 @@
     "rehype-parse": "^7.0.1",
     "rehype-sanitize": "^4.0.0",
     "rehype-stringify": "^8.0.0",
+    "remark-gfm": "^1.0.0",
     "remark-mdx-remove-exports": "^1.6.19",
     "remark-mdx-remove-imports": "^1.6.19",
     "remark-parse": "^9.0.0",
