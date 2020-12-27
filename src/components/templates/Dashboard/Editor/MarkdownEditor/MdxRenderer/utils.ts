@@ -1,7 +1,7 @@
 import mdx from '@mdx-js/mdx'
 import { mdx as createMdxElement } from '@mdx-js/react'
 import { transform as _transform } from 'buble'
-import assign from 'core-js/fn/object/assign'
+import assign from 'core-js/es/object/assign'
 import { Schema } from 'hast-util-sanitize'
 import gh from 'hast-util-sanitize/lib/github.json'
 import React from 'react'

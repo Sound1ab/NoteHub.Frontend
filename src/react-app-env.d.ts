@@ -18,6 +18,7 @@ declare global {
 declare module '@mdx-js/mdx'
 declare module 'remark-mdx-remove-exports'
 declare module 'remark-mdx-remove-imports'
+declare module 'core-js/es/object/assign'
 
 declare module '@mdx-js/react' {
   import * as React from 'react'
