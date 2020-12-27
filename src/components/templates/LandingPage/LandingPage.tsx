@@ -9,7 +9,7 @@ import { Navigation } from './Navigation/Navigation'
 import { Screenshots } from './Screenshots/Screenshots'
 import { Signup } from './Signup/Signup'
 
-export function LandingPage() {
+function LandingPage() {
   return (
     <>
       <Navigation />
@@ -36,3 +36,5 @@ const Main = styled.main`
     grid-column: 2;
   }
 `
+
+export { LandingPage as default }

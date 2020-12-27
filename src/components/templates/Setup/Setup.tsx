@@ -7,7 +7,7 @@ import { useCreateRepo, useReadRepo } from '../../../hooks'
 import image from '../../../images/app_development_PNG.png'
 import { ErrorToast, GithubButton, Icon } from '../../atoms'
 
-export function Setup() {
+function Setup() {
   const { repo } = useReadRepo()
   const [createRepo, { loading, data }] = useCreateRepo()
 
@@ -54,6 +54,8 @@ export function Setup() {
     </Wrapper>
   )
 }
+
+export { Setup as default }
 
 const Wrapper = styled.div`
   position: relative;

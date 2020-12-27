@@ -8,7 +8,7 @@ import { CodeMirrorProvider } from './Editor/MarkdownEditor/CodeMirror/CodeMirro
 import { Sidebar } from './Sidebar/Sidebar'
 import { Toolbar } from './Toolbar/Toolbar'
 
-export function Dashboard() {
+function Dashboard() {
   const { repo, loading } = useReadRepo()
 
   if (loading) {
@@ -37,6 +37,8 @@ export function Dashboard() {
     </Grid>
   )
 }
+
+export { Dashboard as default }
 
 const Grid = styled.div`
   height: 100%;

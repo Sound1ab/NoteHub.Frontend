@@ -1,22 +1,29 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import { Dashboard, LandingPage, Setup } from '../../templates'
 import { Callback, PrivateRoute } from '..'
+
+const Dashboard = lazy(() => import('../../templates/Dashboard/Dashboard'))
+const Setup = lazy(() => import('../../templates/Setup/Setup'))
+const LandingPage = lazy(
+  () => import('../../templates/LandingPage/LandingPage')
+)
 
 export function Router() {
   return (
     <BrowserRouter>
-      <Switch>
-        <Route path="/" exact component={LandingPage} />
-        <PrivateRoute path="/dashboard" exact>
-          <Dashboard />
-        </PrivateRoute>
-        <PrivateRoute path="/setup" exact>
-          <Setup />
-        </PrivateRoute>
-        <Route path="/callback" exact component={Callback} />
-      </Switch>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <Route path="/" exact component={LandingPage} />
+          <PrivateRoute path="/dashboard" exact>
+            <Dashboard />
+          </PrivateRoute>
+          <PrivateRoute path="/setup" exact>
+            <Setup />
+          </PrivateRoute>
+          <Route path="/callback" exact component={Callback} />
+        </Switch>
+      </Suspense>
     </BrowserRouter>
   )
 }
