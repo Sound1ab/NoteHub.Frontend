@@ -37,10 +37,13 @@
     "graphql-tools": "^4.0.6",
     "prettier": "^2.1.2",
     "react-scripts": "4.0.0",
+    "responsive-loader": "^2.3.0",
+    "sharp": "^0.27.0",
     "typescript": "^3.7.4"
   },
   "dependencies": {
     "@apollo/client": "^3.2.9",
+    "@craco/craco": "^6.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
     "@fortawesome/free-brands-svg-icons": "^5.12.0",
     "@fortawesome/free-solid-svg-icons": "^5.7.2",
@@ -97,11 +100,11 @@
     "unist-util-visit": "^2.0.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "craco start",
     "pretest": "graphql-codegen --config codegen.test.yml",
-    "test": "react-scripts test --env=jsdom",
-    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
-    "build": "react-scripts build",
+    "test": "craco test --env=jsdom",
+    "test:debug": "craco --inspect-brk test --runInBand --no-cache",
+    "build": "craco build",
     "eject": "react-scripts eject",
     "codegen": "graphql-codegen --config codegen.yml",
     "lint": "eslint './src/**/*.{ts,tsx}'",

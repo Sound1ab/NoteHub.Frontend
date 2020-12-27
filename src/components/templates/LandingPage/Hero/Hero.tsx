@@ -1,7 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import image from '../../../../images/app_development_PNG.png'
+// @ts-ignore
+import responsiveImage from '../../../../images/app_development_PNG.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600&format=webp'
+// @ts-ignore
+import responsiveImageWebp from '../../../../images/app_development_PNG.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600&format=webp'
 import { Section } from '../Section/Section'
 import { SignUpButton } from '../SignUpButton/SignUpButton'
 
@@ -20,7 +23,21 @@ export function Hero() {
         <SignUpButton>Start Building Your Notebook</SignUpButton>
       </Information>
       <ImageWrapper>
-        <Image src={image} alt="Man sat on laptop uploading" />
+        <picture>
+          <source
+            srcSet={responsiveImageWebp.srcSet}
+            type="image/webp"
+            sizes="284px"
+          />
+          <Image
+            src={responsiveImage.src}
+            srcSet={responsiveImage.srcSet}
+            width={responsiveImage.width}
+            height={responsiveImage.height}
+            sizes="284px"
+            alt="Man sitting on computer, writing notes"
+          />
+        </picture>
       </ImageWrapper>
     </StyledSection>
   )

@@ -10,7 +10,7 @@ import { createNodes } from '../../../utils'
 import { Node_Type } from '../../apollo'
 import { MockProvider } from '../../providers'
 import { localState } from '../../providers/ApolloProvider/cache'
-import { Dashboard } from './Dashboard'
+import Dashboard from './Dashboard'
 
 jest.setTimeout(10000)
 

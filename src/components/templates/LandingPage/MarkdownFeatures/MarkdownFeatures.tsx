@@ -1,23 +1,63 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import codeFences from '../../../../images/code_fences.png'
-import imageUpload from '../../../../images/image_upload.png'
-import inlineStyles from '../../../../images/inline_styles.png'
-import lists from '../../../../images/lists.png'
-import mdx from '../../../../images/mdx.png'
-import toc from '../../../../images/toc.png'
+// @ts-ignore
+import codeFences from '../../../../images/code_fences.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600'
+// @ts-ignore
+import codeFencesWebp from '../../../../images/code_fences.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600&format=webp'
+// @ts-ignore
+import imageUpload from '../../../../images/image_upload.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600'
+// @ts-ignore
+import imageUploadWebp from '../../../../images/image_upload.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600&format=webp'
+// @ts-ignore
+import inlineStyles from '../../../../images/inline_styles.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600'
+// @ts-ignore
+import inlineStylesWebp from '../../../../images/inline_styles.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600&format=webp'
+// @ts-ignore
+import lists from '../../../../images/lists.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600'
+// @ts-ignore
+import listsWebp from '../../../../images/lists.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600&format=webp'
+// @ts-ignore
+import mdx from '../../../../images/mdx.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600'
+// @ts-ignore
+import mdxWebp from '../../../../images/mdx.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600&format=webp'
+// @ts-ignore
+import toc from '../../../../images/toc.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600'
+// @ts-ignore
+import tocWebp from '../../../../images/toc.png?sizes[]=300,sizes[]=600,sizes[]=800,sizes[]=1200,sizes[]=1600&format=webp'
 import { FullBleedSection } from '../Section/Section'
 
 export function MarkdownFeatures() {
-  const images = [inlineStyles, codeFences, imageUpload, lists, mdx, toc]
+  const images = [
+    [inlineStyles, inlineStylesWebp],
+    [codeFences, codeFencesWebp],
+    [imageUpload, imageUploadWebp],
+    [lists, listsWebp],
+    [mdx, mdxWebp],
+    [toc, tocWebp],
+  ]
   return (
     <StyledFullBleedSection>
       <Heading>Your favourite markdown features and more</Heading>
       <FeatureGallery>
-        {images.map((image, index) => (
+        {images.map(([image, webpImage], index) => (
           <Feature key={index}>
-            <Image src={image} />
+            <picture>
+              <source
+                srcSet={webpImage.srcSet}
+                type="image/webp"
+                sizes="(min-width: 780px) 548px, 264px"
+              />
+              <Image
+                src={image.src}
+                srcSet={image.srcSet}
+                sizes="(min-width: 780px) 548px, 264px"
+                alt="Mardown feature"
+                loading="lazy"
+                width={image.width}
+                height={image.height}
+              />
+            </picture>
           </Feature>
         ))}
       </FeatureGallery>
@@ -82,4 +122,6 @@ const FeatureGallery = styled.div`
 const Image = styled.img`
   box-shadow: ${({ theme }) => theme.boxShadow};
   margin: 0;
+  width: 100%;
+  height: auto;
 `
