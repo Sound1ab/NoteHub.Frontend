@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
+import { Spinner } from '../../atoms/Spinner/Spinner'
 import { Callback } from '../Callback/Callback'
 import { PrivateRoute } from '../PrivateRoute/PrivateRoute'
 
@@ -13,7 +14,7 @@ const LandingPage = lazy(
 export function Router() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Spinner name="folding-cube" />}>
         <Switch>
           <Route path="/" exact component={LandingPage} />
           <PrivateRoute path="/dashboard" exact>

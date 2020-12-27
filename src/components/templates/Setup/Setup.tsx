@@ -1,6 +1,5 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
-import ReactSpinner from 'react-spinkit'
 import styled from 'styled-components'
 
 import { useCreateRepo } from '../../../hooks/repo/useCreateRepo'
@@ -8,6 +7,7 @@ import { useReadRepo } from '../../../hooks/repo/useReadRepo'
 import image from '../../../images/app_development_PNG.png'
 import { GithubButton } from '../../atoms/Button/Button'
 import { Icon } from '../../atoms/Icon/Icon'
+import { Spinner } from '../../atoms/Spinner/Spinner'
 import { ErrorToast } from '../../atoms/Toast/Toast'
 
 function Setup() {
@@ -96,11 +96,4 @@ const Copy = styled.p`
 
 const Button = styled(GithubButton)`
   margin: 0 auto;
-`
-
-const Spinner = styled(ReactSpinner)`
-  margin: 0 auto;
-  color: var(--white) !important;
-  top: 50%;
-  transform: translateY(-50%);
 `
