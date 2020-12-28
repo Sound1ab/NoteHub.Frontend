@@ -2,21 +2,17 @@ import React, { ReactNode, createRef } from 'react'
 import { useUpload } from 'react-use-upload'
 
 import { useCodeMirror } from '../../../../../hooks/context/useCodeMirror'
-import { useContextMenu } from '../../../../../hooks/utils/useContextMenu'
-import { useDropzone } from '../../../../../hooks/utils/useDropzone'
 import { useReadFile } from '../../../../../hooks/file/useReadFile'
 import { useUpdateFile } from '../../../../../hooks/file/useUpdateFile'
-
-import { resolvers } from '../../../../../schema/mockResolvers'
+import { useContextMenu } from '../../../../../hooks/utils/useContextMenu'
+import { useDropzone } from '../../../../../hooks/utils/useDropzone'
 import {
-  cleanup,
   fireEvent,
   reactHooks,
   render,
   renderHook,
   waitFor,
 } from '../../../../../test-utils'
-import { MockProvider } from '../../../../providers/ApolloProvider/MockProvider'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 import { ContextMenu } from './ContextMenu'
 
@@ -30,8 +26,6 @@ jest.mock('../../../../../hooks/image/useCreateSignedUrl', () => ({
     () => Promise.resolve({ data: { createSignedUrl: 'MOCK_IMAGE_PATH' } }),
   ],
 }))
-
-afterEach(cleanup)
 
 describe('ContextMenu', () => {
   const toggleOrderedList = jest.fn()
@@ -105,15 +99,10 @@ describe('ContextMenu', () => {
     [drawLink, 'Link'],
     [drawTable, 'Table'],
   ])('should call codemirror using buttons', async (fn, title) => {
+    localState.currentPathVar('MOCK_FILE_PATH_1.md')
+
     const { getByLabelText } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{
-          currentPath: () => localState.currentPathVar('MOCK_FILE_PATH_1.md'),
-        }}
-      >
-        <ContextMenu targetRef={createRef()} />
-      </MockProvider>
+      <ContextMenu targetRef={createRef()} />
     )
 
     await fireEvent.click(getByLabelText(title))

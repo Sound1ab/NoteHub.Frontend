@@ -31,31 +31,28 @@ describe('MarkdownEditor', () => {
   })
 
   it('should show markdown editor', async () => {
+    localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md')
+
     const { getByLabelText } = await render(
-      <MarkdownEditor targetRef={createRef()} />,
-      {
-        localState: [
-          () =>
-            localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md'),
-        ],
-      }
+      <MarkdownEditor targetRef={createRef()} />
     )
 
     expect(getByLabelText('Markdown editor')).toBeInTheDocument()
   })
 
   it('should not show markdown editor if path is not a file', async () => {
+    localState.currentPathVar('MOCK_FOLDER_PATH')
+
     const { queryByLabelText } = await render(
-      <MarkdownEditor targetRef={createRef()} />,
-      {
-        localState: [() => localState.currentPathVar('MOCK_FOLDER_PATH')],
-      }
+      <MarkdownEditor targetRef={createRef()} />
     )
 
     expect(queryByLabelText('Markdown editor')).not.toBeInTheDocument()
   })
 
   it('should display the toast alert if updating file errors', async () => {
+    localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md')
+
     const { getByText, getByRole } = await render(
       <MarkdownEditor targetRef={createRef()} />,
       {
@@ -69,10 +66,6 @@ describe('MarkdownEditor', () => {
             },
           }),
         },
-        localState: [
-          () =>
-            localState.currentPathVar('MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md'),
-        ],
       }
     )
 
@@ -88,18 +81,14 @@ describe('MarkdownEditor', () => {
   })
 
   it('should underline text if file contains messages', async () => {
+    localState.currentPathVar('MOCK_FILE_PATH_4.md')
+    localState.retextSettingsVar({
+      ...localState.retextSettingsVar(),
+      [Retext_Settings.Spell]: true,
+    })
+
     const { getByText } = await render(
-      <MarkdownEditor targetRef={createRef()} />,
-      {
-        localState: [
-          () => localState.currentPathVar('MOCK_FILE_PATH_4.md'),
-          () =>
-            localState.retextSettingsVar({
-              ...localState.retextSettingsVar(),
-              [Retext_Settings.Spell]: true,
-            }),
-        ],
-      }
+      <MarkdownEditor targetRef={createRef()} />
     )
 
     await waitFor(() => {
@@ -111,18 +100,14 @@ describe('MarkdownEditor', () => {
   })
 
   it('should display message widget when marker is clicked', async () => {
+    localState.currentPathVar('MOCK_FILE_PATH_4.md')
+    localState.retextSettingsVar({
+      ...localState.retextSettingsVar(),
+      [Retext_Settings.Spell]: true,
+    })
+
     const { getByText } = await render(
-      <MarkdownEditor targetRef={createRef()} />,
-      {
-        localState: [
-          () => localState.currentPathVar('MOCK_FILE_PATH_4.md'),
-          () =>
-            localState.retextSettingsVar({
-              ...localState.retextSettingsVar(),
-              [Retext_Settings.Spell]: true,
-            }),
-        ],
-      }
+      <MarkdownEditor targetRef={createRef()} />
     )
 
     await userEvent.click(getByText('heelo'))

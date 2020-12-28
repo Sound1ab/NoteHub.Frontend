@@ -6,7 +6,6 @@ import {
   NormalizedCacheObject,
 } from '@apollo/client'
 import { SchemaLink } from '@apollo/client/link/schema'
-import { act } from '@testing-library/react'
 import { GraphQLSchema } from 'graphql'
 import {
   IMocks,
@@ -17,10 +16,10 @@ import { buildClientSchema, printSchema } from 'graphql/utilities'
 import React, { ReactNode } from 'react'
 
 import introspectionResult from '../../../schema.json'
-import { error } from '../../../services/ApolloLink/error'
 import { context } from '../../../services/ApolloLink/context'
+import { error } from '../../../services/ApolloLink/error'
 import { lazy } from '../../../services/ApolloLink/lazy'
-import { Fields, cacheOptions } from './cache'
+import { cacheOptions } from './cache'
 
 async function link(
   client: ApolloClient<NormalizedCacheObject>,
@@ -32,14 +31,9 @@ async function link(
 interface IMockProvider {
   children: ReactNode
   mockResolvers?: IMocks
-  localData?: Partial<Fields>
 }
 
-export const MockProvider = ({
-  children,
-  mockResolvers,
-  localData,
-}: IMockProvider) => {
+export const MockProvider = ({ children, mockResolvers }: IMockProvider) => {
   const cache = new InMemoryCache(cacheOptions)
 
   const schemaSDL = printSchema(
@@ -55,14 +49,6 @@ export const MockProvider = ({
   })
 
   addMockFunctionsToSchema({ schema, mocks: mockResolvers })
-
-  if (localData) {
-    act(() => {
-      Object.values(localData).forEach(
-        (entry) => entry && typeof entry === 'function' && entry()
-      )
-    })
-  }
 
   const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
     link: lazy(() => link(client, schema)),

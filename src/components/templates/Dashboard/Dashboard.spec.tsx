@@ -1,15 +1,12 @@
-import '@testing-library/jest-dom/extend-expect'
-
 import { act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import { files, resolvers } from '../../../schema/mockResolvers'
-import { cleanup, fireEvent, render, waitFor } from '../../../test-utils'
+import { fireEvent, render, waitFor } from '../../../test-utils'
 import { createNodes } from '../../../utils/createNodes'
 import { Node_Type } from '../../apollo/generated_components_typings'
 import { localState } from '../../providers/ApolloProvider/cache'
-import { MockProvider } from '../../providers/ApolloProvider/MockProvider'
 import Dashboard from './Dashboard'
 
 jest.setTimeout(10000)
@@ -40,8 +37,6 @@ jest.mock('../../../hooks/image/useCreateSignedUrl', () => ({
   ],
 }))
 
-afterEach(cleanup)
-
 describe('Dashboard', () => {
   // Mocking out for codemirror as JSDOM doesn't do this
   // @ts-ignore
@@ -71,11 +66,7 @@ describe('Dashboard', () => {
   })
 
   it('should add folder and file', async () => {
-    const { getByText, getByLabelText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <Dashboard />
-      </MockProvider>
-    )
+    const { getByText, getByLabelText } = await render(<Dashboard />)
 
     await fireEvent.click(getByLabelText('MOCK_FOLDER_PATH actions'))
 
@@ -100,17 +91,9 @@ describe('Dashboard', () => {
 
   it('should insert uploaded image at cursor position', async () => {
     const { path } = fileNode
+    localState.currentPathVar(path)
 
-    const { getByLabelText, getByText } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{
-          currentPath: () => localState.currentPathVar(path),
-        }}
-      >
-        <Dashboard />
-      </MockProvider>
-    )
+    const { getByLabelText, getByText } = await render(<Dashboard />)
 
     await fireEvent.contextMenu(getByLabelText('Markdown editor'))
 
@@ -134,26 +117,20 @@ describe('Dashboard', () => {
 
   it.skip('should show alert if deleting a file errors', async () => {
     const { path } = fileNode
+    localState.currentPathVar(path)
 
-    const { getByLabelText, getByText } = await render(
-      <MockProvider
-        localData={{
-          currentPath: () => localState.currentPathVar(path),
-        }}
-        mockResolvers={{
-          ...resolvers,
-          Mutation: () => ({
-            ...resolvers.Mutation(),
-            deleteFile: (): File => {
-              throw new Error('mock error')
-            },
-          }),
-        }}
-      >
-        <Dashboard />
-      </MockProvider>,
-      { enableToast: true }
-    )
+    const { getByLabelText, getByText } = await render(<Dashboard />, {
+      enableToast: true,
+      resolvers: {
+        ...resolvers,
+        Mutation: () => ({
+          ...resolvers.Mutation(),
+          deleteFile: (): File => {
+            throw new Error('mock error')
+          },
+        }),
+      },
+    })
 
     // Open folder
     await fireEvent.click(getByText('MOCK_FOLDER_PATH'))
@@ -175,17 +152,9 @@ describe('Dashboard', () => {
 
   it.skip('should show mdx preview when preview is toggled', async () => {
     const { path } = fileNode
+    localState.currentPathVar(path)
 
-    const { getByTitle, container } = await render(
-      <MockProvider
-        mockResolvers={resolvers}
-        localData={{
-          currentPath: () => localState.currentPathVar(path),
-        }}
-      >
-        <Dashboard />
-      </MockProvider>
-    )
+    const { getByTitle, container } = await render(<Dashboard />)
 
     await fireEvent.click(getByTitle('Toggle side by side'))
 

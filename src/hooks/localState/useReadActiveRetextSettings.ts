@@ -7,7 +7,7 @@ import {
 
 export const ReadActiveRetextSettings = gql`
   query ReadActiveRetextSettings {
-    activeRetextSettings @client(always: true)
+    activeRetextSettings @client
   }
 `
 

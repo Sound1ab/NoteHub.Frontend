@@ -1,6 +1,8 @@
 /* eslint-disable */
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -12,9 +14,11 @@ export type Scalars = {
   Upload: any;
 };
 
+
 export type Query = {
   __typename?: 'Query';
   activeRetextSettings?: Maybe<Array<Retext_Settings>>;
+  fileTree?: Maybe<TreeNode>;
   isDarkMode: Scalars['Boolean'];
   login: Scalars['String'];
   logout: Scalars['String'];
@@ -188,6 +192,28 @@ export enum CacheControlScope {
 }
 
 
+export type FileNode = {
+  __typename?: 'FileNode';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  path: Scalars['String'];
+  type?: Maybe<Node_Type>;
+  isOptimistic?: Maybe<Scalars['Boolean']>;
+};
+
+export type FolderNode = {
+  __typename?: 'FolderNode';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  toggled?: Maybe<Scalars['Boolean']>;
+  path: Scalars['String'];
+  type?: Maybe<Node_Type>;
+  children?: Maybe<Array<Maybe<TreeNode>>>;
+  isOptimistic?: Maybe<Scalars['Boolean']>;
+};
+
+export type TreeNode = FileNode | FolderNode;
+
 export type TreeFileFragment = (
   { __typename?: 'File' }
   & Pick<File, 'id' | 'path' | 'type' | 'url' | 'sha'>
@@ -208,6 +234,18 @@ export type GithubUserFragment = (
   { __typename?: 'GithubUser' }
   & Pick<GithubUser, 'id' | 'login' | 'avatar_url' | 'html_url' | 'name'>
 );
+
+type TreeNode_FileNode_Fragment = (
+  { __typename?: 'FileNode' }
+  & Pick<FileNode, 'id' | 'name' | 'path' | 'type' | 'isOptimistic'>
+);
+
+type TreeNode_FolderNode_Fragment = (
+  { __typename?: 'FolderNode' }
+  & Pick<FolderNode, 'id' | 'name' | 'toggled' | 'path' | 'type' | 'isOptimistic'>
+);
+
+export type TreeNodeFragment = TreeNode_FileNode_Fragment | TreeNode_FolderNode_Fragment;
 
 export type LoginQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -317,6 +355,27 @@ export type ReadActiveRetextSettingsQuery = (
   & Pick<Query, 'activeRetextSettings'>
 );
 
+export type ReadFileTreeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ReadFileTreeQuery = (
+  { __typename?: 'Query' }
+  & { fileTree?: Maybe<(
+    { __typename?: 'FileNode' }
+    & Pick<FileNode, 'id' | 'name' | 'path' | 'type' | 'isOptimistic'>
+  ) | (
+    { __typename?: 'FolderNode' }
+    & Pick<FolderNode, 'id' | 'name' | 'toggled' | 'path' | 'type' | 'isOptimistic'>
+    & { children?: Maybe<Array<Maybe<(
+      { __typename?: 'FileNode' }
+      & TreeNode_FileNode_Fragment
+    ) | (
+      { __typename?: 'FolderNode' }
+      & TreeNode_FolderNode_Fragment
+    )>>> }
+  )> }
+);
+
 export type CreateRepoMutationVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -407,7 +466,20 @@ export type Unnamed_1_Query = (
       }
       const result: IntrospectionResultData = {
   "__schema": {
-    "types": []
+    "types": [
+      {
+        "kind": "UNION",
+        "name": "TreeNode",
+        "possibleTypes": [
+          {
+            "name": "FileNode"
+          },
+          {
+            "name": "FolderNode"
+          }
+        ]
+      }
+    ]
   }
 };
       export default result;

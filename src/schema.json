@@ -11,7 +11,7 @@
       {
         "kind": "OBJECT",
         "name": "Query",
-        "description": "",
+        "description": null,
         "fields": [
           {
             "name": "activeRetextSettings",
@@ -34,6 +34,18 @@
             "deprecationReason": null
           },
           {
+            "name": "fileTree",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "UNION",
+              "name": "TreeNode",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "isDarkMode",
             "description": null,
             "args": [],
@@ -51,7 +63,7 @@
           },
           {
             "name": "login",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -67,7 +79,7 @@
           },
           {
             "name": "logout",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -83,7 +95,7 @@
           },
           {
             "name": "readFile",
-            "description": "",
+            "description": null,
             "args": [
               {
                 "name": "path",
@@ -110,7 +122,7 @@
           },
           {
             "name": "readFiles",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "LIST",
@@ -130,7 +142,7 @@
           },
           {
             "name": "readGithubUser",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -142,7 +154,7 @@
           },
           {
             "name": "readGithubUserAccessToken",
-            "description": "",
+            "description": null,
             "args": [
               {
                 "name": "code",
@@ -187,7 +199,7 @@
           },
           {
             "name": "readImage",
-            "description": "",
+            "description": null,
             "args": [
               {
                 "name": "path",
@@ -214,7 +226,7 @@
           },
           {
             "name": "readRepo",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -226,7 +238,7 @@
           },
           {
             "name": "refresh",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -265,11 +277,11 @@
       {
         "kind": "OBJECT",
         "name": "File",
-        "description": "",
+        "description": null,
         "fields": [
           {
             "name": "id",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -285,7 +297,7 @@
           },
           {
             "name": "path",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -301,7 +313,7 @@
           },
           {
             "name": "type",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -317,7 +329,7 @@
           },
           {
             "name": "sha",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -333,7 +345,7 @@
           },
           {
             "name": "url",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -349,7 +361,7 @@
           },
           {
             "name": "filename",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -361,7 +373,7 @@
           },
           {
             "name": "content",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -390,20 +402,20 @@
       {
         "kind": "ENUM",
         "name": "NODE_TYPE",
-        "description": "",
+        "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
             "name": "FILE",
-            "description": "",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "FOLDER",
-            "description": "",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -413,11 +425,11 @@
       {
         "kind": "OBJECT",
         "name": "Repo",
-        "description": "",
+        "description": null,
         "fields": [
           {
             "name": "id",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -433,7 +445,7 @@
           },
           {
             "name": "node_id",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -449,7 +461,7 @@
           },
           {
             "name": "name",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -465,7 +477,7 @@
           },
           {
             "name": "full_name",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -481,7 +493,7 @@
           },
           {
             "name": "description",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -493,7 +505,7 @@
           },
           {
             "name": "private",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -526,11 +538,11 @@
       {
         "kind": "OBJECT",
         "name": "GithubUser",
-        "description": "",
+        "description": null,
         "fields": [
           {
             "name": "id",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -546,7 +558,7 @@
           },
           {
             "name": "login",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -562,7 +574,7 @@
           },
           {
             "name": "avatar_url",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -578,7 +590,7 @@
           },
           {
             "name": "html_url",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -594,7 +606,7 @@
           },
           {
             "name": "name",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -613,11 +625,11 @@
       {
         "kind": "OBJECT",
         "name": "Mutation",
-        "description": "",
+        "description": null,
         "fields": [
           {
             "name": "createFile",
-            "description": "",
+            "description": null,
             "args": [
               {
                 "name": "input",
@@ -644,7 +656,7 @@
           },
           {
             "name": "updateFile",
-            "description": "",
+            "description": null,
             "args": [
               {
                 "name": "input",
@@ -671,7 +683,7 @@
           },
           {
             "name": "deleteFile",
-            "description": "",
+            "description": null,
             "args": [
               {
                 "name": "input",
@@ -698,7 +710,7 @@
           },
           {
             "name": "moveFile",
-            "description": "",
+            "description": null,
             "args": [
               {
                 "name": "input",
@@ -725,7 +737,7 @@
           },
           {
             "name": "createImage",
-            "description": "",
+            "description": null,
             "args": [
               {
                 "name": "input",
@@ -752,7 +764,7 @@
           },
           {
             "name": "updateImage",
-            "description": "",
+            "description": null,
             "args": [
               {
                 "name": "input",
@@ -779,7 +791,7 @@
           },
           {
             "name": "deleteImage",
-            "description": "",
+            "description": null,
             "args": [
               {
                 "name": "input",
@@ -806,7 +818,7 @@
           },
           {
             "name": "createSignedUrl",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -818,7 +830,7 @@
           },
           {
             "name": "createRepo",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -830,7 +842,7 @@
           },
           {
             "name": "updateRepo",
-            "description": "",
+            "description": null,
             "args": [
               {
                 "name": "input",
@@ -857,7 +869,7 @@
           },
           {
             "name": "deleteRepo",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -876,12 +888,12 @@
       {
         "kind": "INPUT_OBJECT",
         "name": "CreateFileInput",
-        "description": "",
+        "description": null,
         "fields": null,
         "inputFields": [
           {
             "name": "path",
-            "description": "",
+            "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -895,7 +907,7 @@
           },
           {
             "name": "content",
-            "description": "",
+            "description": null,
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -905,7 +917,7 @@
           },
           {
             "name": "retextSettings",
-            "description": "",
+            "description": null,
             "type": {
               "kind": "LIST",
               "name": null,
@@ -929,38 +941,38 @@
       {
         "kind": "ENUM",
         "name": "RETEXT_SETTINGS",
-        "description": "",
+        "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
             "name": "SPELL",
-            "description": "",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "EQUALITY",
-            "description": "",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INDEFINITE_ARTICLE",
-            "description": "",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "REPEATED_WORDS",
-            "description": "",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "READABILITY",
-            "description": "",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -970,12 +982,12 @@
       {
         "kind": "INPUT_OBJECT",
         "name": "UpdateFileInput",
-        "description": "",
+        "description": null,
         "fields": null,
         "inputFields": [
           {
             "name": "path",
-            "description": "",
+            "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -989,7 +1001,7 @@
           },
           {
             "name": "content",
-            "description": "",
+            "description": null,
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -999,7 +1011,7 @@
           },
           {
             "name": "retextSettings",
-            "description": "",
+            "description": null,
             "type": {
               "kind": "LIST",
               "name": null,
@@ -1023,12 +1035,12 @@
       {
         "kind": "INPUT_OBJECT",
         "name": "DeleteFileInput",
-        "description": "",
+        "description": null,
         "fields": null,
         "inputFields": [
           {
             "name": "path",
-            "description": "",
+            "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -1048,12 +1060,12 @@
       {
         "kind": "INPUT_OBJECT",
         "name": "MoveFileInput",
-        "description": "",
+        "description": null,
         "fields": null,
         "inputFields": [
           {
             "name": "path",
-            "description": "",
+            "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -1067,7 +1079,7 @@
           },
           {
             "name": "newPath",
-            "description": "",
+            "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -1087,12 +1099,12 @@
       {
         "kind": "INPUT_OBJECT",
         "name": "UpdateRepoInput",
-        "description": "",
+        "description": null,
         "fields": null,
         "inputFields": [
           {
             "name": "description",
-            "description": "",
+            "description": null,
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -1102,7 +1114,7 @@
           },
           {
             "name": "private",
-            "description": "",
+            "description": null,
             "type": {
               "kind": "SCALAR",
               "name": "Boolean",
@@ -1118,11 +1130,11 @@
       {
         "kind": "OBJECT",
         "name": "Links",
-        "description": "",
+        "description": null,
         "fields": [
           {
             "name": "html",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1145,11 +1157,11 @@
       {
         "kind": "OBJECT",
         "name": "ModelFileConnection",
-        "description": "",
+        "description": null,
         "fields": [
           {
             "name": "items",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1180,11 +1192,11 @@
       {
         "kind": "OBJECT",
         "name": "ModelRepoConnection",
-        "description": "",
+        "description": null,
         "fields": [
           {
             "name": "items",
-            "description": "",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1215,20 +1227,20 @@
       {
         "kind": "ENUM",
         "name": "CacheControlScope",
-        "description": "",
+        "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
             "name": "PUBLIC",
-            "description": "",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PRIVATE",
-            "description": "",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -1244,6 +1256,221 @@
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "FileNode",
+        "description": null,
+        "fields": [
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "path",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "type",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NODE_TYPE",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "isOptimistic",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "FolderNode",
+        "description": null,
+        "fields": [
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "toggled",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "path",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "type",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NODE_TYPE",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "children",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "UNION",
+                "name": "TreeNode",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "isOptimistic",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "UNION",
+        "name": "TreeNode",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "FileNode",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "FolderNode",
+            "ofType": null
+          }
+        ]
       },
       {
         "kind": "OBJECT",
@@ -1518,7 +1745,18 @@
           {
             "name": "inputFields",
             "description": null,
-            "args": [],
+            "args": [
+              {
+                "name": "includeDeprecated",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false"
+              }
+            ],
             "type": {
               "kind": "LIST",
               "name": null,
@@ -1648,7 +1886,18 @@
           {
             "name": "args",
             "description": null,
-            "args": [],
+            "args": [
+              {
+                "name": "includeDeprecated",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false"
+              }
+            ],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -1771,6 +2020,34 @@
           {
             "name": "defaultValue",
             "description": "A GraphQL-formatted string representing the default value for this input value.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "isDeprecated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "deprecationReason",
+            "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2084,26 +2361,32 @@
     ],
     "directives": [
       {
-        "name": "skip",
-        "description": "Directs the executor to skip this field or fragment when the `if` argument is true.",
+        "name": "cacheControl",
+        "description": null,
         "isRepeatable": false,
         "locations": [
-          "FIELD",
-          "FRAGMENT_SPREAD",
-          "INLINE_FRAGMENT"
+          "FIELD_DEFINITION",
+          "OBJECT",
+          "INTERFACE"
         ],
         "args": [
           {
-            "name": "if",
-            "description": "Skipped when true.",
+            "name": "maxAge",
+            "description": null,
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "scope",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "CacheControlScope",
+              "ofType": null
             },
             "defaultValue": null
           }
@@ -2136,11 +2419,39 @@
         ]
       },
       {
+        "name": "skip",
+        "description": "Directs the executor to skip this field or fragment when the `if` argument is true.",
+        "isRepeatable": false,
+        "locations": [
+          "FIELD",
+          "FRAGMENT_SPREAD",
+          "INLINE_FRAGMENT"
+        ],
+        "args": [
+          {
+            "name": "if",
+            "description": "Skipped when true.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ]
+      },
+      {
         "name": "deprecated",
         "description": "Marks an element of a GraphQL schema as no longer supported.",
         "isRepeatable": false,
         "locations": [
           "FIELD_DEFINITION",
+          "ARGUMENT_DEFINITION",
+          "INPUT_FIELD_DEFINITION",
           "ENUM_VALUE"
         ],
         "args": [
