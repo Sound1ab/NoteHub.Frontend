@@ -78,7 +78,7 @@ export function Node({
           {children}
           <Heading isDisabled={node.isOptimistic}>{name}</Heading>
         </Details>
-        <Actions onClick={handleToggleMenu}>
+        <Actions onClick={handleToggleMenu} isDisabled={node.isOptimistic}>
           <StyledIcon
             size="xs"
             icon="ellipsis-h"
@@ -167,7 +167,7 @@ const Heading = styled.h4<{
   user-select: none;
 `
 
-const Actions = styled(Button)`
+const Actions = styled(Button)<{ isDisabled: boolean }>`
   flex: 0;
   position: relative;
   display: flex;
@@ -175,6 +175,7 @@ const Actions = styled(Button)`
   padding: ${({ theme }) => theme.spacing.xs};
   color: var(--text-primary);
   opacity: 0;
+  cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
