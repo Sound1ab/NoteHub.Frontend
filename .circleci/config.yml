@@ -40,6 +40,16 @@ commands:
     steps:
       - run: sudo apt-get install python-dev python-pip
       - run: sudo pip install awscli
+  upload-to-s3:
+    description: 'Upload content to s3 and set cache control headers'
+    parameters:
+      bucket:
+        description: 'The name of the environment to deploy to.'
+        type: string
+    steps:
+      - run: aws configure set default.s3.signature_version s3v4
+      - run: aws --region us-east-1 s3 sync build s3://<< parameters.bucket >>/ --delete
+      - run: aws s3 cp s3://<< parameters.bucket >>/ s3://<< parameters.bucket >>/ --exclude "*" --include "*.js" --include "*.webp" --include "*.css" --include "*.png" --recursive --metadata-directive REPLACE --expires 2034-01-01T00:00:00Z --acl public-read --cache-control max-age=2592000,public
   invalidate-cache:
     description: 'Invalidate Cloudfront cache'
     steps:
@@ -106,8 +116,8 @@ jobs:
       - checkout
       - attach-to-workspace
       - configure-aws
-      - run: aws configure set default.s3.signature_version s3v4
-      - run: aws --region us-east-1 s3 sync build s3://<< parameters.bucket >>/ --delete
+      - upload-to-s3:
+          bucket: << parameters.bucket >>
       - invalidate-cache
 
 workflows:
