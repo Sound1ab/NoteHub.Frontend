@@ -33,7 +33,7 @@ export function Node({
   dndRef,
   className,
 }: INode) {
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>(
     containerRef
   )
@@ -65,6 +65,7 @@ export function Node({
   return (
     <StyledListItem ref={dndRef}>
       <Wrapper
+        isOpen={isOpen}
         isDisabled={node.isOptimistic}
         isActive={isActive}
         level={level}
@@ -78,13 +79,13 @@ export function Node({
           {children}
           <Heading isDisabled={node.isOptimistic}>{name}</Heading>
         </Details>
-        <Actions onClick={handleToggleMenu} isDisabled={node.isOptimistic}>
-          <StyledIcon
-            size="xs"
-            icon="ellipsis-h"
-            isDisabled={isOpen}
-            aria-label={`${name} actions`}
-          />
+        <Actions
+          onClick={handleToggleMenu}
+          isDisabled={node.isOptimistic}
+          isOpen={isOpen}
+          aria-label={`${name} actions`}
+        >
+          <StyledIcon size="xs" icon="ellipsis-h" isDisabled={isOpen} />
         </Actions>
       </Wrapper>
       {isOpen && (
@@ -110,6 +111,7 @@ const Wrapper = styled.div<
     type: string
     isActive: boolean
     isDisabled: boolean
+    isOpen: boolean
   }
 >`
   position: relative;
@@ -126,11 +128,21 @@ const Wrapper = styled.div<
     return css`calc(calc(${level} * ${theme.spacing.s}) + ${additionalPadding})`
   }};
   cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
-  background-color: ${({ isActive }) =>
-    isActive ? css`var(--background-secondary)` : 'transparent'};
   box-shadow: inset ${({ theme }) => theme.spacing.xxxs} 0px 0px 0px
     ${({ isActive }) => (isActive ? css`var(--accent-primary)` : 'transparent')};
   width: 100%;
+
+  ${({ isActive }) =>
+    isActive &&
+    css`
+      background-color: var(--background-secondary);
+    `};
+
+  ${({ isOpen }) =>
+    isOpen &&
+    css`
+      background-color: var(--background-tertiary);
+    `};
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
@@ -167,7 +179,7 @@ const Heading = styled.h4<{
   user-select: none;
 `
 
-const Actions = styled(Button)<{ isDisabled: boolean }>`
+const Actions = styled(Button)<{ isDisabled: boolean; isOpen: boolean }>`
   flex: 0;
   position: relative;
   display: flex;
@@ -176,6 +188,13 @@ const Actions = styled(Button)<{ isDisabled: boolean }>`
   color: var(--text-primary);
   opacity: 0;
   cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
+
+  ${({ isOpen }) =>
+    isOpen &&
+    css`
+      opacity: 1;
+      background-color: var(--background-quaternary);
+    `};
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {

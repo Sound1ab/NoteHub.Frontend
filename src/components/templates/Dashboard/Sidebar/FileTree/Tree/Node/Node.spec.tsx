@@ -1,10 +1,9 @@
 import React from 'react'
 
-import { files, resolvers } from '../../../../../../../schema/mockResolvers'
+import { files } from '../../../../../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../../../../../test-utils'
 import { createNodes } from '../../../../../../../utils/createNodes'
 import { Node_Type } from '../../../../../../apollo/generated_components_typings'
-import { MockProvider } from '../../../../../../providers/ApolloProvider/MockProvider'
 import { Node } from './Node'
 
 describe('Node', () => {
@@ -29,14 +28,12 @@ describe('Node', () => {
 
   it('should call onClick callback', async () => {
     const { getByText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <Node
-          node={fileNode}
-          level={1}
-          dropdownItems={dropdownItems}
-          onClick={onClick}
-        />
-      </MockProvider>
+      <Node
+        node={fileNode}
+        level={1}
+        dropdownItems={dropdownItems}
+        onClick={onClick}
+      />
     )
 
     await fireEvent.click(getByText(fileNode.name))
@@ -46,18 +43,43 @@ describe('Node', () => {
 
   it('should open dropdown', async () => {
     const { getByLabelText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <Node
-          node={fileNode}
-          level={1}
-          dropdownItems={dropdownItems}
-          onClick={onClick}
-        />
-      </MockProvider>
+      <Node
+        node={fileNode}
+        level={1}
+        dropdownItems={dropdownItems}
+        onClick={onClick}
+      />
     )
 
     await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
 
     expect(getByLabelText('Create file')).toBeInTheDocument()
+  })
+
+  it('should add styles when dropdown is open', async () => {
+    const { getByLabelText } = await render(
+      <Node
+        node={fileNode}
+        level={1}
+        dropdownItems={dropdownItems}
+        onClick={onClick}
+      />
+    )
+
+    const actions = getByLabelText(`${fileNode.name} actions`)
+
+    await fireEvent.click(actions)
+
+    expect(getByLabelText('file')).toHaveStyleRule(
+      'background-color',
+      'var(--background-tertiary)'
+    )
+
+    expect(actions).toHaveStyleRule('opacity', '1')
+
+    expect(actions).toHaveStyleRule(
+      'background-color',
+      'var(--background-quaternary)'
+    )
   })
 })
