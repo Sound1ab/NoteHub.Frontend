@@ -14,7 +14,7 @@ const LandingPage = lazy(
 export function Router() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<Spinner name="folding-cube" />}>
+      <Suspense fallback={<Spinner />}>
         <Switch>
           <Route path="/" exact component={LandingPage} />
           <PrivateRoute path="/dashboard" exact>

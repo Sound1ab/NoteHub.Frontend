@@ -4,9 +4,11 @@ import { CONTAINER_ID } from '../../../../../enums'
 import { useCreateFile } from '../../../../../hooks/file/useCreateFile'
 import { useDeleteFile } from '../../../../../hooks/file/useDeleteFile'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
+import { useReadCurrentPath } from '../../../../../hooks/localState/useReadCurrentPath'
 import { useReadTabs } from '../../../../../hooks/localState/useReadTabs'
 import { IFolderNode, ITreeNode } from '../../../../../types'
 import { extractFilename } from '../../../../../utils/extractFilename'
+import { getNextTab } from '../../../../../utils/getNextTab'
 import { removeLastSlug } from '../../../../../utils/removeLastSlug'
 import { scrollIntoView } from '../../../../../utils/scrollIntoView'
 import { Node_Type } from '../../../../apollo/generated_components_typings'
@@ -39,6 +41,7 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
   const [listOfToggledPaths, setListOfToggledPaths] = useState<Set<string>>(
     new Set([])
   )
+  const currentPath = useReadCurrentPath()
   const [activePath, setActivePath] = useState('')
   const [createFile, { loading: createLoading }] = useCreateFile()
   const [moveFile, { loading: moveLoading }] = useMoveFile()
@@ -126,8 +129,22 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
 
   async function handleDeleteFile(node: ITreeNode) {
     try {
+      // If the file deleted is active, update the active file based on
+      // the open tabs
+      if (node.path === currentPath) {
+        const nextTab = getNextTab([...tabs], node.path)
+
+        if (!nextTab) {
+          localState.currentPathVar('')
+        } else {
+          localState.currentPathVar(nextTab)
+        }
+      }
+
       await deleteFile(node)
     } catch (error) {
+      localState.currentPathVar(node.path)
+
       ErrorToast(`There was an issue deleting your file. ${error}`)
     }
   }
@@ -153,10 +170,31 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
 
     openFoldersInPath(newPath)
 
+    const restoreTabs = [...tabs]
+    const restorePath = node.path
+
     try {
+      localState.tabsVar(
+        new Set([...tabs].map((tab) => (tab === node.path ? newPath : tab)))
+      )
+
       await moveFile(node, newPath)
+
+      setActivePath(newPath)
+
+      if (node.path === currentPath) {
+        localState.currentPathVar(newPath)
+      }
     } catch {
-      ErrorToast('Could not move file')
+      localState.tabsVar(new Set(restoreTabs))
+
+      if (restorePath === currentPath) {
+        localState.currentPathVar(restorePath)
+      }
+
+      setActivePath(restorePath)
+
+      ErrorToast('Could not rename file')
     }
   }
 

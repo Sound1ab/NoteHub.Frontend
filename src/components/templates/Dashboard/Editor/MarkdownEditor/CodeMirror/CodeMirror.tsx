@@ -138,6 +138,12 @@ export function CodeMirror() {
     const handleChange = (editor: Editor) => {
       if (!mountedRef.current) return
 
+      const newValue = editor.getValue()
+
+      if (newValue === value) {
+        return
+      }
+
       onUpdateFile?.(editor.getValue())
     }
     const handleCursorActivity = (editor: Editor) => {
@@ -153,7 +159,7 @@ export function CodeMirror() {
       editor.off('change', handleChange)
       editor.off('cursorActivity', handleCursorActivity)
     }
-  }, [onUpdateFile, onMarkdownCursorPosition])
+  }, [onUpdateFile, onMarkdownCursorPosition, value])
 
   useEffect(() => {
     const editor = codeMirrorRef.current

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { useCodeMirror } from '../../../../hooks/context/useCodeMirror'
+import { useReadFile } from '../../../../hooks/file/useReadFile'
 import { useReadTabs } from '../../../../hooks/localState/useReadTabs'
 import { extractFilename } from '../../../../utils/extractFilename'
 import { Icon } from '../../../atoms/Icon/Icon'
@@ -17,12 +18,18 @@ export function Toolbar() {
     toggleSideBySide,
   } = useCodeMirror()
   const tabs = [...useReadTabs()]
+  const { file } = useReadFile()
 
   return (
     <StyledToolbar>
       <Tabs>
         {tabs.map((path) => (
-          <Tab key={path} name={extractFilename(path)} path={path} />
+          <Tab
+            key={path}
+            name={extractFilename(path)}
+            path={path}
+            isDisabled={file?.path === path && file.sha === 'optimistic'}
+          />
         ))}
       </Tabs>
       <Actions>

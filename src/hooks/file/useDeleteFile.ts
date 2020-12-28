@@ -10,6 +10,7 @@ import {
 import { localState } from '../../components/providers/ApolloProvider/cache'
 import { FileFragment } from '../../fragments'
 import { ITreeNode } from '../../types'
+import { useReadTabs } from '../localState/useReadTabs'
 
 export const DeleteFileDocument = gql`
   ${FileFragment}
@@ -24,6 +25,8 @@ export function useDeleteFile(): [
   (file?: ITreeNode) => Promise<ExecutionResult<DeleteFileMutation>>,
   MutationResult<DeleteFileMutation>
 ] {
+  const tabs = useReadTabs()
+
   const [mutation, mutationResult] = useMutation<
     DeleteFileMutation,
     DeleteFileMutationVariables
@@ -44,6 +47,10 @@ export function useDeleteFile(): [
               cache.evict({ id })
             }
 
+            tabs.delete(file.path)
+
+            localState.tabsVar(new Set(tabs))
+
             return existingFileRefs.filter(
               (cachedFiles: File & { [storeFieldName: string]: StoreValue }) =>
                 cachedFiles.path !== file.path
@@ -61,8 +68,6 @@ export function useDeleteFile(): [
     }
 
     const { path, type, name, id } = file
-
-    localState.currentPathVar('')
 
     return mutation({
       variables: {

@@ -194,4 +194,55 @@ describe('Dashboard', () => {
 
     expect(tabTwo).not.toBeInTheDocument()
   })
+
+  it('should remove tab when file is deleted from the sidebar', async () => {
+    const { getByLabelText, getByText, getByTitle } = await render(
+      <Dashboard />
+    )
+
+    await userEvent.click(getByText('MOCK_FILE_PATH_3.md'))
+
+    const tabOne = getByTitle('MOCK_FILE_PATH_3.md')
+
+    // open file menu
+    await userEvent.click(getByLabelText('MOCK_FILE_PATH_3.md actions'))
+
+    await userEvent.click(getByLabelText('Delete'))
+
+    expect(tabOne).not.toBeInTheDocument()
+  })
+
+  it('should change name of tab when file is renamed from the sidebar', async () => {
+    const { getByLabelText, getByText, getByTitle } = await render(
+      <Dashboard />
+    )
+
+    await userEvent.click(getByText('MOCK_FILE_PATH_3.md'))
+
+    const tabOne = getByTitle('MOCK_FILE_PATH_3.md')
+
+    expect(tabOne).toBeInTheDocument()
+
+    // open file menu
+    await userEvent.click(getByLabelText('MOCK_FILE_PATH_3.md actions'))
+
+    await userEvent.click(getByLabelText('Rename'))
+
+    // Insert file name into input and submit
+    const input = getByLabelText('Input file name')
+
+    await fireEvent.change(input, {
+      target: { value: 'NEW_MOCK_FILE_PATH' },
+    })
+
+    expect(input).toHaveAttribute('value', 'NEW_MOCK_FILE_PATH')
+
+    const form = getByLabelText('File name form')
+
+    await fireEvent.submit(form)
+
+    expect(tabOne).not.toBeInTheDocument()
+
+    expect(getByTitle('NEW_MOCK_FILE_PATH.md')).toBeInTheDocument()
+  })
 })

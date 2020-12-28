@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 
 import { useReadCurrentPath } from '../../../../../hooks/localState/useReadCurrentPath'
 import { useReadTabs } from '../../../../../hooks/localState/useReadTabs'
+import { getNextTab } from '../../../../../utils/getNextTab'
 import { Button } from '../../../../atoms/Button/Button'
 import { Icon } from '../../../../atoms/Icon/Icon'
 import { localState } from '../../../../providers/ApolloProvider/cache'
@@ -10,24 +11,16 @@ import { localState } from '../../../../providers/ApolloProvider/cache'
 interface ITab {
   name: string
   path: string
+  isDisabled: boolean
 }
 
-export function Tab({ name, path }: ITab) {
+export function Tab({ name, path, isDisabled }: ITab) {
   const currentPath = useReadCurrentPath()
   const tabs = useReadTabs()
   const isActive = path === currentPath
 
   function handleOnClick() {
     localState.currentPathVar(path)
-  }
-
-  function getNextTab(tabs: string[], tab: string) {
-    const index = tabs.findIndex((nextTab) => nextTab === tab)
-
-    const leftTab = tabs[index - 1]
-    const rightTab = tabs[index + 1]
-
-    return leftTab || rightTab || undefined
   }
 
   function handleOnClose(e: MouseEvent<HTMLElement>) {
@@ -48,14 +41,19 @@ export function Tab({ name, path }: ITab) {
   }
 
   return (
-    <Wrapper onClick={handleOnClick} isActive={isActive} title={path}>
-      <Heading>{name}</Heading>
+    <Wrapper
+      onClick={handleOnClick}
+      isActive={isActive}
+      title={path}
+      isDisabled={isDisabled}
+    >
+      <Heading isDisabled={isDisabled}>{name}</Heading>
       <Close icon="times" size="1x" onClick={handleOnClose} title="close" />
     </Wrapper>
   )
 }
 
-const Wrapper = styled(Button)<{ isActive: boolean }>`
+const Wrapper = styled(Button)<{ isActive: boolean; isDisabled: boolean }>`
   position: relative;
   display: flex;
   justify-content: center;
@@ -71,6 +69,7 @@ const Wrapper = styled(Button)<{ isActive: boolean }>`
     css`
       box-shadow: inset 0px -${theme.spacing.xxxs} 0px 0px var(--accent-primary);
     `};
+  cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
@@ -79,9 +78,14 @@ const Wrapper = styled(Button)<{ isActive: boolean }>`
   }
 `
 
-const Heading = styled.h5`
+const Heading = styled.h5<{ isDisabled: boolean }>`
   margin-bottom: 0;
   white-space: nowrap;
+  ${({ isDisabled }) =>
+    isDisabled &&
+    css`
+      color: var(--text-secondary);
+    `};
 `
 
 const Close = styled(Icon)`

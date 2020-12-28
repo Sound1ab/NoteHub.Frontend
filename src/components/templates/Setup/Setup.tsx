@@ -36,7 +36,7 @@ function Setup() {
     <Wrapper>
       <DialogBox>
         {loading ? (
-          <Spinner name="folding-cube" />
+          <Spinner />
         ) : (
           <>
             <Image src={image} alt="Man sat on laptop uploading" />
