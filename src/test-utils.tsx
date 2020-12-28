@@ -88,13 +88,11 @@ const customRender = async (
     waitForLoad?: boolean
     enableToast?: boolean
     resolvers?: IMocks
-    localState?: Fn[]
   }
 ) => {
   const waitForLoad = options?.waitForLoad ?? false
   const enableToast = options?.enableToast ?? false
   const resolvers = options?.resolvers
-  const localState = options?.localState
 
   if (enableToast) {
     // Toast uses setTimeout under the hood
@@ -117,14 +115,6 @@ const customRender = async (
 
   if (!waitForLoad) {
     await act(wait)
-  }
-
-  if (localState) {
-    await act(async () => {
-      localState.forEach((localState) => localState())
-
-      await wait()
-    })
   }
 
   return {
