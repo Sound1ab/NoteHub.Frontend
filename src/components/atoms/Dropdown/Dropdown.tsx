@@ -75,7 +75,7 @@ export function Dropdown({ items, onClose, containerRef }: IDropdownMenuProps) {
 }
 
 const StyledDropdown = styled.ul`
-  background-color: var(--background-primary);
+  background-color: var(--background-secondary);
   list-style: none;
   border-radius: 3px;
   white-space: pre;
