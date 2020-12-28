@@ -35,6 +35,14 @@ commands:
     description: 'Run typescript tests'
     steps:
       - run: yarn ts
+  build-react-app:
+    description: 'Builds env file and React application'
+    parameters:
+      env:
+        description: 'The name of the bucket to deploy to.'
+        type: string
+    steps:
+      - run: export REACT_APP_NODE_ENV=<< parameters.env >> && . ./.circleci/build_env.sh && yarn build
   configure-aws:
     description: 'Install dependencies for AWS and Serverless'
     steps:
@@ -104,7 +112,8 @@ jobs:
     steps:
       - checkout
       - restore-cached-dependencies
-      - run: export REACT_APP_NODE_ENV=<< parameters.env >> && . ./.circleci/build_env.sh && yarn build
+      - build-react-app:
+          env: << parameters.env >>
       - persist-to-workspace
   deploy:
     parameters:
