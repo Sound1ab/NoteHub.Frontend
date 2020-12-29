@@ -8,6 +8,7 @@ import { createNodes } from '../../../utils/createNodes'
 import { Node_Type } from '../../apollo/generated_components_typings'
 import { localState } from '../../providers/ApolloProvider/cache'
 import Dashboard from './Dashboard'
+import { FileTree } from './Sidebar/FileTree/FileTree'
 
 jest.setTimeout(10000)
 

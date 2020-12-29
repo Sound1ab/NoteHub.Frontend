@@ -104,25 +104,45 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
     handleOnClick(node.path)
   }
 
-  async function handleMove(file: ITreeNode, path: string, isOver: boolean) {
+  async function handleMove(node: ITreeNode, path: string, isOver: boolean) {
     if (!isOver) {
       return
     }
 
-    const name = extractFilename(file.path)
+    const name = extractFilename(node.path)
 
     const newPath = `${path}/${name}`
 
     // Return if we dropped the file in its original folder
-    if (newPath === file.path) {
+    if (newPath === node.path) {
       return
     }
 
     openFoldersInPath(newPath)
 
+    const restoreTabs = [...tabs]
+    const restorePath = node.path
+
     try {
-      await moveFile(file, newPath)
+      localState.tabsVar(
+        new Set([...tabs].map((tab) => (tab === node.path ? newPath : tab)))
+      )
+
+      await moveFile(node, newPath)
+
+      setActivePath(newPath)
+
+      if (node.path === currentPath) {
+        localState.currentPathVar(newPath)
+      }
     } catch {
+      localState.tabsVar(new Set(restoreTabs))
+
+      if (restorePath === currentPath) {
+        localState.currentPathVar(restorePath)
+      }
+
+      setActivePath(restorePath)
       ErrorToast('Could not move file')
     }
   }
