@@ -79,6 +79,14 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
 
     try {
       await createFile(path)
+
+      tabs.add(path)
+
+      localState.tabsVar(new Set(tabs))
+
+      localState.currentPathVar(path)
+
+      setActivePath(path)
     } catch (error) {
       ErrorToast(`There was an issue creating your file`)
     }
