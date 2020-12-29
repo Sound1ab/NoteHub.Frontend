@@ -78,9 +78,15 @@ export function useContextMenuDropdown() {
           hasSeparator: true,
         },
         {
-          heading: 'Components',
+          heading: 'MDX',
           onClick: actions.drawTableComponent,
-          title: 'Table mdx',
+          title: 'Table component',
+          isDisabled: !isMarkdownEditorActive,
+          icon: 'table' as const,
+        },
+        {
+          onClick: actions.drawTodoListComponent,
+          title: 'TodoList component',
           isDisabled: !isMarkdownEditorActive,
           icon: 'table' as const,
         },

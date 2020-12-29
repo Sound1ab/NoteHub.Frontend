@@ -634,6 +634,12 @@ const insertComponents = {
 />
 \`\`\``,
   ],
+  toDoList: [
+    '',
+    `\`\`\`mdx
+<TodoList storeKey="localStorageKey" />
+\`\`\``,
+  ],
 }
 
 export function drawLink(editor: EditorFromTextArea) {
@@ -658,4 +664,8 @@ export function drawHorizontalRule(editor: EditorFromTextArea) {
 
 export function drawTableComponent(editor: EditorFromTextArea) {
   _replaceSelection(editor, false, insertComponents.table)
+}
+
+export function drawTodoListComponent(editor: EditorFromTextArea) {
+  _replaceSelection(editor, false, insertComponents.toDoList)
 }

@@ -5,7 +5,7 @@ import { useReadCurrentPath } from '../../../../../hooks/localState/useReadCurre
 import { useReadTabs } from '../../../../../hooks/localState/useReadTabs'
 import { getNextTab } from '../../../../../utils/getNextTab'
 import { Button } from '../../../../atoms/Button/Button'
-import { Icon } from '../../../../atoms/Icon/Icon'
+import { Close } from '../../../../atoms/Close/Close'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 
 interface ITab {
@@ -86,15 +86,4 @@ const Heading = styled.h5<{ isDisabled: boolean }>`
     css`
       color: var(--text-secondary);
     `};
-`
-
-const Close = styled(Icon)`
-  color: var(--text-secondary);
-  margin-left: ${({ theme }) => theme.spacing.xxs};
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover:not(:disabled) {
-      background-color: var(--background-quaternary);
-    }
-  }
 `

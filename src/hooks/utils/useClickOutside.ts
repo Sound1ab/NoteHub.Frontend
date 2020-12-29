@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 export function useClickOutside(
-  callback: () => void,
+  callback?: () => void,
   ref?: React.Ref<HTMLElement>
 ) {
   useEffect(() => {
@@ -11,12 +11,12 @@ export function useClickOutside(
       if (!ref || ref.current?.contains(event.target as Element)) {
         return
       }
-      callback()
+      callback?.()
     }
 
     const handleKeyPressed = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        callback()
+        callback?.()
       }
     }
 

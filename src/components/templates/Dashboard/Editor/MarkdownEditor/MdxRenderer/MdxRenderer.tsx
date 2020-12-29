@@ -1,10 +1,11 @@
 import { Components, MDXProvider } from '@mdx-js/react'
 import React, { ReactNode } from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
 
 import { ThemeProvider } from '../../../../../providers/ThemeProvider/ThemeProvider'
+import { ErrorBoundary } from '../../../../../utility/ErrorBoundary/ErrorBoundary'
 import { CodeRenderer } from '../../CodeRenderer/CodeRenderer'
 import { Table } from '../Table/Table'
+import { TodoList } from '../TodoList/TodoList'
 import { createElement, transform, transpileMdx } from './utils'
 
 interface IMdxRenderer {
@@ -12,8 +13,9 @@ interface IMdxRenderer {
 }
 
 export function MdxRenderer({ mdxCode }: IMdxRenderer) {
-  const components: Components & { Table: ReactNode } = {
+  const components: Components & { [x: string]: ReactNode } = {
     Table,
+    TodoList,
   }
 
   let element: ReactNode
@@ -28,16 +30,15 @@ export function MdxRenderer({ mdxCode }: IMdxRenderer) {
     return <ErrorDisplay message={error.message} />
   }
 
-  try {
-    const component = renderToStaticMarkup(
+  return (
+    <ErrorBoundary
+      fallback={(errorMessage) => <ErrorDisplay message={errorMessage} />}
+    >
       <ThemeProvider>
         {() => {
           return <MDXProvider components={components}>{element}</MDXProvider>
         }}
       </ThemeProvider>
-    )
-    return <span dangerouslySetInnerHTML={{ __html: component }} />
-  } catch (error) {
-    return <ErrorDisplay message={error.message} />
-  }
+    </ErrorBoundary>
+  )
 }

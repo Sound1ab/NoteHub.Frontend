@@ -5,13 +5,14 @@ import { useClickOutside } from '../../../hooks/utils/useClickOutside'
 
 interface IInlineInput {
   value: string
-  clickOutsideCallback: () => void
+  clickOutsideCallback?: () => void
   handleOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void
+  onSubmit?: () => void
   inputAriaLabel: string
   formAriaLabel?: string
   isDisabled?: boolean
   icon?: ReactNode
+  iconAfter?: ReactNode
   type: 'text' | 'number' | 'submit'
   autocorrect?: 'on' | 'off'
   autocapitalize?: 'on' | 'off'
@@ -32,6 +33,7 @@ export function Input({
   autocorrect = 'off',
   autocapitalize = 'off',
   autoFocus,
+  iconAfter,
   ...rest
 }: IInlineInput) {
   const wrapperRef = useRef<HTMLFormElement | null>(null)
@@ -46,7 +48,14 @@ export function Input({
   }, [autoFocus])
 
   return (
-    <Form ref={wrapperRef} onSubmit={onSubmit} aria-label={formAriaLabel}>
+    <Form
+      ref={wrapperRef}
+      onSubmit={(e) => {
+        e.preventDefault()
+        onSubmit?.()
+      }}
+      aria-label={formAriaLabel}
+    >
       {icon}
       <StyledInput
         {...rest}
@@ -60,6 +69,7 @@ export function Input({
         autoCorrect={autocorrect}
         autoCapitalize={autocapitalize}
       />
+      {iconAfter}
       <HiddenSubmit type="submit" />
     </Form>
   )

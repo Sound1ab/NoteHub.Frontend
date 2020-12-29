@@ -11,6 +11,7 @@ import {
   drawLink,
   drawTable,
   drawTableComponent,
+  drawTodoListComponent,
   toggleBlockquote,
   toggleBold,
   toggleCodeBlock,
@@ -41,6 +42,7 @@ export interface IActions {
   drawLink: () => void
   drawTable: () => void
   drawTableComponent: () => void
+  drawTodoListComponent: () => void
 }
 
 export function CodeMirror() {
@@ -119,6 +121,7 @@ export function CodeMirror() {
       drawLink: () => drawLink(editor),
       drawTable: () => drawTable(editor),
       drawTableComponent: () => drawTableComponent(editor),
+      drawTodoListComponent: () => drawTodoListComponent(editor),
     })
 
     hydrate(editor, value)

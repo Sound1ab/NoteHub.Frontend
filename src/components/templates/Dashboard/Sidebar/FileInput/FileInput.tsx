@@ -41,9 +41,7 @@ export function FileInput({
     }))
   }
 
-  async function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
-    e.preventDefault()
-
+  async function handleSubmit() {
     onClickOutside()
 
     await onSubmit(name)

@@ -13,17 +13,12 @@ export function SearchInput() {
     localState.searchVar(value)
   }
 
-  function onSubmit(e: React.ChangeEvent<HTMLFormElement>) {
-    e.preventDefault()
-  }
-
   return (
     <Wrapper>
       <Input
         value={search}
         clickOutsideCallback={() => null}
         handleOnChange={handleOnChange}
-        onSubmit={onSubmit}
         inputAriaLabel="Search files"
         type="text"
         placeholder="Search"

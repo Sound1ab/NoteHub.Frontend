@@ -37,6 +37,8 @@ describe('ContextMenu', () => {
   const drawHorizontalRule = jest.fn()
   const drawLink = jest.fn()
   const drawTable = jest.fn()
+  const drawTableComponent = jest.fn()
+  const drawTodoListComponent = jest.fn()
 
   const updateFile = jest.fn()
 
@@ -53,6 +55,8 @@ describe('ContextMenu', () => {
         drawHorizontalRule,
         drawLink,
         drawTable,
+        drawTableComponent,
+        drawTodoListComponent,
       },
       editor: 'MOCK_EDITOR',
     })
@@ -98,6 +102,8 @@ describe('ContextMenu', () => {
     [drawHorizontalRule, 'Horizontal line'],
     [drawLink, 'Link'],
     [drawTable, 'Table'],
+    [drawTableComponent, 'Table component'],
+    [drawTodoListComponent, 'TodoList component'],
   ])('should call codemirror using buttons', async (fn, title) => {
     localState.currentPathVar('MOCK_FILE_PATH_1.md')
 
