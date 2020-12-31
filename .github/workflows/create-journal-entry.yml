@@ -1,0 +1,17 @@
+name: 'create-journal-entry'
+on:
+  schedule:
+    - cron: '1 */24 * * *' # Run action at 1 minute past midnight
+  workflow_dispatch:
+
+jobs:
+  create-journal-entry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses:  Sound1ab/NoteHub.Actions@v1
+        with:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO: ${{ secrets.REPO }}
+          ROOT_DIR: ${{ secrets.ROOT_DIR }}
+          COMMAND: 'create-journal-entry'
