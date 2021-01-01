@@ -67,7 +67,7 @@ describe('Dashboard', () => {
   })
 
   it('should add folder and file', async () => {
-    const { getByText, getByLabelText } = await render(<Dashboard />)
+    const { getByLabelText } = await render(<Dashboard />)
 
     await fireEvent.click(getByLabelText('MOCK_FOLDER_PATH actions'))
 
@@ -83,7 +83,7 @@ describe('Dashboard', () => {
 
     await fireEvent.submit(form)
 
-    expect(getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
+    expect(getByLabelText('NEW_MOCK_FILE_NAME.md actions')).toBeInTheDocument()
   })
 
   // it.skip('should display an error message and close the file input if there was a problem', async () => {})

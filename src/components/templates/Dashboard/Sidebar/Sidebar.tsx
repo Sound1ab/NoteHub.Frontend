@@ -38,13 +38,14 @@ export function Sidebar() {
 const StyledSidebar = styled.div`
   flex: 0 0 100%;
   height: 100%;
-  background-color: var(--background-primary);
+  background-color: var(--background-secondary);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   border-right: 1px solid var(--border-primary);
   // Needed to contain children from overflowing and make flex item scroll
   overflow-y: auto;
+  z-index: 2;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     grid-area: sidebar;

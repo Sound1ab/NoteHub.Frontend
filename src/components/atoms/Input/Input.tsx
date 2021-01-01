@@ -83,7 +83,7 @@ const Form = styled.form`
 
 const StyledInput = styled.input`
   flex: 1 1 100%;
-  background-color: var(--background-secondary);
+  background-color: var(--background-tertiary);
   color: var(--text-primary);
   min-width: 20px;
   padding: ${({ theme }) => theme.spacing.xs};

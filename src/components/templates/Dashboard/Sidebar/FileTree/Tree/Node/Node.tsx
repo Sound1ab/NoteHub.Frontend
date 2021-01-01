@@ -135,18 +135,18 @@ const Wrapper = styled.div<
   ${({ isActive }) =>
     isActive &&
     css`
-      background-color: var(--background-secondary);
+      background-color: var(--background-quaternary);
     `};
 
   ${({ isOpen }) =>
     isOpen &&
     css`
-      background-color: var(--background-tertiary);
+      background-color: var(--background-quinary);
     `};
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
-      background-color: var(--background-tertiary);
+      background-color: var(--background-quinary);
     }
   }
 `

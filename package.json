@@ -60,6 +60,7 @@
     "fuse.js": "^6.4.1",
     "graphql-tag": "^2.10.1",
     "hast-util-sanitize": "^3.0.1",
+    "hypermd": "^0.3.11",
     "parse-english": "^4.2.0",
     "polished": "^3.6.7",
     "react": "^16.8.4",

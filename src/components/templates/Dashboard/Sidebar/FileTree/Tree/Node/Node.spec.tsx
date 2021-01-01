@@ -72,7 +72,7 @@ describe('Node', () => {
 
     expect(getByLabelText('file')).toHaveStyleRule(
       'background-color',
-      'var(--background-tertiary)'
+      'var(--background-quinary)'
     )
 
     expect(actions).toHaveStyleRule('opacity', '1')

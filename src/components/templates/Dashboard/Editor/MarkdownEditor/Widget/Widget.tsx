@@ -30,7 +30,7 @@ const Wrapper = styled.div<{ position: Coords }>`
   top: ${({ position }) => `${position?.top ?? -9999}px`};
   left: ${({ position, theme }) =>
     `calc(${position?.left ?? -9999}px + ${theme.spacing.xs})`};
-  z-index: 2;
+  z-index: 10;
   max-width: 40ch;
   box-shadow: ${({ theme }) => theme.boxShadow};
 `

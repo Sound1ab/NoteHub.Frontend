@@ -60,6 +60,8 @@ const StyledToolbar = styled.header`
   background-color: var(--background-primary);
   // Needed to contain children from overflowing and make flex item scroll
   overflow-x: auto;
+  box-shadow: ${({ theme }) => theme.boxShadow};
+  z-index: 1;
 `
 
 const Tabs = styled.div`
