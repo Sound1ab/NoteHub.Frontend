@@ -1,6 +1,7 @@
-/* ./worker/gitLoader.ts */
+/* ./worker/loaders/git.ts */
 
 // eslint-disable-next-line
-import Worker from 'comlink-loader!./git' // inline loader
+// @ts-ignore
+import Worker from 'comlink-loader!../workers/git' // inline loader
 
-export default Worker
+export default new Worker()
