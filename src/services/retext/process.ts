@@ -1,6 +1,6 @@
 import { Retext_Settings } from '../../components/apollo/generated_components_typings'
 import { debounce } from '../../utils/debounce'
-import Worker from '../worker'
+import Worker from '../worker/loaders/retext'
 
 const instance = new Worker()
 

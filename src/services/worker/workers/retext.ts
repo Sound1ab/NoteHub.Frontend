@@ -3,6 +3,8 @@ import { Retext } from '../retext/Retext'
 
 const retext = new Retext()
 
+console.log('retext', retext)
+
 export async function processData(
   markdown: string,
   retextSettings: Retext_Settings[]

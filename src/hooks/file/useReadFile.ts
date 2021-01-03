@@ -1,34 +1,46 @@
-import { gql, useQuery } from '@apollo/client'
+import { useEffect, useState } from 'react'
 
-import {
-  ReadFileQuery,
-  ReadFileQueryVariables,
-} from '../../components/apollo/generated_components_typings'
-import { FileFragment } from '../../fragments'
+import FSWorker from '../../services/worker/loaders/fs'
 import { isFile } from '../../utils/isFile'
 import { useReadCurrentPath } from '../localState/useReadCurrentPath'
 
-export const ReadFileDocument = gql`
-  ${FileFragment}
-  query ReadFile($path: String!) {
-    readFile(path: $path) {
-      ...file
-    }
-  }
-`
+interface IFile {
+  path: string
+  content: string
+}
 
 export function useReadFile() {
   const currentPath = useReadCurrentPath()
 
-  const { data, loading, error } = useQuery<
-    ReadFileQuery,
-    ReadFileQueryVariables
-  >(ReadFileDocument, {
-    skip: !currentPath || !isFile(currentPath),
-    variables: {
-      path: currentPath,
-    },
-  })
+  const [file, setFile] = useState<IFile | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<Error | null>(null)
 
-  return { file: data?.readFile, loading, error }
+  useEffect(() => {
+    if (!isFile(currentPath)) {
+      return
+    }
+
+    setLoading(true)
+
+    const init = async () => {
+      try {
+        const content: string = await FSWorker.readFile({
+          filepath: `/test-dir/${currentPath}`,
+        })
+        console.log('here', content)
+
+        setFile({ path: currentPath, content })
+      } catch (error) {
+        console.log('here', error)
+        setError(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    init()
+  }, [currentPath])
+
+  return { file, loading, error }
 }

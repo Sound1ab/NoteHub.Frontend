@@ -1,74 +1,18 @@
-import {
-  MutationResult,
-  gql,
-  useApolloClient,
-  useMutation,
-} from '@apollo/client'
-import { FetchResult } from '@apollo/client/link/core'
-import {
-  MutationFunctionOptions,
-  MutationHookOptions,
-} from '@apollo/client/react/types/types'
+import { useState } from 'react'
 
-import {
-  File,
-  UpdateFileMutation,
-  UpdateFileMutationVariables,
-} from '../../components/apollo/generated_components_typings'
-import { FileFragment } from '../../fragments'
-import { debounce } from '../../utils/debounce'
-import { useReadActiveRetextSettings } from '../localState/useReadActiveRetextSettings'
-
-let abortController: AbortController
-
-const debouncedSave = debounce(
-  async (
-    mutation: (
-      options?: MutationFunctionOptions<
-        UpdateFileMutation,
-        UpdateFileMutationVariables
-      >
-    ) => Promise<FetchResult<UpdateFileMutation>>,
-    options?: MutationHookOptions<
-      UpdateFileMutation,
-      UpdateFileMutationVariables
-    >
-  ) => {
-    const controller = new window.AbortController()
-
-    abortController = controller
-
-    await mutation({
-      ...options,
-      context: { fetchOptions: { signal: controller.signal } },
-    })
-  },
-  1000
-)
-
-export const UpdateFileDocument = gql`
-  ${FileFragment}
-  mutation UpdateFile($input: UpdateFileInput!) {
-    updateFile(input: $input) {
-      ...file
-    }
-  }
-`
+import FSWorker from '../../services/worker/loaders/fs'
+import { useGit } from '../git/useGit'
 
 export function useUpdateFile(): [
-  (file?: File | null, content?: string) => void,
-  MutationResult<UpdateFileMutation>
+  (path?: string, content?: string) => void,
+  { error: Error | null; loading: boolean }
 ] {
-  const client = useApolloClient()
-  const { activeRetextSettings } = useReadActiveRetextSettings()
+  const [{ getUnstagedChanges }] = useGit()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<Error | null>(null)
 
-  const [mutation, mutationResult] = useMutation<
-    UpdateFileMutation,
-    UpdateFileMutationVariables
-  >(UpdateFileDocument)
-
-  async function updateFile(file?: File | null, content?: string) {
-    if (!file) {
+  async function updateFile(path?: string, content?: string) {
+    if (!path) {
       throw new Error('Update file: no file')
     }
 
@@ -76,27 +20,24 @@ export function useUpdateFile(): [
       throw new Error('Update file: content is not a string')
     }
 
-    client.cache.modify({
-      id: client.cache.identify(file),
-      fields: {
-        content() {
-          return content
-        },
-      },
-    })
+    setLoading(true)
 
-    abortController && abortController.abort()
+    try {
+      console.log('path', path)
+      const test = await FSWorker.writeFile({
+        filepath: `/test-dir/${path}`,
+        content,
+      })
 
-    await debouncedSave(mutation, {
-      variables: {
-        input: {
-          content,
-          path: file.path,
-          retextSettings: activeRetextSettings,
-        },
-      },
-    })
+      await getUnstagedChanges?.()
+      console.log('here', test)
+    } catch (error) {
+      console.log('here', error)
+      setError(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  return [updateFile, mutationResult]
+  return [updateFile, { loading, error }]
 }

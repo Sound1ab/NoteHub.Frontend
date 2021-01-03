@@ -48,3 +48,8 @@ export interface IMessage {
   ruleId?: string
   fatal?: boolean
 }
+
+export interface IFile {
+  path: string
+  content: string
+}
