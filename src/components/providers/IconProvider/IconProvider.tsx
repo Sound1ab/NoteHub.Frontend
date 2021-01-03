@@ -43,6 +43,8 @@ import {
   faBinoculars,
   faRocket,
   faInfoCircle,
+  faCircle,
+  faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { ReactNode } from 'react'
 
@@ -87,7 +89,9 @@ library.add(
   faAlignJustify,
   faBinoculars,
   faRocket,
-  faInfoCircle
+  faInfoCircle,
+  faCircle,
+  faCheckCircle
 )
 
 interface IIconProvider {

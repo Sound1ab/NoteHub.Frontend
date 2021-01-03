@@ -41,6 +41,8 @@ export type TIcons =
   | 'binoculars'
   | 'rocket'
   | 'info-circle'
+  | 'circle'
+  | 'check-circle'
 
 interface IIcon {
   icon: TIcons
