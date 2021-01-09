@@ -1,5 +1,7 @@
 /* ./worker/custom.d.ts */
 
+import { PushResult } from 'isomorphic-git'
+
 import {
   IClone,
   ICommit,
@@ -7,11 +9,11 @@ import {
   IListFiles,
   IPush,
   IRollback,
+  IStageChange,
   IStageChanges,
   IStatus,
 } from '../git'
 import { IWriteFile } from '../lightningFS'
-import { PushResult } from 'isomorphic-git'
 
 declare module 'comlink-loader!*' {
   import { IMessage } from '../../types'
@@ -40,6 +42,7 @@ declare module 'comlink-loader!*' {
     rollback(options: IRollback): Promise<void>
     committedChanges(options: ICommittedChanges): Promise<void>
     push(options: IPush): Promise<PushResult>
+    stageChange(options: IStageChange): Promise<void>
 
     // fs
     readDir(options: IReadDir): Promise<string[]>

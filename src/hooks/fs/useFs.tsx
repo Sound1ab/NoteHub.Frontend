@@ -58,5 +58,8 @@ export function useFs() {
     }
   }, [])
 
-  return [{ readFile, writeFile, listFiles }, { loading }]
+  return [
+    { readFile, writeFile, listFiles },
+    { loading, error },
+  ]
 }

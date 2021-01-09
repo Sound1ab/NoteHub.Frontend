@@ -27,6 +27,8 @@ export function DraftManager() {
   const [{ readFile }] = useFs()
   const [activePath] = useActivePath()
 
+  console.log('unstagedChanges', unstagedChanges)
+
   if (unstagedChanges.length === 0 && committedChanges.length === 0) {
     return null
   }
@@ -44,9 +46,16 @@ export function DraftManager() {
 
     await commit?.()
 
-    setUnstagedChanges(await getUnstagedChanges?.())
+    const test = await getUnstagedChanges?.()
 
-    setCommittedChanges(await getCommittedChanges?.())
+    console.log('unstaged', test)
+
+    setUnstagedChanges(test)
+
+    const test2 = await getCommittedChanges?.()
+
+    console.log('committedd', test2)
+    setCommittedChanges(test2)
   }
 
   async function handlePush() {

@@ -12,7 +12,6 @@ import {
   walk,
 } from 'isomorphic-git'
 import http from 'isomorphic-git/http/web'
-import htmlRE from 'markdown-it/lib/common/html_re'
 
 import { Node_Type } from '../../components/apollo/generated_components_typings'
 import { fs } from '../lightningFS'
@@ -119,6 +118,15 @@ export async function stageChanges({ dir, unstagedChanges }: IStageChanges) {
   }
 }
 
+export interface IStageChange {
+  dir: string
+  path: string
+}
+
+export async function stageChange({ dir, path }: IStageChange) {
+  return await add({ fs, dir, filepath: path })
+}
+
 export interface ICommit {
   dir: string
   message?: string
@@ -161,11 +169,13 @@ export async function committedChanges({ dir }: ICommittedChanges) {
     dir,
     ref: 'refs/remotes/origin/main',
   })
-  return getFileStateChanges({
+  const changedFiles = await getFileStateChanges({
     dir,
     startCommit: currentRemoteCommit,
     endCommit: currentCommit,
   })
+
+  return changedFiles ? changedFiles : []
 }
 
 interface IGetFileStateChanges {
@@ -194,13 +204,13 @@ async function getFileStateChanges({
       if (filepath === '.') {
         return
       }
-      if ((await A.type()) === 'tree' || (await B.type()) === 'tree') {
+      if ((await A?.type()) === 'tree' || (await B?.type()) === 'tree') {
         return
       }
 
       // generate ids
-      const Aoid = await A.oid()
-      const Boid = await B.oid()
+      const Aoid = await A?.oid()
+      const Boid = await B?.oid()
 
       // determine modification type
       let type = 'equal'
@@ -214,9 +224,7 @@ async function getFileStateChanges({
         type = 'remove'
       }
       if (Aoid === undefined && Boid === undefined) {
-        console.log('Something weird happened:')
-        console.log(A)
-        console.log(B)
+        throw new Error('File does not exist in either start or end commit')
       }
 
       return type === 'equal' ? null : filepath

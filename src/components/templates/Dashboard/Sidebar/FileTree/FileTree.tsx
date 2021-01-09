@@ -2,13 +2,16 @@ import React, { useEffect } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
-import { useFileTree } from '../../../../../hooks/context/useFileTree'
+import { useFileTree } from '../../../../../hooks/fileTree/useFileTree'
 import { useFs } from '../../../../../hooks/fs/useFs'
 import { useGit } from '../../../../../hooks/git/useGit'
 import { useReadSearch } from '../../../../../hooks/localState/useReadSearch'
+import { useActivePath } from '../../../../../hooks/recoil/useActivePath'
 import { useFiles } from '../../../../../hooks/recoil/useFiles'
+import { useTabs } from '../../../../../hooks/recoil/useTabs'
 import { createNodes } from '../../../../../utils/createNodes'
 import { List } from '../../../../atoms/List/List'
+import { ErrorToast } from '../../../../atoms/Toast/Toast'
 import { FileInput } from '../FileInput/FileInput'
 import { SearchResults } from './SearchResults/SearchResults'
 import { Tree } from './Tree/Tree'
@@ -21,13 +24,22 @@ interface IFileTree {
 
 export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const search = useReadSearch()
-  const { listOfToggledPaths, onCreate, loading: createLoading } = useFileTree()
+  const [{ openFoldersInPath }, { openFolders }] = useFileTree()
   const [files, setFiles] = useFiles()
-  const [{ clone }, { loading }] = useGit()
-  const [{ listFiles }] = useFs()
+  const [
+    { clone, stageChanges, getUnstagedChanges, commit, getCommittedChanges },
+    { loading: gitLoading },
+  ] = useGit()
+  const [{ listFiles, writeFile }, { loading: fsLoading, error }] = useFs()
+  const [tabs, setTabs] = useTabs()
+  const [, setActivePath] = useActivePath()
+
+  if (error) {
+    ErrorToast(error.message)
+  }
 
   useEffect(() => {
-    if (files.length > 0) {
+    if (files && files.length > 0) {
       return
     }
 
@@ -42,14 +54,30 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
     init()
   }, [files, clone, setFiles, listFiles])
 
-  if (loading || !files) {
+  if (gitLoading || !files) {
     return <TreeSkeleton />
   }
 
   async function handleCreate(name: string) {
     const path = `${name}.md`
 
-    await onCreate(path)
+    openFoldersInPath?.(path)
+
+    await writeFile?.(path, '')
+
+    await stageChanges?.(await getUnstagedChanges?.())
+
+    await commit?.()
+
+    await getCommittedChanges?.()
+
+    setFiles(await listFiles?.())
+
+    tabs.add(path)
+
+    setTabs(new Set(tabs))
+
+    setActivePath(path)
   }
 
   return (
@@ -59,7 +87,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
       ) : (
         <>
           {files &&
-            createNodes(files, listOfToggledPaths).map((node) => (
+            createNodes(files, openFolders!).map((node) => (
               <List key={node.name}>
                 <Tree key={node.name} node={node} />
               </List>
@@ -68,7 +96,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
             <FileInput
               onClickOutside={closeNewFile}
               onSubmit={handleCreate}
-              isDisabled={createLoading}
+              isDisabled={fsLoading!}
             />
           )}
         </>
