@@ -6,6 +6,7 @@ import {
   checkout,
   clone as gitClone,
   commit as gitCommit,
+  push as gitPush,
   resolveRef,
   statusMatrix,
   walk,
@@ -24,14 +25,14 @@ export interface IClone {
 }
 
 export async function clone({ url, dir, onMessage, onProgress }: IClone) {
-  return gitClone({
+  await gitClone({
     fs,
     http,
     dir,
     url,
     onMessage,
     onProgress,
-    corsProxy: 'https://cors.isomorphic-git.org',
+    corsProxy: process.env.REACT_APP_PROXY,
   })
 }
 
@@ -219,5 +220,21 @@ async function getFileStateChanges({
 
       return type === 'equal' ? null : filepath
     },
+  })
+}
+
+export interface IPush {
+  dir: string
+}
+
+export async function push({ dir }: IPush) {
+  return gitPush({
+    fs,
+    http,
+    dir,
+    remote: 'origin',
+    ref: 'main',
+    onAuth: () => ({ username: process.env.REACT_APP_PAT }),
+    corsProxy: process.env.REACT_APP_PROXY,
   })
 }

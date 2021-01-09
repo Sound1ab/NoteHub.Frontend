@@ -3,58 +3,84 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { FONT } from '../../../../../../enums'
-import { useCodeMirror } from '../../../../../../hooks/context/useCodeMirror'
-import { useReadFile } from '../../../../../../hooks/file/useReadFile'
+import { useCodeMirror } from '../../../../../../hooks/codeMirror/useCodeMirror'
+import { useFs } from '../../../../../../hooks/fs/useFs'
+import { useGit } from '../../../../../../hooks/git/useGit'
+import { useReadActiveRetextSettings } from '../../../../../../hooks/localState/useReadActiveRetextSettings'
 import { useReadThemeSettings } from '../../../../../../hooks/localState/useReadThemeSettings'
+import { useActivePath } from '../../../../../../hooks/recoil/useActivePath'
+import { useFileContent } from '../../../../../../hooks/recoil/useFileContent'
+import { useUnstagedChanges } from '../../../../../../hooks/recoil/useUnstagedChanges'
+import useDeepCompareEffect from '../../../../../../hooks/utils/useDeepCompareEffect'
+import { process } from '../../../../../../services/retext/process'
 import { darken } from '../../../../../../utils/css/darken'
-import {
-  drawHorizontalRule,
-  drawLink,
-  drawTable,
-  drawTableComponent,
-  drawTodoListComponent,
-  toggleBlockquote,
-  toggleBold,
-  toggleCodeBlock,
-  toggleItalic,
-  toggleOrderedList,
-  toggleUnorderedList,
-} from './actions'
+import { debounce } from '../../../../../../utils/debounce'
+import { ContextMenu } from '../../ContextMenu/ContextMenu'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const HyperMd = require('hypermd')
 
-export interface IActions {
-  editor: EditorFromTextArea
-  toggleOrderedList: () => void
-  toggleCodeBlock: () => void
-  toggleUnorderedList: () => void
-  toggleItalic: () => void
-  toggleBold: () => void
-  toggleBlockquote: () => void
-  drawHorizontalRule: () => void
-  drawLink: () => void
-  drawTable: () => void
-  drawTableComponent: () => void
-  drawTodoListComponent: () => void
-}
-
-export function CodeMirror() {
+export const CodeMirror = () => {
+  const target = useRef<HTMLDivElement | null>(null)
   const textArea = useRef<HTMLTextAreaElement | null>(null)
   const codeMirrorRef = useRef<EditorFromTextArea | null>(null)
-  const {
-    setActions,
-    onEditorClick,
-    onUpdateFile,
-    onMarkdownCursorPosition,
-  } = useCodeMirror()
+
   const { isFullWidth, font } = useReadThemeSettings()
-  const { file } = useReadFile()
+  const { activeRetextSettings } = useReadActiveRetextSettings()
+  const [, setUnstagedChanges] = useUnstagedChanges()
+  const [fileContent, setFileContent] = useFileContent()
+  const [activePath] = useActivePath()
+  const [{ writeFile, readFile }] = useFs()
+  const [{ getUnstagedChanges }] = useGit()
+  const [
+    { clearMarkers, createMarkers, setCursorPosition, displayWidget },
+  ] = useCodeMirror()
+
   const mountedRef = useRef(false)
   const hydratedRef = useRef(false)
   const cursorAppliedRef = useRef(true)
 
-  const value = file?.content ?? ''
+  // Process retext analysis
+  useDeepCompareEffect(() => {
+    const editor = codeMirrorRef.current
+
+    if (!activeRetextSettings || !fileContent || !editor) {
+      return
+    }
+
+    if (activeRetextSettings.length === 0) {
+      clearMarkers()
+      return
+    }
+
+    process(fileContent, activeRetextSettings).then((result) => {
+      clearMarkers()
+      createMarkers(editor, result)
+    })
+  }, [activeRetextSettings, createMarkers, fileContent, clearMarkers])
+
+  useEffect(() => {
+    async function loadContentFromFS() {
+      setFileContent((await readFile?.(activePath)) ?? '')
+    }
+
+    loadContentFromFS()
+  }, [activePath, readFile, setFileContent])
+
+  const writeContentToFSAndCheckUnstagedChanges = useCallback(
+    debounce(async (activePath, fileContent) => {
+      await writeFile?.(activePath, fileContent)
+
+      const unstagedChanges = await getUnstagedChanges?.()
+
+      await setUnstagedChanges(unstagedChanges ? unstagedChanges : [])
+    }, 200),
+    [writeFile, setUnstagedChanges, getUnstagedChanges]
+  )
+
+  useEffect(() => {
+    writeContentToFSAndCheckUnstagedChanges(activePath, fileContent)
+  }, [fileContent, activePath, writeContentToFSAndCheckUnstagedChanges])
 
   const hydrate = useCallback((editor: Editor, value: string) => {
     if (hydratedRef.current) return
@@ -81,6 +107,7 @@ export function CodeMirror() {
     cursorAppliedRef.current = true
   }, [])
 
+  // Initial load of editor and setting actions for use in context menu
   useEffect(() => {
     if (!textArea || !textArea.current || mountedRef.current) return
 
@@ -93,28 +120,14 @@ export function CodeMirror() {
 
     codeMirrorRef.current = editor
 
-    setActions?.({
-      editor,
-      toggleOrderedList: () => toggleOrderedList(editor),
-      toggleCodeBlock: () => toggleCodeBlock(editor),
-      toggleUnorderedList: () => toggleUnorderedList(editor),
-      toggleItalic: () => toggleItalic(editor),
-      toggleBold: () => toggleBold(editor),
-      toggleBlockquote: () => toggleBlockquote(editor),
-      drawHorizontalRule: () => drawHorizontalRule(editor),
-      drawLink: () => drawLink(editor),
-      drawTable: () => drawTable(editor),
-      drawTableComponent: () => drawTableComponent(editor),
-      drawTodoListComponent: () => drawTodoListComponent(editor),
-    })
-
-    hydrate(editor, value)
+    hydrate(editor, fileContent)
 
     mountedRef.current = true
 
     editor.getDoc().clearHistory()
-  }, [onUpdateFile, onMarkdownCursorPosition, setActions, hydrate, value])
+  }, [hydrate, fileContent])
 
+  // Setup event handlers on editor
   useEffect(() => {
     const editor = codeMirrorRef.current
 
@@ -122,55 +135,71 @@ export function CodeMirror() {
       return
     }
 
-    const handleChange = (editor: Editor) => {
+    const handleChange = async (editor: Editor) => {
       if (!mountedRef.current) return
 
-      const newValue = editor.getValue()
-
-      if (newValue === value) {
-        return
-      }
-
-      onUpdateFile?.(editor.getValue())
+      setFileContent(editor.getValue())
     }
     const handleCursorActivity = (editor: Editor) => {
       if (!mountedRef.current) return
 
-      onMarkdownCursorPosition?.(editor.getCursor())
+      setCursorPosition?.(editor.getCursor())
     }
 
     editor.on('change', handleChange)
     editor.on('cursorActivity', handleCursorActivity)
-
     return () => {
       editor.off('change', handleChange)
       editor.off('cursorActivity', handleCursorActivity)
     }
-  }, [onUpdateFile, onMarkdownCursorPosition, value])
+  }, [setFileContent, setCursorPosition])
 
+  // Hydrate editor when a new file is selected from filelist
   useEffect(() => {
     const editor = codeMirrorRef.current
 
     if (!editor) return
 
-    if (codeMirrorRef.current?.getValue() !== value) {
+    if (codeMirrorRef.current?.getValue() !== fileContent) {
       hydratedRef.current = false
       cursorAppliedRef.current = false
     }
 
     const cursor = editor.getDoc().getCursor()
 
-    hydrate(editor, value)
+    hydrate(editor, fileContent)
 
     preserveCursor(editor, cursor)
-  }, [value, hydrate, preserveCursor])
+  }, [fileContent, hydrate, preserveCursor])
+
+  function handleclick(e: React.MouseEvent<HTMLDivElement>) {
+    const editor = codeMirrorRef.current
+    const scroll = target.current
+
+    if (!editor || !scroll) {
+      return
+    }
+
+    displayWidget(
+      editor,
+      {
+        clientX: e.clientX,
+        clientY: e.clientY,
+      },
+      scroll.scrollTop
+    )
+  }
 
   return (
     <StyledCodeMirror
       isFullWidth={isFullWidth}
       font={font}
-      onClick={onEditorClick}
+      ref={target}
+      onClick={handleclick}
     >
+      {codeMirrorRef.current && (
+        <ContextMenu targetRef={target} editor={codeMirrorRef.current} />
+      )}
       <textarea ref={textArea} />
     </StyledCodeMirror>
   )
@@ -178,6 +207,7 @@ export function CodeMirror() {
 
 const StyledCodeMirror = styled.article<{ isFullWidth: boolean; font: FONT }>`
   position: relative;
+  overflow-y: scroll;
 
   .CodeMirror {
     height: auto;

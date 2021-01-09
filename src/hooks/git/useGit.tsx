@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { ErrorToast } from '../../components/atoms/Toast/Toast'
 import GitWorker from '../../services/worker/loaders/git'
@@ -106,6 +106,18 @@ export function useGit() {
     }
   }, [])
 
+  const push = useCallback(async () => {
+    try {
+      await GitWorker.push({
+        dir: '/test-dir',
+      })
+    } catch (error) {
+      setError(error)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   return [
     {
       getUnstagedChanges,
@@ -115,7 +127,8 @@ export function useGit() {
       status,
       getCommittedChanges,
       clone,
+      push,
     },
-    { loading },
+    { loading, error },
   ]
 }

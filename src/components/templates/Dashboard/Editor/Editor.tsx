@@ -1,30 +1,28 @@
-import React, { useRef } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { CONTAINER_ID } from '../../../../enums'
-import { useCodeMirror } from '../../../../hooks/context/useCodeMirror'
-import { useReadFile } from '../../../../hooks/file/useReadFile'
-import { ContextMenu } from './ContextMenu/ContextMenu'
+import { useFs } from '../../../../hooks/fs/useFs'
+import { useReadCurrentPath } from '../../../../hooks/localState/useReadCurrentPath'
+import { isFile } from '../../../../utils/isFile'
 import { MarkdownEditor } from './MarkdownEditor/MarkdownEditor'
 import { MarkdownEditorSkeleton } from './MarkdownEditor/MarkdownEditorSkeleton'
-import { MarkdownRenderer } from './MarkdownEditor/MarkdownRenderer/MarkdownRenderer'
 
 export function Editor() {
-  const { loading } = useReadFile()
-  const target = useRef(null)
-  const { isPreviewActive, isSideBySideActive } = useCodeMirror()
+  const currentPath = useReadCurrentPath()
+  const [{ readFile }, { loading }] = useFs()
+
+  useEffect(() => {
+    if (!isFile(currentPath)) {
+      return
+    }
+
+    readFile?.(currentPath)
+  }, [currentPath, readFile])
 
   return (
     <Wrapper id={CONTAINER_ID.EDITOR}>
-      {loading ? (
-        <MarkdownEditorSkeleton />
-      ) : (
-        <>
-          {!isPreviewActive && <ContextMenu targetRef={target} />}
-          {!isPreviewActive && <MarkdownEditor targetRef={target} />}
-          {(isPreviewActive || isSideBySideActive) && <MarkdownRenderer />}
-        </>
-      )}
+      {loading ? <MarkdownEditorSkeleton /> : <MarkdownEditor />}
     </Wrapper>
   )
 }

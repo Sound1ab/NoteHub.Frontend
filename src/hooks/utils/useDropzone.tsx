@@ -12,8 +12,7 @@ import styled from 'styled-components'
 import { ErrorToast } from '../../components/atoms/Toast/Toast'
 import { useCreateSignedUrl } from '../image/useCreateSignedUrl'
 import { useReadCursorPosition } from '../localState/useReadCursorPosition'
-import { useReadFile } from '../file/useReadFile'
-import { useUpdateFile } from '../file/useUpdateFile'
+import { useFileContent } from '../recoil/useFileContent'
 
 const Style = styled.input`
   display: none;
@@ -25,8 +24,7 @@ export function useDropzone() {
   const [uploadFile, setUploadFile] = useState<File | null>(null)
   const [imagePath, setImagePath] = useState<string | null>(null)
   const toastId = React.useRef<ReactText | null>(null)
-  const [updateFile] = useUpdateFile()
-  const { file } = useReadFile()
+  const [fileContent, setFileContent] = useFileContent()
   const cursorPosition = useReadCursorPosition()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { progress, done, loading } = useUpload(uploadFile!, {
@@ -107,8 +105,6 @@ export function useDropzone() {
     )
   }, [handleDrop])
 
-  const fileContent = file?.content
-
   const insertPathIntoString = useCallback(
     (path: string | null) => {
       if (!path) {
@@ -130,11 +126,13 @@ export function useDropzone() {
     try {
       const content = insertPathIntoString(imagePath)
 
-      await updateFile(file, content)
+      if (!content) return
+
+      await setFileContent(content)
     } catch (error) {
       ErrorToast(`There was an issue uploading your image. ${error.message}`)
     }
-  }, [file, imagePath, updateFile, insertPathIntoString])
+  }, [imagePath, insertPathIntoString])
 
   useEffect(() => {
     if (!done || !imagePath) {

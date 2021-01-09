@@ -11,8 +11,9 @@ import { Icon } from '../../../atoms/Icon/Icon'
 
 export function DraftManager() {
   const [unstagedChanges, setUnstagedChanges] = useUnstagedChanges()
-  const [{ rollback, stageChanges, commit }] = useGit()
-  const [{ getUnstagedChanges }] = useGit()
+  const [
+    { rollback, stageChanges, commit, getUnstagedChanges, push },
+  ] = useGit()
   const [, setFileContent] = useFileContent()
   const [{ readFile }] = useFs()
   const [activePath] = useActivePath()
@@ -37,14 +38,21 @@ export function DraftManager() {
     setUnstagedChanges(await getUnstagedChanges?.())
   }
 
+  async function handlePush() {
+    await push?.()
+  }
+
   return (
     <Wrapper>
       <DiscardButton title="Discard local changes" onClick={handleDiscard}>
         <Icon icon="times" size="lg" />
       </DiscardButton>
       <CommitButton title="Stage and commit changes" onClick={handleCommit}>
-        <Icon icon="check-circle" size="lg" />
+        <Icon icon="circle" size="lg" />
       </CommitButton>
+      <PushButton title="Push changes to remote" onClick={handlePush}>
+        <Icon icon="check-circle" size="lg" />
+      </PushButton>
     </Wrapper>
   )
 }
@@ -61,6 +69,7 @@ const Wrapper = styled.div`
   background-color: var(--background-secondary);
   border-radius: ${({ theme }) => theme.spacing.xxs};
   margin: ${({ theme }) => theme.spacing.xs};
+  z-index: 20;
 
   button + button {
     margin-left: ${({ theme }) => theme.spacing.xs};
@@ -84,10 +93,10 @@ const DiscardButton = styled(StyledButton)`
   background-color: var(--feedback-error);
 `
 
-const StageButton = styled(StyledButton)`
+const CommitButton = styled(StyledButton)`
   background-color: var(--feedback-info);
 `
 
-const CommitButton = styled(StyledButton)`
+const PushButton = styled(StyledButton)`
   background-color: var(--feedback-success);
 `

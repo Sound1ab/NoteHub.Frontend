@@ -5,11 +5,13 @@ import {
   ICommit,
   ICommittedChanges,
   IListFiles,
+  IPush,
   IRollback,
   IStageChanges,
   IStatus,
 } from '../git'
 import { IWriteFile } from '../lightningFS'
+import { PushResult } from 'isomorphic-git'
 
 declare module 'comlink-loader!*' {
   import { IMessage } from '../../types'
@@ -37,6 +39,7 @@ declare module 'comlink-loader!*' {
     commit(options: ICommit): Promise<void>
     rollback(options: IRollback): Promise<void>
     committedChanges(options: ICommittedChanges): Promise<void>
+    push(options: IPush): Promise<PushResult>
 
     // fs
     readDir(options: IReadDir): Promise<string[]>

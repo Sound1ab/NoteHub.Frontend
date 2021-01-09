@@ -12,9 +12,9 @@ import { Toast } from './components/atoms/Toast/Toast'
 import { MockProvider } from './components/providers/ApolloProvider/MockProvider'
 import { IconProvider } from './components/providers/IconProvider/IconProvider'
 import { ThemeProvider } from './components/providers/ThemeProvider/ThemeProvider'
-import { CodeMirrorProvider } from './components/templates/Dashboard/Editor/MarkdownEditor/CodeMirror/CodeMirrorProvider'
 import { FileTreeProvider } from './components/templates/Dashboard/Sidebar/FileTree/FileTreeProvider'
 import { resolvers as mockResolvers } from './schema/mockResolvers'
+import { RecoilRoot } from 'recoil'
 
 export type FireObject = {
   [K in EventType]: (
@@ -49,11 +49,11 @@ const Context = ({
       {() => (
         <IconProvider>
           {enableToast && <Toast />}
-          <CodeMirrorProvider>
-            <FileTreeProvider>
-              <DndProvider backend={HTML5Backend}>{node}</DndProvider>
-            </FileTreeProvider>
-          </CodeMirrorProvider>
+          <FileTreeProvider>
+            <DndProvider backend={HTML5Backend}>
+              <RecoilRoot>{node}</RecoilRoot>
+            </DndProvider>
+          </FileTreeProvider>
         </IconProvider>
       )}
     </ThemeProvider>

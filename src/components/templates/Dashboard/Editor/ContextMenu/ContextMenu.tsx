@@ -1,3 +1,4 @@
+import { Editor } from 'codemirror'
 import React, { RefObject } from 'react'
 
 import { useContextMenuDropdown } from '../../../../../hooks/dropdown/useContextMenuDropdown'
@@ -6,11 +7,12 @@ import { Dropdown } from '../../../../atoms/Dropdown/Dropdown'
 
 interface IContextMenu {
   targetRef: RefObject<HTMLElement>
+  editor: Editor
 }
 
-export function ContextMenu({ targetRef }: IContextMenu) {
+export function ContextMenu({ targetRef, editor }: IContextMenu) {
   const { isOpen, Portal, ref, setOpen } = useContextMenu(targetRef)
-  const { items, Dropzone } = useContextMenuDropdown()
+  const { items, Dropzone } = useContextMenuDropdown(editor)
 
   if (!items) {
     return null
@@ -29,7 +31,6 @@ export function ContextMenu({ targetRef }: IContextMenu) {
               label: action.title,
               icon: action.icon,
               onClick: action.onClick,
-              isDisabled: action.isDisabled,
               hasSeparator: action.hasSeparator,
             }))}
             onClose={() => setOpen(false)}

@@ -5,6 +5,7 @@ import {
   ICommit,
   ICommittedChanges,
   IListFiles,
+  IPush,
   IRollback,
   IStageChanges,
   IStatus,
@@ -12,6 +13,7 @@ import {
   commit as gitCommit,
   committedChanges as gitCommittedChanges,
   listFiles as gitListFiles,
+  push as gitPush,
   rollback as gitRollback,
   stageChanges as gitStageChanges,
   status as gitStatus,
@@ -22,6 +24,7 @@ export async function clone(options: Pick<IClone, 'url' | 'dir'>) {
   return gitClone({
     ...options,
     onProgress: (progress: GitProgressEvent) => console.log('here', progress),
+    onMessage: (message) => console.log('here', message),
   })
 }
 
@@ -51,4 +54,8 @@ export async function rollback(options: IRollback) {
 
 export async function committedChanges(options: ICommittedChanges) {
   return gitCommittedChanges(options)
+}
+
+export async function push(options: IPush) {
+  return gitPush(options)
 }

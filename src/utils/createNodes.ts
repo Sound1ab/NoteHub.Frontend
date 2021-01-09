@@ -1,44 +1,44 @@
-import {
-  Node_Type,
-  TreeFileFragment,
-} from '../components/apollo/generated_components_typings'
+import { Node_Type } from '../components/apollo/generated_components_typings'
+import { IGitTreeNode } from '../services/git/types'
 import { IFileNode, IFolderNode, ITreeNode } from '../types'
 import { extractFilename } from './extractFilename'
 import { isFile } from './isFile'
 
 export function createFolderNode({
   path,
-  id,
   name,
   toggled,
-  sha,
-}: TreeFileFragment & {
+  isOptimistic,
+}: IGitTreeNode & {
   name: string
   toggled: boolean
 }): IFolderNode {
   return {
-    id,
+    id: path,
     children: [],
     name,
     path,
     toggled,
     type: Node_Type.Folder,
-    isOptimistic: sha === 'optimistic',
+    isOptimistic,
   }
 }
 
-export function createFileNode({ id, sha, path }: TreeFileFragment): IFileNode {
+export function createFileNode({
+  path,
+  isOptimistic,
+}: IGitTreeNode): IFileNode {
   return {
-    id,
+    id: path,
     name: extractFilename(path),
     path,
     type: Node_Type.File,
-    isOptimistic: sha === 'optimistic',
+    isOptimistic,
   }
 }
 
 export function createNodes(
-  gitNodes: TreeFileFragment[],
+  gitNodes: IGitTreeNode[],
   listOfToggledPaths: Set<string>
 ) {
   const parentNode: IFolderNode = {

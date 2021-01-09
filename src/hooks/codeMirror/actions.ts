@@ -1,7 +1,7 @@
-import { EditorFromTextArea, LineHandle, Position, Token } from 'codemirror'
+import { Editor, LineHandle, Position, Token } from 'codemirror'
 
 function _replaceSelection(
-  cm: EditorFromTextArea,
+  cm: Editor,
   active: boolean,
   startEnd: string[],
   url?: string
@@ -43,7 +43,7 @@ function _replaceSelection(
   cm.focus()
 }
 
-function getState(cm: EditorFromTextArea, pos?: Position) {
+function getState(cm: Editor, pos?: Position) {
   pos = pos ?? cm.getCursor('start')
   const stat = cm.getTokenAt(pos)
   if (!stat.type) return {}
@@ -86,7 +86,7 @@ function getState(cm: EditorFromTextArea, pos?: Position) {
 }
 
 function _toggleBlock(
-  editor: EditorFromTextArea,
+  editor: Editor,
   type: string,
   start_chars: string,
   end_chars?: string
@@ -168,19 +168,19 @@ function _toggleBlock(
   cm.focus()
 }
 
-export function toggleBold(editor: EditorFromTextArea) {
+export function _toggleBold(editor: Editor) {
   _toggleBlock(editor, 'bold', '**')
 }
 
-export function toggleItalic(editor: EditorFromTextArea) {
+export function _toggleItalic(editor: Editor) {
   _toggleBlock(editor, 'italic', '*')
 }
 
-export function toggleStrikethrough(editor: EditorFromTextArea) {
+export function _toggleStrikethrough(editor: Editor) {
   _toggleBlock(editor, 'strikethrough', '~~')
 }
 
-export function toggleCodeBlock(editor: EditorFromTextArea) {
+export function _toggleCodeBlock(editor: Editor) {
   const fenceCharsToInsert = '```'
 
   // eslint-disable-next-line
@@ -207,7 +207,7 @@ export function toggleCodeBlock(editor: EditorFromTextArea) {
   }
 
   function code_type(
-    cm: EditorFromTextArea,
+    cm: Editor,
     line_num: number,
     line?: LineHandle,
     firstTok?: Token,
@@ -256,7 +256,7 @@ export function toggleCodeBlock(editor: EditorFromTextArea) {
   }
 
   function insertFencingAtSelection(
-    cm: EditorFromTextArea,
+    cm: Editor,
     cur_start: Position,
     cur_end: Position,
     fenceCharsToInsert: string
@@ -542,7 +542,7 @@ export function toggleCodeBlock(editor: EditorFromTextArea) {
   }
 }
 
-function _toggleLine(cm: EditorFromTextArea, name: string) {
+function _toggleLine(cm: Editor, name: string) {
   if (
     /editor-preview-active/.test(
       // eslint-disable-next-line
@@ -588,15 +588,15 @@ function _toggleLine(cm: EditorFromTextArea, name: string) {
   cm.focus()
 }
 
-export function toggleBlockquote(editor: EditorFromTextArea) {
+export function _toggleBlockquote(editor: Editor) {
   _toggleLine(editor, 'quote')
 }
 
-export function toggleUnorderedList(editor: EditorFromTextArea) {
+export function _toggleUnorderedList(editor: Editor) {
   _toggleLine(editor, 'unordered-list')
 }
 
-export function toggleOrderedList(editor: EditorFromTextArea) {
+export function _toggleOrderedList(editor: Editor) {
   _toggleLine(editor, 'ordered-list')
 }
 
@@ -642,30 +642,30 @@ const insertComponents = {
   ],
 }
 
-export function drawLink(editor: EditorFromTextArea) {
+export function _drawLink(editor: Editor) {
   const stat = getState(editor)
   _replaceSelection(editor, stat.link, insertTexts.link)
 }
 
-export function drawImage(editor: EditorFromTextArea) {
+export function _drawImage(editor: Editor) {
   const stat = getState(editor)
   _replaceSelection(editor, stat.image, insertTexts.image)
 }
 
-export function drawTable(editor: EditorFromTextArea) {
+export function _drawTable(editor: Editor) {
   const stat = getState(editor)
   _replaceSelection(editor, stat.table, insertTexts.table)
 }
 
-export function drawHorizontalRule(editor: EditorFromTextArea) {
+export function _drawHorizontalRule(editor: Editor) {
   const stat = getState(editor)
   _replaceSelection(editor, stat.image, insertTexts.horizontalRule)
 }
 
-export function drawTableComponent(editor: EditorFromTextArea) {
+export function _drawTableComponent(editor: Editor) {
   _replaceSelection(editor, false, insertComponents.table)
 }
 
-export function drawTodoListComponent(editor: EditorFromTextArea) {
+export function _drawComponentTodoList(editor: Editor) {
   _replaceSelection(editor, false, insertComponents.toDoList)
 }

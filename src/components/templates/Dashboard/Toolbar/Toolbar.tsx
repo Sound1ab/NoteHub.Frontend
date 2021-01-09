@@ -1,24 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useCodeMirror } from '../../../../hooks/context/useCodeMirror'
-import { useReadFile } from '../../../../hooks/file/useReadFile'
 import { useReadTabs } from '../../../../hooks/localState/useReadTabs'
+import { useFile } from '../../../../hooks/recoil/useFile'
 import { extractFilename } from '../../../../utils/extractFilename'
-import { Icon } from '../../../atoms/Icon/Icon'
 import { Profile } from './Profile/Profile'
 import { Tab } from './Tab/Tab'
-import { ToolbarButton } from './ToolbarButton/ToolbarButton'
 
 export function Toolbar() {
-  const {
-    isSideBySideActive,
-    isPreviewActive,
-    togglePreview,
-    toggleSideBySide,
-  } = useCodeMirror()
   const tabs = [...useReadTabs()]
-  const { file } = useReadFile()
+  const [file] = useFile()
 
   return (
     <StyledToolbar>
@@ -28,25 +19,11 @@ export function Toolbar() {
             key={path}
             name={extractFilename(path)}
             path={path}
-            isDisabled={file?.path === path && file.sha === 'optimistic'}
+            isDisabled={file?.path === path} // TODO: MAKE OPTIMISTIC file.sha === 'optimistic'
           />
         ))}
       </Tabs>
       <Actions>
-        <ToolbarButton
-          isActive={isSideBySideActive}
-          onClick={() => toggleSideBySide?.()}
-          title="Toggle side by side"
-        >
-          <Icon size="1x" icon="columns" />
-        </ToolbarButton>
-        <ToolbarButton
-          isActive={isPreviewActive}
-          onClick={() => togglePreview?.()}
-          title="Toggle preview"
-        >
-          <Icon size="1x" icon="align-justify" />
-        </ToolbarButton>
         <Profile />
       </Actions>
     </StyledToolbar>
@@ -60,7 +37,6 @@ const StyledToolbar = styled.header`
   background-color: var(--background-primary);
   // Needed to contain children from overflowing and make flex item scroll
   overflow-x: auto;
-  box-shadow: ${({ theme }) => theme.boxShadow};
   z-index: 1;
 `
 

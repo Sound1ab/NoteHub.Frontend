@@ -1,8 +1,8 @@
 import React, { MouseEvent } from 'react'
 import styled, { css } from 'styled-components'
 
-import { useReadCurrentPath } from '../../../../../hooks/localState/useReadCurrentPath'
-import { useReadTabs } from '../../../../../hooks/localState/useReadTabs'
+import { useActivePath } from '../../../../../hooks/recoil/useActivePath'
+import { useTabs } from '../../../../../hooks/recoil/useTabs'
 import { getNextTab } from '../../../../../utils/getNextTab'
 import { Button } from '../../../../atoms/Button/Button'
 import { Close } from '../../../../atoms/Close/Close'
@@ -15,9 +15,9 @@ interface ITab {
 }
 
 export function Tab({ name, path, isDisabled }: ITab) {
-  const currentPath = useReadCurrentPath()
-  const tabs = useReadTabs()
-  const isActive = path === currentPath
+  const [activePath, setActivePath] = useActivePath()
+  const [tabs, setTabs] = useTabs()
+  const isActive = path === activePath
 
   function handleOnClick() {
     localState.currentPathVar(path)
@@ -30,14 +30,15 @@ export function Tab({ name, path, isDisabled }: ITab) {
       const nextTab = getNextTab([...tabs], path)
 
       if (!nextTab) {
-        localState.currentPathVar('')
+        setActivePath('')
       } else {
-        localState.currentPathVar(nextTab)
+        setActivePath(nextTab)
       }
     }
+
     tabs.delete(path)
 
-    localState.tabsVar(new Set(tabs))
+    setTabs(new Set(tabs))
   }
 
   return (

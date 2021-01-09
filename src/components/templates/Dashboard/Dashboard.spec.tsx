@@ -2,13 +2,13 @@ import { act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 
-import { files, resolvers } from '../../../schema/mockResolvers'
+import { files } from '../../../schema/mockData'
+import { resolvers } from '../../../schema/mockResolvers'
 import { fireEvent, render, waitFor } from '../../../test-utils'
 import { createNodes } from '../../../utils/createNodes'
 import { Node_Type } from '../../apollo/generated_components_typings'
 import { localState } from '../../providers/ApolloProvider/cache'
 import Dashboard from './Dashboard'
-import { FileTree } from './Sidebar/FileTree/FileTree'
 
 jest.setTimeout(10000)
 
@@ -37,6 +37,8 @@ jest.mock('../../../hooks/image/useCreateSignedUrl', () => ({
     () => Promise.resolve({ data: { createSignedUrl: 'MOCK_IMAGE_PATH' } }),
   ],
 }))
+jest.mock('../../../hooks/fs/useFs')
+jest.mock('../../../hooks/git/useGit')
 
 describe('Dashboard', () => {
   // Mocking out for codemirror as JSDOM doesn't do this
@@ -66,7 +68,7 @@ describe('Dashboard', () => {
     jest.resetAllMocks()
   })
 
-  it('should add folder and file', async () => {
+  it.only('should add folder and file', async () => {
     const { getByLabelText } = await render(<Dashboard />)
 
     await fireEvent.click(getByLabelText('MOCK_FOLDER_PATH actions'))

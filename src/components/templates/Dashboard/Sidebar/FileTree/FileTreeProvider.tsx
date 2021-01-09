@@ -1,6 +1,5 @@
 import React, { MouseEvent, ReactNode, useState } from 'react'
 
-import { CONTAINER_ID } from '../../../../../enums'
 import { useCreateFile } from '../../../../../hooks/file/useCreateFile'
 import { useDeleteFile } from '../../../../../hooks/file/useDeleteFile'
 import { useMoveFile } from '../../../../../hooks/file/useMoveFile'
@@ -10,8 +9,6 @@ import { IFolderNode, ITreeNode } from '../../../../../types'
 import { extractFilename } from '../../../../../utils/extractFilename'
 import { getNextTab } from '../../../../../utils/getNextTab'
 import { removeLastSlug } from '../../../../../utils/removeLastSlug'
-import { scrollIntoView } from '../../../../../utils/scrollIntoView'
-import { Node_Type } from '../../../../apollo/generated_components_typings'
 import { ErrorToast } from '../../../../atoms/Toast/Toast'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 
@@ -31,7 +28,6 @@ type ContextProps = {
   onChevronClick: (e: MouseEvent<HTMLElement>, node: IFolderNode) => void
   onFolderClick: (node: IFolderNode) => void
   onDeleteFile: (node: ITreeNode) => void
-  onFileClick: (type: Node_Type, path: string) => void
   onRename: (node: ITreeNode, name: string) => void
 }
 
@@ -177,20 +173,6 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
     }
   }
 
-  function handleFileClick(type: Node_Type, path: string) {
-    if (type === Node_Type.File) {
-      scrollIntoView(CONTAINER_ID.EDITOR)
-    }
-
-    handleOnClick(path)
-
-    localState.currentPathVar(path)
-
-    tabs.add(path)
-
-    localState.tabsVar(new Set(tabs))
-  }
-
   async function handleRename(node: ITreeNode, name: string) {
     const path = removeLastSlug(node.path)
 
@@ -240,7 +222,6 @@ export function FileTreeProvider({ children }: IFileTreeProvider) {
         onChevronClick: handleChevronClick,
         onFolderClick: handleFolderClick,
         onDeleteFile: handleDeleteFile,
-        onFileClick: handleFileClick,
         onRename: handleRename,
       }}
     >

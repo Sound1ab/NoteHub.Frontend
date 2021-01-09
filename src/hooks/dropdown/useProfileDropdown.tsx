@@ -7,14 +7,12 @@ import { RadioItem } from '../../components/atoms/Dropdown/RadioItem/RadioItem'
 import { localState } from '../../components/providers/ApolloProvider/cache'
 import { FONT, THEME_SETTINGS } from '../../enums'
 import { useLogout } from '../authorization/useLogout'
-import { useCodeMirror } from '../context/useCodeMirror'
 import { useReadRetextSettings } from '../localState/useReadRetextSettings'
 import { useReadThemeSettings } from '../localState/useReadThemeSettings'
 import { useReadGithubUser } from '../user/useReadGithubUser'
 
 export function useProfileDropdown() {
   const retextSettings = useReadRetextSettings()
-  const { onRefresh } = useCodeMirror()
   const themeSettings = useReadThemeSettings()
   const [logout, { called, data, error }] = useLogout()
   const user = useReadGithubUser()
@@ -36,7 +34,6 @@ export function useProfileDropdown() {
       ...themeSettings,
       font: value,
     })
-    onRefresh?.()
   }
 
   function handleToggleThemeSetting(value: THEME_SETTINGS) {
@@ -44,7 +41,6 @@ export function useProfileDropdown() {
       ...themeSettings,
       [value]: !themeSettings[value],
     })
-    onRefresh?.()
   }
 
   function handleToggleRetextSetting(value: Retext_Settings) {

@@ -1,97 +1,81 @@
-import { isFile } from '../../utils/isFile'
-import { useCodeMirror } from '../context/useCodeMirror'
-import { useReadCurrentPath } from '../localState/useReadCurrentPath'
+import { Editor } from 'codemirror'
+
+import { useCodeMirror } from '../codeMirror/useCodeMirror'
 import { useDropzone } from '../utils/useDropzone'
 
-export function useContextMenuDropdown() {
-  const currentPath = useReadCurrentPath()
+export function useContextMenuDropdown(editor: Editor) {
   const { Dropzone, openFileDialog } = useDropzone()
-  const isMarkdownEditorActive = isFile(currentPath)
-  const { actions } = useCodeMirror()
+  const [
+    {
+      toggleBold,
+      drawTable,
+      drawLink,
+      toggleBlockquote,
+      toggleCodeBlock,
+      drawHorizontalRule,
+      toggleItalic,
+      toggleUnorderedList,
+      toggleOrderedList,
+    },
+  ] = useCodeMirror()
 
-  const items = actions
-    ? [
-        {
-          heading: 'Text',
-          onClick: actions.toggleItalic,
-          title: 'Italic',
-          isDisabled: !isMarkdownEditorActive,
-          icon: 'italic' as const,
-        },
-        {
-          onClick: actions.toggleBold,
-          title: 'Bold',
-          isDisabled: !isMarkdownEditorActive,
-          icon: 'bold' as const,
-        },
-        {
-          onClick: actions.toggleBlockquote,
-          title: 'Quote',
-          isDisabled: !isMarkdownEditorActive,
-          icon: 'quote-right' as const,
-          hasSeparator: true,
-        },
-        {
-          heading: 'List',
-          onClick: actions.toggleOrderedList,
-          title: 'Ordered',
-          isDisabled: !isMarkdownEditorActive,
-          icon: 'list-ol' as const,
-        },
-        {
-          onClick: actions.toggleUnorderedList,
-          title: 'Unordered',
-          isDisabled: !isMarkdownEditorActive,
-          icon: 'list' as const,
-          hasSeparator: true,
-        },
-        {
-          heading: 'Insert',
-          onClick: actions.toggleCodeBlock,
-          title: 'Code block',
-          isDisabled: !isMarkdownEditorActive,
-          icon: 'code' as const,
-        },
-        {
-          onClick: actions.drawHorizontalRule,
-          title: 'Horizontal line',
-          isDisabled: !isMarkdownEditorActive,
-          icon: 'minus' as const,
-        },
-        {
-          onClick: actions.drawTable,
-          title: 'Table',
-          isDisabled: !isMarkdownEditorActive,
-          icon: 'table' as const,
-        },
-        {
-          onClick: actions.drawLink,
-          title: 'Link',
-          isDisabled: !isMarkdownEditorActive,
-          icon: 'link' as const,
-        },
-        {
-          onClick: openFileDialog,
-          title: 'Image',
-          isDisabled: !isMarkdownEditorActive,
-          icon: 'image' as const,
-          hasSeparator: true,
-        },
-        {
-          heading: 'MDX',
-          onClick: actions.drawTableComponent,
-          title: 'Table component',
-          isDisabled: !isMarkdownEditorActive,
-          icon: 'table' as const,
-        },
-        {
-          onClick: actions.drawTodoListComponent,
-          title: 'TodoList component',
-          isDisabled: !isMarkdownEditorActive,
-          icon: 'table' as const,
-        },
-      ]
-    : null
+  const items = [
+    {
+      heading: 'Text',
+      onClick: () => toggleItalic(editor),
+      title: 'Italic',
+      icon: 'italic' as const,
+    },
+    {
+      onClick: () => toggleBold(editor),
+      title: 'Bold',
+      icon: 'bold' as const,
+    },
+    {
+      onClick: () => toggleBlockquote(editor),
+      title: 'Quote',
+      icon: 'quote-right' as const,
+      hasSeparator: true,
+    },
+    {
+      heading: 'List',
+      onClick: () => toggleOrderedList(editor),
+      title: 'Ordered',
+      icon: 'list-ol' as const,
+    },
+    {
+      onClick: () => toggleUnorderedList(editor),
+      title: 'Unordered',
+      icon: 'list' as const,
+      hasSeparator: true,
+    },
+    {
+      heading: 'Insert',
+      onClick: () => toggleCodeBlock(editor),
+      title: 'Code block',
+      icon: 'code' as const,
+    },
+    {
+      onClick: () => drawHorizontalRule(editor),
+      title: 'Horizontal line',
+      icon: 'minus' as const,
+    },
+    {
+      onClick: () => drawTable(editor),
+      title: 'Table',
+      icon: 'table' as const,
+    },
+    {
+      onClick: () => drawLink(editor),
+      title: 'Link',
+      icon: 'link' as const,
+    },
+    {
+      onClick: openFileDialog,
+      title: 'Image',
+      icon: 'image' as const,
+    },
+  ]
 
   return { items, Dropzone }
 }

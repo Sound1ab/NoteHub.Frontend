@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
-import { useReadSearch } from '../../../../../hooks/localState/useReadSearch'
-import { useReadFiles } from '../../../../../hooks/file/useReadFiles'
 import { useFileTree } from '../../../../../hooks/context/useFileTree'
+import { useFs } from '../../../../../hooks/fs/useFs'
+import { useGit } from '../../../../../hooks/git/useGit'
+import { useReadSearch } from '../../../../../hooks/localState/useReadSearch'
+import { useFiles } from '../../../../../hooks/recoil/useFiles'
 import { createNodes } from '../../../../../utils/createNodes'
 import { List } from '../../../../atoms/List/List'
 import { FileInput } from '../FileInput/FileInput'
@@ -20,9 +22,27 @@ interface IFileTree {
 export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const search = useReadSearch()
   const { listOfToggledPaths, onCreate, loading: createLoading } = useFileTree()
-  const { files, loading: readLoading } = useReadFiles()
+  const [files, setFiles] = useFiles()
+  const [{ clone }, { loading }] = useGit()
+  const [{ listFiles }] = useFs()
 
-  if (readLoading) {
+  useEffect(() => {
+    if (files.length > 0) {
+      return
+    }
+
+    async function init() {
+      await clone?.()
+
+      const files = await listFiles?.()
+
+      setFiles(files)
+    }
+
+    init()
+  }, [files, clone, setFiles, listFiles])
+
+  if (loading || !files) {
     return <TreeSkeleton />
   }
 

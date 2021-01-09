@@ -1,10 +1,11 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
+import { RecoilRoot } from 'recoil'
 import styled from 'styled-components'
 
 import { useReadRepo } from '../../../hooks/repo/useReadRepo'
+import { DraftManager } from './DraftManager/DraftManager'
 import { Editor } from './Editor/Editor'
-import { CodeMirrorProvider } from './Editor/MarkdownEditor/CodeMirror/CodeMirrorProvider'
 import { Sidebar } from './Sidebar/Sidebar'
 import { Toolbar } from './Toolbar/Toolbar'
 
@@ -27,13 +28,14 @@ function Dashboard() {
 
   return (
     <Grid>
-      <CodeMirrorProvider>
+      <RecoilRoot>
         <Toolbar />
         <MobileScroll>
           <Sidebar />
           <Editor />
         </MobileScroll>
-      </CodeMirrorProvider>
+        <DraftManager />
+      </RecoilRoot>
     </Grid>
   )
 }

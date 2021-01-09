@@ -1,7 +1,7 @@
 import React, { ReactNode, Ref, SyntheticEvent, useRef } from 'react'
 import styled, { css } from 'styled-components'
 
-import { useFileTree } from '../../../../../../../hooks/context/useFileTree'
+import { useActivePath } from '../../../../../../../hooks/recoil/useActivePath'
 import { useModalToggle } from '../../../../../../../hooks/utils/useModalToggle'
 import { ITreeNode } from '../../../../../../../types'
 import { Node_Type } from '../../../../../../apollo/generated_components_typings'
@@ -38,7 +38,7 @@ export function Node({
     containerRef
   )
   const { type, name, path } = node
-  const { activePath } = useFileTree()
+  const [activePath] = useActivePath()
   const isActive = path === activePath
 
   function handleToggleMenu(e: React.MouseEvent<HTMLElement, MouseEvent>) {

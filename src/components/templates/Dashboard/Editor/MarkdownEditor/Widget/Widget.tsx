@@ -1,18 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useCodeMirror } from '../../../../../../hooks/context/useCodeMirror'
+import { useWidget } from '../../../../../../hooks/recoil/useWidget'
 
 type Coords = { left: number; right: number; top: number; bottom: number }
 
 export function Widget() {
-  const { activeWidget } = useCodeMirror()
+  const [widget] = useWidget()
 
-  if (!activeWidget?.coords || !activeWidget.message) {
+  if (!widget?.coords || !widget.message) {
     return null
   }
 
-  const { message, coords } = activeWidget
+  const { message, coords } = widget
 
   return (
     <Wrapper position={coords}>

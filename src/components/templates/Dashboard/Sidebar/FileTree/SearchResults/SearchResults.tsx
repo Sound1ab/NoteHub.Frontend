@@ -1,15 +1,15 @@
 import Fuse from 'fuse.js'
 import React from 'react'
 
-import { useReadFiles } from '../../../../../../hooks/file/useReadFiles'
 import { useReadSearch } from '../../../../../../hooks/localState/useReadSearch'
+import { useFiles } from '../../../../../../hooks/recoil/useFiles'
 import { extractFilename } from '../../../../../../utils/extractFilename'
 import { Node_Type } from '../../../../../apollo/generated_components_typings'
 import { File } from '../Tree/File/File'
 
 export function SearchResults() {
   const search = useReadSearch()
-  const { files } = useReadFiles()
+  const [files] = useFiles()
 
   if (!files) {
     return null

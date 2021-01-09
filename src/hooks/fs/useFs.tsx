@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { ErrorToast } from '../../components/atoms/Toast/Toast'
 import FSWorker from '../../services/worker/loaders/fs'
