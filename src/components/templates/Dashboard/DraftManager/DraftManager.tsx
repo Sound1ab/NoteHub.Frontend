@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { useFs } from '../../../../hooks/fs/useFs'
 import { useGit } from '../../../../hooks/git/useGit'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
+import { useCommittedChanges } from '../../../../hooks/recoil/useCommittedChanges'
 import { useFileContent } from '../../../../hooks/recoil/useFileContent'
 import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
 import { Button } from '../../../atoms/Button/Button'
@@ -11,14 +12,22 @@ import { Icon } from '../../../atoms/Icon/Icon'
 
 export function DraftManager() {
   const [unstagedChanges, setUnstagedChanges] = useUnstagedChanges()
+  const [committedChanges, setCommittedChanges] = useCommittedChanges()
   const [
-    { rollback, stageChanges, commit, getUnstagedChanges, push },
+    {
+      rollback,
+      stageChanges,
+      commit,
+      getUnstagedChanges,
+      push,
+      getCommittedChanges,
+    },
   ] = useGit()
   const [, setFileContent] = useFileContent()
   const [{ readFile }] = useFs()
   const [activePath] = useActivePath()
 
-  if (!unstagedChanges || unstagedChanges.length === 0) {
+  if (unstagedChanges.length === 0 && committedChanges.length === 0) {
     return null
   }
 
@@ -36,10 +45,14 @@ export function DraftManager() {
     await commit?.()
 
     setUnstagedChanges(await getUnstagedChanges?.())
+
+    setCommittedChanges(await getCommittedChanges?.())
   }
 
   async function handlePush() {
     await push?.()
+
+    setCommittedChanges(await getCommittedChanges?.())
   }
 
   return (
@@ -47,12 +60,16 @@ export function DraftManager() {
       <DiscardButton title="Discard local changes" onClick={handleDiscard}>
         <Icon icon="times" size="lg" />
       </DiscardButton>
-      <CommitButton title="Stage and commit changes" onClick={handleCommit}>
-        <Icon icon="circle" size="lg" />
-      </CommitButton>
-      <PushButton title="Push changes to remote" onClick={handlePush}>
-        <Icon icon="check-circle" size="lg" />
-      </PushButton>
+      {unstagedChanges.length > 0 && (
+        <CommitButton title="Stage and commit changes" onClick={handleCommit}>
+          <Icon icon="circle" size="lg" />
+        </CommitButton>
+      )}
+      {committedChanges.length > 0 && (
+        <PushButton title="Push changes to remote" onClick={handlePush}>
+          <Icon icon="check-circle" size="lg" />
+        </PushButton>
+      )}
     </Wrapper>
   )
 }

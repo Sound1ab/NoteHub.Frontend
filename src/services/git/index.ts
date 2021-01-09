@@ -12,6 +12,7 @@ import {
   walk,
 } from 'isomorphic-git'
 import http from 'isomorphic-git/http/web'
+import htmlRE from 'markdown-it/lib/common/html_re'
 
 import { Node_Type } from '../../components/apollo/generated_components_typings'
 import { fs } from '../lightningFS'
