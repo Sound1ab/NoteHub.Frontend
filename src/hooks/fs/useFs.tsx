@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react'
 
 import { Node_Type } from '../../components/apollo/generated_components_typings'
-import { ErrorToast } from '../../components/atoms/Toast/Toast'
 import { IGitTreeNode } from '../../services/git/types'
 import {
   readDirRecursive as fsReadDirRecursive,
@@ -25,11 +24,6 @@ type UseFSReturn = [
 export function useFs(): UseFSReturn {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
-
-  if (error) {
-    ErrorToast(error)
-    setError(null)
-  }
 
   const readFile = useCallback(async (path: string) => {
     setLoading(true)

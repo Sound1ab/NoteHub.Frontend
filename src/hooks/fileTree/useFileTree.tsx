@@ -1,31 +1,33 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
+
+import { useOpenFolders } from '../recoil/useOpenFolders'
 
 type UseFileTreeReturn = [
   {
     openFoldersInPath: (path: string) => void
-    openFolder: (path: string, toggled: boolean) => void
-  },
-  { openFolders: Set<string> }
+    toggleFolder: (path: string, toggled: boolean) => void
+  }
 ]
 
 export function useFileTree(): UseFileTreeReturn {
-  const [openFolders, setOpenFolders] = useState<Set<string>>(new Set([]))
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<Error | null>(null)
+  const [, setOpenFolders] = useOpenFolders()
 
-  const openFolder = useCallback((path: string, toggled: boolean) => {
-    if (toggled) {
-      setOpenFolders((openFolders) => {
-        openFolders.add(path)
-        return new Set(openFolders)
-      })
-    } else {
-      setOpenFolders((openFolders) => {
-        openFolders.delete(path)
-        return new Set(openFolders)
-      })
-    }
-  }, [])
+  const toggleFolder = useCallback(
+    (path: string, toggled: boolean) => {
+      if (toggled) {
+        setOpenFolders((openFolders) => {
+          openFolders.add(path)
+          return new Set(openFolders)
+        })
+      } else {
+        setOpenFolders((openFolders) => {
+          openFolders.delete(path)
+          return new Set(openFolders)
+        })
+      }
+    },
+    [setOpenFolders]
+  )
 
   const openFoldersInPath = useCallback(
     (path: string) => {
@@ -36,20 +38,17 @@ export function useFileTree(): UseFileTreeReturn {
 
       // Toggle all the folders in the path open so we can see the new file
       for (let i = newPathArray.length - 1; i >= 0; i--) {
-        openFolder(newPathArray.join('/'), true)
+        toggleFolder(newPathArray.join('/'), true)
         newPathArray.pop()
       }
     },
-    [openFolder]
+    [toggleFolder]
   )
 
   return [
     {
       openFoldersInPath,
-      openFolder,
-    },
-    {
-      openFolders,
+      toggleFolder,
     },
   ]
 }

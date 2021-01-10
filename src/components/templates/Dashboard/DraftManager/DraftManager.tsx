@@ -29,14 +29,12 @@ export function DraftManager() {
   const [activePath] = useActivePath()
   const [, setFiles] = useFiles()
 
-  console.log('unstagedChanges', unstagedChanges)
-
   if (unstagedChanges.length === 0 && committedChanges.length === 0) {
     return null
   }
 
   async function handleDiscard() {
-    await rollback?.(unstagedChanges)
+    await rollback?.(await getUnstagedChanges())
 
     setUnstagedChanges(await getUnstagedChanges())
 
@@ -51,7 +49,7 @@ export function DraftManager() {
   }
 
   async function handleCommit() {
-    await stageChanges?.(unstagedChanges)
+    await stageChanges?.(await getUnstagedChanges())
 
     await commit?.()
 

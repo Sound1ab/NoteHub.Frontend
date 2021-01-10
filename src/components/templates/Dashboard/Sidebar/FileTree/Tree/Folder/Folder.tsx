@@ -1,11 +1,19 @@
-import React, { MouseEvent, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import { useDrop } from 'react-dnd'
 import styled, { css } from 'styled-components'
 
-import { useFileTree } from '../../../../../../../hooks/context/useFileTree'
 import { useFolderDropdown } from '../../../../../../../hooks/dropdown/useFolderDropdown'
+import { useFileTree } from '../../../../../../../hooks/fileTree/useFileTree'
+import { useFs } from '../../../../../../../hooks/fs/useFs'
+import { useGit } from '../../../../../../../hooks/git/useGit'
+import { useActivePath } from '../../../../../../../hooks/recoil/useActivePath'
+import { useFiles } from '../../../../../../../hooks/recoil/useFiles'
+import { useTabs } from '../../../../../../../hooks/recoil/useTabs'
+import { useUnstagedChanges } from '../../../../../../../hooks/recoil/useUnstagedChanges'
 import { IFolderNode, ITreeNode } from '../../../../../../../types'
+import { extractFilename } from '../../../../../../../utils/extractFilename'
 import { Icon } from '../../../../../../atoms/Icon/Icon'
+import { ErrorToast } from '../../../../../../atoms/Toast/Toast'
 import { FileInput } from '../../../FileInput/FileInput'
 import { Node } from '../Node/Node'
 
@@ -19,13 +27,13 @@ export function Folder({ level, node, childNodes }: IFolder) {
   const { items, isNewFileOpen, handleSetIsNewFileClose } = useFolderDropdown(
     node
   )
-  const {
-    onCreate,
-    loading,
-    onMove,
-    onChevronClick,
-    onFolderClick,
-  } = useFileTree()
+  const [{ openFoldersInPath, toggleFolder }] = useFileTree()
+  const [tabs, setTabs] = useTabs()
+  const [, setUnstagedChanges] = useUnstagedChanges()
+  const [activePath, setActivePath] = useActivePath()
+  const [, setFiles] = useFiles()
+  const [{ rename, readDirRecursive, writeFile }, { loading, error }] = useFs()
+  const [{ getUnstagedChanges }, { loading: gitLoading }] = useGit()
   const { path, toggled = false } = node
 
   const [{ isOver }, dropRef] = useDrop<
@@ -40,8 +48,73 @@ export function Folder({ level, node, childNodes }: IFolder) {
     }),
   })
 
+  if (error) {
+    ErrorToast(error)
+  }
+
   async function handleMove({ file }: { file: ITreeNode }) {
-    await onMove(file, path, isOver)
+    if (!isOver) {
+      return
+    }
+
+    const filename = extractFilename(file.path)
+
+    const newPath = `${path}/${filename}`
+
+    // Return if we dropped the file in its original folder
+    if (newPath === file.path) {
+      return
+    }
+
+    openFoldersInPath(newPath)
+
+    await rename(file.path, newPath)
+
+    setUnstagedChanges(await getUnstagedChanges())
+
+    setFiles(await readDirRecursive())
+
+    setTabs(new Set([...tabs].map((tab) => (tab === path ? newPath : tab))))
+
+    if (path === activePath) {
+      setActivePath(newPath)
+    }
+  }
+
+  function handleFolderClick() {
+    const isActive = path === activePath
+
+    if (isActive) {
+      toggleFolder(path, !toggled)
+    } else {
+      toggleFolder(path, true)
+    }
+
+    setActivePath(path)
+  }
+
+  function handleChevronClick() {
+    toggleFolder(path, !toggled)
+
+    setActivePath(path)
+  }
+
+  async function handleCreate(name: string) {
+    const path = `${name}.md`
+
+    openFoldersInPath(path)
+
+    await writeFile(path, '')
+
+    setUnstagedChanges(await getUnstagedChanges())
+
+    setFiles(await readDirRecursive())
+
+    tabs.add(path)
+
+    setTabs(new Set(tabs))
+
+    setActivePath(path)
   }
 
   return (
@@ -50,7 +123,7 @@ export function Folder({ level, node, childNodes }: IFolder) {
         node={node}
         level={level}
         dropdownItems={items}
-        onClick={() => onFolderClick(node)}
+        onClick={handleFolderClick}
         childNodes={childNodes}
         dndRef={dropRef}
         isOver={isOver}
@@ -61,7 +134,7 @@ export function Folder({ level, node, childNodes }: IFolder) {
             size="1x"
             icon="chevron-right"
             aria-label="chevron"
-            onClick={(e: MouseEvent<HTMLElement>) => onChevronClick(e, node)}
+            onClick={handleChevronClick}
           />
           <StyledIcon size="1x" icon="folder" />
         </>
@@ -69,7 +142,7 @@ export function Folder({ level, node, childNodes }: IFolder) {
       {isNewFileOpen && (
         <FileInput
           onClickOutside={handleSetIsNewFileClose}
-          onSubmit={(name) => onCreate(`${path}/${name}.md`)}
+          onSubmit={(value) => handleCreate(`${path}/${value}.md`)}
           isDisabled={loading}
         />
       )}

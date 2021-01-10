@@ -8,7 +8,9 @@ import { useGit } from '../../../../../hooks/git/useGit'
 import { useReadSearch } from '../../../../../hooks/localState/useReadSearch'
 import { useActivePath } from '../../../../../hooks/recoil/useActivePath'
 import { useFiles } from '../../../../../hooks/recoil/useFiles'
+import { useOpenFolders } from '../../../../../hooks/recoil/useOpenFolders'
 import { useTabs } from '../../../../../hooks/recoil/useTabs'
+import { useUnstagedChanges } from '../../../../../hooks/recoil/useUnstagedChanges'
 import { createNodes } from '../../../../../utils/createNodes'
 import { List } from '../../../../atoms/List/List'
 import { ErrorToast } from '../../../../atoms/Toast/Toast'
@@ -24,12 +26,11 @@ interface IFileTree {
 
 export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const search = useReadSearch()
-  const [{ openFoldersInPath }, { openFolders }] = useFileTree()
+  const [, setUnstagedChanges] = useUnstagedChanges()
+  const [openFolders] = useOpenFolders()
+  const [{ openFoldersInPath }] = useFileTree()
   const [files, setFiles] = useFiles()
-  const [
-    { clone, stageChanges, getUnstagedChanges, commit, getCommittedChanges },
-    { loading: gitLoading },
-  ] = useGit()
+  const [{ clone, getUnstagedChanges }, { loading: gitLoading }] = useGit()
   const [
     { listFiles, writeFile, readDirRecursive },
     { loading: fsLoading, error },
@@ -38,7 +39,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const [, setActivePath] = useActivePath()
 
   if (error) {
-    ErrorToast(error.message)
+    ErrorToast(error)
   }
 
   useEffect(() => {
@@ -66,7 +67,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
 
     await writeFile(path, '')
 
-    await getCommittedChanges()
+    setUnstagedChanges(await getUnstagedChanges())
 
     setFiles(await readDirRecursive())
 

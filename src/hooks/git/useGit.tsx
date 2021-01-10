@@ -25,15 +25,15 @@ type UseGitReturn = [
     clone: () => Promise<void>
     push: () => Promise<void>
   },
-  { loading: boolean; error: Error | null }
+  { loading: boolean; error: string | null }
 ]
 
 export function useGit(): UseGitReturn {
   const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<Error | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   if (error) {
-    ErrorToast(error.message)
+    ErrorToast(error)
     setError(null)
   }
 
@@ -42,7 +42,7 @@ export function useGit(): UseGitReturn {
     try {
       return unstagedChanges({ dir: '/' })
     } catch (error) {
-      setError(error)
+      setError(`Git get unstaged changes: ${error.message}`)
       return []
     } finally {
       setLoading(false)
@@ -57,7 +57,7 @@ export function useGit(): UseGitReturn {
         unstagedChanges,
       })
     } catch (error) {
-      setError(error)
+      setError(`Git stage changes: ${error.message}`)
     } finally {
       setLoading(false)
     }
@@ -70,7 +70,7 @@ export function useGit(): UseGitReturn {
         dir: '/',
       })
     } catch (error) {
-      setError(error)
+      setError(`Git commit: ${error.message}`)
     } finally {
       setLoading(false)
     }
@@ -84,7 +84,7 @@ export function useGit(): UseGitReturn {
         unstagedChanges,
       })
     } catch (error) {
-      setError(error)
+      setError(`Git rollback: ${error.message}`)
     } finally {
       setLoading(false)
     }
@@ -98,7 +98,7 @@ export function useGit(): UseGitReturn {
       })
       return result
     } catch (error) {
-      setError(error)
+      setError(`Git status: ${error.message}`)
     } finally {
       setLoading(false)
     }
@@ -113,7 +113,7 @@ export function useGit(): UseGitReturn {
 
       return changes
     } catch (error) {
-      setError(error)
+      setError(`Git get committed changes: ${error.message}`)
       return []
     } finally {
       setLoading(false)
@@ -127,7 +127,7 @@ export function useGit(): UseGitReturn {
         dir: '/',
       })
     } catch (error) {
-      setError(error)
+      setError(`Git clone: ${error.message}`)
     } finally {
       setLoading(false)
     }
@@ -139,7 +139,7 @@ export function useGit(): UseGitReturn {
         dir: '/',
       })
     } catch (error) {
-      setError(error)
+      setError(`Git push: ${error.message}`)
     } finally {
       setLoading(false)
     }

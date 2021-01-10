@@ -16,8 +16,10 @@ import { removeMarkdownExtension } from '../../../../../../../utils/removeMarkdo
 import { scrollIntoView } from '../../../../../../../utils/scrollIntoView'
 import { Node_Type } from '../../../../../../apollo/generated_components_typings'
 import { Icon } from '../../../../../../atoms/Icon/Icon'
+import { ErrorToast } from '../../../../../../atoms/Toast/Toast'
 import { FileInput } from '../../../FileInput/FileInput'
 import { Node } from '../Node/Node'
+import { useUnstagedChanges } from '../../../../../../../hooks/recoil/useUnstagedChanges'
 
 interface IFile {
   node: ITreeNode
@@ -27,6 +29,7 @@ interface IFile {
 export function File({ node, level }: IFile) {
   const { items, isRenaming, handleSetIsRenamingClose } = useFileDropdown(node)
   const [{ openFoldersInPath }] = useFileTree()
+  const [, setUnstagedChanges] = useUnstagedChanges()
   const [{ isDragging }, dragRef] = useDrag({
     item: { type: 'NODE', file: node },
     collect: (monitor) => ({
@@ -35,11 +38,15 @@ export function File({ node, level }: IFile) {
   })
   const [activePath, setActivePath] = useActivePath()
   const [tabs, setTabs] = useTabs()
-  const [{ rename, readDirRecursive }, { loading }] = useFs()
-  const [{ commit, getCommittedChanges }] = useGit()
+  const [{ rename, readDirRecursive }, { loading, error }] = useFs()
+  const [{ getUnstagedChanges }] = useGit()
   const [, setFiles] = useFiles()
 
   const { path, type, name } = node
+
+  if (error) {
+    ErrorToast(error)
+  }
 
   async function handleFileClick() {
     if (type === Node_Type.File) {
@@ -63,9 +70,7 @@ export function File({ node, level }: IFile) {
 
     await rename(path, newPath)
 
-    await commit()
-
-    await getCommittedChanges()
+    setUnstagedChanges(await getUnstagedChanges())
 
     setFiles(await readDirRecursive())
 
