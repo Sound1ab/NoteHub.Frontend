@@ -1,6 +1,14 @@
 import { useCallback, useState } from 'react'
 
-export function useFileTree() {
+type UseFileTreeReturn = [
+  {
+    openFoldersInPath: (path: string) => void
+    openFolder: (path: string, toggled: boolean) => void
+  },
+  { openFolders: Set<string> }
+]
+
+export function useFileTree(): UseFileTreeReturn {
   const [openFolders, setOpenFolders] = useState<Set<string>>(new Set([]))
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<Error | null>(null)

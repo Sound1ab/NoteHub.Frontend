@@ -3,11 +3,41 @@ import FS from '@isomorphic-git/lightning-fs'
 export const fs = new FS('fs', { wipe: true })
 
 export interface IReadDir {
-  filepath: string
+  dir: string
 }
 
-export async function readDir({ filepath }: IReadDir): Promise<string[]> {
-  return fs.promises.readdir(filepath, undefined)
+export async function readDir({ dir }: IReadDir): Promise<string[]> {
+  return fs.promises.readdir(dir, undefined)
+}
+
+export interface IReadDirRecursive {
+  dir: string
+}
+
+export async function readDirRecursive({ dir }: IReadDirRecursive) {
+  const subdirs = await readDir({ dir })
+
+  const files: (string | string[])[] = await Promise.all(
+    subdirs
+      .filter((subdir) => subdir !== '.git')
+      .map(async (subdir) => {
+        const path = dir === '/' ? `/${subdir}` : `${dir}/${subdir}`
+
+        return (await stat({ path })).isDirectory()
+          ? readDirRecursive({ dir: path })
+          : path.slice(1) // remove leading slash ()
+      })
+  )
+
+  return files.flat()
+}
+
+export interface IStat {
+  path: string
+}
+
+export async function stat({ path }: IStat) {
+  return fs.promises.stat(path)
 }
 
 export interface IReadFile {

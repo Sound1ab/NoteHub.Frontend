@@ -6,6 +6,7 @@ import { useGit } from '../../../../hooks/git/useGit'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
 import { useCommittedChanges } from '../../../../hooks/recoil/useCommittedChanges'
 import { useFileContent } from '../../../../hooks/recoil/useFileContent'
+import { useFiles } from '../../../../hooks/recoil/useFiles'
 import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
 import { Button } from '../../../atoms/Button/Button'
 import { Icon } from '../../../atoms/Icon/Icon'
@@ -24,8 +25,9 @@ export function DraftManager() {
     },
   ] = useGit()
   const [, setFileContent] = useFileContent()
-  const [{ readFile }] = useFs()
+  const [{ readFile, readDirRecursive }] = useFs()
   const [activePath] = useActivePath()
+  const [, setFiles] = useFiles()
 
   console.log('unstagedChanges', unstagedChanges)
 
@@ -38,7 +40,14 @@ export function DraftManager() {
 
     setUnstagedChanges(await getUnstagedChanges())
 
-    setFileContent((await readFile(activePath)) ?? '')
+    setFiles(await readDirRecursive())
+
+    const content = await readFile(activePath)
+
+    // May unstage adding a new file so content could be undefined
+    if (content) {
+      setFileContent(content)
+    }
   }
 
   async function handleCommit() {
@@ -46,16 +55,9 @@ export function DraftManager() {
 
     await commit?.()
 
-    const test = await getUnstagedChanges()
+    setUnstagedChanges(await getUnstagedChanges())
 
-    console.log('unstaged', test)
-
-    setUnstagedChanges(test)
-
-    const test2 = await getCommittedChanges()
-
-    console.log('committedd', test2)
-    setCommittedChanges(test2)
+    setCommittedChanges(await getCommittedChanges())
   }
 
   async function handlePush() {

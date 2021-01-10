@@ -30,7 +30,10 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
     { clone, stageChanges, getUnstagedChanges, commit, getCommittedChanges },
     { loading: gitLoading },
   ] = useGit()
-  const [{ listFiles, writeFile }, { loading: fsLoading, error }] = useFs()
+  const [
+    { listFiles, writeFile, readDirRecursive },
+    { loading: fsLoading, error },
+  ] = useFs()
   const [tabs, setTabs] = useTabs()
   const [, setActivePath] = useActivePath()
 
@@ -46,11 +49,11 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
     async function init() {
       await clone?.()
 
-      setFiles(await listFiles())
+      setFiles(await readDirRecursive())
     }
 
     init()
-  }, [files, clone, setFiles, listFiles])
+  }, [files, clone, setFiles, listFiles, readDirRecursive])
 
   if (gitLoading || !files) {
     return <TreeSkeleton />
@@ -59,17 +62,13 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   async function handleCreate(name: string) {
     const path = `${name}.md`
 
-    openFoldersInPath?.(path)
+    openFoldersInPath(path)
 
-    await writeFile?.(path, '')
+    await writeFile(path, '')
 
-    await stageChanges?.(await getUnstagedChanges())
+    await getCommittedChanges()
 
-    await commit?.()
-
-    await getCommittedChanges?.()
-
-    setFiles(await listFiles())
+    setFiles(await readDirRecursive())
 
     tabs.add(path)
 

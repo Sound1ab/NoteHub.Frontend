@@ -6,7 +6,9 @@ import { CONTAINER_ID } from '../../../../../../../enums'
 import { useFileDropdown } from '../../../../../../../hooks/dropdown/useFileDropdown'
 import { useFileTree } from '../../../../../../../hooks/fileTree/useFileTree'
 import { useFs } from '../../../../../../../hooks/fs/useFs'
+import { useGit } from '../../../../../../../hooks/git/useGit'
 import { useActivePath } from '../../../../../../../hooks/recoil/useActivePath'
+import { useFiles } from '../../../../../../../hooks/recoil/useFiles'
 import { useTabs } from '../../../../../../../hooks/recoil/useTabs'
 import { ITreeNode } from '../../../../../../../types'
 import { removeLastSlug } from '../../../../../../../utils/removeLastSlug'
@@ -33,7 +35,9 @@ export function File({ node, level }: IFile) {
   })
   const [activePath, setActivePath] = useActivePath()
   const [tabs, setTabs] = useTabs()
-  const [{ rename }, { loading }] = useFs()
+  const [{ rename, readDirRecursive }, { loading }] = useFs()
+  const [{ commit, getCommittedChanges }] = useGit()
+  const [, setFiles] = useFiles()
 
   const { path, type, name } = node
 
@@ -57,13 +61,17 @@ export function File({ node, level }: IFile) {
 
     openFoldersInPath?.(newPath)
 
+    await rename(path, newPath)
+
+    await commit()
+
+    await getCommittedChanges()
+
+    setFiles(await readDirRecursive())
+
     setTabs(new Set([...tabs].map((tab) => (tab === path ? newPath : tab))))
 
-    await rename?.(path, newPath)
-
-    setActivePath(newPath)
-
-    if (node.path === activePath) {
+    if (path === activePath) {
       setActivePath(newPath)
     }
   }

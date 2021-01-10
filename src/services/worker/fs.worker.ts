@@ -1,6 +1,13 @@
-import { IReadDir, IReadFile, IRename, IWriteFile } from '../lightningFS'
+import {
+  IReadDir,
+  IReadDirRecursive,
+  IReadFile,
+  IRename,
+  IWriteFile,
+} from '../lightningFS'
 import {
   readDir as fsReadDir,
+  readDirRecursive as fsReadDirRecursive,
   readFile as fsReadFile,
   rename as fsRename,
   writeFile as fsWriteFile,
@@ -20,4 +27,8 @@ export async function writeFile(options: IWriteFile) {
 
 export async function rename(options: IRename) {
   return fsRename(options)
+}
+
+export async function readDirRecursive(options: IReadDirRecursive) {
+  return fsReadDirRecursive(options)
 }

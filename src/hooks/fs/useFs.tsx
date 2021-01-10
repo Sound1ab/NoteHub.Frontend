@@ -1,8 +1,10 @@
 import { useCallback, useState } from 'react'
 
+import { Node_Type } from '../../components/apollo/generated_components_typings'
 import { ErrorToast } from '../../components/atoms/Toast/Toast'
 import { IGitTreeNode } from '../../services/git/types'
 import {
+  readDirRecursive as fsReadDirRecursive,
   readFile as fsReadFile,
   rename as fsRename,
   writeFile as fsWriteFile,
@@ -15,16 +17,17 @@ type UseFSReturn = [
     writeFile: (path: string, content: string) => Promise<void>
     listFiles: () => Promise<IGitTreeNode[] | never[]>
     rename: (oldFilePath: string, newFilePath: string) => Promise<void>
+    readDirRecursive: () => Promise<IGitTreeNode[] | never[]>
   },
-  { loading: boolean; error: Error | null }
+  { loading: boolean; error: string | null }
 ]
 
 export function useFs(): UseFSReturn {
   const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<Error | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   if (error) {
-    ErrorToast(error.message)
+    ErrorToast(error)
     setError(null)
   }
 
@@ -32,7 +35,7 @@ export function useFs(): UseFSReturn {
     setLoading(true)
     try {
       const content = await fsReadFile({
-        filepath: `/test-dir/${path}`,
+        filepath: `/${path}`,
       })
 
       if (typeof content === 'string') {
@@ -41,7 +44,7 @@ export function useFs(): UseFSReturn {
 
       return new TextDecoder('utf-8').decode(content)
     } catch (error) {
-      setError(error)
+      setError(`FS read: ${error.message}`)
     } finally {
       setLoading(false)
     }
@@ -51,11 +54,11 @@ export function useFs(): UseFSReturn {
     setLoading(true)
     try {
       await fsWriteFile({
-        filepath: `/test-dir/${path}`,
+        filepath: `/${path}`,
         content,
       })
     } catch (error) {
-      setError(error)
+      setError(`FS write: ${error.message}`)
     } finally {
       setLoading(false)
     }
@@ -65,13 +68,13 @@ export function useFs(): UseFSReturn {
     setLoading(true)
     try {
       const files = await gitListFiles({
-        dir: '/test-dir',
+        dir: '/',
         optimisticPaths: [],
       })
 
       return files
     } catch (error) {
-      setError(error)
+      setError(`FS list: ${error.message}`)
       return []
     } finally {
       setLoading(false)
@@ -83,11 +86,11 @@ export function useFs(): UseFSReturn {
       setLoading(true)
       try {
         await fsRename({
-          oldFilePath: `/test-dir/${oldFilePath}`,
-          newFilePath: `/test-dir/${newFilePath}`,
+          oldFilePath: `/${oldFilePath}`,
+          newFilePath: `/${newFilePath}`,
         })
       } catch (error) {
-        setError(error)
+        setError(`FS rename: ${error.message}`)
       } finally {
         setLoading(false)
       }
@@ -95,8 +98,26 @@ export function useFs(): UseFSReturn {
     []
   )
 
+  const readDirRecursive = useCallback(async () => {
+    setLoading(true)
+    try {
+      const files = await fsReadDirRecursive({ dir: '/' })
+
+      return files.map((path) => ({
+        path,
+        isOptimistic: false,
+        type: Node_Type.File,
+      }))
+    } catch (error) {
+      setError(`FS read recursive: ${error.message}`)
+      return []
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   return [
-    { readFile, writeFile, listFiles, rename },
+    { readFile, writeFile, listFiles, rename, readDirRecursive },
     { loading, error },
   ]
 }

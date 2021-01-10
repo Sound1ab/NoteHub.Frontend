@@ -40,7 +40,7 @@ export function useGit(): UseGitReturn {
   const getUnstagedChanges = useCallback(async () => {
     setLoading(true)
     try {
-      return unstagedChanges({ dir: '/test-dir' })
+      return unstagedChanges({ dir: '/' })
     } catch (error) {
       setError(error)
       return []
@@ -53,7 +53,7 @@ export function useGit(): UseGitReturn {
     setLoading(true)
     try {
       await gitStageChanges({
-        dir: '/test-dir',
+        dir: '/',
         unstagedChanges,
       })
     } catch (error) {
@@ -67,7 +67,7 @@ export function useGit(): UseGitReturn {
     setLoading(true)
     try {
       await gitCommit({
-        dir: '/test-dir',
+        dir: '/',
       })
     } catch (error) {
       setError(error)
@@ -80,7 +80,7 @@ export function useGit(): UseGitReturn {
     setLoading(true)
     try {
       await gitRollback({
-        dir: '/test-dir',
+        dir: '/',
         unstagedChanges,
       })
     } catch (error) {
@@ -94,7 +94,7 @@ export function useGit(): UseGitReturn {
     setLoading(true)
     try {
       const result = await gitStatus({
-        dir: '/test-dir',
+        dir: '/',
       })
       return result
     } catch (error) {
@@ -108,7 +108,7 @@ export function useGit(): UseGitReturn {
     setLoading(true)
     try {
       const changes = await committedChanges({
-        dir: '/test-dir',
+        dir: '/',
       })
 
       return changes
@@ -124,7 +124,7 @@ export function useGit(): UseGitReturn {
     try {
       await gitClone({
         url: 'https://github.com/Sound1ab/Notes.git',
-        dir: '/test-dir',
+        dir: '/',
       })
     } catch (error) {
       setError(error)
@@ -136,7 +136,7 @@ export function useGit(): UseGitReturn {
   const push = useCallback(async () => {
     try {
       await gitPush({
-        dir: '/test-dir',
+        dir: '/',
       })
     } catch (error) {
       setError(error)
