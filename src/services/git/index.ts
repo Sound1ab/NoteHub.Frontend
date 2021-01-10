@@ -7,6 +7,7 @@ import {
   clone as gitClone,
   commit as gitCommit,
   push as gitPush,
+  remove as gitRemove,
   resolveRef,
   statusMatrix,
   walk,
@@ -245,5 +246,18 @@ export async function push({ dir }: IPush) {
     ref: 'main',
     onAuth: () => ({ username: process.env.REACT_APP_PAT }),
     corsProxy: process.env.REACT_APP_PROXY,
+  })
+}
+
+export interface IRemove {
+  dir: string
+  filepath: string
+}
+
+export async function remove({ dir, filepath }: IRemove) {
+  return gitRemove({
+    fs,
+    dir,
+    filepath,
   })
 }

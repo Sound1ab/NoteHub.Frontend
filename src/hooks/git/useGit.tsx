@@ -6,6 +6,7 @@ import {
   clone as gitClone,
   commit as gitCommit,
   push as gitPush,
+  remove as gitRemove,
   rollback as gitRollback,
   stageChanges as gitStageChanges,
   status as gitStatus,
@@ -24,6 +25,7 @@ type UseGitReturn = [
     getCommittedChanges: () => Promise<string[] | never[]>
     clone: () => Promise<void>
     push: () => Promise<void>
+    remove: (filepath: string) => Promise<void>
   },
   { loading: boolean; error: string | null }
 ]
@@ -145,6 +147,19 @@ export function useGit(): UseGitReturn {
     }
   }, [])
 
+  const remove = useCallback(async (filepath: string) => {
+    try {
+      await gitRemove({
+        dir: '/',
+        filepath,
+      })
+    } catch (error) {
+      setError(`Git push: ${error.message}`)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   return [
     {
       getUnstagedChanges,
@@ -155,6 +170,7 @@ export function useGit(): UseGitReturn {
       getCommittedChanges,
       clone,
       push,
+      remove,
     },
     { loading, error },
   ]

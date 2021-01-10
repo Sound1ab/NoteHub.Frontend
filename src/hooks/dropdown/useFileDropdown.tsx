@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
 import { ITreeNode } from '../../types'
-import { useFileTree } from '../context/useFileTree'
+import { useFileTree } from '../fileTree/useFileTree'
 
 export function useFileDropdown(node: ITreeNode) {
   const [isRenaming, setIsRenaming] = useState(false)
-  const { onDeleteFile } = useFileTree()
+  const [{ deleteFile }] = useFileTree()
 
   function handleSetIsRenamingOpen(
     e: React.MouseEvent<HTMLElement, MouseEvent>
@@ -16,6 +16,10 @@ export function useFileDropdown(node: ITreeNode) {
 
   function handleSetIsRenamingClose() {
     setIsRenaming(false)
+  }
+
+  async function handleDeleteFile() {
+    await deleteFile(node.path)
   }
 
   const items = [
@@ -29,7 +33,7 @@ export function useFileDropdown(node: ITreeNode) {
     {
       icon: 'trash' as const,
       label: 'Delete',
-      onClick: () => onDeleteFile(node),
+      onClick: handleDeleteFile,
     },
   ]
 

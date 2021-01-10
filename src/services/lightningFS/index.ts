@@ -70,3 +70,11 @@ export interface IRename {
 export async function rename({ oldFilePath, newFilePath }: IRename) {
   return fs.promises.rename(oldFilePath, newFilePath)
 }
+
+export interface IUnlink {
+  filepath: string
+}
+
+export async function unlink({ filepath }: IUnlink) {
+  return fs.promises.unlink(filepath)
+}

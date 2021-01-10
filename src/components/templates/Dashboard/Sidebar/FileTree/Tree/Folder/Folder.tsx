@@ -4,12 +4,6 @@ import styled, { css } from 'styled-components'
 
 import { useFolderDropdown } from '../../../../../../../hooks/dropdown/useFolderDropdown'
 import { useFileTree } from '../../../../../../../hooks/fileTree/useFileTree'
-import { useFs } from '../../../../../../../hooks/fs/useFs'
-import { useGit } from '../../../../../../../hooks/git/useGit'
-import { useActivePath } from '../../../../../../../hooks/recoil/useActivePath'
-import { useFiles } from '../../../../../../../hooks/recoil/useFiles'
-import { useTabs } from '../../../../../../../hooks/recoil/useTabs'
-import { useUnstagedChanges } from '../../../../../../../hooks/recoil/useUnstagedChanges'
 import { IFolderNode, ITreeNode } from '../../../../../../../types'
 import { extractFilename } from '../../../../../../../utils/extractFilename'
 import { Icon } from '../../../../../../atoms/Icon/Icon'
@@ -27,13 +21,10 @@ export function Folder({ level, node, childNodes }: IFolder) {
   const { items, isNewFileOpen, handleSetIsNewFileClose } = useFolderDropdown(
     node
   )
-  const [{ openFoldersInPath, toggleFolder }] = useFileTree()
-  const [tabs, setTabs] = useTabs()
-  const [, setUnstagedChanges] = useUnstagedChanges()
-  const [activePath, setActivePath] = useActivePath()
-  const [, setFiles] = useFiles()
-  const [{ rename, readDirRecursive, writeFile }, { loading, error }] = useFs()
-  const [{ getUnstagedChanges }, { loading: gitLoading }] = useGit()
+  const [
+    { renameNode, folderClick, chevronClick, createFile },
+    { loading, error },
+  ] = useFileTree()
   const { path, toggled = false } = node
 
   const [{ isOver }, dropRef] = useDrop<
@@ -66,55 +57,21 @@ export function Folder({ level, node, childNodes }: IFolder) {
       return
     }
 
-    openFoldersInPath(newPath)
-
-    await rename(file.path, newPath)
-
-    setUnstagedChanges(await getUnstagedChanges())
-
-    setFiles(await readDirRecursive())
-
-    setTabs(new Set([...tabs].map((tab) => (tab === path ? newPath : tab))))
-
-    if (path === activePath) {
-      setActivePath(newPath)
-    }
+    await renameNode(file.path, newPath)
   }
 
   function handleFolderClick() {
-    const isActive = path === activePath
-
-    if (isActive) {
-      toggleFolder(path, !toggled)
-    } else {
-      toggleFolder(path, true)
-    }
-
-    setActivePath(path)
+    folderClick(path, !toggled)
   }
 
   function handleChevronClick() {
-    toggleFolder(path, !toggled)
-
-    setActivePath(path)
+    chevronClick(path, !toggled)
   }
 
   async function handleCreate(name: string) {
     const path = `${name}.md`
 
-    openFoldersInPath(path)
-
-    await writeFile(path, '')
-
-    setUnstagedChanges(await getUnstagedChanges())
-
-    setFiles(await readDirRecursive())
-
-    tabs.add(path)
-
-    setTabs(new Set(tabs))
-
-    setActivePath(path)
+    await createFile(path)
   }
 
   return (

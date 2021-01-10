@@ -6,6 +6,7 @@ import {
   readDirRecursive as fsReadDirRecursive,
   readFile as fsReadFile,
   rename as fsRename,
+  unlink as fsUnlink,
   writeFile as fsWriteFile,
 } from '../../services/worker/fs.worker'
 import { listFiles as gitListFiles } from '../../services/worker/git.worker'
@@ -17,6 +18,7 @@ type UseFSReturn = [
     listFiles: () => Promise<IGitTreeNode[] | never[]>
     rename: (oldFilePath: string, newFilePath: string) => Promise<void>
     readDirRecursive: () => Promise<IGitTreeNode[] | never[]>
+    unlink: (filepath: string) => Promise<void>
   },
   { loading: boolean; error: string | null }
 ]
@@ -110,8 +112,21 @@ export function useFs(): UseFSReturn {
     }
   }, [])
 
+  const unlink = useCallback(async (filepath: string) => {
+    setLoading(true)
+    try {
+      await fsUnlink({
+        filepath: `/${filepath}`,
+      })
+    } catch (error) {
+      setError(`FS rename: ${error.message}`)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   return [
-    { readFile, writeFile, listFiles, rename, readDirRecursive },
+    { readFile, writeFile, listFiles, rename, readDirRecursive, unlink },
     { loading, error },
   ]
 }

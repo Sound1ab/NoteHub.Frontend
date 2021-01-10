@@ -6,6 +6,7 @@ import {
   ICommittedChanges,
   IListFiles,
   IPush,
+  IRemove,
   IRollback,
   IStageChange,
   IStageChanges,
@@ -15,6 +16,7 @@ import {
   committedChanges as gitCommittedChanges,
   listFiles as gitListFiles,
   push as gitPush,
+  remove as gitRemove,
   rollback as gitRollback,
   stageChange as gitStageChange,
   stageChanges as gitStageChanges,
@@ -65,4 +67,8 @@ export async function push(options: IPush) {
 
 export async function stageChange(options: IStageChange) {
   return gitStageChange(options)
+}
+
+export async function remove(options: IRemove) {
+  return gitRemove(options)
 }

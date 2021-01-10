@@ -3,6 +3,7 @@ import {
   IReadDirRecursive,
   IReadFile,
   IRename,
+  IUnlink,
   IWriteFile,
 } from '../lightningFS'
 import {
@@ -10,6 +11,7 @@ import {
   readDirRecursive as fsReadDirRecursive,
   readFile as fsReadFile,
   rename as fsRename,
+  unlink as fsUnlink,
   writeFile as fsWriteFile,
 } from '../lightningFS'
 
@@ -31,4 +33,8 @@ export async function rename(options: IRename) {
 
 export async function readDirRecursive(options: IReadDirRecursive) {
   return fsReadDirRecursive(options)
+}
+
+export async function unlink(options: IUnlink) {
+  return fsUnlink(options)
 }

@@ -6,11 +6,8 @@ import { useFileTree } from '../../../../../hooks/fileTree/useFileTree'
 import { useFs } from '../../../../../hooks/fs/useFs'
 import { useGit } from '../../../../../hooks/git/useGit'
 import { useReadSearch } from '../../../../../hooks/localState/useReadSearch'
-import { useActivePath } from '../../../../../hooks/recoil/useActivePath'
 import { useFiles } from '../../../../../hooks/recoil/useFiles'
 import { useOpenFolders } from '../../../../../hooks/recoil/useOpenFolders'
-import { useTabs } from '../../../../../hooks/recoil/useTabs'
-import { useUnstagedChanges } from '../../../../../hooks/recoil/useUnstagedChanges'
 import { createNodes } from '../../../../../utils/createNodes'
 import { List } from '../../../../atoms/List/List'
 import { ErrorToast } from '../../../../atoms/Toast/Toast'
@@ -26,17 +23,14 @@ interface IFileTree {
 
 export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const search = useReadSearch()
-  const [, setUnstagedChanges] = useUnstagedChanges()
   const [openFolders] = useOpenFolders()
-  const [{ openFoldersInPath }] = useFileTree()
+  const [{ createFile }] = useFileTree()
   const [files, setFiles] = useFiles()
-  const [{ clone, getUnstagedChanges }, { loading: gitLoading }] = useGit()
+  const [{ clone }, { loading: gitLoading }] = useGit()
   const [
-    { listFiles, writeFile, readDirRecursive },
+    { listFiles, readDirRecursive },
     { loading: fsLoading, error },
   ] = useFs()
-  const [tabs, setTabs] = useTabs()
-  const [, setActivePath] = useActivePath()
 
   if (error) {
     ErrorToast(error)
@@ -63,19 +57,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   async function handleCreate(name: string) {
     const path = `${name}.md`
 
-    openFoldersInPath(path)
-
-    await writeFile(path, '')
-
-    setUnstagedChanges(await getUnstagedChanges())
-
-    setFiles(await readDirRecursive())
-
-    tabs.add(path)
-
-    setTabs(new Set(tabs))
-
-    setActivePath(path)
+    await createFile(path)
   }
 
   return (
