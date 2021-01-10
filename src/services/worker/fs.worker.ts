@@ -1,10 +1,10 @@
-import { IReadDir, IReadFile, IRename, IWriteFile } from '../../lightningFS'
+import { IReadDir, IReadFile, IRename, IWriteFile } from '../lightningFS'
 import {
   readDir as fsReadDir,
   readFile as fsReadFile,
   rename as fsRename,
   writeFile as fsWriteFile,
-} from '../../lightningFS'
+} from '../lightningFS'
 
 export async function readDir(options: IReadDir) {
   return fsReadDir(options)

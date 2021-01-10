@@ -18,7 +18,17 @@ module.exports = {
         },
       }
 
+      const webWorkerLoader = {
+        test: /\.worker\.(js|ts)$/i,
+        loader: require.resolve('comlink-loader'),
+        options: {
+          singleton: true,
+        },
+      }
+
       rule.oneOf = [responsiveLoader, ...rule.oneOf]
+
+      rule.rules = [webWorkerLoader]
 
       return webpackConfig
     },

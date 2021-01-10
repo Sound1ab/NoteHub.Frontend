@@ -20,7 +20,7 @@ import {
   stageChanges as gitStageChanges,
   status as gitStatus,
   unstagedChanges as gitUnstagedChanges,
-} from '../../git'
+} from '../git'
 
 export async function clone(options: Pick<IClone, 'url' | 'dir'>) {
   return gitClone({

@@ -1,12 +1,10 @@
 import { Retext_Settings } from '../../components/apollo/generated_components_typings'
 import { debounce } from '../../utils/debounce'
-import Worker from '../worker/loaders/retext'
-
-const instance = new Worker()
+import { processData } from '../worker/retext.worker'
 
 export const process = debounce(
   async (value: string, retextSettings: Retext_Settings[]) => {
-    return instance.processData(value, retextSettings)
+    return processData(value, retextSettings)
   },
   500
 )

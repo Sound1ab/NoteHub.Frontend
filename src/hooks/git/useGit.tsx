@@ -1,9 +1,34 @@
 import { useCallback, useState } from 'react'
 
 import { ErrorToast } from '../../components/atoms/Toast/Toast'
-import GitWorker from '../../services/worker/loaders/git'
+import {
+  committedChanges,
+  clone as gitClone,
+  commit as gitCommit,
+  push as gitPush,
+  rollback as gitRollback,
+  stageChanges as gitStageChanges,
+  status as gitStatus,
+  unstagedChanges,
+} from '../../services/worker/git.worker'
 
-export function useGit() {
+type UseGitReturn = [
+  {
+    getUnstagedChanges: () => Promise<string[] | never[]>
+    stageChanges: (unstagedChanges: string[]) => Promise<void>
+    commit: () => Promise<void>
+    rollback: (unstagedChanges: string[]) => Promise<void>
+    status: () => Promise<
+      [string, 0 | 1, 0 | 2 | 1, 0 | 2 | 1 | 3][] | undefined
+    >
+    getCommittedChanges: () => Promise<string[] | never[]>
+    clone: () => Promise<void>
+    push: () => Promise<void>
+  },
+  { loading: boolean; error: Error | null }
+]
+
+export function useGit(): UseGitReturn {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<Error | null>(null)
 
@@ -15,9 +40,10 @@ export function useGit() {
   const getUnstagedChanges = useCallback(async () => {
     setLoading(true)
     try {
-      return GitWorker.unstagedChanges({ dir: '/test-dir' })
+      return unstagedChanges({ dir: '/test-dir' })
     } catch (error) {
       setError(error)
+      return []
     } finally {
       setLoading(false)
     }
@@ -26,7 +52,7 @@ export function useGit() {
   const stageChanges = useCallback(async (unstagedChanges: string[]) => {
     setLoading(true)
     try {
-      await GitWorker.stageChanges({
+      await gitStageChanges({
         dir: '/test-dir',
         unstagedChanges,
       })
@@ -40,7 +66,7 @@ export function useGit() {
   const commit = useCallback(async () => {
     setLoading(true)
     try {
-      await GitWorker.commit({
+      await gitCommit({
         dir: '/test-dir',
       })
     } catch (error) {
@@ -53,7 +79,7 @@ export function useGit() {
   const rollback = useCallback(async (unstagedChanges: string[]) => {
     setLoading(true)
     try {
-      await GitWorker.rollback({
+      await gitRollback({
         dir: '/test-dir',
         unstagedChanges,
       })
@@ -67,7 +93,7 @@ export function useGit() {
   const status = useCallback(async () => {
     setLoading(true)
     try {
-      const result = await GitWorker.status({
+      const result = await gitStatus({
         dir: '/test-dir',
       })
       return result
@@ -81,13 +107,14 @@ export function useGit() {
   const getCommittedChanges = useCallback(async () => {
     setLoading(true)
     try {
-      const committedChanges = await GitWorker.committedChanges({
+      const changes = await committedChanges({
         dir: '/test-dir',
       })
 
-      return committedChanges
+      return changes
     } catch (error) {
       setError(error)
+      return []
     } finally {
       setLoading(false)
     }
@@ -95,7 +122,7 @@ export function useGit() {
 
   const clone = useCallback(async () => {
     try {
-      await GitWorker.clone({
+      await gitClone({
         url: 'https://github.com/Sound1ab/Notes.git',
         dir: '/test-dir',
       })
@@ -108,7 +135,7 @@ export function useGit() {
 
   const push = useCallback(async () => {
     try {
-      await GitWorker.push({
+      await gitPush({
         dir: '/test-dir',
       })
     } catch (error) {

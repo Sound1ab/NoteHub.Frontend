@@ -1,10 +1,25 @@
 import { useCallback, useState } from 'react'
 
 import { ErrorToast } from '../../components/atoms/Toast/Toast'
-import FSWorker from '../../services/worker/loaders/fs'
-import GitWorker from '../../services/worker/loaders/git'
+import { IGitTreeNode } from '../../services/git/types'
+import {
+  readFile as fsReadFile,
+  rename as fsRename,
+  writeFile as fsWriteFile,
+} from '../../services/worker/fs.worker'
+import { listFiles as gitListFiles } from '../../services/worker/git.worker'
 
-export function useFs() {
+type UseFSReturn = [
+  {
+    readFile: (path: string) => Promise<string | undefined>
+    writeFile: (path: string, content: string) => Promise<void>
+    listFiles: () => Promise<IGitTreeNode[] | never[]>
+    rename: (oldFilePath: string, newFilePath: string) => Promise<void>
+  },
+  { loading: boolean; error: Error | null }
+]
+
+export function useFs(): UseFSReturn {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<Error | null>(null)
 
@@ -16,11 +31,15 @@ export function useFs() {
   const readFile = useCallback(async (path: string) => {
     setLoading(true)
     try {
-      const content: string = await FSWorker.readFile({
+      const content = await fsReadFile({
         filepath: `/test-dir/${path}`,
       })
 
-      return content
+      if (typeof content === 'string') {
+        return content
+      }
+
+      return new TextDecoder('utf-8').decode(content)
     } catch (error) {
       setError(error)
     } finally {
@@ -31,7 +50,7 @@ export function useFs() {
   const writeFile = useCallback(async (path: string, content: string) => {
     setLoading(true)
     try {
-      await FSWorker.writeFile({
+      await fsWriteFile({
         filepath: `/test-dir/${path}`,
         content,
       })
@@ -45,7 +64,7 @@ export function useFs() {
   const listFiles = useCallback(async () => {
     setLoading(true)
     try {
-      const files = await GitWorker.listFiles({
+      const files = await gitListFiles({
         dir: '/test-dir',
         optimisticPaths: [],
       })
@@ -53,13 +72,31 @@ export function useFs() {
       return files
     } catch (error) {
       setError(error)
+      return []
     } finally {
       setLoading(false)
     }
   }, [])
 
+  const rename = useCallback(
+    async (oldFilePath: string, newFilePath: string) => {
+      setLoading(true)
+      try {
+        await fsRename({
+          oldFilePath: `/test-dir/${oldFilePath}`,
+          newFilePath: `/test-dir/${newFilePath}`,
+        })
+      } catch (error) {
+        setError(error)
+      } finally {
+        setLoading(false)
+      }
+    },
+    []
+  )
+
   return [
-    { readFile, writeFile, listFiles },
+    { readFile, writeFile, listFiles, rename },
     { loading, error },
   ]
 }

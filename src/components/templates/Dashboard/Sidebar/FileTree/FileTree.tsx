@@ -46,9 +46,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
     async function init() {
       await clone?.()
 
-      const files = await listFiles?.()
-
-      setFiles(files)
+      setFiles(await listFiles())
     }
 
     init()
@@ -65,13 +63,13 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
 
     await writeFile?.(path, '')
 
-    await stageChanges?.(await getUnstagedChanges?.())
+    await stageChanges?.(await getUnstagedChanges())
 
     await commit?.()
 
     await getCommittedChanges?.()
 
-    setFiles(await listFiles?.())
+    setFiles(await listFiles())
 
     tabs.add(path)
 

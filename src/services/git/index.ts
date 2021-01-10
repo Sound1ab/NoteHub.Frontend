@@ -44,7 +44,7 @@ export interface IListFiles {
 export async function listFiles({
   dir,
   optimisticPaths,
-}: IListFiles): Promise<IGitTreeNode> {
+}: IListFiles): Promise<IGitTreeNode[]> {
   const trees = [TREE({ ref: 'HEAD' })]
 
   return await walk({
@@ -188,7 +188,7 @@ async function getFileStateChanges({
   dir,
   startCommit,
   endCommit,
-}: IGetFileStateChanges) {
+}: IGetFileStateChanges): Promise<string[] | undefined> {
   return walk({
     fs,
     dir,

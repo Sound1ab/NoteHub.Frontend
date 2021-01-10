@@ -36,9 +36,9 @@ export function DraftManager() {
   async function handleDiscard() {
     await rollback?.(unstagedChanges)
 
-    setUnstagedChanges(await getUnstagedChanges?.())
+    setUnstagedChanges(await getUnstagedChanges())
 
-    setFileContent((await readFile?.(activePath)) ?? '')
+    setFileContent((await readFile(activePath)) ?? '')
   }
 
   async function handleCommit() {
@@ -46,13 +46,13 @@ export function DraftManager() {
 
     await commit?.()
 
-    const test = await getUnstagedChanges?.()
+    const test = await getUnstagedChanges()
 
     console.log('unstaged', test)
 
     setUnstagedChanges(test)
 
-    const test2 = await getCommittedChanges?.()
+    const test2 = await getCommittedChanges()
 
     console.log('committedd', test2)
     setCommittedChanges(test2)
@@ -61,7 +61,7 @@ export function DraftManager() {
   async function handlePush() {
     await push?.()
 
-    setCommittedChanges(await getCommittedChanges?.())
+    setCommittedChanges(await getCommittedChanges())
   }
 
   return (
