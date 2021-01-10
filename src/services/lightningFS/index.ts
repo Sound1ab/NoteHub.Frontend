@@ -7,10 +7,7 @@ export interface IReadDir {
 }
 
 export async function readDir({ filepath }: IReadDir): Promise<string[]> {
-  console.log('filepath', filepath)
-  const test = await fs.promises.readdir(filepath, undefined)
-  console.log('here', test)
-  return test
+  return fs.promises.readdir(filepath, undefined)
 }
 
 export interface IReadFile {
@@ -29,9 +26,17 @@ export interface IWriteFile {
 }
 
 export async function writeFile({ filepath, content }: IWriteFile) {
-  console.log('here', filepath, content)
   return fs.promises.writeFile(filepath, content, {
     encoding: 'utf8',
     mode: 0o777,
   })
+}
+
+export interface IRename {
+  oldFilePath: string
+  newFilePath: string
+}
+
+export async function rename({ oldFilePath, newFilePath }: IRename) {
+  return fs.promises.rename(oldFilePath, newFilePath)
 }

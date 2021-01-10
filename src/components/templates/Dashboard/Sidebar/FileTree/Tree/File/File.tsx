@@ -3,11 +3,13 @@ import { useDrag } from 'react-dnd'
 import styled from 'styled-components'
 
 import { CONTAINER_ID } from '../../../../../../../enums'
-import { useFileTree } from '../../../../../../../hooks/context/useFileTree'
 import { useFileDropdown } from '../../../../../../../hooks/dropdown/useFileDropdown'
+import { useFileTree } from '../../../../../../../hooks/fileTree/useFileTree'
+import { useFs } from '../../../../../../../hooks/fs/useFs'
 import { useActivePath } from '../../../../../../../hooks/recoil/useActivePath'
 import { useTabs } from '../../../../../../../hooks/recoil/useTabs'
 import { ITreeNode } from '../../../../../../../types'
+import { removeLastSlug } from '../../../../../../../utils/removeLastSlug'
 import { removeMarkdownExtension } from '../../../../../../../utils/removeMarkdownExtension'
 import { scrollIntoView } from '../../../../../../../utils/scrollIntoView'
 import { Node_Type } from '../../../../../../apollo/generated_components_typings'
@@ -22,19 +24,20 @@ interface IFile {
 
 export function File({ node, level }: IFile) {
   const { items, isRenaming, handleSetIsRenamingClose } = useFileDropdown(node)
-  const { onRename, loading } = useFileTree()
+  const [{ openFoldersInPath }] = useFileTree()
   const [{ isDragging }, dragRef] = useDrag({
     item: { type: 'NODE', file: node },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   })
-  const [, setActivePath] = useActivePath()
+  const [activePath, setActivePath] = useActivePath()
   const [tabs, setTabs] = useTabs()
+  const [{ rename }, { loading }] = useFs()
 
   const { path, type, name } = node
 
-  async function handleFileClick(type: Node_Type, path: string) {
+  async function handleFileClick() {
     if (type === Node_Type.File) {
       scrollIntoView(CONTAINER_ID.EDITOR)
     }
@@ -44,18 +47,39 @@ export function File({ node, level }: IFile) {
     setTabs(new Set(tabs.add(path)))
   }
 
+  async function handleRename(value: string) {
+    const pathWithoutFilename = removeLastSlug(path)
+
+    const newPath =
+      pathWithoutFilename.length > 0
+        ? `${pathWithoutFilename.join('/')}/${value}.md`
+        : `${value}.md`
+
+    openFoldersInPath?.(newPath)
+
+    setTabs(new Set([...tabs].map((tab) => (tab === path ? newPath : tab))))
+
+    await rename?.(path, newPath)
+
+    setActivePath(newPath)
+
+    if (node.path === activePath) {
+      setActivePath(newPath)
+    }
+  }
+
   return isRenaming ? (
     <FileInput
       onClickOutside={handleSetIsRenamingClose}
-      onSubmit={(name) => onRename(node, name)}
+      onSubmit={(value) => handleRename(value)}
       startingText={removeMarkdownExtension(name)}
-      isDisabled={loading}
+      isDisabled={loading!}
     />
   ) : (
     <StyledFile
       node={node}
       level={level}
-      onClick={() => handleFileClick(type, path)}
+      onClick={handleFileClick}
       dropdownItems={items}
       dndRef={dragRef}
       isDragging={isDragging}
