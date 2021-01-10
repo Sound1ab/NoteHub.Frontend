@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import FSWorker from '../../services/worker/loaders/fs'
+// import FSWorker from '../../services/worker/loaders/fs'
 import { useGit } from '../git/useGit'
 
 export function useUpdateFile(): [
@@ -22,21 +22,21 @@ export function useUpdateFile(): [
 
     setLoading(true)
 
-    try {
-      console.log('path', path)
-      const test = await FSWorker.writeFile({
-        filepath: `/test-dir/${path}`,
-        content,
-      })
-
-      await getUnstagedChanges?.()
-      console.log('here', test)
-    } catch (error) {
-      console.log('here', error)
-      setError(error)
-    } finally {
-      setLoading(false)
-    }
+    // try {
+    //   console.log('path', path)
+    //   const test = await FSWorker.writeFile({
+    //     filepath: `/test-dir/${path}`,
+    //     content,
+    //   })
+    //
+    //   await getUnstagedChanges?.()
+    //   console.log('here', test)
+    // } catch (error) {
+    //   console.log('here', error)
+    //   setError(error)
+    // } finally {
+    //   setLoading(false)
+    // }
   }
 
   return [updateFile, { loading, error }]
