@@ -44,14 +44,11 @@ export function useFileTree(): UseFileTreeReturn {
   const toggleFolder = useCallback(
     (path: string, toggled: boolean) => {
       if (toggled) {
-        setOpenFolders((openFolders) => {
-          openFolders.add(path)
-          return new Set(openFolders)
-        })
+        setOpenFolders((openFolders) => new Set([...openFolders.add(path)]))
       } else {
         setOpenFolders((openFolders) => {
           openFolders.delete(path)
-          return new Set(openFolders)
+          return new Set([...openFolders])
         })
       }
     },
@@ -116,8 +113,6 @@ export function useFileTree(): UseFileTreeReturn {
       openFoldersInPath?.(newPath)
 
       await rename(oldPath, newPath)
-
-      await remove(oldPath)
 
       setUnstagedChanges(await getUnstagedChanges())
 

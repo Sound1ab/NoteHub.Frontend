@@ -1,16 +1,16 @@
 import { useState } from 'react'
 
 import { ITreeNode } from '../../types'
-import { useFileTree } from '../context/useFileTree'
+import { useFileTree } from '../fileTree/useFileTree'
 
 export function useFolderDropdown(node: ITreeNode) {
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
-  const { onToggle } = useFileTree()
+  const [{ toggleFolder }] = useFileTree()
 
   function handleSetIsNewFileOpen() {
     setIsNewFileOpen(true)
 
-    onToggle(node.path, true)
+    toggleFolder(node.path, true)
   }
 
   function handleSetIsNewFileClose() {

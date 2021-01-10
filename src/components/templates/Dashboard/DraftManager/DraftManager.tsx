@@ -17,11 +17,13 @@ export function DraftManager() {
   const [
     {
       rollback,
-      stageChanges,
+      addAll,
       commit,
       getUnstagedChanges,
       push,
       getCommittedChanges,
+      removeAll,
+      getDeletedUnstagedChanges,
     },
   ] = useGit()
   const [, setFileContent] = useFileContent()
@@ -34,7 +36,7 @@ export function DraftManager() {
   }
 
   async function handleDiscard() {
-    await rollback?.(await getUnstagedChanges())
+    await rollback(await getUnstagedChanges())
 
     setUnstagedChanges(await getUnstagedChanges())
 
@@ -49,9 +51,11 @@ export function DraftManager() {
   }
 
   async function handleCommit() {
-    await stageChanges?.(await getUnstagedChanges())
+    await removeAll(await getDeletedUnstagedChanges())
 
-    await commit?.()
+    await addAll(await getUnstagedChanges())
+
+    await commit()
 
     setUnstagedChanges(await getUnstagedChanges())
 
@@ -59,7 +63,7 @@ export function DraftManager() {
   }
 
   async function handlePush() {
-    await push?.()
+    await push()
 
     setCommittedChanges(await getCommittedChanges())
   }

@@ -27,10 +27,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const [{ createFile }] = useFileTree()
   const [files, setFiles] = useFiles()
   const [{ clone }, { loading: gitLoading }] = useGit()
-  const [
-    { listFiles, readDirRecursive },
-    { loading: fsLoading, error },
-  ] = useFs()
+  const [{ readDirRecursive }, { loading: fsLoading, error }] = useFs()
 
   if (error) {
     ErrorToast(error)
@@ -48,7 +45,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
     }
 
     init()
-  }, [files, clone, setFiles, listFiles, readDirRecursive])
+  }, [files, clone, setFiles, readDirRecursive])
 
   if (gitLoading || !files) {
     return <TreeSkeleton />

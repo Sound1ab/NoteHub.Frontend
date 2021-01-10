@@ -61,17 +61,17 @@ export function Folder({ level, node, childNodes }: IFolder) {
   }
 
   function handleFolderClick() {
-    folderClick(path, !toggled)
+    folderClick(path, toggled)
   }
 
-  function handleChevronClick() {
-    chevronClick(path, !toggled)
+  function handleChevronClick(e: React.MouseEvent<HTMLDivElement>) {
+    e.stopPropagation()
+
+    chevronClick(path, toggled)
   }
 
-  async function handleCreate(name: string) {
-    const path = `${name}.md`
-
-    await createFile(path)
+  async function handleCreate(value: string) {
+    await createFile(`${path}/${value}.md`)
   }
 
   return (
@@ -99,7 +99,7 @@ export function Folder({ level, node, childNodes }: IFolder) {
       {isNewFileOpen && (
         <FileInput
           onClickOutside={handleSetIsNewFileClose}
-          onSubmit={(value) => handleCreate(`${path}/${value}.md`)}
+          onSubmit={handleCreate}
           isDisabled={loading}
         />
       )}

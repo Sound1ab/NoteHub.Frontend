@@ -2,21 +2,23 @@ import { useCallback, useState } from 'react'
 
 import { ErrorToast } from '../../components/atoms/Toast/Toast'
 import {
-  committedChanges,
+  addAll as gitAddAll,
   clone as gitClone,
   commit as gitCommit,
+  getCommittedChanges as gitGetCommittedChanges,
+  getDeletedUnstagedChanges as gitGetDeletedUnstagedChanges,
+  getUnstagedChanges as gitGetUnstagedChanges,
   push as gitPush,
   remove as gitRemove,
+  removeAll as gitRemoveAll,
   rollback as gitRollback,
-  stageChanges as gitStageChanges,
   status as gitStatus,
-  unstagedChanges,
 } from '../../services/worker/git.worker'
 
 type UseGitReturn = [
   {
     getUnstagedChanges: () => Promise<string[] | never[]>
-    stageChanges: (unstagedChanges: string[]) => Promise<void>
+    addAll: (unstagedChanges: string[]) => Promise<void>
     commit: () => Promise<void>
     rollback: (unstagedChanges: string[]) => Promise<void>
     status: () => Promise<
@@ -26,6 +28,8 @@ type UseGitReturn = [
     clone: () => Promise<void>
     push: () => Promise<void>
     remove: (filepath: string) => Promise<void>
+    removeAll: (deletedUnstagedChanges: string[] | never[]) => Promise<void>
+    getDeletedUnstagedChanges: () => Promise<string[] | never[]>
   },
   { loading: boolean; error: string | null }
 ]
@@ -42,7 +46,7 @@ export function useGit(): UseGitReturn {
   const getUnstagedChanges = useCallback(async () => {
     setLoading(true)
     try {
-      return unstagedChanges({ dir: '/' })
+      return gitGetUnstagedChanges({ dir: '/' })
     } catch (error) {
       setError(`Git get unstaged changes: ${error.message}`)
       return []
@@ -51,10 +55,10 @@ export function useGit(): UseGitReturn {
     }
   }, [])
 
-  const stageChanges = useCallback(async (unstagedChanges: string[]) => {
+  const addAll = useCallback(async (unstagedChanges: string[]) => {
     setLoading(true)
     try {
-      await gitStageChanges({
+      await gitAddAll({
         dir: '/',
         unstagedChanges,
       })
@@ -109,7 +113,7 @@ export function useGit(): UseGitReturn {
   const getCommittedChanges = useCallback(async () => {
     setLoading(true)
     try {
-      const changes = await committedChanges({
+      const changes = await gitGetCommittedChanges({
         dir: '/',
       })
 
@@ -160,10 +164,41 @@ export function useGit(): UseGitReturn {
     }
   }, [])
 
+  const removeAll = useCallback(
+    async (deletedUnstagedChanges: string[] | never[]) => {
+      try {
+        await gitRemoveAll({
+          dir: '/',
+          deletedUnstagedChanges,
+        })
+      } catch (error) {
+        setError(`Git push: ${error.message}`)
+      } finally {
+        setLoading(false)
+      }
+    },
+    []
+  )
+
+  const getDeletedUnstagedChanges = useCallback(async () => {
+    try {
+      const result = await gitGetDeletedUnstagedChanges({
+        dir: '/',
+      })
+
+      return result
+    } catch (error) {
+      setError(`Git get deleted unstaged changes: ${error.message}`)
+      return []
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   return [
     {
       getUnstagedChanges,
-      stageChanges,
+      addAll,
       commit,
       rollback,
       status,
@@ -171,6 +206,8 @@ export function useGit(): UseGitReturn {
       clone,
       push,
       remove,
+      getDeletedUnstagedChanges,
+      removeAll,
     },
     { loading, error },
   ]
