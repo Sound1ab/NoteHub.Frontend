@@ -1,13 +1,7 @@
-import { atom, useRecoilState } from 'recoil'
-
-interface IWidget {
-  coords: { left: number; right: number; top: number; bottom: number }
-  message: string
-}
-
-const widgetState = atom<IWidget | null>({
-  key: 'widget',
-  default: null,
-})
-
-export const useWidget = () => useRecoilState(widgetState)
+export const useWidget = () => [
+  {
+    coords: { left: 0, right: 0, top: 0, bottom: 0 },
+    message: '',
+  },
+  jest.fn(),
+]

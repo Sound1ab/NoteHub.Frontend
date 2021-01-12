@@ -1,8 +1,9 @@
 import { atom, useRecoilState } from 'recoil'
+import { EditorFromTextArea } from 'codemirror'
 
-const activePathState = atom({
-  key: 'activePath',
-  default: '',
+const editorState = atom<EditorFromTextArea | null>({
+  key: 'editor',
+  default: null,
 })
 
-export const useActivePath = () => useRecoilState(activePathState)
+export const useEditor = () => useRecoilState(editorState)

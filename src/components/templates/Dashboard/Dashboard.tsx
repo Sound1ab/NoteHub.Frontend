@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { useReadRepo } from '../../../hooks/repo/useReadRepo'
 import { DraftManager } from './DraftManager/DraftManager'
-import { Editor } from './Editor/Editor'
+import { CodeMirror } from './CodeMirror/CodeMirror'
 import { Sidebar } from './Sidebar/Sidebar'
 import { Toolbar } from './Toolbar/Toolbar'
 
@@ -29,12 +29,18 @@ function Dashboard() {
   return (
     <Grid>
       <RecoilRoot>
-        <Toolbar />
-        <MobileScroll>
-          <Sidebar />
-          <Editor />
-        </MobileScroll>
-        <DraftManager />
+        <CodeMirror>
+          {(Editor) => (
+            <>
+              <Toolbar />
+              <MobileScroll>
+                <Sidebar />
+                {Editor}
+              </MobileScroll>
+              <DraftManager />
+            </>
+          )}
+        </CodeMirror>
       </RecoilRoot>
     </Grid>
   )
