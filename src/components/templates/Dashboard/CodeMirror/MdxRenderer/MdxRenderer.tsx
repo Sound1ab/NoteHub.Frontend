@@ -1,9 +1,9 @@
 import { Components, MDXProvider } from '@mdx-js/react'
 import React, { ReactNode } from 'react'
 
-import { ThemeProvider } from '../../../../../providers/ThemeProvider/ThemeProvider'
-import { ErrorBoundary } from '../../../../../utility/ErrorBoundary/ErrorBoundary'
-import { CodeRenderer } from '../../CodeRenderer/CodeRenderer'
+import { ThemeProvider } from '../../../../providers/ThemeProvider/ThemeProvider'
+import { ErrorBoundary } from '../../../../utility/ErrorBoundary/ErrorBoundary'
+import { CodeRenderer } from '../CodeRenderer/CodeRenderer'
 import { Table } from '../Table/Table'
 import { TodoList } from '../TodoList/TodoList'
 import { createElement, transform, transpileMdx } from './utils'

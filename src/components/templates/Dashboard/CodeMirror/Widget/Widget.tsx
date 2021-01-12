@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useWidget } from '../../../../../../hooks/recoil/useWidget'
+import { useWidget } from '../../../../../hooks/recoil/useWidget'
 
 type Coords = { left: number; right: number; top: number; bottom: number }
 

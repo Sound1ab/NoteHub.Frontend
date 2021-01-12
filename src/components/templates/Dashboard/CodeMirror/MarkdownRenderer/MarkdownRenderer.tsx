@@ -4,10 +4,10 @@ import gfm from 'remark-gfm'
 import toc from 'remark-toc'
 import styled from 'styled-components'
 
-import { FONT } from '../../../../../../enums'
-import { useReadThemeSettings } from '../../../../../../hooks/localState/useReadThemeSettings'
-import { useFile } from '../../../../../../hooks/recoil/useFile'
-import { CodeRenderer } from '../../CodeRenderer/CodeRenderer'
+import { FONT } from '../../../../../enums'
+import { useReadThemeSettings } from '../../../../../hooks/localState/useReadThemeSettings'
+import { useFile } from '../../../../../hooks/recoil/useFile'
+import { CodeRenderer } from '../CodeRenderer/CodeRenderer'
 import { MdxRenderer } from '../MdxRenderer/MdxRenderer'
 
 export const MarkdownRenderer = () => {

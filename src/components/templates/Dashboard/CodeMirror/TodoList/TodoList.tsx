@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
-import { getUuid } from '../../../../../../utils/getUuid'
-import { Checkbox } from '../../../../../atoms/Checkbox/Checkbox'
-import { Close } from '../../../../../atoms/Close/Close'
-import { Input } from '../../../../../atoms/Input/Input'
+import { getUuid } from '../../../../../utils/getUuid'
+import { Checkbox } from '../../../../atoms/Checkbox/Checkbox'
+import { Close } from '../../../../atoms/Close/Close'
+import { Input } from '../../../../atoms/Input/Input'
 
 interface ITodo {
   id: string

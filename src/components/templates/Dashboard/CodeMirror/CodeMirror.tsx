@@ -1,26 +1,39 @@
-import { Editor, EditorFromTextArea, Position } from 'codemirror'
-import React, { useCallback, useEffect, useRef } from 'react'
+import { EditorFromTextArea, Editor as EditorType } from 'codemirror'
+import React, { ReactNode, Ref, useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import { FONT } from '../../../../../../enums'
-import { useCodeMirror } from '../../../../../../hooks/codeMirror/useCodeMirror'
-import { useFs } from '../../../../../../hooks/fs/useFs'
-import { useGit } from '../../../../../../hooks/git/useGit'
-import { useReadActiveRetextSettings } from '../../../../../../hooks/localState/useReadActiveRetextSettings'
-import { useReadThemeSettings } from '../../../../../../hooks/localState/useReadThemeSettings'
-import { useActivePath } from '../../../../../../hooks/recoil/useActivePath'
-import { useFileContent } from '../../../../../../hooks/recoil/useFileContent'
-import { useUnstagedChanges } from '../../../../../../hooks/recoil/useUnstagedChanges'
-import useDeepCompareEffect from '../../../../../../hooks/utils/useDeepCompareEffect'
-import { process } from '../../../../../../services/retext/process'
-import { darken } from '../../../../../../utils/css/darken'
-import { debounce } from '../../../../../../utils/debounce'
-import { ContextMenu } from '../../ContextMenu/ContextMenu'
+import { CONTAINER_ID, FONT } from '../../../../enums'
+import { useCodeMirror } from '../../../../hooks/codeMirror/useCodeMirror'
+import { useFs } from '../../../../hooks/fs/useFs'
+import { useGit } from '../../../../hooks/git/useGit'
+import { useReadActiveRetextSettings } from '../../../../hooks/localState/useReadActiveRetextSettings'
+import { useReadThemeSettings } from '../../../../hooks/localState/useReadThemeSettings'
+import { useActivePath } from '../../../../hooks/recoil/useActivePath'
+import { useFileContent } from '../../../../hooks/recoil/useFileContent'
+import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
+import { useWidget } from '../../../../hooks/recoil/useWidget'
+import useDeepCompareEffect from '../../../../hooks/utils/useDeepCompareEffect'
+import { process } from '../../../../services/retext/process'
+import { darken } from '../../../../utils/css/darken'
+import { debounce } from '../../../../utils/debounce'
+import { ContextMenu } from './ContextMenu/ContextMenu'
+import { Widget } from './Widget/Widget'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const HyperMd = require('hypermd')
 
-export const CodeMirror = () => {
+interface IContextProps {
+  editor: EditorFromTextArea | null
+  textAreaRef: Ref<HTMLTextAreaElement>
+}
+
+export const CodeMirrorContext = React.createContext<Partial<IContextProps>>({})
+
+interface ICodeMirror {
+  children: (ReactNode: ReactNode) => ReactNode
+}
+
+export const CodeMirror = ({ children }: ICodeMirror) => {
   const target = useRef<HTMLDivElement | null>(null)
   const textArea = useRef<HTMLTextAreaElement | null>(null)
   const codeMirrorRef = useRef<EditorFromTextArea | null>(null)
@@ -30,15 +43,18 @@ export const CodeMirror = () => {
   const [, setUnstagedChanges] = useUnstagedChanges()
   const [fileContent, setFileContent] = useFileContent()
   const [activePath] = useActivePath()
+  const [widget] = useWidget()
   const [{ writeFile, readFile }] = useFs()
   const [{ getUnstagedChanges }] = useGit()
   const [
-    { clearMarkers, createMarkers, setCursorPosition, displayWidget },
+    {
+      clearMarkers,
+      createMarkers,
+      setCursorPosition,
+      displayWidget,
+      removeWidget,
+    },
   ] = useCodeMirror()
-
-  const mountedRef = useRef(false)
-  const hydratedRef = useRef(false)
-  const cursorAppliedRef = useRef(true)
 
   // Process retext analysis
   useDeepCompareEffect(() => {
@@ -59,57 +75,18 @@ export const CodeMirror = () => {
     })
   }, [activeRetextSettings, createMarkers, fileContent, clearMarkers])
 
-  useEffect(() => {
-    async function loadContentFromFS() {
-      setFileContent((await readFile?.(activePath)) ?? '')
-    }
-
-    loadContentFromFS()
-  }, [activePath, readFile, setFileContent])
-
   const writeContentToFSAndCheckUnstagedChanges = useCallback(
-    debounce(async (activePath, fileContent) => {
-      await writeFile?.(activePath, fileContent)
+    debounce(async (fileContent) => {
+      await writeFile(activePath, fileContent)
 
-      const unstagedChanges = await getUnstagedChanges?.()
-
-      await setUnstagedChanges(unstagedChanges ? unstagedChanges : [])
+      await setUnstagedChanges(await getUnstagedChanges())
     }, 200),
-    [writeFile, setUnstagedChanges, getUnstagedChanges]
+    [activePath, writeFile, setUnstagedChanges, getUnstagedChanges]
   )
-
-  useEffect(() => {
-    writeContentToFSAndCheckUnstagedChanges(activePath, fileContent)
-  }, [fileContent, activePath, writeContentToFSAndCheckUnstagedChanges])
-
-  const hydrate = useCallback((editor: Editor, value: string) => {
-    if (hydratedRef.current) return
-    const doc = editor.getDoc()
-    const lastLine = doc.lastLine()
-    const lastChar = doc.getLine(doc.lastLine()).length
-
-    doc.replaceRange(
-      value || '',
-      { line: 0, ch: 0 },
-      { line: lastLine, ch: lastChar }
-    )
-
-    hydratedRef.current = true
-  }, [])
-
-  const preserveCursor = useCallback((editor: Editor, position: Position) => {
-    if (cursorAppliedRef.current) return
-
-    const doc = editor.getDoc()
-
-    doc.setCursor(position)
-
-    cursorAppliedRef.current = true
-  }, [])
 
   // Initial load of editor and setting actions for use in context menu
   useEffect(() => {
-    if (!textArea || !textArea.current || mountedRef.current) return
+    if (!textArea || !textArea.current || codeMirrorRef.current) return
 
     const editor = HyperMd.fromTextArea(textArea.current, {
       lineNumbers: false,
@@ -120,12 +97,8 @@ export const CodeMirror = () => {
 
     codeMirrorRef.current = editor
 
-    hydrate(editor, fileContent)
-
-    mountedRef.current = true
-
     editor.getDoc().clearHistory()
-  }, [hydrate, fileContent])
+  }, [])
 
   // Setup event handlers on editor
   useEffect(() => {
@@ -135,14 +108,10 @@ export const CodeMirror = () => {
       return
     }
 
-    const handleChange = async (editor: Editor) => {
-      if (!mountedRef.current) return
-
-      setFileContent(editor.getValue())
+    const handleChange = async (editor: EditorType) => {
+      writeContentToFSAndCheckUnstagedChanges(editor.getValue())
     }
-    const handleCursorActivity = (editor: Editor) => {
-      if (!mountedRef.current) return
-
+    const handleCursorActivity = (editor: EditorType) => {
       setCursorPosition?.(editor.getCursor())
     }
 
@@ -152,27 +121,21 @@ export const CodeMirror = () => {
       editor.off('change', handleChange)
       editor.off('cursorActivity', handleCursorActivity)
     }
-  }, [setFileContent, setCursorPosition])
+  }, [writeContentToFSAndCheckUnstagedChanges, setCursorPosition])
 
-  // Hydrate editor when a new file is selected from filelist
   useEffect(() => {
     const editor = codeMirrorRef.current
 
-    if (!editor) return
+    async function loadContentFromFS() {
+      if (!editor) return
 
-    if (codeMirrorRef.current?.getValue() !== fileContent) {
-      hydratedRef.current = false
-      cursorAppliedRef.current = false
+      editor.setValue((await readFile(activePath)) ?? '')
     }
 
-    const cursor = editor.getDoc().getCursor()
+    loadContentFromFS()
+  }, [activePath, readFile, setFileContent])
 
-    hydrate(editor, fileContent)
-
-    preserveCursor(editor, cursor)
-  }, [fileContent, hydrate, preserveCursor])
-
-  function handleclick(e: React.MouseEvent<HTMLDivElement>) {
+  function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     const editor = codeMirrorRef.current
     const scroll = target.current
 
@@ -191,21 +154,47 @@ export const CodeMirror = () => {
   }
 
   return (
-    <StyledCodeMirror
-      isFullWidth={isFullWidth}
-      font={font}
-      ref={target}
-      onClick={handleclick}
+    <CodeMirrorContext.Provider
+      value={{ editor: codeMirrorRef.current, textAreaRef: textArea }}
     >
       {codeMirrorRef.current && (
         <ContextMenu targetRef={target} editor={codeMirrorRef.current} />
       )}
-      <textarea ref={textArea} />
-    </StyledCodeMirror>
+
+      {children(
+        <Wrapper id={CONTAINER_ID.EDITOR}>
+          {widget && <Widget />}
+          <StyledCodeMirror
+            isFullWidth={isFullWidth}
+            font={font}
+            onScroll={() => removeWidget()}
+            onClick={handleClick}
+          >
+            <textarea ref={textArea} />
+          </StyledCodeMirror>
+        </Wrapper>
+      )}
+    </CodeMirrorContext.Provider>
   )
 }
 
+const Wrapper = styled.div`
+  flex: 0 0 100%; // Needed for scroll snap
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  justify-content: center;
+  display: flex;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    grid-area: editor;
+  }
+`
+
 const StyledCodeMirror = styled.article<{ isFullWidth: boolean; font: FONT }>`
+  flex: 1 1 100%;
+  padding: ${({ theme }) => theme.spacing.xs};
   position: relative;
   overflow-y: scroll;
 
@@ -602,20 +591,20 @@ const StyledCodeMirror = styled.article<{ isFullWidth: boolean; font: FONT }>`
       for (let i = 1; i < 10; i++) {
         hyperMdListLine = `
           ${hyperMdListLine}
-          
+
           pre.HyperMD-quote-${i} {
             --padding-left: var(--quote-margin) + calc((var(--quote-padding)) * ${i});
             padding-left: var(--line-padding) + var(--padding-left);
-      
+
             &:before {
               width: calc(var(--quote-padding) * ${i});
             }
-      
+
             &.HyperMD-footnote {
               padding-left: var(--line-padding) + var(--padding-left) +
                 var(--footnote-padding);
             }
-      
+
             span.cm-formatting-quote {
               transform: translateZ(0); // avoid getting covered by pre:before
               display: inline-block;
@@ -679,7 +668,7 @@ const StyledCodeMirror = styled.article<{ isFullWidth: boolean; font: FONT }>`
       for (let i = 1; i < 10; i++) {
         hyperMdListLine = `
           ${hyperMdListLine}
-          
+
           pre.HyperMD-list-line-${i} {
             padding-left:  calc(var(--line-padding) + var(--list-indent) * ${i} + var(--list-margin));
           }
