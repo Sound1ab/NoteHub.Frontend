@@ -3,8 +3,6 @@ import { useUpload } from 'react-use-upload'
 
 import { useCodeMirror } from '../../../../../hooks/codeMirror/useCodeMirror'
 import { useEditor } from '../../../../../hooks/codeMirror/useEditor'
-import { useReadFile } from '../../../../../hooks/file/useReadFile'
-import { useUpdateFile } from '../../../../../hooks/file/useUpdateFile'
 import { useContextMenu } from '../../../../../hooks/utils/useContextMenu'
 import { useDropzone } from '../../../../../hooks/utils/useDropzone'
 import {
@@ -19,8 +17,6 @@ import { ContextMenu } from './ContextMenu'
 
 jest.mock('../../../../../hooks/codeMirror/useCodeMirror')
 jest.mock('../../../../../hooks/utils/useContextMenu')
-jest.mock('../../../../../hooks/file/useUpdateFile')
-jest.mock('../../../../../hooks/file/useReadFile')
 jest.mock('react-use-upload')
 jest.mock('../../../../../hooks/image/useCreateSignedUrl', () => ({
   useCreateSignedUrl: () => [
@@ -61,15 +57,6 @@ describe('ContextMenu', () => {
         drawTodoListComponent,
       },
     ])
-    ;(useUpdateFile as jest.Mock).mockImplementation(() => [
-      updateFile,
-      { loading: false },
-    ])
-    ;(useReadFile as jest.Mock).mockReturnValue({
-      file: {
-        content: 'MOCK FILE CONTENTS',
-      },
-    })
     ;(useContextMenu as jest.Mock).mockReturnValue({
       isOpen: true,
       Portal: ({ children }: { children: ReactNode }) => <div>{children}</div>,
@@ -208,13 +195,6 @@ describe('ContextMenu', () => {
     })
 
     it.skip('should display toast alert if uploading an image errors', async () => {
-      ;(useUpdateFile as jest.Mock).mockImplementation(() => [
-        async () => {
-          throw new Error('mock error')
-        },
-        { loading: false },
-      ])
-
       const Wrapper = () => {
         const { Dropzone, openFileDialog } = useDropzone()
 

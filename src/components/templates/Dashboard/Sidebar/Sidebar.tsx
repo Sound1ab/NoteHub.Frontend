@@ -6,7 +6,6 @@ import { useReadSearch } from '../../../../hooks/localState/useReadSearch'
 import { Button } from '../../../atoms/Button/Button'
 import { Icon } from '../../../atoms/Icon/Icon'
 import { FileTree } from './FileTree/FileTree'
-import { FileTreeProvider } from './FileTree/FileTreeProvider'
 import { SearchInput } from './SearchInput/SearchInput'
 
 export function Sidebar() {
@@ -17,12 +16,10 @@ export function Sidebar() {
     <StyledSidebar id={CONTAINER_ID.SIDEBAR}>
       <SearchInput />
       <Navigation>
-        <FileTreeProvider>
-          <FileTree
-            isNewFileOpen={isNewFileOpen}
-            closeNewFile={() => setIsNewFileOpen(false)}
-          />
-        </FileTreeProvider>
+        <FileTree
+          isNewFileOpen={isNewFileOpen}
+          closeNewFile={() => setIsNewFileOpen(false)}
+        />
       </Navigation>
       <StyledButton
         onClick={() => setIsNewFileOpen(true)}

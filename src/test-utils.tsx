@@ -7,14 +7,13 @@ import { IMocks } from 'graphql-tools'
 import React, { ReactNode } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { RecoilRoot } from 'recoil'
 
 import { Toast } from './components/atoms/Toast/Toast'
 import { MockProvider } from './components/providers/ApolloProvider/MockProvider'
 import { IconProvider } from './components/providers/IconProvider/IconProvider'
 import { ThemeProvider } from './components/providers/ThemeProvider/ThemeProvider'
-import { FileTreeProvider } from './components/templates/Dashboard/Sidebar/FileTree/FileTreeProvider'
 import { resolvers as mockResolvers } from './schema/mockResolvers'
-import { RecoilRoot } from 'recoil'
 
 export type FireObject = {
   [K in EventType]: (
@@ -49,11 +48,9 @@ const Context = ({
       {() => (
         <IconProvider>
           {enableToast && <Toast />}
-          <FileTreeProvider>
-            <DndProvider backend={HTML5Backend}>
-              <RecoilRoot>{node}</RecoilRoot>
-            </DndProvider>
-          </FileTreeProvider>
+          <DndProvider backend={HTML5Backend}>
+            <RecoilRoot>{node}</RecoilRoot>
+          </DndProvider>
         </IconProvider>
       )}
     </ThemeProvider>
