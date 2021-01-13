@@ -1,0 +1,139 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createNodes should construct missing parent nodes that may have resulted from an optimistic update 1`] = `
+Array [
+  Object {
+    "id": "README.md",
+    "isOptimistic": false,
+    "name": "README.md",
+    "path": "README.md",
+    "type": "FILE",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "id": "folder/file.md",
+        "isOptimistic": false,
+        "name": "file.md",
+        "path": "folder/file.md",
+        "type": "FILE",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "id": "folder/folder2/file2.md",
+            "isOptimistic": false,
+            "name": "file2.md",
+            "path": "folder/folder2/file2.md",
+            "type": "FILE",
+          },
+        ],
+        "id": "folder/folder2",
+        "isOptimistic": false,
+        "name": "folder2",
+        "path": "folder/folder2",
+        "toggled": false,
+        "type": "FOLDER",
+      },
+    ],
+    "id": "folder",
+    "isOptimistic": false,
+    "name": "folder",
+    "path": "folder",
+    "toggled": false,
+    "type": "FOLDER",
+  },
+]
+`;
+
+exports[`createNodes should create a flattened object of nodes with children 1`] = `
+Array [
+  Object {
+    "id": "README.md",
+    "isOptimistic": false,
+    "name": "README.md",
+    "path": "README.md",
+    "type": "FILE",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "id": "folder/file.md",
+        "isOptimistic": false,
+        "name": "file.md",
+        "path": "folder/file.md",
+        "type": "FILE",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "id": "folder/folder2/file2.md",
+            "isOptimistic": false,
+            "name": "file2.md",
+            "path": "folder/folder2/file2.md",
+            "type": "FILE",
+          },
+        ],
+        "id": "folder/folder2",
+        "isOptimistic": false,
+        "name": "folder2",
+        "path": "folder/folder2",
+        "toggled": false,
+        "type": "FOLDER",
+      },
+    ],
+    "id": "folder",
+    "isOptimistic": false,
+    "name": "folder",
+    "path": "folder",
+    "toggled": false,
+    "type": "FOLDER",
+  },
+]
+`;
+
+exports[`createNodes should handle duplicate filenames at the top level 1`] = `
+Array [
+  Object {
+    "id": "README.md",
+    "isOptimistic": false,
+    "name": "README.md",
+    "path": "README.md",
+    "type": "FILE",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "id": "folder/file.md",
+        "isOptimistic": false,
+        "name": "file.md",
+        "path": "folder/file.md",
+        "type": "FILE",
+      },
+      Object {
+        "children": Array [
+          Object {
+            "id": "folder/folder2/file2.md",
+            "isOptimistic": false,
+            "name": "file2.md",
+            "path": "folder/folder2/file2.md",
+            "type": "FILE",
+          },
+        ],
+        "id": "folder/folder2",
+        "isOptimistic": false,
+        "name": "folder2",
+        "path": "folder/folder2",
+        "toggled": false,
+        "type": "FOLDER",
+      },
+    ],
+    "id": "folder",
+    "isOptimistic": false,
+    "name": "folder",
+    "path": "folder",
+    "toggled": false,
+    "type": "FOLDER",
+  },
+]
+`;

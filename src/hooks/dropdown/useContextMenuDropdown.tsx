@@ -1,9 +1,9 @@
-import { Editor } from 'codemirror'
-
 import { useCodeMirror } from '../codeMirror/useCodeMirror'
+import { useEditor } from '../codeMirror/useEditor'
 import { useDropzone } from '../utils/useDropzone'
 
-export function useContextMenuDropdown(editor: Editor) {
+export function useContextMenuDropdown() {
+  const { editor } = useEditor()
   const { Dropzone, openFileDialog } = useDropzone()
   const [
     {

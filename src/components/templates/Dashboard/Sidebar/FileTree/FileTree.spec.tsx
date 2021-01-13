@@ -1,11 +1,17 @@
+import { screen } from '@testing-library/react'
 import React from 'react'
 
-import { resolvers } from '../../../../../schema/mockResolvers'
-import { cleanup, fireEvent, render } from '../../../../../test-utils'
-import { MockProvider } from '../../../../providers/ApolloProvider/MockProvider'
+import { render } from '../../../../../test-utils'
+import {
+  clickAndDragFileOverFolder,
+  clickChevron,
+  clickContainer,
+  clickDropdownItem,
+  clickNode,
+  openDropdown,
+  typeInInputAndSubmit,
+} from '../../../../../utils/testing/userActions'
 import { FileTree } from './FileTree'
-
-afterEach(cleanup)
 
 jest.mock('../../../../../utils/scrollIntoView')
 
@@ -17,46 +23,36 @@ describe('FileTree', () => {
   })
 
   it('should toggle folders', async () => {
-    const { getByText, queryByText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
-      </MockProvider>
-    )
+    await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
 
-    await fireEvent.click(getByText('MOCK_FOLDER_PATH'))
+    await clickNode('MOCK_FOLDER_PATH')
 
-    expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
+    expect(screen.getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
 
-    await fireEvent.click(getByText('MOCK_FOLDER_PATH'))
+    await clickNode('MOCK_FOLDER_PATH')
 
-    expect(queryByText('MOCK_FILE_PATH_2.md')).not.toBeInTheDocument()
+    expect(screen.queryByText('MOCK_FILE_PATH_2.md')).not.toBeInTheDocument()
 
-    await fireEvent.click(getByText('MOCK_FOLDER_PATH'))
+    await clickNode('MOCK_FOLDER_PATH')
 
-    expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
+    expect(screen.getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
   })
 
   describe('file input', () => {
     it('should show file input if passed prop', async () => {
-      const { getByLabelText } = await render(
-        <MockProvider mockResolvers={resolvers}>
-          <FileTree isNewFileOpen={true} closeNewFile={jest.fn()} />
-        </MockProvider>
-      )
+      await render(<FileTree isNewFileOpen={true} closeNewFile={jest.fn()} />)
 
-      expect(getByLabelText('Input file name')).toBeInTheDocument()
+      expect(screen.getByLabelText('Input file name')).toBeInTheDocument()
     })
 
     it('should call closeNewFile if deselected ', async () => {
       const closeNewFile = jest.fn()
 
       const { container } = await render(
-        <MockProvider mockResolvers={resolvers}>
-          <FileTree isNewFileOpen={true} closeNewFile={closeNewFile} />
-        </MockProvider>
+        <FileTree isNewFileOpen={true} closeNewFile={closeNewFile} />
       )
 
-      await fireEvent.mouseDown(container)
+      await clickContainer(container)
 
       expect(closeNewFile).toBeCalled()
     })
@@ -64,224 +60,147 @@ describe('FileTree', () => {
 
   describe('when creating a file', () => {
     it('should toggle folder open if placed inside a closed folder', async () => {
-      const { getByText, getByLabelText } = await render(
-        <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
+      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
+
+      await openDropdown('MOCK_FOLDER_PATH')
+
+      await clickDropdownItem('Create file')
+
+      await typeInInputAndSubmit(
+        'Input file name',
+        'File name form',
+        'MOCK_FOLDER_PATH/NEW_MOCK_FILE_NAME'
       )
 
-      // open dropdown
-      await fireEvent.click(getByLabelText('MOCK_FOLDER_PATH actions'))
-
-      // open new file
-      await fireEvent.click(getByLabelText('Create file'))
-
-      const input = getByLabelText('Input file name')
-
-      await fireEvent.change(input, {
-        target: { value: 'MOCK_FOLDER_PATH/NEW_MOCK_FILE_NAME' },
-      })
-
-      const form = getByLabelText('File name form')
-
-      await fireEvent.submit(form)
-
-      expect(getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
+      await expect(
+        screen.getByText('NEW_MOCK_FILE_NAME.md')
+      ).toBeInTheDocument()
     })
 
     it('should toggle nested folder open if placed inside a closed folder', async () => {
-      const { getByText, getByLabelText } = await render(
-        <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
+      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
+
+      await openDropdown('MOCK_FOLDER_PATH')
+
+      await clickDropdownItem('Create file')
+
+      await typeInInputAndSubmit(
+        'Input file name',
+        'File name form',
+        'MOCK_FOLDER_PATH/MOCK_FOLDER_PATH_2/MOCK_FOLDER_PATH_3/NEW_MOCK_FILE_NAME_5'
       )
 
-      // open dropdown
-      await fireEvent.click(getByLabelText('MOCK_FOLDER_PATH actions'))
-
-      // open new file
-      await fireEvent.click(getByLabelText('Create file'))
-
-      const input = getByLabelText('Input file name')
-
-      await fireEvent.change(input, {
-        target: {
-          value:
-            'MOCK_FOLDER_PATH/MOCK_FOLDER_PATH_2/MOCK_FOLDER_PATH_3/NEW_MOCK_FILE_NAME_5',
-        },
-      })
-
-      const form = getByLabelText('File name form')
-
-      await fireEvent.submit(form)
-
-      expect(getByText('NEW_MOCK_FILE_NAME_5.md')).toBeInTheDocument()
+      expect(screen.getByText('NEW_MOCK_FILE_NAME_5.md')).toBeInTheDocument()
     })
 
     it('should be possible to toggle newly created folder', async () => {
-      const { getByText, getByLabelText, queryByText } = await render(
-        <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
+      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
+
+      await openDropdown('MOCK_FOLDER_PATH')
+
+      await clickDropdownItem('Create file')
+
+      await typeInInputAndSubmit(
+        'Input file name',
+        'File name form',
+        'MOCK_FOLDER_PATH_OTHER/NEW_MOCK_FILE_NAME'
       )
 
-      // open dropdown
-      await fireEvent.click(getByLabelText('MOCK_FOLDER_PATH actions'))
+      expect(screen.getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
 
-      // open new file input
-      await fireEvent.click(getByLabelText('Create file'))
+      await clickNode('MOCK_FOLDER_PATH_OTHER')
 
-      const input = getByLabelText('Input file name')
+      expect(screen.getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
 
-      await fireEvent.change(input, {
-        target: { value: 'MOCK_FOLDER_PATH_OTHER/NEW_MOCK_FILE_NAME' },
-      })
+      await clickNode('MOCK_FOLDER_PATH_OTHER')
 
-      const form = getByLabelText('File name form')
-
-      await fireEvent.submit(form)
-
-      expect(getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
-
-      // click new folder
-      await fireEvent.click(getByText('MOCK_FOLDER_PATH_OTHER'))
-
-      expect(getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
-
-      // click new folder
-      await fireEvent.click(getByText('MOCK_FOLDER_PATH_OTHER'))
-
-      expect(queryByText('NEW_MOCK_FILE_NAME.md')).not.toBeInTheDocument()
+      expect(
+        screen.queryByText('NEW_MOCK_FILE_NAME.md')
+      ).not.toBeInTheDocument()
     })
   })
 
   describe('when deleting a file', () => {
     it('should remove file but keep folder open if other files exist', async () => {
-      const { getByText, getByLabelText, queryByText } = await render(
-        <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
-      )
+      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
 
-      const folder = getByText('MOCK_FOLDER_PATH')
+      await clickNode('MOCK_FOLDER_PATH')
 
-      // open folder
-      await fireEvent.click(folder)
+      expect(screen.getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
 
-      expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
+      await openDropdown('MOCK_FILE_PATH_1.md')
 
-      // open file menu
-      await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+      await clickDropdownItem('Delete')
 
-      await fireEvent.click(getByLabelText('Delete'))
+      expect(screen.queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
 
-      expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
-
-      expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
+      expect(screen.getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
     })
 
     it('should remove folder if no other files exist', async () => {
-      const { getByText, getByLabelText, queryByText } = await render(
-        <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
-      )
+      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
 
-      // open folder
-      await fireEvent.click(getByText('MOCK_FOLDER_PATH'))
+      await clickNode('MOCK_FOLDER_PATH')
 
-      expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
+      expect(screen.getByText('MOCK_FOLDER_PATH')).toBeInTheDocument()
 
-      expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
+      await openDropdown('MOCK_FILE_PATH_1.md')
 
-      // open file menu
-      await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
+      await clickDropdownItem('Delete')
 
-      await fireEvent.click(getByLabelText('Delete'))
+      await openDropdown('MOCK_FILE_PATH_2.md')
 
-      expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
+      await clickDropdownItem('Delete')
 
-      expect(getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
+      await openDropdown('MOCK_FILE_PATH_4.md')
 
-      await fireEvent.click(getByLabelText('MOCK_FILE_PATH_2.md actions'))
+      await clickDropdownItem('Delete')
 
-      await fireEvent.click(getByLabelText('Delete'))
-
-      expect(queryByText('MOCK_FILE_PATH_2.md')).not.toBeInTheDocument()
-
-      expect(queryByText('MOCK_FOLDER_PATH')).not.toBeInTheDocument()
+      expect(screen.queryByText('MOCK_FOLDER_PATH')).not.toBeInTheDocument()
     })
   })
 
   describe('when renaming a file or folder', () => {
     it('should move the file or folder to a new name', async () => {
-      const { getByText, getByLabelText, queryByText } = await render(
-        <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
+      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
+
+      await clickNode('MOCK_FOLDER_PATH')
+
+      expect(screen.getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
+
+      await openDropdown('MOCK_FILE_PATH_1.md')
+
+      await clickDropdownItem('Rename')
+
+      await typeInInputAndSubmit(
+        'Input file name',
+        'File name form',
+        'NEW_MOCK_FILE_PATH'
       )
 
-      // open folder
-      await fireEvent.click(getByText('MOCK_FOLDER_PATH'))
+      expect(screen.queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
 
-      expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
-
-      // open file menu
-      await fireEvent.click(getByLabelText('MOCK_FILE_PATH_1.md actions'))
-
-      await fireEvent.click(getByLabelText('Rename'))
-
-      // Insert file name into input and submit
-      const input = getByLabelText('Input file name')
-
-      await fireEvent.change(input, {
-        target: { value: 'NEW_MOCK_FILE_PATH' },
-      })
-
-      expect(input).toHaveAttribute('value', 'NEW_MOCK_FILE_PATH')
-
-      const form = getByLabelText('File name form')
-
-      await fireEvent.submit(form)
-
-      expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
-
-      expect(getByText('NEW_MOCK_FILE_PATH.md')).toBeInTheDocument()
+      expect(screen.getByText('NEW_MOCK_FILE_PATH.md')).toBeInTheDocument()
     })
   })
 
   describe('when dragging a file', () => {
     it('should place file into folder', async () => {
-      const { getByText, getByLabelText, queryByText } = await render(
-        <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
+      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
+
+      expect(screen.getByText('MOCK_FILE_PATH_3.md')).toBeInTheDocument()
+
+      await clickAndDragFileOverFolder(
+        'MOCK_FILE_PATH_3.md',
+        'MOCK_FOLDER_PATH'
       )
 
-      expect(getByText('MOCK_FILE_PATH_4.md')).toBeInTheDocument()
-
-      expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
-
-      await fireEvent.dragStart(getByText('MOCK_FILE_PATH_4.md'))
-      await fireEvent.dragEnter(getByText('MOCK_FOLDER_PATH'))
-      await fireEvent.dragOver(getByText('MOCK_FOLDER_PATH'))
-      await fireEvent.drop(getByText('MOCK_FOLDER_PATH'))
-
-      expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
+      expect(screen.getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
 
       // Close the folder so we can test it's placement
-      await fireEvent.click(getByLabelText('chevron'))
+      await clickChevron()
 
-      expect(queryByText('MOCK_FILE_PATH_4.md')).not.toBeInTheDocument()
-    })
-
-    it('should place file into folder', async () => {
-      const { getByText, getByLabelText, queryByText } = await render(
-        <FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />
-      )
-
-      expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
-
-      await fireEvent.click(getByLabelText('chevron'))
-
-      expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
-
-      await fireEvent.dragStart(getByText('MOCK_FILE_PATH_1.md'))
-      await fireEvent.dragEnter(getByText('MOCK_FOLDER_PATH'))
-      await fireEvent.dragOver(getByText('MOCK_FOLDER_PATH'))
-      await fireEvent.drop(getByText('MOCK_FOLDER_PATH'))
-
-      expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
-
-      await fireEvent.click(getByLabelText('chevron'))
-
-      expect(queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
+      expect(screen.queryByText('MOCK_FILE_PATH_3.md')).not.toBeInTheDocument()
     })
   })
 })

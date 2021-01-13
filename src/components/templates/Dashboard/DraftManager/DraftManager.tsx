@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 
 import { useFs } from '../../../../hooks/fs/useFs'
@@ -10,8 +10,10 @@ import { useFiles } from '../../../../hooks/recoil/useFiles'
 import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
 import { Button } from '../../../atoms/Button/Button'
 import { Icon } from '../../../atoms/Icon/Icon'
+import { CodeMirrorContext } from '../CodeMirror/CodeMirror'
 
 export function DraftManager() {
+  const { editor } = useContext(CodeMirrorContext)
   const [unstagedChanges, setUnstagedChanges] = useUnstagedChanges()
   const [committedChanges, setCommittedChanges] = useCommittedChanges()
   const [
@@ -46,7 +48,8 @@ export function DraftManager() {
 
     // May unstage adding a new file so content could be undefined
     if (content) {
-      setFileContent(content)
+      editor?.setValue(content)
+      // setFileContent(content)
     }
   }
 

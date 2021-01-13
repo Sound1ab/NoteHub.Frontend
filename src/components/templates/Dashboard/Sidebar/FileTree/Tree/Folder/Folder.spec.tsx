@@ -1,51 +1,48 @@
+import { screen } from '@testing-library/react'
 import React from 'react'
 
-import { useFileTree } from '../../../../../../../hooks/context/useFileTree'
-import { files } from '../../../../../../../schema/mockResolvers'
+import { useFileTree } from '../../../../../../../hooks/fileTree/useFileTree'
 import { fireEvent, render } from '../../../../../../../test-utils'
 import { IFolderNode } from '../../../../../../../types'
-import { createNodes } from '../../../../../../../utils/createNodes'
-import { Node_Type } from '../../../../../../apollo/generated_components_typings'
+import { getMockNodes } from '../../../../../../../utils/testing/getMockNodes'
+import {
+  clickDropdownItem,
+  openDropdown,
+  typeInInputAndSubmit,
+} from '../../../../../../../utils/testing/userActions'
 import { Folder } from './Folder'
 
-jest.mock('../../../../../../../hooks/context/useFileTree')
+jest.mock('../../../../../../../hooks/fileTree/useFileTree', () => ({
+  useFileTree: jest.fn(),
+}))
 
 describe('Folder', () => {
-  const onToggle = jest.fn()
-
-  const onClick = jest.fn()
-
-  const onCreate = jest.fn()
-
-  const onMove = jest.fn()
-
-  const onChevronClick = jest.fn()
-
-  const onFolderClick = jest.fn()
-
-  const activePath = 'MOCK_PATH'
-
   const childNodes = <div>MOCK CHILDREN</div>
+  const { folderNode } = getMockNodes()
 
-  const nodes = createNodes(files, new Set())
-
-  const [folderNode] = nodes.filter((node) => node.type === Node_Type.Folder)
+  const folderClick = jest.fn()
+  const chevronClick = jest.fn()
+  const createFile = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useFileTree as jest.Mock).mockReturnValue({
-      activePath,
-      onClick,
-      onToggle,
-      onCreate,
-      onMove,
-      onChevronClick,
-      onFolderClick,
-    })
+    ;(useFileTree as jest.Mock).mockReturnValue([
+      {
+        openFoldersInPath: jest.fn(),
+        toggleFolder: jest.fn(),
+        deleteFile: jest.fn(),
+        renameNode: jest.fn(),
+        fileClick: jest.fn(),
+        createFile,
+        folderClick,
+        chevronClick,
+      },
+      { loading: false, error: null },
+    ])
   })
 
-  it('should call onFolderClick with node', async () => {
-    const { getByLabelText } = await render(
+  it('should call folderClick with path', async () => {
+    await render(
       <Folder
         node={folderNode as IFolderNode}
         level={1}
@@ -53,13 +50,13 @@ describe('Folder', () => {
       />
     )
 
-    await fireEvent.click(getByLabelText('folder'))
+    await fireEvent.click(screen.getByLabelText('folder'))
 
-    expect(onFolderClick).toBeCalledWith(folderNode)
+    expect(folderClick).toBeCalledWith(folderNode.path, false)
   })
 
-  it('should call onChevronClick if chevron is clicked', async () => {
-    const { getByLabelText } = await render(
+  it('should call chevronClick if chevron is clicked', async () => {
+    await render(
       <Folder
         node={folderNode as IFolderNode}
         level={1}
@@ -67,13 +64,37 @@ describe('Folder', () => {
       />
     )
 
-    await fireEvent.click(getByLabelText('chevron'))
+    await fireEvent.click(screen.getByLabelText('chevron'))
 
-    expect(onChevronClick).toBeCalledWith(expect.anything(), folderNode)
+    expect(chevronClick).toBeCalledWith(folderNode.path, false)
+  })
+
+  it('should handleCreate after inputting new file name', async () => {
+    await render(
+      <Folder
+        node={folderNode as IFolderNode}
+        level={1}
+        childNodes={childNodes}
+      />
+    )
+
+    await openDropdown('MOCK_FOLDER_PATH')
+
+    await clickDropdownItem('Create file')
+
+    await typeInInputAndSubmit(
+      'Input file name',
+      'File name form',
+      'MOCK_FOLDER_PATH/NEW_MOCK_FILE_NAME'
+    )
+
+    await expect(createFile).toBeCalledWith(
+      'MOCK_FOLDER_PATH/MOCK_FOLDER_PATH/NEW_MOCK_FILE_NAME.md'
+    )
   })
 
   it('should open folder dropdown menu', async () => {
-    const { getByLabelText, getByText } = await render(
+    await render(
       <Folder
         node={folderNode as IFolderNode}
         level={1}
@@ -81,24 +102,10 @@ describe('Folder', () => {
       />
     )
 
-    await fireEvent.click(getByLabelText(`${folderNode.name} actions`))
+    await openDropdown(folderNode.name)
 
-    expect(getByText('Create file')).toBeInTheDocument()
-  })
+    await clickDropdownItem('Create file')
 
-  it('should open file input when create new file is selected from folder dropdown', async () => {
-    const { getByLabelText } = await render(
-      <Folder
-        node={folderNode as IFolderNode}
-        level={1}
-        childNodes={childNodes}
-      />
-    )
-
-    await fireEvent.click(getByLabelText(`${folderNode.name} actions`))
-
-    await fireEvent.click(getByLabelText('Create file'))
-
-    expect(getByLabelText('Input file name')).toBeInTheDocument()
+    expect(screen.getByLabelText('Input file name')).toBeInTheDocument()
   })
 })

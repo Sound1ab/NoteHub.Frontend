@@ -1,14 +1,14 @@
+import { screen } from '@testing-library/react'
 import React from 'react'
 
 import { useReadSearch } from '../../../../../../hooks/localState/useReadSearch'
-import { resolvers } from '../../../../../../schema/mockResolvers'
-import { cleanup, render } from '../../../../../../test-utils'
-import { MockProvider } from '../../../../../providers/ApolloProvider/MockProvider'
+import * as recoil from '../../../../../../hooks/recoil/useFiles'
+import { render } from '../../../../../../test-utils'
+import { spyOn } from '../../../../../../utils/testing/spyOn'
 import { SearchResults } from './SearchResults'
 
 jest.mock('../../../../../../hooks/localState/useReadSearch')
-
-afterEach(cleanup)
+jest.mock('../../../../../../hooks/recoil/useFiles')
 
 describe('SearchResults', () => {
   const search = 'MOCK_FILE'
@@ -19,35 +19,21 @@ describe('SearchResults', () => {
   })
 
   it('should display all files', async () => {
-    const { getByText } = await render(<SearchResults />)
+    await render(<SearchResults />)
 
-    expect(getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
+    expect(screen.getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
   })
 
   it('should not display folders', async () => {
-    const { queryByText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <SearchResults />
-      </MockProvider>
-    )
+    await render(<SearchResults />)
 
-    expect(queryByText('MOCK_FOLDER_PATH')).not.toBeInTheDocument()
+    expect(screen.queryByText('MOCK_FOLDER_PATH')).not.toBeInTheDocument()
   })
 
   it('should return null if there are no gitNodes', async () => {
-    const { container } = await render(
-      <MockProvider
-        mockResolvers={{
-          ...resolvers,
-          Query: () => ({
-            ...resolvers.Query(),
-            readFiles: () => [],
-          }),
-        }}
-      >
-        <SearchResults />
-      </MockProvider>
-    )
+    spyOn(recoil, 'useFiles', () => [[], jest.fn()])
+
+    const { container } = await render(<SearchResults />)
 
     expect(container.firstChild).toBeNull()
   })

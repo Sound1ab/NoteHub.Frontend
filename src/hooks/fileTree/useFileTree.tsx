@@ -37,7 +37,7 @@ export function useFileTree(): UseFileTreeReturn {
     { loading: fsLoading, error: fsError },
   ] = useFs()
   const [
-    { remove, getUnstagedChanges },
+    { getUnstagedChanges },
     { loading: gitLoading, error: gitError },
   ] = useGit()
 
@@ -110,7 +110,7 @@ export function useFileTree(): UseFileTreeReturn {
 
   const renameNode = useCallback(
     async (oldPath: string, newPath: string) => {
-      openFoldersInPath?.(newPath)
+      openFoldersInPath(newPath)
 
       await rename(oldPath, newPath)
 
@@ -129,7 +129,6 @@ export function useFileTree(): UseFileTreeReturn {
     },
     [
       openFoldersInPath,
-      remove,
       rename,
       setUnstagedChanges,
       getUnstagedChanges,

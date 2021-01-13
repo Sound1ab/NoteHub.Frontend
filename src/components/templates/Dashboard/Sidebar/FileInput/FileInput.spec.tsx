@@ -1,11 +1,8 @@
-import '@testing-library/jest-dom/extend-expect'
-
 import React from 'react'
 
-import { cleanup, fireEvent, render } from '../../../../../test-utils'
+import { render } from '../../../../../test-utils'
+import { typeInInputAndSubmit } from '../../../../../utils/testing/userActions'
 import { FileInput } from './FileInput'
-
-afterEach(cleanup)
 
 describe('FileInput', () => {
   const newFileName = 'Mock file Na/me'
@@ -13,7 +10,7 @@ describe('FileInput', () => {
   it('should call onSubmit with name', async () => {
     const onSubmit = jest.fn()
 
-    const { getByLabelText } = await render(
+    await render(
       <FileInput
         onClickOutside={jest.fn()}
         onSubmit={onSubmit}
@@ -21,17 +18,7 @@ describe('FileInput', () => {
       />
     )
 
-    const input = getByLabelText('Input file name')
-
-    await fireEvent.change(input, {
-      target: { value: newFileName },
-    })
-
-    expect(input).toHaveAttribute('value', newFileName)
-
-    const form = getByLabelText('File name form')
-
-    await fireEvent.submit(form)
+    await typeInInputAndSubmit('Input file name', 'File name form', newFileName)
 
     expect(onSubmit).toBeCalledWith(`${newFileName}`)
   })

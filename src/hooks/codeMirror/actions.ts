@@ -1,7 +1,7 @@
-import { Editor, LineHandle, Position, Token } from 'codemirror'
+import { EditorFromTextArea, LineHandle, Position, Token } from 'codemirror'
 
 function _replaceSelection(
-  cm: Editor,
+  cm: EditorFromTextArea,
   active: boolean,
   startEnd: string[],
   url?: string
@@ -43,7 +43,7 @@ function _replaceSelection(
   cm.focus()
 }
 
-function getState(cm: Editor, pos?: Position) {
+function getState(cm: EditorFromTextArea, pos?: Position) {
   pos = pos ?? cm.getCursor('start')
   const stat = cm.getTokenAt(pos)
   if (!stat.type) return {}
@@ -86,7 +86,7 @@ function getState(cm: Editor, pos?: Position) {
 }
 
 function _toggleBlock(
-  editor: Editor,
+  editor: EditorFromTextArea,
   type: string,
   start_chars: string,
   end_chars?: string
@@ -168,19 +168,19 @@ function _toggleBlock(
   cm.focus()
 }
 
-export function _toggleBold(editor: Editor) {
+export function _toggleBold(editor: EditorFromTextArea) {
   _toggleBlock(editor, 'bold', '**')
 }
 
-export function _toggleItalic(editor: Editor) {
+export function _toggleItalic(editor: EditorFromTextArea) {
   _toggleBlock(editor, 'italic', '*')
 }
 
-export function _toggleStrikethrough(editor: Editor) {
+export function _toggleStrikethrough(editor: EditorFromTextArea) {
   _toggleBlock(editor, 'strikethrough', '~~')
 }
 
-export function _toggleCodeBlock(editor: Editor) {
+export function _toggleCodeBlock(editor: EditorFromTextArea) {
   const fenceCharsToInsert = '```'
 
   // eslint-disable-next-line
@@ -207,7 +207,7 @@ export function _toggleCodeBlock(editor: Editor) {
   }
 
   function code_type(
-    cm: Editor,
+    cm: EditorFromTextArea,
     line_num: number,
     line?: LineHandle,
     firstTok?: Token,
@@ -256,7 +256,7 @@ export function _toggleCodeBlock(editor: Editor) {
   }
 
   function insertFencingAtSelection(
-    cm: Editor,
+    cm: EditorFromTextArea,
     cur_start: Position,
     cur_end: Position,
     fenceCharsToInsert: string
@@ -542,7 +542,7 @@ export function _toggleCodeBlock(editor: Editor) {
   }
 }
 
-function _toggleLine(cm: Editor, name: string) {
+function _toggleLine(cm: EditorFromTextArea, name: string) {
   if (
     /editor-preview-active/.test(
       // eslint-disable-next-line
@@ -588,15 +588,15 @@ function _toggleLine(cm: Editor, name: string) {
   cm.focus()
 }
 
-export function _toggleBlockquote(editor: Editor) {
+export function _toggleBlockquote(editor: EditorFromTextArea) {
   _toggleLine(editor, 'quote')
 }
 
-export function _toggleUnorderedList(editor: Editor) {
+export function _toggleUnorderedList(editor: EditorFromTextArea) {
   _toggleLine(editor, 'unordered-list')
 }
 
-export function _toggleOrderedList(editor: Editor) {
+export function _toggleOrderedList(editor: EditorFromTextArea) {
   _toggleLine(editor, 'ordered-list')
 }
 
@@ -642,30 +642,30 @@ const insertComponents = {
   ],
 }
 
-export function _drawLink(editor: Editor) {
+export function _drawLink(editor: EditorFromTextArea) {
   const stat = getState(editor)
   _replaceSelection(editor, stat.link, insertTexts.link)
 }
 
-export function _drawImage(editor: Editor) {
+export function _drawImage(editor: EditorFromTextArea) {
   const stat = getState(editor)
   _replaceSelection(editor, stat.image, insertTexts.image)
 }
 
-export function _drawTable(editor: Editor) {
+export function _drawTable(editor: EditorFromTextArea) {
   const stat = getState(editor)
   _replaceSelection(editor, stat.table, insertTexts.table)
 }
 
-export function _drawHorizontalRule(editor: Editor) {
+export function _drawHorizontalRule(editor: EditorFromTextArea) {
   const stat = getState(editor)
   _replaceSelection(editor, stat.image, insertTexts.horizontalRule)
 }
 
-export function _drawTableComponent(editor: Editor) {
+export function _drawTableComponent(editor: EditorFromTextArea) {
   _replaceSelection(editor, false, insertComponents.table)
 }
 
-export function _drawComponentTodoList(editor: Editor) {
+export function _drawComponentTodoList(editor: EditorFromTextArea) {
   _replaceSelection(editor, false, insertComponents.toDoList)
 }

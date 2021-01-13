@@ -157,9 +157,7 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
     <CodeMirrorContext.Provider
       value={{ editor: codeMirrorRef.current, textAreaRef: textArea }}
     >
-      {codeMirrorRef.current && (
-        <ContextMenu targetRef={target} editor={codeMirrorRef.current} />
-      )}
+      {codeMirrorRef.current && <ContextMenu targetRef={target} />}
 
       {children(
         <Wrapper id={CONTAINER_ID.EDITOR}>

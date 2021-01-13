@@ -1,9 +1,8 @@
+import { screen } from '@testing-library/react'
 import React from 'react'
 
-import { files } from '../../../../../../../schema/mockResolvers'
 import { fireEvent, render } from '../../../../../../../test-utils'
-import { createNodes } from '../../../../../../../utils/createNodes'
-import { Node_Type } from '../../../../../../apollo/generated_components_typings'
+import { getMockNodes } from '../../../../../../../utils/testing/getMockNodes'
 import { Node } from './Node'
 
 describe('Node', () => {
@@ -18,16 +17,14 @@ describe('Node', () => {
 
   const onClick = jest.fn()
 
+  const { fileNode } = getMockNodes()
+
   beforeEach(() => {
-    jest.resetAllMocks()
+    jest.clearAllMocks()
   })
 
-  const nodes = createNodes(files, new Set())
-
-  const [fileNode] = nodes.filter((node) => node.type === Node_Type.File)
-
   it('should call onClick callback', async () => {
-    const { getByText } = await render(
+    await render(
       <Node
         node={fileNode}
         level={1}
@@ -36,13 +33,13 @@ describe('Node', () => {
       />
     )
 
-    await fireEvent.click(getByText(fileNode.name))
+    await fireEvent.click(screen.getByText(fileNode.name))
 
     expect(onClick).toBeCalled()
   })
 
   it('should open dropdown', async () => {
-    const { getByLabelText } = await render(
+    await render(
       <Node
         node={fileNode}
         level={1}
@@ -51,13 +48,13 @@ describe('Node', () => {
       />
     )
 
-    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
+    await fireEvent.click(screen.getByLabelText(`${fileNode.name} actions`))
 
-    expect(getByLabelText('Create file')).toBeInTheDocument()
+    expect(screen.getByLabelText('Create file')).toBeInTheDocument()
   })
 
   it('should add styles when dropdown is open', async () => {
-    const { getByLabelText } = await render(
+    await render(
       <Node
         node={fileNode}
         level={1}
@@ -66,11 +63,11 @@ describe('Node', () => {
       />
     )
 
-    const actions = getByLabelText(`${fileNode.name} actions`)
+    const actions = screen.getByLabelText(`${fileNode.name} actions`)
 
     await fireEvent.click(actions)
 
-    expect(getByLabelText('file')).toHaveStyleRule(
+    expect(screen.getByLabelText('file')).toHaveStyleRule(
       'background-color',
       'var(--background-quinary)'
     )

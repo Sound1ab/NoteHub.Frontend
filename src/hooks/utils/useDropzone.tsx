@@ -10,21 +10,21 @@ import { useUpload } from 'react-use-upload'
 import styled from 'styled-components'
 
 import { ErrorToast } from '../../components/atoms/Toast/Toast'
+import { useEditor } from '../codeMirror/useEditor'
 import { useCreateSignedUrl } from '../image/useCreateSignedUrl'
 import { useReadCursorPosition } from '../localState/useReadCursorPosition'
-import { useFileContent } from '../recoil/useFileContent'
 
 const Style = styled.input`
   display: none;
 `
 
 export function useDropzone() {
+  const { editor } = useEditor()
   const input = useRef<HTMLInputElement>(null)
   const [createSignedUrl] = useCreateSignedUrl()
   const [uploadFile, setUploadFile] = useState<File | null>(null)
   const [imagePath, setImagePath] = useState<string | null>(null)
   const toastId = React.useRef<ReactText | null>(null)
-  const [fileContent, setFileContent] = useFileContent()
   const cursorPosition = useReadCursorPosition()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { progress, done, loading } = useUpload(uploadFile!, {
@@ -113,26 +113,22 @@ export function useDropzone() {
 
       const text = `![](${path})`
       const { ch, line } = cursorPosition
-      const lines = fileContent ? fileContent.split('\n') : []
+      const lines = editor?.getValue().split('\n') ?? []
       const characters = lines.length > 0 ? [...lines[line]] : []
       characters.splice(ch, 0, text)
       lines[line] = characters.join('')
       return lines.join('\n')
     },
-    [cursorPosition, fileContent]
+    [cursorPosition, editor]
   )
 
   const updateEditor = useCallback(async () => {
-    try {
-      const content = insertPathIntoString(imagePath)
+    const content = insertPathIntoString(imagePath)
 
-      if (!content) return
+    if (!content) return
 
-      await setFileContent(content)
-    } catch (error) {
-      ErrorToast(`There was an issue uploading your image. ${error.message}`)
-    }
-  }, [imagePath, insertPathIntoString])
+    editor?.setValue(content)
+  }, [imagePath, insertPathIntoString, editor])
 
   useEffect(() => {
     if (!done || !imagePath) {

@@ -1,118 +1,95 @@
+import { screen } from '@testing-library/react'
 import React from 'react'
 
-import { useFileTree } from '../../../../../../../hooks/context/useFileTree'
-import { files, resolvers } from '../../../../../../../schema/mockResolvers'
+import { useFileTree } from '../../../../../../../hooks/fileTree/useFileTree'
 import { fireEvent, render } from '../../../../../../../test-utils'
-import { createNodes } from '../../../../../../../utils/createNodes'
-import { Node_Type } from '../../../../../../apollo/generated_components_typings'
-import { MockProvider } from '../../../../../../providers/ApolloProvider/MockProvider'
+import { getMockNodes } from '../../../../../../../utils/testing/getMockNodes'
+import {
+  clickDropdownItem,
+  openDropdown,
+  typeInInputAndSubmit,
+} from '../../../../../../../utils/testing/userActions'
 import { File } from './File'
 
-jest.mock('../../../../../../../hooks/context/useFileTree')
+jest.mock('../../../../../../../hooks/fileTree/useFileTree', () => ({
+  useFileTree: jest.fn(),
+}))
 
 describe('File', () => {
-  const onFileClick = jest.fn()
+  const fileClick = jest.fn()
+  const deleteFile = jest.fn()
+  const renameNode = jest.fn()
 
-  const onDeleteFile = jest.fn()
-
-  const onRename = jest.fn()
-
-  const activePath = 'MOCK_ACTIVE_PATH'
-
-  const nodes = createNodes(files, new Set())
-
-  const [fileNode] = nodes.filter((node) => node.type === Node_Type.File)
+  const { fileNode } = getMockNodes()
 
   beforeEach(() => {
     jest.resetAllMocks()
-    ;(useFileTree as jest.Mock).mockReturnValue({
-      activePath,
-      onFileClick,
-      onDeleteFile,
-      onRename,
-      loading: false,
-    })
+    ;(useFileTree as jest.Mock).mockReturnValue([
+      {
+        openFoldersInPath: jest.fn(),
+        toggleFolder: jest.fn(),
+        deleteFile,
+        renameNode,
+        fileClick,
+        createFile: jest.fn(),
+        folderClick: jest.fn(),
+        chevronClick: jest.fn(),
+      },
+      { loading: false, error: null },
+    ])
   })
 
-  it('should call onFileClick with type and path', async () => {
-    const { getByText } = await render(<File node={fileNode} level={1} />)
+  it('should call fileClick path', async () => {
+    await render(<File node={fileNode} level={1} />)
 
-    await fireEvent.click(getByText(fileNode.name))
+    await fireEvent.click(screen.getByText(fileNode.name))
 
-    expect(onFileClick).toBeCalledWith(Node_Type.File, fileNode.path)
-  })
-
-  it('should show and hide inline file input when renaming file', async () => {
-    const { getByLabelText } = await render(
-      <div aria-label="outside">
-        <File node={fileNode} level={1} />
-      </div>
-    )
-
-    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
-
-    await fireEvent.click(getByLabelText('Rename'))
-
-    expect(getByLabelText('Input file name')).toBeInTheDocument()
+    expect(fileClick).toBeCalledWith(fileNode.path)
   })
 
   it('should insert file name into inline file input when renaming file', async () => {
-    const { getByLabelText } = await render(
+    await render(
       <div aria-label="outside">
         <File node={fileNode} level={1} />
       </div>
     )
 
-    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
+    await openDropdown(fileNode.name)
 
-    await fireEvent.click(getByLabelText('Rename'))
+    await clickDropdownItem('Rename')
 
-    const input = getByLabelText('Input file name')
-
-    expect((input as HTMLInputElement).value).toEqual('MOCK_FILE_PATH_3')
+    expect(
+      (screen.getByLabelText('Input file name') as HTMLInputElement).value
+    ).toEqual('MOCK_FILE_PATH_3')
   })
 
-  it('should call onRename when renaming file', async () => {
-    const { getByLabelText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <div aria-label="outside">
-          <File node={fileNode} level={1} />
-        </div>
-      </MockProvider>
+  it('should call renameNode when renaming file', async () => {
+    await render(
+      <div aria-label="outside">
+        <File node={fileNode} level={1} />
+      </div>
     )
 
-    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
+    await openDropdown(fileNode.name)
 
-    await fireEvent.click(getByLabelText('Rename'))
+    await clickDropdownItem('Rename')
 
-    const input = getByLabelText('Input file name')
-
-    expect((input as HTMLInputElement).value).toEqual('MOCK_FILE_PATH_3')
-
-    const form = getByLabelText('File name form')
-
-    await fireEvent.submit(form)
-
-    expect(onRename).toBeCalledWith(fileNode, 'MOCK_FILE_PATH_3')
-  })
-
-  it('should open file dropdown menu', async () => {
-    const { getByLabelText, getByText } = await render(
-      <File node={fileNode} level={1} />
+    await typeInInputAndSubmit(
+      'Input file name',
+      'File name form',
+      'NEW_MOCK_FILE_PATH_3'
     )
 
-    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
-
-    expect(getByText('Delete')).toBeInTheDocument()
+    expect(renameNode).toBeCalledWith(fileNode.path, 'NEW_MOCK_FILE_PATH_3.md')
   })
 
-  it('should call onDeleteFile when selected from file dropdown', async () => {
-    const { getByLabelText } = await render(<File node={fileNode} level={1} />)
+  it('should call deleteFile when selected from file dropdown', async () => {
+    await render(<File node={fileNode} level={1} />)
 
-    await fireEvent.click(getByLabelText(`${fileNode.name} actions`))
+    await openDropdown(fileNode.name)
 
-    await fireEvent.click(getByLabelText('Delete'))
+    await clickDropdownItem('Delete')
 
-    expect(onDeleteFile).toBeCalled()
+    expect(deleteFile).toBeCalledWith(fileNode.path)
   })
 })

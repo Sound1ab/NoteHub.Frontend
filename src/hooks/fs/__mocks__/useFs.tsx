@@ -7,22 +7,19 @@ let mockIndexedDB: Record<string, string> = {
   'MOCK_FILE_PATH_3.md': 'MOCK FILE CONTENT',
 }
 
-// beforeEach(() => {
-//   mockIndexedDB = {
-//     'MOCK_FOLDER_PATH/MOCK_FILE_PATH_1.md': '',
-//     'MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md': 'MOCK FILE CONTENT',
-//     'MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md': '',
-//     'MOCK_FILE_PATH_3.md': 'MOCK FILE CONTENT',
-//   }
-// })
+beforeEach(() => {
+  mockIndexedDB = {
+    'MOCK_FOLDER_PATH/MOCK_FILE_PATH_1.md': '',
+    'MOCK_FOLDER_PATH/MOCK_FILE_PATH_2.md': 'MOCK FILE CONTENT',
+    'MOCK_FOLDER_PATH/MOCK_FILE_PATH_4.md': '',
+    'MOCK_FILE_PATH_3.md': 'MOCK FILE CONTENT',
+  }
+})
 
 export function useFs() {
   return [
     {
       readFile: jest.fn((path: string) => {
-        console.log('path', path)
-        console.log('mockIndexedDB', mockIndexedDB)
-        console.log('resolve', mockIndexedDB[path])
         return Promise.resolve(mockIndexedDB[path])
       }),
       writeFile: jest.fn((path: string, content: string) => {

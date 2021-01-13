@@ -6,7 +6,6 @@ import { useTabs } from '../../../../../hooks/recoil/useTabs'
 import { getNextTab } from '../../../../../utils/getNextTab'
 import { Button } from '../../../../atoms/Button/Button'
 import { Close } from '../../../../atoms/Close/Close'
-import { localState } from '../../../../providers/ApolloProvider/cache'
 
 interface ITab {
   name: string
@@ -20,7 +19,7 @@ export function Tab({ name, path, isDisabled }: ITab) {
   const isActive = path === activePath
 
   function handleOnClick() {
-    localState.currentPathVar(path)
+    setActivePath(path)
   }
 
   function handleOnClose(e: MouseEvent<HTMLElement>) {

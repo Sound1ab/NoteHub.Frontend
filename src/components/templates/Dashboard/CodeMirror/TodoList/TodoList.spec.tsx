@@ -3,7 +3,7 @@ import React from 'react'
 import { fireEvent, render } from '../../../../../test-utils'
 import { TodoList } from './TodoList'
 
-jest.mock('../../../../../../utils/getUuid', () => ({
+jest.mock('../../../../../utils/getUuid', () => ({
   getUuid: () => 'MOCK_UUID',
 }))
 

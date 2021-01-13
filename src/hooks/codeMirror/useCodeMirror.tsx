@@ -1,4 +1,4 @@
-import CodeMirror, { Editor } from 'codemirror'
+import CodeMirror, { Editor, EditorFromTextArea } from 'codemirror'
 import { useCallback, useState } from 'react'
 
 import { localState } from '../../components/providers/ApolloProvider/cache'
@@ -166,7 +166,7 @@ export function useCodeMirror() {
     setWidget(null)
   }, [widget, setWidget])
 
-  const refreshEditor = useCallback((editor: Editor) => {
+  const refreshEditor = useCallback((editor: EditorFromTextArea) => {
     setTimeout(() => {
       editor.setOption('viewportMargin', Infinity)
       editor.refresh()
@@ -174,40 +174,52 @@ export function useCodeMirror() {
   }, [])
 
   const toggleOrderedList = useCallback(
-    (editor: Editor) => _toggleOrderedList(editor),
+    (editor?: EditorFromTextArea | null) =>
+      editor && _toggleOrderedList(editor),
     []
   )
 
   const toggleUnorderedList = useCallback(
-    (editor: Editor) => _toggleUnorderedList(editor),
+    (editor?: EditorFromTextArea | null) =>
+      editor && _toggleUnorderedList(editor),
     []
   )
 
   const toggleCodeBlock = useCallback(
-    (editor: Editor) => _toggleCodeBlock(editor),
+    (editor?: EditorFromTextArea | null) => editor && _toggleCodeBlock(editor),
     []
   )
 
   const toggleItalic = useCallback(
-    (editor: Editor) => _toggleItalic(editor),
+    (editor?: EditorFromTextArea | null) => editor && _toggleItalic(editor),
     []
   )
 
-  const toggleBold = useCallback((editor: Editor) => _toggleBold(editor), [])
+  const toggleBold = useCallback(
+    (editor?: EditorFromTextArea | null) => editor && _toggleBold(editor),
+    []
+  )
 
   const toggleBlockquote = useCallback(
-    (editor: Editor) => _toggleBlockquote(editor),
+    (editor?: EditorFromTextArea | null) => editor && _toggleBlockquote(editor),
     []
   )
 
   const drawHorizontalRule = useCallback(
-    (editor: Editor) => _drawHorizontalRule(editor),
+    (editor?: EditorFromTextArea | null) =>
+      editor && _drawHorizontalRule(editor),
     []
   )
 
-  const drawLink = useCallback((editor: Editor) => _drawLink(editor), [])
+  const drawLink = useCallback(
+    (editor?: EditorFromTextArea | null) => editor && _drawLink(editor),
+    []
+  )
 
-  const drawTable = useCallback((editor: Editor) => _drawTable(editor), [])
+  const drawTable = useCallback(
+    (editor?: EditorFromTextArea | null) => editor && _drawTable(editor),
+    []
+  )
 
   return [
     {

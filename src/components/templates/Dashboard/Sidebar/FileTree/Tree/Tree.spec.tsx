@@ -1,47 +1,40 @@
+import { screen } from '@testing-library/react'
 import React from 'react'
 
-import { files, resolvers } from '../../../../../../schema/mockResolvers'
-import { fireEvent, render } from '../../../../../../test-utils'
-import { createNodes } from '../../../../../../utils/createNodes'
-import { Node_Type } from '../../../../../apollo/generated_components_typings'
-import { MockProvider } from '../../../../../providers/ApolloProvider/MockProvider'
+import { render } from '../../../../../../test-utils'
+import { getMockNodes } from '../../../../../../utils/testing/getMockNodes'
+import {
+  clickDropdownItem,
+  openDropdown,
+} from '../../../../../../utils/testing/userActions'
 import { Tree } from './Tree'
 
 describe('Tree', () => {
-  const nodes = createNodes(files, new Set())
-
-  const [folderNode] = nodes.filter((node) => node.type === Node_Type.Folder)
-  const [fileNode] = nodes.filter((node) => node.type === Node_Type.File)
+  const { fileNode, folderNode } = getMockNodes()
 
   it('should show children when toggled is true and tree has children', async () => {
-    const { getByText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <Tree
-          node={{ ...folderNode, toggled: true, children: [fileNode] }}
-          level={1}
-        />
-      </MockProvider>
+    await render(
+      <Tree
+        node={{ ...folderNode, toggled: true, children: [fileNode] }}
+        level={1}
+      />
     )
 
-    expect(getByText(fileNode.name)).toBeInTheDocument()
+    expect(screen.getByText(fileNode.name)).toBeInTheDocument()
   })
 
   it('should open file input when create new file is selected from dropdown', async () => {
-    const { getAllByLabelText, getByLabelText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <Tree
-          node={{ ...folderNode, toggled: true, children: [fileNode] }}
-          level={1}
-        />
-      </MockProvider>
+    await render(
+      <Tree
+        node={{ ...folderNode, toggled: true, children: [fileNode] }}
+        level={1}
+      />
     )
 
-    const [folderDropdown] = getAllByLabelText(`${folderNode.name} actions`)
+    await openDropdown(folderNode.name)
 
-    await fireEvent.click(folderDropdown)
+    await clickDropdownItem('Create file')
 
-    await fireEvent.click(getByLabelText('Create file'))
-
-    expect(getByLabelText('Input file name')).toBeInTheDocument()
+    expect(screen.getByLabelText('Input file name')).toBeInTheDocument()
   })
 })

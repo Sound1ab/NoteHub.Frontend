@@ -64,7 +64,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
       ) : (
         <>
           {files &&
-            createNodes(files, openFolders!).map((node) => (
+            createNodes(files, openFolders).map((node) => (
               <List key={node.name}>
                 <Tree key={node.name} node={node} />
               </List>
@@ -73,7 +73,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
             <FileInput
               onClickOutside={closeNewFile}
               onSubmit={handleCreate}
-              isDisabled={fsLoading!}
+              isDisabled={fsLoading}
             />
           )}
         </>

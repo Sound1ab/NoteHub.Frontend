@@ -1,20 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useReadTabs } from '../../../../hooks/localState/useReadTabs'
 import { useFile } from '../../../../hooks/recoil/useFile'
+import { useTabs } from '../../../../hooks/recoil/useTabs'
 import { extractFilename } from '../../../../utils/extractFilename'
 import { Profile } from './Profile/Profile'
 import { Tab } from './Tab/Tab'
 
 export function Toolbar() {
-  const tabs = [...useReadTabs()]
+  const [tabs] = useTabs()
   const [file] = useFile()
 
   return (
     <StyledToolbar>
       <Tabs>
-        {tabs.map((path) => (
+        {[...tabs].map((path) => (
           <Tab
             key={path}
             name={extractFilename(path)}

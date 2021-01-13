@@ -17,6 +17,18 @@ jest.mock('./utils/css/darken', () => ({
   darken: jest.fn(() => '#000'),
 }))
 
+jest.mock('./hooks/fs/useFs')
+jest.mock('./hooks/git/useGit')
+// jest.mock('./hooks/recoil/useActivePath')
+// jest.mock('./hooks/recoil/useCommittedChanges')
+// jest.mock('./hooks/recoil/useFile')
+// jest.mock('./hooks/recoil/useFileContent')
+// jest.mock('./hooks/recoil/useFiles')
+// jest.mock('./hooks/recoil/useOpenFolders')
+// jest.mock('./hooks/recoil/useTabs')
+// jest.mock('./hooks/recoil/useUnstagedChanges')
+// jest.mock('./hooks/recoil/useWidget')
+
 // Mocking out for codemirror as JSDOM doesn't do this
 // @ts-ignore
 global.document.createRange = () => {
