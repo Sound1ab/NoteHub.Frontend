@@ -8,6 +8,7 @@ import { useGit } from '../../../../../hooks/git/useGit'
 import { useReadSearch } from '../../../../../hooks/localState/useReadSearch'
 import { useFiles } from '../../../../../hooks/recoil/useFiles'
 import { useOpenFolders } from '../../../../../hooks/recoil/useOpenFolders'
+import { useRepo } from '../../../../../hooks/recoil/useRepo'
 import { createNodes } from '../../../../../utils/createNodes'
 import { List } from '../../../../atoms/List/List'
 import { ErrorToast } from '../../../../atoms/Toast/Toast'
@@ -26,6 +27,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const [openFolders] = useOpenFolders()
   const [{ createFile }] = useFileTree()
   const [files, setFiles] = useFiles()
+  const [repo] = useRepo()
   const [{ clone }, { loading: gitLoading }] = useGit()
   const [{ readDirRecursive }, { loading: fsLoading, error }] = useFs()
 
@@ -39,13 +41,13 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
     }
 
     async function init() {
-      await clone?.()
+      await clone(repo)
 
       setFiles(await readDirRecursive())
     }
 
     init()
-  }, [files, clone, setFiles, readDirRecursive])
+  }, [files, clone, setFiles, readDirRecursive, repo])
 
   if (gitLoading || !files) {
     return <TreeSkeleton />

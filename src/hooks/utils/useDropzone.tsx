@@ -9,7 +9,6 @@ import { toast } from 'react-toastify'
 import { useUpload } from 'react-use-upload'
 import styled from 'styled-components'
 
-import { ErrorToast } from '../../components/atoms/Toast/Toast'
 import { useEditor } from '../codeMirror/useEditor'
 import { useCreateSignedUrl } from '../image/useCreateSignedUrl'
 import { useReadCursorPosition } from '../localState/useReadCursorPosition'

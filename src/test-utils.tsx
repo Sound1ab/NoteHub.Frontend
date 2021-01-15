@@ -26,11 +26,11 @@ global.matchMedia = () =>
     matches: false,
   } as MediaQueryList)
 
-export const wait = (): Promise<void> => {
+export const wait = (ms = 1): Promise<void> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve()
-    }, 1)
+    }, ms)
   })
 }
 

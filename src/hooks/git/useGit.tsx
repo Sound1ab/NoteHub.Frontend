@@ -25,7 +25,7 @@ type UseGitReturn = [
       [string, 0 | 1, 0 | 2 | 1, 0 | 2 | 1 | 3][] | undefined
     >
     getCommittedChanges: () => Promise<string[] | never[]>
-    clone: () => Promise<void>
+    clone: (repo: string) => Promise<void>
     push: () => Promise<void>
     remove: (filepath: string) => Promise<void>
     removeAll: (deletedUnstagedChanges: string[] | never[]) => Promise<void>
@@ -126,10 +126,10 @@ export function useGit(): UseGitReturn {
     }
   }, [])
 
-  const clone = useCallback(async () => {
+  const clone = useCallback(async (repo: string) => {
     try {
       await gitClone({
-        url: 'https://github.com/Sound1ab/Notes.git',
+        url: repo,
         dir: '/',
       })
     } catch (error) {

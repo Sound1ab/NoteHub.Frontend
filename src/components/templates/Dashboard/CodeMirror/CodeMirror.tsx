@@ -133,7 +133,7 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
     }
 
     loadContentFromFS()
-  }, [activePath, readFile, setFileContent])
+  }, [activePath, readFile])
 
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     const editor = codeMirrorRef.current

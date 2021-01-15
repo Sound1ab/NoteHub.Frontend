@@ -1,5 +1,3 @@
-import { GitProgressEvent } from 'isomorphic-git'
-
 import { IAdd, IAddAll, add as gitAdd, addAll as gitAddAll } from '../git/add'
 import { IClone, clone as gitClone } from '../git/clone'
 import { ICommit, commit as gitCommit } from '../git/commit'
@@ -24,9 +22,6 @@ import {
 export async function clone(options: Pick<IClone, 'url' | 'dir'>) {
   return gitClone({
     ...options,
-    onProgress: (progress: GitProgressEvent) =>
-      console.log('progress', progress),
-    onMessage: (message) => console.log('message', message),
   })
 }
 
