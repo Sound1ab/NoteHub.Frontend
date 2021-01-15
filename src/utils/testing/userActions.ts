@@ -30,7 +30,7 @@ export async function typeInInputAndSubmit(
 }
 
 export async function clickNode(nodeName: string) {
-  await userEvent.click(screen.getByText(nodeName))
+  await userEvent.click(await screen.findByText(nodeName))
 }
 
 export async function clickChevron() {
@@ -50,5 +50,12 @@ export async function clickAndDragFileOverFolder(
     await fireEvent.dragEnter(screen.getByText(folderPath))
     await fireEvent.dragOver(screen.getByText(folderPath))
     await fireEvent.drop(screen.getByText(folderPath))
+  })
+}
+
+export async function closeTab(tab: HTMLElement) {
+  await act(async () => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    await userEvent.click(tab.querySelector('svg')!)
   })
 }

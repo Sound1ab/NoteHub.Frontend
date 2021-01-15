@@ -2,32 +2,40 @@ import '@testing-library/jest-dom/extend-expect'
 import 'jest-styled-components'
 
 import { cleanup } from '@testing-library/react'
+import fetch from 'node-fetch'
+
+require('fake-indexeddb/auto')
 
 afterEach(cleanup)
 
+globalThis.fetch = fetch
+
+jest.mock('./utils/scrollIntoView')
+jest.mock('react-use-upload', () => ({
+  useUpload: jest.fn(
+    (file: File | null, { getUrl }: { getUrl: () => void }) => {
+      getUrl()
+
+      return file
+        ? {
+            progress: 100,
+            done: true,
+          }
+        : {
+            progress: 0,
+            done: false,
+          }
+    }
+  ),
+}))
+jest.mock('./hooks/image/useCreateSignedUrl')
 jest.mock('./services/retext/process', () => ({
   process: jest.fn(() => []),
 }))
-
-jest.mock('./utils/debounce', () => ({
-  debounce: (fn: () => void) => fn,
-}))
-
-jest.mock('./utils/css/darken', () => ({
-  darken: jest.fn(() => '#000'),
-}))
-
+jest.mock('./utils/debounce')
+jest.mock('./utils/css/darken')
 jest.mock('./hooks/fs/useFs')
 jest.mock('./hooks/git/useGit')
-// jest.mock('./hooks/recoil/useActivePath')
-// jest.mock('./hooks/recoil/useCommittedChanges')
-// jest.mock('./hooks/recoil/useFile')
-// jest.mock('./hooks/recoil/useFileContent')
-// jest.mock('./hooks/recoil/useFiles')
-// jest.mock('./hooks/recoil/useOpenFolders')
-// jest.mock('./hooks/recoil/useTabs')
-// jest.mock('./hooks/recoil/useUnstagedChanges')
-// jest.mock('./hooks/recoil/useWidget')
 
 // Mocking out for codemirror as JSDOM doesn't do this
 // @ts-ignore
@@ -46,4 +54,11 @@ global.document.createRange = () => {
       }
     },
   }
+}
+
+if (typeof globalThis.TextEncoder === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { TextEncoder, TextDecoder } = require('util')
+  globalThis.TextEncoder = TextEncoder
+  globalThis.TextDecoder = TextDecoder
 }

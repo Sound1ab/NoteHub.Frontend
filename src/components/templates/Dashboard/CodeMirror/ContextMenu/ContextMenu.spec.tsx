@@ -17,12 +17,6 @@ import { ContextMenu } from './ContextMenu'
 
 jest.mock('../../../../../hooks/codeMirror/useCodeMirror')
 jest.mock('../../../../../hooks/utils/useContextMenu')
-jest.mock('react-use-upload')
-jest.mock('../../../../../hooks/image/useCreateSignedUrl', () => ({
-  useCreateSignedUrl: () => [
-    () => Promise.resolve({ data: { createSignedUrl: 'MOCK_IMAGE_PATH' } }),
-  ],
-}))
 jest.mock('../../../../../hooks/codeMirror/useEditor')
 
 describe('ContextMenu', () => {
@@ -37,8 +31,6 @@ describe('ContextMenu', () => {
   const drawTable = jest.fn()
   const drawTableComponent = jest.fn()
   const drawTodoListComponent = jest.fn()
-
-  const updateFile = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -63,21 +55,6 @@ describe('ContextMenu', () => {
       ref: createRef(),
       setOpen: jest.fn(),
     })
-    ;(useUpload as jest.Mock).mockImplementation(
-      (file: File | null, { getUrl }: { getUrl: () => void }) => {
-        getUrl()
-
-        return file
-          ? {
-              progress: 100,
-              done: true,
-            }
-          : {
-              progress: 0,
-              done: false,
-            }
-      }
-    )
     ;(useEditor as jest.Mock).mockReturnValue({
       editor: { setValue: jest.fn(), getValue: () => 'MOCK CONTENT' },
     })

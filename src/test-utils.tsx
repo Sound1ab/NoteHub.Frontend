@@ -4,6 +4,7 @@ import { EventType } from '@testing-library/dom/types/events'
 import { act, fireEvent, render } from '@testing-library/react'
 import { act as hooksAct, renderHook } from '@testing-library/react-hooks'
 import { IMocks } from 'graphql-tools'
+import nock from 'nock'
 import React, { ReactNode } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -159,6 +160,24 @@ const customFireEvent = Object.entries(fireEvent).reduce(
   },
   {}
 )
+
+export const nockBack = nock.back
+
+export async function renderWithNockBack(
+  component: ReactNode,
+  nockBackName: string
+) {
+  const { nockDone, context } = await nockBack(nockBackName)
+
+  const Component = () => <>{component}</>
+
+  await customRender(<Component />)
+
+  // If no nockback is pre-generated we need to await the fetch call
+  !context.isLoaded && (await wait(5000))
+
+  return { nockDone }
+}
 
 // re-export everything
 export * as reactHooks from '@testing-library/react-hooks'
