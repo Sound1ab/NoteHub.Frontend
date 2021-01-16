@@ -5,7 +5,6 @@ import { useFs } from '../../../../hooks/fs/useFs'
 import { useGit } from '../../../../hooks/git/useGit'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
 import { useCommittedChanges } from '../../../../hooks/recoil/useCommittedChanges'
-import { useFileContent } from '../../../../hooks/recoil/useFileContent'
 import { useFiles } from '../../../../hooks/recoil/useFiles'
 import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
 import { Button } from '../../../atoms/Button/Button'
@@ -28,7 +27,6 @@ export function DraftManager() {
       getDeletedUnstagedChanges,
     },
   ] = useGit()
-  const [, setFileContent] = useFileContent()
   const [{ readFile, readDirRecursive }] = useFs()
   const [activePath] = useActivePath()
   const [, setFiles] = useFiles()
@@ -49,7 +47,6 @@ export function DraftManager() {
     // May unstage adding a new file so content could be undefined
     if (content) {
       editor?.setValue(content)
-      // setFileContent(content)
     }
   }
 

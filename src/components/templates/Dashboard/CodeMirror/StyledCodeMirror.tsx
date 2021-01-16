@@ -114,7 +114,7 @@ export const StyledCodeMirror = styled.article<{
 
   .cm-s-hypermd-light {
     --fs: ${({ theme }) =>
-      theme.typographyStyles.html.fontSize}; //default font-size
+      theme.typographyStyles.body.fontSize}; //default font-size
 
     --editor-background: var(--background-primary);
     --editor-color: var(--text-primary);
@@ -158,7 +158,7 @@ export const StyledCodeMirror = styled.article<{
     font-family: ${({ font }) => {
       switch (font) {
         case 'isDefault':
-          return `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;`
+          return `'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;`
         case 'isSerif':
           return `Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif;`
         case 'isMono':

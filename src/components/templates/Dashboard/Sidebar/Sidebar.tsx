@@ -36,7 +36,7 @@ export function Sidebar() {
 const StyledSidebar = styled.div`
   flex: 0 0 100%;
   height: 100%;
-  background-color: var(--background-secondary);
+  background-color: var(--background-primary);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -67,7 +67,8 @@ const StyledButton = styled(Button)`
   padding: ${({ theme }) => theme.spacing.xs};
 `
 
-const Add = styled.h4`
+const Add = styled.span`
+  font-weight: 700;
   margin-bottom: 0;
   line-height: inherit;
 `

@@ -8,7 +8,6 @@ import { ITreeNode } from '../../../../../../../types'
 import { removeLastSlug } from '../../../../../../../utils/removeLastSlug'
 import { removeMarkdownExtension } from '../../../../../../../utils/removeMarkdownExtension'
 import { Icon } from '../../../../../../atoms/Icon/Icon'
-import { ErrorToast } from '../../../../../../atoms/Toast/Toast'
 import { FileInput } from '../../../FileInput/FileInput'
 import { Node } from '../Node/Node'
 
@@ -19,7 +18,7 @@ interface IFile {
 
 export function File({ node, level }: IFile) {
   const { items, isRenaming, handleSetIsRenamingClose } = useFileDropdown(node)
-  const [{ renameNode, fileClick }, { loading, error }] = useFileTree()
+  const [{ renameNode, fileClick }] = useFileTree()
   const [{ isDragging }, dragRef] = useDrag({
     item: { type: 'NODE', file: node },
     collect: (monitor) => ({
@@ -28,10 +27,6 @@ export function File({ node, level }: IFile) {
   })
 
   const { path, name } = node
-
-  if (error) {
-    ErrorToast(error)
-  }
 
   async function handleFileClick() {
     fileClick(path)

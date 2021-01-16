@@ -121,7 +121,7 @@ const Wrapper = styled.div<
     } else if (level === 0 && type === Node_Type.Folder) {
       return 0
     }
-    const additionalPadding = type === Node_Type.File ? theme.spacing.ms : '0px'
+    const additionalPadding = type === Node_Type.File ? '24px' : '0px'
     return css`calc(calc(${level} * ${theme.spacing.s}) + ${additionalPadding})`
   }};
   cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
@@ -162,7 +162,7 @@ const Details = styled.div`
   }
 `
 
-const Heading = styled.h4<{
+const Heading = styled.span<{
   isDisabled: boolean
 }>`
   ${({ isDisabled }) =>

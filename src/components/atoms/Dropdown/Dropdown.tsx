@@ -63,7 +63,7 @@ export function Dropdown({ items, onClose, containerRef }: IDropdownMenuProps) {
                       title={`${label} icon`}
                     />
                   )}
-                  {label}
+                  <h5>{label}</h5>
                 </Item>
               )}
             </DropdownButton>

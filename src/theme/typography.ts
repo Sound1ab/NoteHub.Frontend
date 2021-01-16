@@ -2,15 +2,10 @@ import Typography from 'typography'
 
 export const createTypography = (isLargeText: boolean) => {
   return new Typography({
-    baseFontSize: isLargeText ? '16px' : '14px',
     googleFonts: [
       {
         name: 'Nunito',
-        styles: ['700'],
-      },
-      {
-        name: 'Merriweather',
-        styles: ['400', '400i', '700', '700i'],
+        styles: ['600', '700'],
       },
     ],
     bodyFontFamily: [
@@ -35,10 +30,12 @@ export const createTypography = (isLargeText: boolean) => {
       'Helvetica Neue',
       'sans-serif',
     ],
-    scaleRatio: 2.9,
+    baseFontSize: '14px',
+    scaleRatio: 2.5,
+    baseLineHeight: 1,
     overrideThemeStyles: ({ rhythm, scale }) => ({
       body: {
-        fontSizeAdjust: '0.5',
+        fontSize: isLargeText ? '16px' : '14px',
       },
       form: {
         marginBottom: 0,
@@ -54,28 +51,32 @@ export const createTypography = (isLargeText: boolean) => {
       },
       h1: {
         color: 'var(--text-primary)',
+        letterSpacing: '0.036em',
         fontWeight: 'bold',
         marginBottom: rhythm(1),
       },
       h2: {
+        letterSpacing: '0.036em',
         color: 'var(--text-primary)',
-        fontWeight: 'bold',
         marginBottom: rhythm(1),
       },
       h3: {
+        letterSpacing: '0.036em',
         color: 'var(--text-primary)',
-        fontWeight: 'bold',
         marginBottom: rhythm(0.8),
       },
       h4: {
+        letterSpacing: '0.036em',
         color: 'var(--text-primary)',
         marginBottom: rhythm(0.6),
       },
       h5: {
+        letterSpacing: '0.036em',
         color: 'var(--text-primary)',
         marginBottom: rhythm(0.4),
       },
       h6: {
+        letterSpacing: '0.036em',
         color: 'var(--text-primary)',
         marginBottom: rhythm(0.2),
       },
@@ -86,6 +87,9 @@ export const createTypography = (isLargeText: boolean) => {
         padding: `0 ${rhythm(1)}`,
         borderLeft: `${rhythm(0.2)} solid var(--text-secondary)`,
         margin: `0 0 ${rhythm(1)} 0`,
+      },
+      span: {
+        color: 'var(--text-primary)',
       },
     }),
   })

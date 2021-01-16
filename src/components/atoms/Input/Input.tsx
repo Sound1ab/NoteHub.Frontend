@@ -88,7 +88,7 @@ const StyledInput = styled.input`
   font-weight: ${({ theme }) => theme.typographyStyles.h5.fontWeight};
   border: none;
   border-radius: ${({ theme }) => theme.spacing.xxs};
-  line-height: 0;
+  line-height: 1.1;
 
   &:focus {
     outline: ${({ theme }) => theme.spacing.xxxs} solid var(--accent-primary);

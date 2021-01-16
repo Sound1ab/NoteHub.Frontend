@@ -28,7 +28,7 @@ export function RadioItem<T extends string>({
         name={group}
         onChange={() => onChange(value)}
       />
-      <label htmlFor={value}>{label}</label>
+      <Label htmlFor={value}>{label}</Label>
     </StyledRadioItem>
   )
 }
@@ -44,4 +44,8 @@ const Radio = styled.input`
   width: 1.15em;
   height: 1.15em;
   margin-right: ${({ theme }) => theme.spacing.xs};
+`
+
+const Label = styled.label`
+  font-size: ${({ theme }) => theme.typographyStyles.h5.fontSize};
 `

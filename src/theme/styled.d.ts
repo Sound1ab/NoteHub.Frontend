@@ -27,6 +27,7 @@ export interface ITheme {
     h5: IHeading
     h6: IHeading
     html: IHeading
+    body: IHeading
   }
   boxShadow: string
   transition: string

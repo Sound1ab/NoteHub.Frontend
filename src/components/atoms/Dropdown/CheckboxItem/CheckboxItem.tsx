@@ -29,7 +29,7 @@ export function CheckboxItem<T extends string>({
         readOnly={true}
         id={value}
       />
-      <label htmlFor={value}>{label}</label>
+      <Label htmlFor={value}>{label}</Label>
     </StyledCheckboxItem>
   )
 }
@@ -45,4 +45,8 @@ const Checkbox = styled.input`
   width: 1.15em;
   height: 1.15em;
   margin-right: ${({ theme }) => theme.spacing.xs};
+`
+
+const Label = styled.label`
+  font-size: ${({ theme }) => theme.typographyStyles.h5.fontSize};
 `

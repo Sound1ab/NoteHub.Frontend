@@ -100,8 +100,8 @@ const Wrapper = styled.div<
   margin-left: ${({ theme, marginLeft }) =>
     marginLeft ? theme.spacing.xxs : 0};
   pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'all')};
-  width: 1.15em;
-  height: 1.15em;
+  width: 1em;
+  height: 1em;
   align-items: center;
 `
 
