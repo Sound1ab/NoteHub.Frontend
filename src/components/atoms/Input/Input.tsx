@@ -10,7 +10,6 @@ interface IInlineInput {
   onSubmit?: () => void
   inputAriaLabel: string
   formAriaLabel?: string
-  isDisabled?: boolean
   icon?: ReactNode
   iconAfter?: ReactNode
   type: 'text' | 'number' | 'submit'
@@ -28,7 +27,6 @@ export function Input({
   formAriaLabel,
   inputAriaLabel,
   icon,
-  isDisabled,
   type = 'text',
   autocorrect = 'off',
   autocapitalize = 'off',
@@ -60,7 +58,6 @@ export function Input({
       <StyledInput
         {...rest}
         ref={inputRef}
-        disabled={isDisabled}
         type={type}
         value={value}
         onChange={handleOnChange}

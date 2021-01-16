@@ -56,7 +56,7 @@ describe('File', () => {
 
     await openDropdown(fileNode.name)
 
-    await clickDropdownItem('Rename')
+    await clickDropdownItem({ item: 'Rename' })
 
     expect(
       (screen.getByLabelText('Input file name') as HTMLInputElement).value
@@ -72,7 +72,7 @@ describe('File', () => {
 
     await openDropdown(fileNode.name)
 
-    await clickDropdownItem('Rename')
+    await clickDropdownItem({ item: 'Rename' })
 
     await typeInInputAndSubmit(
       'Input file name',
@@ -88,8 +88,11 @@ describe('File', () => {
 
     await openDropdown(fileNode.name)
 
-    await clickDropdownItem('Delete')
+    await clickDropdownItem({ item: 'Delete' })
 
     expect(deleteFile).toBeCalledWith(fileNode.path)
   })
+
+  // TODO: Complete tests
+  it('should add styles when being drag and dropped dragged', async () => {})
 })

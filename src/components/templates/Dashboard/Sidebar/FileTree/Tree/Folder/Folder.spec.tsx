@@ -69,7 +69,7 @@ describe('Folder', () => {
     expect(chevronClick).toBeCalledWith(folderNode.path, false)
   })
 
-  it('should handleCreate after inputting new file name', async () => {
+  it('should call handleCreate after inputting new file name', async () => {
     await render(
       <Folder
         node={folderNode as IFolderNode}
@@ -80,7 +80,7 @@ describe('Folder', () => {
 
     await openDropdown('MOCK_FOLDER_PATH')
 
-    await clickDropdownItem('Create file')
+    await clickDropdownItem({ item: 'Create file' })
 
     await typeInInputAndSubmit(
       'Input file name',
@@ -104,8 +104,13 @@ describe('Folder', () => {
 
     await openDropdown(folderNode.name)
 
-    await clickDropdownItem('Create file')
+    await clickDropdownItem({ item: 'Create file' })
 
     expect(screen.getByLabelText('Input file name')).toBeInTheDocument()
   })
+
+  // TODO: Complete tests
+  it('should add styles in drag and drop is over folder', async () => {})
+
+  it('should call handleMove after drag and drop is dropped', async () => {})
 })

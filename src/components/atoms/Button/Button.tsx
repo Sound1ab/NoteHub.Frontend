@@ -5,7 +5,6 @@ import { darken } from '../../../utils/css/darken'
 import { Icon } from '../Icon/Icon'
 
 interface IButton {
-  isActive?: boolean
   isDisabled?: boolean
   isLoading?: boolean
   children?: ReactNode
@@ -16,25 +15,33 @@ interface IButton {
 export const Button = forwardRef(
   (props: IButton, ref: Ref<HTMLButtonElement>) => {
     return (
-      <StyledButton ref={ref} {...props} disabled={props.isDisabled}>
-        {props.isLoading ? <Icon size="1x" icon="spinner" /> : props.children}
+      <StyledButton ref={ref} {...props}>
+        {props.isLoading ? (
+          <Icon size="1x" icon="spinner" title="loading spinner" />
+        ) : (
+          props.children
+        )}
       </StyledButton>
     )
   }
 )
 
-const StyledButton = styled.button<Pick<IButton, 'isActive' | 'isLoading'>>`
+const StyledButton = styled.button<Pick<IButton, 'isLoading' | 'isDisabled'>>`
   position: relative;
   display: flex;
   align-items: center;
-
-  &[disabled] {
-    cursor: not-allowed;
-
-    > * {
-      color: var(--text-tertiary);
-    }
-  }
+  ${({ isDisabled }) =>
+    isDisabled &&
+    css`
+      cursor: not-allowed;
+    `}
+  ${({ isDisabled }) =>
+    isDisabled &&
+    css`
+      > * {
+        color: var(--text-tertiary);
+      }
+    `}
 
   > * {
     ${({ isLoading }) =>

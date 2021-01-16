@@ -7,14 +7,12 @@ interface IFileInput {
   onClickOutside: () => void
   onSubmit: (name: string) => Promise<void> | void
   startingText?: string
-  isDisabled: boolean
 }
 
 export function FileInput({
   onClickOutside,
   onSubmit,
   startingText,
-  isDisabled,
 }: IFileInput) {
   const defaultState = { name: '' }
   const [{ name }, setForm] = useState<{
@@ -50,7 +48,6 @@ export function FileInput({
   return (
     <Wrapper>
       <StyledFileInput
-        isDisabled={isDisabled}
         value={name}
         clickOutsideCallback={onClickOutside}
         handleOnChange={handleOnChange}

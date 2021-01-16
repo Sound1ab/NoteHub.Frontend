@@ -19,6 +19,7 @@ jest.mock('../../../../../hooks/localState/useReadThemeSettings')
 
 afterEach(cleanup)
 
+// TODO: Fix tests so they use recoil instead of apollo client
 describe('Profile', () => {
   let currentJwtVar = jest.spyOn(localState, 'currentJwtVar')
   let retextSettingsVar = jest.spyOn(localState, 'retextSettingsVar')

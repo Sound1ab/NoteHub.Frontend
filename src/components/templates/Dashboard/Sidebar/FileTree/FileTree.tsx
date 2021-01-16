@@ -11,11 +11,9 @@ import { useOpenFolders } from '../../../../../hooks/recoil/useOpenFolders'
 import { useRepo } from '../../../../../hooks/recoil/useRepo'
 import { createNodes } from '../../../../../utils/createNodes'
 import { List } from '../../../../atoms/List/List'
-import { ErrorToast } from '../../../../atoms/Toast/Toast'
 import { FileInput } from '../FileInput/FileInput'
 import { SearchResults } from './SearchResults/SearchResults'
 import { Tree } from './Tree/Tree'
-import { TreeSkeleton } from './TreeSkeleton'
 
 interface IFileTree {
   isNewFileOpen: boolean
@@ -23,17 +21,14 @@ interface IFileTree {
 }
 
 export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
+  // TODO: use recoil state
   const search = useReadSearch()
   const [openFolders] = useOpenFolders()
   const [{ createFile }] = useFileTree()
   const [files, setFiles] = useFiles()
   const [repo] = useRepo()
-  const [{ clone }, { loading: gitLoading }] = useGit()
-  const [{ readDirRecursive }, { loading: fsLoading, error }] = useFs()
-
-  if (error) {
-    ErrorToast(error)
-  }
+  const [{ clone }] = useGit()
+  const [{ readDirRecursive }] = useFs()
 
   useEffect(() => {
     if (files && files.length > 0) {
@@ -48,10 +43,6 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
 
     init()
   }, [files, clone, setFiles, readDirRecursive, repo])
-
-  if (gitLoading || !files) {
-    return <TreeSkeleton />
-  }
 
   async function handleCreate(name: string) {
     const path = `${name}.md`
@@ -72,11 +63,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
               </List>
             ))}
           {isNewFileOpen && (
-            <FileInput
-              onClickOutside={closeNewFile}
-              onSubmit={handleCreate}
-              isDisabled={fsLoading}
-            />
+            <FileInput onClickOutside={closeNewFile} onSubmit={handleCreate} />
           )}
         </>
       )}

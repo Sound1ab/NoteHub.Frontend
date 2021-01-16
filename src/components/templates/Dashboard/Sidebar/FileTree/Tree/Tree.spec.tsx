@@ -12,6 +12,14 @@ import { Tree } from './Tree'
 describe('Tree', () => {
   const { fileNode, folderNode } = getMockNodes()
 
+  it('should hide tree if folder has no files', async () => {
+    const { container } = await render(
+      <Tree node={{ ...folderNode, children: [] }} level={1} />
+    )
+
+    expect(container.firstChild).toBeNull()
+  })
+
   it('should show children when toggled is true and tree has children', async () => {
     await render(
       <Tree
@@ -33,7 +41,7 @@ describe('Tree', () => {
 
     await openDropdown(folderNode.name)
 
-    await clickDropdownItem('Create file')
+    await clickDropdownItem({ item: 'Create file' })
 
     expect(screen.getByLabelText('Input file name')).toBeInTheDocument()
   })

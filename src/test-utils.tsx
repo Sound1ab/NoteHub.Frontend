@@ -171,12 +171,12 @@ export async function renderWithNockBack(
 
   const Component = () => <>{component}</>
 
-  await customRender(<Component />)
+  const { container } = await customRender(<Component />)
 
   // If no nockback is pre-generated we need to await the fetch call
   !context.isLoaded && (await wait(5000))
 
-  return { nockDone }
+  return { nockDone, container }
 }
 
 // re-export everything

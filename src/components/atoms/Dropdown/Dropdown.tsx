@@ -44,6 +44,7 @@ export function Dropdown({ items, onClose, containerRef }: IDropdownMenuProps) {
             {heading && <Heading>{heading}</Heading>}
             <DropdownButton
               onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                if (isDisabled) return
                 onClick?.(e)
                 onClose?.()
               }}

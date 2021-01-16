@@ -9,6 +9,7 @@ import { FileTree } from './FileTree/FileTree'
 import { SearchInput } from './SearchInput/SearchInput'
 
 export function Sidebar() {
+  // TODO: Use recoil state
   const search = useReadSearch()
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
 

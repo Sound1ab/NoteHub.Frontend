@@ -3,7 +3,18 @@ import Typography from 'typography'
 export const createTypography = (isLargeText: boolean) => {
   return new Typography({
     baseFontSize: isLargeText ? '16px' : '14px',
+    googleFonts: [
+      {
+        name: 'Nunito',
+        styles: ['700'],
+      },
+      {
+        name: 'Merriweather',
+        styles: ['400', '400i', '700', '700i'],
+      },
+    ],
     bodyFontFamily: [
+      'Nunito',
       '-apple-system',
       'Blink,acSystemFont',
       'Segoe UI',
@@ -14,6 +25,7 @@ export const createTypography = (isLargeText: boolean) => {
       'sans-serif',
     ],
     headerFontFamily: [
+      'Nunito',
       '-apple-system',
       'Blink,acSystemFont',
       'Segoe UI',

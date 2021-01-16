@@ -1,13 +1,28 @@
 import { act, fireEvent, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
+import { wait } from '../../test-utils'
+
+interface IUserAction {
+  shouldWait?: number
+}
+
 export async function openDropdown(nodeName: string) {
   await userEvent.click(screen.getByLabelText(`${nodeName} actions`))
 }
 
-export async function clickDropdownItem(item: string) {
+interface IClickDropdownItem {
+  item: string
+  shouldWait?: number
+}
+
+export async function clickDropdownItem({
+  item,
+  shouldWait,
+}: IClickDropdownItem) {
   await act(async () => {
-    await userEvent.click(screen.getByLabelText(item))
+    await userEvent.click(screen.getByText(item))
+    shouldWait && (await wait(shouldWait))
   })
 }
 
@@ -57,5 +72,26 @@ export async function closeTab(tab: HTMLElement) {
   await act(async () => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await userEvent.click(tab.querySelector('svg')!)
+  })
+}
+
+export async function clickProfile({ shouldWait }: IUserAction) {
+  await act(async () => {
+    await fireEvent.click(screen.getByAltText('avatar'))
+    shouldWait && (await wait(shouldWait))
+  })
+}
+
+interface ITypeInTextArea extends IUserAction {
+  text: string
+}
+
+export async function typeInTextArea({ shouldWait, text }: ITypeInTextArea) {
+  await act(async () => {
+    const [textAreaOne, textAreaTwo] = screen.getAllByRole('textbox')
+
+    await userEvent.type(textAreaTwo || textAreaOne, text)
+
+    shouldWait && (await wait(shouldWait))
   })
 }

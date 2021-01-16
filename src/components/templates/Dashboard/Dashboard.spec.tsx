@@ -3,7 +3,6 @@ import path from 'path'
 import { act, screen } from '@testing-library/react'
 import React from 'react'
 
-import { process } from '../../../services/retext/process'
 import {
   fireEvent,
   nockBack,
@@ -14,9 +13,11 @@ import {
 import {
   clickDropdownItem,
   clickNode,
+  clickProfile,
   closeTab,
   openDropdown,
   typeInInputAndSubmit,
+  typeInTextArea,
 } from '../../../utils/testing/userActions'
 import Dashboard from './Dashboard'
 
@@ -33,22 +34,6 @@ describe('Dashboard', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     globalThis.indexedDB = new FDBFactory()
-    ;((process as unknown) as jest.Mock).mockReturnValue(
-      Promise.resolve([
-        {
-          message: '`heelo` is misspelt',
-          location: {
-            start: {
-              offset: 0,
-            },
-            end: {
-              offset: 5,
-            },
-          },
-          actual: 16,
-        },
-      ])
-    )
   })
 
   beforeAll(() => {
@@ -83,6 +68,8 @@ describe('Dashboard', () => {
   })
 
   describe('toolbar', () => {
+    // TODO: Add tests related to profile dropdown menu
+
     it('should remove tab when file is deleted from the sidebar', async () => {
       const { nockDone } = await renderWithNockBack(<Dashboard />, 'clone.json')
 
@@ -96,7 +83,7 @@ describe('Dashboard', () => {
       await openDropdown('levelOneFileOne.md')
 
       await act(async () => {
-        await clickDropdownItem('Delete')
+        await clickDropdownItem({ item: 'Delete' })
         await wait(200)
       })
 
@@ -141,7 +128,7 @@ describe('Dashboard', () => {
 
       await openDropdown('levelOneFileOne.md')
 
-      await clickDropdownItem('Rename')
+      await clickDropdownItem({ item: 'Rename' })
 
       await act(async () => {
         await typeInInputAndSubmit(
@@ -186,41 +173,27 @@ describe('Dashboard', () => {
       nockDone()
     })
 
-    // it('should underline text if file contains messages', async () => {
-    //   localState.currentPathVar('MOCK_FILE_PATH_4.md')
-    //   localState.retextSettingsVar({
-    //     ...localState.retextSettingsVar(),
-    //     [Retext_Settings.Spell]: true,
-    //   })
-    //
-    //   const { getByText } = await render(
-    //     <MarkdownEditor targetRef={createRef()} />
-    //   )
-    //
-    //   await waitFor(() => {
-    //     expect(getByText('heelo')).toHaveAttribute(
-    //       'style',
-    //       'text-decoration: underline; text-decoration-color: var(--accent-primary); text-decoration-style: wavy;'
-    //     )
-    //   })
-    // })
-    //
-    // it('should display message widget when marker is clicked', async () => {
-    //   localState.currentPathVar('MOCK_FILE_PATH_4.md')
-    //   localState.retextSettingsVar({
-    //     ...localState.retextSettingsVar(),
-    //     [Retext_Settings.Spell]: true,
-    //   })
-    //
-    //   const { getByText } = await render(
-    //     <MarkdownEditor targetRef={createRef()} />
-    //   )
-    //
-    //   await userEvent.click(getByText('heelo'))
-    //
-    //   await waitFor(() =>
-    //     expect(getByText('`heelo` is misspelt')).toBeInTheDocument()
-    //   )
-    // })
+    it('should spell check text', async () => {
+      const { nockDone } = await renderWithNockBack(<Dashboard />, 'clone.json')
+
+      await clickProfile({ shouldWait: 500 })
+
+      await clickDropdownItem({ item: 'Spelling', shouldWait: 200 })
+
+      await typeInTextArea({
+        text: 'some text wigh a spelling error',
+        shouldWait: 1000,
+      })
+
+      await expect(screen.findByText('wigh')).resolves.toHaveAttribute(
+        'style',
+        'text-decoration: underline; text-decoration-color: var(--accent-primary); text-decoration-style: wavy;'
+      )
+
+      nockDone()
+    })
   })
+
+  // TODO: ADD DRAFT MANAGER TESTS
+  describe('draft manager', () => {})
 })

@@ -29,9 +29,9 @@ jest.mock('react-use-upload', () => ({
   ),
 }))
 jest.mock('./hooks/image/useCreateSignedUrl')
-jest.mock('./services/retext/process', () => ({
-  process: jest.fn(() => []),
-}))
+// jest.mock('./services/retext/process', () => ({
+//   process: jest.fn(() => []),
+// }))
 jest.mock('./utils/debounce')
 jest.mock('./utils/css/darken')
 jest.mock('./hooks/fs/useFs')

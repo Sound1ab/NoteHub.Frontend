@@ -53,7 +53,6 @@ export function File({ node, level }: IFile) {
       onClickOutside={handleSetIsRenamingClose}
       onSubmit={handleRename}
       startingText={removeMarkdownExtension(name)}
-      isDisabled={loading!}
     />
   ) : (
     <StyledFile

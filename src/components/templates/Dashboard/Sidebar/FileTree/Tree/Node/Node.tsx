@@ -20,7 +20,6 @@ interface INode {
   dropdownItems: IDropdownItem[]
   onClick: () => void
   dndRef?: Ref<HTMLLIElement>
-  className?: string
 }
 
 export function Node({
@@ -31,7 +30,6 @@ export function Node({
   dropdownItems,
   onClick,
   dndRef,
-  className,
 }: INode) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>(
@@ -73,7 +71,6 @@ export function Node({
         ref={containerRef}
         type={type}
         aria-label={node.type === Node_Type.File ? 'file' : 'folder'}
-        className={className}
       >
         <Details>
           {children}

@@ -1,12 +1,8 @@
-import '@testing-library/jest-dom/extend-expect'
-
+import { screen } from '@testing-library/react'
 import React from 'react'
 
-import { cleanup, fireEvent, render } from '../../../test-utils'
-import { MockProvider } from '../../providers/ApolloProvider/MockProvider'
+import { fireEvent, render } from '../../../test-utils'
 import { Input } from './Input'
-
-afterEach(cleanup)
 
 describe('InlineInput', () => {
   const value = 'MOCK_VALUE'
@@ -23,18 +19,16 @@ describe('InlineInput', () => {
 
   it('should fire callback when user clicks off input', async () => {
     const { container } = await render(
-      <MockProvider>
-        <Input
-          value={value}
-          clickOutsideCallback={clickOutsideCallback}
-          handleOnChange={handleOnChange}
-          inputAriaLabel={inputAriaLabel}
-          onSubmit={onSubmit}
-          formAriaLabel={formAriaLabel}
-          icon={icon}
-          type="text"
-        />
-      </MockProvider>
+      <Input
+        value={value}
+        clickOutsideCallback={clickOutsideCallback}
+        handleOnChange={handleOnChange}
+        inputAriaLabel={inputAriaLabel}
+        onSubmit={onSubmit}
+        formAriaLabel={formAriaLabel}
+        icon={icon}
+        type="text"
+      />
     )
 
     await fireEvent.mouseDown(container)
@@ -43,22 +37,20 @@ describe('InlineInput', () => {
   })
 
   it('should fire callback when user presses escape', async () => {
-    const { getByLabelText } = await render(
-      <MockProvider>
-        <Input
-          value={value}
-          clickOutsideCallback={clickOutsideCallback}
-          handleOnChange={handleOnChange}
-          inputAriaLabel={inputAriaLabel}
-          onSubmit={onSubmit}
-          formAriaLabel={formAriaLabel}
-          icon={icon}
-          type="text"
-        />
-      </MockProvider>
+    await render(
+      <Input
+        value={value}
+        clickOutsideCallback={clickOutsideCallback}
+        handleOnChange={handleOnChange}
+        inputAriaLabel={inputAriaLabel}
+        onSubmit={onSubmit}
+        formAriaLabel={formAriaLabel}
+        icon={icon}
+        type="text"
+      />
     )
 
-    await fireEvent.keyDown(getByLabelText(inputAriaLabel), {
+    await fireEvent.keyDown(screen.getByLabelText(inputAriaLabel), {
       key: 'Escape',
       code: 'Escape',
       keyCode: 27,
@@ -69,41 +61,37 @@ describe('InlineInput', () => {
   })
 
   it('should focus the input when first rendered', async () => {
-    const { getByLabelText } = await render(
-      <MockProvider>
-        <Input
-          value={value}
-          clickOutsideCallback={clickOutsideCallback}
-          handleOnChange={handleOnChange}
-          inputAriaLabel={inputAriaLabel}
-          onSubmit={onSubmit}
-          formAriaLabel={formAriaLabel}
-          icon={icon}
-          type="text"
-          autoFocus
-        />
-      </MockProvider>
+    await render(
+      <Input
+        value={value}
+        clickOutsideCallback={clickOutsideCallback}
+        handleOnChange={handleOnChange}
+        inputAriaLabel={inputAriaLabel}
+        onSubmit={onSubmit}
+        formAriaLabel={formAriaLabel}
+        icon={icon}
+        type="text"
+        autoFocus
+      />
     )
 
-    expect(getByLabelText(inputAriaLabel)).toHaveFocus()
+    expect(screen.getByLabelText(inputAriaLabel)).toHaveFocus()
   })
 
   it('should display icon if passed as prop', async () => {
-    const { getByText } = await render(
-      <MockProvider>
-        <Input
-          value={value}
-          clickOutsideCallback={clickOutsideCallback}
-          handleOnChange={handleOnChange}
-          inputAriaLabel={inputAriaLabel}
-          onSubmit={onSubmit}
-          formAriaLabel={formAriaLabel}
-          icon={icon}
-          type="text"
-        />
-      </MockProvider>
+    await render(
+      <Input
+        value={value}
+        clickOutsideCallback={clickOutsideCallback}
+        handleOnChange={handleOnChange}
+        inputAriaLabel={inputAriaLabel}
+        onSubmit={onSubmit}
+        formAriaLabel={formAriaLabel}
+        icon={icon}
+        type="text"
+      />
     )
 
-    expect(getByText('MOCK_ICON')).toBeDefined()
+    expect(screen.getByText('MOCK_ICON')).toBeDefined()
   })
 })

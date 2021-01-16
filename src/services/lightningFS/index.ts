@@ -14,6 +14,7 @@ export interface IReadDirRecursive {
   dir: string
 }
 
+// TODO: SPLIT INTO MODULES AND WRITE TESTS
 export async function readDirRecursive({ dir }: IReadDirRecursive) {
   const subdirs = await readDir({ dir })
 

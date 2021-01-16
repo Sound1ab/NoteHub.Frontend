@@ -84,6 +84,7 @@ describe('ContextMenu', () => {
     expect(fn).toBeCalled()
   })
 
+  // TODO: PLACE THESE SOMEWHERE BETTER
   describe('When uploading an image', () => {
     it('should call updateFile with the currentPath and content if successfully uploaded', async () => {
       const setValue = jest.fn()

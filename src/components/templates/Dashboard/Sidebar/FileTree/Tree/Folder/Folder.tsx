@@ -100,7 +100,6 @@ export function Folder({ level, node, childNodes }: IFolder) {
         <FileInput
           onClickOutside={handleSetIsNewFileClose}
           onSubmit={handleCreate}
-          isDisabled={loading}
         />
       )}
     </>

@@ -6,6 +6,7 @@ import { Input } from '../../../../atoms/Input/Input'
 import { localState } from '../../../../providers/ApolloProvider/cache'
 
 export function SearchInput() {
+  // TODO: use recoil state
   const search = useReadSearch()
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { value } = event.target

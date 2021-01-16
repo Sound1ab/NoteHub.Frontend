@@ -1,206 +1,87 @@
 import { screen } from '@testing-library/react'
 import React from 'react'
 
+import { useFileTree } from '../../../../../hooks/fileTree/useFileTree'
+import { useFs } from '../../../../../hooks/fs/useFs'
+import { useGit } from '../../../../../hooks/git/useGit'
+import { useFiles } from '../../../../../hooks/recoil/useFiles'
 import { render } from '../../../../../test-utils'
 import {
-  clickAndDragFileOverFolder,
-  clickChevron,
   clickContainer,
-  clickDropdownItem,
-  clickNode,
-  openDropdown,
   typeInInputAndSubmit,
 } from '../../../../../utils/testing/userActions'
+import { Node_Type } from '../../../../apollo/generated_components_typings'
 import { FileTree } from './FileTree'
 
 jest.mock('../../../../../utils/scrollIntoView')
+jest.mock('../../../../../hooks/git/useGit', () => ({
+  useGit: jest.fn(),
+}))
+jest.mock('../../../../../hooks/fs/useFs', () => ({
+  useFs: jest.fn(),
+}))
+jest.mock('../../../../../hooks/recoil/useFiles', () => ({
+  useFiles: jest.fn(),
+}))
+jest.mock('../../../../../hooks/fileTree/useFileTree', () => ({
+  useFileTree: jest.fn(),
+}))
 
 jest.setTimeout(10000)
 
 describe('FileTree', () => {
+  const clone = jest.fn()
+  const setFiles = jest.fn()
+  const file = {
+    path: 'MOCK_FILE_PATH.md',
+    type: Node_Type.File,
+    isOptimistic: false,
+  }
+  const createFile = jest.fn()
+
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(useGit as jest.Mock).mockReturnValue([{ clone }, { loading: false }])
+    ;(useFs as jest.Mock).mockReturnValue([
+      {
+        readDirRecursive: () => [file],
+      },
+      { loading: false },
+    ])
+    ;(useFiles as jest.Mock).mockReturnValue([[], setFiles])
+    ;(useFileTree as jest.Mock).mockReturnValue([{ createFile }])
   })
 
-  it('should toggle folders', async () => {
+  it('should call clone repo and setFiles on load', async () => {
     await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
 
-    await clickNode('MOCK_FOLDER_PATH')
-
-    expect(screen.getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
-
-    await clickNode('MOCK_FOLDER_PATH')
-
-    expect(screen.queryByText('MOCK_FILE_PATH_2.md')).not.toBeInTheDocument()
-
-    await clickNode('MOCK_FOLDER_PATH')
-
-    expect(screen.getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
+    expect(clone).toBeCalledTimes(1)
+    expect(setFiles).toBeCalledWith([file])
   })
 
-  describe('file input', () => {
-    it('should show file input if passed prop', async () => {
-      await render(<FileTree isNewFileOpen={true} closeNewFile={jest.fn()} />)
+  it('should call createFile when creating a new file', async () => {
+    await render(<FileTree isNewFileOpen={true} closeNewFile={jest.fn()} />)
 
-      expect(screen.getByLabelText('Input file name')).toBeInTheDocument()
-    })
+    await typeInInputAndSubmit('Input file name', 'File name form', 'NEW_FILE')
 
-    it('should call closeNewFile if deselected ', async () => {
-      const closeNewFile = jest.fn()
-
-      const { container } = await render(
-        <FileTree isNewFileOpen={true} closeNewFile={closeNewFile} />
-      )
-
-      await clickContainer(container)
-
-      expect(closeNewFile).toBeCalled()
-    })
+    expect(createFile).toBeCalledWith('NEW_FILE.md')
   })
 
-  describe('when creating a file', () => {
-    it('should toggle folder open if placed inside a closed folder', async () => {
-      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
+  it('should show file input if passed prop', async () => {
+    await render(<FileTree isNewFileOpen={true} closeNewFile={jest.fn()} />)
 
-      await openDropdown('MOCK_FOLDER_PATH')
-
-      await clickDropdownItem('Create file')
-
-      await typeInInputAndSubmit(
-        'Input file name',
-        'File name form',
-        'MOCK_FOLDER_PATH/NEW_MOCK_FILE_NAME'
-      )
-
-      await expect(
-        screen.getByText('NEW_MOCK_FILE_NAME.md')
-      ).toBeInTheDocument()
-    })
-
-    it('should toggle nested folder open if placed inside a closed folder', async () => {
-      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
-
-      await openDropdown('MOCK_FOLDER_PATH')
-
-      await clickDropdownItem('Create file')
-
-      await typeInInputAndSubmit(
-        'Input file name',
-        'File name form',
-        'MOCK_FOLDER_PATH/MOCK_FOLDER_PATH_2/MOCK_FOLDER_PATH_3/NEW_MOCK_FILE_NAME_5'
-      )
-
-      expect(screen.getByText('NEW_MOCK_FILE_NAME_5.md')).toBeInTheDocument()
-    })
-
-    it('should be possible to toggle newly created folder', async () => {
-      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
-
-      await openDropdown('MOCK_FOLDER_PATH')
-
-      await clickDropdownItem('Create file')
-
-      await typeInInputAndSubmit(
-        'Input file name',
-        'File name form',
-        'MOCK_FOLDER_PATH_OTHER/NEW_MOCK_FILE_NAME'
-      )
-
-      expect(screen.getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
-
-      await clickNode('MOCK_FOLDER_PATH_OTHER')
-
-      expect(screen.getByText('NEW_MOCK_FILE_NAME.md')).toBeInTheDocument()
-
-      await clickNode('MOCK_FOLDER_PATH_OTHER')
-
-      expect(
-        screen.queryByText('NEW_MOCK_FILE_NAME.md')
-      ).not.toBeInTheDocument()
-    })
+    expect(screen.getByLabelText('Input file name')).toBeInTheDocument()
   })
 
-  describe('when deleting a file', () => {
-    it('should remove file but keep folder open if other files exist', async () => {
-      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
+  it('should call closeNewFile if deselected ', async () => {
+    const closeNewFile = jest.fn()
 
-      await clickNode('MOCK_FOLDER_PATH')
+    const { container } = await render(
+      <FileTree isNewFileOpen={true} closeNewFile={closeNewFile} />
+    )
 
-      expect(screen.getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
+    await clickContainer(container)
 
-      await openDropdown('MOCK_FILE_PATH_1.md')
-
-      await clickDropdownItem('Delete')
-
-      expect(screen.queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
-
-      expect(screen.getByText('MOCK_FILE_PATH_2.md')).toBeInTheDocument()
-    })
-
-    it('should remove folder if no other files exist', async () => {
-      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
-
-      await clickNode('MOCK_FOLDER_PATH')
-
-      expect(screen.getByText('MOCK_FOLDER_PATH')).toBeInTheDocument()
-
-      await openDropdown('MOCK_FILE_PATH_1.md')
-
-      await clickDropdownItem('Delete')
-
-      await openDropdown('MOCK_FILE_PATH_2.md')
-
-      await clickDropdownItem('Delete')
-
-      await openDropdown('MOCK_FILE_PATH_4.md')
-
-      await clickDropdownItem('Delete')
-
-      expect(screen.queryByText('MOCK_FOLDER_PATH')).not.toBeInTheDocument()
-    })
-  })
-
-  describe('when renaming a file or folder', () => {
-    it('should move the file or folder to a new name', async () => {
-      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
-
-      await clickNode('MOCK_FOLDER_PATH')
-
-      expect(screen.getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
-
-      await openDropdown('MOCK_FILE_PATH_1.md')
-
-      await clickDropdownItem('Rename')
-
-      await typeInInputAndSubmit(
-        'Input file name',
-        'File name form',
-        'NEW_MOCK_FILE_PATH'
-      )
-
-      expect(screen.queryByText('MOCK_FILE_PATH_1.md')).not.toBeInTheDocument()
-
-      expect(screen.getByText('NEW_MOCK_FILE_PATH.md')).toBeInTheDocument()
-    })
-  })
-
-  describe('when dragging a file', () => {
-    it('should place file into folder', async () => {
-      await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
-
-      expect(screen.getByText('MOCK_FILE_PATH_3.md')).toBeInTheDocument()
-
-      await clickAndDragFileOverFolder(
-        'MOCK_FILE_PATH_3.md',
-        'MOCK_FOLDER_PATH'
-      )
-
-      expect(screen.getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
-
-      // Close the folder so we can test it's placement
-      await clickChevron()
-
-      expect(screen.queryByText('MOCK_FILE_PATH_3.md')).not.toBeInTheDocument()
-    })
+    expect(closeNewFile).toBeCalled()
   })
 })

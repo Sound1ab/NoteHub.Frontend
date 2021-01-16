@@ -12,6 +12,7 @@ import { useReadThemeSettings } from '../localState/useReadThemeSettings'
 import { useReadGithubUser } from '../user/useReadGithubUser'
 
 export function useProfileDropdown() {
+  // TODO: Use recoil instead of reactive vars
   const retextSettings = useReadRetextSettings()
   const themeSettings = useReadThemeSettings()
   const [logout, { called, data, error }] = useLogout()
