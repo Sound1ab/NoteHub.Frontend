@@ -14,6 +14,7 @@ import { useWidget } from '../../../../hooks/recoil/useWidget'
 import useDeepCompareEffect from '../../../../hooks/utils/useDeepCompareEffect'
 import { process } from '../../../../services/retext/process'
 import { debounce } from '../../../../utils/debounce'
+import { isFile } from '../../../../utils/isFile'
 import { ContextMenu } from './ContextMenu/ContextMenu'
 import { StyledCodeMirror } from './StyledCodeMirror'
 import { Widget } from './Widget/Widget'
@@ -149,7 +150,7 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
     const editor = codeMirrorRef.current
 
     async function loadContentFromFS() {
-      if (!editor) return
+      if (!editor || !isFile(activePath)) return
 
       editor.setValue((await readFile(activePath)) ?? '')
     }
