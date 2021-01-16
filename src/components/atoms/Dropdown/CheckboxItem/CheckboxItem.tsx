@@ -48,5 +48,5 @@ const Checkbox = styled.input`
 `
 
 const Label = styled.label`
-  font-size: ${({ theme }) => theme.typographyStyles.h5.fontSize};
+  font-size: ${({ theme }) => theme.typographyStyles.body.fontSize};
 `

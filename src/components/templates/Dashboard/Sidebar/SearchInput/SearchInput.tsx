@@ -29,5 +29,9 @@ export function SearchInput() {
 }
 
 const Wrapper = styled.div`
-  padding: ${({ theme }) => theme.spacing.xs};
+  padding: 0 ${({ theme }) => theme.spacing.xs};
+  border-bottom: 1px solid var(--border-primary);
+  height: ${({ theme }) => theme.spacing.xl};
+  display: flex;
+  align-items: center;
 `

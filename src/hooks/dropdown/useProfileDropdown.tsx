@@ -88,6 +88,7 @@ export function useProfileDropdown() {
           group="font"
         />
       ),
+      hasSeparator: true,
     },
     {
       heading: 'Theme',

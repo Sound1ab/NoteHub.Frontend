@@ -202,8 +202,6 @@ const Wrapper = styled.div`
   flex: 0 0 100%; // Needed for scroll snap
   position: relative;
   height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
   justify-content: center;
   display: flex;
 

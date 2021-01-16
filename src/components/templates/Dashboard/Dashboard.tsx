@@ -4,8 +4,8 @@ import { RecoilRoot } from 'recoil'
 import styled from 'styled-components'
 
 import { useReadRepo } from '../../../hooks/repo/useReadRepo'
-import { DraftManager } from './DraftManager/DraftManager'
 import { CodeMirror } from './CodeMirror/CodeMirror'
+import { DraftManager } from './DraftManager/DraftManager'
 import { Sidebar } from './Sidebar/Sidebar'
 import { Toolbar } from './Toolbar/Toolbar'
 
@@ -49,7 +49,6 @@ function Dashboard() {
 export { Dashboard as default }
 
 const Grid = styled.div`
-  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;

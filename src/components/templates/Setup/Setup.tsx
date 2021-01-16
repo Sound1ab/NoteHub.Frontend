@@ -86,7 +86,7 @@ const DialogBox = styled.div`
   padding: ${({ theme }) => theme.spacing.m};
   background-color: var(--accent-primary);
   text-align: center;
-  border-radius: ${({ theme }) => theme.spacing.xxs};
+  border-radius: ${({ theme }) => theme.borderRadius};
 `
 
 const Copy = styled.p`

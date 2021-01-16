@@ -16,8 +16,8 @@ export function Avatar({ image, onClick }: IAvatar) {
 
 const StyledAvatar = styled.div`
   position: relative;
-  height: ${({ theme }) => theme.spacing.m};
-  width: ${({ theme }) => theme.spacing.m};
+  height: ${({ theme }) => theme.spacing.l};
+  width: ${({ theme }) => theme.spacing.l};
 `
 
 const Image = styled.img`

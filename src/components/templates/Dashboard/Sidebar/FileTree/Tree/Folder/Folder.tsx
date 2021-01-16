@@ -21,10 +21,7 @@ export function Folder({ level, node, childNodes }: IFolder) {
   const { items, isNewFileOpen, handleSetIsNewFileClose } = useFolderDropdown(
     node
   )
-  const [
-    { renameNode, folderClick, chevronClick, createFile },
-    { loading, error },
-  ] = useFileTree()
+  const [{ renameNode, folderClick, chevronClick, createFile }] = useFileTree()
   const { path, toggled = false } = node
 
   const [{ isOver }, dropRef] = useDrop<
@@ -39,9 +36,7 @@ export function Folder({ level, node, childNodes }: IFolder) {
     }),
   })
 
-  if (error) {
-    ErrorToast(error)
-  }
+  console.log('here', isOver)
 
   async function handleMove({ file }: { file: ITreeNode }) {
     if (!isOver) {

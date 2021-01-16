@@ -63,7 +63,7 @@ export function Dropdown({ items, onClose, containerRef }: IDropdownMenuProps) {
                       title={`${label} icon`}
                     />
                   )}
-                  <h5>{label}</h5>
+                  <span>{label}</span>
                 </Item>
               )}
             </DropdownButton>
@@ -78,7 +78,7 @@ export function Dropdown({ items, onClose, containerRef }: IDropdownMenuProps) {
 const StyledDropdown = styled.ul`
   background-color: var(--background-secondary);
   list-style: none;
-  border-radius: 3px;
+  border-radius: ${({ theme }) => theme.borderRadius};
   white-space: pre;
   margin: 0;
   padding: ${({ theme }) => theme.spacing.xxs} 0;

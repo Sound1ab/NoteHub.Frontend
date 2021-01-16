@@ -20,6 +20,7 @@ interface INode {
   dropdownItems: IDropdownItem[]
   onClick: () => void
   dndRef?: Ref<HTMLLIElement>
+  className?: string
 }
 
 export function Node({
@@ -30,6 +31,7 @@ export function Node({
   dropdownItems,
   onClick,
   dndRef,
+  className,
 }: INode) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>(
@@ -61,7 +63,7 @@ export function Node({
   }
 
   return (
-    <StyledListItem ref={dndRef}>
+    <StyledListItem ref={dndRef} className={className}>
       <Wrapper
         isOpen={isOpen}
         isDisabled={node.isOptimistic}

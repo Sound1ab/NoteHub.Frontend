@@ -63,7 +63,7 @@ export const RegularButton = styled(Button)`
   padding: ${({ theme }) => theme.spacing.xs};
   align-items: center;
   text-decoration: none;
-  border-radius: ${({ theme }) => theme.spacing.xxs};
+  border-radius: ${({ theme }) => theme.borderRadius};
 `
 
 export const GithubButton = styled(RegularButton)`

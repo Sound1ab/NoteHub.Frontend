@@ -5,6 +5,7 @@ import Typography from 'typography'
 import { COLOR_MODE } from '../../../enums'
 import { useReadThemeSettings } from '../../../hooks/localState/useReadThemeSettings'
 import {
+  borderRadius,
   boxShadow,
   breakpoints,
   createSpacing,
@@ -36,6 +37,7 @@ export function ThemeProvider({ children }: IThemeProvider) {
         typographyStyles: typography.toJSON(),
         boxShadow,
         transition,
+        borderRadius,
       }}
     >
       {children(typography)}

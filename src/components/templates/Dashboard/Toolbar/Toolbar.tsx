@@ -31,13 +31,18 @@ export function Toolbar() {
 }
 
 const StyledToolbar = styled.header`
-  position: relative;
+  grid-area: toolbar;
   width: 100%;
   display: flex;
   background-color: var(--background-primary);
   // Needed to contain children from overflowing and make flex item scroll
   overflow-x: auto;
-  z-index: 1;
+  z-index: 3;
+  position: sticky;
+  top: 0px;
+  align-self: start;
+  border-bottom: 1px solid var(--border-primary);
+  height: ${({ theme }) => theme.spacing.xl};
 `
 
 const Tabs = styled.div`

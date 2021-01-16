@@ -31,6 +31,7 @@ export interface ITheme {
   }
   boxShadow: string
   transition: string
+  borderRadius: string
 }
 
 declare module 'styled-components' {

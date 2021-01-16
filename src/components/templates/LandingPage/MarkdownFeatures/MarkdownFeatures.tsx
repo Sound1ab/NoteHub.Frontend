@@ -90,7 +90,7 @@ const Feature = styled.article`
   box-shadow: ${({ theme }) => theme.boxShadow};
   padding: ${({ theme }) => theme.spacing.xs};
   background-color: var(--background-secondary);
-  border-radius: ${({ theme }) => theme.spacing.xxs};
+  border-radius: ${({ theme }) => theme.borderRadius};
   transition: ${({ theme }) => theme.transition};
 
   &:hover {

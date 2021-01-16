@@ -35,7 +35,7 @@ export function Sidebar() {
 
 const StyledSidebar = styled.div`
   flex: 0 0 100%;
-  height: 100%;
+  height: 100vh;
   background-color: var(--background-primary);
   display: flex;
   flex-direction: column;
@@ -44,11 +44,14 @@ const StyledSidebar = styled.div`
   // Needed to contain children from overflowing and make flex item scroll
   overflow-y: auto;
   z-index: 2;
+  position: sticky;
+  top: 0px;
+  align-self: start;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     grid-area: sidebar;
     resize: horizontal;
-    min-width: ${({ theme }) => theme.spacing.xxl};
+    min-width: ${({ theme }) => theme.spacing.xxxl};
     max-width: 50vw;
     overflow-x: auto;
   }

@@ -10,7 +10,6 @@ export const StyledCodeMirror = styled.article<{
   flex: 1 1 100%;
   padding: ${({ theme }) => theme.spacing.xs};
   position: relative;
-  overflow-y: scroll;
 
   .CodeMirror {
     height: auto;
@@ -28,7 +27,7 @@ export const StyledCodeMirror = styled.article<{
     outline: 0;
     position: relative;
     width: 100%;
-    overflow: visible;
+    overflow: visible !important;
     display: flex;
     justify-content: center;
   }

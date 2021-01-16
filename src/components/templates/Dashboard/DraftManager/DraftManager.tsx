@@ -97,7 +97,7 @@ const Wrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.xs};
   box-shadow: ${({ theme }) => theme.boxShadow};
   background-color: var(--background-secondary);
-  border-radius: ${({ theme }) => theme.spacing.xxs};
+  border-radius: ${({ theme }) => theme.borderRadius};
   margin: ${({ theme }) => theme.spacing.xs};
   z-index: 20;
 
