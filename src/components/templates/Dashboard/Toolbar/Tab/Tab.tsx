@@ -2,7 +2,9 @@ import React, { MouseEvent } from 'react'
 import styled, { css } from 'styled-components'
 
 import { useActivePath } from '../../../../../hooks/recoil/useActivePath'
+import { useCommittedChanges } from '../../../../../hooks/recoil/useCommittedChanges'
 import { useTabs } from '../../../../../hooks/recoil/useTabs'
+import { useUnstagedChanges } from '../../../../../hooks/recoil/useUnstagedChanges'
 import { getNextTab } from '../../../../../utils/getNextTab'
 import { Button } from '../../../../atoms/Button/Button'
 import { Close } from '../../../../atoms/Close/Close'
@@ -17,6 +19,11 @@ export function Tab({ name, path, isDisabled }: ITab) {
   const [activePath, setActivePath] = useActivePath()
   const [tabs, setTabs] = useTabs()
   const isActive = path === activePath
+  const [unstagedChanges] = useUnstagedChanges()
+  const [committedChanges] = useCommittedChanges()
+
+  const hasUnstagedChanges = unstagedChanges.includes(path)
+  const hasUnpushedChanges = committedChanges.includes(path)
 
   function handleOnClick() {
     setActivePath(path)
@@ -47,7 +54,13 @@ export function Tab({ name, path, isDisabled }: ITab) {
       title={path}
       isDisabled={isDisabled}
     >
-      <Heading isDisabled={isDisabled}>{name}</Heading>
+      <Heading
+        isDisabled={isDisabled}
+        hasUnstagedChanges={hasUnstagedChanges}
+        hasUnpushedChanges={hasUnpushedChanges}
+      >
+        {name}
+      </Heading>
       <Close icon="times" size="1x" onClick={handleOnClose} title="close" />
     </Wrapper>
   )
@@ -58,7 +71,7 @@ const Wrapper = styled(Button)<{ isActive: boolean; isDisabled: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: ${({ theme }) => theme.spacing.xs};
+  padding: ${({ theme }) => theme.spacing.m};
   ${({ isActive }) =>
     isActive &&
     css`
@@ -78,9 +91,23 @@ const Wrapper = styled(Button)<{ isActive: boolean; isDisabled: boolean }>`
   }
 `
 
-const Heading = styled.h5<{ isDisabled: boolean }>`
+const Heading = styled.h5<{
+  isDisabled: boolean
+  hasUnstagedChanges: boolean
+  hasUnpushedChanges: boolean
+}>`
   margin-bottom: 0;
   white-space: nowrap;
+  ${({ hasUnpushedChanges }) =>
+    hasUnpushedChanges &&
+    css`
+      color: var(--feedback-success);
+    `}
+  ${({ hasUnstagedChanges }) =>
+    hasUnstagedChanges &&
+    css`
+      color: var(--feedback-info);
+    `}
   ${({ isDisabled }) =>
     isDisabled &&
     css`
