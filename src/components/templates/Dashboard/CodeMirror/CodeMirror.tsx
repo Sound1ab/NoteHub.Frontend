@@ -37,6 +37,7 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
   const target = useRef<HTMLDivElement | null>(null)
   const textArea = useRef<HTMLTextAreaElement | null>(null)
   const codeMirrorRef = useRef<EditorFromTextArea | null>(null)
+  const wrapperRef = useRef<HTMLDivElement | null>(null)
 
   const { isFullWidth, font } = useReadThemeSettings()
   const { activeRetextSettings } = useReadActiveRetextSettings()
@@ -160,7 +161,7 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
 
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     const editor = codeMirrorRef.current
-    const scroll = target.current
+    const scroll = wrapperRef.current
 
     if (!editor || !scroll) {
       return
@@ -182,7 +183,7 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
     >
       {codeMirrorRef.current && <ContextMenu targetRef={target} />}
       {children(
-        <Wrapper id={CONTAINER_ID.EDITOR}>
+        <Wrapper id={CONTAINER_ID.EDITOR} ref={wrapperRef}>
           {widget && <Widget />}
           <StyledCodeMirror
             isFullWidth={isFullWidth}

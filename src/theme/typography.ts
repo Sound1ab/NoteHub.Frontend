@@ -42,6 +42,7 @@ export const createTypography = (isLargeText: boolean) => {
       },
       p: {
         color: 'var(--text-primary)',
+        lineHeight: 1.5,
       },
       pre: {
         fontSize: scale(1),

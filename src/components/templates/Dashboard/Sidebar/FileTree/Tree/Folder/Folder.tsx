@@ -36,8 +36,6 @@ export function Folder({ level, node, childNodes }: IFolder) {
     }),
   })
 
-  console.log('here', isOver)
-
   async function handleMove({ file }: { file: ITreeNode }) {
     if (!isOver) {
       return

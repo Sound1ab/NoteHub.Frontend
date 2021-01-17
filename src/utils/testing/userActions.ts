@@ -95,3 +95,18 @@ export async function typeInTextArea({ shouldWait, text }: ITypeInTextArea) {
     shouldWait && (await wait(shouldWait))
   })
 }
+
+interface IClickEditorText extends IUserAction {
+  text: string
+}
+
+export async function clickEditorText({ shouldWait, text }: IClickEditorText) {
+  await act(async () => {
+    await userEvent.click(screen.getByText(text), {
+      clientX: 250,
+      clientY: 250,
+    })
+
+    shouldWait && (await wait(shouldWait))
+  })
+}

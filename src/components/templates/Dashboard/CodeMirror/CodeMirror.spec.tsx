@@ -5,7 +5,10 @@ import { useFs } from '../../../../hooks/fs/useFs'
 import { useReadActiveRetextSettings } from '../../../../hooks/localState/useReadActiveRetextSettings'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
 import { render } from '../../../../test-utils'
-import { typeInTextArea } from '../../../../utils/testing/userActions'
+import {
+  clickEditorText,
+  typeInTextArea,
+} from '../../../../utils/testing/userActions'
 import { Retext_Settings } from '../../../apollo/generated_components_typings'
 import { CodeMirror } from './CodeMirror'
 
@@ -72,21 +75,24 @@ describe('CodeMirror', () => {
     expect(readFile).not.toBeCalled()
   })
 
-  // it('should display message widget when marker is clicked', async () => {
-  //   localState.currentPathVar('MOCK_FILE_PATH_4.md')
-  //   localState.retextSettingsVar({
-  //     ...localState.retextSettingsVar(),
-  //     [Retext_Settings.Spell]: true,
-  //   })
-  //
-  //   const { getByText } = await render(
-  //     <MarkdownEditor targetRef={createRef()} />
-  //   )
-  //
-  //   await userEvent.click(getByText('heelo'))
-  //
-  //   await waitFor(() =>
-  //     expect(getByText('`heelo` is misspelt')).toBeInTheDocument()
-  //   )
-  // })
+  xit('should display message widget when marker is clicked', async () => {
+    ;(useReadActiveRetextSettings as jest.Mock).mockReturnValue({
+      activeRetextSettings: [Retext_Settings.Spell],
+    })
+    ;(useFs as jest.Mock).mockReturnValue([
+      { writeFile: jest.fn(), readFile: () => 'heelo' },
+    ])
+
+    await render(<CodeMirror>{(textArea) => textArea}</CodeMirror>)
+
+    await typeInTextArea({
+      text: 'some text wigh a spelling error',
+    })
+
+    await clickEditorText({ shouldWait: 1000, text: 'wigh' })
+
+    expect(
+      screen.getByText('`wigh` is misspelt; did you mean')
+    ).toBeInTheDocument()
+  })
 })

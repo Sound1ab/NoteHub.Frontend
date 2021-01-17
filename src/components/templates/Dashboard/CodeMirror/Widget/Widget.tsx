@@ -24,7 +24,7 @@ export function Widget() {
 const Wrapper = styled.div<{ position: Coords }>`
   position: absolute;
   background-color: var(--background-secondary);
-  border-radius: 3px;
+  border-radius: ${({ theme }) => theme.borderRadius};
   padding: ${({ theme }) => theme.spacing.xxs};
   margin-top: ${({ theme }) => theme.spacing.s};
   top: ${({ position }) => `${position?.top ?? -9999}px`};
