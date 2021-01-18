@@ -39,6 +39,8 @@ describe('FileInput', () => {
       />
     )
 
-    expect(screen.getByLabelText('Input file name')).toHaveValue('MOCK STARTING TEXT')
+    expect(screen.getByLabelText('Input file name')).toHaveValue(
+      'MOCK STARTING TEXT'
+    )
   })
 })

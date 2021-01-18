@@ -7,7 +7,6 @@ import { useFileTree } from '../../../../../../../hooks/fileTree/useFileTree'
 import { IFolderNode, ITreeNode } from '../../../../../../../types'
 import { extractFilename } from '../../../../../../../utils/extractFilename'
 import { Icon } from '../../../../../../atoms/Icon/Icon'
-import { ErrorToast } from '../../../../../../atoms/Toast/Toast'
 import { FileInput } from '../../../FileInput/FileInput'
 import { Node } from '../Node/Node'
 

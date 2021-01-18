@@ -333,6 +333,7 @@ declare module '@isomorphic-git/lightning-fs' {
       du(filepath: string): Promise<number>
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface Options {
       /**
        * Delete the database and start with an empty filesystem
@@ -395,11 +396,11 @@ declare module '@isomorphic-git/lightning-fs' {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface Stats {
       type: 'file' | 'dir'
-      mode: any
+      mode: never
       size: number
-      ino: any
-      mtimeMs: any
-      ctimeMs: any
+      ino: never
+      mtimeMs: never
+      ctimeMs: never
       uid: 1
       gid: 1
       dev: 1

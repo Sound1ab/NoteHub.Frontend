@@ -195,5 +195,6 @@ describe('Dashboard', () => {
   })
 
   // TODO: ADD DRAFT MANAGER TESTS
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('draft manager', () => {})
 })

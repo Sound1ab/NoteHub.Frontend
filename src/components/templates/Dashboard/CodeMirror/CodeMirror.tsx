@@ -91,6 +91,7 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
     [activeRetextSettings, clearMarkers, createMarkers]
   )
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const writeContentToFSAndCheckUnstagedChanges = useCallback(
     debounce(async (fileContent) => {
       processRetext(fileContent)

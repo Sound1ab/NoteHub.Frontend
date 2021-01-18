@@ -78,8 +78,6 @@ async function customRenderHook<T>(
   return result
 }
 
-type Fn = () => void
-
 const customRender = async (
   node: ReactNode,
   options?: {

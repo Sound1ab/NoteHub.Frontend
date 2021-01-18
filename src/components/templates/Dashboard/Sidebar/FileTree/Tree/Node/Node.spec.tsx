@@ -128,7 +128,7 @@ describe('Node', () => {
 
     expect(screen.getByLabelText('file')).toHaveStyleRule(
       'padding-left',
-      'calc(calc(2 * 1.45rem) + 1.885rem)'
+      'calc(calc(2 * 1.2rem) + 24px)'
     )
   })
 

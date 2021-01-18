@@ -38,8 +38,6 @@ export function useFs(): UseFSReturn {
         filepath: `/${path}`,
       })
 
-      console.log('here', content)
-
       if (typeof content === 'string') {
         return content
       }

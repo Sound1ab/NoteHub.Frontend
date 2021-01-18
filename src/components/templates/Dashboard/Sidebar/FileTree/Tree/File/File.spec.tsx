@@ -94,5 +94,6 @@ describe('File', () => {
   })
 
   // TODO: Complete tests
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   it('should add styles when being drag and dropped dragged', async () => {})
 })

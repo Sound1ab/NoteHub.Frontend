@@ -110,7 +110,9 @@ describe('Folder', () => {
   })
 
   // TODO: Complete tests
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   it('should add styles in drag and drop is over folder', async () => {})
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   it('should call handleMove after drag and drop is dropped', async () => {})
 })
