@@ -1,3 +1,6 @@
+/**
+ * @jest-environment ../testEnvironment.js
+ */
 import path from 'path'
 
 import { act, screen } from '@testing-library/react'
@@ -174,7 +177,7 @@ describe('Dashboard', () => {
     })
 
     it('should spell check text', async () => {
-      const { nockDone } = await renderWithNockBack(<Dashboard />, 'clone.json')
+      const { nockDone, container } = await renderWithNockBack(<Dashboard />, 'clone.json')
 
       await clickProfile({ shouldWait: 500 })
 

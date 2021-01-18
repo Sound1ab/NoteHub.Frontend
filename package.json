@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "@babel/preset-typescript": "^7.12.7",
     "@graphql-codegen/add": "^2.0.1",
     "@graphql-codegen/cli": "^1.17.8",
     "@graphql-codegen/fragment-matcher": "^1.17.8",
@@ -29,17 +30,25 @@
     "@types/typography": "^0.16.2",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
+    "dotenv": "^8.2.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-jest-dom": "^3.6.5",
+    "eslint-plugin-jest-playwright": "^0.2.1",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react-hooks": "^4.1.2",
     "eslint-plugin-testing-library": "^3.10.1",
     "fake-indexeddb": "^3.1.2",
     "graphql": "^15.3.0",
     "graphql-tools": "^4.0.6",
+    "http": "^0.0.1-security",
+    "https": "^1.0.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest-playwright-preset": "^1.4.4",
     "jest-styled-components": "^7.0.3",
     "nock": "^13.0.5",
     "node-fetch": "^2.6.1",
+    "playwright": "^1.7.1",
+    "playwright-testing-library": "^2.7.0",
     "prettier": "^2.1.2",
     "react-scripts": "4.0.0",
     "responsive-loader": "^2.3.0",
@@ -115,6 +124,8 @@
     "pretest": "graphql-codegen --config codegen.test.yml",
     "test": "craco test --env=jsdom",
     "test:debug": "craco --inspect-brk test --runInBand --no-cache",
+    "test:e2e": "jest --config=test/jest.config.e2e.ts",
+    "test:e2e:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --config=test/jest.config.e2e.ts",
     "build": "craco --max_old_space_size=4096 build",
     "eject": "react-scripts eject",
     "codegen": "graphql-codegen --config codegen.yml",
@@ -148,7 +159,14 @@
     "resetModules": false
   },
   "eslintConfig": {
-    "extends": ["react-app", "plugin:testing-library/recommended", "jest-dom", "plugin:jest-dom/recommended"],
-    "plugins": ["testing-library"]
+    "extends": [
+      "react-app",
+      "plugin:testing-library/recommended",
+      "jest-dom",
+      "plugin:jest-dom/recommended"
+    ],
+    "plugins": [
+      "testing-library"
+    ]
   }
 }

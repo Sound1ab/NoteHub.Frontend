@@ -6,7 +6,8 @@
     "prettier/@typescript-eslint",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "plugin:jest-playwright/recommended"
   ],
   "plugins": ["react", "@typescript-eslint", "prettier"],
   "env": {
