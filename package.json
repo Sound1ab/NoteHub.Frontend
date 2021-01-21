@@ -78,7 +78,7 @@
     "hypermd": "^0.3.11",
     "isomorphic-git": "^1.8.0",
     "parse-english": "^4.2.0",
-    "polished": "^3.6.7",
+    "polished": "^4.0.5",
     "react": "^16.8.4",
     "react-content-loader": "^5.1.2",
     "react-dnd": "^11.1.3",
