@@ -19,10 +19,8 @@ import {
   status as gitStatus,
 } from '../git/status'
 
-export async function clone(options: Pick<IClone, 'url' | 'dir'>) {
-  return gitClone({
-    ...options,
-  })
+export async function clone(options: Pick<IClone, 'url' | 'dir' | 'jwt'>) {
+  return gitClone(options)
 }
 
 export async function getTree(options: IGetTree) {

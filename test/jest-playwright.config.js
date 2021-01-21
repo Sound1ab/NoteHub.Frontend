@@ -11,7 +11,7 @@ module.exports = {
     debug: true,
     launchTimeout: 60 * 5000,
     port: 8080,
-    usedPortAction: 'error',
+    usedPortAction: 'kill',
     waitOnScheme: {
       delay: 30 * 1000,
     },

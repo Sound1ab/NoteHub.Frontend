@@ -14,6 +14,7 @@ import {
   rollback as gitRollback,
   status as gitStatus,
 } from '../../services/worker/git.worker'
+import { useReadJwt } from '../localState/useReadJwt'
 
 type UseGitReturn = [
   {
@@ -37,6 +38,8 @@ type UseGitReturn = [
 export function useGit(): UseGitReturn {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
+
+  const jwt = useReadJwt()
 
   if (error) {
     ErrorToast(error)
@@ -126,30 +129,35 @@ export function useGit(): UseGitReturn {
     }
   }, [])
 
-  const clone = useCallback(async (repo: string) => {
-    try {
-      await gitClone({
-        url: repo,
-        dir: '/',
-      })
-    } catch (error) {
-      setError(`Git clone: ${error.message}`)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const clone = useCallback(
+    async (repo: string) => {
+      try {
+        await gitClone({
+          url: repo,
+          dir: '/',
+          jwt,
+        })
+      } catch (error) {
+        setError(`Git clone: ${error.message}`)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [jwt]
+  )
 
   const push = useCallback(async () => {
     try {
       await gitPush({
         dir: '/',
+        jwt,
       })
     } catch (error) {
       setError(`Git push: ${error.message}`)
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [jwt])
 
   const remove = useCallback(async (filepath: string) => {
     try {
