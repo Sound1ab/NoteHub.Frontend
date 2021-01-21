@@ -27,5 +27,7 @@ export async function clone({ url, dir, onMessage, onProgress, jwt }: IClone) {
     headers: {
       ...(jwt ? { Authorization: `Bearer ${jwt}` } : undefined),
     },
+    singleBranch: true,
+    depth: 1,
   })
 }
