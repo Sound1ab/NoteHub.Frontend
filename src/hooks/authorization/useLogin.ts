@@ -16,7 +16,5 @@ export function useLogin() {
     LoginDocument
   )
 
-  console.log('useLogin', data)
-
   return { jwt: data?.login, loading }
 }

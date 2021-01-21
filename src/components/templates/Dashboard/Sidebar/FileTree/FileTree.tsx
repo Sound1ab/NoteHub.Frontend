@@ -36,7 +36,6 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
     }
 
     async function init() {
-      console.log('cloning')
       await clone(repo)
 
       setFiles(await readDirRecursive())

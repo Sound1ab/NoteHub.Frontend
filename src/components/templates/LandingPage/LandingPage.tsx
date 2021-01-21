@@ -10,7 +10,6 @@ import { Screenshots } from './Screenshots/Screenshots'
 import { Signup } from './Signup/Signup'
 
 function LandingPage() {
-  console.log('landing page')
   return (
     <>
       <Navigation />

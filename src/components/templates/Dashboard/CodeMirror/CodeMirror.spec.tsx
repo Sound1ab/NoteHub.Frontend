@@ -26,7 +26,7 @@ jest.mock('../../../../hooks/fs/useFs', () => ({
   useFs: jest.fn(),
 }))
 
-jest.setTimeout(10000)
+jest.setTimeout(60 * 1000)
 
 describe('CodeMirror', () => {
   beforeEach(() => {

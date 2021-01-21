@@ -12,7 +12,6 @@ export interface IPrivateRoute {
 }
 
 export function PrivateRoute({ children, exact, path }: IPrivateRoute) {
-  console.log('here')
   const { jwt, loading } = useLogin()
   const savedJwt = useReadJwt()
 
