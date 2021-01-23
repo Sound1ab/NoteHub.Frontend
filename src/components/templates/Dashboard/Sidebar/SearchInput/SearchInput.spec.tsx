@@ -1,30 +1,31 @@
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 
+import * as useSearch from '../../../../../hooks/recoil/useSearch'
 import { render } from '../../../../../test-utils'
-import { localState } from '../../../../providers/ApolloProvider/cache'
+import { spyOn } from '../../../../../utils/testing/spyOn'
 import { SearchInput } from './SearchInput'
 
-jest.mock('../../../../../hooks/localState/useReadSearch')
+jest.mock('../../../../../hooks/recoil/useSearch')
 
 describe('SearchInput', () => {
-  const searchVar = jest.spyOn(localState, 'searchVar')
-
   beforeEach(() => {
-    jest.resetAllMocks()
-  })
-
-  afterEach(() => {
-    searchVar.mockRestore()
+    jest.clearAllMocks()
   })
 
   it('should update apollo local state with input text', async () => {
+    const setSearch = jest.fn()
+
+    spyOn(useSearch, 'useSearch', () => ['', setSearch])
+
     const { getByLabelText } = await render(<SearchInput />)
 
-    const input = getByLabelText('Search files')
+    const searchValue = 'MOCK_FILE'
 
-    await userEvent.type(input, 'MOCK_FILE')
+    await userEvent.type(getByLabelText('Search files'), searchValue)
 
-    expect(searchVar).toBeCalledWith('MOCK_FILE')
+    searchValue.split('').forEach((letter, index) => {
+      expect(setSearch).toHaveBeenNthCalledWith(index + 1, letter)
+    })
   })
 })

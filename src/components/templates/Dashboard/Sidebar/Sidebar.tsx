@@ -2,15 +2,14 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { CONTAINER_ID } from '../../../../enums'
-import { useReadSearch } from '../../../../hooks/localState/useReadSearch'
 import { Button } from '../../../atoms/Button/Button'
 import { Icon } from '../../../atoms/Icon/Icon'
 import { FileTree } from './FileTree/FileTree'
 import { SearchInput } from './SearchInput/SearchInput'
+import { useSearch } from '../../../../hooks/recoil/useSearch'
 
 export function Sidebar() {
-  // TODO: Use recoil state
-  const search = useReadSearch()
+  const [search] = useSearch()
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
 
   return (

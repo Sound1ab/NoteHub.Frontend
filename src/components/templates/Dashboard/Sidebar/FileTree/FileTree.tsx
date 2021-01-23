@@ -5,10 +5,10 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useFileTree } from '../../../../../hooks/fileTree/useFileTree'
 import { useFs } from '../../../../../hooks/fs/useFs'
 import { useGit } from '../../../../../hooks/git/useGit'
-import { useReadSearch } from '../../../../../hooks/localState/useReadSearch'
 import { useFiles } from '../../../../../hooks/recoil/useFiles'
 import { useOpenFolders } from '../../../../../hooks/recoil/useOpenFolders'
 import { useRepo } from '../../../../../hooks/recoil/useRepo'
+import { useSearch } from '../../../../../hooks/recoil/useSearch'
 import { createNodes } from '../../../../../utils/createNodes'
 import { List } from '../../../../atoms/List/List'
 import { FileInput } from '../FileInput/FileInput'
@@ -21,8 +21,7 @@ interface IFileTree {
 }
 
 export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
-  // TODO: use recoil state
-  const search = useReadSearch()
+  const [search] = useSearch()
   const [openFolders] = useOpenFolders()
   const [{ createFile }] = useFileTree()
   const [files, setFiles] = useFiles()

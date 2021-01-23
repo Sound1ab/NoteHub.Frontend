@@ -1,21 +1,22 @@
 import { screen } from '@testing-library/react'
 import React from 'react'
 
-import { useReadSearch } from '../../../../../../hooks/localState/useReadSearch'
-import * as recoil from '../../../../../../hooks/recoil/useFiles'
+import * as useFiles from '../../../../../../hooks/recoil/useFiles'
+import * as useSearch from '../../../../../../hooks/recoil/useSearch'
 import { render } from '../../../../../../test-utils'
 import { spyOn } from '../../../../../../utils/testing/spyOn'
 import { SearchResults } from './SearchResults'
 
 jest.mock('../../../../../../hooks/localState/useReadSearch')
 jest.mock('../../../../../../hooks/recoil/useFiles')
+jest.mock('../../../../../../hooks/recoil/useSearch')
 
 describe('SearchResults', () => {
   const search = 'MOCK_FILE'
 
   beforeEach(() => {
     jest.resetAllMocks()
-    ;(useReadSearch as jest.Mock).mockImplementation(() => search)
+    spyOn(useSearch, 'useSearch', () => [search, jest.fn()])
   })
 
   it('should display all files', async () => {
@@ -31,7 +32,7 @@ describe('SearchResults', () => {
   })
 
   it('should return null if there are no gitNodes', async () => {
-    spyOn(recoil, 'useFiles', () => [[], jest.fn()])
+    spyOn(useFiles, 'useFiles', () => [[], jest.fn()])
 
     const { container } = await render(<SearchResults />)
 

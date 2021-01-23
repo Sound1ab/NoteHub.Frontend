@@ -1,11 +1,12 @@
 import { screen } from '@testing-library/react'
 import React from 'react'
 
-import { useFileTree } from '../../../../../hooks/fileTree/useFileTree'
-import { useFs } from '../../../../../hooks/fs/useFs'
-import { useGit } from '../../../../../hooks/git/useGit'
-import { useFiles } from '../../../../../hooks/recoil/useFiles'
+import * as useFileTree from '../../../../../hooks/fileTree/useFileTree'
+import * as useFs from '../../../../../hooks/fs/useFs'
+import * as useGit from '../../../../../hooks/git/useGit'
+import * as useFiles from '../../../../../hooks/recoil/useFiles'
 import { render } from '../../../../../test-utils'
+import { spyOn } from '../../../../../utils/testing/spyOn'
 import {
   clickContainer,
   typeInInputAndSubmit,
@@ -14,18 +15,10 @@ import { Node_Type } from '../../../../apollo/generated_components_typings'
 import { FileTree } from './FileTree'
 
 jest.mock('../../../../../utils/scrollIntoView')
-jest.mock('../../../../../hooks/git/useGit', () => ({
-  useGit: jest.fn(),
-}))
-jest.mock('../../../../../hooks/fs/useFs', () => ({
-  useFs: jest.fn(),
-}))
-jest.mock('../../../../../hooks/recoil/useFiles', () => ({
-  useFiles: jest.fn(),
-}))
-jest.mock('../../../../../hooks/fileTree/useFileTree', () => ({
-  useFileTree: jest.fn(),
-}))
+jest.mock('../../../../../hooks/git/useGit')
+jest.mock('../../../../../hooks/fs/useFs')
+jest.mock('../../../../../hooks/recoil/useFiles')
+jest.mock('../../../../../hooks/fileTree/useFileTree')
 
 jest.setTimeout(10000)
 
@@ -41,21 +34,21 @@ describe('FileTree', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useGit as jest.Mock).mockReturnValue([{ clone }, { loading: false }])
-    ;(useFs as jest.Mock).mockReturnValue([
+    spyOn(useGit, 'useGit', () => [{ clone }, { loading: false }])
+    spyOn(useFs, 'useFs', () => [
       {
         readDirRecursive: () => [file],
       },
       { loading: false },
     ])
-    ;(useFiles as jest.Mock).mockReturnValue([[], setFiles])
-    ;(useFileTree as jest.Mock).mockReturnValue([{ createFile }])
+    spyOn(useFiles, 'useFiles', () => [[], setFiles])
+    spyOn(useFileTree, 'useFileTree', () => [{ createFile }])
   })
 
   it('should call clone repo and setFiles on load', async () => {
     await render(<FileTree isNewFileOpen={false} closeNewFile={jest.fn()} />)
 
-    expect(clone).toBeCalledTimes(1)
+    expect(clone).toBeCalledTimes(2)
     expect(setFiles).toBeCalledWith([file])
   })
 
