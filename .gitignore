@@ -144,3 +144,6 @@ api/.serverless
 api/.webpack
 
 build
+
+# playwright auth session
+auth.json

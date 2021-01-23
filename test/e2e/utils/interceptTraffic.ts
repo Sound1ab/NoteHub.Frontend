@@ -6,7 +6,7 @@ import { Page } from 'playwright'
 type Headers = { [key: string]: string }
 
 export async function interceptTraffic(page: Page) {
-  await page.route(/\/(graphql|proxy)/, async (route) => {
+  await page.route(/\/(graphql)/, async (route) => {
     const request = route.request()
 
     try {

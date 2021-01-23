@@ -49,4 +49,52 @@ describe('Dashboard', () => {
       })
     })
   })
+
+  describe('File tree', () => {
+    it('should create new file and open in editor', async () => {
+      await dashboard.openFileInEditor(['levelOneFileOne.md'])
+
+      await dashboard.createTopLevelFile('levelOneFileTwo')
+
+      await dashboard.typeInTextArea('this is some test content')
+
+      await wait(async () => {
+        expect(
+          await dashboard.searchRegex(/.*this is some test content.*/)
+        ).not.toBeNull()
+      })
+    })
+
+    it('should create nested file and open in editor', async () => {
+      await dashboard.openFileInEditor(['levelOneFileOne.md'])
+
+      await dashboard.createTopLevelFile(
+        'levelOneFolderTwo/levelTwoFolderOne/levelThreeFileOne'
+      )
+
+      await dashboard.typeInTextArea('this is some test content')
+
+      await wait(async () => {
+        expect(
+          await dashboard.searchRegex(/.*this is some test content.*/)
+        ).not.toBeNull()
+      })
+    })
+
+    fit('should create file in existing folder', async () => {
+      await dashboard.openFileInEditor(['levelOneFileOne.md'])
+
+      await dashboard.createTopLevelFile(
+        'levelOneFolderOne/levelTwoFolderOne/levelThreeFileOne'
+      )
+
+      await dashboard.typeInTextArea('this is some test content')
+
+      await wait(async () => {
+        expect(
+          await dashboard.searchRegex(/.*this is some test content.*/)
+        ).not.toBeNull()
+      })
+    })
+  })
 })
