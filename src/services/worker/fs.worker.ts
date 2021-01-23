@@ -1,19 +1,14 @@
+import { IUnlink, unlink as fsUnlink } from '../lightningFS/delete'
 import {
   IReadDir,
   IReadDirRecursive,
   IReadFile,
-  IRename,
-  IUnlink,
-  IWriteFile,
-} from '../lightningFS'
-import {
   readDir as fsReadDir,
   readDirRecursive as fsReadDirRecursive,
   readFile as fsReadFile,
-  rename as fsRename,
-  unlink as fsUnlink,
-  writeFile as fsWriteFile,
-} from '../lightningFS'
+} from '../lightningFS/read'
+import { IRename, rename as fsRename } from '../lightningFS/rename'
+import { IWriteFile, writeFile as fsWriteFile } from '../lightningFS/write'
 
 export async function readDir(options: IReadDir) {
   return fsReadDir(options)
