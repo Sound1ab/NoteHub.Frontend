@@ -32,7 +32,6 @@ jest.mock('../../../../../hooks/recoil/theme/useFullWidth')
 jest.mock('../../../../../hooks/recoil/theme/useLargeText')
 jest.mock('../../../../../hooks/recoil/theme/useLightTheme')
 
-// TODO: Fix tests so they use recoil instead of apollo client
 describe('Profile', () => {
   let currentJwtVar = jest.spyOn(localState, 'currentJwtVar')
 

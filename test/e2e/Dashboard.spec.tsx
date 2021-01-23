@@ -48,6 +48,21 @@ describe('Dashboard', () => {
         ).not.toBeNull()
       })
     })
+
+    it('should bold text from context menu', async () => {
+      await dashboard.openFileInEditor([
+        'levelOneFolderOne',
+        'levelTwoFileOne.md',
+      ])
+
+      await dashboard.selectText(4)
+
+      await dashboard.rightClickEditorAndClickDropdownItem('Bold')
+
+      expect(await dashboard.getText('span[role="presentation"]')).toEqual(
+        'Some more **mock** content'
+      )
+    })
   })
 
   describe('File tree', () => {
@@ -81,7 +96,7 @@ describe('Dashboard', () => {
       })
     })
 
-    fit('should create file in existing folder', async () => {
+    it('should create file in existing folder', async () => {
       await dashboard.openFileInEditor(['levelOneFileOne.md'])
 
       await dashboard.createTopLevelFile(

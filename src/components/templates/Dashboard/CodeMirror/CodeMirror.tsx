@@ -39,7 +39,6 @@ interface ICodeMirror {
 }
 
 export const CodeMirror = ({ children }: ICodeMirror) => {
-  const target = useRef<HTMLDivElement | null>(null)
   const textArea = useRef<HTMLTextAreaElement | null>(null)
   const codeMirrorRef = useRef<EditorFromTextArea | null>(null)
   const wrapperRef = useRef<HTMLDivElement | null>(null)
@@ -224,7 +223,7 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
     <CodeMirrorContext.Provider
       value={{ editor: codeMirrorRef.current, textAreaRef: textArea }}
     >
-      {codeMirrorRef.current && <ContextMenu targetRef={target} />}
+      {codeMirrorRef.current && <ContextMenu targetRef={wrapperRef} />}
       {children(
         <Wrapper id={CONTAINER_ID.EDITOR} ref={wrapperRef}>
           {widget && <Widget />}

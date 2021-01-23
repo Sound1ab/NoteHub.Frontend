@@ -54,6 +54,13 @@ export class DashboardPage {
     return this.page.$(`text=${text}`)
   }
 
+  public async getText(selector: string) {
+    return this.page.$eval(
+      selector,
+      (e: SVGElement | HTMLElement) => e.textContent
+    )
+  }
+
   public async openFileInEditor(path: string[]) {
     for (const node of path) {
       await this.page.click(`text="${node}"`)
@@ -90,6 +97,20 @@ export class DashboardPage {
     await this.page.fill('input[aria-label="Input file name"]', filepath)
 
     await this.page.press('input[aria-label="Input file name"]', 'Enter')
+  }
+
+  public async selectText(spacing: number) {
+    await this.page.click('span[role="presentation"]')
+
+    for (let i = 0; i < spacing; i++) {
+      await this.page.press('//article /textarea', 'Shift+ArrowRight')
+    }
+  }
+
+  public async rightClickEditorAndClickDropdownItem(item: string) {
+    await this.page.click('//article', { button: 'right' })
+
+    await this.page.click(`button[aria-label="${item}"]`)
   }
 
   private debugRequests(page: Page) {

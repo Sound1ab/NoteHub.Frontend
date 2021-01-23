@@ -5,18 +5,20 @@ import toc from 'remark-toc'
 import styled from 'styled-components'
 
 import { FONT } from '../../../../../enums'
-import { useReadThemeSettings } from '../../../../../hooks/localState/useReadThemeSettings'
+import { useFont } from '../../../../../hooks/recoil/theme/useFont'
+import { useFullWidth } from '../../../../../hooks/recoil/theme/useFullWidth'
 import { useFile } from '../../../../../hooks/recoil/useFile'
 import { CodeRenderer } from '../CodeRenderer/CodeRenderer'
 import { MdxRenderer } from '../MdxRenderer/MdxRenderer'
 
 export const MarkdownRenderer = () => {
   const [file] = useFile()
-  const { font, isFullWidth } = useReadThemeSettings()
+  const [font] = useFont()
+  const [fullWidth] = useFullWidth()
 
   return (
     <Wrapper>
-      <Sizer font={font} isFullWidth={isFullWidth}>
+      <Sizer font={font} isFullWidth={fullWidth}>
         <ReactMarkdown
           source={file?.content ?? ''}
           plugins={[gfm, toc]}
