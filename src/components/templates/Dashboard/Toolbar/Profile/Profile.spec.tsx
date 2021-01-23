@@ -4,90 +4,98 @@ import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Router } from 'react-router-dom'
 
-import { FONT, THEME_SETTINGS } from '../../../../../enums'
-import { useReadThemeSettings } from '../../../../../hooks/localState/useReadThemeSettings'
-import { useReadRetextSettings } from '../../../../../hooks/localState/useReadRetextSettings'
+import { FONT } from '../../../../../enums'
+import * as useEquality from '../../../../../hooks/recoil/retext/useEquality'
+import * as useIndefiniteArticle from '../../../../../hooks/recoil/retext/useIndefiniteArticle'
+import * as useReadability from '../../../../../hooks/recoil/retext/useReadability'
+import * as useRepeatedWords from '../../../../../hooks/recoil/retext/useRepeatedWords'
+import * as useSpelling from '../../../../../hooks/recoil/retext/useSpelling'
+import * as useFont from '../../../../../hooks/recoil/theme/useFont'
+import * as useFullWidth from '../../../../../hooks/recoil/theme/useFullWidth'
+import * as useLargeText from '../../../../../hooks/recoil/theme/useLargeText'
+import * as useLightTheme from '../../../../../hooks/recoil/theme/useLightTheme'
 import { resolvers, user } from '../../../../../schema/mockResolvers'
-import { cleanup, fireEvent, render } from '../../../../../test-utils'
-import { Retext_Settings } from '../../../../apollo/generated_components_typings'
-import { MockProvider } from '../../../../providers/ApolloProvider/MockProvider'
+import { fireEvent, render } from '../../../../../test-utils'
+import { spyOn } from '../../../../../utils/testing/spyOn'
 import { localState } from '../../../../providers/ApolloProvider/cache'
+import { MockProvider } from '../../../../providers/ApolloProvider/MockProvider'
 import { Profile } from './Profile'
+import { screen } from '@testing-library/react'
 
-jest.mock('../../../../../hooks/localState/useReadRetextSettings')
-jest.mock('../../../../../hooks/localState/useReadThemeSettings')
-
-afterEach(cleanup)
+jest.mock('../../../../../hooks/recoil/retext/useEquality')
+jest.mock('../../../../../hooks/recoil/retext/useIndefiniteArticle')
+jest.mock('../../../../../hooks/recoil/retext/useReadability')
+jest.mock('../../../../../hooks/recoil/retext/useRepeatedWords')
+jest.mock('../../../../../hooks/recoil/retext/useSpelling')
+jest.mock('../../../../../hooks/recoil/theme/useFont')
+jest.mock('../../../../../hooks/recoil/theme/useFullWidth')
+jest.mock('../../../../../hooks/recoil/theme/useLargeText')
+jest.mock('../../../../../hooks/recoil/theme/useLightTheme')
 
 // TODO: Fix tests so they use recoil instead of apollo client
 describe('Profile', () => {
   let currentJwtVar = jest.spyOn(localState, 'currentJwtVar')
-  let retextSettingsVar = jest.spyOn(localState, 'retextSettingsVar')
-  let themeSettingsVar = jest.spyOn(localState, 'themeSettingsVar')
-  const retextSettings = {
-    [Retext_Settings.Spell]: false,
-    [Retext_Settings.Equality]: false,
-    [Retext_Settings.IndefiniteArticle]: false,
-    [Retext_Settings.RepeatedWords]: false,
-    [Retext_Settings.Readability]: false,
-  }
-  const themeSettings = {
-    [THEME_SETTINGS.IS_LIGHT_THEME]: false,
-    [THEME_SETTINGS.IS_FULL_WIDTH]: false,
-    [THEME_SETTINGS.IS_LARGE_TEXT]: false,
-    [THEME_SETTINGS.FONT]: FONT.IS_DEFAULT,
-  }
+
+  const setEquality = jest.fn()
+  const setIndefiniteArticle = jest.fn()
+  const setReadability = jest.fn()
+  const setRepeatedWords = jest.fn()
+  const setSpelling = jest.fn()
+  const setFont = jest.fn()
+  const setFullWidth = jest.fn()
+  const setLargeText = jest.fn()
+  const setLightTheme = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
     currentJwtVar = jest.spyOn(localState, 'currentJwtVar')
-    retextSettingsVar = jest.spyOn(localState, 'retextSettingsVar')
-    themeSettingsVar = jest.spyOn(localState, 'themeSettingsVar')
-    ;(useReadRetextSettings as jest.Mock).mockReturnValue(retextSettings)
-    ;(useReadThemeSettings as jest.Mock).mockReturnValue(themeSettings)
+
+    spyOn(useEquality, 'useEquality', () => [false, setEquality])
+    spyOn(useIndefiniteArticle, 'useIndefiniteArticle', () => [
+      false,
+      setIndefiniteArticle,
+    ])
+    spyOn(useReadability, 'useReadability', () => [false, setReadability])
+    spyOn(useRepeatedWords, 'useRepeatedWords', () => [false, setRepeatedWords])
+    spyOn(useSpelling, 'useSpelling', () => [false, setSpelling])
+    spyOn(useFont, 'useFont', () => [false, setFont])
+    spyOn(useFullWidth, 'useFullWidth', () => [false, setFullWidth])
+    spyOn(useLargeText, 'useLargeText', () => [false, setLargeText])
+    spyOn(useLightTheme, 'useLightTheme', () => [false, setLightTheme])
   })
 
   afterEach(() => {
     currentJwtVar.mockRestore()
-    retextSettingsVar.mockRestore()
-    themeSettingsVar.mockRestore()
   })
 
   it('should display a profile', async () => {
-    const { container } = await render(
-      <MockProvider>
-        <Profile />
-      </MockProvider>
-    )
+    const { container } = await render(<Profile />)
 
     expect(container).toBeDefined()
   })
 
   it('should show a users avatar', async () => {
-    const { getByAltText } = await render(
-      <MockProvider mockResolvers={resolvers}>
-        <Profile />
-      </MockProvider>
-    )
+    await render(<Profile />)
 
-    expect(getByAltText('avatar')).toHaveAttribute('src', user.avatar_url)
+    expect(screen.getByAltText('avatar')).toHaveAttribute(
+      'src',
+      user.avatar_url
+    )
   })
 
   describe('Dropdown', function () {
     it('should clear apollo store and deauth use when they logout', async () => {
       const history = createMemoryHistory()
 
-      const { getByAltText, getByLabelText } = await render(
-        <MockProvider mockResolvers={resolvers}>
-          <Router history={history}>
-            <Profile />
-          </Router>
-        </MockProvider>
+      await render(
+        <Router history={history}>
+          <Profile />
+        </Router>
       )
 
-      await fireEvent.click(getByAltText('avatar'))
+      await fireEvent.click(screen.getByAltText('avatar'))
 
-      await fireEvent.click(getByLabelText('Logout'))
+      await fireEvent.click(screen.getByLabelText('Logout'))
 
       expect(currentJwtVar).toBeCalledWith(null)
     })
@@ -96,7 +104,7 @@ describe('Profile', () => {
       const alert = jest.fn()
       global.alert = alert
 
-      const { getByAltText, getByLabelText } = await render(
+      await render(
         <MockProvider
           mockResolvers={{
             ...resolvers,
@@ -112,57 +120,43 @@ describe('Profile', () => {
         </MockProvider>
       )
 
-      await fireEvent.click(getByAltText('avatar'))
+      await fireEvent.click(screen.getByAltText('avatar'))
 
-      await fireEvent.click(getByLabelText('Logout'))
+      await fireEvent.click(screen.getByLabelText('Logout'))
 
       expect(alert).toBeCalledWith('Could not logout. Please try again.')
     })
 
     it.each([
-      ['Spelling', Retext_Settings.Spell, true],
-      ['Readability', Retext_Settings.Readability, true],
-      ['Repeated Words', Retext_Settings.RepeatedWords, true],
-      ['Indefinite Article', Retext_Settings.IndefiniteArticle, true],
-      ['Equality', Retext_Settings.Equality, true],
-    ])('should update retext settings', async (label, setting, value) => {
-      const { getByText, getByAltText } = await render(
-        <MockProvider mockResolvers={resolvers}>
-          <Profile />
-        </MockProvider>
-      )
+      ['Spelling', setSpelling],
+      ['Readability', setReadability],
+      ['Repeated Words', setRepeatedWords],
+      ['Indefinite Article', setIndefiniteArticle],
+      ['Equality', setEquality],
+    ])('should update %s setting', async (label, fn) => {
+      await render(<Profile />)
 
-      await fireEvent.click(getByAltText('avatar'))
+      await fireEvent.click(screen.getByAltText('avatar'))
 
-      await fireEvent.click(getByText(label))
+      await fireEvent.click(screen.getByText(label))
 
-      expect(retextSettingsVar).toBeCalledWith({
-        ...retextSettings,
-        [setting]: value,
-      })
+      expect(fn).toBeCalledWith(true)
     })
 
     it.each([
-      ['Light mode', THEME_SETTINGS.IS_LIGHT_THEME, true],
-      ['Full width', THEME_SETTINGS.IS_FULL_WIDTH, true],
-      ['Large text', THEME_SETTINGS.IS_LARGE_TEXT, true],
-      ['Mono', THEME_SETTINGS.FONT, FONT.IS_MONO],
-      ['Serif', THEME_SETTINGS.FONT, FONT.IS_SERIF],
-    ])('should update theme settings', async (label, setting, value) => {
-      const { getByText, getByAltText } = await render(
-        <MockProvider mockResolvers={resolvers}>
-          <Profile />
-        </MockProvider>
-      )
+      ['Light mode', setLightTheme, true],
+      ['Full width', setFullWidth, true],
+      ['Large text', setLargeText, true],
+      ['Mono', setFont, FONT.IS_MONO],
+      ['Serif', setFont, FONT.IS_SERIF],
+    ])('should update %s settings', async (label, fn, value) => {
+      await render(<Profile />)
 
-      await fireEvent.click(getByAltText('avatar'))
+      await fireEvent.click(screen.getByAltText('avatar'))
 
-      await fireEvent.click(getByText(label))
+      await fireEvent.click(screen.getByText(label))
 
-      expect(themeSettingsVar).toBeCalledWith({
-        ...themeSettings,
-        [setting]: value,
-      })
+      expect(fn).toBeCalledWith(value)
     })
   })
 })

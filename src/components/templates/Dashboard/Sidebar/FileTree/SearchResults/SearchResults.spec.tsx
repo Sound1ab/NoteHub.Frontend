@@ -7,7 +7,6 @@ import { render } from '../../../../../../test-utils'
 import { spyOn } from '../../../../../../utils/testing/spyOn'
 import { SearchResults } from './SearchResults'
 
-jest.mock('../../../../../../hooks/localState/useReadSearch')
 jest.mock('../../../../../../hooks/recoil/useFiles')
 jest.mock('../../../../../../hooks/recoil/useSearch')
 

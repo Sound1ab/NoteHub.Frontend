@@ -1,20 +1,31 @@
 import React from 'react'
 
-import { Retext_Settings } from '../../components/apollo/generated_components_typings'
 import { CheckboxItem } from '../../components/atoms/Dropdown/CheckboxItem/CheckboxItem'
 import { ColorPickerItem } from '../../components/atoms/Dropdown/ColorPickerItem/ColorPickerItem'
 import { RadioItem } from '../../components/atoms/Dropdown/RadioItem/RadioItem'
-import { localState } from '../../components/providers/ApolloProvider/cache'
-import { FONT, THEME_SETTINGS } from '../../enums'
+import { FONT } from '../../enums'
 import { useLogout } from '../authorization/useLogout'
-import { useReadRetextSettings } from '../localState/useReadRetextSettings'
-import { useReadThemeSettings } from '../localState/useReadThemeSettings'
+import { useEquality } from '../recoil/retext/useEquality'
+import { useIndefiniteArticle } from '../recoil/retext/useIndefiniteArticle'
+import { useReadability } from '../recoil/retext/useReadability'
+import { useRepeatedWords } from '../recoil/retext/useRepeatedWords'
+import { useSpelling } from '../recoil/retext/useSpelling'
+import { useFont } from '../recoil/theme/useFont'
+import { useFullWidth } from '../recoil/theme/useFullWidth'
+import { useLargeText } from '../recoil/theme/useLargeText'
+import { useLightTheme } from '../recoil/theme/useLightTheme'
 import { useReadGithubUser } from '../user/useReadGithubUser'
 
 export function useProfileDropdown() {
-  // TODO: Use recoil instead of reactive vars
-  const retextSettings = useReadRetextSettings()
-  const themeSettings = useReadThemeSettings()
+  const [equality, setEquality] = useEquality()
+  const [indefiniteArticle, setIndefiniteArticle] = useIndefiniteArticle()
+  const [readability, setReadability] = useReadability()
+  const [repeatedWords, setRepeatedWords] = useRepeatedWords()
+  const [spelling, setSpelling] = useSpelling()
+  const [font, setFont] = useFont()
+  const [fullWidth, setFullWidth] = useFullWidth()
+  const [largeText, setLargeText] = useLargeText()
+  const [LightTheme, setLightTheme] = useLightTheme()
   const [logout, { called, data, error }] = useLogout()
   const user = useReadGithubUser()
 
@@ -30,27 +41,6 @@ export function useProfileDropdown() {
     await logout()
   }
 
-  function handleToggleFontSetting(value: FONT) {
-    localState.themeSettingsVar({
-      ...themeSettings,
-      font: value,
-    })
-  }
-
-  function handleToggleThemeSetting(value: THEME_SETTINGS) {
-    localState.themeSettingsVar({
-      ...themeSettings,
-      [value]: !themeSettings[value],
-    })
-  }
-
-  function handleToggleRetextSetting(value: Retext_Settings) {
-    localState.retextSettingsVar({
-      ...retextSettings,
-      [value]: !retextSettings[value],
-    })
-  }
-
   const items = [
     {
       heading: 'Font',
@@ -59,8 +49,8 @@ export function useProfileDropdown() {
           label="Default"
           value={FONT.IS_DEFAULT}
           title="Default font"
-          checked={themeSettings.font === FONT.IS_DEFAULT}
-          onChange={handleToggleFontSetting}
+          checked={font === FONT.IS_DEFAULT}
+          onChange={setFont}
           group="font"
         />
       ),
@@ -71,8 +61,8 @@ export function useProfileDropdown() {
           label="Serif"
           value={FONT.IS_SERIF}
           title="Serif font"
-          checked={themeSettings.font === FONT.IS_SERIF}
-          onChange={handleToggleFontSetting}
+          checked={font === FONT.IS_SERIF}
+          onChange={setFont}
           group="font"
         />
       ),
@@ -83,8 +73,8 @@ export function useProfileDropdown() {
           label="Mono"
           value={FONT.IS_MONO}
           title="Mono font"
-          checked={themeSettings.font === FONT.IS_MONO}
-          onChange={handleToggleFontSetting}
+          checked={font === FONT.IS_MONO}
+          onChange={setFont}
           group="font"
         />
       ),
@@ -95,10 +85,10 @@ export function useProfileDropdown() {
       custom: (
         <CheckboxItem
           label="Light mode"
-          value={THEME_SETTINGS.IS_LIGHT_THEME}
+          value={!LightTheme}
           title="Activate light mode"
-          checked={themeSettings.isLightTheme}
-          onChange={handleToggleThemeSetting}
+          checked={LightTheme}
+          onChange={setLightTheme}
         />
       ),
     },
@@ -106,10 +96,10 @@ export function useProfileDropdown() {
       custom: (
         <CheckboxItem
           label="Full width"
-          value={THEME_SETTINGS.IS_FULL_WIDTH}
+          value={!fullWidth}
           title="Increase width of the editor"
-          checked={themeSettings.isFullWidth}
-          onChange={handleToggleThemeSetting}
+          checked={fullWidth}
+          onChange={setFullWidth}
         />
       ),
     },
@@ -117,10 +107,10 @@ export function useProfileDropdown() {
       custom: (
         <CheckboxItem
           label="Large text"
-          value={THEME_SETTINGS.IS_LARGE_TEXT}
+          value={!largeText}
           title="Increase size of text"
-          checked={themeSettings.isLargeText}
-          onChange={handleToggleThemeSetting}
+          checked={largeText}
+          onChange={setLargeText}
         />
       ),
     },
@@ -134,10 +124,10 @@ export function useProfileDropdown() {
       custom: (
         <CheckboxItem
           label="Spelling"
-          value={Retext_Settings.Spell}
+          value={!spelling}
           title="Checks spelling"
-          checked={retextSettings[Retext_Settings.Spell]}
-          onChange={handleToggleRetextSetting}
+          checked={spelling}
+          onChange={setSpelling}
         />
       ),
     },
@@ -146,10 +136,10 @@ export function useProfileDropdown() {
       custom: (
         <CheckboxItem
           label="Readability"
-          value={Retext_Settings.Readability}
+          value={!readability}
           title="Detects possibly hard to read sentences"
-          checked={retextSettings[Retext_Settings.Readability]}
-          onChange={handleToggleRetextSetting}
+          checked={readability}
+          onChange={setReadability}
         />
       ),
     },
@@ -159,9 +149,9 @@ export function useProfileDropdown() {
         <CheckboxItem
           label="Repeated Words"
           title="Checks for repeated words e.g. for for"
-          value={Retext_Settings.RepeatedWords}
-          checked={retextSettings[Retext_Settings.RepeatedWords]}
-          onChange={handleToggleRetextSetting}
+          value={!repeatedWords}
+          checked={repeatedWords}
+          onChange={setRepeatedWords}
         />
       ),
     },
@@ -171,9 +161,9 @@ export function useProfileDropdown() {
         <CheckboxItem
           label="Indefinite Article"
           title="Checks if indefinite articles (a and an) are used correctly"
-          value={Retext_Settings.IndefiniteArticle}
-          checked={retextSettings[Retext_Settings.IndefiniteArticle]}
-          onChange={handleToggleRetextSetting}
+          value={!indefiniteArticle}
+          checked={indefiniteArticle}
+          onChange={setIndefiniteArticle}
         />
       ),
     },
@@ -184,9 +174,9 @@ export function useProfileDropdown() {
         <CheckboxItem
           label="Equality"
           title="Checks for possibly insensitive, inconsiderate language"
-          value={Retext_Settings.Equality}
-          checked={retextSettings[Retext_Settings.Equality]}
-          onChange={handleToggleRetextSetting}
+          value={!equality}
+          checked={equality}
+          onChange={setEquality}
         />
       ),
     },

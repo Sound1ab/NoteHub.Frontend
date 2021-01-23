@@ -45,16 +45,16 @@ const Context = ({
   resolvers?: IMocks
 }) => (
   <MockProvider mockResolvers={{ ...mockResolvers, ...resolvers }}>
-    <ThemeProvider>
-      {() => (
-        <IconProvider>
-          {enableToast && <Toast />}
-          <DndProvider backend={HTML5Backend}>
-            <RecoilRoot>{node}</RecoilRoot>
-          </DndProvider>
-        </IconProvider>
-      )}
-    </ThemeProvider>
+    <RecoilRoot>
+      <ThemeProvider>
+        {() => (
+          <IconProvider>
+            {enableToast && <Toast />}
+            <DndProvider backend={HTML5Backend}>{node}</DndProvider>
+          </IconProvider>
+        )}
+      </ThemeProvider>
+    </RecoilRoot>
   </MockProvider>
 )
 

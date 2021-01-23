@@ -6,15 +6,20 @@ import { CONTAINER_ID } from '../../../../enums'
 import { useCodeMirror } from '../../../../hooks/codeMirror/useCodeMirror'
 import { useFs } from '../../../../hooks/fs/useFs'
 import { useGit } from '../../../../hooks/git/useGit'
-import { useReadActiveRetextSettings } from '../../../../hooks/localState/useReadActiveRetextSettings'
-import { useReadThemeSettings } from '../../../../hooks/localState/useReadThemeSettings'
+import { useEquality } from '../../../../hooks/recoil/retext/useEquality'
+import { useIndefiniteArticle } from '../../../../hooks/recoil/retext/useIndefiniteArticle'
+import { useReadability } from '../../../../hooks/recoil/retext/useReadability'
+import { useRepeatedWords } from '../../../../hooks/recoil/retext/useRepeatedWords'
+import { useSpelling } from '../../../../hooks/recoil/retext/useSpelling'
+import { useFont } from '../../../../hooks/recoil/theme/useFont'
+import { useFullWidth } from '../../../../hooks/recoil/theme/useFullWidth'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
 import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
 import { useWidget } from '../../../../hooks/recoil/useWidget'
-import useDeepCompareEffect from '../../../../hooks/utils/useDeepCompareEffect'
 import { process } from '../../../../services/retext/process'
 import { debounce } from '../../../../utils/debounce'
 import { isFile } from '../../../../utils/isFile'
+import { Retext_Settings } from '../../../apollo/generated_components_typings'
 import { ContextMenu } from './ContextMenu/ContextMenu'
 import { StyledCodeMirror } from './StyledCodeMirror'
 import { Widget } from './Widget/Widget'
@@ -39,8 +44,15 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
   const codeMirrorRef = useRef<EditorFromTextArea | null>(null)
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
-  const { isFullWidth, font } = useReadThemeSettings()
-  const { activeRetextSettings } = useReadActiveRetextSettings()
+  const [equality] = useEquality()
+  const [indefiniteArticle] = useIndefiniteArticle()
+  const [readability] = useReadability()
+  const [repeatedWords] = useRepeatedWords()
+  const [spelling] = useSpelling()
+
+  const [font] = useFont()
+  const [fullWidth] = useFullWidth()
+
   const [, setUnstagedChanges] = useUnstagedChanges()
   const [activePath] = useActivePath()
   const [widget] = useWidget()
@@ -56,47 +68,77 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
     },
   ] = useCodeMirror()
 
-  // React wen activeRetextSettings changes
-  useDeepCompareEffect(() => {
+  const processRetext = useCallback(
+    (editor: EditorType) => {
+      let settings: Retext_Settings[] = []
+
+      if (equality) {
+        settings = [...settings, Retext_Settings.Equality]
+      }
+      if (indefiniteArticle) {
+        settings = [...settings, Retext_Settings.IndefiniteArticle]
+      }
+      if (readability) {
+        settings = [...settings, Retext_Settings.Readability]
+      }
+      if (repeatedWords) {
+        settings = [...settings, Retext_Settings.RepeatedWords]
+      }
+      if (spelling) {
+        settings = [...settings, Retext_Settings.Spell]
+      }
+
+      process(editor.getValue(), settings).then((result) => {
+        clearMarkers()
+        createMarkers(editor, result)
+      })
+    },
+    [
+      equality,
+      indefiniteArticle,
+      readability,
+      repeatedWords,
+      spelling,
+      clearMarkers,
+      createMarkers,
+    ]
+  )
+
+  // React when activeRetextSettings changes
+  useEffect(() => {
     const editor = codeMirrorRef.current
 
     if (!editor) {
       return
     }
 
-    if (activeRetextSettings && activeRetextSettings.length > 0) {
-      processRetext(editor.getValue())
+    if (
+      equality ||
+      indefiniteArticle ||
+      readability ||
+      repeatedWords ||
+      spelling
+    ) {
+      processRetext(editor)
     } else {
       clearMarkers()
     }
-  }, [activeRetextSettings, clearMarkers])
-
-  const processRetext = useCallback(
-    (fileContent) => {
-      const editor = codeMirrorRef.current
-
-      if (!editor) {
-        return
-      }
-
-      if (!activeRetextSettings || activeRetextSettings.length === 0) {
-        return
-      }
-
-      process(fileContent, activeRetextSettings).then((result) => {
-        clearMarkers()
-        createMarkers(editor, result)
-      })
-    },
-    [activeRetextSettings, clearMarkers, createMarkers]
-  )
+  }, [
+    equality,
+    indefiniteArticle,
+    readability,
+    repeatedWords,
+    spelling,
+    clearMarkers,
+    processRetext,
+  ])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const writeContentToFSAndCheckUnstagedChanges = useCallback(
-    debounce(async (fileContent) => {
-      processRetext(fileContent)
+    debounce(async (editor: EditorType) => {
+      processRetext(editor)
 
-      await writeFile(activePath, fileContent)
+      await writeFile(activePath, editor.getValue())
 
       await setUnstagedChanges(await getUnstagedChanges())
     }, 200),
@@ -134,7 +176,7 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
     }
 
     const handleChange = async (editor: EditorType) => {
-      writeContentToFSAndCheckUnstagedChanges(editor.getValue())
+      writeContentToFSAndCheckUnstagedChanges(editor)
     }
     const handleCursorActivity = (editor: EditorType) => {
       setCursorPosition?.(editor.getCursor())
@@ -187,7 +229,7 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
         <Wrapper id={CONTAINER_ID.EDITOR} ref={wrapperRef}>
           {widget && <Widget />}
           <StyledCodeMirror
-            isFullWidth={isFullWidth}
+            isFullWidth={fullWidth}
             font={font}
             onScroll={() => removeWidget()}
             onClick={handleClick}

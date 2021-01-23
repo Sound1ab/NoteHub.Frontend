@@ -28,20 +28,18 @@ function Dashboard() {
 
   return (
     <Grid>
-      <RecoilRoot>
-        <CodeMirror>
-          {(Editor) => (
-            <>
-              <Toolbar />
-              <MobileScroll>
-                <Sidebar />
-                {Editor}
-              </MobileScroll>
-              <DraftManager />
-            </>
-          )}
-        </CodeMirror>
-      </RecoilRoot>
+      <CodeMirror>
+        {(Editor) => (
+          <>
+            <Toolbar />
+            <MobileScroll>
+              <Sidebar />
+              {Editor}
+            </MobileScroll>
+            <DraftManager />
+          </>
+        )}
+      </CodeMirror>
     </Grid>
   )
 }

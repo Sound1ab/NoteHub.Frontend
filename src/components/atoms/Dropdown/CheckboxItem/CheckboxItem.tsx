@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-interface ICheckboxItem<T extends string> {
+interface ICheckboxItem<T extends boolean> {
   label: string
   value: T
   checked: boolean
@@ -9,7 +9,7 @@ interface ICheckboxItem<T extends string> {
   title?: string
 }
 
-export function CheckboxItem<T extends string>({
+export function CheckboxItem<T extends boolean>({
   label,
   value,
   checked,
@@ -24,12 +24,12 @@ export function CheckboxItem<T extends string>({
     <StyledCheckboxItem onClick={handleClick} title={title}>
       <Checkbox
         type="checkbox"
-        name={value}
+        name={label}
         checked={checked}
         readOnly={true}
-        id={value}
+        id={label}
       />
-      <Label htmlFor={value}>{label}</Label>
+      <Label htmlFor={label}>{label}</Label>
     </StyledCheckboxItem>
   )
 }

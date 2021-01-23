@@ -3,7 +3,8 @@ import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 import Typography from 'typography'
 
 import { COLOR_MODE } from '../../../enums'
-import { useReadThemeSettings } from '../../../hooks/localState/useReadThemeSettings'
+import { useLargeText } from '../../../hooks/recoil/theme/useLargeText'
+import { useLightTheme } from '../../../hooks/recoil/theme/useLightTheme'
 import {
   borderRadius,
   boxShadow,
@@ -18,12 +19,12 @@ interface IThemeProvider {
 }
 
 export function ThemeProvider({ children }: IThemeProvider) {
-  const { isLargeText } = useReadThemeSettings()
-  const { isLightTheme } = useReadThemeSettings()
-  const typography = createTypography(isLargeText)
+  const [largeText] = useLargeText()
+  const [lightTheme] = useLightTheme()
+  const typography = createTypography(largeText)
   const spacing = createSpacing(typography)
 
-  document.documentElement.dataset.theme = isLightTheme
+  document.documentElement.dataset.theme = lightTheme
     ? COLOR_MODE.LIGHT
     : COLOR_MODE.DARK
 

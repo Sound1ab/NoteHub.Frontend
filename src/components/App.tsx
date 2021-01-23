@@ -10,21 +10,24 @@ import { IconProvider } from './providers/IconProvider/IconProvider'
 import { ThemeProvider } from './providers/ThemeProvider/ThemeProvider'
 import { GlobalStyle } from './utility/GlobalStyle/GlobalStyle'
 import { Router } from './utility/Router/Router'
+import { RecoilRoot } from 'recoil'
 
 export function App() {
   return (
     <ApolloProvider>
-      <ThemeProvider>
-        {(typography: Typography) => (
-          <IconProvider>
-            <Toast />
-            <GlobalStyle />
-            <TypographyStyle typography={typography} />
-            <GoogleFont typography={typography} />
-            <Router />
-          </IconProvider>
-        )}
-      </ThemeProvider>
+      <RecoilRoot>
+        <ThemeProvider>
+          {(typography: Typography) => (
+            <IconProvider>
+              <Toast />
+              <GlobalStyle />
+              <TypographyStyle typography={typography} />
+              <GoogleFont typography={typography} />
+              <Router />
+            </IconProvider>
+          )}
+        </ThemeProvider>
+      </RecoilRoot>
     </ApolloProvider>
   )
 }
