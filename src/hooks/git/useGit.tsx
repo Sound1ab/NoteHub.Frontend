@@ -131,6 +131,7 @@ export function useGit(): UseGitReturn {
 
   const clone = useCallback(
     async (repo: string) => {
+      setLoading(true)
       try {
         await gitClone({
           url: repo,

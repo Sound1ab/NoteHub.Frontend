@@ -12,10 +12,11 @@ export function Fade({ children, show }: IFade) {
   return (
     <UnstyledCSSTransition
       in={show}
-      timeout={300}
+      timeout={100}
       classNames="fade"
       mountOnEnter
       unmountOnExit
+      appear={true}
     >
       {children}
     </UnstyledCSSTransition>

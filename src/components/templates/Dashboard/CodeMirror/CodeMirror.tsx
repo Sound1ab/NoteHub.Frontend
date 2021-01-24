@@ -1,8 +1,6 @@
 import { EditorFromTextArea, Editor as EditorType } from 'codemirror'
 import React, { ReactNode, Ref, useCallback, useEffect, useRef } from 'react'
-import styled from 'styled-components'
 
-import { CONTAINER_ID } from '../../../../enums'
 import { useCodeMirror } from '../../../../hooks/codeMirror/useCodeMirror'
 import { useFs } from '../../../../hooks/fs/useFs'
 import { useGit } from '../../../../hooks/git/useGit'
@@ -18,9 +16,7 @@ import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
 import { useWidget } from '../../../../hooks/recoil/useWidget'
 import { process } from '../../../../services/retext/process'
 import { debounce } from '../../../../utils/debounce'
-import { isFile } from '../../../../utils/isFile'
 import { Retext_Settings } from '../../../apollo/generated_components_typings'
-import { ContextMenu } from './ContextMenu/ContextMenu'
 import { StyledCodeMirror } from './StyledCodeMirror'
 import { Widget } from './Widget/Widget'
 
@@ -35,10 +31,11 @@ interface IContextProps {
 export const CodeMirrorContext = React.createContext<Partial<IContextProps>>({})
 
 interface ICodeMirror {
-  children: (ReactNode: ReactNode) => ReactNode
+  children: ReactNode
+  fileContent: string
 }
 
-export const CodeMirror = ({ children }: ICodeMirror) => {
+export const CodeMirror = ({ children, fileContent }: ICodeMirror) => {
   const textArea = useRef<HTMLTextAreaElement | null>(null)
   const codeMirrorRef = useRef<EditorFromTextArea | null>(null)
   const wrapperRef = useRef<HTMLDivElement | null>(null)
@@ -192,14 +189,10 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
   useEffect(() => {
     const editor = codeMirrorRef.current
 
-    async function loadContentFromFS() {
-      if (!editor || !isFile(activePath)) return
+    if (!editor) return
 
-      editor.setValue((await readFile(activePath)) ?? '')
-    }
-
-    loadContentFromFS()
-  }, [activePath, readFile])
+    editor.setValue(fileContent)
+  }, [fileContent])
 
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     const editor = codeMirrorRef.current
@@ -223,32 +216,18 @@ export const CodeMirror = ({ children }: ICodeMirror) => {
     <CodeMirrorContext.Provider
       value={{ editor: codeMirrorRef.current, textAreaRef: textArea }}
     >
-      {codeMirrorRef.current && <ContextMenu targetRef={wrapperRef} />}
-      {children(
-        <Wrapper id={CONTAINER_ID.EDITOR} ref={wrapperRef}>
-          {widget && <Widget />}
-          <StyledCodeMirror
-            isFullWidth={fullWidth}
-            font={font}
-            onScroll={() => removeWidget()}
-            onClick={handleClick}
-          >
-            <textarea ref={textArea} />
-          </StyledCodeMirror>
-        </Wrapper>
-      )}
+      <>
+        {children}
+        {widget && <Widget />}
+        <StyledCodeMirror
+          isFullWidth={fullWidth}
+          font={font}
+          onScroll={() => removeWidget()}
+          onClick={handleClick}
+        >
+          <textarea ref={textArea} />
+        </StyledCodeMirror>
+      </>
     </CodeMirrorContext.Provider>
   )
 }
-
-const Wrapper = styled.div`
-  flex: 0 0 100%; // Needed for scroll snap
-  position: relative;
-  height: 100%;
-  justify-content: center;
-  display: flex;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    grid-area: editor;
-  }
-`

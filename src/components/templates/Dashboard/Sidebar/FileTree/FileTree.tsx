@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
@@ -10,10 +10,12 @@ import { useOpenFolders } from '../../../../../hooks/recoil/useOpenFolders'
 import { useRepo } from '../../../../../hooks/recoil/useRepo'
 import { useSearch } from '../../../../../hooks/recoil/useSearch'
 import { createNodes } from '../../../../../utils/createNodes'
+import { Fade } from '../../../../animation/Mount/Fade'
 import { List } from '../../../../atoms/List/List'
 import { FileInput } from '../FileInput/FileInput'
 import { SearchResults } from './SearchResults/SearchResults'
 import { Tree } from './Tree/Tree'
+import { TreeSkeleton } from './TreeSkeleton'
 
 interface IFileTree {
   isNewFileOpen: boolean
@@ -28,16 +30,19 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const [repo] = useRepo()
   const [{ clone }] = useGit()
   const [{ readDirRecursive }] = useFs()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (files && files.length > 0) {
       return
     }
+    setLoading(true)
 
     async function init() {
       await clone(repo)
 
       setFiles(await readDirRecursive())
+      setLoading(false)
     }
 
     init()
@@ -51,21 +56,31 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      {search ? (
-        <SearchResults />
-      ) : (
-        <>
-          {files &&
-            createNodes(files, openFolders).map((node) => (
-              <List key={node.name}>
-                <Tree key={node.name} node={node} />
-              </List>
-            ))}
-          {isNewFileOpen && (
-            <FileInput onClickOutside={closeNewFile} onSubmit={handleCreate} />
+      <>
+        <Fade show={loading}>
+          <TreeSkeleton />
+        </Fade>
+        <Fade show={!loading}>
+          {search ? (
+            <SearchResults />
+          ) : (
+            <>
+              {files &&
+                createNodes(files, openFolders).map((node) => (
+                  <List key={node.name}>
+                    <Tree key={node.name} node={node} />
+                  </List>
+                ))}
+              {isNewFileOpen && (
+                <FileInput
+                  onClickOutside={closeNewFile}
+                  onSubmit={handleCreate}
+                />
+              )}
+            </>
           )}
-        </>
-      )}
+        </Fade>
+      </>
     </DndProvider>
   )
 }

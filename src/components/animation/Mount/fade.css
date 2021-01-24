@@ -1,18 +1,22 @@
 .fade-enter {
   opacity: 0;
-  transform: scale(0.9) translateX(0) translateY(10%) !important;
+  /*transform: scale(0.9) translateX(0) translateY(10%) !important;*/
+  /*transform: scale(0.9) !important;*/
 }
 .fade-enter-active {
   opacity: 1;
-  transform: scale(1) translateX(0) translateY(0) !important;
-  transition: opacity 100ms, transform 100ms;
+  /*transform: scale(1) translateX(0) translateY(0) !important;*/
+  /*transform: scale(1) !important;*/
+  transition: opacity 100ms ease-in, transform 100ms ease-in;
 }
 .fade-exit {
   opacity: 1;
-  transform: scale(1) translateX(0) translateY(0) !important;
+  /*transform: scale(1) translateX(0) translateY(0) !important;*/
+  /*transform: scale(1) !important;*/
 }
 .fade-exit-active {
   opacity: 0;
-  transform: scale(0.9) translateY(10%) !important;
-  transition: opacity 100ms, transform 100ms;
+  /*transform: scale(0.9) translateY(10%) !important;*/
+  /*transform: scale(0.9) !important;*/
+  transition: opacity 100ms ease-in, transform 100ms ease-in;
 }

@@ -1,6 +1,7 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
+import { useEditor } from '../../../../hooks/codeMirror/useEditor'
 import { useFs } from '../../../../hooks/fs/useFs'
 import { useGit } from '../../../../hooks/git/useGit'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
@@ -9,10 +10,9 @@ import { useFiles } from '../../../../hooks/recoil/useFiles'
 import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
 import { Button } from '../../../atoms/Button/Button'
 import { Icon } from '../../../atoms/Icon/Icon'
-import { CodeMirrorContext } from '../CodeMirror/CodeMirror'
 
 export function DraftManager() {
-  const { editor } = useContext(CodeMirrorContext)
+  const { editor } = useEditor()
   const [unstagedChanges, setUnstagedChanges] = useUnstagedChanges()
   const [committedChanges, setCommittedChanges] = useCommittedChanges()
   const [
