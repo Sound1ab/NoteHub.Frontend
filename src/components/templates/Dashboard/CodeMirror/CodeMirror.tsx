@@ -1,6 +1,14 @@
 import { EditorFromTextArea, Editor as EditorType } from 'codemirror'
-import React, { ReactNode, Ref, useCallback, useEffect, useRef } from 'react'
+import React, {
+  ReactNode,
+  Ref,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react'
 
+import { CONTAINER_ID } from '../../../../enums'
 import { useCodeMirror } from '../../../../hooks/codeMirror/useCodeMirror'
 import { useFs } from '../../../../hooks/fs/useFs'
 import { useGit } from '../../../../hooks/git/useGit'
@@ -13,12 +21,10 @@ import { useFont } from '../../../../hooks/recoil/theme/useFont'
 import { useFullWidth } from '../../../../hooks/recoil/theme/useFullWidth'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
 import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
-import { useWidget } from '../../../../hooks/recoil/useWidget'
 import { process } from '../../../../services/retext/process'
 import { debounce } from '../../../../utils/debounce'
 import { Retext_Settings } from '../../../apollo/generated_components_typings'
 import { StyledCodeMirror } from './StyledCodeMirror'
-import { Widget } from './Widget/Widget'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const HyperMd = require('hypermd')
@@ -26,6 +32,7 @@ const HyperMd = require('hypermd')
 interface IContextProps {
   editor: EditorFromTextArea | null
   textAreaRef: Ref<HTMLTextAreaElement>
+  wrapperRef: RefObject<HTMLElement>
 }
 
 export const CodeMirrorContext = React.createContext<Partial<IContextProps>>({})
@@ -51,8 +58,7 @@ export const CodeMirror = ({ children, fileContent }: ICodeMirror) => {
 
   const [, setUnstagedChanges] = useUnstagedChanges()
   const [activePath] = useActivePath()
-  const [widget] = useWidget()
-  const [{ writeFile, readFile }] = useFs()
+  const [{ writeFile }] = useFs()
   const [{ getUnstagedChanges }] = useGit()
   const [
     {
@@ -196,11 +202,8 @@ export const CodeMirror = ({ children, fileContent }: ICodeMirror) => {
 
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     const editor = codeMirrorRef.current
-    const scroll = wrapperRef.current
 
-    if (!editor || !scroll) {
-      return
-    }
+    if (!editor) return
 
     displayWidget(
       editor,
@@ -208,23 +211,28 @@ export const CodeMirror = ({ children, fileContent }: ICodeMirror) => {
         clientX: e.clientX,
         clientY: e.clientY,
       },
-      scroll.scrollTop
+      window.pageYOffset
     )
   }
 
   return (
     <CodeMirrorContext.Provider
-      value={{ editor: codeMirrorRef.current, textAreaRef: textArea }}
+      value={{
+        editor: codeMirrorRef.current,
+        textAreaRef: textArea,
+        wrapperRef,
+      }}
     >
       <>
-        {children}
-        {widget && <Widget />}
         <StyledCodeMirror
+          id={CONTAINER_ID.EDITOR}
           isFullWidth={fullWidth}
           font={font}
           onScroll={() => removeWidget()}
           onClick={handleClick}
+          ref={wrapperRef}
         >
+          {children}
           <textarea ref={textArea} />
         </StyledCodeMirror>
       </>

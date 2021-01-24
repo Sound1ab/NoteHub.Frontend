@@ -104,10 +104,13 @@ export function useCodeMirror() {
     (
       editor: Editor,
       { clientX, clientY }: { clientX: number; clientY: number },
-      scrollTop: number
+      scrollOffset: number
     ) => {
       // Get line and character given the position of the mouse in the editor
-      const lineCh = editor.coordsChar({ left: clientX, top: clientY }, 'page')
+      const lineCh = editor.coordsChar(
+        { left: clientX, top: clientY + scrollOffset },
+        'page'
+      )
 
       if (!lineCh) {
         return
@@ -150,7 +153,7 @@ export function useCodeMirror() {
         coords: {
           ...coords,
           left: coords.left,
-          top: coords.top - scrollTop + 10,
+          top: coords.top + 10,
         },
         message: activeMarker.options.message,
       })

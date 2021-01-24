@@ -2,7 +2,7 @@ import React, { ReactNode, RefObject, useLayoutEffect, useState } from 'react'
 
 import { useModalToggle } from './useModalToggle'
 
-export function useContextMenu(target: RefObject<HTMLElement>) {
+export function useContextMenu(target?: RefObject<HTMLElement> | null) {
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
   const [{ top, left }, setClickPosition] = useState({
     top: '-9999px',
@@ -18,26 +18,21 @@ export function useContextMenu(target: RefObject<HTMLElement>) {
         e.preventDefault()
         setOpen(true)
 
-        if (!ref.current || !target.current) return
+        if (!ref.current || !target?.current) return
 
-        const { left, top } = target.current.getBoundingClientRect()
+        const viewportWidth = window.innerWidth
+        const viewportHeight = window.innerHeight
 
         const cursorX = e.clientX
         const cursorY = e.clientY
 
-        // We need to take into account the head and sidebar as mouse position
-        // doesn't do this for us
-        const cursorWithinTargetX = e.clientX - left
-        const cursorWithinTargetY = e.clientY - top
-
-        const containerWidth = target.current.clientWidth
-        const containerHeight = target.current.clientHeight
         const elementWidth = ref.current.clientWidth
         const elementHeight = ref.current.clientHeight
 
-        // Detect if the element is going over the container boundaries
-        const xOffset = containerWidth - (elementWidth + cursorWithinTargetX)
-        const yOffset = containerHeight - (elementHeight + cursorWithinTargetY)
+        // If the position of the cursor plus the width/height of the menu is
+        // greater than the viewport width/height, we know its out of bounds
+        const xOffset = viewportWidth - (cursorX + elementWidth)
+        const yOffset = viewportHeight - (cursorY + elementHeight)
 
         const willDisplayOverXBoundary = xOffset < 0
         const willDisplayOverYBoundary = yOffset < 0
@@ -69,7 +64,7 @@ export function useContextMenu(target: RefObject<HTMLElement>) {
     children: ReactNode
     domNode?: HTMLElement | null
   }) => (
-    <Portal style={{ top, left, position: 'absolute' }} domNode={domNode}>
+    <Portal style={{ top, left, position: 'fixed' }} domNode={domNode}>
       {children}
     </Portal>
   )

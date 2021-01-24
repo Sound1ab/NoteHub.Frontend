@@ -1,15 +1,14 @@
-import React, { RefObject } from 'react'
+import React from 'react'
 
 import { useContextMenuDropdown } from '../../../../../hooks/dropdown/useContextMenuDropdown'
 import { useContextMenu } from '../../../../../hooks/utils/useContextMenu'
+import { Fade } from '../../../../animation/Mount/Fade'
 import { Dropdown } from '../../../../atoms/Dropdown/Dropdown'
+import { useEditor } from '../../../../../hooks/codeMirror/useEditor'
 
-interface IContextMenu {
-  targetRef: RefObject<HTMLElement>
-}
-
-export function ContextMenu({ targetRef }: IContextMenu) {
-  const { isOpen, Portal, ref, setOpen } = useContextMenu(targetRef)
+export function ContextMenu() {
+  const { wrapperRef } = useEditor()
+  const { isOpen, Portal, ref, setOpen } = useContextMenu(wrapperRef)
   const { items, Dropzone } = useContextMenuDropdown()
 
   if (!items) {
@@ -19,7 +18,7 @@ export function ContextMenu({ targetRef }: IContextMenu) {
   return (
     <>
       <Dropzone />
-      {isOpen && (
+      <Fade show={isOpen}>
         <Portal>
           <Dropdown
             containerRef={ref}
@@ -34,7 +33,7 @@ export function ContextMenu({ targetRef }: IContextMenu) {
             onClose={() => setOpen(false)}
           />
         </Portal>
-      )}
+      </Fade>
     </>
   )
 }

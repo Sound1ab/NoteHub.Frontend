@@ -11,8 +11,21 @@ export const StyledCodeMirror = styled.article<{
   padding: ${({ theme }) => theme.spacing.xs};
   position: relative;
 
+  height: 100%;
+  justify-content: center;
+  display: flex;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    grid-area: editor;
+  }
+
   .CodeMirror {
     height: auto;
+    width: 100%;
+  }
+
+  .CodeMirror-vscrollbar {
+    display: none !important;
   }
 
   .CodeMirror-sizer {

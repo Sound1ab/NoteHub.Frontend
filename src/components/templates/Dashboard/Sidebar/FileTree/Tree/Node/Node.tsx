@@ -11,6 +11,7 @@ import {
   IDropdownItem,
 } from '../../../../../../atoms/Dropdown/Dropdown'
 import { Icon } from '../../../../../../atoms/Icon/Icon'
+import { Fade } from '../../../../../../animation/Mount/Fade'
 
 interface INode {
   node: ITreeNode
@@ -87,7 +88,7 @@ export function Node({
           <StyledIcon size="xs" icon="ellipsis-h" isDisabled={isOpen} />
         </Actions>
       </Wrapper>
-      {isOpen && (
+      <Fade show={isOpen}>
         <Portal>
           <Dropdown
             containerRef={ref}
@@ -95,7 +96,7 @@ export function Node({
             onClose={() => setOpen(false)}
           />
         </Portal>
-      )}
+      </Fade>
       {childNodes}
     </StyledListItem>
   )

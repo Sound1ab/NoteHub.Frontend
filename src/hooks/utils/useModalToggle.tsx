@@ -22,7 +22,7 @@ export function useModalToggle<T extends HTMLElement>(
       paddingTop: theme.spacing.xxs,
       top: `${bottom}px`,
       right: `${positionFromRight}px`,
-      position: 'absolute',
+      position: 'fixed',
     }
   }
 

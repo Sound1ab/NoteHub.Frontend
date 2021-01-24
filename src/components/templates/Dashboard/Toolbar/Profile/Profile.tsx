@@ -3,9 +3,10 @@ import React, { ReactNode, useRef } from 'react'
 import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { useModalToggle } from '../../../../../hooks/utils/useModalToggle'
 import { useProfileDropdown } from '../../../../../hooks/dropdown/useProfileDropdown'
 import { useReadGithubUser } from '../../../../../hooks/user/useReadGithubUser'
+import { useModalToggle } from '../../../../../hooks/utils/useModalToggle'
+import { Fade } from '../../../../animation/Mount/Fade'
 import { Avatar } from '../../../../atoms/Avatar/Avatar'
 import { Dropdown } from '../../../../atoms/Dropdown/Dropdown'
 import { localState } from '../../../../providers/ApolloProvider/cache'
@@ -44,11 +45,11 @@ export function Profile(props: IProfile) {
   return (
     <Wrapper {...props} ref={containerRef}>
       <Avatar image={user?.avatar_url} onClick={handleOpen} />
-      {isOpen && (
+      <Fade show={isOpen}>
         <Portal>
           <Dropdown containerRef={ref} items={items} />
         </Portal>
-      )}
+      </Fade>
     </Wrapper>
   )
 }
