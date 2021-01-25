@@ -1,4 +1,5 @@
-import React from 'react'
+import { ReadCommitResult } from 'isomorphic-git'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { useEditor } from '../../../../hooks/codeMirror/useEditor'
@@ -25,18 +26,20 @@ export function DraftManager() {
       getCommittedChanges,
       removeAll,
       getDeletedUnstagedChanges,
+      getCommits,
     },
   ] = useGit()
   const [{ readFile, readDirRecursive }] = useFs()
   const [activePath] = useActivePath()
   const [, setFiles] = useFiles()
-
-  if (unstagedChanges.length === 0 && committedChanges.length === 0) {
-    return null
-  }
+  const [commits, setCommits] = useState<ReadCommitResult[]>([])
+  const [loading, setLoading] = useState(false)
+  const [isDiscarding, setIsDiscarding] = useState(false)
 
   async function handleDiscard() {
-    await rollback(await getUnstagedChanges())
+    setIsDiscarding(true)
+
+    await rollback()
 
     setUnstagedChanges(await getUnstagedChanges())
 
@@ -44,13 +47,19 @@ export function DraftManager() {
 
     const content = await readFile(activePath)
 
+    setCommittedChanges(await getCommittedChanges())
+
     // May unstage adding a new file so content could be undefined
     if (content) {
       editor?.setValue(content)
     }
+
+    setIsDiscarding(false)
   }
 
   async function handleCommit() {
+    setLoading(true)
+
     await removeAll(await getDeletedUnstagedChanges())
 
     await addAll(await getUnstagedChanges())
@@ -60,27 +69,60 @@ export function DraftManager() {
     setUnstagedChanges(await getUnstagedChanges())
 
     setCommittedChanges(await getCommittedChanges())
+
+    // Get commits not pushed to remote
+    setCommits(await getCommits())
+
+    setLoading(false)
   }
 
   async function handlePush() {
+    setLoading(true)
+
     await push()
 
+    // Get files not pushed to remote
     setCommittedChanges(await getCommittedChanges())
+
+    // Get commits not pushed to remote
+    setCommits(await getCommits())
+
+    setLoading(false)
   }
 
+  // TODO: Write tests
   return (
     <Wrapper>
-      <DiscardButton title="Discard local changes" onClick={handleDiscard}>
+      <div>
+        <Heading>{unstagedChanges.length} unstaged</Heading>
+        <Heading>{commits.length} commits</Heading>
+      </div>
+      <DiscardButton
+        title="Discard local changes"
+        onClick={handleDiscard}
+        isDisabled={unstagedChanges.length === 0}
+        isLoading={isDiscarding}
+      >
         <Icon icon="times" size="lg" />
       </DiscardButton>
       {unstagedChanges.length > 0 && (
-        <CommitButton title="Stage and commit changes" onClick={handleCommit}>
-          <Icon icon="circle" size="lg" />
-        </CommitButton>
+        <>
+          <CommitButton
+            title="Stage and commit changes"
+            onClick={handleCommit}
+            isLoading={loading}
+          >
+            <Icon icon="circle" size="lg" />
+          </CommitButton>
+        </>
       )}
-      {committedChanges.length > 0 && (
-        <PushButton title="Push changes to remote" onClick={handlePush}>
-          <Icon icon="check-circle" size="lg" />
+      {committedChanges.length > 0 && unstagedChanges.length === 0 && (
+        <PushButton
+          title="Push changes to remote"
+          onClick={handlePush}
+          isLoading={loading}
+        >
+          <Icon icon="arrow-circle-up" size="lg" />
         </PushButton>
       )}
     </Wrapper>
@@ -101,7 +143,7 @@ const Wrapper = styled.div`
   margin: ${({ theme }) => theme.spacing.xs};
   z-index: 20;
 
-  button + button {
+  * + * {
     margin-left: ${({ theme }) => theme.spacing.xs};
   }
 `
@@ -120,7 +162,7 @@ const StyledButton = styled(Button)`
 `
 
 const DiscardButton = styled(StyledButton)`
-  background-color: var(--feedback-error);
+  background-color: var(--text-tertiary);
 `
 
 const CommitButton = styled(StyledButton)`
@@ -128,5 +170,9 @@ const CommitButton = styled(StyledButton)`
 `
 
 const PushButton = styled(StyledButton)`
-  background-color: var(--feedback-success);
+  background-color: var(--accent-primary);
+`
+
+const Heading = styled.h6`
+  margin: 0;
 `

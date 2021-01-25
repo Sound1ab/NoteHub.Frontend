@@ -13,7 +13,7 @@ export function createSpacing(typography: Typography) {
     sm: typography.rhythm(1),
     xs: typography.rhythm(0.9),
     xxs: typography.rhythm(0.65),
-    xxxs: typography.rhythm(0.1),
+    xxxs: typography.rhythm(0.2),
   }
 }
 

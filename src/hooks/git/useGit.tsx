@@ -1,3 +1,4 @@
+import { ReadCommitResult } from 'isomorphic-git'
 import { useCallback, useState } from 'react'
 
 import { ErrorToast } from '../../components/atoms/Toast/Toast'
@@ -5,9 +6,11 @@ import {
   addAll as gitAddAll,
   clone as gitClone,
   commit as gitCommit,
+  getCommits as gitGetCommits,
   getCommittedChanges as gitGetCommittedChanges,
   getDeletedUnstagedChanges as gitGetDeletedUnstagedChanges,
   getUnstagedChanges as gitGetUnstagedChanges,
+  log as gitLog,
   push as gitPush,
   remove as gitRemove,
   removeAll as gitRemoveAll,
@@ -21,7 +24,7 @@ type UseGitReturn = [
     getUnstagedChanges: () => Promise<string[] | never[]>
     addAll: (unstagedChanges: string[]) => Promise<void>
     commit: () => Promise<void>
-    rollback: (unstagedChanges: string[]) => Promise<void>
+    rollback: () => Promise<void>
     status: () => Promise<
       [string, 0 | 1, 0 | 2 | 1, 0 | 2 | 1 | 3][] | undefined
     >
@@ -31,6 +34,8 @@ type UseGitReturn = [
     remove: (filepath: string) => Promise<void>
     removeAll: (deletedUnstagedChanges: string[] | never[]) => Promise<void>
     getDeletedUnstagedChanges: () => Promise<string[] | never[]>
+    log: () => Promise<ReadCommitResult[]>
+    getCommits: () => Promise<ReadCommitResult[]>
   },
   { loading: boolean; error: string | null }
 ]
@@ -85,12 +90,11 @@ export function useGit(): UseGitReturn {
     }
   }, [])
 
-  const rollback = useCallback(async (unstagedChanges: string[]) => {
+  const rollback = useCallback(async () => {
     setLoading(true)
     try {
       await gitRollback({
         dir: '/',
-        unstagedChanges,
       })
     } catch (error) {
       setError(`Git rollback: ${error.message}`)
@@ -204,6 +208,36 @@ export function useGit(): UseGitReturn {
     }
   }, [])
 
+  const log = useCallback(async () => {
+    try {
+      const result = await gitLog({
+        dir: '/',
+      })
+
+      return result
+    } catch (error) {
+      setError(`Git log: ${error.message}`)
+      return []
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  const getCommits = useCallback(async () => {
+    try {
+      const result = await gitGetCommits({
+        dir: '/',
+      })
+
+      return result
+    } catch (error) {
+      setError(`Git log: ${error.message}`)
+      return []
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   return [
     {
       getUnstagedChanges,
@@ -217,6 +251,8 @@ export function useGit(): UseGitReturn {
       remove,
       getDeletedUnstagedChanges,
       removeAll,
+      log,
+      getCommits,
     },
     { loading, error },
   ]

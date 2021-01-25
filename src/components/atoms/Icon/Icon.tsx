@@ -43,6 +43,7 @@ export type TIcons =
   | 'info-circle'
   | 'circle'
   | 'check-circle'
+  | 'arrow-circle-up'
 
 interface IIcon {
   icon: TIcons

@@ -39,11 +39,13 @@ export interface IGetCommittedChanges {
 
 export async function getCommittedChanges({ dir }: IGetCommittedChanges) {
   const currentCommit = await resolveRef({ fs, dir, ref: 'HEAD' })
+
   const currentRemoteCommit = await resolveRef({
     fs,
     dir,
     ref: 'refs/remotes/origin/main',
   })
+
   const changedFiles = await getFileStateChanges({
     dir,
     startCommit: currentRemoteCommit,

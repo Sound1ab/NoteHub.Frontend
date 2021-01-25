@@ -1,7 +1,9 @@
 import { IAdd, IAddAll, add as gitAdd, addAll as gitAddAll } from '../git/add'
 import { IClone, clone as gitClone } from '../git/clone'
 import { ICommit, commit as gitCommit } from '../git/commit'
+import { IGetCommits, getCommits as gitGetCommits } from '../git/getCommits'
 import { IGetTree, getTree as gitGetTree } from '../git/getTree'
+import { ILog, log as gitLog } from '../git/log'
 import { IPush, push as gitPush } from '../git/push'
 import {
   IRemove,
@@ -69,4 +71,12 @@ export async function remove(options: IRemove) {
 
 export async function removeAll(options: IRemoveAll) {
   return gitRemoveAll(options)
+}
+
+export async function log(options: ILog) {
+  return gitLog(options)
+}
+
+export async function getCommits(options: IGetCommits) {
+  return gitGetCommits(options)
 }

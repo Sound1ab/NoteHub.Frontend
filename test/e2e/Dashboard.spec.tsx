@@ -112,4 +112,13 @@ describe('Dashboard', () => {
       })
     })
   })
+
+  // TODO: Complete tests
+  describe('Draft Manager', () => {
+    it('should discard local changes', async () => {})
+
+    it('should stage commit changes', async () => {})
+
+    it('should push changes', async () => {})
+  })
 })
