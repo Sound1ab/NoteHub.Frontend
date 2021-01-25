@@ -1,4 +1,4 @@
-import React, { RefObject, useRef, useState } from 'react'
+import React, { RefObject, useEffect, useRef, useState } from 'react'
 
 import { IPortal } from '../../components/atoms/Portal/Portal'
 import { Portal } from '../../components/atoms/Portal/Portal'
@@ -10,21 +10,36 @@ export function useModalToggle<T extends HTMLElement>(
   const [isOpen, setOpen] = useState(false)
   const ref = useRef<T | null>(null)
   const theme = useTheme()
+  const [position, setClickPosition] = useState({
+    top: '-9999px',
+    right: '-9999px',
+  })
 
-  let position: Record<string, string>
+  useEffect(() => {
+    if (!isOpen || !origin?.current || !ref?.current) return
 
-  if (origin?.current) {
     const { bottom, right } = origin.current.getBoundingClientRect()
 
-    const positionFromRight = window.innerWidth - right
+    const viewportWidth = window.innerWidth
+    const viewportHeight = window.innerHeight
 
-    position = {
-      paddingTop: theme.spacing.xxs,
-      top: `${bottom}px`,
+    const elementHeight = ref?.current?.scrollHeight
+
+    const yOffset = viewportHeight - (bottom + (elementHeight ?? 0))
+
+    const willDisplayOverYBoundary = yOffset < 0
+
+    const positionFromRight = viewportWidth - right
+
+    const elementYPosition = willDisplayOverYBoundary
+      ? bottom - Math.abs(yOffset)
+      : bottom
+
+    setClickPosition({
+      top: `${elementYPosition}px`,
       right: `${positionFromRight}px`,
-      position: 'fixed',
-    }
-  }
+    })
+  }, [isOpen, setClickPosition, origin])
 
   const PartiallyAppliedPortal = ({
     children,
@@ -46,7 +61,11 @@ export function useModalToggle<T extends HTMLElement>(
       domNode={domNode}
       hasBackground={hasBackground}
       placementAroundContainer={placementAroundContainer}
-      style={position ? position : style}
+      style={
+        position
+          ? { ...position, paddingTop: theme.spacing.xxs, position: 'fixed' }
+          : style
+      }
     >
       {children}
     </Portal>

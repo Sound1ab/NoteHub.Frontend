@@ -21,7 +21,9 @@ describe('CodeMirror', () => {
     spyOn(useActivePath, 'useActivePath', () => ['MOCK_FOLDER_PATH'])
     spyOn(useFs, 'useFs', () => [{ writeFile: jest.fn(), readFile }])
 
-    await render(<CodeMirror>{(textArea) => textArea}</CodeMirror>)
+    await render(
+      <CodeMirror fileContent="MOCK FILE CONTENT">{'MOCK CHILDREN'}</CodeMirror>
+    )
 
     expect(readFile).not.toBeCalled()
   })

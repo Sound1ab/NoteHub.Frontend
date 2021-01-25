@@ -9,7 +9,7 @@ describe('CheckboxItem', () => {
     await render(
       <CheckboxItem
         label="MOCK_LABEL"
-        value="MOCK_VALUE"
+        value={true}
         checked={false}
         onChange={jest.fn()}
         title="MOCK_TITLE"
@@ -26,7 +26,7 @@ describe('CheckboxItem', () => {
     await render(
       <CheckboxItem
         label="MOCK_LABEL"
-        value="MOCK_VALUE"
+        value={true}
         checked={false}
         onChange={onChange}
         title="MOCK_TITLE"
@@ -35,14 +35,14 @@ describe('CheckboxItem', () => {
 
     await fireEvent.click(screen.getByTitle('MOCK_TITLE'))
 
-    expect(onChange).toBeCalledWith('MOCK_VALUE')
+    expect(onChange).toBeCalledWith(true)
   })
 
   it('should have a controlled checkbox', async () => {
     const { rerender } = await render(
       <CheckboxItem
         label="MOCK_LABEL"
-        value="MOCK_VALUE"
+        value={true}
         checked={false}
         onChange={jest.fn()}
         title="MOCK_TITLE"
@@ -54,7 +54,7 @@ describe('CheckboxItem', () => {
     await rerender(
       <CheckboxItem
         label="MOCK_LABEL"
-        value="MOCK_VALUE"
+        value={false}
         checked={true}
         onChange={jest.fn()}
         title="MOCK_TITLE"

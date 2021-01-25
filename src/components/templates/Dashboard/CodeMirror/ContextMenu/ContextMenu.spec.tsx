@@ -75,9 +75,7 @@ describe('ContextMenu', () => {
   ])('should call codemirror using buttons', async (fn, title) => {
     localState.currentPathVar('MOCK_FILE_PATH_1.md')
 
-    const { getByLabelText } = await render(
-      <ContextMenu targetRef={createRef()} />
-    )
+    const { getByLabelText } = await render(<ContextMenu />)
 
     await fireEvent.click(getByLabelText(title))
 
