@@ -199,16 +199,4 @@ describe('Sidebar', () => {
       expect(screen.getByLabelText('Input file name')).toBeInTheDocument()
     })
   })
-
-  describe('when searching', () => {
-    it('should display search results instead of tree', async () => {
-      await render(<Sidebar />)
-
-      const input = screen.getByLabelText('Search files')
-
-      await userEvent.type(input, 'MOCK_FILE')
-
-      expect(screen.getByText('MOCK_FILE_PATH_1.md')).toBeInTheDocument()
-    })
-  })
 })

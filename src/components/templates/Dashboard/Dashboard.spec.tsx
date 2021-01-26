@@ -1,11 +1,13 @@
 import path from 'path'
 
 import { act, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import {
   fireEvent,
   nockBack,
+  render,
   renderWithNockBack,
   wait,
   waitFor,
@@ -39,6 +41,29 @@ describe('Dashboard', () => {
   beforeAll(() => {
     nockBack.fixtures = path.join(__dirname, '__nockbacks__')
     nockBack.setMode('record')
+  })
+
+  describe('when searching', () => {
+    xit('should display search results instead of tree', async () => {
+      const { nockDone } = await renderWithNockBack(<Dashboard />, 'clone.json')
+
+      await render(<Dashboard />)
+
+      await expect(
+        screen.findByText('levelOneFileOne.md')
+      ).resolves.toBeInTheDocument()
+
+      const input = screen.getByLabelText('Search files')
+
+      await act(async () => {
+        await userEvent.type(input, 'levelOneFileOne')
+        await wait(1000)
+      })
+
+      expect(screen.getByText('levelOneFileOne.md')).toBeInTheDocument()
+
+      nockDone()
+    })
   })
 
   xit('should show sidebar, toolbar and editor', async () => {

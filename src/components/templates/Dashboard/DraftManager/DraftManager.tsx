@@ -9,6 +9,7 @@ import { useActivePath } from '../../../../hooks/recoil/useActivePath'
 import { useCommittedChanges } from '../../../../hooks/recoil/useCommittedChanges'
 import { useFiles } from '../../../../hooks/recoil/useFiles'
 import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
+import { Fade } from '../../../animation/Mount/Fade'
 import { Button } from '../../../atoms/Button/Button'
 import { Icon } from '../../../atoms/Icon/Icon'
 
@@ -90,23 +91,25 @@ export function DraftManager() {
     setLoading(false)
   }
 
+  const isPushReady =
+    committedChanges.length > 0 && unstagedChanges.length === 0
+
   // TODO: Write tests
   return (
-    <Wrapper>
-      <div>
-        <Heading>{unstagedChanges.length} unstaged</Heading>
-        <Heading>{commits.length} commits</Heading>
-      </div>
-      <DiscardButton
-        title="Discard local changes"
-        onClick={handleDiscard}
-        isDisabled={unstagedChanges.length === 0}
-        isLoading={isDiscarding}
-      >
-        <Icon icon="times" size="lg" />
-      </DiscardButton>
-      {unstagedChanges.length > 0 && (
-        <>
+    <Fade show={unstagedChanges.length > 0 || loading || commits.length > 0}>
+      <Wrapper>
+        <Heading>
+          {unstagedChanges.length} unstaged {commits.length} commits
+        </Heading>
+        <DiscardButton
+          title="Discard local changes"
+          onClick={handleDiscard}
+          isDisabled={unstagedChanges.length === 0}
+          isLoading={isDiscarding}
+        >
+          <Icon icon="times" size="lg" />
+        </DiscardButton>
+        {!isPushReady ? (
           <CommitButton
             title="Stage and commit changes"
             onClick={handleCommit}
@@ -114,18 +117,17 @@ export function DraftManager() {
           >
             <Icon icon="circle" size="lg" />
           </CommitButton>
-        </>
-      )}
-      {committedChanges.length > 0 && unstagedChanges.length === 0 && (
-        <PushButton
-          title="Push changes to remote"
-          onClick={handlePush}
-          isLoading={loading}
-        >
-          <Icon icon="arrow-circle-up" size="lg" />
-        </PushButton>
-      )}
-    </Wrapper>
+        ) : (
+          <PushButton
+            title="Push changes to remote"
+            onClick={handlePush}
+            isLoading={loading}
+          >
+            <Icon icon="arrow-circle-up" size="lg" />
+          </PushButton>
+        )}
+      </Wrapper>
+    </Fade>
   )
 }
 
