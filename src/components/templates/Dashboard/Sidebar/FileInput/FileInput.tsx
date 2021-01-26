@@ -62,17 +62,9 @@ export function FileInput({
 }
 
 const Wrapper = styled.div`
-  padding: ${({ theme }) => theme.spacing.xs};
+  padding: ${({ theme }) => theme.spacing.xxs}
+    ${({ theme }) => theme.spacing.xs};
   position: relative;
-
-  &:after {
-    content: '.md';
-    color: var(--text-secondary);
-    position: absolute;
-    top: 50%;
-    right: ${({ theme }) => theme.spacing.s};
-    transform: translateY(-50%);
-  }
 `
 
 const StyledFileInput = styled(Input)`
