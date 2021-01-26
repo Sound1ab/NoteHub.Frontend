@@ -49,7 +49,7 @@ const Grid = styled.div`
       3fr;
     grid-template-rows: auto 1fr;
     grid-template-areas:
-      'sidebar toolbar'
+      'toolbar toolbar'
       'sidebar editor';
   }
 `

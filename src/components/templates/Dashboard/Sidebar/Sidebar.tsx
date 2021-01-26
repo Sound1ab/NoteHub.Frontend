@@ -2,11 +2,10 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { CONTAINER_ID } from '../../../../enums'
+import { useSearch } from '../../../../hooks/recoil/useSearch'
 import { Button } from '../../../atoms/Button/Button'
 import { Icon } from '../../../atoms/Icon/Icon'
 import { FileTree } from './FileTree/FileTree'
-import { SearchInput } from './SearchInput/SearchInput'
-import { useSearch } from '../../../../hooks/recoil/useSearch'
 
 export function Sidebar() {
   const [search] = useSearch()
@@ -14,7 +13,6 @@ export function Sidebar() {
 
   return (
     <StyledSidebar id={CONTAINER_ID.SIDEBAR}>
-      <SearchInput />
       <Navigation>
         <FileTree
           isNewFileOpen={isNewFileOpen}
@@ -34,7 +32,7 @@ export function Sidebar() {
 
 const StyledSidebar = styled.div`
   flex: 0 0 100%;
-  height: 100vh;
+  height: calc(100vh - var(--toolbar-height));
   background-color: var(--background-primary);
   display: flex;
   flex-direction: column;
@@ -44,7 +42,7 @@ const StyledSidebar = styled.div`
   overflow-y: auto;
   z-index: 2;
   position: sticky;
-  top: 0px;
+  top: var(--toolbar-height);
   align-self: start;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {

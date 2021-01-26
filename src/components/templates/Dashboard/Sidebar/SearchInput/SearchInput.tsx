@@ -27,9 +27,7 @@ export function SearchInput() {
 }
 
 const Wrapper = styled.div`
-  padding: 0 ${({ theme }) => theme.spacing.xs};
-  border-bottom: 1px solid var(--border-primary);
-  height: ${({ theme }) => theme.spacing.xl};
+  padding: ${({ theme }) => theme.spacing.xs};
   display: flex;
   align-items: center;
 `

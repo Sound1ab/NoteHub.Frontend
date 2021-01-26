@@ -1,18 +1,28 @@
-import React from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { useFile } from '../../../../hooks/recoil/useFile'
 import { useTabs } from '../../../../hooks/recoil/useTabs'
+import { setCssVariable } from '../../../../utils/css/setCssVariable'
 import { extractFilename } from '../../../../utils/extractFilename'
+import { SearchInput } from '../Sidebar/SearchInput/SearchInput'
 import { Profile } from './Profile/Profile'
 import { Tab } from './Tab/Tab'
 
 export function Toolbar() {
   const [tabs] = useTabs()
   const [file] = useFile()
+  const toolbarRef = useRef<HTMLDivElement | null>(null)
+
+  useLayoutEffect(() => {
+    if (!toolbarRef?.current) return
+
+    setCssVariable('--toolbar-height', `${toolbarRef.current.offsetHeight}px`)
+  }, [])
 
   return (
-    <StyledToolbar>
+    <StyledToolbar ref={toolbarRef}>
+      <SearchInput />
       <Tabs>
         {[...tabs].map((path) => (
           <Tab

@@ -2,7 +2,7 @@ import Typography from 'typography'
 
 export function createSpacing(typography: Typography) {
   return {
-    xxxl: typography.rhythm(14.2),
+    xxxl: typography.rhythm(17.1),
     xxl: typography.rhythm(10.2),
     xl: typography.rhythm(4.8),
     l: typography.rhythm(3.2),
