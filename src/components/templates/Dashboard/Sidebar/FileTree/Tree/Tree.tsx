@@ -3,7 +3,7 @@ import React from 'react'
 import { ITreeNode } from '../../../../../../types'
 import { isFolderNode, traverseTree } from '../../../../../../utils/createNodes'
 import { Node_Type } from '../../../../../apollo/generated_components_typings'
-import { List } from '../../../../../atoms/List/List'
+import { UnstyledList } from '../../../../../atoms/UnstyledList/UnstyledList'
 import { File } from './File/File'
 import { Folder } from './Folder/Folder'
 
@@ -33,7 +33,7 @@ export function Tree({ node, level = 0 }: INode) {
       node={node}
       level={level}
       childNodes={
-        <List>
+        <UnstyledList>
           {node.toggled &&
             node.children?.map((childNode) => (
               <Tree
@@ -42,7 +42,7 @@ export function Tree({ node, level = 0 }: INode) {
                 level={level + 1}
               />
             ))}
-        </List>
+        </UnstyledList>
       }
     />
   ) : (

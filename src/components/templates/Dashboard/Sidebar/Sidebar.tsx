@@ -65,12 +65,14 @@ const StyledButton = styled(Button)`
   width: 100%;
   height: 100%;
   padding: ${({ theme }) => theme.spacing.xs};
+  background-color: var(--background-primary);
 `
 
 const Add = styled.span`
   font-weight: 700;
   margin-bottom: 0;
   line-height: inherit;
+  color: var(--text-primary);
 `
 
 const PlusIcon = styled(Icon)`

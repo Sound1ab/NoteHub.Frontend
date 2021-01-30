@@ -27,6 +27,8 @@ export const Button = forwardRef(
 )
 
 const StyledButton = styled.button<Pick<IButton, 'isLoading' | 'isDisabled'>>`
+  border: none;
+  background-color: var(--background-secondary);
   position: relative;
   display: flex;
   align-items: center;

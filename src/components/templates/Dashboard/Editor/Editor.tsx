@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
 
 import { useFs } from '../../../../hooks/fs/useFs'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
 import { isFile } from '../../../../utils/isFile'
 import { Fade } from '../../../animation/Mount/Fade'
-import { CodeMirror } from '../CodeMirror/CodeMirror'
-import { ContextMenu } from '../CodeMirror/ContextMenu/ContextMenu'
-import { Widget } from '../CodeMirror/Widget/Widget'
 import { DraftManager } from '../DraftManager/DraftManager'
 import { MarkdownEditorSkeleton } from './MarkdownEditorSkeleton'
+import { Slate } from './Slate/Slate'
 
 export function Editor() {
   const [fileContent, setFileContent] = useState('')
@@ -28,17 +27,19 @@ export function Editor() {
   }, [activePath, readFile])
 
   return (
-    <>
+    <Wrapper>
       <Fade show={loading}>
         <MarkdownEditorSkeleton />
       </Fade>
       <Fade show={!loading}>
-        <CodeMirror fileContent={fileContent}>
-          <Widget />
-          <ContextMenu />
+        <Slate fileContent={fileContent}>
           <DraftManager />
-        </CodeMirror>
+        </Slate>
       </Fade>
-    </>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  background-color: var(--background-primary);
+`

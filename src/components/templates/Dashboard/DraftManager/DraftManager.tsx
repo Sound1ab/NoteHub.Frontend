@@ -2,7 +2,6 @@ import { ReadCommitResult } from 'isomorphic-git'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { useEditor } from '../../../../hooks/codeMirror/useEditor'
 import { useFs } from '../../../../hooks/fs/useFs'
 import { useGit } from '../../../../hooks/git/useGit'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
@@ -14,7 +13,6 @@ import { Button } from '../../../atoms/Button/Button'
 import { Icon } from '../../../atoms/Icon/Icon'
 
 export function DraftManager() {
-  const { editor } = useEditor()
   const [unstagedChanges, setUnstagedChanges] = useUnstagedChanges()
   const [committedChanges, setCommittedChanges] = useCommittedChanges()
   const [
@@ -51,9 +49,9 @@ export function DraftManager() {
     setCommittedChanges(await getCommittedChanges())
 
     // May unstage adding a new file so content could be undefined
-    if (content) {
-      editor?.setValue(content)
-    }
+    // if (content) {
+    //   editor?.setValue(content)
+    // }
 
     setIsDiscarding(false)
   }
@@ -168,11 +166,11 @@ const DiscardButton = styled(StyledButton)`
 `
 
 const CommitButton = styled(StyledButton)`
-  background-color: var(--feedback-info);
+  background-color: var(--feedback-info) !important;
 `
 
 const PushButton = styled(StyledButton)`
-  background-color: var(--accent-primary);
+  background-color: var(--accent-primary) !important;
 `
 
 const Heading = styled.h6`

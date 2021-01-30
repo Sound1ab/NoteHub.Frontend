@@ -8,6 +8,7 @@ export const createTypography = (isLargeText: boolean) => {
         styles: ['600', '700'],
       },
     ],
+    includeNormalize: true,
     bodyFontFamily: [
       'Nunito',
       '-apple-system',
@@ -85,12 +86,14 @@ export const createTypography = (isLargeText: boolean) => {
         background: 'var(--accent-primary)',
       },
       blockquote: {
-        padding: `0 ${rhythm(1)}`,
-        borderLeft: `${rhythm(0.2)} solid var(--text-secondary)`,
-        margin: `0 0 ${rhythm(1)} 0`,
-      },
-      span: {
         color: 'var(--text-primary)',
+        padding: `0 ${rhythm(1)}`,
+        borderLeft: `${rhythm(0.2)} solid var(--accent-primary)`,
+        margin: `0 0 ${rhythm(1)} 0`,
+        lineHeight: 1.5,
+      },
+      a: {
+        color: 'var(--accent-primary)',
       },
     }),
   })

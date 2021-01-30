@@ -1,7 +1,6 @@
-import '../theme/ColorPalette.css'
-
 import React from 'react'
 import { GoogleFont, TypographyStyle } from 'react-typography'
+import { RecoilRoot } from 'recoil'
 import Typography from 'typography'
 
 import { Toast } from './atoms/Toast/Toast'
@@ -10,7 +9,6 @@ import { IconProvider } from './providers/IconProvider/IconProvider'
 import { ThemeProvider } from './providers/ThemeProvider/ThemeProvider'
 import { GlobalStyle } from './utility/GlobalStyle/GlobalStyle'
 import { Router } from './utility/Router/Router'
-import { RecoilRoot } from 'recoil'
 
 export function App() {
   return (

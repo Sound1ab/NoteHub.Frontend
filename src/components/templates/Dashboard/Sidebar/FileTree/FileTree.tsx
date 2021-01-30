@@ -11,7 +11,7 @@ import { useRepo } from '../../../../../hooks/recoil/useRepo'
 import { useSearch } from '../../../../../hooks/recoil/useSearch'
 import { createNodes } from '../../../../../utils/createNodes'
 import { Fade } from '../../../../animation/Mount/Fade'
-import { List } from '../../../../atoms/List/List'
+import { UnstyledList } from '../../../../atoms/UnstyledList/UnstyledList'
 import { FileInput } from '../FileInput/FileInput'
 import { SearchResults } from './SearchResults/SearchResults'
 import { Tree } from './Tree/Tree'
@@ -67,9 +67,9 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
             <>
               {files &&
                 createNodes(files, openFolders).map((node) => (
-                  <List key={node.name}>
+                  <UnstyledList key={node.name}>
                     <Tree key={node.name} node={node} />
-                  </List>
+                  </UnstyledList>
                 ))}
               {isNewFileOpen && (
                 <FileInput
