@@ -66,7 +66,7 @@ export function withShortcuts(editor: Editor) {
       // Get the Point of the start of the shortcut node
       const start = Editor.start(editor, path)
 
-      // Get the range from the cusor to the start of the node
+      // Get the range from the cursor to the start of the node
       const range = { anchor, focus: start }
 
       // Use range to extract the shortcut text

@@ -2,19 +2,6 @@ import Prism, { Token } from 'prismjs'
 import { Node, NodeEntry, Range, Text } from 'slate'
 
 export function decorateCodeBlock([node, path]: NodeEntry): Range[] {
-  const getLength = (token: string | Token) => {
-    if (typeof token === 'string') {
-      return token.length
-    } else if (typeof token.content === 'string') {
-      return token.content.length
-    } else {
-      return (token.content as any).reduce(
-        (l: number, t: string | Token) => l + getLength(t),
-        0
-      )
-    }
-  }
-
   const ranges: Range[] = []
 
   let text = ''
@@ -50,4 +37,17 @@ export function decorateCodeBlock([node, path]: NodeEntry): Range[] {
   }
 
   return ranges
+}
+
+const getLength = (token: string | Token) => {
+  if (typeof token === 'string') {
+    return token.length
+  } else if (typeof token.content === 'string') {
+    return token.content.length
+  } else {
+    return (token.content as any).reduce(
+      (l: number, t: string | Token) => l + getLength(t),
+      0
+    )
+  }
 }
