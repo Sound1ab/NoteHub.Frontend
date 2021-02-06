@@ -52,14 +52,26 @@ export function withShortcuts(editor: Editor) {
     const { selection } = editor
 
     if (text === ' ' && selection && Range.isCollapsed(selection)) {
+      // Get the position of the cursor
       const { anchor } = selection
+
+      // Get nodes for the entire block
       const block = Editor.above(editor, {
         match: (n) => Editor.isBlock(editor, n),
       })
+
+      // Get the path of the node
       const path = block ? block[1] : []
+
+      // Get the Point of the start of the shortcut node
       const start = Editor.start(editor, path)
+
+      // Get the range from the cusor to the start of the node
       const range = { anchor, focus: start }
+
+      // Use range to extract the shortcut text
       const beforeText = Editor.string(editor, range)
+
       const element = SHORTCUTS[beforeText]
 
       if (element) {

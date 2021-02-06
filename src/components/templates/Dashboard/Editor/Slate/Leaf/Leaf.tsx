@@ -11,12 +11,22 @@ export function Leaf({ attributes, children, leaf }: RenderLeafProps) {
     children = <em>{children}</em>
   }
 
+  if (leaf.inlineCode) {
+    children = <Code>{children}</Code>
+  }
+
   return (
     <Node {...attributes} leaf={leaf}>
       {children}
     </Node>
   )
 }
+
+const Code = styled.code`
+  padding: ${({ theme }) => theme.spacing.xxs};
+  background-color: var(--background-secondary);
+  font-family: Consolas, Menlo, Monaco, Courier, monospace;
+`
 
 const Node = styled.span<{ leaf: RenderLeafProps['leaf'] }>`
   color: inherit;

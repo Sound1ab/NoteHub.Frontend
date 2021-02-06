@@ -8,7 +8,15 @@ import React, {
 import parse from 'remark-parse'
 import { remarkToSlate, slateToRemark } from 'remark-slate-transformer'
 import stringify from 'remark-stringify'
-import { Editor, Node, NodeEntry, Transforms, createEditor } from 'slate'
+import {
+  Editor,
+  Node,
+  NodeEntry,
+  Point,
+  Range,
+  Transforms,
+  createEditor,
+} from 'slate'
 import { Editable, Slate as SlateReact, withReact } from 'slate-react'
 import styled from 'styled-components'
 import unified from 'unified'
@@ -23,6 +31,7 @@ import { Leaf } from './Leaf/Leaf'
 import { withShortcuts } from './plugins/withShortcuts'
 import { decorateCodeBlock } from './utils/decorateCodeBlock'
 import { insertLink } from './utils/insertLink'
+import { isInlineActive } from './utils/isInlineActive'
 import { isTypeActive } from './utils/isTypeActive'
 import { mdastAppendTextToEmptyListItem } from './utils/mdastAppendTextToEmptyListItem'
 import { mdastFlattenBlockQuote } from './utils/mdastFlattenBlockQuote'
@@ -103,6 +112,56 @@ export function Slate({ children, fileContent }: ISlate) {
   )
 
   function handleKeyDown(event: React.KeyboardEvent) {
+    if (event.key === 'ArrowRight') {
+      if (isInlineActive(editor, 'inlineCode')) {
+        const { selection } = editor
+
+        if (!selection || !Range.isCollapsed(selection)) return
+
+        // Selection is the position of the cursor
+        // Focus and anchor are both Points
+        // Point offset = position of cursor within leaf
+        // Point path[0] = line of the block within editor
+        // Point path[1] = leaf position within the block
+        const {
+          focus,
+          anchor: { path, offset },
+        } = selection
+
+        // Get end point of the leaf at path position
+        const end = Editor.end(editor, path)
+
+        // Detect if current selection position is at the end of the leaf
+        const cursorIsAtEndOfInlineCode = Point.isAfter(
+          { path, offset },
+          { ...end, offset: end.offset - 1 }
+        )
+
+        if (!cursorIsAtEndOfInlineCode) return
+
+        const text = { text: ' ' }
+
+        // Insert new text node after selection leaf
+        Transforms.insertNodes(editor, text, { at: end })
+
+        // To update cursor position we need to know the line and leaf position
+        const {
+          path: [selectionLine, selectionLeafPosition],
+        } = focus
+
+        // New position will be on the same line but after the current leaf
+        const textPath = [selectionLine, selectionLeafPosition + 1]
+
+        // Place cursor at the start of the new leaf
+        const point: Point = { offset: 0, path: textPath }
+
+        Transforms.setSelection(editor, {
+          focus: point,
+          anchor: point,
+        })
+      }
+    }
+
     if (event.metaKey) {
       switch (event.key) {
         case 'Enter': {
@@ -133,9 +192,9 @@ export function Slate({ children, fileContent }: ISlate) {
         }
         case 'l': {
           event.preventDefault()
-          const selection = editor.selection
+          const { selection } = editor
 
-          if (!selection) return
+          if (!selection || !Range.isCollapsed(selection)) return
 
           const url = 'http://google.com'
 

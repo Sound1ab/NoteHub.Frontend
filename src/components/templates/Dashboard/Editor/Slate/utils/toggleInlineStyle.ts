@@ -4,7 +4,7 @@ import { isInlineActive } from './isInlineActive'
 
 export function toggleInlineStyle(
   editor: Editor,
-  inlineStyle: 'bold' | 'code' | 'italic'
+  inlineStyle: 'bold' | 'inlineCode' | 'italic'
 ) {
   const isActive = isInlineActive(editor, inlineStyle)
   Transforms.setNodes(
