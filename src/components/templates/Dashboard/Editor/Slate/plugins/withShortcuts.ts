@@ -37,6 +37,12 @@ const SHORTCUTS: Record<string, { type: string; depth?: number }> = {
     type: 'heading',
     depth: 6,
   },
+  hr: {
+    type: 'thematicBreak',
+  },
+  '```': {
+    type: 'code',
+  },
 }
 
 export function withShortcuts(editor: Editor) {
@@ -71,6 +77,14 @@ export function withShortcuts(editor: Editor) {
               Element.isElement(n) &&
               n.type === 'listItem',
           })
+        }
+
+        // if (element.type === 'code_block') {
+        //   const
+        // }
+
+        if (element.type === 'thematicBreak') {
+          Editor.insertBreak(editor)
         }
 
         return

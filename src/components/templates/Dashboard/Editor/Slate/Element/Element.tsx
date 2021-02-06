@@ -3,7 +3,9 @@ import { Editor } from 'slate'
 import { RenderElementProps } from 'slate-react/dist/components/editable'
 
 import { BlockQuote } from '../../../../../atoms/BlockQuote/BlockQuote'
+import { CodeBlock } from '../../../../../atoms/CodeBlock/CodeBlock'
 import { Heading } from '../../../../../atoms/Heading/Heading'
+import { Hr } from '../../../../../atoms/Hr/Hr'
 import { Link } from '../../../../../atoms/Link/Link'
 import { List } from '../../../../../atoms/List/List'
 import { ListItem } from '../../../../../atoms/ListItem/ListItem'
@@ -30,6 +32,8 @@ export function Element(props: IElement) {
         {props.children}
       </Link>
     ),
+    thematicBreak: <Hr {...props} />,
+    code: <CodeBlock {...props}>{props.children}</CodeBlock>,
     // softbreak: () => <span {...attributes}> {children}</span>,
     // linebreak: () => (
     //   <span {...attributes}>
@@ -40,9 +44,7 @@ export function Element(props: IElement) {
     //   </span>
     // ),
     // html_block: () => <pre {...attributes}>{children}</pre>,
-    // code_block: () => <pre {...attributes}>{children}</pre>,
     // image: () => <ImageElement {...props} />,
-    // horizontal_rule: () => <hr />,
     // html_inline: () => (
     //   <span {...attributes}>
     //     {(element.data as any).content}

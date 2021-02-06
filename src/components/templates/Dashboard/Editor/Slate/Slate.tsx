@@ -8,7 +8,7 @@ import React, {
 import parse from 'remark-parse'
 import { remarkToSlate, slateToRemark } from 'remark-slate-transformer'
 import stringify from 'remark-stringify'
-import { Editor, Node, createEditor } from 'slate'
+import { Editor, Node, NodeEntry, Transforms, createEditor } from 'slate'
 import { Editable, Slate as SlateReact, withReact } from 'slate-react'
 import styled from 'styled-components'
 import unified from 'unified'
@@ -21,7 +21,10 @@ import { debounce } from '../../../../../utils/debounce'
 import { Element } from './Element/Element'
 import { Leaf } from './Leaf/Leaf'
 import { withShortcuts } from './plugins/withShortcuts'
+import { decorateCodeBlock } from './utils/decorateCodeBlock'
 import { insertLink } from './utils/insertLink'
+import { isTypeActive } from './utils/isTypeActive'
+import { mdastAppendTextToEmptyListItem } from './utils/mdastAppendTextToEmptyListItem'
 import { mdastFlattenBlockQuote } from './utils/mdastFlattenBlockQuote'
 import { flattenListItemParagraphs } from './utils/mdastFlattenListItem'
 import { toggleInlineStyle } from './utils/toggleInlineStyle'
@@ -55,12 +58,15 @@ export function Slate({ children, fileContent }: ISlate) {
   useEffect(() => {
     const processor = unified()
       .use(parse)
+      .use(remarkToSlate)
       .use(flattenListItemParagraphs)
       .use(mdastFlattenBlockQuote)
-      .use(remarkToSlate)
+      .use(mdastAppendTextToEmptyListItem)
 
     processor.process(fileContent, (err, file) => {
       if (err) throw err
+
+      console.log('here', file.result)
 
       setValue(file.result as any)
     })
@@ -99,41 +105,64 @@ export function Slate({ children, fileContent }: ISlate) {
   )
 
   function handleKeyDown(event: React.KeyboardEvent) {
-    if (!event.ctrlKey) {
-      return
+    if (event.shiftKey) {
+      switch (event.key) {
+        case 'Enter': {
+          if (
+            !isTypeActive(editor, 'code') &&
+            !isTypeActive(editor, 'blockquote')
+          )
+            return
+
+          event.preventDefault()
+          Transforms.insertText(editor, '\n')
+          break
+        }
+      }
     }
 
-    switch (event.key) {
-      case 'b': {
-        event.preventDefault()
-        toggleInlineStyle(editor, 'bold')
-        break
-      }
-      case 'i': {
-        event.preventDefault()
-        toggleInlineStyle(editor, 'italic')
-        break
-      }
-      case 'l': {
-        event.preventDefault()
-        const selection = editor.selection
+    if (event.ctrlKey) {
+      switch (event.key) {
+        case 'b': {
+          event.preventDefault()
+          toggleInlineStyle(editor, 'bold')
+          break
+        }
+        case 'i': {
+          event.preventDefault()
+          toggleInlineStyle(editor, 'italic')
+          break
+        }
+        case 'l': {
+          event.preventDefault()
+          const selection = editor.selection
 
-        if (!selection) return
+          if (!selection) return
 
-        const url = 'http://google.com'
+          const url = 'http://google.com'
 
-        const text = Editor.string(editor, selection)
+          const text = Editor.string(editor, selection)
 
-        insertLink(editor, url, text)
-        break
+          insertLink(editor, url, text)
+          break
+        }
       }
     }
   }
+
+  const decorate = useCallback(([node, path]: NodeEntry) => {
+    if (node?.type === 'code') {
+      return decorateCodeBlock([node, path])
+    }
+
+    return []
+  }, [])
 
   return (
     <Wrapper>
       <SlateReact editor={editor} value={value} onChange={handleOnChange}>
         <StyledEditable
+          decorate={decorate}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           onKeyDown={handleKeyDown}
