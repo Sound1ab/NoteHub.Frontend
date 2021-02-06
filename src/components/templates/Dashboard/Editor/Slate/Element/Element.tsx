@@ -32,7 +32,7 @@ export function Element(props: IElement) {
         {props.children}
       </Link>
     ),
-    thematicBreak: <Hr {...props} />,
+    thematicBreak: <Hr {...props}>{props.children}</Hr>,
     code: <CodeBlock {...props}>{props.children}</CodeBlock>,
     // softbreak: () => <span {...attributes}> {children}</span>,
     // linebreak: () => (

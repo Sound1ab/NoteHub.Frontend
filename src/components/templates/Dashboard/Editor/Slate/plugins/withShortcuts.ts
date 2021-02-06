@@ -92,7 +92,10 @@ export function withShortcuts(editor: Editor) {
         }
 
         if (element.type === 'thematicBreak') {
-          Editor.insertBreak(editor)
+          Transforms.insertNodes(editor, {
+            type: 'paragraph',
+            children: [{ text: '' }],
+          })
         }
 
         return

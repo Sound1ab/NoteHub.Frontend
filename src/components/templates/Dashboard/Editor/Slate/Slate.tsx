@@ -29,6 +29,7 @@ import { isTypeActive } from './utils/isTypeActive'
 import { mdastAppendTextToEmptyListItem } from './utils/mdastAppendTextToEmptyListItem'
 import { mdastFlattenBlockQuote } from './utils/mdastFlattenBlockQuote'
 import { flattenListItemParagraphs } from './utils/mdastFlattenListItem'
+import { mdastHr } from './utils/mdastHr'
 import { toggleInlineStyle } from './utils/toggleInlineStyle'
 
 interface ISlate {
@@ -60,6 +61,7 @@ export function Slate({ children, fileContent }: ISlate) {
   useEffect(() => {
     const processor = unified()
       .use(parse)
+      .use(mdastHr)
       .use(remarkToSlate)
       .use(flattenListItemParagraphs)
       .use(mdastFlattenBlockQuote)
