@@ -79,10 +79,6 @@ export function withShortcuts(editor: Editor) {
           })
         }
 
-        // if (element.type === 'code_block') {
-        //   const
-        // }
-
         if (element.type === 'thematicBreak') {
           Editor.insertBreak(editor)
         }

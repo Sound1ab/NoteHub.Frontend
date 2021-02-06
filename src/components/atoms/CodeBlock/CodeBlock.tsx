@@ -18,4 +18,5 @@ const Pre = styled.pre`
 
 const Code = styled.code`
   font-family: Consolas, Menlo, Monaco, Courier, monospace;
+  color: var(--text-primary);
 `

@@ -66,8 +66,6 @@ export function Slate({ children, fileContent }: ISlate) {
     processor.process(fileContent, (err, file) => {
       if (err) throw err
 
-      console.log('here', file.result)
-
       setValue(file.result as any)
     })
   }, [fileContent, editor])
@@ -105,7 +103,7 @@ export function Slate({ children, fileContent }: ISlate) {
   )
 
   function handleKeyDown(event: React.KeyboardEvent) {
-    if (event.shiftKey) {
+    if (event.metaKey) {
       switch (event.key) {
         case 'Enter': {
           if (
@@ -150,6 +148,28 @@ export function Slate({ children, fileContent }: ISlate) {
     }
   }
 
+  function handleClick(event: React.MouseEvent) {
+    if (event.metaKey) {
+      if (!isTypeActive(editor, 'link')) return
+
+      const range = editor.selection
+
+      if (!range) return
+
+      const {
+        anchor: { path },
+      } = range
+
+      // Getting the parent of a text node
+      const node = Node.parent(editor, path)
+
+      Object.assign(document.createElement('a'), {
+        target: '_blank',
+        href: node.url,
+      }).click()
+    }
+  }
+
   const decorate = useCallback(([node, path]: NodeEntry) => {
     if (node?.type === 'code') {
       return decorateCodeBlock([node, path])
@@ -166,6 +186,7 @@ export function Slate({ children, fileContent }: ISlate) {
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           onKeyDown={handleKeyDown}
+          onClick={handleClick}
         />
         {children}
       </SlateReact>

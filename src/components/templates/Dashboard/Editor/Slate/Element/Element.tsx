@@ -14,7 +14,7 @@ import { Paragraph } from '../../../../../atoms/Paragraph/Paragraph'
 interface IElement extends RenderElementProps {
   editor: Editor
   element: {
-    link?: string
+    url?: string
     children: []
     type: string
   }
@@ -28,7 +28,7 @@ export function Element(props: IElement) {
     listItem: <ListItem {...props}>{props.children}</ListItem>,
     blockquote: <BlockQuote {...props}>{props.children}</BlockQuote>,
     link: (
-      <Link {...props} link={props.element.link}>
+      <Link {...props} link={props.element.url}>
         {props.children}
       </Link>
     ),

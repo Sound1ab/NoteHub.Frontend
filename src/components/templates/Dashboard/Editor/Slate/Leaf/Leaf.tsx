@@ -19,7 +19,7 @@ export function Leaf({ attributes, children, leaf }: RenderLeafProps) {
 }
 
 const Node = styled.span<{ leaf: RenderLeafProps['leaf'] }>`
-  color: var(--text-primary);
+  color: inherit;
   ${({ leaf }) =>
     leaf['function-variable'] &&
     css`
