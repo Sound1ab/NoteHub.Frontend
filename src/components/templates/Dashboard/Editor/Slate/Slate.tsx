@@ -5,10 +5,12 @@ import React, {
   useMemo,
   useState,
 } from 'react'
+import gfm from 'remark-gfm'
 import parse from 'remark-parse'
 import { remarkToSlate, slateToRemark } from 'remark-slate-transformer'
 import stringify from 'remark-stringify'
 import { Editor, Node, NodeEntry, Range, Transforms, createEditor } from 'slate'
+import { withHistory } from 'slate-history'
 import { Editable, Slate as SlateReact, withReact } from 'slate-react'
 import styled from 'styled-components'
 import unified from 'unified'
@@ -21,16 +23,17 @@ import { debounce } from '../../../../../utils/debounce'
 import { Element } from './Element/Element'
 import { Leaf } from './Leaf/Leaf'
 import { withShortcuts } from './plugins/withShortcuts'
-import { decorateCodeBlock } from './utils/decorateCodeBlock'
-import { inlineCodeCursorBehaviour } from './utils/inlineCodeCursorBehaviour'
-import { insertLink } from './utils/insertLink'
-import { isInlineActive } from './utils/isInlineActive'
-import { isTypeActive } from './utils/isTypeActive'
-import { mdastAppendTextToEmptyListItem } from './utils/mdastAppendTextToEmptyListItem'
-import { mdastFlattenBlockQuote } from './utils/mdastFlattenBlockQuote'
-import { flattenListItemParagraphs } from './utils/mdastFlattenListItem'
-import { mdastHr } from './utils/mdastHr'
-import { toggleInlineStyle } from './utils/toggleInlineStyle'
+import { withTables } from './plugins/withTables'
+import { inlineCodeCursorBehaviour } from './utils/behaviours/inlineCodeCursorBehaviour'
+import { insertLink } from './utils/commands/insertLink'
+import { toggleInlineStyle } from './utils/commands/toggleInlineStyle'
+import { decorateCodeBlock } from './utils/decorators/decorateCodeBlock'
+import { isInlineActive } from './utils/helpers/isInlineActive'
+import { isTypeActive } from './utils/helpers/isTypeActive'
+import { mdastAppendTextToEmptyListItem } from './utils/mdast/mdastAppendTextToEmptyListItem'
+import { mdastFlattenBlockQuote } from './utils/mdast/mdastFlattenBlockQuote'
+import { flattenListItemParagraphs } from './utils/mdast/mdastFlattenListItem'
+import { mdastHr } from './utils/mdast/mdastHr'
 
 interface ISlate {
   children: ReactNode
@@ -38,7 +41,10 @@ interface ISlate {
 }
 
 export function Slate({ children, fileContent }: ISlate) {
-  const editor = useMemo(() => withReact(withShortcuts(createEditor())), [])
+  const editor = useMemo(
+    () => withReact(withHistory(withTables(withShortcuts(createEditor())))),
+    []
+  )
   const [value, setValue] = useState<Node[]>([])
 
   const [, setUnstagedChanges] = useUnstagedChanges()
@@ -61,8 +67,9 @@ export function Slate({ children, fileContent }: ISlate) {
   useEffect(() => {
     const processor = unified()
       .use(parse)
-      .use(mdastHr)
+      .use(gfm)
       .use(remarkToSlate)
+      .use(mdastHr)
       .use(flattenListItemParagraphs)
       .use(mdastFlattenBlockQuote)
       .use(mdastAppendTextToEmptyListItem)
@@ -76,7 +83,7 @@ export function Slate({ children, fileContent }: ISlate) {
 
   const handleOnChange = useCallback(
     (value: Node[]) => {
-      const processor = unified().use(slateToRemark).use(stringify)
+      const processor = unified().use(slateToRemark).use(gfm).use(stringify)
 
       const ast = processor.runSync({
         type: 'root',
@@ -106,84 +113,90 @@ export function Slate({ children, fileContent }: ISlate) {
     []
   )
 
-  function handleKeyDown(event: React.KeyboardEvent) {
-    if (event.key === 'ArrowRight') {
-      if (isInlineActive(editor, 'inlineCode')) {
-        inlineCodeCursorBehaviour(editor)
-      }
-    }
-
-    if (event.metaKey) {
-      switch (event.key) {
-        case 'Enter': {
-          if (
-            !isTypeActive(editor, 'code') &&
-            !isTypeActive(editor, 'blockquote')
-          )
-            return
-
-          event.preventDefault()
-          Transforms.insertText(editor, '\n')
-          break
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'ArrowRight') {
+        if (isInlineActive(editor, 'inlineCode')) {
+          inlineCodeCursorBehaviour(editor)
         }
       }
-    }
 
-    if (event.ctrlKey) {
-      switch (event.key) {
-        case 'b': {
-          event.preventDefault()
-          toggleInlineStyle(editor, 'bold')
-          break
-        }
-        case 'i': {
-          event.preventDefault()
-          toggleInlineStyle(editor, 'italic')
-          break
-        }
-        case 'l': {
-          event.preventDefault()
-          const { selection } = editor
+      if (event.metaKey) {
+        switch (event.key) {
+          case 'Enter': {
+            if (
+              !isTypeActive(editor, 'code') &&
+              !isTypeActive(editor, 'blockquote')
+            )
+              return
 
-          if (!selection || !Range.isCollapsed(selection)) return
-
-          const url = 'http://google.com'
-
-          const text = Editor.string(editor, selection)
-
-          insertLink(editor, url, text)
-          break
-        }
-        case 'c': {
-          event.preventDefault()
-          toggleInlineStyle(editor, 'inlineCode')
-          break
+            event.preventDefault()
+            Transforms.insertText(editor, '\n')
+            break
+          }
         }
       }
-    }
-  }
 
-  function handleClick(event: React.MouseEvent) {
-    if (event.metaKey) {
-      if (!isTypeActive(editor, 'link')) return
+      if (event.ctrlKey) {
+        switch (event.key) {
+          case 'b': {
+            event.preventDefault()
+            toggleInlineStyle(editor, 'bold')
+            break
+          }
+          case 'i': {
+            event.preventDefault()
+            toggleInlineStyle(editor, 'italic')
+            break
+          }
+          case 'l': {
+            event.preventDefault()
+            const { selection } = editor
 
-      const range = editor.selection
+            if (!selection || !Range.isCollapsed(selection)) return
 
-      if (!range) return
+            const url = 'http://google.com'
 
-      const {
-        anchor: { path },
-      } = range
+            const text = Editor.string(editor, selection)
 
-      // Getting the parent of a text node
-      const node = Node.parent(editor, path)
+            insertLink(editor, url, text)
+            break
+          }
+          case 'c': {
+            event.preventDefault()
+            toggleInlineStyle(editor, 'inlineCode')
+            break
+          }
+        }
+      }
+    },
+    [editor]
+  )
 
-      Object.assign(document.createElement('a'), {
-        target: '_blank',
-        href: node.url,
-      }).click()
-    }
-  }
+  const handleClick = useCallback(
+    (event: React.MouseEvent) => {
+      if (event.metaKey) {
+        if (!isTypeActive(editor, 'link')) return
+
+        const range = editor.selection
+
+        if (!range) return
+
+        const {
+          anchor: { path },
+        } = range
+
+        // Getting the parent of a text node
+        const node = Node.parent(editor, path)
+
+        Object.assign(document.createElement('a'), {
+          target: '_blank',
+          href: node.url,
+        }).click()
+      }
+    },
+    [editor]
+  )
 
   const decorate = useCallback(([node, path]: NodeEntry) => {
     if (node?.type === 'code') {

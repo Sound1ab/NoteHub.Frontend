@@ -1,6 +1,6 @@
 import { Editor, Text, Transforms } from 'slate'
 
-import { isInlineActive } from './isInlineActive'
+import { isInlineActive } from '../helpers/isInlineActive'
 
 export function toggleInlineStyle(
   editor: Editor,

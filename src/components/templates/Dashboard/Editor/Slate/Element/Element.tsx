@@ -10,6 +10,9 @@ import { Link } from '../../../../../atoms/Link/Link'
 import { List } from '../../../../../atoms/List/List'
 import { ListItem } from '../../../../../atoms/ListItem/ListItem'
 import { Paragraph } from '../../../../../atoms/Paragraph/Paragraph'
+import { Table } from '../../../../../atoms/Table/Table'
+import { TableCell } from '../../../../../atoms/Table/TableCell'
+import { TableRow } from '../../../../../atoms/Table/TableRow'
 
 interface IElement extends RenderElementProps {
   editor: Editor
@@ -34,6 +37,9 @@ export function Element(props: IElement) {
     ),
     thematicBreak: <Hr {...props}>{props.children}</Hr>,
     code: <CodeBlock {...props}>{props.children}</CodeBlock>,
+    table: <Table {...props}>{props.children}</Table>,
+    tableRow: <TableRow {...props}>{props.children}</TableRow>,
+    tableCell: <TableCell {...props}>{props.children}</TableCell>,
     // softbreak: () => <span {...attributes}> {children}</span>,
     // linebreak: () => (
     //   <span {...attributes}>

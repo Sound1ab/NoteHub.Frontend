@@ -116,6 +116,7 @@
     "retext-spell": "^4.0.0",
     "retext-stringify": "^2.0.4",
     "slate": "^0.59.0",
+    "slate-history": "^0.59.0",
     "slate-react": "^0.59.0",
     "styled-components": "^5.1.1",
     "typography": "^0.16.19",
