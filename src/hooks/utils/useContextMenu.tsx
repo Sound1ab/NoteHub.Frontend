@@ -3,7 +3,7 @@ import React, { ReactNode, RefObject, useLayoutEffect, useState } from 'react'
 import { useModalToggle } from './useModalToggle'
 
 export function useContextMenu(target?: RefObject<HTMLElement> | null) {
-  const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>()
+  const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>({})
   const [{ top, left }, setClickPosition] = useState({
     top: '-9999px',
     left: '-9999px',
@@ -69,5 +69,11 @@ export function useContextMenu(target?: RefObject<HTMLElement> | null) {
     </Portal>
   )
 
-  return { isOpen, Portal: PartiallyAppliedPortal, ref, setOpen }
+  return {
+    isOpen,
+    Portal: PartiallyAppliedPortal,
+    ref,
+    setOpen,
+    position: { left, top },
+  }
 }

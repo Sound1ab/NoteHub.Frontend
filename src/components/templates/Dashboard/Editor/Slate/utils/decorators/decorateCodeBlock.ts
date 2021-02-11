@@ -39,15 +39,21 @@ export function decorateCodeBlock([node, path]: NodeEntry): Range[] {
   return ranges
 }
 
-const getLength = (token: string | Token) => {
+const getLength = (token: string | Token): number => {
   if (typeof token === 'string') {
     return token.length
-  } else if (typeof token.content === 'string') {
+  }
+
+  if (typeof token.content === 'string') {
     return token.content.length
-  } else {
-    return (token.content as any).reduce(
+  }
+
+  if (Array.isArray(token.content)) {
+    return token.content.reduce(
       (l: number, t: string | Token) => l + getLength(t),
       0
     )
   }
+
+  return getLength(token.content)
 }

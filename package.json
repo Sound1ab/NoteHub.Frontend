@@ -106,7 +106,7 @@
     "remark-mdx-remove-imports": "^1.6.19",
     "remark-parse": "^9.0.0",
     "remark-retext": "^4.0.0",
-    "remark-slate-transformer": "^0.2.5",
+    "remark-slate-transformer": "Sound1ab/remark-slate-transformer",
     "remark-stringify": "^9.0.1",
     "remark-toc": "^7.0.0",
     "retext-equality": "^5.5.0",

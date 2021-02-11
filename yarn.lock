@@ -13768,10 +13768,9 @@ remark-retext@^4.0.0:
   dependencies:
     mdast-util-to-nlcst "^4.0.0"
 
-remark-slate-transformer@^0.2.5:
+remark-slate-transformer@Sound1ab/remark-slate-transformer:
   version "0.2.5"
-  resolved "https://registry.yarnpkg.com/remark-slate-transformer/-/remark-slate-transformer-0.2.5.tgz#146188c74bc197ca33e1c82ecb08a09f43de63c0"
-  integrity sha512-Ukwx1r2SVN7eq/hAm+imwqyG7Qd8MSjS++vQLrUBn88mpmOBbmGmfQztX7Z/m+o2CnyvcbhXJOYkItjAmQ5nxA==
+  resolved "https://codeload.github.com/Sound1ab/remark-slate-transformer/tar.gz/50c6de044a5a6c415de1d8e76d0cbdc743c47da2"
 
 remark-squeeze-paragraphs@4.0.0:
   version "4.0.0"

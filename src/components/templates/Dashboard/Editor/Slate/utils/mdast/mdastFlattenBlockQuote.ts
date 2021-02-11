@@ -7,9 +7,9 @@ interface INode extends Node {
 }
 
 export function mdastFlattenBlockQuote() {
-  return (ast: any) => {
+  return (ast: never) => {
     // @ts-ignore
-    visit<INode>(ast, 'blockquote' as any, (blockquote) => {
+    visit<INode>(ast, 'blockquote' as never, (blockquote) => {
       if (
         blockquote.children.length === 1 &&
         blockquote.children[0].type === 'paragraph'

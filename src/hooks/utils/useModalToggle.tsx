@@ -4,9 +4,17 @@ import { IPortal } from '../../components/atoms/Portal/Portal'
 import { Portal } from '../../components/atoms/Portal/Portal'
 import { useTheme } from '../context/useTheme'
 
-export function useModalToggle<T extends HTMLElement>(
+interface IUseModalToggle {
   origin?: RefObject<HTMLElement>
-) {
+  placement?: 'top' | 'bottom'
+  hasTopPadding?: boolean
+}
+
+export function useModalToggle<T extends HTMLElement>({
+  origin,
+  placement = 'bottom',
+  hasTopPadding = true,
+}: IUseModalToggle) {
   const [isOpen, setOpen] = useState(false)
   const ref = useRef<T | null>(null)
   const theme = useTheme()
@@ -18,28 +26,30 @@ export function useModalToggle<T extends HTMLElement>(
   useEffect(() => {
     if (!isOpen || !origin?.current || !ref?.current) return
 
-    const { bottom, right } = origin.current.getBoundingClientRect()
+    const { bottom, right, top } = origin.current.getBoundingClientRect()
 
     const viewportWidth = window.innerWidth
     const viewportHeight = window.innerHeight
 
     const elementHeight = ref?.current?.scrollHeight
 
-    const yOffset = viewportHeight - (bottom + (elementHeight ?? 0))
+    const startingPosition = placement === 'bottom' ? bottom : top
+
+    const yOffset = viewportHeight - (startingPosition + (elementHeight ?? 0))
 
     const willDisplayOverYBoundary = yOffset < 0
 
     const positionFromRight = viewportWidth - right
 
     const elementYPosition = willDisplayOverYBoundary
-      ? bottom - Math.abs(yOffset)
-      : bottom
+      ? startingPosition - Math.abs(yOffset)
+      : startingPosition
 
     setClickPosition({
       top: `${elementYPosition}px`,
       right: `${positionFromRight}px`,
     })
-  }, [isOpen, setClickPosition, origin])
+  }, [isOpen, setClickPosition, origin, placement])
 
   const PartiallyAppliedPortal = ({
     children,
@@ -47,14 +57,7 @@ export function useModalToggle<T extends HTMLElement>(
     hasBackground,
     placementAroundContainer,
     style,
-  }: Pick<
-    IPortal,
-    | 'children'
-    | 'domNode'
-    | 'hasBackground'
-    | 'placementAroundContainer'
-    | 'style'
-  >) => (
+  }: Omit<IPortal, 'setOpen'>) => (
     <Portal
       ref={ref}
       setOpen={setOpen}
@@ -63,7 +66,11 @@ export function useModalToggle<T extends HTMLElement>(
       placementAroundContainer={placementAroundContainer}
       style={
         position
-          ? { ...position, paddingTop: theme.spacing.xxs, position: 'fixed' }
+          ? {
+              ...position,
+              ...(hasTopPadding && { paddingTop: theme.spacing.xxs }),
+              position: 'fixed',
+            }
           : style
       }
     >

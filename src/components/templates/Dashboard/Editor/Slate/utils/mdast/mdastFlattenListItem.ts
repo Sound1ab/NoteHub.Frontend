@@ -7,9 +7,9 @@ interface IListItemNode extends Node {
 }
 
 export function flattenListItemParagraphs() {
-  return (ast: any) => {
+  return (ast: never) => {
     // @ts-ignore
-    visit<IListItemNode>(ast, 'listItem' as any, (listItem) => {
+    visit<IListItemNode>(ast, 'listItem' as never, (listItem) => {
       if (
         listItem.children.length === 1 &&
         listItem.children[0].type === 'paragraph'

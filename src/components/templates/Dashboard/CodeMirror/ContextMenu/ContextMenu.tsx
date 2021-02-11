@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { RefObject } from 'react'
 
 import { useContextMenuDropdown } from '../../../../../hooks/dropdown/useContextMenuDropdown'
 import { useContextMenu } from '../../../../../hooks/utils/useContextMenu'
 import { Fade } from '../../../../animation/Mount/Fade'
 import { Dropdown } from '../../../../atoms/Dropdown/Dropdown'
-import { useEditor } from '../../../../../hooks/codeMirror/useEditor'
+import { Portal } from '../../../../atoms/Portal/Portal'
 
-export function ContextMenu() {
-  const { wrapperRef } = useEditor()
-  const { isOpen, Portal, ref, setOpen } = useContextMenu(wrapperRef)
+interface IContextMenu {
+  target?: RefObject<HTMLElement> | null
+}
+
+export function ContextMenu({ target }: IContextMenu) {
+  const { isOpen, ref, setOpen, position } = useContextMenu(target)
   const { items, Dropzone } = useContextMenuDropdown()
 
   if (!items) {
@@ -19,7 +22,11 @@ export function ContextMenu() {
     <>
       <Dropzone />
       <Fade show={isOpen}>
-        <Portal>
+        <Portal
+          ref={ref}
+          setOpen={() => setOpen(false)}
+          style={{ ...position, position: 'absolute' }}
+        >
           <Dropdown
             containerRef={ref}
             hasTriangle={false}

@@ -7,11 +7,11 @@ interface INode extends Node {
 }
 
 export function mdastHr() {
-  return (ast: any) => {
+  return (ast: never) => {
     // @ts-ignore
     visit<INode>(
       ast,
-      'thematicBreak' as any,
+      'thematicBreak' as never,
       // @ts-ignore
       (thematicBreak, index, parent) => {
         const numberOfChildren = parent?.children.length ?? 0

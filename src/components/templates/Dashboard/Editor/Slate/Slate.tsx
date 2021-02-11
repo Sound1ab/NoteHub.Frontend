@@ -34,6 +34,7 @@ import { mdastAppendTextToEmptyListItem } from './utils/mdast/mdastAppendTextToE
 import { mdastFlattenBlockQuote } from './utils/mdast/mdastFlattenBlockQuote'
 import { flattenListItemParagraphs } from './utils/mdast/mdastFlattenListItem'
 import { mdastHr } from './utils/mdast/mdastHr'
+import { mdastTableHeader } from './utils/mdast/mdastTableHeader'
 
 interface ISlate {
   children: ReactNode
@@ -52,6 +53,7 @@ export function Slate({ children, fileContent }: ISlate) {
   const [{ writeFile }] = useFs()
   const [{ getUnstagedChanges }] = useGit()
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const writeContentToFSAndCheckUnstagedChanges = useCallback(
     debounce(async (markdown: string) => {
       if (!activePath) return
@@ -68,16 +70,18 @@ export function Slate({ children, fileContent }: ISlate) {
     const processor = unified()
       .use(parse)
       .use(gfm)
-      .use(remarkToSlate)
       .use(mdastHr)
       .use(flattenListItemParagraphs)
       .use(mdastFlattenBlockQuote)
       .use(mdastAppendTextToEmptyListItem)
+      .use(mdastTableHeader)
+      .use(remarkToSlate)
 
     processor.process(fileContent, (err, file) => {
       if (err) throw err
 
-      setValue(file.result as any)
+      // @ts-ignore
+      setValue(file.result)
     })
   }, [fileContent, editor])
 

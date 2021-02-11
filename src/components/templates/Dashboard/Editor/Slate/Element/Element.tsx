@@ -18,6 +18,8 @@ interface IElement extends RenderElementProps {
   editor: Editor
   element: {
     url?: string
+    header?: boolean
+    footer?: boolean
     children: []
     type: string
   }
@@ -38,7 +40,15 @@ export function Element(props: IElement) {
     thematicBreak: <Hr {...props}>{props.children}</Hr>,
     code: <CodeBlock {...props}>{props.children}</CodeBlock>,
     table: <Table {...props}>{props.children}</Table>,
-    tableRow: <TableRow {...props}>{props.children}</TableRow>,
+    tableRow: (
+      <TableRow
+        {...props}
+        header={props.element.header}
+        footer={props.element.footer}
+      >
+        {props.children}
+      </TableRow>
+    ),
     tableCell: <TableCell {...props}>{props.children}</TableCell>,
     // softbreak: () => <span {...attributes}> {children}</span>,
     // linebreak: () => (
@@ -59,7 +69,7 @@ export function Element(props: IElement) {
     // ),
   }
 
-  const component = baseElementRenderer[props.element.type as any]
+  const component = baseElementRenderer[props.element.type]
 
   if (!component) {
     console.log(

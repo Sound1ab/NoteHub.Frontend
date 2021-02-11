@@ -2,11 +2,11 @@ import { ReadCommitResult } from 'isomorphic-git'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { useFs } from '../../../../hooks/fs/useFs'
+// import { useFs } from '../../../../hooks/fs/useFs'
 import { useGit } from '../../../../hooks/git/useGit'
-import { useActivePath } from '../../../../hooks/recoil/useActivePath'
+// import { useActivePath } from '../../../../hooks/recoil/useActivePath'
 import { useCommittedChanges } from '../../../../hooks/recoil/useCommittedChanges'
-import { useFiles } from '../../../../hooks/recoil/useFiles'
+// import { useFiles } from '../../../../hooks/recoil/useFiles'
 import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
 import { Fade } from '../../../animation/Mount/Fade'
 import { Button } from '../../../atoms/Button/Button'
@@ -28,9 +28,9 @@ export function DraftManager() {
       getCommits,
     },
   ] = useGit()
-  const [{ readFile, readDirRecursive }] = useFs()
-  const [activePath] = useActivePath()
-  const [, setFiles] = useFiles()
+  // const [{ readFile, readDirRecursive }] = useFs()
+  // const [activePath] = useActivePath()
+  // const [, setFiles] = useFiles()
   const [commits, setCommits] = useState<ReadCommitResult[]>([])
   const [loading, setLoading] = useState(false)
   const [isDiscarding, setIsDiscarding] = useState(false)
@@ -42,9 +42,9 @@ export function DraftManager() {
 
     setUnstagedChanges(await getUnstagedChanges())
 
-    setFiles(await readDirRecursive())
+    // setFiles(await readDirRecursive())
 
-    const content = await readFile(activePath)
+    // const content = await readFile(activePath)
 
     setCommittedChanges(await getCommittedChanges())
 

@@ -10,6 +10,7 @@ export interface IPortal {
   setOpen: Dispatch<SetStateAction<boolean>>
   domNode?: HTMLElement | null
   hasBackground?: boolean
+  hasClickLayer?: boolean
   placementAroundContainer?: 'bottom-left' | 'bottom-right'
   style?: Record<string, string | number>
 }
@@ -21,20 +22,20 @@ export const Portal = React.forwardRef(
       setOpen,
       domNode,
       hasBackground = false,
+      hasClickLayer = true,
       placementAroundContainer,
       style,
     }: IPortal,
     ref?: React.Ref<HTMLElement> | null
   ) => {
     useClickOutside(() => setOpen(false), ref)
-
     return ReactDOM.createPortal(
       <Wrapper
         hasBackground={hasBackground}
         placementAroundContainer={placementAroundContainer}
         style={style}
       >
-        <ClickLayer />
+        {hasClickLayer && <ClickLayer />}
         {children}
       </Wrapper>,
       domNode ?? document.body

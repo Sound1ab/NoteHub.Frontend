@@ -3,11 +3,7 @@ import { RenderElementProps } from 'slate-react/dist/components/editable'
 import styled from 'styled-components'
 
 export function Table({ attributes, children }: RenderElementProps) {
-  return (
-    <StyledTable>
-      <tbody {...attributes}>{children}</tbody>
-    </StyledTable>
-  )
+  return <StyledTable {...attributes}>{children}</StyledTable>
 }
 
 const StyledTable = styled.table`
