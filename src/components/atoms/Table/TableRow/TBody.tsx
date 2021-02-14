@@ -4,6 +4,7 @@ import { RenderElementProps } from 'slate-react/dist/components/editable'
 import styled from 'styled-components'
 
 import { useTable } from '../../../../hooks/context/useTable'
+import { deleteTableRow } from '../../../templates/Dashboard/Editor/Slate/utils/commands/deleteTableRow'
 import { insertTableRow } from '../../../templates/Dashboard/Editor/Slate/utils/commands/insertTableRow'
 import { Icon } from '../../Icon/Icon'
 
@@ -40,6 +41,10 @@ export function TBody({ children, attributes, element }: RenderElementProps) {
     insertTableRow(reactEditor, element)
   }
 
+  function handleTrashClick() {
+    deleteTableRow(reactEditor, element)
+  }
+
   return (
     <StyledTBody>
       <Tr {...attributes} onMouseOver={handleMouseOver}>
@@ -58,6 +63,7 @@ export function TBody({ children, attributes, element }: RenderElementProps) {
             icon="trash"
             isDisabled={false}
             contentEditable={false}
+            onClick={handleTrashClick}
           />
         </CollapsedTableCell>
       </Tr>
