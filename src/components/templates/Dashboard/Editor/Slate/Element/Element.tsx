@@ -11,8 +11,8 @@ import { List } from '../../../../../atoms/List/List'
 import { ListItem } from '../../../../../atoms/ListItem/ListItem'
 import { Paragraph } from '../../../../../atoms/Paragraph/Paragraph'
 import { Table } from '../../../../../atoms/Table/Table'
-import { TableCell } from '../../../../../atoms/Table/TableCell'
-import { TableRow } from '../../../../../atoms/Table/TableRow'
+import { TableCell } from '../../../../../atoms/Table/TableCell/TableCell'
+import { TableRow } from '../../../../../atoms/Table/TableRow/TableRow'
 
 interface IElement extends RenderElementProps {
   editor: Editor
@@ -49,7 +49,11 @@ export function Element(props: IElement) {
         {props.children}
       </TableRow>
     ),
-    tableCell: <TableCell {...props}>{props.children}</TableCell>,
+    tableCell: (
+      <TableCell {...props} header={props.element.header}>
+        {props.children}
+      </TableCell>
+    ),
     // softbreak: () => <span {...attributes}> {children}</span>,
     // linebreak: () => (
     //   <span {...attributes}>

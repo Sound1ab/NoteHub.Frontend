@@ -7,7 +7,7 @@ interface INode extends Node {
 }
 
 export function mdastHr() {
-  return (ast: never) => {
+  return (ast: any) => {
     // @ts-ignore
     visit<INode>(
       ast,

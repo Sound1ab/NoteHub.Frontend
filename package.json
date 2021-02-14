@@ -11,6 +11,12 @@
     "@graphql-codegen/introspection": "^1.17.8",
     "@graphql-codegen/typescript": "^1.17.9",
     "@graphql-codegen/typescript-operations": "^1.17.8",
+    "@storybook/addon-actions": "^6.1.17",
+    "@storybook/addon-essentials": "^6.1.17",
+    "@storybook/addon-links": "^6.1.17",
+    "@storybook/node-logger": "^6.1.17",
+    "@storybook/preset-create-react-app": "^3.1.5",
+    "@storybook/react": "^6.1.17",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.2.3",
     "@testing-library/react-hooks": "^3.4.2",
@@ -137,7 +143,9 @@
     "codegen": "graphql-codegen --config codegen.yml",
     "lint": "eslint './src/**/*.{ts,tsx}'",
     "ts": "tsc --noEmit --pretty --noUnusedParameters --noUnusedLocals",
-    "codechecks": "yarn ts && yarn lint && yarn test"
+    "codechecks": "yarn ts && yarn lint && yarn test",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "browserslist": {
     "production": [

@@ -7,7 +7,7 @@ interface IListItemNode extends Node {
 }
 
 export function flattenListItemParagraphs() {
-  return (ast: never) => {
+  return (ast: any) => {
     // @ts-ignore
     visit<IListItemNode>(ast, 'listItem' as never, (listItem) => {
       if (

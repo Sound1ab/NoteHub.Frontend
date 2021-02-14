@@ -8,7 +8,7 @@ interface IListItemNode extends Node {
 
 // this doesn't work for some reason
 export function mdastAppendTextToEmptyListItem() {
-  return (ast: never) => {
+  return (ast: any) => {
     // @ts-ignore
     visit<IListItemNode>(ast, 'listItem' as never, (listItem) => {
       if (listItem.children.length === 0) {

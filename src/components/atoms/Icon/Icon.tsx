@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { RefObject } from 'react'
 import styled from 'styled-components'
 
 export type TIcons =
@@ -68,6 +68,7 @@ interface IIcon {
   title?: string
   ariaLabel?: string
   isDisabled?: boolean
+  wrapperRef?: RefObject<HTMLDivElement>
 }
 
 export function Icon({
@@ -77,6 +78,7 @@ export function Icon({
   prefix = 'fas',
   title,
   icon,
+  wrapperRef,
   ...rest
 }: IIcon) {
   return (
@@ -85,6 +87,7 @@ export function Icon({
       marginRight={marginRight}
       marginLeft={marginLeft}
       size={size}
+      ref={wrapperRef}
     >
       <StyledFontAwesomeIcon icon={[prefix, icon]} size="1x" title={title} />
     </Wrapper>

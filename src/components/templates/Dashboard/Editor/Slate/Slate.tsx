@@ -34,6 +34,7 @@ import { mdastAppendTextToEmptyListItem } from './utils/mdast/mdastAppendTextToE
 import { mdastFlattenBlockQuote } from './utils/mdast/mdastFlattenBlockQuote'
 import { flattenListItemParagraphs } from './utils/mdast/mdastFlattenListItem'
 import { mdastHr } from './utils/mdast/mdastHr'
+import { mdastTableCell } from './utils/mdast/mdastTableCell'
 import { mdastTableHeader } from './utils/mdast/mdastTableHeader'
 
 interface ISlate {
@@ -75,6 +76,7 @@ export function Slate({ children, fileContent }: ISlate) {
       .use(mdastFlattenBlockQuote)
       .use(mdastAppendTextToEmptyListItem)
       .use(mdastTableHeader)
+      .use(mdastTableCell)
       .use(remarkToSlate)
 
     processor.process(fileContent, (err, file) => {
