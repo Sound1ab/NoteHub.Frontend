@@ -4,6 +4,7 @@ import { RenderElementProps } from 'slate-react/dist/components/editable'
 import styled from 'styled-components'
 
 import { useTable } from '../../../../hooks/context/useTable'
+import { deleteTableColumn } from '../../../templates/Dashboard/Editor/Slate/utils/commands/deleteTableColumn'
 import { insertTableColumn } from '../../../templates/Dashboard/Editor/Slate/utils/commands/insertTableColumn'
 import { Icon } from '../../Icon/Icon'
 
@@ -34,7 +35,7 @@ export function Th({ attributes, children, element }: ITh) {
   }
 
   function handleActionClick() {
-    console.log('here')
+    deleteTableColumn(reactEditor, element)
   }
 
   function handlePlusClick() {
