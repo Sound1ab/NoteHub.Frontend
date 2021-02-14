@@ -1,15 +1,18 @@
 import React, { useCallback, useEffect, useRef } from 'react'
+import { useSlate } from 'slate-react'
 import { RenderElementProps } from 'slate-react/dist/components/editable'
 import styled from 'styled-components'
 
 import { useTable } from '../../../../hooks/context/useTable'
+import { insertTableRow } from '../../../templates/Dashboard/Editor/Slate/utils/commands/insertTableRow'
 import { Icon } from '../../Icon/Icon'
 
-export function TBody({ children, attributes }: RenderElementProps) {
+export function TBody({ children, attributes, element }: RenderElementProps) {
   const actionBarRef = useRef<HTMLDivElement | null>(null)
   const collapsedTableCellRef = useRef<HTMLTableCellElement | null>(null)
   const plusRef = useRef<HTMLDivElement | null>(null)
   const { tableRef } = useTable()
+  const reactEditor = useSlate()
 
   const setActionBarWidth = useCallback(() => {
     const actionBar = actionBarRef.current
@@ -33,14 +36,29 @@ export function TBody({ children, attributes }: RenderElementProps) {
     setActionBarWidth()
   }
 
+  function handlePlusClick() {
+    insertTableRow(reactEditor, element)
+  }
+
   return (
     <StyledTBody>
       <Tr {...attributes} onMouseOver={handleMouseOver}>
         {children}
         <CollapsedTableCell ref={collapsedTableCellRef}>
-          <Plus icon="plus-circle" size="lg" wrapperRef={plusRef} />
+          <Plus
+            icon="plus-circle"
+            size="lg"
+            wrapperRef={plusRef}
+            contentEditable={false}
+            onClick={handlePlusClick}
+          />
           <ActionBar ref={actionBarRef} />
-          <StyledIcon size="xs" icon="trash" isDisabled={false} />
+          <StyledIcon
+            size="xs"
+            icon="trash"
+            isDisabled={false}
+            contentEditable={false}
+          />
         </CollapsedTableCell>
       </Tr>
     </StyledTBody>

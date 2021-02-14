@@ -38,7 +38,7 @@ export function Th({ attributes, children, element }: ITh) {
   }
 
   function handlePlusClick() {
-    insertTableColumn(reactEditor!, element)
+    insertTableColumn(reactEditor, element)
   }
 
   return (
