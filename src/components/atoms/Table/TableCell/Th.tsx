@@ -1,17 +1,20 @@
 import React, { useCallback, useEffect, useRef } from 'react'
+import { useSlate } from 'slate-react'
 import { RenderElementProps } from 'slate-react/dist/components/editable'
 import styled from 'styled-components'
 
 import { useTable } from '../../../../hooks/context/useTable'
+import { insertTableColumn } from '../../../templates/Dashboard/Editor/Slate/utils/commands/insertTableColumn'
 import { Icon } from '../../Icon/Icon'
 
 interface ITh extends RenderElementProps {
   header?: boolean
 }
 
-export function Th({ attributes, children }: ITh) {
+export function Th({ attributes, children, element }: ITh) {
   const actionBarRef = useRef<HTMLDivElement | null>(null)
   const { tableRef } = useTable()
+  const reactEditor = useSlate()
 
   const setActionBarHeight = useCallback(() => {
     const actionBar = actionBarRef.current
@@ -30,13 +33,26 @@ export function Th({ attributes, children }: ITh) {
     setActionBarHeight()
   }
 
+  function handleActionClick() {
+    console.log('here')
+  }
+
+  function handlePlusClick() {
+    insertTableColumn(reactEditor!, element)
+  }
+
   return (
     <StyledTh {...attributes} onMouseOver={handleMouseOver}>
-      <ActionButtonWrapper>
+      <ActionButtonWrapper contentEditable={false} onClick={handleActionClick}>
         <ActionButton size="xs" icon="ellipsis-h" isDisabled={false} />
       </ActionButtonWrapper>
-      <Plus icon="plus-circle" size="lg" />
-      <ActionBar ref={actionBarRef} />
+      <Plus
+        icon="plus-circle"
+        size="lg"
+        contentEditable={false}
+        onClick={handlePlusClick}
+      />
+      <ActionBar ref={actionBarRef} contentEditable={false} />
       {children}
     </StyledTh>
   )

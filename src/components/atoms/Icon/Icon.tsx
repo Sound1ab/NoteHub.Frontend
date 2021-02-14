@@ -69,6 +69,7 @@ interface IIcon {
   ariaLabel?: string
   isDisabled?: boolean
   wrapperRef?: RefObject<HTMLDivElement>
+  contentEditable?: boolean
 }
 
 export function Icon({

@@ -16823,7 +16823,7 @@ remark-retext@^4.0.0:
 
 remark-slate-transformer@Sound1ab/remark-slate-transformer:
   version "0.2.5"
-  resolved "https://codeload.github.com/Sound1ab/remark-slate-transformer/tar.gz/b965f73dd57eed7b05cb5a4a1a16e0a928246387"
+  resolved "https://codeload.github.com/Sound1ab/remark-slate-transformer/tar.gz/ab68b29d0a7cca5a7d8f67923de40a117aa5e9ed"
 
 remark-slug@^6.0.0:
   version "6.0.0"
