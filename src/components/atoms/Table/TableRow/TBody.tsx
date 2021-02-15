@@ -46,8 +46,8 @@ export function TBody({ children, attributes, element }: RenderElementProps) {
   }
 
   return (
-    <StyledTBody>
-      <Tr {...attributes} onMouseOver={handleMouseOver}>
+    <StyledTBody {...attributes}>
+      <Tr onMouseOver={handleMouseOver}>
         {children}
         <CollapsedTableCell ref={collapsedTableCellRef}>
           <Plus

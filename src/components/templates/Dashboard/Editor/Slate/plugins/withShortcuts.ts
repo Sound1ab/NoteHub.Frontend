@@ -1,4 +1,4 @@
-import { Editor, Element, Point, Range, Transforms } from 'slate'
+import { Editor, Element, Node, Point, Range, Transforms } from 'slate'
 
 const SHORTCUTS: Record<string, { type: string; depth?: number }> = {
   '*': {
@@ -42,6 +42,9 @@ const SHORTCUTS: Record<string, { type: string; depth?: number }> = {
   },
   '```': {
     type: 'code',
+  },
+  table: {
+    type: 'table',
   },
 }
 
@@ -96,6 +99,47 @@ export function withShortcuts(editor: Editor) {
             type: 'paragraph',
             children: [{ text: '' }],
           })
+        }
+
+        if (element.type === 'table') {
+          const cell = {
+            type: 'tableCell',
+            children: [{ text: 'Content' }],
+          }
+          const row = {
+            type: 'tableRow',
+            header: undefined,
+            footer: undefined,
+          }
+
+          const children = Node.children(editor, path, { reverse: true })
+
+          for (const child of children) {
+            Transforms.removeNodes(editor, { at: child[1] })
+            Transforms.insertNodes(
+              editor,
+              { ...row, children: [cell] },
+              {
+                at: child[1],
+              }
+            )
+            Transforms.insertNodes(
+              editor,
+              { ...row, header: true, children: [{ ...cell, header: true }] },
+              {
+                at: child[1],
+              }
+            )
+          }
+
+          Transforms.insertNodes(
+            editor,
+            {
+              type: 'paragraph',
+              children: [{ text: '' }],
+            },
+            { at: [path[0] + 1] }
+          )
         }
 
         return
