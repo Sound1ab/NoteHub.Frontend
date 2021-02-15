@@ -8,4 +8,5 @@ export function Td({ attributes, children }: RenderElementProps) {
 
 const StyledTd = styled.td`
   position: relative;
+  border-bottom: 1px solid var(--accent-primary);
 `

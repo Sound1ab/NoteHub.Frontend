@@ -67,6 +67,7 @@ export function Tab({ name, path, isDisabled }: ITab) {
 }
 
 const Wrapper = styled(Button)<{ isActive: boolean; isDisabled: boolean }>`
+  background-color: var(--background-primary);
   position: relative;
   display: flex;
   justify-content: center;

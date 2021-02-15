@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components'
 import { useActivePath } from '../../../../../../../hooks/recoil/useActivePath'
 import { useModalToggle } from '../../../../../../../hooks/utils/useModalToggle'
 import { ITreeNode } from '../../../../../../../types'
+import { Fade } from '../../../../../../animation/Mount/Fade'
 import { Node_Type } from '../../../../../../apollo/generated_components_typings'
 import { Button } from '../../../../../../atoms/Button/Button'
 import {
@@ -11,7 +12,6 @@ import {
   IDropdownItem,
 } from '../../../../../../atoms/Dropdown/Dropdown'
 import { Icon } from '../../../../../../atoms/Icon/Icon'
-import { Fade } from '../../../../../../animation/Mount/Fade'
 
 interface INode {
   node: ITreeNode
@@ -180,6 +180,7 @@ const Heading = styled.span<{
 `
 
 const Actions = styled(Button)<{ isDisabled: boolean; isOpen: boolean }>`
+  background-color: var(--background-quinary);
   flex: 0;
   position: relative;
   display: flex;

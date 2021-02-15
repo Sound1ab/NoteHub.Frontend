@@ -161,7 +161,7 @@ export function Slate({ children, fileContent }: ISlate) {
             event.preventDefault()
             const { selection } = editor
 
-            if (!selection || !Range.isCollapsed(selection)) return
+            if (!selection || Range.isCollapsed(selection)) return
 
             const url = 'http://google.com'
 

@@ -65,6 +65,7 @@ export function Th({ attributes, children, element }: ITh) {
 
 const StyledTh = styled.th`
   position: relative;
+  border-bottom: 1px solid var(--accent-primary);
 `
 
 const Plus = styled(Icon)`
