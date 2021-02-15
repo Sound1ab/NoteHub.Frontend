@@ -37,6 +37,7 @@ export function Node({
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>({
     origin: containerRef,
+    placement: 'right',
   })
   const { type, name, path } = node
   const [activePath] = useActivePath()
