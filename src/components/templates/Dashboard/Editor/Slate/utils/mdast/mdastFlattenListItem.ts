@@ -7,6 +7,7 @@ interface IListItemNode extends Node {
 }
 
 export function flattenListItemParagraphs() {
+  // eslint-disable-next-line
   return (ast: any) => {
     // @ts-ignore
     visit<IListItemNode>(ast, 'listItem' as never, (listItem) => {

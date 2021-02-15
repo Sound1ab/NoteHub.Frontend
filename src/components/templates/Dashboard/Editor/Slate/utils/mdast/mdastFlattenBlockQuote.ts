@@ -7,6 +7,7 @@ interface INode extends Node {
 }
 
 export function mdastFlattenBlockQuote() {
+  // eslint-disable-next-line
   return (ast: any) => {
     // @ts-ignore
     visit<INode>(ast, 'blockquote' as never, (blockquote) => {

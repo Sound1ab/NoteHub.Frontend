@@ -7,6 +7,7 @@ interface INode extends Node {
 }
 
 export function mdastHr() {
+  // eslint-disable-next-line
   return (ast: any) => {
     // @ts-ignore
     visit<INode>(

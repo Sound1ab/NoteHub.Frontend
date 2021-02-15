@@ -8,6 +8,7 @@ interface IListItemNode extends Node {
 
 // this doesn't work for some reason
 export function mdastAppendTextToEmptyListItem() {
+  // eslint-disable-next-line
   return (ast: any) => {
     // @ts-ignore
     visit<IListItemNode>(ast, 'listItem' as never, (listItem) => {
