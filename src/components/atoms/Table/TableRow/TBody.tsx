@@ -41,7 +41,11 @@ export function TBody({ children, attributes, element }: RenderElementProps) {
     insertTableRow(reactEditor, element)
   }
 
-  function handleTrashClick() {
+  function handleTrashClick(e: React.MouseEvent<HTMLDivElement>) {
+    // Without this, the event will propagate to slate, which will then
+    // try and select the area which we are about to delete
+    e.stopPropagation()
+
     deleteTableRow(reactEditor, element)
   }
 

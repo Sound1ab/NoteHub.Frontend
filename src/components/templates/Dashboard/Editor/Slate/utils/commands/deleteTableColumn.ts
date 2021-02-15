@@ -1,7 +1,6 @@
 import { Ancestor, Node, NodeEntry, Transforms } from 'slate'
 import { ReactEditor } from 'slate-react'
 
-// Broken
 export function deleteTableColumn(editor: ReactEditor, node: Node) {
   const path = ReactEditor.findPath(editor, node)
 
@@ -29,7 +28,7 @@ export function deleteTableColumn(editor: ReactEditor, node: Node) {
   const tableCells = Array.from(Node.children(editor, table[1]))[0][0].children
 
   if (Array.isArray(tableCells) && tableCells.length === 1) {
-    // Delete table
+    Transforms.removeNodes(editor, { at: table[1] })
     return
   }
 
@@ -37,9 +36,11 @@ export function deleteTableColumn(editor: ReactEditor, node: Node) {
   // Uses the table and row position of the tableRow node
   // Uses the cell position of the header node
   for (const tableRow of tableRows) {
-    console.log('here', [...tableRow[1], headerCellPosition])
     Transforms.removeNodes(editor, {
       at: [...tableRow[1], headerCellPosition],
     })
   }
+
+  const point = { path: [0, 0], offset: 0 }
+  editor.selection = { anchor: point, focus: point }
 }

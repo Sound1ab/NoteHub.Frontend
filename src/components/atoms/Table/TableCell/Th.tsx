@@ -34,7 +34,11 @@ export function Th({ attributes, children, element }: ITh) {
     setActionBarHeight()
   }
 
-  function handleActionClick() {
+  function handleActionClick(e: React.MouseEvent<HTMLDivElement>) {
+    // Without this, the event will propagate to slate, which will then
+    // try and select the area which we are about to delete
+    e.stopPropagation()
+
     deleteTableColumn(reactEditor, element)
   }
 
