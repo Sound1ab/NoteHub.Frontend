@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useFs } from '../../../../hooks/fs/useFs'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
+import { useSlateValue } from '../../../../hooks/recoil/useSlateValue'
 import { isFile } from '../../../../utils/isFile'
 import { Fade } from '../../../animation/Mount/Fade'
 import { DraftManager } from '../DraftManager/DraftManager'
 import { MarkdownEditorSkeleton } from './MarkdownEditorSkeleton'
 import { Slate } from './Slate/Slate'
+import { remarkToSlate } from './Slate/utils/unifed/remarkToSlate'
 
 export function Editor() {
-  const [fileContent, setFileContent] = useState('')
+  const [, setSlateValue] = useSlateValue()
   const [{ readFile }, { loading }] = useFs()
   const [activePath] = useActivePath()
 
@@ -20,11 +22,13 @@ export function Editor() {
     }
 
     async function loadContentFromFS() {
-      setFileContent((await readFile(activePath)) ?? '')
+      const markdown = await readFile(activePath)
+
+      setSlateValue(remarkToSlate(markdown ?? ''))
     }
 
     loadContentFromFS()
-  }, [activePath, readFile])
+  }, [activePath, readFile, setSlateValue])
 
   return (
     <Wrapper>
@@ -32,10 +36,9 @@ export function Editor() {
         <MarkdownEditorSkeleton />
       </Fade>
       <Fade show={!loading}>
-        <Slate fileContent={fileContent}>
-          <DraftManager />
-        </Slate>
+        <Slate />
       </Fade>
+      <DraftManager />
     </Wrapper>
   )
 }

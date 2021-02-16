@@ -1,23 +1,13 @@
-import React, {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
-import gfm from 'remark-gfm'
-import parse from 'remark-parse'
-import { remarkToSlate, slateToRemark } from 'remark-slate-transformer'
-import stringify from 'remark-stringify'
+import React, { useCallback, useMemo } from 'react'
 import { Editor, Node, NodeEntry, Range, Transforms, createEditor } from 'slate'
 import { withHistory } from 'slate-history'
 import { Editable, Slate as SlateReact, withReact } from 'slate-react'
 import styled from 'styled-components'
-import unified from 'unified'
 
 import { useFs } from '../../../../../hooks/fs/useFs'
 import { useGit } from '../../../../../hooks/git/useGit'
 import { useActivePath } from '../../../../../hooks/recoil/useActivePath'
+import { useSlateValue } from '../../../../../hooks/recoil/useSlateValue'
 import { useUnstagedChanges } from '../../../../../hooks/recoil/useUnstagedChanges'
 import { debounce } from '../../../../../utils/debounce'
 import { Element } from './Element/Element'
@@ -30,26 +20,14 @@ import { toggleInlineStyle } from './utils/commands/toggleInlineStyle'
 import { decorateCodeBlock } from './utils/decorators/decorateCodeBlock'
 import { isInlineActive } from './utils/helpers/isInlineActive'
 import { isTypeActive } from './utils/helpers/isTypeActive'
-import { mdastAppendTextToEmptyListItem } from './utils/mdast/mdastAppendTextToEmptyListItem'
-import { mdastFlattenBlockQuote } from './utils/mdast/mdastFlattenBlockQuote'
-import { flattenListItemParagraphs } from './utils/mdast/mdastFlattenListItem'
-import { mdastHr } from './utils/mdast/mdastHr'
-import { mdastTable } from './utils/mdast/mdastTable'
-import { mdastTableCell } from './utils/mdast/mdastTableCell'
-import { mdastTableHeader } from './utils/mdast/mdastTableHeader'
+import { slateToRemark } from './utils/unifed/slateToRemark'
 
-interface ISlate {
-  children: ReactNode
-  fileContent: string
-}
-
-export function Slate({ children, fileContent }: ISlate) {
+export function Slate() {
+  const [slateValue, setSlateValue] = useSlateValue()
   const editor = useMemo(
     () => withReact(withHistory(withTables(withShortcuts(createEditor())))),
     []
   )
-  const [value, setValue] = useState<Node[]>([])
-
   const [, setUnstagedChanges] = useUnstagedChanges()
   const [activePath] = useActivePath()
   const [{ writeFile }] = useFs()
@@ -67,44 +45,15 @@ export function Slate({ children, fileContent }: ISlate) {
     [activePath, writeFile, setUnstagedChanges, getUnstagedChanges]
   )
 
-  // Load slate with initial markdown
-  useEffect(() => {
-    const processor = unified()
-      .use(parse)
-      .use(gfm)
-      .use(mdastHr)
-      .use(flattenListItemParagraphs)
-      .use(mdastFlattenBlockQuote)
-      .use(mdastAppendTextToEmptyListItem)
-      .use(mdastTableHeader)
-      .use(mdastTableCell)
-      .use(mdastTable)
-      .use(remarkToSlate)
-
-    processor.process(fileContent, (err, file) => {
-      if (err) throw err
-
-      // @ts-ignore
-      setValue(file.result)
-    })
-  }, [fileContent, editor])
-
   const handleOnChange = useCallback(
     (value: Node[]) => {
-      const processor = unified().use(slateToRemark).use(gfm).use(stringify)
+      const markdown = slateToRemark(value)
 
-      const ast = processor.runSync({
-        type: 'root',
-        children: value,
-      })
+      writeContentToFSAndCheckUnstagedChanges(markdown)
 
-      const text = processor.stringify(ast)
-
-      writeContentToFSAndCheckUnstagedChanges(text)
-
-      setValue(value)
+      setSlateValue(value)
     },
-    [writeContentToFSAndCheckUnstagedChanges]
+    [writeContentToFSAndCheckUnstagedChanges, setSlateValue]
   )
 
   const renderElement = useCallback(
@@ -216,7 +165,7 @@ export function Slate({ children, fileContent }: ISlate) {
 
   return (
     <Wrapper>
-      <SlateReact editor={editor} value={value} onChange={handleOnChange}>
+      <SlateReact editor={editor} value={slateValue} onChange={handleOnChange}>
         <StyledEditable
           decorate={decorate}
           renderElement={renderElement}
@@ -224,7 +173,6 @@ export function Slate({ children, fileContent }: ISlate) {
           onKeyDown={handleKeyDown}
           onClick={handleClick}
         />
-        {children}
       </SlateReact>
     </Wrapper>
   )
