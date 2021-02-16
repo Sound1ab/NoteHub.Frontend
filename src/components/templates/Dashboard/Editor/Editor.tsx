@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
+import { useSlateValue } from '../../../../hooks/context/useSlateValue'
 import { useFs } from '../../../../hooks/fs/useFs'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
-import { useSlateValue } from '../../../../hooks/recoil/useSlateValue'
 import { isFile } from '../../../../utils/isFile'
 import { Fade } from '../../../animation/Mount/Fade'
 import { DraftManager } from '../DraftManager/DraftManager'
@@ -12,7 +12,7 @@ import { Slate } from './Slate/Slate'
 import { remarkToSlate } from './Slate/utils/unifed/remarkToSlate'
 
 export function Editor() {
-  const [, setSlateValue] = useSlateValue()
+  const { setSlateValue } = useSlateValue()
   const [{ readFile }, { loading }] = useFs()
   const [activePath] = useActivePath()
 
@@ -21,10 +21,10 @@ export function Editor() {
       return
     }
 
-    async function loadContentFromFS() {
+    const loadContentFromFS = async () => {
       const markdown = await readFile(activePath)
 
-      setSlateValue(remarkToSlate(markdown ?? ''))
+      setSlateValue?.(remarkToSlate(markdown ?? ''))
     }
 
     loadContentFromFS()

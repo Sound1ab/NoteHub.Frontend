@@ -4,10 +4,10 @@ import { withHistory } from 'slate-history'
 import { Editable, Slate as SlateReact, withReact } from 'slate-react'
 import styled from 'styled-components'
 
+import { useSlateValue } from '../../../../../hooks/context/useSlateValue'
 import { useFs } from '../../../../../hooks/fs/useFs'
 import { useGit } from '../../../../../hooks/git/useGit'
 import { useActivePath } from '../../../../../hooks/recoil/useActivePath'
-import { useSlateValue } from '../../../../../hooks/recoil/useSlateValue'
 import { useUnstagedChanges } from '../../../../../hooks/recoil/useUnstagedChanges'
 import { debounce } from '../../../../../utils/debounce'
 import { Element } from './Element/Element'
@@ -23,7 +23,6 @@ import { isTypeActive } from './utils/helpers/isTypeActive'
 import { slateToRemark } from './utils/unifed/slateToRemark'
 
 export function Slate() {
-  const [slateValue, setSlateValue] = useSlateValue()
   const editor = useMemo(
     () => withReact(withHistory(withTables(withShortcuts(createEditor())))),
     []
@@ -32,10 +31,13 @@ export function Slate() {
   const [activePath] = useActivePath()
   const [{ writeFile }] = useFs()
   const [{ getUnstagedChanges }] = useGit()
+  const { slateValue = [], setSlateValue } = useSlateValue()
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const writeContentToFSAndCheckUnstagedChanges = useCallback(
-    debounce(async (markdown: string) => {
+    debounce(async (value: Node[]) => {
+      const markdown = slateToRemark(value)
+
       if (!activePath) return
 
       await writeFile(activePath, markdown)
@@ -47,11 +49,9 @@ export function Slate() {
 
   const handleOnChange = useCallback(
     (value: Node[]) => {
-      const markdown = slateToRemark(value)
+      setSlateValue?.(value)
 
-      writeContentToFSAndCheckUnstagedChanges(markdown)
-
-      setSlateValue(value)
+      writeContentToFSAndCheckUnstagedChanges(value)
     },
     [writeContentToFSAndCheckUnstagedChanges, setSlateValue]
   )

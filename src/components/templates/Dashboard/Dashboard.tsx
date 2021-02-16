@@ -6,6 +6,7 @@ import { useReadRepo } from '../../../hooks/repo/useReadRepo'
 import { Editor } from './Editor/Editor'
 import { Sidebar } from './Sidebar/Sidebar'
 import { Toolbar } from './Toolbar/Toolbar'
+import { SlateValueProvider } from '../../providers/SlateValueProvider/SlateValueProvider'
 
 function Dashboard() {
   const { repo, loading } = useReadRepo()
@@ -29,7 +30,9 @@ function Dashboard() {
       <Toolbar />
       <MobileScroll>
         <Sidebar />
-        <Editor />
+        <SlateValueProvider>
+          <Editor />
+        </SlateValueProvider>
       </MobileScroll>
     </Grid>
   )
