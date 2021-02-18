@@ -1,6 +1,7 @@
 import gfm from 'remark-gfm'
 import parse from 'remark-parse'
 import { remarkToSlate as _remarkToSlate } from 'remark-slate-transformer'
+import { Node } from 'slate'
 import unified from 'unified'
 
 import { mdastAppendTextToEmptyListItem } from '../mdast/mdastAppendTextToEmptyListItem'
@@ -27,5 +28,11 @@ export function remarkToSlate(markdown: string) {
   const vFile = processor.processSync(markdown)
 
   // eslint-disable-next-line
-  return (vFile as any).result
+  let result = (vFile as any).result as Node[] | []
+
+  if (result.length === 0) {
+    result = [{ type: 'paragraph', children: [{ text: '' }] }]
+  }
+
+  return result
 }
