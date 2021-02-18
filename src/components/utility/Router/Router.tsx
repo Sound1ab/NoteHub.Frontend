@@ -17,7 +17,7 @@ export function Router() {
       <Suspense fallback={<Spinner />}>
         <Switch>
           <Route path="/" exact component={LandingPage} />
-          <PrivateRoute path="/dashboard" exact>
+          <PrivateRoute path="/dashboard">
             <Dashboard />
           </PrivateRoute>
           <PrivateRoute path="/setup" exact>

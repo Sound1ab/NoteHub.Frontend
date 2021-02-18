@@ -6,6 +6,7 @@ import { useSearch } from '../../../../hooks/recoil/useSearch'
 import { Button } from '../../../atoms/Button/Button'
 import { Icon } from '../../../atoms/Icon/Icon'
 import { FileTree } from './FileTree/FileTree'
+import { SearchInput } from './SearchInput/SearchInput'
 
 export function Sidebar() {
   const [search] = useSearch()
@@ -13,6 +14,7 @@ export function Sidebar() {
 
   return (
     <StyledSidebar id={CONTAINER_ID.SIDEBAR}>
+      <SearchInput />
       <Navigation>
         <FileTree
           isNewFileOpen={isNewFileOpen}
@@ -32,7 +34,7 @@ export function Sidebar() {
 
 const StyledSidebar = styled.div`
   flex: 0 0 100%;
-  height: calc(100vh - var(--toolbar-height));
+  height: 100vh;
   background-color: var(--background-primary);
   display: flex;
   flex-direction: column;
@@ -42,7 +44,7 @@ const StyledSidebar = styled.div`
   overflow-y: auto;
   z-index: 2;
   position: sticky;
-  top: var(--toolbar-height);
+  top: 0.01px;
   align-self: start;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {

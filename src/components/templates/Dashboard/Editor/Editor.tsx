@@ -44,5 +44,6 @@ export function Editor() {
 }
 
 const Wrapper = styled.div`
+  grid-area: editor;
   background-color: var(--background-primary);
 `

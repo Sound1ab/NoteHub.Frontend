@@ -182,14 +182,9 @@ const Wrapper = styled.main`
   flex: 1 1 100%;
   padding: ${({ theme }) => theme.spacing.xs};
   position: relative;
-
   height: 100%;
   justify-content: center;
   display: flex;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    grid-area: editor;
-  }
 `
 
 const StyledEditable = styled(Editable)`

@@ -8,7 +8,7 @@ import { localState } from '../../providers/ApolloProvider/cache'
 export interface IPrivateRoute {
   children: ReactNode
   path: string
-  exact: boolean
+  exact?: boolean
 }
 
 export function PrivateRoute({ children, exact, path }: IPrivateRoute) {

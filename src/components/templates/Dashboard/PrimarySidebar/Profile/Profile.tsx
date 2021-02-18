@@ -13,6 +13,7 @@ import { localState } from '../../../../providers/ApolloProvider/cache'
 
 interface IProfile {
   children?: ReactNode
+  className?: string
 }
 
 export function Profile(props: IProfile) {
@@ -22,6 +23,7 @@ export function Profile(props: IProfile) {
   const user = useReadGithubUser()
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>({
     origin: containerRef,
+    placement: 'right',
   })
   const { items, logout, called } = useProfileDropdown()
 

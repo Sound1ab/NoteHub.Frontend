@@ -5,8 +5,6 @@ import { useFile } from '../../../../hooks/recoil/useFile'
 import { useTabs } from '../../../../hooks/recoil/useTabs'
 import { setCssVariable } from '../../../../utils/css/setCssVariable'
 import { extractFilename } from '../../../../utils/extractFilename'
-import { SearchInput } from '../Sidebar/SearchInput/SearchInput'
-import { Profile } from './Profile/Profile'
 import { Tab } from './Tab/Tab'
 
 export function Toolbar() {
@@ -22,7 +20,6 @@ export function Toolbar() {
 
   return (
     <StyledToolbar ref={toolbarRef}>
-      <SearchInput />
       <Tabs>
         {[...tabs].map((path) => (
           <Tab
@@ -33,9 +30,6 @@ export function Toolbar() {
           />
         ))}
       </Tabs>
-      <Actions>
-        <Profile />
-      </Actions>
     </StyledToolbar>
   )
 }
@@ -60,11 +54,4 @@ const Tabs = styled.div`
   position: relative;
   display: flex;
   overflow-x: auto;
-`
-
-const Actions = styled.div`
-  flex: 0;
-  display: flex;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing.xs};
 `

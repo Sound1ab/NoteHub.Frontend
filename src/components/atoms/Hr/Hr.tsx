@@ -2,10 +2,9 @@ import React from 'react'
 import { RenderElementProps } from 'slate-react/dist/components/editable'
 import styled from 'styled-components'
 
-export function Hr({ attributes, children }: RenderElementProps) {
+export function Hr({ attributes, children }: Partial<RenderElementProps>) {
   return (
     <SelectFreeZone contentEditable={false} {...attributes}>
-      <br />
       <HorizontalRuleWrapper contentEditable={false}>
         <HorizontalLine />
         {children}
@@ -16,6 +15,7 @@ export function Hr({ attributes, children }: RenderElementProps) {
 }
 
 const SelectFreeZone = styled.div`
+  width: 100%;
   user-select: none;
 `
 
