@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { useSlateValue } from '../../../../hooks/context/useSlateValue'
 import { useFs } from '../../../../hooks/fs/useFs'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
-import { isFile } from '../../../../utils/isFile'
 import { Fade } from '../../../animation/Mount/Fade'
 import { DraftManager } from '../DraftManager/DraftManager'
 import { MarkdownEditorSkeleton } from './MarkdownEditorSkeleton'
@@ -17,12 +16,12 @@ export function Editor() {
   const [activePath] = useActivePath()
 
   useEffect(() => {
-    if (!isFile(activePath)) {
-      return
-    }
-
     const loadContentFromFS = async () => {
-      const markdown = await readFile(activePath)
+      let markdown: string | undefined
+
+      if (activePath !== '') {
+        markdown = await readFile(activePath)
+      }
 
       setSlateValue?.(remarkToSlate(markdown ?? ''))
     }
