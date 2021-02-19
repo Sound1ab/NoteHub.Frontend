@@ -1,7 +1,7 @@
 import React, { ReactNode, Ref, SyntheticEvent, useRef } from 'react'
 import styled, { css } from 'styled-components'
 
-import { useActivePath } from '../../../../../../../hooks/recoil/useActivePath'
+import { useFileTreePath } from '../../../../../../../hooks/recoil/useFileTreePath'
 import { useModalToggle } from '../../../../../../../hooks/utils/useModalToggle'
 import { ITreeNode } from '../../../../../../../types'
 import { Fade } from '../../../../../../animation/Mount/Fade'
@@ -40,8 +40,8 @@ export function Node({
     placement: 'right',
   })
   const { type, name, path } = node
-  const [activePath] = useActivePath()
-  const isActive = path === activePath
+  const [fileTreePath] = useFileTreePath()
+  const isActive = path === fileTreePath
 
   function handleToggleMenu(e: React.MouseEvent<HTMLElement, MouseEvent>) {
     e.stopPropagation()

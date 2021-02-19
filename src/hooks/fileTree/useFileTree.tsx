@@ -7,6 +7,7 @@ import { useFs } from '../fs/useFs'
 import { useGit } from '../git/useGit'
 import { useActivePath } from '../recoil/useActivePath'
 import { useFiles } from '../recoil/useFiles'
+import { useFileTreePath } from '../recoil/useFileTreePath'
 import { useOpenFolders } from '../recoil/useOpenFolders'
 import { useTabs } from '../recoil/useTabs'
 import { useUnstagedChanges } from '../recoil/useUnstagedChanges'
@@ -27,6 +28,7 @@ type UseFileTreeReturn = [
 
 export function useFileTree(): UseFileTreeReturn {
   const [activePath, setActivePath] = useActivePath()
+  const [FileTreePath, setFileTreePath] = useFileTreePath()
   const [, setFiles] = useFiles()
   const [, setOpenFolders] = useOpenFolders()
   const [tabs, setTabs] = useTabs()
@@ -90,8 +92,10 @@ export function useFileTree(): UseFileTreeReturn {
 
         if (!nextTab) {
           setActivePath('')
+          setFileTreePath('')
         } else {
           setActivePath(nextTab)
+          setFileTreePath(nextTab)
         }
       }
     },
@@ -101,6 +105,7 @@ export function useFileTree(): UseFileTreeReturn {
       getUnstagedChanges,
       setFiles,
       setActivePath,
+      setFileTreePath,
       activePath,
       readDirRecursive,
       setTabs,
@@ -125,6 +130,7 @@ export function useFileTree(): UseFileTreeReturn {
 
       if (oldPath === activePath) {
         setActivePath(newPath)
+        setFileTreePath(newPath)
       }
     },
     [
@@ -134,6 +140,7 @@ export function useFileTree(): UseFileTreeReturn {
       getUnstagedChanges,
       setFiles,
       setActivePath,
+      setFileTreePath,
       activePath,
       readDirRecursive,
       setTabs,
@@ -153,6 +160,7 @@ export function useFileTree(): UseFileTreeReturn {
       setTabs((tabs) => new Set([...tabs.add(path)]))
 
       setActivePath(path)
+      setFileTreePath(path)
     },
     [
       openFoldersInPath,
@@ -160,6 +168,7 @@ export function useFileTree(): UseFileTreeReturn {
       getUnstagedChanges,
       setFiles,
       setActivePath,
+      setFileTreePath,
       readDirRecursive,
       setTabs,
       writeFile,
@@ -171,10 +180,11 @@ export function useFileTree(): UseFileTreeReturn {
       scrollIntoView(CONTAINER_ID.EDITOR)
 
       setActivePath(path)
+      setFileTreePath(path)
 
       setTabs((tabs) => new Set(tabs.add(path)))
     },
-    [setActivePath, setTabs]
+    [setActivePath, setTabs, setFileTreePath]
   )
 
   const folderClick = useCallback(
@@ -187,18 +197,18 @@ export function useFileTree(): UseFileTreeReturn {
         toggleFolder(path, true)
       }
 
-      setActivePath(path)
+      setFileTreePath(path)
     },
-    [activePath, toggleFolder, setActivePath]
+    [activePath, toggleFolder, setFileTreePath]
   )
 
   const chevronClick = useCallback(
     async (path: string, toggled: boolean) => {
       toggleFolder(path, !toggled)
 
-      setActivePath(path)
+      setFileTreePath(path)
     },
-    [toggleFolder, setActivePath]
+    [toggleFolder, setFileTreePath]
   )
 
   return [

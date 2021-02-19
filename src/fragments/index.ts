@@ -24,6 +24,7 @@ export const RepoFragment = gql`
     name
     description
     private
+    full_name
   }
 `
 
