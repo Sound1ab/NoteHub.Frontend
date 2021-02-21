@@ -20,7 +20,7 @@ export function Profile(props: IProfile) {
   const client = useApolloClient()
 
   const containerRef = useRef(null)
-  const user = useReadGithubUser()
+  const { user } = useReadGithubUser()
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>({
     origin: containerRef,
     placement: 'right',

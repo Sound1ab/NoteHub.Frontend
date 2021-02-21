@@ -9,6 +9,7 @@ import { useActivePath } from '../recoil/useActivePath'
 import { useFiles } from '../recoil/useFiles'
 import { useFileTreePath } from '../recoil/useFileTreePath'
 import { useOpenFolders } from '../recoil/useOpenFolders'
+import { useRepo } from '../recoil/useRepo'
 import { useTabs } from '../recoil/useTabs'
 import { useUnstagedChanges } from '../recoil/useUnstagedChanges'
 
@@ -28,11 +29,14 @@ type UseFileTreeReturn = [
 
 export function useFileTree(): UseFileTreeReturn {
   const [activePath, setActivePath] = useActivePath()
-  const [FileTreePath, setFileTreePath] = useFileTreePath()
+  const [, setFileTreePath] = useFileTreePath()
   const [, setFiles] = useFiles()
   const [, setOpenFolders] = useOpenFolders()
   const [tabs, setTabs] = useTabs()
   const [, setUnstagedChanges] = useUnstagedChanges()
+  const [repo] = useRepo()
+
+  const repoDir = repo.split('/')[1]
 
   const [
     { unlink, readDirRecursive, rename, writeFile },
@@ -81,7 +85,7 @@ export function useFileTree(): UseFileTreeReturn {
 
       setUnstagedChanges(await getUnstagedChanges())
 
-      setFiles(await readDirRecursive())
+      setFiles(await readDirRecursive(`/${repoDir}`))
 
       setTabs((tabs) => new Set([...tabs].filter((tab) => tab !== path)))
 
@@ -110,6 +114,7 @@ export function useFileTree(): UseFileTreeReturn {
       readDirRecursive,
       setTabs,
       tabs,
+      repoDir,
     ]
   )
 
@@ -121,7 +126,7 @@ export function useFileTree(): UseFileTreeReturn {
 
       setUnstagedChanges(await getUnstagedChanges())
 
-      setFiles(await readDirRecursive())
+      setFiles(await readDirRecursive(`/${repoDir}`))
 
       setTabs(
         (tabs) =>
@@ -144,6 +149,7 @@ export function useFileTree(): UseFileTreeReturn {
       activePath,
       readDirRecursive,
       setTabs,
+      repoDir,
     ]
   )
 
@@ -155,7 +161,7 @@ export function useFileTree(): UseFileTreeReturn {
 
       setUnstagedChanges(await getUnstagedChanges())
 
-      setFiles(await readDirRecursive())
+      setFiles(await readDirRecursive(`/${repoDir}`))
 
       setTabs((tabs) => new Set([...tabs.add(path)]))
 
@@ -172,6 +178,7 @@ export function useFileTree(): UseFileTreeReturn {
       readDirRecursive,
       setTabs,
       writeFile,
+      repoDir,
     ]
   )
 

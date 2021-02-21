@@ -59,19 +59,20 @@ export function ConnectRepo() {
           {loading ? (
             <Spinner />
           ) : (
-            <SearchResults<{ full_name: string }>
+            <SearchResults<{ name: string; full_name: string }>
               search={search}
               data={repos}
-              keys={['full_name']}
+              keys={['name']}
             >
               {(results) =>
-                results.map(({ item: { full_name } }) => (
+                results.map(({ item: { name, full_name } }) => (
                   <Row
-                    key={full_name}
-                    name={full_name}
+                    key={name}
+                    name={name}
+                    fullName={full_name}
                     onClick={handleRowClick}
-                    isSelected={full_name === selectedRepo}
-                    isConnected={connectedRepos.includes(full_name)}
+                    isSelected={name === selectedRepo}
+                    isConnected={connectedRepos.includes(name)}
                   />
                 ))
               }

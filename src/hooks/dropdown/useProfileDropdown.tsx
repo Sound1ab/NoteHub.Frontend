@@ -3,7 +3,7 @@ import { useReadGithubUser } from '../user/useReadGithubUser'
 
 export function useProfileDropdown() {
   const [logout, { called, data, error }] = useLogout()
-  const user = useReadGithubUser()
+  const { user } = useReadGithubUser()
 
   if (error) {
     alert('Could not logout. Please try again.')

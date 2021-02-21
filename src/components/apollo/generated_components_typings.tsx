@@ -48,6 +48,11 @@ export type QueryReadImageArgs = {
   path: Scalars['String'];
 };
 
+
+export type QueryReadRepoArgs = {
+  name: Scalars['String'];
+};
+
 export type File = {
   __typename?: 'File';
   id: Scalars['ID'];
@@ -73,6 +78,7 @@ export type Repo = {
   full_name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   private: Scalars['Boolean'];
+  updated_at: Scalars['String'];
 };
 
 export type GithubUser = {
@@ -148,6 +154,11 @@ export type MutationUpdateRepoArgs = {
 };
 
 
+export type MutationDeleteRepoArgs = {
+  input: DeleteRepoInput;
+};
+
+
 export type MutationUpdateConfigurationArgs = {
   input: UpdateConfigurationInput;
 };
@@ -182,8 +193,13 @@ export type MoveFileInput = {
 };
 
 export type UpdateRepoInput = {
+  name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   private?: Maybe<Scalars['Boolean']>;
+};
+
+export type DeleteRepoInput = {
+  name: Scalars['String'];
 };
 
 export type UpdateConfigurationInput = {
@@ -224,17 +240,21 @@ export type FileFragment = (
 
 export type RepoFragment = (
   { __typename?: 'Repo' }
-  & Pick<Repo, 'name' | 'description' | 'private' | 'full_name'>
-);
-
-export type GithubUserFragment = (
-  { __typename?: 'GithubUser' }
-  & Pick<GithubUser, 'id' | 'login' | 'avatar_url' | 'html_url' | 'name'>
+  & Pick<Repo, 'name' | 'description' | 'private' | 'full_name' | 'updated_at'>
 );
 
 export type ConfigurationFragment = (
   { __typename?: 'Configuration' }
   & Pick<Configuration, 'id' | 'connectedRepos'>
+);
+
+export type GithubUserFragment = (
+  { __typename?: 'GithubUser' }
+  & Pick<GithubUser, 'id' | 'login' | 'avatar_url' | 'html_url' | 'name'>
+  & { configuration?: Maybe<(
+    { __typename?: 'Configuration' }
+    & ConfigurationFragment
+  )> }
 );
 
 export type LoginQueryVariables = Exact<{ [key: string]: never; }>;
@@ -303,14 +323,29 @@ export type ListReposQuery = (
   { __typename?: 'Query' }
   & { listRepos?: Maybe<Array<(
     { __typename?: 'Repo' }
-    & Pick<Repo, 'id' | 'full_name'>
+    & Pick<Repo, 'id' | 'name' | 'full_name'>
   )>> }
 );
 
-export type ReadRepoQueryVariables = Exact<{ [key: string]: never; }>;
+export type ReadRepoQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
 
 
 export type ReadRepoQuery = (
+  { __typename?: 'Query' }
+  & { readRepo?: Maybe<(
+    { __typename?: 'Repo' }
+    & RepoFragment
+  )> }
+);
+
+export type ReadRepoLazyQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type ReadRepoLazyQuery = (
   { __typename?: 'Query' }
   & { readRepo?: Maybe<(
     { __typename?: 'Repo' }

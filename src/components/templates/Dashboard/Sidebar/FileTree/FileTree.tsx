@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
@@ -9,13 +9,14 @@ import { useFiles } from '../../../../../hooks/recoil/useFiles'
 import { useOpenFolders } from '../../../../../hooks/recoil/useOpenFolders'
 import { useRepo } from '../../../../../hooks/recoil/useRepo'
 import { useSearch } from '../../../../../hooks/recoil/useSearch'
+import useDeepCompareEffect from '../../../../../hooks/utils/useDeepCompareEffect'
 import { createNodes } from '../../../../../utils/createNodes'
 import { extractFilename } from '../../../../../utils/extractFilename'
 import { Fade } from '../../../../animation/Mount/Fade'
 import { Node_Type } from '../../../../apollo/generated_components_typings'
+import { SearchResults } from '../../../../atoms/SearchResults/SearchResults'
 import { UnstyledList } from '../../../../atoms/UnstyledList/UnstyledList'
 import { FileInput } from '../FileInput/FileInput'
-import { SearchResults } from '../../../../atoms/SearchResults/SearchResults'
 import { File } from './Tree/File/File'
 import { Tree } from './Tree/Tree'
 import { TreeSkeleton } from './TreeSkeleton'
@@ -29,27 +30,7 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const [search] = useSearch()
   const [openFolders] = useOpenFolders()
   const [{ createFile }] = useFileTree()
-  const [files, setFiles] = useFiles()
-  const [repo] = useRepo()
-  const [{ clone }] = useGit()
-  const [{ readDirRecursive }] = useFs()
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    if (files && files.length > 0) {
-      return
-    }
-    setLoading(true)
-
-    async function init() {
-      await clone(repo)
-
-      setFiles(await readDirRecursive())
-      setLoading(false)
-    }
-
-    init()
-  }, [files, clone, setFiles, readDirRecursive, repo])
+  const { files, loading } = useCloneConnectedRepo()
 
   async function handleCreate(name: string) {
     const path = `${name}.md`
@@ -118,4 +99,34 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
       </>
     </DndProvider>
   )
+}
+
+function useCloneConnectedRepo() {
+  const [files, setFiles] = useFiles()
+  const [repo] = useRepo()
+  const [{ clone }] = useGit()
+  const [{ readDirRecursive }] = useFs()
+  const [loading, setLoading] = useState(false)
+
+  useDeepCompareEffect(() => {
+    if (!repo) return
+
+    setLoading(true)
+
+    async function init() {
+      await clone(repo)
+
+      const repoDir = repo.split('/')[1]
+
+      setFiles(await readDirRecursive(`/${repoDir}`))
+      setLoading(false)
+    }
+
+    init()
+  }, [clone, setFiles, readDirRecursive, repo])
+
+  return {
+    files,
+    loading,
+  }
 }

@@ -16,9 +16,10 @@ export const ReadGithubUserDocument = gql`
 `
 
 export function useReadGithubUser() {
-  const { data } = useQuery<ReadGithubUserQuery, ReadGithubUserQueryVariables>(
-    ReadGithubUserDocument
-  )
+  const { data, loading } = useQuery<
+    ReadGithubUserQuery,
+    ReadGithubUserQueryVariables
+  >(ReadGithubUserDocument)
 
-  return data?.readGithubUser
+  return { user: data?.readGithubUser, loading }
 }

@@ -25,16 +25,7 @@ export const RepoFragment = gql`
     description
     private
     full_name
-  }
-`
-
-export const GithubUserFragment = gql`
-  fragment githubUser on GithubUser {
-    id
-    login
-    avatar_url
-    html_url
-    name
+    updated_at
   }
 `
 
@@ -42,5 +33,19 @@ export const ConfigurationFragment = gql`
   fragment configuration on Configuration {
     id
     connectedRepos
+  }
+`
+
+export const GithubUserFragment = gql`
+  ${ConfigurationFragment}
+  fragment githubUser on GithubUser {
+    id
+    login
+    avatar_url
+    html_url
+    name
+    configuration {
+      ...configuration
+    }
   }
 `

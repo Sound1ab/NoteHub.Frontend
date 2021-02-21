@@ -31,6 +31,7 @@ const StyledButton = styled.button<Pick<IButton, 'isLoading' | 'isDisabled'>>`
   position: relative;
   display: flex;
   align-items: center;
+  cursor: pointer;
   ${({ isDisabled }) =>
     isDisabled &&
     css`

@@ -94,6 +94,7 @@ export const createTypography = (isLargeText: boolean) => {
       },
       a: {
         color: 'var(--accent-primary)',
+        textDecoration: 'none',
       },
     }),
   })

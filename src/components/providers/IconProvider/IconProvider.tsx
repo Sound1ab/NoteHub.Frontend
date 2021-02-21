@@ -33,6 +33,7 @@ import {
   faLink,
   faList,
   faListOl,
+  faLock,
   faMinus,
   faMoon,
   faPen,
@@ -46,6 +47,7 @@ import {
   faTable,
   faTimes,
   faTrash,
+  faUnlock,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { ReactNode } from 'react'
@@ -95,7 +97,9 @@ library.add(
   faCircle,
   faCheckCircle,
   faArrowCircleUp,
-  faCheck
+  faCheck,
+  faLock,
+  faUnlock
 )
 
 interface IIconProvider {

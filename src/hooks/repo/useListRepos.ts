@@ -9,6 +9,7 @@ export const ListReposDocument = gql`
   query ListRepos {
     listRepos {
       id
+      name
       full_name
     }
   }

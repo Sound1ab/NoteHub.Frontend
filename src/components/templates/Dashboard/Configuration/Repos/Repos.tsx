@@ -1,25 +1,28 @@
 import React from 'react'
-import { useRouteMatch } from 'react-router-dom'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { useReadConfiguration } from '../../../../../hooks/configuration/useReadConfiguration'
+import { Fade } from '../../../../animation/Mount/Fade'
 import { ModalSwitch } from '../../../../utility/Switch/ModalSwitch'
-import { Card } from './Card/Card'
+import { ConnectRepoCard } from './Card/ConnectRepoCard'
+import { RepoCard } from './Card/RepoCard'
 
 export function Repos() {
-  const { url } = useRouteMatch()
+  const { configuration, loading } = useReadConfiguration()
 
   return (
-    <>
-      <h1>Repos</h1>
-      <CardGrid>
-        <Card />
-        <Card />
-        <Card />
-        <Link to={`${url}/connect-repo`}>click</Link>
-      </CardGrid>
-      <ModalSwitch />
-    </>
+    <Fade show={!loading}>
+      <>
+        <h1>Repos</h1>
+        <CardGrid>
+          {configuration?.connectedRepos?.map((name) => (
+            <RepoCard key={name} name={name} />
+          ))}
+          <ConnectRepoCard />
+        </CardGrid>
+        <ModalSwitch />
+      </>
+    </Fade>
   )
 }
 

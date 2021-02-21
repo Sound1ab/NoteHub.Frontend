@@ -136,10 +136,13 @@ export function useGit(): UseGitReturn {
   const clone = useCallback(
     async (repo: string) => {
       setLoading(true)
+
+      const name = repo.split('/')[1]
+
       try {
         await gitClone({
-          url: repo,
-          dir: '/',
+          url: `https://github.com/${repo}`,
+          dir: `/${name}`,
           jwt,
         })
       } catch (error) {

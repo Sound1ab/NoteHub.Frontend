@@ -5,12 +5,19 @@ import { Icon } from '../../../../atoms/Icon/Icon'
 
 interface IRow {
   name: string
+  fullName: string
   onClick: (name: string) => void
   isSelected: boolean
   isConnected: boolean
 }
 
-export function Row({ name, onClick, isSelected, isConnected }: IRow) {
+export function Row({
+  name,
+  fullName,
+  onClick,
+  isSelected,
+  isConnected,
+}: IRow) {
   function handleClick() {
     if (isConnected) return
 
@@ -18,8 +25,8 @@ export function Row({ name, onClick, isSelected, isConnected }: IRow) {
   }
 
   return (
-    <Wrapper key={name} onClick={handleClick}>
-      <RepoHeading>{name}</RepoHeading>
+    <Wrapper key={fullName} onClick={handleClick}>
+      <RepoHeading>{fullName}</RepoHeading>
       {isSelected && !isConnected && <TickIcon icon="check" size="1x" />}
       {isConnected && <IsConnectedHeading>Connected</IsConnectedHeading>}
     </Wrapper>
