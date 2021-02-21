@@ -4,7 +4,6 @@ import React, { ReactNode } from 'react'
 import { ThemeProvider } from '../../../../providers/ThemeProvider/ThemeProvider'
 import { ErrorBoundary } from '../../../../utility/ErrorBoundary/ErrorBoundary'
 import { CodeRenderer } from '../CodeRenderer/CodeRenderer'
-import { Table } from '../Table/Table'
 import { TodoList } from '../TodoList/TodoList'
 import { createElement, transform, transpileMdx } from './utils'
 
@@ -14,7 +13,6 @@ interface IMdxRenderer {
 
 export function MdxRenderer({ mdxCode }: IMdxRenderer) {
   const components: Components & { [x: string]: ReactNode } = {
-    Table,
     TodoList,
   }
 

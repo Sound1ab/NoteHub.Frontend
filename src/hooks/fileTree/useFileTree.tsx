@@ -85,7 +85,7 @@ export function useFileTree(): UseFileTreeReturn {
 
       setUnstagedChanges(await getUnstagedChanges())
 
-      setFiles(await readDirRecursive(`/${repoDir}`))
+      setFiles(await readDirRecursive())
 
       setTabs((tabs) => new Set([...tabs].filter((tab) => tab !== path)))
 
@@ -126,7 +126,7 @@ export function useFileTree(): UseFileTreeReturn {
 
       setUnstagedChanges(await getUnstagedChanges())
 
-      setFiles(await readDirRecursive(`/${repoDir}`))
+      setFiles(await readDirRecursive())
 
       setTabs(
         (tabs) =>
@@ -161,7 +161,7 @@ export function useFileTree(): UseFileTreeReturn {
 
       setUnstagedChanges(await getUnstagedChanges())
 
-      setFiles(await readDirRecursive(`/${repoDir}`))
+      setFiles(await readDirRecursive())
 
       setTabs((tabs) => new Set([...tabs.add(path)]))
 

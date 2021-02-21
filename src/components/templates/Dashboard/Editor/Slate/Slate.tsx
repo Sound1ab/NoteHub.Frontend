@@ -33,8 +33,6 @@ export function Slate() {
   const [{ getUnstagedChanges }] = useGit()
   const { slateValue = [], setSlateValue } = useSlateValue()
 
-  console.log('here', slateValue)
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const writeContentToFSAndCheckUnstagedChanges = useCallback(
     debounce(async (value: Node[]) => {

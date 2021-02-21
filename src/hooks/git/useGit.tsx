@@ -18,6 +18,7 @@ import {
   status as gitStatus,
 } from '../../services/worker/git.worker'
 import { useReadJwt } from '../localState/useReadJwt'
+import { useRepo } from '../recoil/useRepo'
 
 type UseGitReturn = [
   {
@@ -43,6 +44,9 @@ type UseGitReturn = [
 export function useGit(): UseGitReturn {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
+  const [repo] = useRepo()
+
+  const dir = repo.split('/')[1]
 
   const jwt = useReadJwt()
 
@@ -54,60 +58,63 @@ export function useGit(): UseGitReturn {
   const getUnstagedChanges = useCallback(async () => {
     setLoading(true)
     try {
-      return gitGetUnstagedChanges({ dir: '/' })
+      return gitGetUnstagedChanges({ dir: `/${dir}` })
     } catch (error) {
       setError(`Git get unstaged changes: ${error.message}`)
       return []
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [dir])
 
-  const addAll = useCallback(async (unstagedChanges: string[]) => {
-    setLoading(true)
-    try {
-      await gitAddAll({
-        dir: '/',
-        unstagedChanges,
-      })
-    } catch (error) {
-      setError(`Git stage changes: ${error.message}`)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const addAll = useCallback(
+    async (unstagedChanges: string[]) => {
+      setLoading(true)
+      try {
+        await gitAddAll({
+          dir: `/${dir}`,
+          unstagedChanges,
+        })
+      } catch (error) {
+        setError(`Git stage changes: ${error.message}`)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [dir]
+  )
 
   const commit = useCallback(async () => {
     setLoading(true)
     try {
       await gitCommit({
-        dir: '/',
+        dir: `/${dir}`,
       })
     } catch (error) {
       setError(`Git commit: ${error.message}`)
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [dir])
 
   const rollback = useCallback(async () => {
     setLoading(true)
     try {
       await gitRollback({
-        dir: '/',
+        dir: `/${dir}`,
       })
     } catch (error) {
       setError(`Git rollback: ${error.message}`)
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [dir])
 
   const status = useCallback(async () => {
     setLoading(true)
     try {
       const result = await gitStatus({
-        dir: '/',
+        dir: `/${dir}`,
       })
       return result
     } catch (error) {
@@ -115,13 +122,13 @@ export function useGit(): UseGitReturn {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [dir])
 
   const getCommittedChanges = useCallback(async () => {
     setLoading(true)
     try {
       const changes = await gitGetCommittedChanges({
-        dir: '/',
+        dir: `/${dir}`,
       })
 
       return changes
@@ -131,18 +138,16 @@ export function useGit(): UseGitReturn {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [dir])
 
   const clone = useCallback(
     async (repo: string) => {
       setLoading(true)
 
-      const name = repo.split('/')[1]
-
       try {
         await gitClone({
           url: `https://github.com/${repo}`,
-          dir: `/${name}`,
+          dir: `/${dir}`,
           jwt,
         })
       } catch (error) {
@@ -151,13 +156,13 @@ export function useGit(): UseGitReturn {
         setLoading(false)
       }
     },
-    [jwt]
+    [jwt, dir]
   )
 
   const push = useCallback(async () => {
     try {
       await gitPush({
-        dir: '/',
+        dir: `/${dir}`,
         jwt,
       })
     } catch (error) {
@@ -165,26 +170,29 @@ export function useGit(): UseGitReturn {
     } finally {
       setLoading(false)
     }
-  }, [jwt])
+  }, [jwt, dir])
 
-  const remove = useCallback(async (filepath: string) => {
-    try {
-      await gitRemove({
-        dir: '/',
-        filepath,
-      })
-    } catch (error) {
-      setError(`Git push: ${error.message}`)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const remove = useCallback(
+    async (filepath: string) => {
+      try {
+        await gitRemove({
+          dir: `/${dir}`,
+          filepath,
+        })
+      } catch (error) {
+        setError(`Git push: ${error.message}`)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [dir]
+  )
 
   const removeAll = useCallback(
     async (deletedUnstagedChanges: string[] | never[]) => {
       try {
         await gitRemoveAll({
-          dir: '/',
+          dir: `/${dir}`,
           deletedUnstagedChanges,
         })
       } catch (error) {
@@ -199,7 +207,7 @@ export function useGit(): UseGitReturn {
   const getDeletedUnstagedChanges = useCallback(async () => {
     try {
       const result = await gitGetDeletedUnstagedChanges({
-        dir: '/',
+        dir: `/${dir}`,
       })
 
       return result
@@ -209,12 +217,12 @@ export function useGit(): UseGitReturn {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [dir])
 
   const log = useCallback(async () => {
     try {
       const result = await gitLog({
-        dir: '/',
+        dir: `/${dir}`,
       })
 
       return result
@@ -224,12 +232,12 @@ export function useGit(): UseGitReturn {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [dir])
 
   const getCommits = useCallback(async () => {
     try {
       const result = await gitGetCommits({
-        dir: '/',
+        dir: `/${dir}`,
       })
 
       return result
@@ -239,7 +247,7 @@ export function useGit(): UseGitReturn {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [dir])
 
   return [
     {

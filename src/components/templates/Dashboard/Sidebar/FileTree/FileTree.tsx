@@ -116,9 +116,7 @@ function useCloneConnectedRepo() {
     async function init() {
       await clone(repo)
 
-      const repoDir = repo.split('/')[1]
-
-      setFiles(await readDirRecursive(`/${repoDir}`))
+      setFiles(await readDirRecursive())
       setLoading(false)
     }
 

@@ -12,6 +12,10 @@ export function PrimarySidebar() {
   return (
     <StyledPrimarySidebar>
       <StyledProfile />
+      <StyledLink to={url}>
+        <StyledIcon icon="pen" size="lg" />
+        <h5>Editor</h5>
+      </StyledLink>
       <StyledLink to={`${url}/repos`}>
         <StyledIcon icon="sync" size="lg" />
         <h5>Repos</h5>
@@ -45,7 +49,7 @@ const StyledPrimarySidebar = styled.div`
   align-self: start;
 
   a + a {
-    margin-top: ${({ theme }) => theme.spacing.s};
+    margin-top: ${({ theme }) => theme.spacing.m};
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
@@ -69,5 +73,5 @@ const StyledLink = styled(Link)`
 `
 
 const StyledIcon = styled(Icon)`
-  margin-bottom: ${({ theme }) => theme.spacing.xxs};
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
 `

@@ -8,7 +8,6 @@ import { useGit } from '../../../../hooks/git/useGit'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
 import { useCommittedChanges } from '../../../../hooks/recoil/useCommittedChanges'
 import { useFiles } from '../../../../hooks/recoil/useFiles'
-import { useRepo } from '../../../../hooks/recoil/useRepo'
 import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
 import { Fade } from '../../../animation/Mount/Fade'
 import { Button } from '../../../atoms/Button/Button'
@@ -38,7 +37,7 @@ export function DraftManager() {
   const [commits, setCommits] = useState<ReadCommitResult[]>([])
   const [loading, setLoading] = useState(false)
   const [isDiscarding, setIsDiscarding] = useState(false)
-  const [repo] = useRepo()
+
   async function handleDiscard() {
     setIsDiscarding(true)
 
@@ -46,9 +45,7 @@ export function DraftManager() {
 
     setUnstagedChanges(await getUnstagedChanges())
 
-    const repoDir = repo.split('/')[1]
-
-    setFiles(await readDirRecursive(`/${repoDir}`))
+    setFiles(await readDirRecursive())
 
     const markdown = await readFile(activePath)
 

@@ -9,7 +9,6 @@ import { toast } from 'react-toastify'
 import { useUpload } from 'react-use-upload'
 import styled from 'styled-components'
 
-import { useEditor } from '../codeMirror/useEditor'
 import { useCreateSignedUrl } from '../image/useCreateSignedUrl'
 import { useReadCursorPosition } from '../localState/useReadCursorPosition'
 
@@ -18,7 +17,6 @@ const Style = styled.input`
 `
 
 export function useDropzone() {
-  const { editor } = useEditor()
   const input = useRef<HTMLInputElement>(null)
   const [createSignedUrl] = useCreateSignedUrl()
   const [uploadFile, setUploadFile] = useState<File | null>(null)
@@ -112,13 +110,15 @@ export function useDropzone() {
 
       const text = `![](${path})`
       const { ch, line } = cursorPosition
-      const lines = editor?.getValue().split('\n') ?? []
+      // const lines = editor?.getValue().split('\n') ?? []
+      // eslint-disable-next-line
+      const lines: any = []
       const characters = lines.length > 0 ? [...lines[line]] : []
       characters.splice(ch, 0, text)
       lines[line] = characters.join('')
       return lines.join('\n')
     },
-    [cursorPosition, editor]
+    [cursorPosition]
   )
 
   const updateEditor = useCallback(async () => {
@@ -126,8 +126,8 @@ export function useDropzone() {
 
     if (!content) return
 
-    editor?.setValue(content)
-  }, [imagePath, insertPathIntoString, editor])
+    // editor?.setValue(content)
+  }, [imagePath, insertPathIntoString])
 
   useEffect(() => {
     if (!done || !imagePath) {
