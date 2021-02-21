@@ -18,7 +18,9 @@ describe('SearchInput', () => {
 
     spyOn(useSearch, 'useSearch', () => ['', setSearch])
 
-    const { getByLabelText } = await render(<SearchInput />)
+    const { getByLabelText } = await render(
+      <SearchInput setSearch={() => null} search="mock" />
+    )
 
     const searchValue = 'MOCK_FILE'
 

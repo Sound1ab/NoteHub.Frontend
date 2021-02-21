@@ -1,8 +1,6 @@
 import React, { ReactNode, createRef } from 'react'
 import { useUpload } from 'react-use-upload'
 
-import { useCodeMirror } from '../../../../../hooks/codeMirror/useCodeMirror'
-import { useEditor } from '../../../../../hooks/codeMirror/useEditor'
 import { useContextMenu } from '../../../../../hooks/utils/useContextMenu'
 import { useDropzone } from '../../../../../hooks/utils/useDropzone'
 import {
@@ -29,34 +27,14 @@ describe('ContextMenu', () => {
   const drawHorizontalRule = jest.fn()
   const drawLink = jest.fn()
   const drawTable = jest.fn()
-  const drawTableComponent = jest.fn()
-  const drawTodoListComponent = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useCodeMirror as jest.Mock).mockReturnValue([
-      {
-        toggleOrderedList,
-        toggleCodeBlock,
-        toggleUnorderedList,
-        toggleItalic,
-        toggleBold,
-        toggleBlockquote,
-        drawHorizontalRule,
-        drawLink,
-        drawTable,
-        drawTableComponent,
-        drawTodoListComponent,
-      },
-    ])
     ;(useContextMenu as jest.Mock).mockReturnValue({
       isOpen: true,
       Portal: ({ children }: { children: ReactNode }) => <div>{children}</div>,
       ref: createRef(),
       setOpen: jest.fn(),
-    })
-    ;(useEditor as jest.Mock).mockReturnValue({
-      editor: { setValue: jest.fn(), getValue: () => 'MOCK CONTENT' },
     })
   })
 
@@ -86,10 +64,6 @@ describe('ContextMenu', () => {
   describe('When uploading an image', () => {
     it('should call updateFile with the currentPath and content if successfully uploaded', async () => {
       const setValue = jest.fn()
-
-      ;(useEditor as jest.Mock).mockReturnValue({
-        editor: { setValue, getValue: () => 'MOCK CONTENT' },
-      })
 
       const {
         result: {

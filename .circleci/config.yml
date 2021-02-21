@@ -148,7 +148,7 @@ workflows:
           name: build-development
           env: development
           requires:
-            - test
+#            - test
             - eslint
             - typescript
           filters:

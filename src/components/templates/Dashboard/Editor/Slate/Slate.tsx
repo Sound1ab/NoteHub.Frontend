@@ -49,11 +49,13 @@ export function Slate() {
 
   const handleOnChange = useCallback(
     (value: Node[]) => {
+      if (JSON.stringify(value) === JSON.stringify(slateValue)) return
+
       setSlateValue?.(value)
 
       writeContentToFSAndCheckUnstagedChanges(value)
     },
-    [writeContentToFSAndCheckUnstagedChanges, setSlateValue]
+    [writeContentToFSAndCheckUnstagedChanges, setSlateValue, slateValue]
   )
 
   const renderElement = useCallback(
