@@ -65,6 +65,31 @@ export const RegularButton = styled(Button)`
   align-items: center;
   text-decoration: none;
   border-radius: ${({ theme }) => theme.borderRadius};
+  transition: ${({ theme }) => theme.transition};
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.11);
+  font-size: ${({ theme }) => theme.typographyStyles.h4.fontSize};
+  font-weight: lighter;
+  line-height: 1;
+
+  &:visited {
+    color: #fff;
+  }
+
+  &:link {
+    color: var(--white);
+  }
+
+  * svg {
+    color: #fff;
+  }
+
+  &:hover {
+    box-shadow: ${({ theme }) => theme.boxShadow};
+  }
+
+  &:active {
+    transform: translateY(${({ theme }) => theme.spacing.xxxs});
+  }
 `
 
 export const GithubButton = styled(RegularButton)`

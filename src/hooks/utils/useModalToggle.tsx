@@ -21,8 +21,8 @@ export function useModalToggle<T extends HTMLElement>({
   const ref = useRef<T | null>(null)
   const theme = useTheme()
   const [position, setClickPosition] = useState({
-    top: '-9999px',
-    left: '-9999px',
+    top: '0px',
+    left: '0px',
   })
 
   useEffect(() => {

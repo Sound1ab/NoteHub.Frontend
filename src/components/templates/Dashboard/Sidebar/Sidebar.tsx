@@ -5,16 +5,16 @@ import { CONTAINER_ID } from '../../../../enums'
 import { useSearch } from '../../../../hooks/recoil/useSearch'
 import { Button } from '../../../atoms/Button/Button'
 import { Icon } from '../../../atoms/Icon/Icon'
+import { SearchInput } from '../../../atoms/SearchInput/SearchInput'
 import { FileTree } from './FileTree/FileTree'
-import { SearchInput } from './SearchInput/SearchInput'
 
 export function Sidebar() {
-  const [search] = useSearch()
+  const [search, setSearch] = useSearch()
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
 
   return (
     <StyledSidebar id={CONTAINER_ID.SIDEBAR}>
-      <SearchInput />
+      <StyledSearchInput search={search} setSearch={setSearch} />
       <Navigation>
         <FileTree
           isNewFileOpen={isNewFileOpen}
@@ -83,4 +83,8 @@ const PlusIcon = styled(Icon)`
   svg {
     color: var(--accent-primary);
   }
+`
+
+const StyledSearchInput = styled(SearchInput)`
+  margin: ${({ theme }) => theme.spacing.xs};
 `

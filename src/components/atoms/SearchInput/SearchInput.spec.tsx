@@ -1,9 +1,9 @@
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 
-import * as useSearch from '../../../../../hooks/recoil/useSearch'
-import { render } from '../../../../../test-utils'
-import { spyOn } from '../../../../../utils/testing/spyOn'
+import * as useSearch from '../../../hooks/recoil/useSearch'
+import { render } from '../../../test-utils'
+import { spyOn } from '../../../utils/testing/spyOn'
 import { SearchInput } from './SearchInput'
 
 jest.mock('../../../../../hooks/recoil/useSearch')

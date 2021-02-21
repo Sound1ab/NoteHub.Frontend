@@ -37,3 +37,10 @@ export const GithubUserFragment = gql`
     name
   }
 `
+
+export const ConfigurationFragment = gql`
+  fragment configuration on Configuration {
+    id
+    connectedRepos
+  }
+`

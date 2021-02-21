@@ -10,10 +10,13 @@ import { useOpenFolders } from '../../../../../hooks/recoil/useOpenFolders'
 import { useRepo } from '../../../../../hooks/recoil/useRepo'
 import { useSearch } from '../../../../../hooks/recoil/useSearch'
 import { createNodes } from '../../../../../utils/createNodes'
+import { extractFilename } from '../../../../../utils/extractFilename'
 import { Fade } from '../../../../animation/Mount/Fade'
+import { Node_Type } from '../../../../apollo/generated_components_typings'
 import { UnstyledList } from '../../../../atoms/UnstyledList/UnstyledList'
 import { FileInput } from '../FileInput/FileInput'
-import { SearchResults } from './SearchResults/SearchResults'
+import { SearchResults } from '../../../../atoms/SearchResults/SearchResults'
+import { File } from './Tree/File/File'
 import { Tree } from './Tree/Tree'
 import { TreeSkeleton } from './TreeSkeleton'
 
@@ -54,6 +57,18 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
     await createFile(path)
   }
 
+  const searchFiles = files
+    .filter(({ type }: { type: Node_Type }) => type === Node_Type.File)
+    .map(({ type, path }: { type: Node_Type; path: string }) => {
+      const slug = extractFilename(path)
+
+      return {
+        slug,
+        path,
+        type,
+      }
+    })
+
   return (
     <DndProvider backend={HTML5Backend}>
       <>
@@ -62,7 +77,27 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
         </Fade>
         <Fade show={!loading}>
           {search ? (
-            <SearchResults />
+            <SearchResults<{ type: Node_Type; path: string; slug: string }>
+              search={search}
+              data={searchFiles}
+              keys={['slug']}
+            >
+              {(results) =>
+                results.map(({ item: { path, type, slug } }) => (
+                  <File
+                    key={path}
+                    node={{
+                      id: path,
+                      name: slug,
+                      type,
+                      path,
+                      isOptimistic: false,
+                    }}
+                    level={-1}
+                  />
+                ))
+              }
+            </SearchResults>
           ) : (
             <>
               {files &&

@@ -6,11 +6,16 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 import {
   faAlignJustify,
+  faArrowCircleUp,
   faBars,
+  faBinoculars,
   faBold,
   faBook,
+  faCheck,
+  faCheckCircle,
   faChevronDown,
   faChevronRight,
+  faCircle,
   faCode,
   faColumns,
   faComment,
@@ -23,6 +28,7 @@ import {
   faFolder,
   faGripLinesVertical,
   faImage,
+  faInfoCircle,
   faItalic,
   faLink,
   faList,
@@ -33,6 +39,7 @@ import {
   faPenSquare,
   faPlusCircle,
   faQuoteRight,
+  faRocket,
   faSignOutAlt,
   faSpinner,
   faSync,
@@ -40,12 +47,6 @@ import {
   faTimes,
   faTrash,
   faUser,
-  faBinoculars,
-  faRocket,
-  faInfoCircle,
-  faCircle,
-  faCheckCircle,
-  faArrowCircleUp,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { ReactNode } from 'react'
 
@@ -93,7 +94,8 @@ library.add(
   faInfoCircle,
   faCircle,
   faCheckCircle,
-  faArrowCircleUp
+  faArrowCircleUp,
+  faCheck
 )
 
 interface IIconProvider {

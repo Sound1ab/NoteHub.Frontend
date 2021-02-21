@@ -18,10 +18,11 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   activeRetextSettings?: Maybe<Array<Retext_Settings>>;
-  fileTree?: Maybe<TreeNode>;
   isDarkMode: Scalars['Boolean'];
+  listRepos?: Maybe<Array<Repo>>;
   login: Scalars['String'];
   logout: Scalars['String'];
+  readConfiguration?: Maybe<Configuration>;
   readFile?: Maybe<File>;
   readFiles?: Maybe<Array<File>>;
   readGithubUser?: Maybe<GithubUser>;
@@ -60,7 +61,8 @@ export type File = {
 
 export enum Node_Type {
   File = 'FILE',
-  Folder = 'FOLDER'
+  Folder = 'FOLDER',
+  User = 'USER'
 }
 
 export type Repo = {
@@ -80,6 +82,13 @@ export type GithubUser = {
   avatar_url: Scalars['String'];
   html_url: Scalars['String'];
   name?: Maybe<Scalars['String']>;
+  configuration?: Maybe<Configuration>;
+};
+
+export type Configuration = {
+  __typename?: 'Configuration';
+  id: Scalars['String'];
+  connectedRepos?: Maybe<Array<Scalars['String']>>;
 };
 
 export type Mutation = {
@@ -95,6 +104,7 @@ export type Mutation = {
   createRepo?: Maybe<Repo>;
   updateRepo?: Maybe<Repo>;
   deleteRepo?: Maybe<Repo>;
+  updateConfiguration?: Maybe<Configuration>;
 };
 
 
@@ -137,6 +147,11 @@ export type MutationUpdateRepoArgs = {
   input: UpdateRepoInput;
 };
 
+
+export type MutationUpdateConfigurationArgs = {
+  input: UpdateConfigurationInput;
+};
+
 export type CreateFileInput = {
   path: Scalars['String'];
   content?: Maybe<Scalars['String']>;
@@ -171,6 +186,10 @@ export type UpdateRepoInput = {
   private?: Maybe<Scalars['Boolean']>;
 };
 
+export type UpdateConfigurationInput = {
+  connectedRepos?: Maybe<Array<Scalars['String']>>;
+};
+
 export type Links = {
   __typename?: 'Links';
   html: Scalars['String'];
@@ -192,28 +211,6 @@ export enum CacheControlScope {
 }
 
 
-export type FileNode = {
-  __typename?: 'FileNode';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  path: Scalars['String'];
-  type?: Maybe<Node_Type>;
-  isOptimistic?: Maybe<Scalars['Boolean']>;
-};
-
-export type FolderNode = {
-  __typename?: 'FolderNode';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  toggled?: Maybe<Scalars['Boolean']>;
-  path: Scalars['String'];
-  type?: Maybe<Node_Type>;
-  children?: Maybe<Array<Maybe<TreeNode>>>;
-  isOptimistic?: Maybe<Scalars['Boolean']>;
-};
-
-export type TreeNode = FileNode | FolderNode;
-
 export type TreeFileFragment = (
   { __typename?: 'File' }
   & Pick<File, 'id' | 'path' | 'type' | 'url' | 'sha'>
@@ -227,7 +224,7 @@ export type FileFragment = (
 
 export type RepoFragment = (
   { __typename?: 'Repo' }
-  & Pick<Repo, 'name' | 'description' | 'private'>
+  & Pick<Repo, 'name' | 'description' | 'private' | 'full_name'>
 );
 
 export type GithubUserFragment = (
@@ -235,17 +232,10 @@ export type GithubUserFragment = (
   & Pick<GithubUser, 'id' | 'login' | 'avatar_url' | 'html_url' | 'name'>
 );
 
-type TreeNode_FileNode_Fragment = (
-  { __typename?: 'FileNode' }
-  & Pick<FileNode, 'id' | 'name' | 'path' | 'type' | 'isOptimistic'>
+export type ConfigurationFragment = (
+  { __typename?: 'Configuration' }
+  & Pick<Configuration, 'id' | 'connectedRepos'>
 );
-
-type TreeNode_FolderNode_Fragment = (
-  { __typename?: 'FolderNode' }
-  & Pick<FolderNode, 'id' | 'name' | 'toggled' | 'path' | 'type' | 'isOptimistic'>
-);
-
-export type TreeNodeFragment = TreeNode_FileNode_Fragment | TreeNode_FolderNode_Fragment;
 
 export type LoginQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -263,79 +253,27 @@ export type LogoutQuery = (
   & Pick<Query, 'logout'>
 );
 
-export type CreateFileMutationVariables = Exact<{
-  input: CreateFileInput;
-}>;
+export type ReadConfigurationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CreateFileMutation = (
-  { __typename?: 'Mutation' }
-  & { createFile?: Maybe<(
-    { __typename?: 'File' }
-    & FileFragment
-  )> }
-);
-
-export type DeleteFileMutationVariables = Exact<{
-  input: DeleteFileInput;
-}>;
-
-
-export type DeleteFileMutation = (
-  { __typename?: 'Mutation' }
-  & { deleteFile?: Maybe<(
-    { __typename?: 'File' }
-    & FileFragment
-  )> }
-);
-
-export type MoveFileMutationVariables = Exact<{
-  input: MoveFileInput;
-}>;
-
-
-export type MoveFileMutation = (
-  { __typename?: 'Mutation' }
-  & { moveFile?: Maybe<(
-    { __typename?: 'File' }
-    & FileFragment
-  )> }
-);
-
-export type ReadFileQueryVariables = Exact<{
-  path: Scalars['String'];
-}>;
-
-
-export type ReadFileQuery = (
+export type ReadConfigurationQuery = (
   { __typename?: 'Query' }
-  & { readFile?: Maybe<(
-    { __typename?: 'File' }
-    & FileFragment
+  & { readConfiguration?: Maybe<(
+    { __typename?: 'Configuration' }
+    & ConfigurationFragment
   )> }
 );
 
-export type ReadFilesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ReadFilesQuery = (
-  { __typename?: 'Query' }
-  & { readFiles?: Maybe<Array<(
-    { __typename?: 'File' }
-    & TreeFileFragment
-  )>> }
-);
-
-export type UpdateFileMutationVariables = Exact<{
-  input: UpdateFileInput;
+export type UpdateConfigurationMutationVariables = Exact<{
+  input: UpdateConfigurationInput;
 }>;
 
 
-export type UpdateFileMutation = (
+export type UpdateConfigurationMutation = (
   { __typename?: 'Mutation' }
-  & { updateFile?: Maybe<(
-    { __typename?: 'File' }
-    & FileFragment
+  & { updateConfiguration?: Maybe<(
+    { __typename?: 'Configuration' }
+    & ConfigurationFragment
   )> }
 );
 
@@ -345,35 +283,6 @@ export type CreateSignedUrlMutationVariables = Exact<{ [key: string]: never; }>;
 export type CreateSignedUrlMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'createSignedUrl'>
-);
-
-export type ReadActiveRetextSettingsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ReadActiveRetextSettingsQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'activeRetextSettings'>
-);
-
-export type ReadFileTreeQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ReadFileTreeQuery = (
-  { __typename?: 'Query' }
-  & { fileTree?: Maybe<(
-    { __typename?: 'FileNode' }
-    & Pick<FileNode, 'id' | 'name' | 'path' | 'type' | 'isOptimistic'>
-  ) | (
-    { __typename?: 'FolderNode' }
-    & Pick<FolderNode, 'id' | 'name' | 'toggled' | 'path' | 'type' | 'isOptimistic'>
-    & { children?: Maybe<Array<Maybe<(
-      { __typename?: 'FileNode' }
-      & TreeNode_FileNode_Fragment
-    ) | (
-      { __typename?: 'FolderNode' }
-      & TreeNode_FolderNode_Fragment
-    )>>> }
-  )> }
 );
 
 export type CreateRepoMutationVariables = Exact<{ [key: string]: never; }>;
@@ -387,15 +296,15 @@ export type CreateRepoMutation = (
   )> }
 );
 
-export type DeleteRepoMutationVariables = Exact<{ [key: string]: never; }>;
+export type ListReposQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DeleteRepoMutation = (
-  { __typename?: 'Mutation' }
-  & { deleteRepo?: Maybe<(
+export type ListReposQuery = (
+  { __typename?: 'Query' }
+  & { listRepos?: Maybe<Array<(
     { __typename?: 'Repo' }
-    & RepoFragment
-  )> }
+    & Pick<Repo, 'id' | 'full_name'>
+  )>> }
 );
 
 export type ReadRepoQueryVariables = Exact<{ [key: string]: never; }>;
@@ -404,19 +313,6 @@ export type ReadRepoQueryVariables = Exact<{ [key: string]: never; }>;
 export type ReadRepoQuery = (
   { __typename?: 'Query' }
   & { readRepo?: Maybe<(
-    { __typename?: 'Repo' }
-    & RepoFragment
-  )> }
-);
-
-export type UpdateRepoMutationVariables = Exact<{
-  input: UpdateRepoInput;
-}>;
-
-
-export type UpdateRepoMutation = (
-  { __typename?: 'Mutation' }
-  & { updateRepo?: Maybe<(
     { __typename?: 'Repo' }
     & RepoFragment
   )> }
@@ -466,20 +362,7 @@ export type Unnamed_1_Query = (
       }
       const result: IntrospectionResultData = {
   "__schema": {
-    "types": [
-      {
-        "kind": "UNION",
-        "name": "TreeNode",
-        "possibleTypes": [
-          {
-            "name": "FileNode"
-          },
-          {
-            "name": "FolderNode"
-          }
-        ]
-      }
-    ]
+    "types": []
   }
 };
       export default result;

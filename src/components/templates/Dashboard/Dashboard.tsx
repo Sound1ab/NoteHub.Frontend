@@ -1,65 +1,20 @@
 import React from 'react'
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { useReadRepo } from '../../../hooks/repo/useReadRepo'
-import { SlateValueProvider } from '../../providers/SlateValueProvider/SlateValueProvider'
-import { Configuration } from './Configuration/Configuration'
-import { Repos } from './Configuration/Repos/Repos'
-import { Settings } from './Configuration/Settings/Settings'
-import { TextCheck } from './Configuration/TextCheck/TextCheck'
-import { Editor } from './Editor/Editor'
+import { EditorSwitch } from '../../utility/Switch/EditorSwitch'
 import { PrimarySidebar } from './PrimarySidebar/PrimarySidebar'
 import { Sidebar } from './Sidebar/Sidebar'
 import { Toolbar } from './Toolbar/Toolbar'
 
 function Dashboard() {
-  const { repo, loading } = useReadRepo()
-  const { path } = useRouteMatch()
-
-  if (loading) {
-    return null
-  }
-
-  if (!repo) {
-    return (
-      <Redirect
-        to={{
-          pathname: '/setup',
-        }}
-      />
-    )
-  }
-
   return (
     <Grid>
       <Toolbar />
       <MobileScroll>
         <PrimarySidebar />
         <Sidebar />
-        <Switch>
-          <Route exact path={path}>
-            <SlateValueProvider>
-              <Editor />
-            </SlateValueProvider>
-          </Route>
-          <Route path={`${path}/settings`}>
-            <Configuration>
-              <Settings />
-            </Configuration>
-          </Route>
-          <Route path={`${path}/text-check`}>
-            <Configuration>
-              <TextCheck />
-            </Configuration>
-          </Route>
-          <Route path={`${path}/repos`}>
-            <Configuration>
-              <Repos />
-            </Configuration>
-          </Route>
-        </Switch>
       </MobileScroll>
+      <EditorSwitch />
     </Grid>
   )
 }

@@ -1,10 +1,10 @@
 import { screen } from '@testing-library/react'
 import React from 'react'
 
-import * as useFiles from '../../../../../../hooks/recoil/useFiles'
-import * as useSearch from '../../../../../../hooks/recoil/useSearch'
-import { render } from '../../../../../../test-utils'
-import { spyOn } from '../../../../../../utils/testing/spyOn'
+import * as useFiles from '../../../hooks/recoil/useFiles'
+import * as useSearch from '../../../hooks/recoil/useSearch'
+import { render } from '../../../test-utils'
+import { spyOn } from '../../../utils/testing/spyOn'
 import { SearchResults } from './SearchResults'
 
 jest.mock('../../../../../../hooks/recoil/useFiles')

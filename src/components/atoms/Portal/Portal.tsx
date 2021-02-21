@@ -7,7 +7,7 @@ import { useClickOutside } from '../../../hooks/utils/useClickOutside'
 
 export interface IPortal {
   children?: ReactNode
-  setOpen: Dispatch<SetStateAction<boolean>>
+  setOpen?: Dispatch<SetStateAction<boolean>>
   domNode?: HTMLElement | null
   hasBackground?: boolean
   hasClickLayer?: boolean
@@ -28,7 +28,7 @@ export const Portal = React.forwardRef(
     }: IPortal,
     ref?: React.Ref<HTMLElement> | null
   ) => {
-    useClickOutside(() => setOpen(false), ref)
+    useClickOutside(() => setOpen?.(false), ref)
     return ReactDOM.createPortal(
       <Wrapper
         hasBackground={hasBackground}
