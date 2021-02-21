@@ -9,7 +9,6 @@ import { useActivePath } from '../recoil/useActivePath'
 import { useFiles } from '../recoil/useFiles'
 import { useFileTreePath } from '../recoil/useFileTreePath'
 import { useOpenFolders } from '../recoil/useOpenFolders'
-import { useRepo } from '../recoil/useRepo'
 import { useTabs } from '../recoil/useTabs'
 import { useUnstagedChanges } from '../recoil/useUnstagedChanges'
 
@@ -34,9 +33,6 @@ export function useFileTree(): UseFileTreeReturn {
   const [, setOpenFolders] = useOpenFolders()
   const [tabs, setTabs] = useTabs()
   const [, setUnstagedChanges] = useUnstagedChanges()
-  const [repo] = useRepo()
-
-  const repoDir = repo.split('/')[1]
 
   const [
     { unlink, readDirRecursive, rename, writeFile },
@@ -114,7 +110,6 @@ export function useFileTree(): UseFileTreeReturn {
       readDirRecursive,
       setTabs,
       tabs,
-      repoDir,
     ]
   )
 
@@ -149,7 +144,6 @@ export function useFileTree(): UseFileTreeReturn {
       activePath,
       readDirRecursive,
       setTabs,
-      repoDir,
     ]
   )
 
@@ -178,7 +172,6 @@ export function useFileTree(): UseFileTreeReturn {
       readDirRecursive,
       setTabs,
       writeFile,
-      repoDir,
     ]
   )
 

@@ -1,12 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { useReadConfiguration } from '../../../../../../hooks/configuration/useReadConfiguration'
+import { useUpdateConfiguration } from '../../../../../../hooks/configuration/useUpdateConfiguration'
 import { useRepo } from '../../../../../../hooks/recoil/useRepo'
 import { useReadRepo } from '../../../../../../hooks/repo/useReadRepo'
 import { useReadGithubUser } from '../../../../../../hooks/user/useReadGithubUser'
 import { daysFromEvent } from '../../../../../../utils/daysFromEvent'
 import { Fade } from '../../../../../animation/Mount/Fade'
 import { Icon } from '../../../../../atoms/Icon/Icon'
+import { ErrorToast } from '../../../../../atoms/Toast/Toast'
 import { Card } from './Card'
 
 interface ICard {
@@ -17,11 +20,33 @@ export function RepoCard({ name }: ICard) {
   const { repo, loading: repoLoading } = useReadRepo(name)
   const { user, loading: userLoading } = useReadGithubUser()
   const [, setRepo] = useRepo()
+  const { configuration } = useReadConfiguration()
+  const [updateConfiguration] = useUpdateConfiguration()
 
   function handleClick() {
     const login = user?.login
 
     setRepo(`${login}/${name}`)
+  }
+
+  async function handleDisconnect(e: React.MouseEvent) {
+    e.stopPropagation()
+
+    if (!configuration) {
+      ErrorToast('There was a problem connecting')
+      return
+    }
+
+    const connectedRepos = configuration?.connectedRepos ?? []
+
+    try {
+      await updateConfiguration({
+        ...configuration,
+        connectedRepos: [...connectedRepos.filter((repo) => repo !== name)],
+      })
+    } catch {
+      ErrorToast('There was a problem connecting')
+    }
   }
 
   return (
@@ -38,11 +63,18 @@ export function RepoCard({ name }: ICard) {
               last updated {daysFromEvent(repo?.updated_at)}d
             </UpdatedAt>
           </UpdateWrapper>
-          {repo?.private ? (
-            <StyledIcon icon="lock" />
-          ) : (
-            <StyledIcon icon="unlock" />
-          )}
+          <IconWrapper>
+            {repo?.private ? (
+              <StyledIcon title="Repo is private. Make public" icon="lock" />
+            ) : (
+              <StyledIcon title="Repo is public. Make private" icon="unlock" />
+            )}
+            <StyledIcon
+              title="Disconnect repo"
+              icon="trash"
+              onClick={handleDisconnect}
+            />
+          </IconWrapper>
         </InfoWrapper>
       </Card>
     </Fade>
@@ -92,4 +124,12 @@ const UpdatedAt = styled.h6`
 
 const StyledIcon = styled(Icon)`
   color: var(--text-primary);
+`
+
+const IconWrapper = styled.div`
+  display: flex;
+
+  div + div {
+    margin-left: ${({ theme }) => theme.spacing.xxs};
+  }
 `

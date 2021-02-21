@@ -43,6 +43,8 @@ export function ConnectRepo() {
       })
     } catch {
       ErrorToast('There was a problem connecting')
+    } finally {
+      handleCancel()
     }
   }
 

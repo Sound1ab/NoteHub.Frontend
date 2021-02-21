@@ -201,7 +201,7 @@ export function useGit(): UseGitReturn {
         setLoading(false)
       }
     },
-    []
+    [dir]
   )
 
   const getDeletedUnstagedChanges = useCallback(async () => {
