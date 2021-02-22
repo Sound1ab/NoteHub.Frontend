@@ -1,4 +1,7 @@
-import { Editor, Element, Node, Point, Range, Transforms } from 'slate'
+import { Editor, Element, Point, Range, Transforms } from 'slate'
+
+import { insertTableCell } from '../utils/commands/insertTableCell'
+import { insertTableRow } from '../utils/commands/insertTableRow'
 
 const SHORTCUTS: Record<string, { type: string; depth?: number }> = {
   '*': {
@@ -102,44 +105,30 @@ export function withShortcuts(editor: Editor) {
         }
 
         if (element.type === 'table') {
-          const cell = {
-            type: 'tableCell',
-            children: [{ text: 'Content' }],
-          }
-          const row = {
-            type: 'tableRow',
-            header: undefined,
-            footer: undefined,
-          }
+          const block = Editor.above(editor, {
+            match: (n) => Editor.isBlock(editor, n),
+          })
 
-          const children = Node.children(editor, path, { reverse: true })
-
-          for (const child of children) {
-            Transforms.removeNodes(editor, { at: child[1] })
-            Transforms.insertNodes(
+          if (!block) return
+          ;[0, 1].forEach((position) => {
+            insertTableRow({
               editor,
-              { ...row, children: [cell] },
-              {
-                at: child[1],
-              }
-            )
-            Transforms.insertNodes(
+              header: position === 0,
+              at: [...block[1], position],
+            })
+          })
+          ;[
+            [0, 0],
+            [0, 1],
+            [1, 0],
+            [1, 1],
+          ].forEach(([rowPosition, cellPosition]) => {
+            insertTableCell({
               editor,
-              { ...row, header: true, children: [{ ...cell, header: true }] },
-              {
-                at: child[1],
-              }
-            )
-          }
-
-          Transforms.insertNodes(
-            editor,
-            {
-              type: 'paragraph',
-              children: [{ text: '' }],
-            },
-            { at: [path[0] + 1] }
-          )
+              header: rowPosition === 0,
+              at: [...block[1], rowPosition, cellPosition],
+            })
+          })
         }
 
         return

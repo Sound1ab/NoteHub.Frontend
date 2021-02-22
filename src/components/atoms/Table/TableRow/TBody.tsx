@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { useTable } from '../../../../hooks/context/useTable'
 import { deleteTableRow } from '../../../templates/Dashboard/Editor/Slate/utils/commands/deleteTableRow'
-import { insertTableRow } from '../../../templates/Dashboard/Editor/Slate/utils/commands/insertTableRow'
+import { insertMatchingTableRow } from '../../../templates/Dashboard/Editor/Slate/utils/commands/insertMatchingTableRow'
 import { Icon } from '../../Icon/Icon'
 
 export function TBody({ children, attributes, element }: RenderElementProps) {
@@ -38,7 +38,7 @@ export function TBody({ children, attributes, element }: RenderElementProps) {
   }
 
   function handlePlusClick() {
-    insertTableRow(reactEditor, element)
+    insertMatchingTableRow(reactEditor, element)
   }
 
   function handleTrashClick(e: React.MouseEvent<HTMLDivElement>) {
@@ -53,7 +53,7 @@ export function TBody({ children, attributes, element }: RenderElementProps) {
     <StyledTBody {...attributes}>
       <Tr onMouseOver={handleMouseOver}>
         {children}
-        <CollapsedTableCell ref={collapsedTableCellRef}>
+        <CollapsedTableCell ref={collapsedTableCellRef} contentEditable={false}>
           <Plus
             icon="plus-circle"
             size="lg"

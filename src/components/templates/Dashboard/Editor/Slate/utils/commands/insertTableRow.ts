@@ -1,30 +1,23 @@
-import { Element, Node, Transforms } from 'slate'
-import { ReactEditor } from 'slate-react'
+import { Editor, Node, Transforms } from 'slate'
 
-export function insertTableRow(editor: ReactEditor, node: Node) {
-  const path = ReactEditor.findPath(editor, node)
+interface IInsertTableRow {
+  editor: Editor
+  header?: boolean
+  at: number[]
+  children?: Node[]
+}
 
-  // Create cells that make up a row
-  const cells =
-    Element.isElement(node) &&
-    node.children.map(() => ({
-      type: 'tableCell',
-      children: [{ text: 'Content' }],
-    }))
-
-  if (!cells) return
-
-  // Insert row one leaf after the selected row
+export function insertTableRow({
+  editor,
+  header = false,
+  at,
+  children = [],
+}: IInsertTableRow) {
   Transforms.insertNodes(
     editor,
+    { type: 'tableRow', header, children },
     {
-      type: 'tableRow',
-      header: undefined,
-      footer: undefined,
-      children: cells,
-    },
-    {
-      at: [path[0], path[1] + 1],
+      at,
     }
   )
 }

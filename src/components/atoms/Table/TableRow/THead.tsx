@@ -5,7 +5,7 @@ import styled from 'styled-components'
 export function THead({ children, attributes }: RenderElementProps) {
   return (
     <StyledTHead {...attributes}>
-      <tr>{children}</tr>
+      <tr {...attributes}>{children}</tr>
     </StyledTHead>
   )
 }

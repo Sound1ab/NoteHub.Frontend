@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { useTable } from '../../../../hooks/context/useTable'
 import { deleteTableColumn } from '../../../templates/Dashboard/Editor/Slate/utils/commands/deleteTableColumn'
-import { insertTableColumn } from '../../../templates/Dashboard/Editor/Slate/utils/commands/insertTableColumn'
+import { insertTableColumn } from '../../../templates/Dashboard/Editor/Slate/utils/commands/insertMatchingTableColumn'
 import { Icon } from '../../Icon/Icon'
 
 interface ITh extends RenderElementProps {
@@ -49,7 +49,12 @@ export function Th({ attributes, children, element }: ITh) {
   return (
     <StyledTh {...attributes} onMouseOver={handleMouseOver}>
       <ActionButtonWrapper contentEditable={false} onClick={handleActionClick}>
-        <ActionButton size="xs" icon="ellipsis-h" isDisabled={false} />
+        <ActionButton
+          contentEditable={false}
+          size="xs"
+          icon="ellipsis-h"
+          isDisabled={false}
+        />
       </ActionButtonWrapper>
       <Plus
         icon="plus-circle"
