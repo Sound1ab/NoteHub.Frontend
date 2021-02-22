@@ -12,8 +12,8 @@ import { useUnstagedChanges } from '../../../../../hooks/recoil/useUnstagedChang
 import { debounce } from '../../../../../utils/debounce'
 import { Element } from './Element/Element'
 import { Leaf } from './Leaf/Leaf'
-import { withShortcuts } from './plugins/withShortcuts'
-import { withTables } from './plugins/withTables'
+import { withShortcuts } from './utils/plugins/withShortcuts'
+import { withTables } from './utils/plugins/withTables'
 import { inlineCodeCursorBehaviour } from './utils/behaviours/inlineCodeCursorBehaviour'
 import { insertLink } from './utils/commands/insertLink'
 import { toggleInlineStyle } from './utils/commands/toggleInlineStyle'
@@ -21,10 +21,14 @@ import { decorateCodeBlock } from './utils/decorators/decorateCodeBlock'
 import { isInlineActive } from './utils/helpers/isInlineActive'
 import { isTypeActive } from './utils/helpers/isTypeActive'
 import { slateToRemark } from './utils/unifed/slateToRemark'
+import { withLinks } from './utils/plugins/withLinks'
 
 export function Slate() {
   const editor = useMemo(
-    () => withReact(withHistory(withTables(withShortcuts(createEditor())))),
+    () =>
+      withReact(
+        withHistory(withLinks(withTables(withShortcuts(createEditor()))))
+      ),
     []
   )
   const [, setUnstagedChanges] = useUnstagedChanges()

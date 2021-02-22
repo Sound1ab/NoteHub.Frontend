@@ -1,7 +1,7 @@
 import { Editor, Element, Point, Range, Transforms } from 'slate'
 
-import { insertTableCell } from '../utils/commands/insertTableCell'
-import { insertTableRow } from '../utils/commands/insertTableRow'
+import { insertTableCell } from '../commands/insertTableCell'
+import { insertTableRow } from '../commands/insertTableRow'
 
 const SHORTCUTS: Record<string, { type: string; depth?: number }> = {
   '*': {
