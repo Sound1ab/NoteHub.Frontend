@@ -50,6 +50,7 @@ export const createTypography = (isLargeText: boolean) => {
       },
       li: {
         color: 'var(--text-primary)',
+        lineHeight: 1.5,
       },
       h1: {
         color: 'var(--text-primary)',
