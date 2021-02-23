@@ -105,6 +105,7 @@ export function Node({
 
 const StyledListItem = styled.li`
   margin: 0;
+  line-height: 1;
 `
 
 const Wrapper = styled.div<
