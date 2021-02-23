@@ -28,7 +28,7 @@ type UseFileTreeReturn = [
 
 export function useFileTree(): UseFileTreeReturn {
   const [activePath, setActivePath] = useActivePath()
-  const [, setFileTreePath] = useFileTreePath()
+  const [fileTreePath, setFileTreePath] = useFileTreePath()
   const [, setFiles] = useFiles()
   const [, setOpenFolders] = useOpenFolders()
   const [tabs, setTabs] = useTabs()
@@ -85,16 +85,21 @@ export function useFileTree(): UseFileTreeReturn {
 
       setTabs((tabs) => new Set([...tabs].filter((tab) => tab !== path)))
 
+      const nextTab = getNextTab([...tabs], path)
       // If the file deleted is active, update the active file based on
       // the open tabs
       if (path === activePath) {
-        const nextTab = getNextTab([...tabs], path)
-
         if (!nextTab) {
           setActivePath('')
-          setFileTreePath('')
         } else {
           setActivePath(nextTab)
+        }
+      }
+
+      if (path === fileTreePath) {
+        if (!nextTab) {
+          setFileTreePath('')
+        } else {
           setFileTreePath(nextTab)
         }
       }
@@ -107,6 +112,7 @@ export function useFileTree(): UseFileTreeReturn {
       setActivePath,
       setFileTreePath,
       activePath,
+      fileTreePath,
       readDirRecursive,
       setTabs,
       tabs,
@@ -130,6 +136,8 @@ export function useFileTree(): UseFileTreeReturn {
 
       if (oldPath === activePath) {
         setActivePath(newPath)
+      }
+      if (oldPath === fileTreePath) {
         setFileTreePath(newPath)
       }
     },
@@ -142,6 +150,7 @@ export function useFileTree(): UseFileTreeReturn {
       setActivePath,
       setFileTreePath,
       activePath,
+      fileTreePath,
       readDirRecursive,
       setTabs,
     ]
@@ -189,7 +198,7 @@ export function useFileTree(): UseFileTreeReturn {
 
   const folderClick = useCallback(
     async (path: string, toggled: boolean) => {
-      const isActive = path === activePath
+      const isActive = path === fileTreePath
 
       if (isActive) {
         toggleFolder(path, !toggled)
@@ -199,7 +208,7 @@ export function useFileTree(): UseFileTreeReturn {
 
       setFileTreePath(path)
     },
-    [activePath, toggleFolder, setFileTreePath]
+    [fileTreePath, toggleFolder, setFileTreePath]
   )
 
   const chevronClick = useCallback(
