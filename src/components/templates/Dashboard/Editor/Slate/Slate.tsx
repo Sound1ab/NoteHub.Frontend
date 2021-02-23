@@ -18,7 +18,7 @@ import { toggleInlineStyle } from './utils/commands/toggleInlineStyle'
 import { decorateCodeBlock } from './utils/decorators/decorateCodeBlock'
 import { isInlineActive } from './utils/helpers/isInlineActive'
 import { isTypeActive } from './utils/helpers/isTypeActive'
-import { withLinks } from './utils/plugins/withLinks'
+import { withLists } from './utils/plugins/withLists'
 import { withShortcuts } from './utils/plugins/withShortcuts'
 import { withTables } from './utils/plugins/withTables'
 import { slateToRemark } from './utils/unifed/slateToRemark'
@@ -27,7 +27,7 @@ export function Slate() {
   const editor = useMemo(
     () =>
       withReact(
-        withHistory(withLinks(withTables(withShortcuts(createEditor()))))
+        withHistory(withLists(withTables(withShortcuts(createEditor()))))
       ),
     []
   )
@@ -84,8 +84,9 @@ export function Slate() {
         }
       }
 
-      if (event.shiftKey) {
-        if (event.key === 'Tab') {
+      if (event.key === 'Tab') {
+        event.preventDefault()
+        if (event.shiftKey) {
           const [listItem] = Editor.nodes(editor, {
             match: (n) => n.type === 'listItem',
             universal: true,
@@ -94,28 +95,43 @@ export function Slate() {
           if (listItem) {
             const [, listItemPath] = listItem
 
+            // Get the ancestors of the list item
+            const nodes = Node.levels(editor, listItemPath, { reverse: true })
+
+            let lists = 0
+
+            // Determine how many ancestor lists the list item has
+            for (const nodeEntry of nodes) {
+              const [node] = nodeEntry
+              if (node.type !== 'list') continue
+
+              lists += 1
+            }
+
+            // For some reason it has 2 if it's at base indent level
+            // Do nothing in this case
+            if (lists === 1) return
+
             Transforms.liftNodes(editor, { at: listItemPath })
           }
+          return
+        }
+
+        const [listItem] = Editor.nodes(editor, {
+          match: (n) => n.type === 'listItem',
+          universal: true,
+        })
+
+        if (listItem) {
+          const [, listItemPath] = listItem
+
+          Transforms.wrapNodes(
+            editor,
+            { type: 'list', children: [] },
+            { at: listItemPath }
+          )
         }
       }
-
-      // if (event.key === 'Tab') {
-      //   const [listItem] = Editor.nodes(editor, {
-      //     match: (n) => n.type === 'listItem',
-      //     universal: true,
-      //   })
-      //
-      //   if (listItem) {
-      //     console.log('here')
-      //     const [, listItemPath] = listItem
-      //
-      //     Transforms.wrapNodes(
-      //       editor,
-      //       { type: 'list', children: [] },
-      //       { at: listItemPath }
-      //     )
-      //   }
-      // }
 
       if (event.metaKey) {
         switch (event.key) {

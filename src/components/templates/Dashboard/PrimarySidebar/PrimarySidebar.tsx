@@ -10,8 +10,6 @@ export function PrimarySidebar() {
   const { url } = useRouteMatch()
   const { pathname } = useLocation()
 
-  console.log('pathname', pathname)
-
   const repos = `${url}/repos`
   const textCheck = `${url}/text-check`
   const settings = `${url}/settings`

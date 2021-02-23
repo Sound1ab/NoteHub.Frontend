@@ -1,6 +1,6 @@
-import { Editor, Element, Point, Range, Transforms } from 'slate'
+import { Editor, Element, Node, Point, Range, Transforms } from 'slate'
 
-export function withLinks(editor: Editor) {
+export function withLists(editor: Editor) {
   const { deleteBackward, insertBreak } = editor
 
   editor.deleteBackward = (unit) => {
@@ -51,7 +51,35 @@ export function withLinks(editor: Editor) {
             { type: 'paragraph' },
             { at: listItemPath }
           )
-          Transforms.liftNodes(editor, { at: listItemPath })
+
+          // Get the ancestors of the list item
+          const nodes = Node.levels(editor, listItemPath, { reverse: true })
+
+          let lists = 0
+
+          // Determine how many ancestor lists the list item has
+          // incase the list is indented
+          for (const nodeEntry of nodes) {
+            const [node] = nodeEntry
+            if (node.type !== 'list') continue
+
+            lists += 1
+          }
+
+          // Lift up the paragraph out of any nested lists
+          for (let i = 0; i < lists; i++) {
+            const [paragraph] = Editor.nodes(editor, {
+              match: (n) =>
+                !Editor.isEditor(n) &&
+                Element.isElement(n) &&
+                n.type === 'paragraph',
+            })
+
+            const [, paragraphPath] = paragraph
+
+            Transforms.liftNodes(editor, { at: paragraphPath })
+          }
+
           return
         }
       }
