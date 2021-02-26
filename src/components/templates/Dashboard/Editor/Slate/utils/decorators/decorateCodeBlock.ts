@@ -2,6 +2,8 @@ import Prism, { Token } from 'prismjs'
 import { Node, NodeEntry, Range, Text } from 'slate'
 
 export function decorateCodeBlock([node, path]: NodeEntry): Range[] {
+  if (node.type !== 'code') return []
+
   const ranges: Range[] = []
 
   let text = ''

@@ -1,6 +1,10 @@
 import { Editor, Point, Range, Transforms } from 'slate'
 
+import { isInlineActive } from '../helpers/isInlineActive'
+
 export function inlineCodeCursorBehaviour(editor: Editor) {
+  if (!isInlineActive(editor, 'inlineCode')) return
+
   const { selection } = editor
 
   if (!selection || !Range.isCollapsed(selection)) return

@@ -1,4 +1,5 @@
 import gfm from 'remark-gfm'
+// @ts-ignore
 import { slateToRemark as _slateToRemark } from 'remark-slate-transformer'
 import stringify from 'remark-stringify'
 import { Node } from 'slate'

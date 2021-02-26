@@ -4,8 +4,8 @@ import { RenderElementProps } from 'slate-react/dist/components/editable'
 import styled from 'styled-components'
 
 import { useTable } from '../../../../hooks/context/useTable'
-import { deleteTableRow } from '../../../templates/Dashboard/Editor/Slate/utils/commands/deleteTableRow'
-import { insertMatchingTableRow } from '../../../templates/Dashboard/Editor/Slate/utils/commands/insertMatchingTableRow'
+import { deleteTableRow } from '../../../templates/Dashboard/Editor/Slate/utils/commands/table/deleteTableRow'
+import { insertMatchingTableRow } from '../../../templates/Dashboard/Editor/Slate/utils/commands/table/insertMatchingTableRow'
 import { Icon } from '../../Icon/Icon'
 
 export function TBody({ children, attributes, element }: RenderElementProps) {

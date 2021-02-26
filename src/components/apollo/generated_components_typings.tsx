@@ -273,6 +273,14 @@ export type LogoutQuery = (
   & Pick<Query, 'logout'>
 );
 
+export type RefreshQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RefreshQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'refresh'>
+);
+
 export type ReadConfigurationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -333,19 +341,6 @@ export type ReadRepoQueryVariables = Exact<{
 
 
 export type ReadRepoQuery = (
-  { __typename?: 'Query' }
-  & { readRepo?: Maybe<(
-    { __typename?: 'Repo' }
-    & RepoFragment
-  )> }
-);
-
-export type ReadRepoLazyQueryVariables = Exact<{
-  name: Scalars['String'];
-}>;
-
-
-export type ReadRepoLazyQuery = (
   { __typename?: 'Query' }
   & { readRepo?: Maybe<(
     { __typename?: 'Repo' }

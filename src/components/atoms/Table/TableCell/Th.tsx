@@ -4,8 +4,8 @@ import { RenderElementProps } from 'slate-react/dist/components/editable'
 import styled from 'styled-components'
 
 import { useTable } from '../../../../hooks/context/useTable'
-import { deleteTableColumn } from '../../../templates/Dashboard/Editor/Slate/utils/commands/deleteTableColumn'
-import { insertTableColumn } from '../../../templates/Dashboard/Editor/Slate/utils/commands/insertMatchingTableColumn'
+import { deleteTableColumn } from '../../../templates/Dashboard/Editor/Slate/utils/commands/table/deleteTableColumn'
+import { insertTableColumn } from '../../../templates/Dashboard/Editor/Slate/utils/commands/table/insertMatchingTableColumn'
 import { Icon } from '../../Icon/Icon'
 
 interface ITh extends RenderElementProps {

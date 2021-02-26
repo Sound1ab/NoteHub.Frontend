@@ -1,7 +1,8 @@
-import { Editor, Element, Point, Range, Transforms } from 'slate'
+import { Editor, Element, Node, Point, Range, Transforms } from 'slate'
 
-import { insertTableCell } from '../commands/insertTableCell'
-import { insertTableRow } from '../commands/insertTableRow'
+import { insertTableCell } from '../commands/table/insertTableCell'
+import { insertTableRow } from '../commands/table/insertTableRow'
+import { getCurrentItem } from '../helpers/list/getCurrentItem'
 
 const SHORTCUTS: Record<string, { type: string; depth?: number }> = {
   '*': {
@@ -89,12 +90,22 @@ export function withShortcuts(editor: Editor) {
 
         if (element.type === 'listItem') {
           const list = { type: 'list', ordered: false, children: [] }
+
           Transforms.wrapNodes(editor, list, {
-            match: (n) =>
-              !Editor.isEditor(n) &&
-              Element.isElement(n) &&
-              n.type === 'listItem',
+            at: path,
           })
+
+          const item = getCurrentItem(editor)
+
+          if (!item) return
+
+          const [, itemPath] = item
+
+          Transforms.insertNodes(
+            editor,
+            { type: 'paragraph', children: [] },
+            { at: [...itemPath, 0] }
+          )
         }
 
         if (element.type === 'thematicBreak') {

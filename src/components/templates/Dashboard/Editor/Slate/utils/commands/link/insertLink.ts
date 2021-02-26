@@ -5,12 +5,12 @@ export const isSelectionLink = (editor: Editor, selection: Range) => {
   return Node.parent(editor, selection.focus.path).type === 'link'
 }
 
-export const unwrapLink = (editor: ReactEditor) => {
+export const unwrapLink = (editor: Editor) => {
   Transforms.unwrapNodes(editor, { match: (n) => n.type === 'link' })
 }
 
 const wrapLink = (
-  editor: ReactEditor,
+  editor: Editor,
   url: string,
   text: string,
   selection: Range
@@ -24,7 +24,7 @@ const wrapLink = (
 
   if (isCollapsed && isSelectionLink(editor, selection)) {
     const linkNodePath = ReactEditor.findPath(
-      editor,
+      editor as any,
       Node.parent(editor, selection.focus.path)
     )
 
@@ -50,10 +50,14 @@ const wrapLink = (
   Transforms.wrapNodes(editor, link, { split: true })
 }
 
-export const insertLink = (editor: ReactEditor, url: string, text: string) => {
+export const insertLink = (editor: Editor) => {
   const selection = editor.selection
 
-  if (!selection) return
+  if (!selection || Range.isCollapsed(selection)) return
+
+  const url = 'http://google.com'
+
+  const text = Editor.string(editor, selection)
 
   wrapLink(editor, url, text, selection)
 }

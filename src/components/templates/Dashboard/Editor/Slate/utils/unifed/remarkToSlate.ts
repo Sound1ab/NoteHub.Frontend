@@ -1,12 +1,12 @@
 import gfm from 'remark-gfm'
 import parse from 'remark-parse'
+// @ts-ignore
 import { remarkToSlate as _remarkToSlate } from 'remark-slate-transformer'
 import { Node } from 'slate'
 import unified from 'unified'
 
 import { mdastAppendTextToEmptyListItem } from '../mdast/mdastAppendTextToEmptyListItem'
 import { mdastFlattenBlockQuote } from '../mdast/mdastFlattenBlockQuote'
-import { flattenListItemParagraphs } from '../mdast/mdastFlattenListItem'
 import { mdastHr } from '../mdast/mdastHr'
 import { mdastTable } from '../mdast/mdastTable'
 import { mdastTableCell } from '../mdast/mdastTableCell'
@@ -17,7 +17,6 @@ export function remarkToSlate(markdown: string) {
     .use(parse)
     .use(gfm)
     .use(mdastHr)
-    .use(flattenListItemParagraphs)
     .use(mdastFlattenBlockQuote)
     .use(mdastAppendTextToEmptyListItem)
     .use(mdastTableHeader)

@@ -17,6 +17,7 @@ import {
   rollback as gitRollback,
   status as gitStatus,
 } from '../../services/worker/git.worker'
+import { useLazyRefresh } from '../authorization/useRefresh'
 import { useReadJwt } from '../localState/useReadJwt'
 import { useRepo } from '../recoil/useRepo'
 
@@ -45,6 +46,7 @@ export function useGit(): UseGitReturn {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [repo] = useRepo()
+  const [refresh] = useLazyRefresh()
 
   const dir = repo.split('/')[1]
 
@@ -161,6 +163,8 @@ export function useGit(): UseGitReturn {
 
   const push = useCallback(async () => {
     try {
+      // await refresh()
+
       await gitPush({
         dir: `/${dir}`,
         jwt,
@@ -170,7 +174,7 @@ export function useGit(): UseGitReturn {
     } finally {
       setLoading(false)
     }
-  }, [jwt, dir])
+  }, [refresh, jwt, dir])
 
   const remove = useCallback(
     async (filepath: string) => {
