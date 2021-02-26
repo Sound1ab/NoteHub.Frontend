@@ -1,4 +1,4 @@
-import { Editor, Element, Node, Point, Range, Transforms } from 'slate'
+import { Editor, Element, Point, Range, Transforms } from 'slate'
 
 import { insertTableCell } from '../commands/table/insertTableCell'
 import { insertTableRow } from '../commands/table/insertTableRow'

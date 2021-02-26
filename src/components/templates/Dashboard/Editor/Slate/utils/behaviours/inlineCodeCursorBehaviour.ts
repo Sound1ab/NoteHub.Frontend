@@ -42,39 +42,31 @@ export function inlineCodeCursorBehaviour(editor: Editor) {
 
   // Check if we're in the last leaf, if we are we will need to create
   //  a new node, otherwise we want to place the cursor into the next node
-  const isLastChildInBlock = path[1] === numberOfChildren - 1
+  const isLastChildInBlock = path[path.length - 1] === numberOfChildren - 1
 
   // To update cursor position we need to know the line and leaf position
-  const {
-    path: [selectionLine, selectionLeafPosition],
-  } = focus
+  const { path: cursorPath } = focus
 
   if (isLastChildInBlock) {
     const text = { text: ' ' }
 
     // Insert new text node after selection leaf
     Transforms.insertNodes(editor, text, { at: end })
-
-    // New position will be on the same line but after the current leaf
-    const textPath = [selectionLine, selectionLeafPosition + 1]
-
-    // Place cursor at the start of the new leaf
-    const point: Point = { offset: 0, path: textPath }
-
-    Transforms.setSelection(editor, {
-      focus: point,
-      anchor: point,
-    })
-  } else {
-    // New position will be on the same line but after the current leaf
-    const textPath = [selectionLine, selectionLeafPosition + 1]
-
-    // Place cursor at the start of the next leaf
-    const point: Point = { offset: 0, path: textPath }
-
-    Transforms.setSelection(editor, {
-      focus: point,
-      anchor: point,
-    })
   }
+
+  // Get the position of the current element within its block
+  const leafPosition = cursorPath[cursorPath.length - 1]
+
+  if (!leafPosition) return
+
+  // New position will be on the same line but after the current leaf
+  const textPath = [...cursorPath.slice(0, -1), leafPosition + 1]
+
+  // Place cursor at the start of the next leaf
+  const point: Point = { offset: 0, path: textPath }
+
+  Transforms.setSelection(editor, {
+    focus: point,
+    anchor: point,
+  })
 }

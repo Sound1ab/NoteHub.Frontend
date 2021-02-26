@@ -24,7 +24,7 @@ const wrapLink = (
 
   if (isCollapsed && isSelectionLink(editor, selection)) {
     const linkNodePath = ReactEditor.findPath(
-      editor as any,
+      editor as never,
       Node.parent(editor, selection.focus.path)
     )
 
