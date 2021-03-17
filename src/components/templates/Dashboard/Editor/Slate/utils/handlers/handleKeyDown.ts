@@ -3,15 +3,20 @@ import { Editor } from 'slate'
 
 import { inlineCodeCursorBehaviour } from '../behaviours/inlineCodeCursorBehaviour'
 import { listBehaviour } from '../behaviours/listBehaviour'
-import { insertLink } from '../commands/link/insertLink'
 import { insertNewLine } from '../commands/insertNewLine'
 import { decreaseItemDepth } from '../commands/list/decreaseItemDepth'
 import { increaseItemDepth } from '../commands/list/increaseItemDepth'
 import { toggleInlineStyle } from '../commands/toggleInlineStyle'
 
-export const handleKeyDown = (editor: Editor) => (
-  event: React.KeyboardEvent
-) => {
+interface IHandleKeyDown {
+  editor: Editor
+  onOpenHyperLinkModal: () => void
+}
+
+export const handleKeyDown = ({
+  editor,
+  onOpenHyperLinkModal,
+}: IHandleKeyDown) => (event: React.KeyboardEvent) => {
   switch (event.key) {
     case 'Enter': {
       insertNewLine(editor, event)
@@ -45,7 +50,7 @@ export const handleKeyDown = (editor: Editor) => (
     case 'l': {
       if (event.ctrlKey) {
         event.preventDefault()
-        insertLink(editor)
+        onOpenHyperLinkModal()
       }
       break
     }

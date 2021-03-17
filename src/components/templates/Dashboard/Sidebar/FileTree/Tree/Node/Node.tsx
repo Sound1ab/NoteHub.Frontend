@@ -36,7 +36,7 @@ export function Node({
 }: INode) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>({
-    origin: containerRef,
+    origin: containerRef.current,
     placement: 'right',
   })
   const { type, name, path } = node

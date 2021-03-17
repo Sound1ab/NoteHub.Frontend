@@ -1,4 +1,3 @@
-// @flow
 import { Element, Node } from 'slate'
 
 /**

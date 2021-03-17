@@ -6,6 +6,7 @@ import { useReadConfiguration } from '../../../../hooks/configuration/useReadCon
 import { useUpdateConfiguration } from '../../../../hooks/configuration/useUpdateConfiguration'
 import { useListRepos } from '../../../../hooks/repo/useListRepos'
 import { RegularButton } from '../../../atoms/Button/Button'
+import { Modal } from '../../../atoms/Modal/Modal'
 import { Portal } from '../../../atoms/Portal/Portal'
 import { SearchInput } from '../../../atoms/SearchInput/SearchInput'
 import { SearchResults } from '../../../atoms/SearchResults/SearchResults'
@@ -54,7 +55,7 @@ export function ConnectRepo() {
 
   return (
     <Portal hasBackground={true} setOpen={handleCancel} hasClickLayer={false}>
-      <Modal>
+      <StyledModal>
         <h2>Link your GitHub repository</h2>
         <StyledSearchInput search={search} setSearch={setSearch} />
         <ResultsWrapper>
@@ -87,22 +88,17 @@ export function ConnectRepo() {
             Connect
           </ConnectButton>
         </ButtonWrapper>
-      </Modal>
+      </StyledModal>
     </Portal>
   )
 }
 
-const Modal = styled.div`
+const StyledModal = styled(Modal)`
   width: 100%;
   max-width: 70ch;
   height: 100%;
   max-height: 58ch;
-  border-radius: ${({ theme }) => theme.borderRadius};
-  box-shadow: ${({ theme }) => theme.boxShadow};
-  background-color: var(--background-primary);
   padding: ${({ theme }) => theme.spacing.l};
-  display: flex;
-  flex-direction: column;
 `
 
 const StyledSearchInput = styled(SearchInput)`

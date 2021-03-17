@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { IPortal } from '../../components/atoms/Portal/Portal'
 import { Portal } from '../../components/atoms/Portal/Portal'
@@ -7,7 +7,7 @@ import { useTheme } from '../context/useTheme'
 type Placement = 'top' | 'bottom' | 'right'
 
 interface IUseModalToggle {
-  origin?: RefObject<HTMLElement>
+  origin?: HTMLElement | Range | null
   placement?: Placement
   hasPadding?: boolean
 }
@@ -26,9 +26,9 @@ export function useModalToggle<T extends HTMLElement>({
   })
 
   useEffect(() => {
-    if (!isOpen || !origin?.current || !ref?.current) return
+    if (!isOpen || !origin || !ref?.current) return
 
-    const { x, y } = getPosition(origin.current, placement, ref.current)
+    const { x, y } = getPosition(origin, placement, ref.current)
 
     setClickPosition({
       left: `${x}px`,
@@ -84,7 +84,7 @@ export function useModalToggle<T extends HTMLElement>({
 }
 
 function getPosition(
-  origin: HTMLElement,
+  origin: HTMLElement | Range,
   placement: Placement,
   element: HTMLElement
 ) {

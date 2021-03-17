@@ -1,9 +1,4 @@
-import { Editor, Node, Range, Transforms } from 'slate'
-import { ReactEditor } from 'slate-react'
-
-export const isSelectionLink = (editor: Editor, selection: Range) => {
-  return Node.parent(editor, selection.focus.path).type === 'link'
-}
+import { Editor, Range, Transforms } from 'slate'
 
 export const unwrapLink = (editor: Editor) => {
   Transforms.unwrapNodes(editor, { match: (n) => n.type === 'link' })
@@ -17,47 +12,29 @@ const wrapLink = (
 ) => {
   const link = {
     type: 'link',
-    link: url,
-    children: text ? [{ text }] : [{ text: url }],
+    url,
+    children: [],
   }
   const isCollapsed = Range.isCollapsed(selection)
 
-  if (isCollapsed && isSelectionLink(editor, selection)) {
-    const linkNodePath = ReactEditor.findPath(
-      editor as never,
-      Node.parent(editor, selection.focus.path)
-    )
+  if (isCollapsed) return
 
-    if (text !== Editor.string(editor, linkNodePath)) {
-      Transforms.insertText(editor, text, { at: linkNodePath })
-    }
-
-    Transforms.select(editor, linkNodePath)
-
-    unwrapLink(editor)
-
-    Transforms.wrapNodes(editor, link, { split: true })
-
-    return
-  }
-  if (isCollapsed) {
-    Transforms.insertNodes(editor, link)
-
-    return
-  }
-  unwrapLink(editor)
-
-  Transforms.wrapNodes(editor, link, { split: true })
+  Transforms.wrapNodes(editor, link, {
+    split: true,
+    at: selection,
+  })
 }
 
-export const insertLink = (editor: Editor) => {
-  const selection = editor.selection
+interface IInsertLink {
+  editor: Editor
+  selection: Range
+  url: string
+}
 
+export const insertLink = ({ editor, selection, url }: IInsertLink) => {
   if (!selection || Range.isCollapsed(selection)) return
 
-  const url = 'http://google.com'
-
-  const text = Editor.string(editor, selection)
+  const text = Editor.string(editor, selection) ?? url
 
   wrapLink(editor, url, text, selection)
 }

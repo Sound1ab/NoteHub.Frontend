@@ -1,7 +1,12 @@
-import React, { useCallback, useMemo } from 'react'
-import { Node, NodeEntry, createEditor } from 'slate'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Node, NodeEntry, Range as SlateRange, createEditor } from 'slate'
 import { withHistory } from 'slate-history'
-import { Editable, Slate as SlateReact, withReact } from 'slate-react'
+import {
+  Editable,
+  ReactEditor,
+  Slate as SlateReact,
+  withReact,
+} from 'slate-react'
 import styled from 'styled-components'
 
 import { useSlateValue } from '../../../../../hooks/context/useSlateValue'
@@ -9,12 +14,15 @@ import { useFs } from '../../../../../hooks/fs/useFs'
 import { useGit } from '../../../../../hooks/git/useGit'
 import { useActivePath } from '../../../../../hooks/recoil/useActivePath'
 import { useUnstagedChanges } from '../../../../../hooks/recoil/useUnstagedChanges'
+import { useModalToggle } from '../../../../../hooks/utils/useModalToggle'
 import { debounce } from '../../../../../utils/debounce'
 import { Element } from './Element/Element'
+import { HyperLinkModal } from './HyperLinkModal/HyperLinkModal'
 import { Leaf } from './Leaf/Leaf'
 import { openLink } from './utils/commands/link/openLink'
 import { decorateCodeBlock } from './utils/decorators/decorateCodeBlock'
 import { handleKeyDown } from './utils/handlers/handleKeyDown'
+import { withLinks } from './utils/plugins/withLinks'
 import { withLists } from './utils/plugins/withLists'
 import { withShortcuts } from './utils/plugins/withShortcuts'
 import { withTables } from './utils/plugins/withTables'
@@ -24,7 +32,9 @@ export function Slate() {
   const editor = useMemo(
     () =>
       withReact(
-        withHistory(withLists(withTables(withShortcuts(createEditor()))))
+        withHistory(
+          withLinks(withLists(withTables(withShortcuts(createEditor()))))
+        )
       ),
     []
   )
@@ -33,6 +43,10 @@ export function Slate() {
   const [{ writeFile }] = useFs()
   const [{ getUnstagedChanges }] = useGit()
   const { slateValue = [], setSlateValue } = useSlateValue()
+  const domRangeRange = useRef<Range | null>(null)
+  const { isOpen, setOpen, Portal, ref } = useModalToggle<HTMLDivElement>({
+    origin: domRangeRange.current,
+  })
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const writeContentToFSAndCheckUnstagedChanges = useCallback(
@@ -84,14 +98,38 @@ export function Slate() {
     return decorateCodeBlock([node, path])
   }, [])
 
+  const [linkSelection, setLinkSelection] = useState<SlateRange | null>(null)
+
+  const handleOpenHyperLinkModal = useCallback(() => {
+    if (!editor.selection) return
+
+    domRangeRange.current = ReactEditor.toDOMRange(editor, editor.selection)
+
+    setLinkSelection(editor.selection)
+
+    setOpen(true)
+  }, [editor, setOpen])
+
   return (
     <Wrapper>
       <SlateReact editor={editor} value={slateValue} onChange={handleOnChange}>
+        {isOpen && (
+          <Portal>
+            <HyperLinkModal
+              onClose={() => setOpen(false)}
+              modalRef={ref}
+              selection={linkSelection}
+            />
+          </Portal>
+        )}
         <StyledEditable
           decorate={decorate}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
-          onKeyDown={handleKeyDown(editor)}
+          onKeyDown={handleKeyDown({
+            editor,
+            onOpenHyperLinkModal: handleOpenHyperLinkModal,
+          })}
           onClick={handleClick}
         />
       </SlateReact>

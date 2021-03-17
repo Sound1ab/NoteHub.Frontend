@@ -22,7 +22,7 @@ export function Profile(props: IProfile) {
   const containerRef = useRef(null)
   const { user } = useReadGithubUser()
   const { isOpen, Portal, ref, setOpen } = useModalToggle<HTMLUListElement>({
-    origin: containerRef,
+    origin: containerRef.current,
     placement: 'right',
   })
   const { items, logout, called } = useProfileDropdown()
