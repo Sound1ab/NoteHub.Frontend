@@ -4,12 +4,7 @@ export const unwrapLink = (editor: Editor) => {
   Transforms.unwrapNodes(editor, { match: (n) => n.type === 'link' })
 }
 
-const wrapLink = (
-  editor: Editor,
-  url: string,
-  text: string,
-  selection: Range
-) => {
+const wrapLink = (editor: Editor, url: string, selection: Range) => {
   const link = {
     type: 'link',
     url,
@@ -34,7 +29,5 @@ interface IInsertLink {
 export const insertLink = ({ editor, selection, url }: IInsertLink) => {
   if (!selection || Range.isCollapsed(selection)) return
 
-  const text = Editor.string(editor, selection) ?? url
-
-  wrapLink(editor, url, text, selection)
+  wrapLink(editor, url, selection)
 }

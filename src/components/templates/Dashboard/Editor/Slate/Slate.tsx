@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Node, NodeEntry, Range as SlateRange, createEditor } from 'slate'
 import { withHistory } from 'slate-history'
 import {
