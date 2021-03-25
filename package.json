@@ -75,7 +75,7 @@
     "@isomorphic-git/lightning-fs": "^4.4.1",
     "@mdx-js/mdx": "^1.6.19",
     "@mdx-js/react": "^1.6.19",
-    "NoteHub.GitFetchClient": "Sound1ab/NoteHub.GitFetchClient#v0.1",
+    "NoteHub.GitFetchClient": "Sound1ab/NoteHub.GitFetchClient#v0.2",
     "buble": "^0.20.0",
     "codemirror": "^5.58.3",
     "comlink-loader": "^2.0.0",

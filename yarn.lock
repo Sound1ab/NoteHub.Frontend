@@ -4705,9 +4705,9 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-NoteHub.GitFetchClient@Sound1ab/NoteHub.GitFetchClient#v0.1:
+NoteHub.GitFetchClient@Sound1ab/NoteHub.GitFetchClient#v0.2:
   version "1.0.0"
-  resolved "https://codeload.github.com/Sound1ab/NoteHub.GitFetchClient/tar.gz/8fa4f239b1a743857e0af2f14019ffd5c0c0a826"
+  resolved "https://codeload.github.com/Sound1ab/NoteHub.GitFetchClient/tar.gz/cf93d4942fef3e2994a461c4fd165be914380ce8"
   dependencies:
     "@babel/polyfill" "^7.12.1"
     "@vercel/fetch-retry" "^5.0.3"
