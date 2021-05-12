@@ -15,6 +15,8 @@ export function PrivateRoute({ children, exact, path }: IPrivateRoute) {
   const { jwt, loading } = useLogin()
   const savedJwt = useReadJwt()
 
+  console.log('here', jwt)
+
   useEffect(() => {
     if (!jwt) {
       return

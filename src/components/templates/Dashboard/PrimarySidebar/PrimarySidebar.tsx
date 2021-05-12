@@ -11,7 +11,6 @@ export function PrimarySidebar() {
   const { pathname } = useLocation()
 
   const repos = `${url}/repos`
-  const textCheck = `${url}/text-check`
   const settings = `${url}/settings`
 
   return (
@@ -24,10 +23,6 @@ export function PrimarySidebar() {
       <StyledLink to={repos} isActive={pathname === repos}>
         <StyledIcon icon="sync" size="lg" />
         <Heading>Repos</Heading>
-      </StyledLink>
-      <StyledLink to={textCheck} isActive={pathname === textCheck}>
-        <StyledIcon icon="binoculars" size="lg" />
-        <Heading>Text check</Heading>
       </StyledLink>
       <StyledLink to={settings} isActive={pathname === settings}>
         <StyledIcon icon="sync" size="lg" />

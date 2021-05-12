@@ -1,7 +1,6 @@
 import { push as gitPush } from 'isomorphic-git'
-// @ts-ignore
-import { request } from 'NoteHub.GitFetchClient'
 
+import { request } from '../GitFetchClient/request'
 import { fs } from '../lightningFS'
 
 export interface IPush {
@@ -13,7 +12,7 @@ export async function push({ dir, jwt }: IPush) {
   return gitPush({
     fs,
     http: {
-      request,
+      request: request as any,
     },
     dir,
     remote: 'origin',

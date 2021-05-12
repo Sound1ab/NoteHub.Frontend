@@ -3,9 +3,8 @@ import {
   ProgressCallback,
   clone as gitClone,
 } from 'isomorphic-git'
-// @ts-ignore
-import { request } from 'NoteHub.GitFetchClient'
 
+import { request } from '../GitFetchClient/request'
 import { fs } from '../lightningFS'
 
 export interface IClone {
@@ -20,7 +19,7 @@ export async function clone({ url, dir, onMessage, onProgress, jwt }: IClone) {
   await gitClone({
     fs,
     http: {
-      request,
+      request: request as any,
     },
     dir,
     url,
