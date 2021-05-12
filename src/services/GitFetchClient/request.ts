@@ -31,7 +31,7 @@ export const request = async ({
   })
   console.log('outer1')
   if (res.status === 401) {
-    console.log('inner1')
+    console.log('inner1', process.env.REACT_APP_SERVER_BASE_URL)
     const response = await fetch(
       `${process.env.REACT_APP_SERVER_BASE_URL}/refresh`,
       {
