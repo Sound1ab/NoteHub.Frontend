@@ -64,7 +64,7 @@
     "responsive-loader": "^2.3.0",
     "sharp": "^0.27.0",
     "source-map-explorer": "^2.5.2",
-    "typescript": "^3.7.4"
+    "typescript": "^4.3.5"
   },
   "dependencies": {
     "@apollo/client": "^3.2.9",
