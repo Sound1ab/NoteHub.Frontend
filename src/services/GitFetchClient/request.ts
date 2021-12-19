@@ -31,12 +31,20 @@ export const request = async ({
   })
   console.log('outer1')
   if (res.status === 401) {
-    console.log('inner1', process.env.REACT_APP_SERVER_BASE_URL)
+    console.log('inner1', headers)
+    if (!headers.Authorization) {
+      throw new Error('No auth header set, refresh failing')
+    }
+
+    const { Authorization } = headers
+
     const response = await fetch(
       `${process.env.REACT_APP_SERVER_BASE_URL}/refresh`,
       {
         method: 'GET',
-        headers,
+        headers: {
+          Authorization,
+        },
         credentials: 'include',
       }
     )
