@@ -13,13 +13,16 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
   async function refetchToken() {
     const jwt = localState.currentJwtVar()
 
-    const response = await fetch('http://localhost:3000/dev/refresh', {
-      method: 'GET',
-      headers: {
-        Authorization: jwt ? `Bearer ${jwt}` : '',
-      },
-      credentials: 'include',
-    })
+    const response = await fetch(
+      `${process.env.REACT_APP_SERVER_BASE_URL}/refresh`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: jwt ? `Bearer ${jwt}` : '',
+        },
+        credentials: 'include',
+      }
+    )
 
     const regeneratedJwt = await response.json()
 
