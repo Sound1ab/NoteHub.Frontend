@@ -43,7 +43,7 @@ export const request = async ({
 
     const jwt = await response.json()
 
-    if (response.status !== 200 || response.statusText !== 'OK' || !jwt) {
+    if (response.status !== 200 || !jwt) {
       throw new Error('No refresh token')
     }
 
