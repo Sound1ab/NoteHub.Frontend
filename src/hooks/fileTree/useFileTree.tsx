@@ -38,10 +38,10 @@ export function useFileTree(): UseFileTreeReturn {
     { unlink, readDirRecursive, rename, writeFile },
     { loading: fsLoading, error: fsError },
   ] = useFs()
-  const [
-    { getUnstagedChanges },
-    { loading: gitLoading, error: gitError },
-  ] = useGit()
+  const {
+    actions: { getUnstagedChanges },
+    meta: { loading: gitLoading, error: gitError },
+  } = useGit()
 
   const toggleFolder = useCallback(
     (path: string, toggled: boolean) => {

@@ -104,7 +104,9 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
 function useCloneConnectedRepo() {
   const [files, setFiles] = useFiles()
   const [repo] = useRepo()
-  const [{ clone }] = useGit()
+  const {
+    actions: { clone },
+  } = useGit()
   const [{ readDirRecursive }] = useFs()
   const [loading, setLoading] = useState(false)
 

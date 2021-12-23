@@ -3,12 +3,14 @@ import { useCallback, useState } from 'react'
 
 import { ErrorToast } from '../../components/atoms/Toast/Toast'
 import {
+  add as gitAdd,
   addAll as gitAddAll,
   clone as gitClone,
   commit as gitCommit,
   getCommits as gitGetCommits,
   getCommittedChanges as gitGetCommittedChanges,
   getDeletedUnstagedChanges as gitGetDeletedUnstagedChanges,
+  getStatusForFile as gitGetStatusForFile,
   getUnstagedChanges as gitGetUnstagedChanges,
   log as gitLog,
   push as gitPush,
@@ -17,31 +19,11 @@ import {
   rollback as gitRollback,
   status as gitStatus,
 } from '../../services/worker/git.worker'
+import { removeFirstSlug } from '../../utils/removeFirstSlug'
 import { useReadJwt } from '../localState/useReadJwt'
 import { useRepo } from '../recoil/useRepo'
 
-type UseGitReturn = [
-  {
-    getUnstagedChanges: () => Promise<string[] | never[]>
-    addAll: (unstagedChanges: string[]) => Promise<void>
-    commit: () => Promise<void>
-    rollback: () => Promise<void>
-    status: () => Promise<
-      [string, 0 | 1, 0 | 2 | 1, 0 | 2 | 1 | 3][] | undefined
-    >
-    getCommittedChanges: () => Promise<string[] | never[]>
-    clone: (repo: string) => Promise<void>
-    push: () => Promise<void>
-    remove: (filepath: string) => Promise<void>
-    removeAll: (deletedUnstagedChanges: string[] | never[]) => Promise<void>
-    getDeletedUnstagedChanges: () => Promise<string[] | never[]>
-    log: () => Promise<ReadCommitResult[]>
-    getCommits: () => Promise<ReadCommitResult[]>
-  },
-  { loading: boolean; error: string | null }
-]
-
-export function useGit(): UseGitReturn {
+export function useGit() {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [repo] = useRepo()
@@ -54,6 +36,31 @@ export function useGit(): UseGitReturn {
     ErrorToast(error)
     setError(null)
   }
+
+  const add = useCallback(
+    async (path: string) => {
+      setLoading(true)
+      try {
+        return gitAdd({ dir: `/${dir}`, path: removeFirstSlug(path) })
+      } catch (error) {
+        setError(`Git add error: ${error.message}`)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [dir]
+  )
+
+  const getStatusForFile = useCallback(async (filepath: string) => {
+    setLoading(true)
+    try {
+      return gitGetStatusForFile({ filepath })
+    } catch (error) {
+      setError(`Git get status error: ${error.message}`)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   const getUnstagedChanges = useCallback(async () => {
     setLoading(true)
@@ -251,8 +258,8 @@ export function useGit(): UseGitReturn {
     }
   }, [dir])
 
-  return [
-    {
+  return {
+    actions: {
       getUnstagedChanges,
       addAll,
       commit,
@@ -266,7 +273,9 @@ export function useGit(): UseGitReturn {
       removeAll,
       log,
       getCommits,
+      getStatusForFile,
+      add,
     },
-    { loading, error },
-  ]
+    meta: { loading, error },
+  }
 }

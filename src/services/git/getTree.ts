@@ -26,7 +26,7 @@ export async function getTree({
 
       const [entry] = entries
 
-      const type = await entry.type()
+      const type = await entry?.type()
 
       if (type === 'commit' || type === 'special') {
         return

@@ -18,8 +18,8 @@ export function DraftManager() {
   const { setSlateValue } = useSlateValue()
   const [unstagedChanges, setUnstagedChanges] = useUnstagedChanges()
   const [committedChanges, setCommittedChanges] = useCommittedChanges()
-  const [
-    {
+  const {
+    actions: {
       rollback,
       addAll,
       commit,
@@ -28,9 +28,11 @@ export function DraftManager() {
       getCommittedChanges,
       removeAll,
       getDeletedUnstagedChanges,
+      add,
       getCommits,
+      getStatusForFile,
     },
-  ] = useGit()
+  } = useGit()
   const [{ readFile, readDirRecursive }] = useFs()
   const [activePath] = useActivePath()
   const [, setFiles] = useFiles()
@@ -62,9 +64,11 @@ export function DraftManager() {
   async function handleCommit() {
     setLoading(true)
 
-    await removeAll(await getDeletedUnstagedChanges())
-
-    await addAll(await getUnstagedChanges())
+    // await removeAll(await getDeletedUnstagedChanges())
+    //
+    // await addAll(await getUnstagedChanges())
+    //
+    await add(activePath)
 
     await commit()
 

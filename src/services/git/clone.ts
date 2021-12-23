@@ -6,6 +6,7 @@ import {
 
 import { request } from '../GitFetchClient/request'
 import { fs } from '../lightningFS'
+import { refreshOnAuth } from './refreshOnAuth'
 
 export interface IClone {
   url: string
@@ -29,6 +30,7 @@ export async function clone({ url, dir, onMessage, onProgress, jwt }: IClone) {
     headers: {
       ...(jwt ? { Authorization: `Bearer ${jwt}` } : undefined),
     },
+    onAuth: refreshOnAuth,
     singleBranch: true,
     depth: 1,
   })
