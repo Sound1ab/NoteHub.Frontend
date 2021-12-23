@@ -15,10 +15,12 @@ import { IRollback, rollback as gitRollback } from '../git/rollback'
 import {
   IGetCommittedChanges,
   IStatus,
+  IStatusForFile,
   getCommittedChanges as gitGetCommittedChanges,
   getDeletedUnstagedChanges as gitGetDeletedUnstagedChanges,
+  getStatusForFile as gitGetStatusForFile,
   getUnstagedChanges as gitGetUnstagedChanges,
-  status as gitStatus,
+  getStatus as gitStatus,
 } from '../git/status'
 
 export async function clone(options: Pick<IClone, 'url' | 'dir' | 'jwt'>) {
@@ -43,6 +45,10 @@ export async function getUnstagedChanges(options: IStatus) {
 
 export async function getCommittedChanges(options: IGetCommittedChanges) {
   return gitGetCommittedChanges(options)
+}
+
+export async function getStatusForFile(options: IStatusForFile) {
+  return gitGetStatusForFile(options)
 }
 
 export async function addAll(options: IAddAll) {

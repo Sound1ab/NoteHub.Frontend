@@ -1,4 +1,4 @@
-import { TREE, resolveRef, statusMatrix, walk } from 'isomorphic-git'
+import { TREE, resolveRef, status, statusMatrix, walk } from 'isomorphic-git'
 
 import { fs } from '../lightningFS'
 
@@ -6,7 +6,11 @@ export interface IStatus {
   dir: string
 }
 
-export async function status({ dir }: IStatus) {
+export interface IStatusForFile {
+  filepath: string
+}
+
+export async function getStatus({ dir }: IStatus) {
   return statusMatrix({ fs, dir })
 }
 
@@ -15,6 +19,22 @@ enum STATUS {
   HEAD,
   WORKDIR,
   STAGE,
+}
+
+export async function getStatusForFile({ filepath }: IStatusForFile) {
+  const pathParts = filepath.split('/')
+  const slug = pathParts.pop()
+  const dir = `/${pathParts.join('/')}`
+
+  if (!slug) {
+    throw new Error('filepath not found')
+  }
+
+  return await status({
+    dir,
+    filepath: slug,
+    fs,
+  })
 }
 
 export async function getUnstagedChanges({ dir }: IStatus): Promise<string[]> {
