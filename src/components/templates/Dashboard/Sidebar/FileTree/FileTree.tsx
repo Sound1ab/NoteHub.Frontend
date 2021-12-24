@@ -60,27 +60,29 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
         </Fade>
         <Fade show={!loading}>
           {search ? (
-            <SearchResults<{ type: Node_Type; path: string; slug: string }>
-              search={search}
-              data={searchFiles}
-              keys={['slug']}
-            >
-              {(results) =>
-                results.map(({ item: { path, type, slug } }) => (
-                  <File
-                    key={path}
-                    node={{
-                      id: path,
-                      name: slug,
-                      type,
-                      path,
-                      isOptimistic: false,
-                    }}
-                    level={-1}
-                  />
-                ))
-              }
-            </SearchResults>
+            <UnstyledList>
+              <SearchResults<{ type: Node_Type; path: string; slug: string }>
+                search={search}
+                data={searchFiles}
+                keys={['slug']}
+              >
+                {(results) =>
+                  results.map(({ item: { path, type, slug } }) => (
+                    <File
+                      key={path}
+                      node={{
+                        id: path,
+                        name: slug,
+                        type,
+                        path,
+                        isOptimistic: false,
+                      }}
+                      level={-1}
+                    />
+                  ))
+                }
+              </SearchResults>
+            </UnstyledList>
           ) : (
             <>
               {files &&
