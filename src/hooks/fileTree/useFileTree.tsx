@@ -199,7 +199,7 @@ export function useFileTree() {
   )
 
   const folderClick = useCallback(
-    async (path: string, toggled: boolean) => {
+    (path: string, toggled: boolean) => {
       const isActive = path === fileTreePath
 
       if (isActive) {
@@ -214,7 +214,7 @@ export function useFileTree() {
   )
 
   const chevronClick = useCallback(
-    async (path: string, toggled: boolean) => {
+    (path: string, toggled: boolean) => {
       toggleFolder(path, !toggled)
 
       setFileTreePath(path)
