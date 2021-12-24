@@ -35,6 +35,9 @@ export const createTypography = (isLargeText: boolean) => {
     scaleRatio: 2.5,
     baseLineHeight: 1,
     overrideThemeStyles: ({ rhythm, scale }) => ({
+      '*': {
+        overscrollBehavior: 'none',
+      },
       body: {
         fontSize: isLargeText ? '16px' : '14px',
       },
