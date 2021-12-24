@@ -15,6 +15,7 @@ import {
   push as gitPush,
   remove as gitRemove,
   removeAll as gitRemoveAll,
+  resetIndex as gitResetIndex,
   rollback as gitRollback,
   status as gitStatus,
 } from '../../services/worker/git.worker'
@@ -37,10 +38,10 @@ export function useGit() {
   }
 
   const add = useCallback(
-    async (path: string) => {
+    async (filepath: string) => {
       setLoading(true)
       try {
-        return gitAdd({ dir: `/${dir}`, path: removeFirstSlug(path) })
+        return gitAdd({ dir: `/${dir}`, filepath: removeFirstSlug(filepath) })
       } catch (error) {
         setError(`Git add error: ${error.message}`)
       } finally {
@@ -167,8 +168,6 @@ export function useGit() {
 
   const push = useCallback(async () => {
     try {
-      // await refresh()
-
       await gitPush({
         dir: `/${dir}`,
         jwt,
@@ -185,7 +184,7 @@ export function useGit() {
       try {
         await gitRemove({
           dir: `/${dir}`,
-          filepath,
+          filepath: removeFirstSlug(filepath),
         })
       } catch (error) {
         setError(`Git push: ${error.message}`)
@@ -257,6 +256,24 @@ export function useGit() {
     }
   }, [dir])
 
+  const resetIndex = useCallback(
+    async (filepath: string) => {
+      try {
+        const result = await gitResetIndex({
+          dir: `/${dir}`,
+          filepath: removeFirstSlug(filepath),
+        })
+
+        return result
+      } catch (error) {
+        setError(`Git reset index: ${error.message}`)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [dir]
+  )
+
   return {
     actions: {
       getUnstagedChanges,
@@ -274,6 +291,7 @@ export function useGit() {
       getCommits,
       getStatusForFile,
       add,
+      resetIndex,
     },
     meta: { loading, error },
   }

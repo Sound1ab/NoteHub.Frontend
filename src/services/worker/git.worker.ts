@@ -11,6 +11,7 @@ import {
   remove as gitRemove,
   removeAll as gitRemoveAll,
 } from '../git/remove'
+import { IResetIndex, resetIndex as gitResetIndex } from '../git/resetIndex'
 import { IRollback, rollback as gitRollback } from '../git/rollback'
 import {
   IGetCommittedChanges,
@@ -85,4 +86,8 @@ export async function log(options: ILog) {
 
 export async function getCommits(options: IGetCommits) {
   return gitGetCommits(options)
+}
+
+export async function resetIndex(options: IResetIndex) {
+  return gitResetIndex(options)
 }
