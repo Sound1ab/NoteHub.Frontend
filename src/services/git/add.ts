@@ -15,9 +15,9 @@ export async function addAll({ dir, unstagedChanges }: IAddAll) {
 
 export interface IAdd {
   dir: string
-  path: string
+  filepath: string
 }
 
-export async function add({ dir, path }: IAdd) {
-  return await gitAdd({ fs, dir, filepath: path })
+export async function add({ dir, filepath }: IAdd) {
+  return await gitAdd({ fs, dir, filepath })
 }
