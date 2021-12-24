@@ -12,7 +12,10 @@ import { remarkToSlate } from './Slate/utils/unifed/remarkToSlate'
 
 export function Editor() {
   const { setSlateValue } = useSlateValue()
-  const [{ readFile }, { loading }] = useFs()
+  const {
+    actions: { readFile },
+    meta: { loading },
+  } = useFs()
   const [activePath] = useActivePath()
 
   useEffect(() => {

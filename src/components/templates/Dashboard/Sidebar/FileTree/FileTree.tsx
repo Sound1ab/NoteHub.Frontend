@@ -29,7 +29,9 @@ interface IFileTree {
 export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
   const [search] = useSearch()
   const [openFolders] = useOpenFolders()
-  const [{ createFile }] = useFileTree()
+  const {
+    actions: { createFile },
+  } = useFileTree()
   const { files, loading } = useCloneConnectedRepo()
 
   async function handleCreate(name: string) {
@@ -107,7 +109,9 @@ function useCloneConnectedRepo() {
   const {
     actions: { clone },
   } = useGit()
-  const [{ readDirRecursive }] = useFs()
+  const {
+    actions: { readDirRecursive },
+  } = useFs()
   const [loading, setLoading] = useState(false)
 
   useDeepCompareEffect(() => {

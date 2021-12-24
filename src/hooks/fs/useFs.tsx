@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react'
 
 import { Node_Type } from '../../components/apollo/generated_components_typings'
 import { ErrorToast } from '../../components/atoms/Toast/Toast'
-import { IGitTreeNode } from '../../services/git/types'
 import {
   readDirRecursive as fsReadDirRecursive,
   readFile as fsReadFile,
@@ -12,18 +11,7 @@ import {
 } from '../../services/worker/fs.worker'
 import { useRepo } from '../recoil/useRepo'
 
-type UseFSReturn = [
-  {
-    readFile: (path: string) => Promise<string | undefined>
-    writeFile: (path: string, content: string) => Promise<void>
-    rename: (oldFilePath: string, newFilePath: string) => Promise<void>
-    readDirRecursive: () => Promise<IGitTreeNode[] | never[]>
-    unlink: (filepath: string) => Promise<void>
-  },
-  { loading: boolean; error: string | null }
-]
-
-export function useFs(): UseFSReturn {
+export function useFs() {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [repo] = useRepo()
@@ -116,8 +104,8 @@ export function useFs(): UseFSReturn {
     }
   }, [])
 
-  return [
-    { readFile, writeFile, rename, readDirRecursive, unlink },
-    { loading, error },
-  ]
+  return {
+    actions: { readFile, writeFile, rename, readDirRecursive, unlink },
+    meta: { loading, error },
+  }
 }

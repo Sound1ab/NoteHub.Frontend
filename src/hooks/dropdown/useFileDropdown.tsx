@@ -5,7 +5,9 @@ import { useFileTree } from '../fileTree/useFileTree'
 
 export function useFileDropdown(node: ITreeNode) {
   const [isRenaming, setIsRenaming] = useState(false)
-  const [{ deleteFile }] = useFileTree()
+  const {
+    actions: { deleteFile },
+  } = useFileTree()
 
   function handleSetIsRenamingOpen(
     e: React.MouseEvent<HTMLElement, MouseEvent>

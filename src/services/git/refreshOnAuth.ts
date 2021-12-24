@@ -9,7 +9,6 @@ export const refreshOnAuth: AuthCallback = async (url, { headers }) => {
 
   abortController = new AbortController()
 
-  console.log('here', headers)
   if (!headers?.Authorization) {
     throw new Error('No auth header set, refresh failing')
   }

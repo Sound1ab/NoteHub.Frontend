@@ -10,36 +10,20 @@ import { useFiles } from '../recoil/useFiles'
 import { useFileTreePath } from '../recoil/useFileTreePath'
 import { useOpenFolders } from '../recoil/useOpenFolders'
 import { useTabs } from '../recoil/useTabs'
-import { useUnstagedChanges } from '../recoil/useUnstagedChanges'
 
-type UseFileTreeReturn = [
-  {
-    openFoldersInPath: (path: string) => void
-    toggleFolder: (path: string, toggled: boolean) => void
-    deleteFile: (path: string) => Promise<void>
-    renameNode: (oldPath: string, newPath: string) => Promise<void>
-    fileClick: (path: string) => void
-    createFile: (path: string) => void
-    folderClick: (path: string, toggled: boolean) => void
-    chevronClick: (path: string, toggled: boolean) => void
-  },
-  { loading: boolean; error: string | null }
-]
-
-export function useFileTree(): UseFileTreeReturn {
+export function useFileTree() {
   const [activePath, setActivePath] = useActivePath()
   const [fileTreePath, setFileTreePath] = useFileTreePath()
   const [, setFiles] = useFiles()
   const [, setOpenFolders] = useOpenFolders()
   const [tabs, setTabs] = useTabs()
-  const [, setUnstagedChanges] = useUnstagedChanges()
 
-  const [
-    { unlink, readDirRecursive, rename, writeFile },
-    { loading: fsLoading, error: fsError },
-  ] = useFs()
   const {
-    actions: { getUnstagedChanges },
+    actions: { unlink, readDirRecursive, rename, writeFile },
+    meta: { loading: fsLoading, error: fsError },
+  } = useFs()
+  const {
+    actions: { commit, push, add, remove },
     meta: { loading: gitLoading, error: gitError },
   } = useGit()
 
@@ -75,11 +59,15 @@ export function useFileTree(): UseFileTreeReturn {
 
   const deleteFile = useCallback(
     async (path: string) => {
+      // Delete a file from FS. File is removed from the tree and not yet staged
       await unlink(path)
 
-      // await remove(path)
+      // Stage the deleted file
+      await remove(path)
 
-      setUnstagedChanges(await getUnstagedChanges())
+      await commit()
+
+      await push()
 
       setFiles(await readDirRecursive())
 
@@ -105,9 +93,10 @@ export function useFileTree(): UseFileTreeReturn {
       }
     },
     [
+      remove,
+      push,
+      commit,
       unlink,
-      setUnstagedChanges,
-      getUnstagedChanges,
       setFiles,
       setActivePath,
       setFileTreePath,
@@ -125,7 +114,13 @@ export function useFileTree(): UseFileTreeReturn {
 
       await rename(oldPath, newPath)
 
-      setUnstagedChanges(await getUnstagedChanges())
+      await remove(oldPath)
+
+      await add(newPath)
+
+      await commit()
+
+      await push()
 
       setFiles(await readDirRecursive())
 
@@ -142,10 +137,12 @@ export function useFileTree(): UseFileTreeReturn {
       }
     },
     [
+      remove,
+      add,
+      commit,
+      push,
       openFoldersInPath,
       rename,
-      setUnstagedChanges,
-      getUnstagedChanges,
       setFiles,
       setActivePath,
       setFileTreePath,
@@ -162,7 +159,11 @@ export function useFileTree(): UseFileTreeReturn {
 
       await writeFile(path, '')
 
-      setUnstagedChanges(await getUnstagedChanges())
+      await add(path)
+
+      await commit()
+
+      await push()
 
       setFiles(await readDirRecursive())
 
@@ -172,9 +173,10 @@ export function useFileTree(): UseFileTreeReturn {
       setFileTreePath(path)
     },
     [
+      add,
+      commit,
+      push,
       openFoldersInPath,
-      setUnstagedChanges,
-      getUnstagedChanges,
       setFiles,
       setActivePath,
       setFileTreePath,
@@ -220,8 +222,8 @@ export function useFileTree(): UseFileTreeReturn {
     [toggleFolder, setFileTreePath]
   )
 
-  return [
-    {
+  return {
+    actions: {
       openFoldersInPath,
       toggleFolder,
       deleteFile,
@@ -231,6 +233,6 @@ export function useFileTree(): UseFileTreeReturn {
       folderClick,
       chevronClick,
     },
-    { loading: fsLoading || gitLoading, error: fsError || gitError },
-  ]
+    meta: { loading: fsLoading || gitLoading, error: fsError || gitError },
+  }
 }

@@ -5,7 +5,9 @@ import { useFileTree } from '../fileTree/useFileTree'
 
 export function useFolderDropdown(node: ITreeNode) {
   const [isNewFileOpen, setIsNewFileOpen] = useState(false)
-  const [{ toggleFolder }] = useFileTree()
+  const {
+    actions: { toggleFolder },
+  } = useFileTree()
 
   function handleSetIsNewFileOpen() {
     setIsNewFileOpen(true)

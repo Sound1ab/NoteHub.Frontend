@@ -40,9 +40,11 @@ export function Slate() {
   )
   const [, setUnstagedChanges] = useUnstagedChanges()
   const [activePath] = useActivePath()
-  const [{ writeFile }] = useFs()
   const {
-    actions: { getUnstagedChanges },
+    actions: { writeFile },
+  } = useFs()
+  const {
+    actions: { getUnstagedChanges, add, commit, push },
   } = useGit()
   const { slateValue = [], setSlateValue } = useSlateValue()
   const domRangeRange = useRef<Range | null>(null)
@@ -59,9 +61,21 @@ export function Slate() {
 
       await writeFile(activePath, markdown)
 
-      await setUnstagedChanges(await getUnstagedChanges())
-    }, 200),
-    [activePath, writeFile, setUnstagedChanges, getUnstagedChanges]
+      await add(activePath)
+
+      await commit()
+
+      await push()
+    }, 1000),
+    [
+      activePath,
+      writeFile,
+      setUnstagedChanges,
+      getUnstagedChanges,
+      add,
+      commit,
+      push,
+    ]
   )
 
   const handleOnChange = useCallback(
