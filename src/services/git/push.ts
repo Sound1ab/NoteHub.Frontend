@@ -22,6 +22,6 @@ export async function push({ dir, jwt }: IPush) {
       ...(jwt ? { Authorization: `Bearer ${jwt}` } : undefined),
     },
     corsProxy: process.env.REACT_APP_PROXY,
-    // onAuth: refreshOnAuth,
+    onAuth: refreshOnAuth,
   })
 }
