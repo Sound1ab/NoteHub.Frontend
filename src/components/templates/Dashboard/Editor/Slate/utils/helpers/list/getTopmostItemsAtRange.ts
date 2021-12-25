@@ -4,10 +4,10 @@ import { getCurrentItem } from './getCurrentItem'
 import { isItem } from './isItem'
 import { isList } from './isList'
 
-const takeOnlyDirectChildren = (ancestorPath: Path) => ([
-  ,
-  listItemPath,
-]: NodeEntry<Node>) => listItemPath.length === ancestorPath.length + 1
+const takeOnlyDirectChildren =
+  (ancestorPath: Path) =>
+  ([, listItemPath]: NodeEntry<Node>) =>
+    listItemPath.length === ancestorPath.length + 1
 
 /**
  * Return the array of items at the given range. The returned items are

@@ -13,14 +13,12 @@ export const RefreshDocument = gql`
 `
 
 export function useLazyRefresh(): [
-  () => Promise<void>,
+  () => Promise<LazyQueryResult<RefreshQuery, Exact<{ [key: string]: never }>>>,
   LazyQueryResult<RefreshQuery, Exact<{ [key: string]: never }>>
 ] {
   const [query, rest] = useLazyQuery<RefreshQuery, RefreshQueryVariables>(
     RefreshDocument
   )
-
-  // console.log('here', rest)
 
   async function refresh() {
     return query()

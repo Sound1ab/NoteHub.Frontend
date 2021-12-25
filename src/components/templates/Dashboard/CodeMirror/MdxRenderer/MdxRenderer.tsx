@@ -25,7 +25,9 @@ export function MdxRenderer({ mdxCode }: IMdxRenderer) {
   try {
     element = createElement(transform(transpileMdx(mdxCode)))
   } catch (error) {
-    return <ErrorDisplay message={error.message} />
+    if (error instanceof Error) {
+      return <ErrorDisplay message={error?.message} />
+    }
   }
 
   return (

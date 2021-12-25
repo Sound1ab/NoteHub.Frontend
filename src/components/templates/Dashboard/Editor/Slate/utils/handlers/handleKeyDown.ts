@@ -13,53 +13,52 @@ interface IHandleKeyDown {
   onOpenHyperLinkModal: () => void
 }
 
-export const handleKeyDown = ({
-  editor,
-  onOpenHyperLinkModal,
-}: IHandleKeyDown) => (event: React.KeyboardEvent) => {
-  switch (event.key) {
-    case 'Enter': {
-      insertNewLine(editor, event)
-      listBehaviour(editor, event)
-      break
-    }
-    case 'Tab': {
-      event.preventDefault()
-      !event.shiftKey && increaseItemDepth(editor)
-      event.shiftKey && decreaseItemDepth(editor)
-      break
-    }
-    case 'ArrowRight': {
-      inlineCodeCursorBehaviour(editor)
-      break
-    }
-    case 'b': {
-      if (event.ctrlKey) {
-        event.preventDefault()
-        toggleInlineStyle(editor, 'bold')
+export const handleKeyDown =
+  ({ editor, onOpenHyperLinkModal }: IHandleKeyDown) =>
+  (event: React.KeyboardEvent) => {
+    switch (event.key) {
+      case 'Enter': {
+        insertNewLine(editor, event)
+        listBehaviour(editor, event)
+        break
       }
-      break
-    }
-    case 'i': {
-      if (event.ctrlKey) {
+      case 'Tab': {
         event.preventDefault()
-        toggleInlineStyle(editor, 'italic')
+        !event.shiftKey && increaseItemDepth(editor)
+        event.shiftKey && decreaseItemDepth(editor)
+        break
       }
-      break
-    }
-    case 'l': {
-      if (event.ctrlKey) {
-        event.preventDefault()
-        onOpenHyperLinkModal()
+      case 'ArrowRight': {
+        inlineCodeCursorBehaviour(editor)
+        break
       }
-      break
-    }
-    case 'c': {
-      if (event.ctrlKey) {
-        event.preventDefault()
-        toggleInlineStyle(editor, 'inlineCode')
+      case 'b': {
+        if (event.ctrlKey) {
+          event.preventDefault()
+          toggleInlineStyle(editor, 'bold')
+        }
+        break
       }
-      break
+      case 'i': {
+        if (event.ctrlKey) {
+          event.preventDefault()
+          toggleInlineStyle(editor, 'italic')
+        }
+        break
+      }
+      case 'l': {
+        if (event.ctrlKey) {
+          event.preventDefault()
+          onOpenHyperLinkModal()
+        }
+        break
+      }
+      case 'c': {
+        if (event.ctrlKey) {
+          event.preventDefault()
+          toggleInlineStyle(editor, 'inlineCode')
+        }
+        break
+      }
     }
   }
-}

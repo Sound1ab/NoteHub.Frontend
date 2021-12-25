@@ -17,9 +17,8 @@ interface IFolder {
 }
 
 export function Folder({ level, node, childNodes }: IFolder) {
-  const { items, isNewFileOpen, handleSetIsNewFileClose } = useFolderDropdown(
-    node
-  )
+  const { items, isNewFileOpen, handleSetIsNewFileClose } =
+    useFolderDropdown(node)
   const {
     actions: { renameNode, folderClick, chevronClick, createFile },
   } = useFileTree()
