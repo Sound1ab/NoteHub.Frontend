@@ -1,5 +1,6 @@
 /* eslint-disable */
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -14,6 +15,143 @@ export type Scalars = {
   Upload: any;
 };
 
+export enum CacheControlScope {
+  Private = 'PRIVATE',
+  Public = 'PUBLIC'
+}
+
+export type Configuration = {
+  __typename?: 'Configuration';
+  connectedRepos?: Maybe<Array<Scalars['String']>>;
+  id: Scalars['String'];
+};
+
+export type CreateFileInput = {
+  content?: InputMaybe<Scalars['String']>;
+  path: Scalars['String'];
+  retextSettings?: InputMaybe<Array<Retext_Settings>>;
+};
+
+export type DeleteFileInput = {
+  path: Scalars['String'];
+};
+
+export type DeleteRepoInput = {
+  name: Scalars['String'];
+};
+
+export type File = {
+  __typename?: 'File';
+  content?: Maybe<Scalars['String']>;
+  filename?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  path: Scalars['String'];
+  sha: Scalars['String'];
+  type: Node_Type;
+  url: Scalars['String'];
+};
+
+export type GithubUser = {
+  __typename?: 'GithubUser';
+  avatar_url: Scalars['String'];
+  configuration?: Maybe<Configuration>;
+  html_url: Scalars['String'];
+  id: Scalars['Int'];
+  login: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+};
+
+export type Links = {
+  __typename?: 'Links';
+  html: Scalars['String'];
+};
+
+export type ModelFileConnection = {
+  __typename?: 'ModelFileConnection';
+  items: Array<File>;
+};
+
+export type ModelRepoConnection = {
+  __typename?: 'ModelRepoConnection';
+  items: Array<Repo>;
+};
+
+export type MoveFileInput = {
+  newPath: Scalars['String'];
+  path: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createFile?: Maybe<File>;
+  createImage?: Maybe<File>;
+  createRepo?: Maybe<Repo>;
+  createSignedUrl?: Maybe<Scalars['String']>;
+  deleteFile?: Maybe<File>;
+  deleteImage?: Maybe<File>;
+  deleteRepo?: Maybe<Repo>;
+  moveFile?: Maybe<File>;
+  updateConfiguration?: Maybe<Configuration>;
+  updateFile?: Maybe<File>;
+  updateImage?: Maybe<File>;
+  updateRepo?: Maybe<Repo>;
+};
+
+
+export type MutationCreateFileArgs = {
+  input: CreateFileInput;
+};
+
+
+export type MutationCreateImageArgs = {
+  input: CreateFileInput;
+};
+
+
+export type MutationDeleteFileArgs = {
+  input: DeleteFileInput;
+};
+
+
+export type MutationDeleteImageArgs = {
+  input: DeleteFileInput;
+};
+
+
+export type MutationDeleteRepoArgs = {
+  input: DeleteRepoInput;
+};
+
+
+export type MutationMoveFileArgs = {
+  input: MoveFileInput;
+};
+
+
+export type MutationUpdateConfigurationArgs = {
+  input: UpdateConfigurationInput;
+};
+
+
+export type MutationUpdateFileArgs = {
+  input: UpdateFileInput;
+};
+
+
+export type MutationUpdateImageArgs = {
+  input: UpdateFileInput;
+};
+
+
+export type MutationUpdateRepoArgs = {
+  input: UpdateRepoInput;
+};
+
+export enum Node_Type {
+  File = 'FILE',
+  Folder = 'FOLDER',
+  User = 'USER'
+}
 
 export type Query = {
   __typename?: 'Query';
@@ -53,311 +191,104 @@ export type QueryReadRepoArgs = {
   name: Scalars['String'];
 };
 
-export type File = {
-  __typename?: 'File';
-  id: Scalars['ID'];
-  path: Scalars['String'];
-  type: Node_Type;
-  sha: Scalars['String'];
-  url: Scalars['String'];
-  filename?: Maybe<Scalars['String']>;
-  content?: Maybe<Scalars['String']>;
-};
-
-export enum Node_Type {
-  File = 'FILE',
-  Folder = 'FOLDER',
-  User = 'USER'
-}
-
 export type Repo = {
   __typename?: 'Repo';
-  id: Scalars['Int'];
-  node_id: Scalars['String'];
-  name: Scalars['String'];
-  full_name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  full_name: Scalars['String'];
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  node_id: Scalars['String'];
   private: Scalars['Boolean'];
   updated_at: Scalars['String'];
 };
 
-export type GithubUser = {
-  __typename?: 'GithubUser';
-  id: Scalars['Int'];
-  login: Scalars['String'];
-  avatar_url: Scalars['String'];
-  html_url: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
-  configuration?: Maybe<Configuration>;
-};
-
-export type Configuration = {
-  __typename?: 'Configuration';
-  id: Scalars['String'];
-  connectedRepos?: Maybe<Array<Scalars['String']>>;
-};
-
-export type Mutation = {
-  __typename?: 'Mutation';
-  createFile?: Maybe<File>;
-  updateFile?: Maybe<File>;
-  deleteFile?: Maybe<File>;
-  moveFile?: Maybe<File>;
-  createImage?: Maybe<File>;
-  updateImage?: Maybe<File>;
-  deleteImage?: Maybe<File>;
-  createSignedUrl?: Maybe<Scalars['String']>;
-  createRepo?: Maybe<Repo>;
-  updateRepo?: Maybe<Repo>;
-  deleteRepo?: Maybe<Repo>;
-  updateConfiguration?: Maybe<Configuration>;
-};
-
-
-export type MutationCreateFileArgs = {
-  input: CreateFileInput;
-};
-
-
-export type MutationUpdateFileArgs = {
-  input: UpdateFileInput;
-};
-
-
-export type MutationDeleteFileArgs = {
-  input: DeleteFileInput;
-};
-
-
-export type MutationMoveFileArgs = {
-  input: MoveFileInput;
-};
-
-
-export type MutationCreateImageArgs = {
-  input: CreateFileInput;
-};
-
-
-export type MutationUpdateImageArgs = {
-  input: UpdateFileInput;
-};
-
-
-export type MutationDeleteImageArgs = {
-  input: DeleteFileInput;
-};
-
-
-export type MutationUpdateRepoArgs = {
-  input: UpdateRepoInput;
-};
-
-
-export type MutationDeleteRepoArgs = {
-  input: DeleteRepoInput;
-};
-
-
-export type MutationUpdateConfigurationArgs = {
-  input: UpdateConfigurationInput;
-};
-
-export type CreateFileInput = {
-  path: Scalars['String'];
-  content?: Maybe<Scalars['String']>;
-  retextSettings?: Maybe<Array<Retext_Settings>>;
-};
-
 export enum Retext_Settings {
-  Spell = 'SPELL',
   Equality = 'EQUALITY',
   IndefiniteArticle = 'INDEFINITE_ARTICLE',
+  Readability = 'READABILITY',
   RepeatedWords = 'REPEATED_WORDS',
-  Readability = 'READABILITY'
+  Spell = 'SPELL'
 }
 
+export type UpdateConfigurationInput = {
+  connectedRepos?: InputMaybe<Array<Scalars['String']>>;
+};
+
 export type UpdateFileInput = {
+  content?: InputMaybe<Scalars['String']>;
   path: Scalars['String'];
-  content?: Maybe<Scalars['String']>;
-  retextSettings?: Maybe<Array<Retext_Settings>>;
-};
-
-export type DeleteFileInput = {
-  path: Scalars['String'];
-};
-
-export type MoveFileInput = {
-  path: Scalars['String'];
-  newPath: Scalars['String'];
+  retextSettings?: InputMaybe<Array<Retext_Settings>>;
 };
 
 export type UpdateRepoInput = {
+  description?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  private?: Maybe<Scalars['Boolean']>;
+  private?: InputMaybe<Scalars['Boolean']>;
 };
 
-export type DeleteRepoInput = {
-  name: Scalars['String'];
-};
+export type TreeFileFragment = { __typename?: 'File', id: string, path: string, type: Node_Type, url: string, sha: string };
 
-export type UpdateConfigurationInput = {
-  connectedRepos?: Maybe<Array<Scalars['String']>>;
-};
+export type FileFragment = { __typename?: 'File', filename?: string | null | undefined, content?: string | null | undefined, id: string, path: string, type: Node_Type, url: string, sha: string };
 
-export type Links = {
-  __typename?: 'Links';
-  html: Scalars['String'];
-};
+export type RepoFragment = { __typename?: 'Repo', name: string, description?: string | null | undefined, private: boolean, full_name: string, updated_at: string };
 
-export type ModelFileConnection = {
-  __typename?: 'ModelFileConnection';
-  items: Array<File>;
-};
+export type ConfigurationFragment = { __typename?: 'Configuration', id: string, connectedRepos?: Array<string> | null | undefined };
 
-export type ModelRepoConnection = {
-  __typename?: 'ModelRepoConnection';
-  items: Array<Repo>;
-};
-
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
-}
-
-
-export type TreeFileFragment = (
-  { __typename?: 'File' }
-  & Pick<File, 'id' | 'path' | 'type' | 'url' | 'sha'>
-);
-
-export type FileFragment = (
-  { __typename?: 'File' }
-  & Pick<File, 'filename' | 'content'>
-  & TreeFileFragment
-);
-
-export type RepoFragment = (
-  { __typename?: 'Repo' }
-  & Pick<Repo, 'name' | 'description' | 'private' | 'full_name' | 'updated_at'>
-);
-
-export type ConfigurationFragment = (
-  { __typename?: 'Configuration' }
-  & Pick<Configuration, 'id' | 'connectedRepos'>
-);
-
-export type GithubUserFragment = (
-  { __typename?: 'GithubUser' }
-  & Pick<GithubUser, 'id' | 'login' | 'avatar_url' | 'html_url' | 'name'>
-  & { configuration?: Maybe<(
-    { __typename?: 'Configuration' }
-    & ConfigurationFragment
-  )> }
-);
+export type GithubUserFragment = { __typename?: 'GithubUser', id: number, login: string, avatar_url: string, html_url: string, name?: string | null | undefined, configuration?: { __typename?: 'Configuration', id: string, connectedRepos?: Array<string> | null | undefined } | null | undefined };
 
 export type LoginQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LoginQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'login'>
-);
+export type LoginQuery = { __typename?: 'Query', login: string };
 
 export type LogoutQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'logout'>
-);
+export type LogoutQuery = { __typename?: 'Query', logout: string };
 
 export type RefreshQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RefreshQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'refresh'>
-);
+export type RefreshQuery = { __typename?: 'Query', refresh?: string | null | undefined };
 
 export type ReadConfigurationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ReadConfigurationQuery = (
-  { __typename?: 'Query' }
-  & { readConfiguration?: Maybe<(
-    { __typename?: 'Configuration' }
-    & ConfigurationFragment
-  )> }
-);
+export type ReadConfigurationQuery = { __typename?: 'Query', readConfiguration?: { __typename?: 'Configuration', id: string, connectedRepos?: Array<string> | null | undefined } | null | undefined };
 
 export type UpdateConfigurationMutationVariables = Exact<{
   input: UpdateConfigurationInput;
 }>;
 
 
-export type UpdateConfigurationMutation = (
-  { __typename?: 'Mutation' }
-  & { updateConfiguration?: Maybe<(
-    { __typename?: 'Configuration' }
-    & ConfigurationFragment
-  )> }
-);
+export type UpdateConfigurationMutation = { __typename?: 'Mutation', updateConfiguration?: { __typename?: 'Configuration', id: string, connectedRepos?: Array<string> | null | undefined } | null | undefined };
 
 export type CreateSignedUrlMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CreateSignedUrlMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'createSignedUrl'>
-);
+export type CreateSignedUrlMutation = { __typename?: 'Mutation', createSignedUrl?: string | null | undefined };
 
 export type CreateRepoMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CreateRepoMutation = (
-  { __typename?: 'Mutation' }
-  & { createRepo?: Maybe<(
-    { __typename?: 'Repo' }
-    & RepoFragment
-  )> }
-);
+export type CreateRepoMutation = { __typename?: 'Mutation', createRepo?: { __typename?: 'Repo', name: string, description?: string | null | undefined, private: boolean, full_name: string, updated_at: string } | null | undefined };
 
 export type ListReposQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ListReposQuery = (
-  { __typename?: 'Query' }
-  & { listRepos?: Maybe<Array<(
-    { __typename?: 'Repo' }
-    & Pick<Repo, 'id' | 'name' | 'full_name'>
-  )>> }
-);
+export type ListReposQuery = { __typename?: 'Query', listRepos?: Array<{ __typename?: 'Repo', id: number, name: string, full_name: string }> | null | undefined };
 
 export type ReadRepoQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
 
 
-export type ReadRepoQuery = (
-  { __typename?: 'Query' }
-  & { readRepo?: Maybe<(
-    { __typename?: 'Repo' }
-    & RepoFragment
-  )> }
-);
+export type ReadRepoQuery = { __typename?: 'Query', readRepo?: { __typename?: 'Repo', name: string, description?: string | null | undefined, private: boolean, full_name: string, updated_at: string } | null | undefined };
 
 export type ReadGithubUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ReadGithubUserQuery = (
-  { __typename?: 'Query' }
-  & { readGithubUser?: Maybe<(
-    { __typename?: 'GithubUser' }
-    & GithubUserFragment
-  )> }
-);
+export type ReadGithubUserQuery = { __typename?: 'Query', readGithubUser?: { __typename?: 'GithubUser', id: number, login: string, avatar_url: string, html_url: string, name?: string | null | undefined, configuration?: { __typename?: 'Configuration', id: string, connectedRepos?: Array<string> | null | undefined } | null | undefined } | null | undefined };
 
 export type ReadGithubUserAccessTokenQueryVariables = Exact<{
   code: Scalars['String'];
@@ -365,35 +296,16 @@ export type ReadGithubUserAccessTokenQueryVariables = Exact<{
 }>;
 
 
-export type ReadGithubUserAccessTokenQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'readGithubUserAccessToken'>
-);
-
-export type Unnamed_1_QueryVariables = Exact<{ [key: string]: never; }>;
+export type ReadGithubUserAccessTokenQuery = { __typename?: 'Query', readGithubUserAccessToken: string };
 
 
-export type Unnamed_1_Query = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'refresh'>
-);
-
-
-      export interface IntrospectionResultData {
-        __schema: {
-          types: {
-            kind: string;
-            name: string;
-            possibleTypes: {
-              name: string;
-            }[];
-          }[];
-        };
+      export interface PossibleTypesResultData {
+        possibleTypes: {
+          [key: string]: string[]
+        }
       }
-      const result: IntrospectionResultData = {
-  "__schema": {
-    "types": []
-  }
+      const result: PossibleTypesResultData = {
+  "possibleTypes": {}
 };
       export default result;
     
