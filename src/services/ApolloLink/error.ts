@@ -11,10 +11,8 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
   }
 
   async function refetchToken() {
-    console.log('in refresh token')
     const jwt = localState.currentJwtVar()
 
-    console.log('old jwt', jwt)
     const response = await fetch(
       `${process.env.REACT_APP_SERVER_BASE_URL}/refresh`,
       {
@@ -26,17 +24,11 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
       }
     )
 
-    console.log('response', response)
-
     const regeneratedJwt = await response.json()
-
-    console.log('regenerated jwt', regeneratedJwt)
 
     if (response.status !== 200 || !regeneratedJwt) {
       throw new Error('No refresh token')
     }
-
-    console.log('setting jwt')
 
     localState.currentJwtVar(regeneratedJwt)
 
@@ -75,8 +67,6 @@ export function error(client: ApolloClient<NormalizedCacheObject>) {
                       Authorization: `Bearer ${jwt}`,
                     },
                   })
-
-                  console.log('setting new context', operation.getContext())
 
                   forward(operation).subscribe(subscriber)
                 })

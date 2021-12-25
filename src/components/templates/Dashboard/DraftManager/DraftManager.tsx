@@ -19,19 +19,15 @@ export function DraftManager() {
   const [unstagedChanges, setUnstagedChanges] = useUnstagedChanges()
   const [committedChanges, setCommittedChanges] = useCommittedChanges()
   const {
-    actions: {
-      rollback,
-      commit,
-      getUnstagedChanges,
-      push,
-      getCommittedChanges,
-      add,
-      getCommits,
-    },
+    rollback,
+    commit,
+    getUnstagedChanges,
+    push,
+    getCommittedChanges,
+    add,
+    getCommits,
   } = useGit()
-  const {
-    actions: { readFile, readDirRecursive },
-  } = useFs()
+  const { readFile, readDirRecursive } = useFs()
   const [activePath] = useActivePath()
   const [, setFiles] = useFiles()
   const [commits, setCommits] = useState<ReadCommitResult[]>([])

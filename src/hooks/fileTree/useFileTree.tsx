@@ -17,15 +17,8 @@ export function useFileTree() {
   const [, setFiles] = useFiles()
   const [, setOpenFolders] = useOpenFolders()
   const [tabs, setTabs] = useTabs()
-
-  const {
-    actions: { unlink, readDirRecursive, rename, writeFile },
-    meta: { loading: fsLoading, error: fsError },
-  } = useFs()
-  const {
-    actions: { commit, push, add, remove },
-    meta: { loading: gitLoading, error: gitError },
-  } = useGit()
+  const { unlink, readDirRecursive, rename, writeFile } = useFs()
+  const { commit, push, add, remove } = useGit()
 
   const toggleFolder = useCallback(
     (path: string, toggled: boolean) => {
@@ -233,6 +226,5 @@ export function useFileTree() {
       folderClick,
       chevronClick,
     },
-    meta: { loading: fsLoading || gitLoading, error: fsError || gitError },
   }
 }

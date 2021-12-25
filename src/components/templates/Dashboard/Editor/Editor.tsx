@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useSlateValue } from '../../../../hooks/context/useSlateValue'
@@ -11,22 +11,24 @@ import { Slate } from './Slate/Slate'
 import { remarkToSlate } from './Slate/utils/unifed/remarkToSlate'
 
 export function Editor() {
+  const [loading, setLoading] = useState(false)
   const { setSlateValue } = useSlateValue()
-  const {
-    actions: { readFile },
-    meta: { loading },
-  } = useFs()
+  const { readFile } = useFs()
   const [activePath] = useActivePath()
 
   useEffect(() => {
     const loadContentFromFS = async () => {
+      setLoading(true)
       let markdown: string | undefined
 
       if (activePath !== '') {
         markdown = await readFile(activePath)
       }
 
-      setSlateValue?.(remarkToSlate(markdown ?? ''))
+      const slateValue = remarkToSlate(markdown ?? '')
+
+      setSlateValue?.(slateValue)
+      setLoading(false)
     }
 
     loadContentFromFS()

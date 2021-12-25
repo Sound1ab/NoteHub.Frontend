@@ -108,12 +108,8 @@ export function FileTree({ isNewFileOpen, closeNewFile }: IFileTree) {
 function useCloneConnectedRepo() {
   const [files, setFiles] = useFiles()
   const [repo] = useRepo()
-  const {
-    actions: { clone },
-  } = useGit()
-  const {
-    actions: { readDirRecursive },
-  } = useFs()
+  const { clone } = useGit()
+  const { readDirRecursive } = useFs()
   const [loading, setLoading] = useState(false)
 
   useDeepCompareEffect(() => {

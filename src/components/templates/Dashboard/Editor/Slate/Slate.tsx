@@ -40,12 +40,8 @@ export function Slate() {
   )
   const [, setUnstagedChanges] = useUnstagedChanges()
   const [activePath] = useActivePath()
-  const {
-    actions: { writeFile },
-  } = useFs()
-  const {
-    actions: { getUnstagedChanges, add, commit, push },
-  } = useGit()
+  const { writeFile } = useFs()
+  const { getUnstagedChanges, add, commit, push } = useGit()
   const { slateValue = [], setSlateValue } = useSlateValue()
   const domRangeRange = useRef<Range | null>(null)
   const { isOpen, setOpen, Portal, ref } = useModalToggle<HTMLDivElement>({

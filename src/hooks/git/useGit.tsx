@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 
 import { ErrorToast } from '../../components/atoms/Toast/Toast'
 import {
@@ -24,115 +24,86 @@ import { useReadJwt } from '../localState/useReadJwt'
 import { useRepo } from '../recoil/useRepo'
 
 export function useGit() {
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
   const [repo] = useRepo()
 
   const dir = repo.split('/')[1]
 
   const jwt = useReadJwt()
 
-  if (error) {
-    ErrorToast(error)
-    setError(null)
-  }
-
   const add = useCallback(
     async (filepath: string) => {
-      setLoading(true)
       try {
         return gitAdd({ dir: `/${dir}`, filepath: removeFirstSlug(filepath) })
       } catch (error) {
-        setError(`Git add error: ${error.message}`)
-      } finally {
-        setLoading(false)
+        ErrorToast(`Git add error: ${error.message}`)
       }
     },
     [dir]
   )
 
   const getStatusForFile = useCallback(async (filepath: string) => {
-    setLoading(true)
     try {
       return gitGetStatusForFile({ filepath })
     } catch (error) {
-      setError(`Git get status error: ${error.message}`)
-    } finally {
-      setLoading(false)
+      ErrorToast(`Git get status error: ${error.message}`)
     }
   }, [])
 
   const getUnstagedChanges = useCallback(async () => {
-    setLoading(true)
     try {
       return gitGetUnstagedChanges({ dir: `/${dir}` })
     } catch (error) {
-      setError(`Git get unstaged changes: ${error.message}`)
+      ErrorToast(`Git get unstaged changes: ${error.message}`)
       return []
-    } finally {
-      setLoading(false)
     }
   }, [dir])
 
   const addAll = useCallback(
     async (unstagedChanges: string[]) => {
-      setLoading(true)
       try {
         await gitAddAll({
           dir: `/${dir}`,
           unstagedChanges,
         })
       } catch (error) {
-        setError(`Git stage changes: ${error.message}`)
-      } finally {
-        setLoading(false)
+        ErrorToast(`Git stage changes: ${error.message}`)
       }
     },
     [dir]
   )
 
   const commit = useCallback(async () => {
-    setLoading(true)
     try {
       await gitCommit({
         dir: `/${dir}`,
       })
     } catch (error) {
-      setError(`Git commit: ${error.message}`)
-    } finally {
-      setLoading(false)
+      ErrorToast(`Git commit: ${error.message}`)
     }
   }, [dir])
 
   const rollback = useCallback(async () => {
-    setLoading(true)
     try {
       await gitRollback({
         dir: `/${dir}`,
       })
     } catch (error) {
-      setError(`Git rollback: ${error.message}`)
-    } finally {
-      setLoading(false)
+      ErrorToast(`Git rollback: ${error.message}`)
     }
   }, [dir])
 
   const status = useCallback(async () => {
-    setLoading(true)
     try {
       const result = await gitStatus({
         dir: `/${dir}`,
       })
       return result
     } catch (error) {
-      setError(`Git status: ${error.message}`)
-    } finally {
-      setLoading(false)
+      ErrorToast(`Git status: ${error.message}`)
     }
   }, [dir])
 
   const getCommittedChanges = useCallback(async () => {
-    setLoading(true)
     try {
       const changes = await gitGetCommittedChanges({
         dir: `/${dir}`,
@@ -140,17 +111,13 @@ export function useGit() {
 
       return changes
     } catch (error) {
-      setError(`Git get committed changes: ${error.message}`)
+      ErrorToast(`Git get committed changes: ${error.message}`)
       return []
-    } finally {
-      setLoading(false)
     }
   }, [dir])
 
   const clone = useCallback(
     async (repo: string) => {
-      setLoading(true)
-
       try {
         await gitClone({
           url: `https://github.com/${repo}`,
@@ -158,9 +125,7 @@ export function useGit() {
           jwt,
         })
       } catch (error) {
-        setError(`Git clone: ${error.message}`)
-      } finally {
-        setLoading(false)
+        ErrorToast(`Git clone: ${error.message}`)
       }
     },
     [jwt, dir]
@@ -173,9 +138,7 @@ export function useGit() {
         jwt,
       })
     } catch (error) {
-      setError(`Git push: ${error.message}`)
-    } finally {
-      setLoading(false)
+      ErrorToast(`Git push: ${error.message}`)
     }
   }, [jwt, dir])
 
@@ -187,9 +150,7 @@ export function useGit() {
           filepath: removeFirstSlug(filepath),
         })
       } catch (error) {
-        setError(`Git push: ${error.message}`)
-      } finally {
-        setLoading(false)
+        ErrorToast(`Git push: ${error.message}`)
       }
     },
     [dir]
@@ -203,9 +164,7 @@ export function useGit() {
           deletedUnstagedChanges,
         })
       } catch (error) {
-        setError(`Git push: ${error.message}`)
-      } finally {
-        setLoading(false)
+        ErrorToast(`Git push: ${error.message}`)
       }
     },
     [dir]
@@ -219,10 +178,8 @@ export function useGit() {
 
       return result
     } catch (error) {
-      setError(`Git get deleted unstaged changes: ${error.message}`)
+      ErrorToast(`Git get deleted unstaged changes: ${error.message}`)
       return []
-    } finally {
-      setLoading(false)
     }
   }, [dir])
 
@@ -234,10 +191,8 @@ export function useGit() {
 
       return result
     } catch (error) {
-      setError(`Git log: ${error.message}`)
+      ErrorToast(`Git log: ${error.message}`)
       return []
-    } finally {
-      setLoading(false)
     }
   }, [dir])
 
@@ -249,10 +204,8 @@ export function useGit() {
 
       return result
     } catch (error) {
-      setError(`Git log: ${error.message}`)
+      ErrorToast(`Git log: ${error.message}`)
       return []
-    } finally {
-      setLoading(false)
     }
   }, [dir])
 
@@ -266,33 +219,28 @@ export function useGit() {
 
         return result
       } catch (error) {
-        setError(`Git reset index: ${error.message}`)
-      } finally {
-        setLoading(false)
+        ErrorToast(`Git reset index: ${error.message}`)
       }
     },
     [dir]
   )
 
   return {
-    actions: {
-      getUnstagedChanges,
-      addAll,
-      commit,
-      rollback,
-      status,
-      getCommittedChanges,
-      clone,
-      push,
-      remove,
-      getDeletedUnstagedChanges,
-      removeAll,
-      log,
-      getCommits,
-      getStatusForFile,
-      add,
-      resetIndex,
-    },
-    meta: { loading, error },
+    getUnstagedChanges,
+    addAll,
+    commit,
+    rollback,
+    status,
+    getCommittedChanges,
+    clone,
+    push,
+    remove,
+    getDeletedUnstagedChanges,
+    removeAll,
+    log,
+    getCommits,
+    getStatusForFile,
+    add,
+    resetIndex,
   }
 }
