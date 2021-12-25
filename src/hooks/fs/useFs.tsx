@@ -28,7 +28,9 @@ export function useFs() {
 
       return new TextDecoder('utf-8').decode(content)
     } catch (error) {
-      ErrorToast(`FS read: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`FS read: ${error.message}`)
+      }
     }
   }, [])
 
@@ -39,7 +41,9 @@ export function useFs() {
         content,
       })
     } catch (error) {
-      ErrorToast(`FS write: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`FS write: ${error.message}`)
+      }
     }
   }, [])
 
@@ -51,7 +55,9 @@ export function useFs() {
           newFilePath: `/${newFilePath}`,
         })
       } catch (error) {
-        ErrorToast(`FS rename: ${error.message}`)
+        if (error instanceof Error) {
+          ErrorToast(`FS rename: ${error.message}`)
+        }
       }
     },
     []
@@ -67,7 +73,9 @@ export function useFs() {
         type: Node_Type.File,
       }))
     } catch (error) {
-      ErrorToast(`FS read recursive: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`FS read recursive: ${error.message}`)
+      }
       return []
     }
   }, [dir])
@@ -78,7 +86,9 @@ export function useFs() {
         filepath: `/${filepath}`,
       })
     } catch (error) {
-      ErrorToast(`FS rename: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`FS rename: ${error.message}`)
+      }
     }
   }, [])
 

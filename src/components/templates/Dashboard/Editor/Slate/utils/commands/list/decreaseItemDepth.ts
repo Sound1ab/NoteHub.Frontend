@@ -33,7 +33,7 @@ export const decreaseItemDepth = (editor: Editor, path?: Path) => {
     if (followingItems.length > 0) {
       const newList = {
         type: currentList.type,
-        ...(currentList.data && { data: currentList.data }),
+        ...(currentList.data ? { data: currentList.data } : {}),
         children: followingItems,
       }
 

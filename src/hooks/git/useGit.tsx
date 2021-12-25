@@ -35,7 +35,9 @@ export function useGit() {
       try {
         return gitAdd({ dir: `/${dir}`, filepath: removeFirstSlug(filepath) })
       } catch (error) {
-        ErrorToast(`Git add error: ${error.message}`)
+        if (error instanceof Error) {
+          ErrorToast(`Git add error: ${error.message}`)
+        }
       }
     },
     [dir]
@@ -45,7 +47,9 @@ export function useGit() {
     try {
       return gitGetStatusForFile({ filepath })
     } catch (error) {
-      ErrorToast(`Git get status error: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`Git get status error: ${error.message}`)
+      }
     }
   }, [])
 
@@ -53,7 +57,9 @@ export function useGit() {
     try {
       return gitGetUnstagedChanges({ dir: `/${dir}` })
     } catch (error) {
-      ErrorToast(`Git get unstaged changes: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`Git get unstaged changes: ${error.message}`)
+      }
       return []
     }
   }, [dir])
@@ -66,7 +72,9 @@ export function useGit() {
           unstagedChanges,
         })
       } catch (error) {
-        ErrorToast(`Git stage changes: ${error.message}`)
+        if (error instanceof Error) {
+          ErrorToast(`Git stage changes: ${error.message}`)
+        }
       }
     },
     [dir]
@@ -78,7 +86,9 @@ export function useGit() {
         dir: `/${dir}`,
       })
     } catch (error) {
-      ErrorToast(`Git commit: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`Git commit: ${error.message}`)
+      }
     }
   }, [dir])
 
@@ -88,7 +98,9 @@ export function useGit() {
         dir: `/${dir}`,
       })
     } catch (error) {
-      ErrorToast(`Git rollback: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`Git rollback: ${error.message}`)
+      }
     }
   }, [dir])
 
@@ -99,7 +111,9 @@ export function useGit() {
       })
       return result
     } catch (error) {
-      ErrorToast(`Git status: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`Git status: ${error.message}`)
+      }
     }
   }, [dir])
 
@@ -111,7 +125,9 @@ export function useGit() {
 
       return changes
     } catch (error) {
-      ErrorToast(`Git get committed changes: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`Git get committed changes: ${error.message}`)
+      }
       return []
     }
   }, [dir])
@@ -125,7 +141,9 @@ export function useGit() {
           jwt,
         })
       } catch (error) {
-        ErrorToast(`Git clone: ${error.message}`)
+        if (error instanceof Error) {
+          ErrorToast(`Git clone: ${error.message}`)
+        }
       }
     },
     [jwt, dir]
@@ -138,7 +156,9 @@ export function useGit() {
         jwt,
       })
     } catch (error) {
-      ErrorToast(`Git push: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`Git push: ${error.message}`)
+      }
     }
   }, [jwt, dir])
 
@@ -150,7 +170,9 @@ export function useGit() {
           filepath: removeFirstSlug(filepath),
         })
       } catch (error) {
-        ErrorToast(`Git push: ${error.message}`)
+        if (error instanceof Error) {
+          ErrorToast(`Git push: ${error.message}`)
+        }
       }
     },
     [dir]
@@ -164,7 +186,9 @@ export function useGit() {
           deletedUnstagedChanges,
         })
       } catch (error) {
-        ErrorToast(`Git push: ${error.message}`)
+        if (error instanceof Error) {
+          ErrorToast(`Git push: ${error.message}`)
+        }
       }
     },
     [dir]
@@ -178,7 +202,9 @@ export function useGit() {
 
       return result
     } catch (error) {
-      ErrorToast(`Git get deleted unstaged changes: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`Git get deleted unstaged changes: ${error.message}`)
+      }
       return []
     }
   }, [dir])
@@ -191,7 +217,9 @@ export function useGit() {
 
       return result
     } catch (error) {
-      ErrorToast(`Git log: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`Git log: ${error.message}`)
+      }
       return []
     }
   }, [dir])
@@ -204,7 +232,9 @@ export function useGit() {
 
       return result
     } catch (error) {
-      ErrorToast(`Git log: ${error.message}`)
+      if (error instanceof Error) {
+        ErrorToast(`Git log: ${error.message}`)
+      }
       return []
     }
   }, [dir])
@@ -219,7 +249,9 @@ export function useGit() {
 
         return result
       } catch (error) {
-        ErrorToast(`Git reset index: ${error.message}`)
+        if (error instanceof Error) {
+          ErrorToast(`Git reset index: ${error.message}`)
+        }
       }
     },
     [dir]

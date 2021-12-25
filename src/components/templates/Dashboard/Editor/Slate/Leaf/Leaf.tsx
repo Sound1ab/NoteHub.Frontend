@@ -28,7 +28,7 @@ const Code = styled.code`
   font-family: Consolas, Menlo, Monaco, Courier, monospace;
 `
 
-const Node = styled.span<{ leaf: RenderLeafProps['leaf'] }>`
+const Node = styled.span<{ leaf: any }>`
   color: inherit;
   ${({ leaf }) =>
     leaf['function-variable'] &&
