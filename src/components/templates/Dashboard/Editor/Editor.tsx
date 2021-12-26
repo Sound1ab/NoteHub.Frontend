@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useSlateValue } from '../../../../hooks/context/useSlateValue'
 import { useFs } from '../../../../hooks/fs/useFs'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
+import { useLoading } from '../../../../hooks/utils/useLoading'
 import { Fade } from '../../../animation/Mount/Fade'
 import { DraftManager } from '../DraftManager/DraftManager'
 import { MarkdownEditorSkeleton } from './MarkdownEditorSkeleton'
 import { Slate } from './Slate/Slate'
 import { remarkToSlate } from './Slate/utils/unifed/remarkToSlate'
-import { useLoading } from '../../../../hooks/utils/useLoading'
 
 export function Editor() {
   const { loading, withLoading } = useLoading()

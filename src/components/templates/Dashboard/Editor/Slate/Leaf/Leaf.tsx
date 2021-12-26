@@ -28,6 +28,7 @@ const Code = styled.code`
   font-family: Consolas, Menlo, Monaco, Courier, monospace;
 `
 
+// eslint-disable-next-line
 const Node = styled.span<{ leaf: any }>`
   color: inherit;
   ${({ leaf }) =>

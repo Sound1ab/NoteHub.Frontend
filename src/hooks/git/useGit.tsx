@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
 
-import { ErrorToast } from '../../components/atoms/Toast/Toast'
 import {
   add as gitAdd,
   addAll as gitAddAll,
@@ -22,239 +21,174 @@ import {
 import { removeFirstSlug } from '../../utils/removeFirstSlug'
 import { useReadJwt } from '../localState/useReadJwt'
 import { useRepo } from '../recoil/useRepo'
+import { useError } from '../utils/useError'
 
 export function useGit() {
+  const { withError } = useError()
   const [repo] = useRepo()
+  const jwt = useReadJwt()
 
   const dir = repo.split('/')[1]
 
-  const jwt = useReadJwt()
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const add = useCallback(
-    async (filepath: string) => {
-      try {
-        return gitAdd({ dir: `/${dir}`, filepath: removeFirstSlug(filepath) })
-      } catch (error) {
-        if (error instanceof Error) {
-          ErrorToast(`Git add error: ${error.message}`)
-        }
-      }
-    },
-    [dir]
+    withError(async (filepath: string) => {
+      return gitAdd({ dir: `/${dir}`, filepath: removeFirstSlug(filepath) })
+    }, 'Git add'),
+    [withError, dir]
   )
 
-  const getStatusForFile = useCallback(async (filepath: string) => {
-    try {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getStatusForFile = useCallback(
+    withError(async (filepath: string) => {
       return gitGetStatusForFile({ filepath })
-    } catch (error) {
-      if (error instanceof Error) {
-        ErrorToast(`Git get status error: ${error.message}`)
-      }
-    }
-  }, [])
-
-  const getUnstagedChanges = useCallback(async () => {
-    try {
-      return gitGetUnstagedChanges({ dir: `/${dir}` })
-    } catch (error) {
-      if (error instanceof Error) {
-        ErrorToast(`Git get unstaged changes: ${error.message}`)
-      }
-      return []
-    }
-  }, [dir])
-
-  const addAll = useCallback(
-    async (unstagedChanges: string[]) => {
-      try {
-        await gitAddAll({
-          dir: `/${dir}`,
-          unstagedChanges,
-        })
-      } catch (error) {
-        if (error instanceof Error) {
-          ErrorToast(`Git stage changes: ${error.message}`)
-        }
-      }
-    },
-    [dir]
+    }, 'Git get status'),
+    [withError]
   )
 
-  const commit = useCallback(async () => {
-    try {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getUnstagedChanges = useCallback(
+    withError(async () => {
+      return gitGetUnstagedChanges({ dir: `/${dir}` })
+    }, 'Git get unstaged changes'),
+    [withError, dir]
+  )
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const addAll = useCallback(
+    withError(async (unstagedChanges: string[]) => {
+      await gitAddAll({
+        dir: `/${dir}`,
+        unstagedChanges,
+      })
+    }, 'Git stage changes'),
+    [withError, dir]
+  )
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const commit = useCallback(
+    withError(async () => {
       await gitCommit({
         dir: `/${dir}`,
       })
-    } catch (error) {
-      if (error instanceof Error) {
-        ErrorToast(`Git commit: ${error.message}`)
-      }
-    }
-  }, [dir])
+    }, 'Git commit'),
+    [withError, dir]
+  )
 
-  const rollback = useCallback(async () => {
-    try {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const rollback = useCallback(
+    withError(async () => {
       await gitRollback({
         dir: `/${dir}`,
       })
-    } catch (error) {
-      if (error instanceof Error) {
-        ErrorToast(`Git rollback: ${error.message}`)
-      }
-    }
-  }, [dir])
-
-  const status = useCallback(async () => {
-    try {
-      const result = await gitStatus({
-        dir: `/${dir}`,
-      })
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        ErrorToast(`Git status: ${error.message}`)
-      }
-    }
-  }, [dir])
-
-  const getCommittedChanges = useCallback(async () => {
-    try {
-      const changes = await gitGetCommittedChanges({
-        dir: `/${dir}`,
-      })
-
-      return changes
-    } catch (error) {
-      if (error instanceof Error) {
-        ErrorToast(`Git get committed changes: ${error.message}`)
-      }
-      return []
-    }
-  }, [dir])
-
-  const clone = useCallback(
-    async (repo: string) => {
-      try {
-        await gitClone({
-          url: `https://github.com/${repo}`,
-          dir: `/${dir}`,
-          jwt,
-        })
-      } catch (error) {
-        if (error instanceof Error) {
-          ErrorToast(`Git clone: ${error.message}`)
-        }
-      }
-    },
-    [jwt, dir]
+    }, 'Git rollback'),
+    [withError, dir]
   )
 
-  const push = useCallback(async () => {
-    try {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const status = useCallback(
+    withError(async () => {
+      return await gitStatus({
+        dir: `/${dir}`,
+      })
+    }, 'Git status'),
+    [withError, dir]
+  )
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getCommittedChanges = useCallback(
+    withError(async () => {
+      return await gitGetCommittedChanges({
+        dir: `/${dir}`,
+      })
+    }, 'Git get committed changes'),
+    [withError, dir]
+  )
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const clone = useCallback(
+    withError(async (repo: string) => {
+      await gitClone({
+        url: `https://github.com/${repo}`,
+        dir: `/${dir}`,
+        jwt,
+      })
+    }, 'Git clone'),
+    [withError, dir, jwt]
+  )
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const push = useCallback(
+    withError(async () => {
       await gitPush({
         dir: `/${dir}`,
         jwt,
       })
-    } catch (error) {
-      if (error instanceof Error) {
-        ErrorToast(`Git push: ${error.message}`)
-      }
-    }
-  }, [jwt, dir])
+    }, 'Git push'),
+    [withError, dir, jwt]
+  )
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const remove = useCallback(
-    async (filepath: string) => {
-      try {
-        await gitRemove({
-          dir: `/${dir}`,
-          filepath: removeFirstSlug(filepath),
-        })
-      } catch (error) {
-        if (error instanceof Error) {
-          ErrorToast(`Git push: ${error.message}`)
-        }
-      }
-    },
-    [dir]
+    withError(async (filepath: string) => {
+      await gitRemove({
+        dir: `/${dir}`,
+        filepath: removeFirstSlug(filepath),
+      })
+    }, 'Git push'),
+    [withError, dir]
   )
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const removeAll = useCallback(
-    async (deletedUnstagedChanges: string[] | never[]) => {
-      try {
-        await gitRemoveAll({
-          dir: `/${dir}`,
-          deletedUnstagedChanges,
-        })
-      } catch (error) {
-        if (error instanceof Error) {
-          ErrorToast(`Git push: ${error.message}`)
-        }
-      }
-    },
-    [dir]
+    withError(async (deletedUnstagedChanges: string[] | never[]) => {
+      await gitRemoveAll({
+        dir: `/${dir}`,
+        deletedUnstagedChanges,
+      })
+    }, 'Remove all'),
+    [withError, dir]
   )
 
-  const getDeletedUnstagedChanges = useCallback(async () => {
-    try {
-      const result = await gitGetDeletedUnstagedChanges({
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getDeletedUnstagedChanges = useCallback(
+    withError(async () => {
+      return await gitGetDeletedUnstagedChanges({
         dir: `/${dir}`,
       })
+    }, 'Git get deleted unstaged changes'),
+    [withError, dir]
+  )
 
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        ErrorToast(`Git get deleted unstaged changes: ${error.message}`)
-      }
-      return []
-    }
-  }, [dir])
-
-  const log = useCallback(async () => {
-    try {
-      const result = await gitLog({
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const log = useCallback(
+    withError(async () => {
+      return await gitLog({
         dir: `/${dir}`,
       })
+    }, 'Git log'),
+    [withError, dir]
+  )
 
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        ErrorToast(`Git log: ${error.message}`)
-      }
-      return []
-    }
-  }, [dir])
-
-  const getCommits = useCallback(async () => {
-    try {
-      const result = await gitGetCommits({
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getCommits = useCallback(
+    withError(async () => {
+      return await gitGetCommits({
         dir: `/${dir}`,
       })
+    }, 'Git get commits'),
+    [withError, dir]
+  )
 
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        ErrorToast(`Git log: ${error.message}`)
-      }
-      return []
-    }
-  }, [dir])
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetIndex = useCallback(
-    async (filepath: string) => {
-      try {
-        const result = await gitResetIndex({
-          dir: `/${dir}`,
-          filepath: removeFirstSlug(filepath),
-        })
-
-        return result
-      } catch (error) {
-        if (error instanceof Error) {
-          ErrorToast(`Git reset index: ${error.message}`)
-        }
-      }
-    },
-    [dir]
+    withError(async (filepath: string) => {
+      return await gitResetIndex({
+        dir: `/${dir}`,
+        filepath: removeFirstSlug(filepath),
+      })
+    }, 'Git reset index'),
+    [withError, dir]
   )
 
   return {
