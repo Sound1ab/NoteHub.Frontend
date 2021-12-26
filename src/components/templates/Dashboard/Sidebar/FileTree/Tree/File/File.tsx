@@ -41,7 +41,8 @@ export function File({ node, level }: IFile) {
     actions: { renameNode, fileClick },
   } = useFileTree()
   const [{ isDragging }, dragRef] = useDrag({
-    item: { type: 'NODE', file: node },
+    type: 'NODE',
+    item: { file: node },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
