@@ -1,44 +1,26 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDrag } from 'react-dnd'
 import styled from 'styled-components'
 
 import { useFileDropdown } from '../../../../../../../hooks/dropdown/useFileDropdown'
 import { useFileTree } from '../../../../../../../hooks/fileTree/useFileTree'
 import { ITreeNode } from '../../../../../../../types'
-import { removeLastSlug } from '../../../../../../../utils/removeLastSlug'
 import { removeMarkdownExtension } from '../../../../../../../utils/removeMarkdownExtension'
 import { Icon } from '../../../../../../atoms/Icon/Icon'
 import { FileInput } from '../../../FileInput/FileInput'
 import { Node } from '../Node/Node'
+import { FileSkeleton } from './FileSkeleton'
 
 interface IFile {
   node: ITreeNode
   level: number
 }
 
-function useLoading() {
-  const [loading, setLoading] = useState(false)
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function withLoading<T extends any[]>(callback: (...args: T) => any) {
-    return async (...args: T) => {
-      setLoading(true)
-      await callback(...args)
-      setLoading(false)
-    }
-  }
-
-  return {
-    loading,
-    withLoading,
-  }
-}
-
 export function File({ node, level }: IFile) {
-  const { loading, withLoading } = useLoading()
-  const { items, isRenaming, handleSetIsRenamingClose } = useFileDropdown(node)
+  const { items, isRenaming, handleSetIsRenamingClose, loading, handleRename } =
+    useFileDropdown(node)
   const {
-    actions: { renameNode, fileClick },
+    actions: { fileClick },
   } = useFileTree()
   const [{ isDragging }, dragRef] = useDrag({
     type: 'NODE',
@@ -48,26 +30,15 @@ export function File({ node, level }: IFile) {
     }),
   })
 
-  // if (loading) {
-  //   return
-  // }
+  if (loading) {
+    return <FileSkeleton />
+  }
 
   const { path, name } = node
 
   async function handleFileClick() {
     fileClick(path)
   }
-
-  const handleRename = withLoading(async (value: string) => {
-    const pathWithoutFilename = removeLastSlug(path)
-
-    const newPath =
-      pathWithoutFilename.length > 0
-        ? `${pathWithoutFilename.join('/')}/${value}.md`
-        : `${value}.md`
-
-    await renameNode(path, newPath)
-  })
 
   return isRenaming ? (
     <FileInput

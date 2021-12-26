@@ -9,16 +9,16 @@ import { DraftManager } from '../DraftManager/DraftManager'
 import { MarkdownEditorSkeleton } from './MarkdownEditorSkeleton'
 import { Slate } from './Slate/Slate'
 import { remarkToSlate } from './Slate/utils/unifed/remarkToSlate'
+import { useLoading } from '../../../../hooks/utils/useLoading'
 
 export function Editor() {
-  const [loading, setLoading] = useState(false)
+  const { loading, withLoading } = useLoading()
   const { setSlateValue } = useSlateValue()
   const { readFile } = useFs()
   const [activePath] = useActivePath()
 
   useEffect(() => {
-    const loadContentFromFS = async () => {
-      setLoading(true)
+    const loadContentFromFS = withLoading(async () => {
       let markdown: string | undefined
 
       if (activePath !== '') {
@@ -27,14 +27,11 @@ export function Editor() {
 
       const slateValue = remarkToSlate(markdown ?? '')
 
-      // console.log('here', slateValue)
-
       setSlateValue?.(slateValue)
-      setLoading(false)
-    }
+    })
 
     loadContentFromFS()
-  }, [activePath, readFile, setSlateValue])
+  }, [activePath, readFile, setSlateValue, withLoading])
 
   return (
     <Wrapper>

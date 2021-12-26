@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
@@ -10,6 +10,7 @@ import { useOpenFolders } from '../../../../../hooks/recoil/useOpenFolders'
 import { useRepo } from '../../../../../hooks/recoil/useRepo'
 import { useSearch } from '../../../../../hooks/recoil/useSearch'
 import useDeepCompareEffect from '../../../../../hooks/utils/useDeepCompareEffect'
+import { useLoading } from '../../../../../hooks/utils/useLoading'
 import { createNodes } from '../../../../../utils/createNodes'
 import { extractFilename } from '../../../../../utils/extractFilename'
 import { Fade } from '../../../../animation/Mount/Fade'
@@ -110,19 +111,16 @@ function useCloneConnectedRepo() {
   const [repo] = useRepo()
   const { clone } = useGit()
   const { readDirRecursive } = useFs()
-  const [loading, setLoading] = useState(false)
+  const { loading, withLoading } = useLoading()
 
   useDeepCompareEffect(() => {
     if (!repo) return
 
-    setLoading(true)
-
-    async function init() {
+    const init = withLoading(async () => {
       await clone(repo)
 
       setFiles(await readDirRecursive())
-      setLoading(false)
-    }
+    })
 
     init()
   }, [clone, setFiles, readDirRecursive, repo])

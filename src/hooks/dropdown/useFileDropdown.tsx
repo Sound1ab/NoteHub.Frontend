@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 
 import { ITreeNode } from '../../types'
+import { removeLastSlug } from '../../utils/removeLastSlug'
 import { useFileTree } from '../fileTree/useFileTree'
+import { useLoading } from '../utils/useLoading'
 
 export function useFileDropdown(node: ITreeNode) {
+  const { loading, withLoading } = useLoading()
   const [isRenaming, setIsRenaming] = useState(false)
   const {
-    actions: { deleteFile },
+    actions: { deleteFile, renameNode },
   } = useFileTree()
 
   function handleSetIsRenamingOpen(
@@ -20,9 +23,20 @@ export function useFileDropdown(node: ITreeNode) {
     setIsRenaming(false)
   }
 
-  async function handleDeleteFile() {
+  const handleDeleteFile = withLoading(async () => {
     await deleteFile(node.path)
-  }
+  })
+
+  const handleRename = withLoading(async (value: string) => {
+    const pathWithoutFilename = removeLastSlug(node.path)
+
+    const newPath =
+      pathWithoutFilename.length > 0
+        ? `${pathWithoutFilename.join('/')}/${value}.md`
+        : `${value}.md`
+
+    await renameNode(node.path, newPath)
+  })
 
   const items = [
     {
@@ -39,5 +53,5 @@ export function useFileDropdown(node: ITreeNode) {
     },
   ]
 
-  return { items, isRenaming, handleSetIsRenamingClose }
+  return { items, isRenaming, handleSetIsRenamingClose, handleRename, loading }
 }
