@@ -1,22 +1,25 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 
-export function useLoading() {
-  const [loading, setLoading] = useState(false)
+import { ErrorToast } from '../../components/atoms/Toast/Toast'
 
-  const withLoading = useCallback(
+export function useError() {
+  const withError = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    <T extends any[]>(callback: (...args: T) => any) => {
+    <T extends any[]>(callback: (...args: T) => any, message: string) => {
       return async (...args: T) => {
-        setLoading(true)
-        await callback(...args)
-        setLoading(false)
+        try {
+          return await callback(...args)
+        } catch (err) {
+          if (err instanceof Error) {
+            ErrorToast(`${message}: ${err.message}`)
+          }
+        }
       }
     },
     []
   )
 
   return {
-    loading,
-    withLoading,
+    withError,
   }
 }
