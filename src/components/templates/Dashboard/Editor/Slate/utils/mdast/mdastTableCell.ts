@@ -18,6 +18,15 @@ export function mdastTableCell() {
           tableCell.header = true
         }
 
+        // Fix for when a tableCell has no text. Manually insert some empty
+        // text otherwise markdown can't be converted to slate value
+        if (tableCell.children.length === 0) {
+          tableCell.children.push({
+            type: 'text',
+            value: '',
+          })
+        }
+
         return tableCell
       }
     )

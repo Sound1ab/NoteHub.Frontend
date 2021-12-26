@@ -20,23 +20,35 @@ export function mdastTable() {
 
         const endOfDocumentPoint = parent?.position?.end
 
+        const isNextChildATable = parent?.children[index + 1]?.type === 'table'
+
+        const emptyParagraph = {
+          type: 'paragraph',
+          children: [
+            {
+              type: 'text',
+              value: '',
+            },
+          ],
+        }
+
         if (isLastInDocument && endOfDocumentPoint) {
+          // Insert empty paragraph after table if it's the last element in the
+          // page so we can continue editing
           const position = {
             start: endOfDocumentPoint,
             end: endOfDocumentPoint,
           }
 
           parent?.children.push({
-            type: 'paragraph',
-            children: [
-              {
-                type: 'text',
-                value: '',
-                position,
-              },
-            ],
+            ...emptyParagraph,
+            children: [{ ...emptyParagraph.children[0], position }],
             position,
           })
+        } else if (isNextChildATable) {
+          // Insert empty paragraph between two tables otherwise we can't insert
+          // anything there
+          parent?.children.splice(index + 1, 0, emptyParagraph)
         }
 
         return table
