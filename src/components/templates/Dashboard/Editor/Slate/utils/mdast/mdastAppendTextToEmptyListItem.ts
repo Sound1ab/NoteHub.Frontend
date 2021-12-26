@@ -1,9 +1,8 @@
-import { Node as SlateNode } from 'slate'
-import { Node } from 'unist'
+import { Literal, Node } from 'unist'
 import visit from 'unist-util-visit'
 
 interface IListItemNode extends Node {
-  children: SlateNode[]
+  children: Literal[]
 }
 
 export function mdastAppendTextToEmptyListItem() {
@@ -12,7 +11,6 @@ export function mdastAppendTextToEmptyListItem() {
     // @ts-ignore
     visit<IListItemNode>(ast, 'listItem' as never, (listItem) => {
       if (listItem.children.length === 0) {
-        // @ts-ignore
         listItem.children.push({
           type: 'text',
           value: '',

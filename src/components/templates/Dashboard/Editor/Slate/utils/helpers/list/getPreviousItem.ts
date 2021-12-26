@@ -1,4 +1,4 @@
-import { Editor, Node, Path } from 'slate'
+import { Editor, Element, Node, Path } from 'slate'
 
 import { getCurrentItem } from './getCurrentItem'
 
@@ -31,7 +31,10 @@ export const getPreviousItem = (editor: Editor, path?: Path) => {
 
   if (!previousSibling) {
     return null
-  } else if (previousSibling.type === 'listItem') {
+  } else if (
+    Element.isElement(previousSibling) &&
+    previousSibling.type === 'listItem'
+  ) {
     return [previousSibling, previousSiblingPath]
   }
   return null

@@ -16,7 +16,7 @@ export function insertTableCell({
     {
       type: 'tableCell',
       header,
-      children: [{ text: 'Content' }],
+      children: [{ text: '', bold: false, italic: false, inlineCode: false }],
     },
     {
       at,

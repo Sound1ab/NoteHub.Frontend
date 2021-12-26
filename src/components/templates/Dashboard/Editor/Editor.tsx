@@ -27,6 +27,8 @@ export function Editor() {
 
       const slateValue = remarkToSlate(markdown ?? '')
 
+      // console.log('here', slateValue)
+
       setSlateValue?.(slateValue)
       setLoading(false)
     }

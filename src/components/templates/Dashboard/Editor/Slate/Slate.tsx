@@ -1,6 +1,13 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { Node, NodeEntry, Range as SlateRange, createEditor } from 'slate'
-import { withHistory } from 'slate-history'
+import {
+  BaseEditor,
+  Descendant,
+  Node,
+  NodeEntry,
+  Range as SlateRange,
+  createEditor,
+} from 'slate'
+import { HistoryEditor, withHistory } from 'slate-history'
 import {
   Editable,
   ReactEditor,
@@ -19,6 +26,7 @@ import { debounce } from '../../../../../utils/debounce'
 import { Element } from './Element/Element'
 import { HyperLinkModal } from './HyperLinkModal/HyperLinkModal'
 import { Leaf } from './Leaf/Leaf'
+import { CustomElement, CustomText } from './SlateTypes'
 import { openLink } from './utils/commands/link/openLink'
 import { decorateCodeBlock } from './utils/decorators/decorateCodeBlock'
 import { handleKeyDown } from './utils/handlers/handleKeyDown'
@@ -27,6 +35,15 @@ import { withLists } from './utils/plugins/withLists'
 import { withShortcuts } from './utils/plugins/withShortcuts'
 import { withTables } from './utils/plugins/withTables'
 import { slateToRemark } from './utils/unifed/slateToRemark'
+
+declare module 'slate' {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor & HistoryEditor
+    Element: CustomElement
+    Text: CustomText
+  }
+}
 
 export function Slate() {
   const editor = useMemo(
@@ -75,7 +92,7 @@ export function Slate() {
   )
 
   const handleOnChange = useCallback(
-    (value: Node[]) => {
+    (value: Descendant[]) => {
       if (JSON.stringify(value) === JSON.stringify(slateValue)) return
 
       setSlateValue?.(value)
@@ -121,6 +138,10 @@ export function Slate() {
 
     setOpen(true)
   }, [editor, setOpen])
+
+  // This is how we dynamically update the slate value after adding the  initial
+  // value. See https://github.com/ianstormtaylor/slate/pull/4540
+  editor.children = slateValue
 
   return (
     <Wrapper>

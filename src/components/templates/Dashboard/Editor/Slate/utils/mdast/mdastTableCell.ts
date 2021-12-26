@@ -1,9 +1,8 @@
-import { Node as SlateNode } from 'slate'
-import { Node } from 'unist'
+import { Literal, Node } from 'unist'
 import visit from 'unist-util-visit'
 
 interface INode extends Node {
-  children: SlateNode[]
+  children: Literal[]
 }
 
 export function mdastTableCell() {

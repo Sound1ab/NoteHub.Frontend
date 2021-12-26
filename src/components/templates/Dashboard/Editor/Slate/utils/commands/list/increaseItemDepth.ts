@@ -1,5 +1,6 @@
 import { Editor, Element, NodeEntry, Path, Transforms } from 'slate'
 
+import { ListElement } from '../../../SlateTypes'
 import { getCurrentItem } from '../../helpers/list/getCurrentItem'
 import { getDeepestItemDepth } from '../../helpers/list/getDeepestItemDepth'
 import { getListForItem } from '../../helpers/list/getListForItem'
@@ -45,7 +46,7 @@ const moveAsSubItem = (
 
   const [currentList] = item
 
-  if (!currentList) return
+  if (!currentList || !Element.isElement(currentList)) return
 
   const newSublist = {
     type: currentList.type,
@@ -55,9 +56,13 @@ const moveAsSubItem = (
   Editor.withoutNormalizing(editor, () => {
     // Insert new sublist after the position
     // of the last child of the destination node
-    Transforms.insertNodes(editor, newSublist, {
-      at: [...destinationElementPath, lastChildIndex + 1],
-    })
+    Transforms.insertNodes<ListElement>(
+      editor,
+      newSublist as unknown as ListElement,
+      {
+        at: [...destinationElementPath, lastChildIndex + 1],
+      }
+    )
 
     Transforms.removeNodes(editor, {
       at: movedItemElementPath,

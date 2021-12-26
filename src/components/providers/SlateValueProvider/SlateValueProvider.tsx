@@ -1,9 +1,11 @@
 import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react'
-import { Node } from 'slate'
+import { Descendant } from 'slate'
+
+import { CustomElement } from '../../templates/Dashboard/Editor/Slate/SlateTypes'
 
 interface IContextProps {
-  slateValue: Node[]
-  setSlateValue: Dispatch<SetStateAction<Node[]>>
+  slateValue: Descendant[]
+  setSlateValue: Dispatch<SetStateAction<Descendant[]>>
 }
 
 export const SlateValueContext = React.createContext<Partial<IContextProps>>({})
@@ -13,7 +15,8 @@ interface ISlateValueProvider {
 }
 
 export function SlateValueProvider({ children }: ISlateValueProvider) {
-  const [slateValue, setSlateValue] = useState<Node[]>([])
+  const initialValue: CustomElement[] = []
+  const [slateValue, setSlateValue] = useState<Descendant[]>(initialValue)
 
   return (
     <SlateValueContext.Provider value={{ slateValue, setSlateValue }}>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDrag } from 'react-dnd'
 import styled from 'styled-components'
 
@@ -16,7 +16,26 @@ interface IFile {
   level: number
 }
 
+function useLoading() {
+  const [loading, setLoading] = useState(false)
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function withLoading<T extends any[]>(callback: (...args: T) => any) {
+    return async (...args: T) => {
+      setLoading(true)
+      await callback(...args)
+      setLoading(false)
+    }
+  }
+
+  return {
+    loading,
+    withLoading,
+  }
+}
+
 export function File({ node, level }: IFile) {
+  const { loading, withLoading } = useLoading()
   const { items, isRenaming, handleSetIsRenamingClose } = useFileDropdown(node)
   const {
     actions: { renameNode, fileClick },
@@ -28,13 +47,17 @@ export function File({ node, level }: IFile) {
     }),
   })
 
+  // if (loading) {
+  //   return
+  // }
+
   const { path, name } = node
 
   async function handleFileClick() {
     fileClick(path)
   }
 
-  async function handleRename(value: string) {
+  const handleRename = withLoading(async (value: string) => {
     const pathWithoutFilename = removeLastSlug(path)
 
     const newPath =
@@ -43,7 +66,7 @@ export function File({ node, level }: IFile) {
         : `${value}.md`
 
     await renameNode(path, newPath)
-  }
+  })
 
   return isRenaming ? (
     <FileInput

@@ -48,7 +48,7 @@ export function inlineCodeCursorBehaviour(editor: Editor) {
   const { path: cursorPath } = focus
 
   if (isLastChildInBlock) {
-    const text = { text: ' ' }
+    const text = { text: ' ', bold: false, italic: false, inlineCode: false }
 
     // Insert new text node after selection leaf
     Transforms.insertNodes(editor, text, { at: end })

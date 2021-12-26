@@ -13,74 +13,77 @@ import { Paragraph } from '../../../../../atoms/Paragraph/Paragraph'
 import { Table } from '../../../../../atoms/Table/Table'
 import { TableCell } from '../../../../../atoms/Table/TableCell/TableCell'
 import { TableRow } from '../../../../../atoms/Table/TableRow/TableRow'
+import { CustomElement } from '../SlateTypes'
 
 interface IElement extends RenderElementProps {
   editor: Editor
-  element: {
-    url?: string
-    header?: boolean
-    footer?: boolean
-    children: []
-    type: string
-  }
+  element: CustomElement
 }
 
 export function Element(props: IElement) {
-  const baseElementRenderer: Record<string, JSX.Element> = {
-    paragraph: <Paragraph {...props}>{props.children}</Paragraph>,
-    heading: <Heading {...props}>{props.children}</Heading>,
-    list: <List {...props}>{props.children}</List>,
-    listItem: <ListItem {...props}>{props.children}</ListItem>,
-    blockquote: <BlockQuote {...props}>{props.children}</BlockQuote>,
-    link: (
-      <Link {...props} link={props.element.url}>
-        {props.children}
-      </Link>
-    ),
-    thematicBreak: <Hr {...props}>{props.children}</Hr>,
-    code: <CodeBlock {...props}>{props.children}</CodeBlock>,
-    table: <Table {...props}>{props.children}</Table>,
-    tableRow: (
-      <TableRow
-        {...props}
-        header={props.element.header}
-        footer={props.element.footer}
-      >
-        {props.children}
-      </TableRow>
-    ),
-    tableCell: (
-      <TableCell {...props} header={props.element.header}>
-        {props.children}
-      </TableCell>
-    ),
-    // softbreak: () => <span {...attributes}> {children}</span>,
-    // linebreak: () => (
-    //   <span {...attributes}>
-    //     <span contentEditable={false} style={{ userSelect: 'none' }}>
-    //       <br />
-    //     </span>
-    //     {children}
-    //   </span>
-    // ),
-    // html_block: () => <pre {...attributes}>{children}</pre>,
-    // image: () => <ImageElement {...props} />,
-    // html_inline: () => (
-    //   <span {...attributes}>
-    //     {(element.data as any).content}
-    //     {children}
-    //   </span>
-    // ),
+  // const baseElementRenderer: Record<string, JSX.Element> = {
+  // softbreak: () => <span {...attributes}> {children}</span>,
+  // linebreak: () => (
+  //   <span {...attributes}>
+  //     <span contentEditable={false} style={{ userSelect: 'none' }}>
+  //       <br />
+  //     </span>
+  //     {children}
+  //   </span>
+  // ),
+  // html_block: () => <pre {...attributes}>{children}</pre>,
+  // image: () => <ImageElement {...props} />,
+  // html_inline: () => (
+  //   <span {...attributes}>
+  //     {(element.data as any).content}
+  //     {children}
+  //   </span>
+  // ),
+  // }
+
+  switch (props.element.type) {
+    case 'paragraph':
+      return <Paragraph {...props}>{props.children}</Paragraph>
+    case 'heading':
+      return <Heading {...props}>{props.children}</Heading>
+    case 'link':
+      return (
+        <Link {...props} link={props.element.url}>
+          {props.children}
+        </Link>
+      )
+    case 'list':
+      return <List {...props}>{props.children}</List>
+    case 'listItem':
+      return <ListItem {...props}>{props.children}</ListItem>
+    case 'blockquote':
+      return <BlockQuote {...props}>{props.children}</BlockQuote>
+    case 'thematicBreak':
+      return <Hr {...props}>{props.children}</Hr>
+    case 'code':
+      return <CodeBlock {...props}>{props.children}</CodeBlock>
+    case 'table':
+      return <Table {...props}>{props.children}</Table>
+    case 'tableRow':
+      return (
+        <TableRow
+          {...props}
+          header={props.element.header}
+          footer={props.element.footer}
+        >
+          {props.children}
+        </TableRow>
+      )
+    case 'tableCell':
+      return (
+        <TableCell {...props} header={props.element.header}>
+          {props.children}
+        </TableCell>
+      )
+    default:
+      console.log(
+        `Didn't know how to render ${JSON.stringify(props.element, null, 2)}`
+      )
+      return <p {...props.attributes}>{props.children}</p>
   }
-
-  const component = baseElementRenderer[props.element.type]
-
-  if (!component) {
-    console.log(
-      `Didn't know how to render ${JSON.stringify(props.element, null, 2)}`
-    )
-    return <p {...props.attributes}>{props.children}</p>
-  }
-
-  return component
 }

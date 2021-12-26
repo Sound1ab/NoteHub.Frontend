@@ -1,5 +1,6 @@
 import { Editor, Element, Node, NodeEntry, Path, Transforms } from 'slate'
 
+import { CustomElement } from '../../../SlateTypes'
 import { isList } from '../../helpers/list/isList'
 
 /**
@@ -29,7 +30,7 @@ export function joinAdjacentLists(editor: Editor): void {
       if (!previousSiblingNode || !Element.isElement(previousSiblingNode))
         return
 
-      const canMerge = (nodeA: Node, nodeB: Node) =>
+      const canMerge = (nodeA: CustomElement, nodeB: CustomElement) =>
         nodeA.type === 'list' && nodeB.type === 'list'
 
       if (isList(previousSiblingNode) && canMerge(node, previousSiblingNode)) {

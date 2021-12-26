@@ -1,6 +1,6 @@
 import React, { RefObject, useState } from 'react'
 import { Range } from 'slate'
-import { useEditor } from 'slate-react'
+import { useSlateStatic } from 'slate-react'
 import styled from 'styled-components'
 
 import { Input } from '../../../../../atoms/Input/Input'
@@ -18,7 +18,7 @@ export function HyperLinkModal({
   selection,
   onClose,
 }: IHyperLinkModal) {
-  const editor = useEditor()
+  const editor = useSlateStatic()
   const [url, setUrl] = useState('')
 
   function handleOnSubmit() {

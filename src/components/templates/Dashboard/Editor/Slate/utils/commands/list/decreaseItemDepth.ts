@@ -1,5 +1,6 @@
 import { Editor, Element, Path, Transforms } from 'slate'
 
+import { ListElement } from '../../../SlateTypes'
 import { getCurrentItem } from '../../helpers/list/getCurrentItem'
 import { getItemDepth } from '../../helpers/list/getItemDepth'
 
@@ -31,18 +32,19 @@ export const decreaseItemDepth = (editor: Editor, path?: Path) => {
 
   Editor.withoutNormalizing(editor, () => {
     if (followingItems.length > 0) {
+      if (!currentList || !Element.isElement(currentList)) return
+
       const newList = {
         type: currentList.type,
-        ...(currentList.data ? { data: currentList.data } : {}),
         children: followingItems,
       }
 
       Transforms.removeNodes(editor, {
         at: currentListPath,
-        match: (n) => followingItems.includes(n),
+        match: (n) => Element.isElement(n) && followingItems.includes(n),
       })
 
-      Transforms.insertNodes(editor, newList, {
+      Transforms.insertNodes(editor, newList as unknown as ListElement, {
         at: currentItemPath.concat([currentItem.children.length]),
       })
 

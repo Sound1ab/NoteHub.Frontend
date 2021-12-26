@@ -1,6 +1,7 @@
 import React from 'react'
-import { Editor, Node } from 'slate'
+import { Editor, Element, Node } from 'slate'
 
+import { LinkElement } from '../../../SlateTypes'
 import { isTypeActive } from '../../helpers/isTypeActive'
 
 export function openLink(editor: Editor, event: React.MouseEvent) {
@@ -17,8 +18,13 @@ export function openLink(editor: Editor, event: React.MouseEvent) {
   // Getting the parent of a text node
   const node = Node.parent(editor, path)
 
-  Object.assign(document.createElement('a'), {
-    target: '_blank',
-    href: node.url,
-  }).click()
+  if (
+    Element.isElement(node) &&
+    Element.isElementType<LinkElement>(node, 'link')
+  ) {
+    Object.assign(document.createElement('a'), {
+      target: '_blank',
+      href: node.url,
+    }).click()
+  }
 }

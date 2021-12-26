@@ -2,7 +2,7 @@ import gfm from 'remark-gfm'
 import parse from 'remark-parse'
 // @ts-ignore
 import { remarkToSlate as _remarkToSlate } from 'remark-slate-transformer'
-import { Node } from 'slate'
+import { Descendant } from 'slate'
 import unified from 'unified'
 
 import { mdastAppendTextToEmptyListItem } from '../mdast/mdastAppendTextToEmptyListItem'
@@ -27,10 +27,15 @@ export function remarkToSlate(markdown: string) {
   const vFile = processor.processSync(markdown)
 
   // eslint-disable-next-line
-  let result = (vFile as any).result as Node[] | []
+  let result = (vFile as any).result as Descendant[] | []
 
   if (result.length === 0) {
-    result = [{ type: 'paragraph', children: [{ text: '' }] }]
+    result = [
+      {
+        type: 'paragraph',
+        children: [{ text: '', bold: false, italic: false, inlineCode: false }],
+      },
+    ]
   }
 
   return result

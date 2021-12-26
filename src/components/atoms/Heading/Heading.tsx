@@ -2,6 +2,8 @@ import React from 'react'
 import { RenderElementProps } from 'slate-react/dist/components/editable'
 
 export function Heading({ attributes, children, element }: RenderElementProps) {
+  if (element.type !== 'heading') return null
+
   switch (element.depth) {
     case 1:
       return <h1 {...attributes}>{children}</h1>

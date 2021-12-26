@@ -10,6 +10,8 @@ interface ITableRow extends RenderElementProps {
 }
 
 export function TableRow({ children, header, ...rest }: ITableRow) {
+  if (rest.element.type !== 'tableRow') return null
+
   return (
     <>
       {header ? (

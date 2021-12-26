@@ -1,10 +1,12 @@
-import { Editor, Node, Transforms } from 'slate'
+import { Editor, Transforms } from 'slate'
+
+import { TableCellElement } from '../../../SlateTypes'
 
 interface IInsertTableRow {
   editor: Editor
   header?: boolean
   at: number[]
-  children?: Node[]
+  children?: TableCellElement[]
 }
 
 export function insertTableRow({
@@ -15,7 +17,7 @@ export function insertTableRow({
 }: IInsertTableRow) {
   Transforms.insertNodes(
     editor,
-    { type: 'tableRow', header, children },
+    { type: 'tableRow', header, children, footer: false },
     {
       at,
     }

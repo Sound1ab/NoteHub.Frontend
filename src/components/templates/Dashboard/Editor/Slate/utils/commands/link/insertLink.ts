@@ -1,12 +1,14 @@
-import { Editor, Range, Transforms } from 'slate'
+import { Editor, Element, Range, Transforms } from 'slate'
 
 export const unwrapLink = (editor: Editor) => {
-  Transforms.unwrapNodes(editor, { match: (n) => n.type === 'link' })
+  Transforms.unwrapNodes(editor, {
+    match: (n) => Element.isElement(n) && n.type === 'link',
+  })
 }
 
 const wrapLink = (editor: Editor, url: string, selection: Range) => {
   const link = {
-    type: 'link',
+    type: 'link' as const,
     url,
     children: [],
   }

@@ -4,7 +4,7 @@ import { insertTableCell } from '../commands/table/insertTableCell'
 import { insertTableRow } from '../commands/table/insertTableRow'
 import { getCurrentItem } from '../helpers/list/getCurrentItem'
 
-const SHORTCUTS: Record<string, { type: string; depth?: number }> = {
+const SHORTCUTS = {
   '*': {
     type: 'listItem',
   },
@@ -79,6 +79,7 @@ export function withShortcuts(editor: Editor) {
       // Use range to extract the shortcut text
       const beforeText = Editor.string(editor, range)
 
+      // @ts-ignore
       const element = SHORTCUTS[beforeText]
 
       if (element) {
@@ -89,7 +90,7 @@ export function withShortcuts(editor: Editor) {
         })
 
         if (element.type === 'listItem') {
-          const list = { type: 'list', ordered: false, children: [] }
+          const list = { type: 'list' as const, ordered: false, children: [] }
 
           Transforms.wrapNodes(editor, list, {
             at: path,
@@ -111,7 +112,9 @@ export function withShortcuts(editor: Editor) {
         if (element.type === 'thematicBreak') {
           Transforms.insertNodes(editor, {
             type: 'paragraph',
-            children: [{ text: '' }],
+            children: [
+              { text: '', bold: false, italic: false, inlineCode: false },
+            ],
           })
         }
 

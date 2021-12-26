@@ -1,17 +1,20 @@
-import { Element, Node } from 'slate'
+import { Editor, Element, Node } from 'slate'
 import { ReactEditor } from 'slate-react'
 
 import { insertTableRow } from './insertTableRow'
 
-export function insertMatchingTableRow(editor: ReactEditor, node: Node) {
+export function insertMatchingTableRow(editor: Editor, node: Node) {
   const path = ReactEditor.findPath(editor, node)
 
   // Create cells that make up a row
   const cells =
     Element.isElement(node) &&
     node.children.map(() => ({
-      type: 'tableCell',
-      children: [{ text: 'Content' }],
+      type: 'tableCell' as const,
+      header: false,
+      children: [
+        { text: 'Content', bold: false, italic: false, inlineCode: false },
+      ],
     }))
 
   if (!cells) return

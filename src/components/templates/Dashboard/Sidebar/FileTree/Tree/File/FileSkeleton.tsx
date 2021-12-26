@@ -2,9 +2,9 @@ import React from 'react'
 import ContentLoader from 'react-content-loader'
 import styled from 'styled-components'
 
-import { getCssVariable } from '../../../../../utils/css/getCssVariable'
+import { getCssVariable } from '../../../../../../../utils/css/getCssVariable'
 
-export function TreeSkeleton() {
+export function FileSkeleton() {
   return (
     <Wrapper aria-label="Markdown loading">
       <StyledContentLoader
