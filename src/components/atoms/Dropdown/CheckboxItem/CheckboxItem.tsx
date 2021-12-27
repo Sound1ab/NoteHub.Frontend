@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Label } from '../../Label/Label'
 
 interface ICheckboxItem<T extends boolean> {
   label: string
@@ -45,8 +46,4 @@ const Checkbox = styled.input`
   width: 1.15em;
   height: 1.15em;
   margin-right: ${({ theme }) => theme.spacing.xs};
-`
-
-const Label = styled.label`
-  font-size: ${({ theme }) => theme.typographyStyles.body.fontSize};
 `

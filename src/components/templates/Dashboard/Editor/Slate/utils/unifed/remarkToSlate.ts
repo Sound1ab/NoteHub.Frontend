@@ -6,6 +6,8 @@ import { Descendant } from 'slate'
 import unified from 'unified'
 
 import { mdastAppendTextToEmptyListItem } from '../mdast/mdastAppendTextToEmptyListItem'
+import { mdastChecklist } from '../mdast/mdastChecklist'
+import { mdastChecklistItem } from '../mdast/mdastChecklistItem'
 import { mdastFlattenBlockQuote } from '../mdast/mdastFlattenBlockQuote'
 import { mdastHr } from '../mdast/mdastHr'
 import { mdastTable } from '../mdast/mdastTable'
@@ -22,6 +24,8 @@ export function remarkToSlate(markdown: string) {
     .use(mdastTableHeader)
     .use(mdastTableCell)
     .use(mdastTable)
+    .use(mdastChecklist)
+    .use(mdastChecklistItem)
     .use(_remarkToSlate)
 
   const vFile = processor.processSync(markdown)

@@ -25,12 +25,24 @@ export type LinkElement = {
 export type ListElement = {
   type: 'list'
   ordered: boolean
-  children: CustomText[]
+  children: ListItemElement[]
 }
 
 export type ListItemElement = {
   type: 'listItem'
-  children: CustomText[]
+  children: ParagraphElement[]
+}
+
+export type ChecklistElement = {
+  type: 'checklist'
+  ordered: boolean
+  children: ChecklistItemElement[]
+}
+
+export type ChecklistItemElement = {
+  type: 'checklistItem'
+  checked: boolean
+  children: ParagraphElement[]
 }
 
 export type BlockquoteElement = {
@@ -72,6 +84,8 @@ export type CustomElement =
   | LinkElement
   | ListElement
   | ListItemElement
+  | ChecklistElement
+  | ChecklistItemElement
   | BlockquoteElement
   | ThematicBreakElement
   | CodeElement

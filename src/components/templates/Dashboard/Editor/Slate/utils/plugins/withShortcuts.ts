@@ -1,5 +1,6 @@
-import { Editor, Element, Point, Range, Transforms } from 'slate'
+import { Editor, Range, Transforms } from 'slate'
 
+import { ChecklistElement } from '../../SlateTypes'
 import { insertTableCell } from '../commands/table/insertTableCell'
 import { insertTableRow } from '../commands/table/insertTableRow'
 import { getCurrentItem } from '../helpers/list/getCurrentItem'
@@ -50,10 +51,14 @@ const SHORTCUTS = {
   table: {
     type: 'table',
   },
+  checklist: {
+    type: 'checklistItem',
+    checked: false,
+  },
 }
 
 export function withShortcuts(editor: Editor) {
-  const { deleteBackward, insertText } = editor
+  const { insertText } = editor
 
   editor.insertText = (text) => {
     const { selection } = editor
@@ -85,6 +90,40 @@ export function withShortcuts(editor: Editor) {
       if (element) {
         Transforms.select(editor, range)
         Transforms.delete(editor)
+
+        if (element.type === 'checklistItem') {
+          const list: ChecklistElement = {
+            type: 'checklist' as const,
+            ordered: false,
+            children: [],
+          }
+
+          Transforms.setNodes(editor, list, {
+            at: path,
+            match: (n) => Editor.isBlock(editor, n),
+          })
+
+          Transforms.insertNodes(
+            editor,
+            {
+              type: 'checklistItem',
+              checked: false,
+              children: [],
+            },
+            {
+              at: [...path, 0],
+            }
+          )
+
+          Transforms.insertNodes(
+            editor,
+            { type: 'paragraph', children: [] },
+            { at: [...path, 0, 0] }
+          )
+
+          return
+        }
+
         Transforms.setNodes(editor, element, {
           match: (n) => Editor.isBlock(editor, n),
         })
@@ -150,47 +189,6 @@ export function withShortcuts(editor: Editor) {
     }
 
     insertText(text)
-  }
-
-  editor.deleteBackward = (...args) => {
-    const { selection } = editor
-
-    if (selection && Range.isCollapsed(selection)) {
-      const match = Editor.above(editor, {
-        match: (n) => Editor.isBlock(editor, n),
-      })
-
-      if (match) {
-        const [block, path] = match
-        const start = Editor.start(editor, path)
-
-        if (
-          !Editor.isEditor(block) &&
-          Element.isElement(block) &&
-          block.type !== 'paragraph' &&
-          Point.equals(selection.anchor, start)
-        ) {
-          const newProperties: Partial<Element> = {
-            type: 'paragraph',
-          }
-          Transforms.setNodes(editor, newProperties)
-
-          if (block.type === 'listItem') {
-            Transforms.unwrapNodes(editor, {
-              match: (n) =>
-                !Editor.isEditor(n) &&
-                Element.isElement(n) &&
-                n.type === 'list',
-              split: true,
-            })
-          }
-
-          return
-        }
-      }
-
-      deleteBackward(...args)
-    }
   }
 
   return editor

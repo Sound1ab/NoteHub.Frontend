@@ -149,9 +149,10 @@ workflows:
           name: build-development
           env: development
           requires:
+            - prepare
 #            - test
-            - eslint
-            - typescript
+#            - eslint
+#            - typescript
           filters:
             branches:
               only: master

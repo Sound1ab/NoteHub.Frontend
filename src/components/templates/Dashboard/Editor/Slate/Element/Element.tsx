@@ -3,6 +3,7 @@ import { Editor } from 'slate'
 import { RenderElementProps } from 'slate-react/dist/components/editable'
 
 import { BlockQuote } from '../../../../../atoms/BlockQuote/BlockQuote'
+import { ChecklistItem } from '../../../../../atoms/ChecklistItem/ChecklistItem'
 import { CodeBlock } from '../../../../../atoms/CodeBlock/CodeBlock'
 import { Heading } from '../../../../../atoms/Heading/Heading'
 import { Hr } from '../../../../../atoms/Hr/Hr'
@@ -53,7 +54,19 @@ export function Element(props: IElement) {
         </Link>
       )
     case 'list':
-      return <List {...props}>{props.children}</List>
+      return (
+        <List {...props} ordered={props.element.ordered}>
+          {props.children}
+        </List>
+      )
+    case 'checklist':
+      return <div {...props.attributes}>{props.children}</div>
+    case 'checklistItem':
+      return (
+        <ChecklistItem {...props} checked={props.element.checked}>
+          {props.children}
+        </ChecklistItem>
+      )
     case 'listItem':
       return <ListItem {...props}>{props.children}</ListItem>
     case 'blockquote':

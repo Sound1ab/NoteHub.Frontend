@@ -1,6 +1,6 @@
 import { Editor, Transforms } from 'slate'
 
-import { isItem } from '../../helpers/list/isItem'
+import { isItem } from './isItem'
 
 /**
  * Split a list item at the start of the current range.

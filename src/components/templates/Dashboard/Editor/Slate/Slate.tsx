@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useRef, useState } from 'react'
 import {
   BaseEditor,
   Descendant,
-  Node,
   NodeEntry,
   Range as SlateRange,
   createEditor,
@@ -30,6 +29,7 @@ import { CustomElement, CustomText } from './SlateTypes'
 import { openLink } from './utils/commands/link/openLink'
 import { decorateCodeBlock } from './utils/decorators/decorateCodeBlock'
 import { handleKeyDown } from './utils/handlers/handleKeyDown'
+import { withChecklists } from './utils/plugins/withChecklists'
 import { withLinks } from './utils/plugins/withLinks'
 import { withLists } from './utils/plugins/withLists'
 import { withShortcuts } from './utils/plugins/withShortcuts'
@@ -50,7 +50,9 @@ export function Slate() {
     () =>
       withReact(
         withHistory(
-          withLinks(withLists(withTables(withShortcuts(createEditor()))))
+          withChecklists(
+            withLinks(withLists(withTables(withShortcuts(createEditor()))))
+          )
         )
       ),
     []
@@ -67,7 +69,7 @@ export function Slate() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const writeContentToFSAndCheckUnstagedChanges = useCallback(
-    debounce(async (value: Node[]) => {
+    debounce(async (value: Descendant[]) => {
       const markdown = slateToRemark(value)
 
       if (!activePath) return

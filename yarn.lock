@@ -12962,7 +12962,7 @@ remark-retext@^4.0.0:
 
 remark-slate-transformer@Sound1ab/remark-slate-transformer:
   version "0.2.5"
-  resolved "https://codeload.github.com/Sound1ab/remark-slate-transformer/tar.gz/ab68b29d0a7cca5a7d8f67923de40a117aa5e9ed"
+  resolved "https://codeload.github.com/Sound1ab/remark-slate-transformer/tar.gz/da9d67a577eeec7021d429f0ff6b13520b918f2b"
 
 remark-squeeze-paragraphs@4.0.0:
   version "4.0.0"

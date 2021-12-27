@@ -8,17 +8,15 @@ import React from 'react'
  */
 import { Editor, Node } from 'slate'
 
-import { decreaseItemDepth } from '../commands/list/decreaseItemDepth'
-import { splitListItem } from '../helpers/list/splitListItem'
-import { unwrapList } from '../helpers/list/unwrapList'
-import { getCurrentItem } from '../helpers/list/getCurrentItem'
-import { getItemDepth } from '../helpers/list/getItemDepth'
+import { getCurrentChecklistItem } from '../helpers/checklist/getCurrentChecklistItem'
+import { splitChecklistItem } from '../helpers/checklist/splitChecklistItem'
+import { unwrapChecklist } from '../helpers/checklist/unwrapChecklist'
 
-export function listBehaviour(
+export function checklistBehaviour(
   editor: Editor,
   event: React.KeyboardEvent<Element>
 ) {
-  const currentItem = getCurrentItem(editor)
+  const currentItem = getCurrentChecklistItem(editor)
 
   if (event.shiftKey || !currentItem) return
 
@@ -32,15 +30,10 @@ export function listBehaviour(
     !Editor.isVoid(editor, currentItemNode) &&
     Node.string(currentItemNode) === ''
   ) {
-    // Block is empty, we exit the list
-    if (getItemDepth(editor) > 1) {
-      decreaseItemDepth(editor)
-    } else {
-      // Exit list
-      unwrapList(editor)
-    }
+    // Exit list
+    unwrapChecklist(editor)
   } else {
     // Split list item
-    splitListItem(editor)
+    splitChecklistItem(editor)
   }
 }

@@ -1,6 +1,6 @@
 import { Editor, Path, Transforms } from 'slate'
 
-import { getTopmostItemsAtRange } from '../../helpers/list/getTopmostItemsAtRange'
+import { getTopmostItemsAtRange } from './getTopmostItemsAtRange'
 
 /**
  * Unwrap items at range from their list.

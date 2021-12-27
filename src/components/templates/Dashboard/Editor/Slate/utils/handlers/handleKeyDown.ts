@@ -7,6 +7,7 @@ import { insertNewLine } from '../commands/insertNewLine'
 import { decreaseItemDepth } from '../commands/list/decreaseItemDepth'
 import { increaseItemDepth } from '../commands/list/increaseItemDepth'
 import { toggleInlineStyle } from '../commands/toggleInlineStyle'
+import { checklistBehaviour } from '../behaviours/checklistBehaviour'
 
 interface IHandleKeyDown {
   editor: Editor
@@ -20,6 +21,7 @@ export const handleKeyDown =
       case 'Enter': {
         insertNewLine(editor, event)
         listBehaviour(editor, event)
+        checklistBehaviour(editor, event)
         break
       }
       case 'Tab': {
