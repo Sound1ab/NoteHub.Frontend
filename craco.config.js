@@ -4,7 +4,22 @@ const webpack = require('webpack')
 module.exports = {
   webpack: {
     configure: (webpackConfig) => {
-      const rule = webpackConfig.module.rules[1]
+      let rule
+
+      // Source map rule is added to array locally but removed
+      // in development and production as an env var in ci because
+      // it causes the container to run out of memory
+      if (
+        // eslint-disable-next-line no-undef
+        process.env.REACT_APP_NODE_ENV === 'development' ||
+        // eslint-disable-next-line no-undef
+        process.env.REACT_APP_NODE_ENV === 'production'
+      ) {
+        rule = webpackConfig.module.rules[0]
+      } else {
+        rule = webpackConfig.module.rules[1]
+      }
+
       if (!('oneOf' in rule)) {
         throw new Error(
           'CRA webpackConfig not as expected. Update craco config.'
