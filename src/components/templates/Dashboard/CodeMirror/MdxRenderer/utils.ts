@@ -40,7 +40,7 @@ export function sanitizeJsx() {
         return
       }
 
-      const html = (node.value as unknown) as string
+      const html = node.value as unknown as string
 
       if (isJSXRegex.test(html)) {
         return
@@ -53,7 +53,7 @@ export function sanitizeJsx() {
           // a missing trailing slash (/)
           closeSelfClosing: true,
         })
-        .use(sanitize, (gh as unknown) as Schema)
+        .use(sanitize, gh as unknown as Schema)
         // Pascal case all custom elements so they work as JSX
         .processSync(node.value)
     })

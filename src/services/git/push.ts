@@ -13,7 +13,7 @@ export async function push({ dir, jwt }: IPush) {
   return gitPush({
     fs,
     http: {
-      request: request as any,
+      request: request as never,
     },
     dir,
     remote: 'origin',

@@ -16,47 +16,47 @@ const mockAttributes = {
 }
 
 export const Primary = () => (
-  <Table attributes={mockAttributes} element={mockElement as any}>
+  <Table attributes={mockAttributes} element={mockElement as never}>
     <TableRow
       attributes={mockAttributes}
       element={
         {
           ...mockElement,
-          children: [mockElement, mockElement, mockElement] as any,
-        } as any
+          children: [mockElement, mockElement, mockElement] as never,
+        } as never
       }
       header={true}
     >
       <TableCell
         attributes={mockAttributes}
-        element={mockElement as any}
+        element={mockElement as never}
         header
       >
         one
       </TableCell>
       <TableCell
         attributes={mockAttributes}
-        element={mockElement as any}
+        element={mockElement as never}
         header
       >
         one
       </TableCell>
       <TableCell
         attributes={mockAttributes}
-        element={mockElement as any}
+        element={mockElement as never}
         header
       >
         one
       </TableCell>
     </TableRow>
-    <TableRow attributes={mockAttributes} element={mockElement as any}>
-      <TableCell attributes={mockAttributes} element={mockElement as any}>
+    <TableRow attributes={mockAttributes} element={mockElement as never}>
+      <TableCell attributes={mockAttributes} element={mockElement as never}>
         one
       </TableCell>
-      <TableCell attributes={mockAttributes} element={mockElement as any}>
+      <TableCell attributes={mockAttributes} element={mockElement as never}>
         one
       </TableCell>
-      <TableCell attributes={mockAttributes} element={mockElement as any}>
+      <TableCell attributes={mockAttributes} element={mockElement as never}>
         one
       </TableCell>
     </TableRow>

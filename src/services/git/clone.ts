@@ -20,7 +20,7 @@ export async function clone({ url, dir, onMessage, onProgress, jwt }: IClone) {
   await gitClone({
     fs,
     http: {
-      request: request as any,
+      request: request as never,
     },
     dir,
     url,

@@ -2,7 +2,7 @@ import { AuthCallback } from 'isomorphic-git'
 
 let abortController: AbortController
 
-export const refreshOnAuth: AuthCallback = async (url, { headers }) => {
+export const refreshOnAuth: AuthCallback = async (_, { headers }) => {
   if (abortController) {
     abortController.abort()
   }
