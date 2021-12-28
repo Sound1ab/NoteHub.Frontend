@@ -6,16 +6,21 @@ module.exports = {
     configure: (webpackConfig) => {
       let rule
 
-      // Source map rule is added to array locally but removed
-      // in development and production as an env var in ci because
-      // it causes the container to run out of memory
       if (
         // eslint-disable-next-line no-undef
         process.env.REACT_APP_NODE_ENV === 'development' ||
         // eslint-disable-next-line no-undef
         process.env.REACT_APP_NODE_ENV === 'production'
       ) {
+        // Source map rule is added to array locally but removed
+        // in development and production as an env var in ci because
+        // it causes the container to run out of memory
         rule = webpackConfig.module.rules[0]
+
+        // Resolves problem with comlink-loader in webpack 5
+        // Error happens only in production
+        // https://github.com/GoogleChromeLabs/comlink-loader/issues/34#issuecomment-894099400
+        webpackConfig.optimization.usedExports = false
       } else {
         rule = webpackConfig.module.rules[1]
       }
