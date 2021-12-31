@@ -3,7 +3,6 @@ import '@testing-library/jest-dom/extend-expect'
 import { screen } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import React from 'react'
-import { Router } from 'react-router-dom'
 
 import { FONT } from '../../../../../enums'
 import * as useEquality from '../../../../../hooks/recoil/retext/useEquality'
@@ -84,12 +83,10 @@ describe('Profile', () => {
 
   describe('Dropdown', function () {
     it('should clear apollo store and deauth use when they logout', async () => {
-      const history = createMemoryHistory()
-
       await render(
-        <Router history={history}>
-          <Profile />
-        </Router>
+        // <Router history={history}>
+        <Profile />
+        // </Router>
       )
 
       await fireEvent.click(screen.getByAltText('avatar'))

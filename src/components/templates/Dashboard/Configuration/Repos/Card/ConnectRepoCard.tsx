@@ -1,15 +1,13 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Icon } from '../../../../../atoms/Icon/Icon'
 import { Card } from './Card'
-import { Link, useRouteMatch } from 'react-router-dom'
 
 export function ConnectRepoCard() {
-  const { url } = useRouteMatch()
-
   return (
-    <Link to={`${url}/connect-repo`}>
+    <Link to="connect-repo">
       <Card>
         <HeadingWrapper>
           <RepoIcon icon="plus-circle" />

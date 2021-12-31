@@ -1,8 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 
-import { createMemoryHistory } from 'history'
 import React from 'react'
-import { Redirect, Router, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 import { useReadGithubUserAccessToken } from '../../../hooks/user/useReadGithubUserAccessToken'
 import { cleanup, render } from '../../../test-utils'
@@ -22,8 +21,6 @@ jest.mock('react-router-dom', () => {
 afterEach(cleanup)
 
 describe('Callback', () => {
-  const history = createMemoryHistory()
-
   beforeEach(() => {
     jest.restoreAllMocks()
     ;(useReadGithubUserAccessToken as jest.Mock).mockReturnValue({
@@ -31,7 +28,7 @@ describe('Callback', () => {
       jwt: 'MOCK_JWT',
       error: undefined,
     })
-    ;(Redirect as jest.Mock).mockImplementation(() => <div>redirect</div>)
+    // ;(Redirect as jest.Mock).mockImplementation(() => <div>redirect</div>)
     ;(useLocation as jest.Mock).mockImplementation(() => ({
       search: '?code=1234&state=state',
     }))
@@ -39,9 +36,9 @@ describe('Callback', () => {
 
   it('should parse query parameters and pass code and state to query', async () => {
     await render(
-      <Router history={history}>
-        <Callback />
-      </Router>
+      // <Router history={history}>
+      <Callback />
+      // </Router>
     )
 
     expect(useReadGithubUserAccessToken).toBeCalledWith('1234', 'state')
@@ -49,9 +46,9 @@ describe('Callback', () => {
 
   it('should redirect dashboard if a jwt if received', async () => {
     const { getByText } = await render(
-      <Router history={history}>
-        <Callback />
-      </Router>
+      // <Router history={history}>
+      <Callback />
+      // </Router>
     )
 
     expect(getByText('redirect')).toBeDefined()

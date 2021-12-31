@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect, useLocation } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 
 import { useReadGithubUserAccessToken } from '../../../hooks/user/useReadGithubUserAccessToken'
 import { localState } from '../../providers/ApolloProvider/cache'
@@ -16,13 +16,7 @@ export const Callback = () => {
   if (jwt) {
     localState.currentJwtVar(jwt)
 
-    return (
-      <Redirect
-        to={{
-          pathname: '/dashboard',
-        }}
-      />
-    )
+    return <Navigate to="/dashboard" />
   }
 
   return null

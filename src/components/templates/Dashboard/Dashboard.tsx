@@ -1,11 +1,15 @@
 import React from 'react'
-import { useHistory, useRouteMatch } from 'react-router-dom'
+import {
+  Outlet,
+  useMatch,
+  useNavigate,
+  useResolvedPath,
+} from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useRepo } from '../../../hooks/recoil/useRepo'
 import { useReadGithubUser } from '../../../hooks/user/useReadGithubUser'
 import useDeepCompareEffect from '../../../hooks/utils/useDeepCompareEffect'
-import { EditorSwitch } from '../../utility/Switch/EditorSwitch'
 import { PrimarySidebar } from './PrimarySidebar/PrimarySidebar'
 import { Sidebar } from './Sidebar/Sidebar'
 import { Toolbar } from './Toolbar/Toolbar'
@@ -20,7 +24,7 @@ function Dashboard() {
         <PrimarySidebar />
         <Sidebar />
       </MobileScroll>
-      <EditorSwitch />
+      <Outlet />
     </Grid>
   )
 }
@@ -29,8 +33,12 @@ export { Dashboard as default }
 
 function useSetConnectedRepo() {
   const { user, loading } = useReadGithubUser()
-  const { path } = useRouteMatch()
-  const { push, location } = useHistory()
+  const navigate = useNavigate()
+  const resolvedPath = useResolvedPath('repos/connect-repo')
+  const isConnectRepoMatch = useMatch({
+    path: resolvedPath.pathname,
+    end: true,
+  })
   const [, setRepo] = useRepo()
 
   const connectedRepos = user?.configuration?.connectedRepos ?? []
@@ -45,12 +53,10 @@ function useSetConnectedRepo() {
   }, [connectedRepos, login])
 
   if (!loading && connectedRepos.length === 0) {
-    const connectRepoPath = `${path}/repos/connect-repo`
-
     // Cancel push if we're already at the connect repo path
-    if (location.pathname === connectRepoPath) return
+    if (isConnectRepoMatch) return
 
-    push(`${path}/repos/connect-repo`)
+    navigate('repos/connect-repo')
   }
 }
 

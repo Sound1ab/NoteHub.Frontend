@@ -1,9 +1,9 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useReadConfiguration } from '../../../../../hooks/configuration/useReadConfiguration'
 import { Fade } from '../../../../animation/Mount/Fade'
-import { ModalSwitch } from '../../../../utility/Switch/ModalSwitch'
 import { ConnectRepoCard } from './Card/ConnectRepoCard'
 import { RepoCard } from './Card/RepoCard'
 
@@ -20,7 +20,7 @@ export function Repos() {
           ))}
           <ConnectRepoCard />
         </CardGrid>
-        <ModalSwitch />
+        <Outlet />
       </>
     </Fade>
   )

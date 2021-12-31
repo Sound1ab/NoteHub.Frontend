@@ -1,33 +1,26 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { useRouteMatch } from 'react-router-dom'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { Icon } from '../../../atoms/Icon/Icon'
+import { Link } from './Link/Link'
 import { Profile } from './Profile/Profile'
 
 export function PrimarySidebar() {
-  const { url } = useRouteMatch()
-  const { pathname } = useLocation()
-
-  const repos = `${url}/repos`
-  const settings = `${url}/settings`
-
   return (
     <StyledPrimarySidebar>
       <StyledProfile />
-      <StyledLink to={url} isActive={pathname === url}>
+      <Link to=".">
         <StyledIcon icon="pen" size="lg" />
         <Heading>Editor</Heading>
-      </StyledLink>
-      <StyledLink to={repos} isActive={pathname === repos}>
+      </Link>
+      <Link to="repos">
         <StyledIcon icon="sync" size="lg" />
         <Heading>Repos</Heading>
-      </StyledLink>
-      <StyledLink to={settings} isActive={pathname === settings}>
+      </Link>
+      <Link to="settings">
         <StyledIcon icon="sync" size="lg" />
         <Heading>Settings</Heading>
-      </StyledLink>
+      </Link>
     </StyledPrimarySidebar>
   )
 }
@@ -57,24 +50,6 @@ const StyledProfile = styled(Profile)`
   display: flex;
   justify-content: center;
   align-items: center;
-`
-
-const StyledLink = styled(Link)<{ isActive: boolean }>`
-  padding: ${({ theme }) => theme.spacing.xs};
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  ${({ isActive }) =>
-    isActive &&
-    css`
-      background-color: var(--background-secondary);
-    `};
-
-  &:hover {
-    background-color: var(--background-tertiary);
-  }
 `
 
 const StyledIcon = styled(Icon)`

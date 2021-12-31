@@ -27,7 +27,7 @@ describe('PrivateRoute', () => {
 
   it('should display child components if jwt is received', async () => {
     const { findByText } = await render(
-      <PrivateRoute path="MOCK_PATH" exact={true}>
+      <PrivateRoute>
         <div>children</div>
       </PrivateRoute>
     )
@@ -37,7 +37,7 @@ describe('PrivateRoute', () => {
 
   it('should retrn null if loading', async () => {
     const { container } = await render(
-      <PrivateRoute path="MOCK_PATH" exact={true}>
+      <PrivateRoute>
         <div>children</div>
       </PrivateRoute>,
       { waitForLoad: true }

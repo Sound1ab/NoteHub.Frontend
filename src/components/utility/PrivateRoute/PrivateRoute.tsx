@@ -1,21 +1,16 @@
-import React, { ReactNode, useEffect } from 'react'
-import { Route } from 'react-router-dom'
+import React, { useEffect } from 'react'
 
 import { useLogin } from '../../../hooks/authorization/useLogin'
 import { useReadJwt } from '../../../hooks/localState/useReadJwt'
 import { localState } from '../../providers/ApolloProvider/cache'
 
 export interface IPrivateRoute {
-  children: ReactNode
-  path: string
-  exact?: boolean
+  children: JSX.Element
 }
 
-export function PrivateRoute({ children, exact, path }: IPrivateRoute) {
+export function PrivateRoute({ children }: IPrivateRoute) {
   const { jwt, loading } = useLogin()
   const savedJwt = useReadJwt()
-
-  console.log('here', jwt)
 
   useEffect(() => {
     if (!jwt) {
@@ -29,11 +24,5 @@ export function PrivateRoute({ children, exact, path }: IPrivateRoute) {
     return null
   }
 
-  return (
-    <Route
-      exact={exact}
-      path={path}
-      render={() => (savedJwt ? children : null)}
-    />
-  )
+  return savedJwt && children ? children : null
 }

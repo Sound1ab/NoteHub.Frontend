@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useReadConfiguration } from '../../../../hooks/configuration/useReadConfiguration'
@@ -15,7 +15,7 @@ import { ErrorToast } from '../../../atoms/Toast/Toast'
 import { Row } from './Row/Row'
 
 export function ConnectRepo() {
-  const { goBack } = useHistory()
+  const navigate = useNavigate()
   const [updateConfiguration] = useUpdateConfiguration()
   const { configuration } = useReadConfiguration()
   const [selectedRepo, setSelectedRepo] = useState('')
@@ -50,7 +50,7 @@ export function ConnectRepo() {
   }
 
   function handleCancel() {
-    goBack()
+    navigate(-1)
   }
 
   return (

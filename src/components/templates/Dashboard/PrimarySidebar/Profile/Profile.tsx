@@ -1,6 +1,6 @@
 import { useApolloClient } from '@apollo/client'
 import React, { ReactNode, useRef } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useProfileDropdown } from '../../../../../hooks/dropdown/useProfileDropdown'
@@ -31,13 +31,7 @@ export function Profile(props: IProfile) {
     localState.currentJwtVar(null)
     client.cache.gc()
 
-    return (
-      <Redirect
-        to={{
-          pathname: '/',
-        }}
-      />
-    )
+    return <Navigate to="/" />
   }
 
   function handleOpen() {
