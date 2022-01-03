@@ -15,10 +15,10 @@ import {
 } from 'slate-react'
 import styled from 'styled-components'
 
-import { useSlateValue } from '../../../../../hooks/context/useSlateValue'
 import { useFs } from '../../../../../hooks/fs/useFs'
 import { useGit } from '../../../../../hooks/git/useGit'
 import { useActivePath } from '../../../../../hooks/recoil/useActivePath'
+import { useSlateValue } from '../../../../../hooks/recoil/useSlateValue'
 import { useUnstagedChanges } from '../../../../../hooks/recoil/useUnstagedChanges'
 import { useModalToggle } from '../../../../../hooks/utils/useModalToggle'
 import { debounce } from '../../../../../utils/debounce'
@@ -57,11 +57,12 @@ export function Slate() {
       ),
     []
   )
+
   const [, setUnstagedChanges] = useUnstagedChanges()
   const [activePath] = useActivePath()
   const { writeFile } = useFs()
   const { getUnstagedChanges, add, commit, push } = useGit()
-  const { slateValue = [], setSlateValue } = useSlateValue()
+  const [slateValue, setSlateValue] = useSlateValue()
   const domRangeRange = useRef<Range | null>(null)
   const { isOpen, setOpen, Portal, ref } = useModalToggle<HTMLDivElement>({
     origin: domRangeRange.current,

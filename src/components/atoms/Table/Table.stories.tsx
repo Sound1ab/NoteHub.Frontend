@@ -1,73 +1,115 @@
-import React, { createRef } from 'react'
+import React, { useEffect } from 'react'
 
-import { Table } from './Table'
-import { TableCell } from './TableCell/TableCell'
-import { TableRow } from './TableRow/TableRow'
+import { useSlateValue } from '../../../hooks/recoil/useSlateValue'
+import { Slate } from '../../templates/Dashboard/Editor/Slate/Slate'
 
-const mockElement = {
-  children: [],
+export const Table = () => {
+  const [, setSlateValue] = useSlateValue()
+
+  useEffect(() => {
+    setSlateValue([slateTable] as any)
+  }, [setSlateValue])
+
+  return <Slate />
 }
 
-const mockAttributes = {
-  'data-slate-node': 'element' as const,
-  'data-slate-inline': true as const,
-  'data-slate-void': true as const,
-  ref: createRef(),
-}
-
-export const Primary = () => (
-  <Table attributes={mockAttributes} element={mockElement as never}>
-    <TableRow
-      attributes={mockAttributes}
-      element={
+const slateTable = {
+  type: 'table',
+  children: [
+    {
+      type: 'tableRow',
+      header: true,
+      children: [
         {
-          ...mockElement,
-          children: [mockElement, mockElement, mockElement] as never,
-        } as never
-      }
-      header={true}
-    >
-      <TableCell
-        attributes={mockAttributes}
-        element={mockElement as never}
-        header
-      >
-        one
-      </TableCell>
-      <TableCell
-        attributes={mockAttributes}
-        element={mockElement as never}
-        header
-      >
-        one
-      </TableCell>
-      <TableCell
-        attributes={mockAttributes}
-        element={mockElement as never}
-        header
-      >
-        one
-      </TableCell>
-    </TableRow>
-    <TableRow attributes={mockAttributes} element={mockElement as never}>
-      <TableCell attributes={mockAttributes} element={mockElement as never}>
-        one
-      </TableCell>
-      <TableCell attributes={mockAttributes} element={mockElement as never}>
-        one
-      </TableCell>
-      <TableCell attributes={mockAttributes} element={mockElement as never}>
-        one
-      </TableCell>
-    </TableRow>
-  </Table>
-)
-
-export const Test = () => {
-  return <div>hey</div>
+          type: 'tableCell',
+          children: [
+            {
+              text: 'Content',
+            },
+          ],
+        },
+        {
+          type: 'tableCell',
+          children: [
+            {
+              text: 'asdf',
+            },
+          ],
+        },
+        {
+          type: 'tableCell',
+          children: [
+            {
+              text: 'fadsf',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'tableRow',
+      children: [
+        {
+          type: 'tableCell',
+          children: [
+            {
+              text: 'Content',
+            },
+          ],
+        },
+        {
+          type: 'tableCell',
+          children: [
+            {
+              text: 'fasdfasdf',
+            },
+          ],
+        },
+        {
+          type: 'tableCell',
+          children: [
+            {
+              text: 'afsdfasdf',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'tableRow',
+      footer: true,
+      children: [
+        {
+          type: 'tableCell',
+          children: [
+            {
+              text: 'Content',
+            },
+          ],
+        },
+        {
+          type: 'tableCell',
+          children: [
+            {
+              text: 'Content',
+            },
+          ],
+        },
+        {
+          type: 'tableCell',
+          children: [
+            {
+              text: 'Content',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  align: [null, null, null],
 }
 
 export default {
-  title: 'Components/Button',
-  component: Primary,
+  title: 'Components/Table',
+  component: Table,
 }

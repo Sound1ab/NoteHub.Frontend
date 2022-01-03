@@ -2,12 +2,12 @@ import { ReadCommitResult } from 'isomorphic-git'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { useSlateValue } from '../../../../hooks/context/useSlateValue'
 import { useFs } from '../../../../hooks/fs/useFs'
 import { useGit } from '../../../../hooks/git/useGit'
 import { useActivePath } from '../../../../hooks/recoil/useActivePath'
 import { useCommittedChanges } from '../../../../hooks/recoil/useCommittedChanges'
 import { useFiles } from '../../../../hooks/recoil/useFiles'
+import { useSlateValue } from '../../../../hooks/recoil/useSlateValue'
 import { useUnstagedChanges } from '../../../../hooks/recoil/useUnstagedChanges'
 import { Fade } from '../../../animation/Mount/Fade'
 import { Button } from '../../../atoms/Button/Button'
@@ -15,7 +15,7 @@ import { Icon } from '../../../atoms/Icon/Icon'
 import { remarkToSlate } from '../Editor/Slate/utils/unifed/remarkToSlate'
 
 export function DraftManager() {
-  const { setSlateValue } = useSlateValue()
+  const [, setSlateValue] = useSlateValue()
   const [unstagedChanges, setUnstagedChanges] = useUnstagedChanges()
   const [committedChanges, setCommittedChanges] = useCommittedChanges()
   const {

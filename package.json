@@ -11,6 +11,14 @@
     "@graphql-codegen/introspection": "^2.1.0",
     "@graphql-codegen/typescript": "^2.4.1",
     "@graphql-codegen/typescript-operations": "^2.2.1",
+    "@storybook/addon-actions": "^6.4.9",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-links": "^6.4.9",
+    "@storybook/builder-webpack5": "^6.4.9",
+    "@storybook/manager-webpack5": "^6.4.9",
+    "@storybook/node-logger": "^6.4.9",
+    "@storybook/preset-create-react-app": "^4.0.0",
+    "@storybook/react": "6.5.0-alpha.5",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/react-hooks": "^7.0.2",
@@ -126,7 +134,7 @@
     "typography": "^0.16.21",
     "unified": "^9.2.0",
     "unist-util-visit": "^2.0.3",
-    "webpack": "^5.65.0"
+    "webpack": "5"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
